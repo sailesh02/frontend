@@ -15,7 +15,7 @@ import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import { edcrHttpRequest } from "../../../../ui-utils/api";
 import { convertDateToEpoch } from "../utils";
-
+import { changePage } from "./my-applications";
 const userTenant = getTenantId();
 const userUUid = get(JSON.parse(getUserInfo()), "uuid");
 export const fetchData = async (
@@ -46,6 +46,7 @@ export const fetchData = async (
         );
       }
     }
+    changePage();
   } catch (error) {
     console.log(error);
   }

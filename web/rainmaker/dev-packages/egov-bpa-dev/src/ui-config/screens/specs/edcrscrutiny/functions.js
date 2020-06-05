@@ -490,7 +490,7 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
     { key: "permitDate", value: convertDateToEpoch(permitDate) }
   ];
   const response = await getBpaSearchResults(queryObject);
-
+  
   if (get(response, "Bpa[0].edcrNumber") == undefined) {
     visibleHiddenSearchFields(state, dispatch, false);
     dispatch(
@@ -505,15 +505,23 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
     );
     return;
   }
-
-  let edcrRes = await edcrHttpRequest(
+  
+  const dateFromApi = new Date(response.Bpa[0].approvalDate);
+  let month = dateFromApi.getMonth() + 1;
+  let day = dateFromApi.getDate();
+  let year = dateFromApi.getFullYear();
+  month = (month > 9 ? "" : "0") + month;
+  day = (day > 9 ? "" : "0") + day;
+  let date = `${year}-${month}-${day}`;
+  if(permitNum === response.Bpa[0].approvalNo && date === permitDate) {
+    let edcrRes = await edcrHttpRequest( 
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "Bpa[0].edcrNumber") + "&tenantId=" + tenantId,
     "search", []
   );
 
   let SHLicenseDetails = await getLicenseDetails(state,dispatch);
-  
+
   if(get(edcrRes,"edcrDetail[0]") && SHLicenseDetails) {
     visibleHiddenSearchFields(state, dispatch, true);
   } else {
@@ -530,12 +538,22 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
     );
     return;
   }
+
   set(response, "Bpa[0].serviceType", "NEW_CONSTRUCTION")
   let primaryOwnerArray = get(response, "Bpa[0].landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
   dispatch(prepareFinalObject(`Scrutiny[0].applicantName`, primaryOwnerArray.length && primaryOwnerArray[0].name));
   dispatch(prepareFinalObject(`bpaDetails`, get(response, "Bpa[0]")));
   dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
   dispatch(prepareFinalObject(`bpaDetails.appliedBy`, SHLicenseDetails));
+}
+else {
+  let errorMessage = {
+    labelName: "Please select approval date",
+    // labelKey: "ERR_FILL_MANDATORY_FIELDS_PERMIT_SEARCH"
+  };
+  dispatch(toggleSnackbar(true, errorMessage, "warning"));
+  return;
+}
 };
 
 export const resetOCFields = (state, dispatch) => {

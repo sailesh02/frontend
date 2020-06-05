@@ -5041,7 +5041,6 @@ export const deviationValidation = (action, state, dispatch) => {
   let validationResponse = APPROVED;
   let planParam = [],
     ocParam = [];
-debugger
   for (let paramRecord of validationParams) {
 
     let firstIndex = paramRecord.paramPath.indexOf("[");

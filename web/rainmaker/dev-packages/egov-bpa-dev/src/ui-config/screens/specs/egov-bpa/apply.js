@@ -5,7 +5,7 @@ import {
   getSelectField,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getCurrentFinancialYear } from "../utils";
+import { getCurrentFinancialYear, getScrutinyDetails } from "../utils";
 import { footer, showApplyLicencePicker } from "./applyResource/footer";
 import { basicDetails } from "./applyResource/basicDetails";
 import { bpaLocationDetails } from "./applyResource/propertyLocationDetails";
@@ -546,13 +546,13 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
-
+    
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "BPA");
     getTenantMdmsData(action, state, dispatch).then(response => {
       dispatch(prepareFinalObject("BPA.landInfo.address.city", tenantId));
     });
-
+    
     let isEdit = true;
     if(step || step == 0) {
       isEdit = false
@@ -560,6 +560,11 @@ const screenConfig = {
     if (applicationNumber && isEdit) {
       setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
     } else {
+      const edcrNumber = getQueryArg(window.location.href, "edcrNumber");
+      if(edcrNumber) {
+        dispatch(prepareFinalObject("BPA.edcrNumber", edcrNumber));
+        getScrutinyDetails(state, dispatch);
+      }
       setProposedBuildingData(state, dispatch);
       getTodaysDate(action, state, dispatch);
       const queryObject = [
@@ -568,24 +573,24 @@ const screenConfig = {
       ];
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     }
-
+    
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
-      // Set Dropdowns Data
+    // Set Dropdowns Data
       let ownershipCategory = get(
         state,
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
         []
-      );
-      ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
-      dispatch(
-        prepareFinalObject(
-          "applyScreenMdmsData.DropdownsData.OwnershipCategory",
-          ownershipCategory
-        )
-      );
+    );
+    ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
+    dispatch(
+      prepareFinalObject(
+      "applyScreenMdmsData.DropdownsData.OwnershipCategory",
+      ownershipCategory
+      )
+    );     
     });
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+      dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
 
     // Code to goto a specific step through URL

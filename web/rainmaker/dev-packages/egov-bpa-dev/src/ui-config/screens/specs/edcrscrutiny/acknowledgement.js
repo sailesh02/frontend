@@ -259,13 +259,13 @@ const screenConfig = {
                 true
               )
             )
-          } else {
+          } else if(purpose == "apply" && status == "success") {
             dispatch(
               handleField(
                 "acknowledgement",
-                "components.div.children.gotoHomeFooter.children.ocCreateApp",
+                "components.div.children.gotoHomeFooter.children.bpaCreateApp",
                 "visible",
-                false
+                true
               )
             )
           }

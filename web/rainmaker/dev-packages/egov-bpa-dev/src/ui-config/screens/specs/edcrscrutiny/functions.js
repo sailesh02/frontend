@@ -119,7 +119,7 @@ const moveToSuccess = (dispatch, edcrDetail, isOCApp) => {
   if(edcrDetail.status == "Aborted") {
     status = "aborted";
   }
-  let url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}`;
+  let url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}`;
   if(isOCApp) {
     url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}`;
   }
@@ -213,7 +213,10 @@ const scrutinizePlan = async (state, dispatch) => {
       userInfo = { id: userUUid, tenantId: tenantId },
       edcrNumber =  get(state.screenConfiguration.preparedFinalObject, "bpaDetails.edcrNumber");
      }
-    else { userInfo = { id: userUUid, tenantId: userTenant } }
+    else { 
+      userInfo = { id: userUUid, tenantId: userTenant },
+      edcrNumber =  get(state.screenConfiguration.preparedFinalObject, "bpaDetails.edcrNumber");     
+    }
 
     let edcrRequest = {
       transactionNumber: "",

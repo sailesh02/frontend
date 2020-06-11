@@ -4145,26 +4145,36 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
   }
 }
 const documentMaping = async (state, dispatch, action,documentsPreview) => {
-  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+  let files = []
+  documentsPreview.map((docs, index) => {
+    docs.map(doc => {
+      files.push(doc);
+
+    })
+  })
+  let fileStoreIds = jp.query(files, "$.*.fileStoreId");
   let fileUrls =
     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-   let documentsPreviews = documentsPreview.map((doc, index) => {
-    doc["link"] =
-      (fileUrls &&
-        fileUrls[doc.fileStoreId] &&
-        getFileUrl(fileUrls[doc.fileStoreId])) ||
-      "";
-    doc["name"] =
-      (fileUrls[doc.fileStoreId] &&
-        decodeURIComponent(
-          getFileUrl(fileUrls[doc.fileStoreId])
-            .split("?")[0]
-            .split("/")
-            .pop()
-            .slice(13)
-        )) ||
-      `Document - ${index + 1}`;
-      return doc;
+  let documentsPreviews = documentsPreview.map((doc, index) => {
+    doc.map((docs, index) => {
+      docs["link"] =
+        (fileUrls &&
+          fileUrls[docs.fileStoreId] &&
+          getFileUrl(fileUrls[docs.fileStoreId])) ||
+        "";
+        docs["name"] =
+        (fileUrls[docs.fileStoreId] &&
+          decodeURIComponent(
+            getFileUrl(fileUrls[docs.fileStoreId])
+              .split("?")[0]
+              .split("/")
+              .pop()
+              .slice(13)
+          )) ||
+        `Document - ${index + 1}`;
+        return docs;
+    })
+    return doc;    
   });
   return documentsPreviews;
 }
@@ -4196,21 +4206,30 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     let additionalDetail = BPA.additionalDetails, 
     fieldInspectionDetails, fieldInspectionDocs = [], fieldInspectionsQstions = [];
     if(additionalDetail && additionalDetail["fieldinspection_pending"] && additionalDetail["fieldinspection_pending"].length > 0) {
-      fieldInspectionDetails = additionalDetail["fieldinspection_pending"][0]
-      fieldInspectionDocs = fieldInspectionDetails.docs;
-      fieldInspectionsQstions = fieldInspectionDetails.questions;
-    }
-  
-    if(fieldInspectionDocs && fieldInspectionDocs.length > 0 && fieldInspectionsQstions && fieldInspectionsQstions.length > 0) {
-      let fiDocumentsPreview = [];
-      fieldInspectionDocs.forEach(fiDoc => {        
-        fiDocumentsPreview.push({
-          title: getTransformedLocale(fiDoc.documentType),
-          fileStoreId: fiDoc.fileStoreId,
-          linkText: "View"
-        });
+      fieldInspectionDetails = additionalDetail["fieldinspection_pending"]
+      fieldInspectionDetails && fieldInspectionDetails.length > 0 &&
+      fieldInspectionDetails.map( items => {
+        fieldInspectionDocs.push(items.docs);
+        fieldInspectionsQstions.push(items.questions)
       })
+    }
 
+    if(fieldInspectionDocs && fieldInspectionDocs.length > 0 && fieldInspectionsQstions && fieldInspectionsQstions.length > 0) {
+      var fiDocumentsPreview = [];
+      fieldInspectionDocs && fieldInspectionDocs.length > 0 && 
+      fieldInspectionDocs.forEach((fiDocs, index) => { 
+        fiDocumentsPreview[index] = [];
+        fiDocs.map(fiDoc => {
+          let documentCode = (fiDoc.documentType).split('.')[0]+"_"+(fiDoc.documentType).split('.')[1];
+          fiDocumentsPreview[index].push({
+            title: getTransformedLocale(fiDoc.documentType),
+            fileStoreId: fiDoc.fileStoreId,
+            linkText: "View",
+            documentCode: documentCode,
+            additionalDetails: fiDoc.additionalDetails
+          });
+        }) 
+      })
       let fieldInspectionDocuments = await documentMaping(state, dispatch, action, fiDocumentsPreview);
       set(
         action,

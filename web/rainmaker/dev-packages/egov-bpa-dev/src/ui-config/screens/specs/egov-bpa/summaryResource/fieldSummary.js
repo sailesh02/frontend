@@ -96,20 +96,34 @@ const fieldSummaryContent = () => {
   });
 }
 
-export const fieldSummary = getCommonContainer({
-  summaryContent: {
+export const fieldSummary = getCommonGrayCard({
+  header: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: { marginBottom: "10px" }
+    },
+    children: {
+      header: {
+        gridDefination: {
+          xs: 8
+        },
+        ...getCommonSubHeader({
+          labelName: "FI Report",
+          labelKey: "BPA_FI_REPORT"
+        })
+      },
+    }
+  },
+  documentDetailsCard:{
     uiFramework: "custom-containers",
     componentPath: "MultiItem",
     props: {
-      className: "filed-inspection-summary",
-      scheama: fieldSummaryContent(),
-      items: [],
-      hasAddItem: false,
-      isReviewPage: true,
-      prefixSourceJsonPath: "children.cardContent.children",
-      sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending",
-      headerJsonPath : "children.cardContent.children.header.children.header.children.key.props.label",
-      headerName : getLocaleLabels( "FI Report", "BPA_FI_REPORT")
+          className: "applicant-summary",
+          scheama: getCommonGrayCard({
+            scheama: fieldSummaryContent(),              
+        }),
+        items: [],
     },
     type: "array"
   }

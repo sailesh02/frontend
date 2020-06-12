@@ -217,7 +217,8 @@ class NocList extends Component {
           doc.fileStore = docs.fileStoreId;
           doc.fileName = docs.fileName;
           doc.fileUrl = docs.fileUrl;
-          doc.additionalDetails = documents.documents[0].additionalDetails;
+          doc.isClickable = true;
+          doc.additionalDetails = docs.additionalDetails;
           if (doc.id) {
             doc.id = docs.id;
           }

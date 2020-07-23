@@ -193,7 +193,7 @@ const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
-  
+
   let isFormValid = true;
   let hasFieldToaster = false;
 
@@ -408,13 +408,7 @@ const callBackForNext = async (state, dispatch) => {
         // dispatch(prepareFinalObject("BPA.owners[0].ownerType", "NONE"));
       }
       if (activeStep === 3) {
-        let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
-        if(nocData && nocData.length > 0) { 
-          nocData.map(items => {
-            if(!items.readOnly) items.readOnly = items.readOnly ? false : true;
-          })
-          dispatch(prepareFinalObject("nocForPreview", nocData));
-        }
+        uploadButtonVisible(state, dispatch, activeStep);
       }
       if (activeStep === 2) {
         let checkingOwner = get(
@@ -728,22 +722,24 @@ export const getActionDefinationForStepper = path => {
   }
   return actionDefination;
 };
-
-export const callBackForPrevious = (state, dispatch) => {
+export const uploadButtonVisible = (state, dispatch, step) => {
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.div.children.stepper.props.activeStep",
     0
   );
-  if (activeStep === 4) {
+  if (activeStep === step) {
     let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
     if(nocData && nocData.length > 0) { 
       nocData.map(items => {
-        if(items.readOnly) items.readOnly = items.readOnly ? false : true;
+        items.readOnly = items.readOnly ? false : true;
       })
       dispatch(prepareFinalObject("nocForPreview", nocData));
     }
   }
+}
+export const callBackForPrevious = (state, dispatch) => {
+  uploadButtonVisible(state, dispatch, 4);
   changeStep(state, dispatch, "previous");
 };
 

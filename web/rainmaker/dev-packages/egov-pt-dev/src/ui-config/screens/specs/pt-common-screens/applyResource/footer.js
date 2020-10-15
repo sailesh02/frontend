@@ -206,8 +206,13 @@ const callBackForApply = async (state, dispatch) => {
         ...propertyPayload.owners
       ]
     }
+
+    let propertySource = get(
+      state,
+      "screenConfiguration.preparedFinalObject.Property.source"
+    );
     set(propertyPayload, "channel", "SYSTEM");
-    set(propertyPayload, "source", "MUNICIPAL_RECORDS");
+    set(propertyPayload, "source", propertySource);
     set(propertyPayload, "noOfFloors", 1);
     propertyPayload.landArea = parseInt(propertyPayload.landArea);
     propertyPayload.tenantId = propertyPayload.address.city;

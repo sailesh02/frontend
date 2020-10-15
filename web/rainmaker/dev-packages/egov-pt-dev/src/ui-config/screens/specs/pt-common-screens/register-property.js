@@ -265,6 +265,13 @@ const screenConfig = {
       );
     });
 
+    dispatch(
+      prepareFinalObject(
+        "Property.source",
+        "MUNICIPAL_RECORDS"
+      )
+    );
+
     return action;
   },
   components: {

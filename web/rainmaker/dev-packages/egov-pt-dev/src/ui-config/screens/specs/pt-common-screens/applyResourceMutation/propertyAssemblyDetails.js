@@ -187,6 +187,39 @@ export const propertyAssemblyDetails = getCommonCard({
         moduleName: "COMMON",
         masterName: "PROPSUBUSGTYPE"
       },
-    })
-  })
+    }),
+    propertyEntryType: {
+      uiFramework: "custom-containers",
+      componentPath: "RadioGroupContainer",
+      visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      jsonPath: "Property.source",
+      props: {
+        label: {
+          name: "Property Entry Type",
+          key: "PT_PROPERTY_ADDRESS_ENTRY_TYPE"
+        },
+        buttons: [
+          {
+            labelName: "New Property (Default)",
+            labelKey: "PT_NEW_PROPERTY_DEFAULT",
+            value: "MUNICIPAL_RECORDS"
+          },
+          {
+            label: "Legacy Data Entry",
+            labelKey: "PT_LEGACY_DATA_ENTRY",
+            value: "WATER_CHARGES"
+          }
+        ],
+        jsonPath: "Property.source",
+        required: true
+      },
+      required: true,
+      type: "array"
+    },
+  })
 });

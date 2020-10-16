@@ -59,7 +59,12 @@ export const getAddressItems = (properties, OldProperty) => {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_EXISTING_PID", localizationLabelsData),
         value: properties.oldPropertyId || "NA",
         oldValue: OldProperty && OldProperty.oldPropertyId
-      }
+      },
+      process.env.REACT_APP_NAME !== "Citizen" ? {
+        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_ENTRY_TYPE", localizationLabelsData),
+        value: getTranslatedLabel(properties.source, localizationLabelsData) || getTranslatedLabel("MUNICIPAL_RECORDS", localizationLabelsData),
+        oldValue: OldProperty && getTranslatedLabel(OldProperty.source, localizationLabelsData)
+      } : ""
     ]
   );
 }

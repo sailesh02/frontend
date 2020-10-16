@@ -12,7 +12,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
   properties[0] = {
     ...properties[0],
     ...properties[0].propertyDetails[0],
-    source: "MUNICIPAL_RECORDS",
+    source: get(properties[0], "source", "MUNICIPAL_RECORDS"),
     channel: "CFC_COUNTER",
   };
   if (properties[0].owners && properties[0].owners.length) {
@@ -113,7 +113,7 @@ export const createAssessmentPayload = (properties, propertyPayload) => {
     financialYear: propertyPayload.financialYear,
     tenantId: properties.tenantId,
     propertyId: properties.propertyId,
-    source: "MUNICIPAL_RECORDS",
+    source: get(properties[0], "source", "MUNICIPAL_RECORDS"),
     channel: "CFC_COUNTER",
   };
 

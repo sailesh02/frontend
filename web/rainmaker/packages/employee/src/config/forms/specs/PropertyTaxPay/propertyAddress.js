@@ -6,9 +6,16 @@ import set from "lodash/set";
 import get from "lodash/get";
 import { getLocale, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import commonConfig from '../../../common'
+import commonConfig from '../../../common';
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 
 // const Search = <Icon action="action" name="home" color="#30588c" />;
+
+const options = [
+  
+  { value: "MUNICIPAL_RECORDS", label: getLocaleLabels("New Property (Default)", "PT_NEW_PROPERTY_DEFAULT") },
+  { value: "WATER_CHARGES", label: getLocaleLabels("Legacy Data Entry", "PT_LEGACY_DATA_ENTRY") },
+];
 
 const formConfig = {
   name: "propertyAddress",
@@ -86,6 +93,33 @@ const formConfig = {
       toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
       maxLength: 64,
     },
+    propertyEntryType: {
+      id: "propertyEntryType",
+      jsonPath: "Properties[0].source",
+      type: "radioButton",
+      localePrefix: "PROPERTYTAX_BILLING_SLAB",
+      floatingLabelText: "PT_PROPERTY_ADDRESS_ENTRY_TYPE",
+      hintText: "PT_PROPERTY_ADDRESS_ENTRY_TYPE",
+      required: false,
+      fullWidth: true,
+      showFloatingLabelText:true,
+      labelsFromLocalisation:false,
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
+      dropDownData: [],
+    }
+  },
+  beforeInitForm: (action, store) => {
+    try {
+      let state = store.getState();
+      set(action, "form.fields.propertyEntryType.options",options);
+      set(action, "form.fields.propertyEntryType.value", get(state.common.prepareFormData,'Properties[0].source',"MUNICIPAL_RECORDS"));
+      return action;
+    } catch (e) {
+      console.log(e);
+    }
   },
   afterInitForm: (action, store, dispatch) => {
     let tenantId = getTenantId();

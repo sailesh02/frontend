@@ -640,7 +640,7 @@ export const sampleSingleSearch = () => {
                     address: "Corresponding address",
                     type: "CORRESPONDENCE",
                     id: 52741,
-                    tenantId: "pb",
+                    tenantId: "od",
                     userId: 23442,
                     addressType: "CORRESPONDENCE",
                     lastModifiedBy: null,
@@ -652,7 +652,7 @@ export const sampleSingleSearch = () => {
                     address: "Some correspondance address",
                     type: "PERMANENT",
                     id: 48685,
-                    tenantId: "pb",
+                    tenantId: "od",
                     userId: 23442,
                     addressType: "PERMANENT",
                     lastModifiedBy: null,
@@ -671,12 +671,12 @@ export const sampleSingleSearch = () => {
                 identificationMark: null,
                 createdBy: 0,
                 lastModifiedBy: 1,
-                tenantId: "pb",
+                tenantId: "od",
                 roles: [
                   {
                     code: "CITIZEN",
                     name: "Citizen",
-                    tenantId: "pb"
+                    tenantId: "od"
                   }
                 ],
                 uuid: "d9fb76e8-3c65-4e11-9f5f-2998c0f8b8a6",

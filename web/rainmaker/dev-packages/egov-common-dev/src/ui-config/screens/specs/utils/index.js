@@ -391,7 +391,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
         "_search",
         [],
         {
-          tenantId: "pb",
+          tenantId: "od",
           userName: `${ownerNo}`
         }
       );

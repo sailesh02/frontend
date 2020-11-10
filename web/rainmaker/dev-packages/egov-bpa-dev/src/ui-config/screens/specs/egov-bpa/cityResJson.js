@@ -236,7 +236,7 @@ export const cityModuleMockJson = {
         "StateInfo": [
           {
             "name": "Panjab",
-            "code": "pb",
+            "code": "od",
             "bannerUrl": "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.testing/Punjab-bg-QA.jpg",
             "logoUrl": "https://raw.githubusercontent.com/egovernments/egov-web-app/rainmaker-v1-dynamic-state/web/rainmaker/packages/assets/images/pb/mseva-punjab.png",
             "hasLocalisation": true,
@@ -264,7 +264,7 @@ export const cityModuleMockJson = {
       "tenant": {
         "tenants": [
           {
-            "code": "pb",
+            "code": "od",
             "name": "Punjab",
             "description": "Punjab",
             "logoId": "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jalandhar/logo.png",

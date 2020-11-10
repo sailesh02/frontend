@@ -63,7 +63,7 @@ class CustomizedShare extends Component {
             anchorEl: null,
             //logo: this.props.mdmsData['tentantLogo'][`${localStorage.getItem('tenant-id')}`],
             //pdfHeader: this.props.mdmsData['tenantName'] +" "+ this.props.mdmsData['corpName']
-            // logo: this.props.globalFilter[1]['tentantLogo']['pb.abohar']
+            // logo: this.props.globalFilter[1]['tentantLogo']['od.abohar']
 
         }
 

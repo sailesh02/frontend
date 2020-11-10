@@ -978,7 +978,7 @@ class FormWizard extends Component {
             createAndUpdate(index, 'create');
           }
           // createAndUpdate(index);
-          // pt-acknowledgment?purpose=apply&status=success&applicationNumber=PB-TL-2019-12-20-003743&FY=2019-20&tenantId=pb.amritsar
+          // pt-acknowledgment?purpose=apply&status=success&applicationNumber=PB-TL-2019-12-20-003743&FY=2019-20&tenantId=od.amritsar
           // createAndUpdate(index);
 
         }

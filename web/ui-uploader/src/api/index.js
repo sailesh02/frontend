@@ -112,7 +112,7 @@ export const Api = () => {
   const loginUser = async (username, password, userType) => {
     const grant_type = "password";
     const scope = "read";
-    // const tenantId = "pb.amritsar";
+    // const tenantId = "od.amritsar";
     const requestParams = {
       tenantId,
       username,

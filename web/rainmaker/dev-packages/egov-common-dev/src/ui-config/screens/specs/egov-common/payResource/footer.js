@@ -104,9 +104,9 @@ export const callPGService = async (state, dispatch) => {
   });
   const buttonJsonpath = paybuttonJsonpath + `${process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt"}`;
   try {
-    
+
     dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
-  
+
     const requestBody = {
       Transaction: {
         tenantId,
@@ -115,7 +115,7 @@ export const callPGService = async (state, dispatch) => {
         billId: get(billPayload, "Bill[0].id"),
         consumerCode: consumerCode,
         productInfo: "Common Payment",
-        gateway: "AXIS",
+        gateway: "CCAVENUE",
         taxAndPayments,
         user,
         callbackUrl
@@ -419,7 +419,7 @@ const callBackForPay = async (state, dispatch) => {
     }
   }
   if (selectedPaymentType === "CHEQUE" || selectedPaymentType === "OFFLINE_NEFT" || selectedPaymentType === "OFFLINE_RTGS") {
-    //Extra check - to verify ifsc and bank details are populated 
+    //Extra check - to verify ifsc and bank details are populated
 
 
     let ifscCode = get(finalReceiptData, "instrument.ifscCode", "");
@@ -556,7 +556,7 @@ const callBackForPay = async (state, dispatch) => {
         receiptNumber
       );
     } catch (e) {
-      
+
       dispatch(handleField("pay", buttonJsonpath, "props.disabled", false));
       dispatch(
         toggleSnackbar(

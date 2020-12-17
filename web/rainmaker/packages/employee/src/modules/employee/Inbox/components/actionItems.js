@@ -3,21 +3,21 @@ import { Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import Icon from "egov-ui-kit/components/Icon";
 
-export class Taskboard extends React.Component{
-  state={
-    color:""
+export class Taskboard extends React.Component {
+  state = {
+    color: ""
   }
 
-  render(){
-    const {data ,onSlaClick , color} = this.props
+  render() {
+    const { data, onSlaClick, color } = this.props
     return (
       <div className="inbox-taskboard">
         {data.map((item, i) => (
           <Card
             className={`inbox-card inbox-worklist-card inbox-worklist-card-hover-${i}`}
             key={i}
-            onClick={() => onSlaClick(item.baseColor,item.body)}
-            style={{backgroundColor : item.color ,borderTop:  item.baseColor === color ?  `4px solid ${color}`  : ""}}
+            onClick={() => onSlaClick(item.baseColor, item.body)}
+            style={{ backgroundColor: item.color, borderTop: item.baseColor === color ? `4px solid ${color}` : "" }}
             textChildren={
               <div>
                 <div className="head">{item.head}</div>
@@ -26,6 +26,14 @@ export class Taskboard extends React.Component{
             }
           />
         ))}
+
+        <style>{
+          `
+            .inbox-worklist-card-hover-1, .inbox-worklist-card-hover-2{display:none;}
+
+            `
+        }
+        </style>
       </div>
     );
   }
@@ -38,7 +46,7 @@ const onModuleCardClick = (route, setRoute) => {
 const iconStyle = {
   width: "48px",
   height: "46.02px",
-  color:"#fe7a51",
+  color: "#fe7a51",
 };
 
 export const Boxboard = ({ data, setRoute }) => {

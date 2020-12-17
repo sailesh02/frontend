@@ -510,7 +510,7 @@ class TableData extends Component {
         "WF_INBOX_HEADER_LOCALITY",
         "WF_INBOX_HEADER_STATUS",
         "WF_INBOX_HEADER_CURRENT_OWNER",
-        "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
+       // "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
       ];
       inboxData[0].headers = headersList;
       inboxData[0].rows = assignedDataRows;
@@ -642,6 +642,13 @@ class TableData extends Component {
           </Tabs>
           <InboxData businessServiceSla={businessServiceSla} data={inboxData[value]} />
         </div>
+        <style>{
+          `
+            .inbox-data-table-bodycell-4{display:none;}
+
+            `
+        }
+        </style>
       </div>
     );
   }

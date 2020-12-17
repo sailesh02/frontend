@@ -11,7 +11,7 @@ import { convertDateToEpoch, getBill, validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 export const callPGService = async (state, dispatch) => {
- 
+
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const applicationNumber = getQueryArg(
     window.location.href,
@@ -52,7 +52,7 @@ export const callPGService = async (state, dispatch) => {
           taxAndPayments,
           consumerCode: get(billPayload, "Bill[0].billDetails[0].consumerCode"),
           productInfo: "BPA Payment",
-          gateway: "AXIS",
+          gateway: "CCAVENUE",
           user : {
             mobileNumber : userMobileNumber,
             name : userName,

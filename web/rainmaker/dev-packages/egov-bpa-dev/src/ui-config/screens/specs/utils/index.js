@@ -2894,26 +2894,32 @@ export const getRiskType = (state, dispatch, forBPA) => {
     state.screenConfiguration.preparedFinalObject,
     "applyScreenMdmsData.BPA.RiskTypeComputation"
   );
+
+
+  let lowRiskBuilding = get(
+    state.screenConfiguration.preparedFinalObject,
+    `${scrutinytype}.planDetail.planInformation.lowRiskBuilding`
+  );
   let block = get(
     state.screenConfiguration.preparedFinalObject,
     `${scrutinytype}.planDetail.blocks[0].building.occupancies[0].typeHelper.type`, []
   );
   // dispatch(prepareFinalObject("BPA.blocks", [block]));
   let scrutinyRiskType;
-  if (
-    plotArea < riskType[2].toPlotArea &&
-    buildingHeight < riskType[2].toBuildingHeight
-  ) {
-    scrutinyRiskType = "LOW"
-  } else if (
-    (plotArea >= riskType[1].fromPlotArea && plotArea <= riskType[1].toPlotArea) ||
-    (buildingHeight >= riskType[1].fromBuildingHeight && buildingHeight <= riskType[1].toBuildingHeight)) {
-    scrutinyRiskType = "MEDIUM"
-  } else if (
-    (plotArea > riskType[0].fromPlotArea) ||
-    (buildingHeight >= riskType[0].fromBuildingHeight)) {
-    scrutinyRiskType = "HIGH"
-  }
+  // if (
+  //   plotArea < riskType[2].toPlotArea &&
+  //   buildingHeight < riskType[2].toBuildingHeight
+  // ) {
+  //   scrutinyRiskType = "LOW"
+  // } else if (
+  //   (plotArea >= riskType[1].fromPlotArea && plotArea <= riskType[1].toPlotArea) ||
+  //   (buildingHeight >= riskType[1].fromBuildingHeight && buildingHeight <= riskType[1].toBuildingHeight)) {
+  //   scrutinyRiskType = "MEDIUM"
+  // } else if (
+  //   (plotArea > riskType[0].fromPlotArea) ||
+  //   (buildingHeight >= riskType[0].fromBuildingHeight)) {
+  //   scrutinyRiskType = "HIGH"
+  // }
   // if(scrutinyRiskType === "LOW"){
   //   const tenantId = getQueryArg(window.location.href, "tenantId");
   //   const queryObject = [
@@ -2922,6 +2928,12 @@ export const getRiskType = (state, dispatch, forBPA) => {
   //   ];
   //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
   // }
+
+  if(lowRiskBuilding){
+    scrutinyRiskType = "LOW"
+  }else{
+    scrutinyRiskType = "OTHER"
+  }
 
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
   return scrutinyRiskType;
@@ -4264,10 +4276,10 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     //     obj.createdBy = "BPA Document Verifier"
     //   }
     //   else if (doc.wfState === "FIELDINSPECTION_PENDING") {
-    //     obj.createdBy = "BPA Field Inspector"   
+    //     obj.createdBy = "BPA Field Inspector"
     //   }
     //   else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
-    //     obj.createdBy = "BPA Noc Verifier"    
+    //     obj.createdBy = "BPA Noc Verifier"
     //   } else {
     //     obj.createdBy = "BPA Architect"
     //   }
@@ -4313,7 +4325,7 @@ const getRequiredMdmsCards = (state, dispatch) => {
 
 /**
  * This method will be called to get the current role of logged-in user
- * @param {String} wfState 
+ * @param {String} wfState
  * @returns {String} currentRole
  */
 export const getLoggedinUserRole = (wfState) => {
@@ -4380,9 +4392,9 @@ const getEditableUserRoleforNoc = (state, isVisibleTrue) => {
   roles.map(role => {
     if(isEmployee && isVisibleTrue && (role.code == "BPA_NOC_VERIFIER")) {
         allowedToUpload = true;
-    } 
+    }
     if(
-      window.location.href.includes("egov-bpa/apply") || 
+      window.location.href.includes("egov-bpa/apply") ||
       window.location.href.includes("oc-bpa/apply")) {
       allowedToUpload = true;
     }
@@ -4658,12 +4670,12 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
   if (documentCards && documentCards.length > 0) {
     cards = documentCards[0].cards;
   }
-  
+
 for (var i = 0; i < cards.length; i++) {
-  cards[i].documents && cards[i].documents.length && 
+  cards[i].documents && cards[i].documents.length &&
   cards[i].documents.map(fidocs =>{
     nocDocuments && nocDocuments.length &&
-    nocDocuments.forEach(doc => { 
+    nocDocuments.forEach(doc => {
       if(doc.fileStoreId === fidocs.fileStoreId) {
         fidocs.link = get(doc, "link");
         fidocs.name = get(doc, "name");
@@ -4784,9 +4796,9 @@ const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMd
 
 }
 /**
- * 
- * @param {String} documentType 
- * Eg: APPL_ADDRESSPROOF_ELECTRICITYBILL 
+ *
+ * @param {String} documentType
+ * Eg: APPL_ADDRESSPROOF_ELECTRICITYBILL
  * retrun APPL_ADDRESSPROOF
  */
 const getDocumentCode = (documentType) => {

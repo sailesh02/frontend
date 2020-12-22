@@ -503,7 +503,8 @@ const setSearchResponse = async (
     //this condition should extend to OR with status INPROGRESS
     let businessService = "BPA.NC_APP_FEE";
     if (get(response, "BPA[0].businessService") == "BPA_LOW") {
-      businessService = "BPA.LOW_RISK_PERMIT_FEE"
+      //businessService = "BPA.LOW_RISK_PERMIT_FEE"
+      businessService = "BPA.NC_APP_FEE"
     }
     generateBillForBPA(dispatch, applicationNumber, tenantId, businessService);
     dispatch(

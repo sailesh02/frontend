@@ -327,13 +327,14 @@ class WorkFlowContainer extends React.Component {
       bservice = "FIRENOC";
     } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC") {
       baseUrl = "egov-bpa";
-      if (moduleName === "BPA") {
+      if (moduleName === "BPA" || moduleName === "BPA_LOW") {
         bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
-      } else if (moduleName === "BPA_OC") {
+      } //else if (moduleName === "BPA_OC") {
+      else {
         bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_OC_APP_FEE" : "BPA.NC_OC_SAN_FEE");
-      } else {
-        bservice = "BPA.LOW_RISK_PERMIT_FEE"
-      }
+      } //else {
+        //bservice = "BPA.LOW_RISK_PERMIT_FEE"
+      //}
     } else if (moduleName === "PT") {
       bservice = "PT"
     } else if (moduleName === "PT.CREATE") {

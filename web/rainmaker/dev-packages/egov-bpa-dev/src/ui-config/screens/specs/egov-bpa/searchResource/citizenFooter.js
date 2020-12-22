@@ -28,7 +28,8 @@ export const bpaMakePayment = async (state, dispatch) => {
   let riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.riskType");
   let billbService
   if(riskType === "LOW") {
-    billbService = "BPA.LOW_RISK_PERMIT_FEE"
+    //billbService = "BPA.LOW_RISK_PERMIT_FEE"
+    billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
   } else {
     billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
   }

@@ -63,7 +63,8 @@ export const applicationSuccessFooter = (
   let businessService = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].businessService") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.businessService"));
   let billbService
   if(businessService === "BPA_LOW") {
-    billbService = "BPA.LOW_RISK_PERMIT_FEE"
+    //billbService = "BPA.LOW_RISK_PERMIT_FEE"
+     billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
   } else if(businessService === "BPA"){
     billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
   } else if(businessService === "BPA_OC"){

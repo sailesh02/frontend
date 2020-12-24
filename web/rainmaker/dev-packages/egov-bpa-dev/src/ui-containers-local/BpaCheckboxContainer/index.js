@@ -61,6 +61,7 @@ class BpaCheckboxContainer extends React.Component {
       componentJsonpath,
       fieldValue,
       localizationLabels,
+      disabled = false,
       ...rest
     } = this.props;
 
@@ -76,7 +77,7 @@ class BpaCheckboxContainer extends React.Component {
         localizationLabels
       );
     }
-    
+
 
     return (
       <FormGroup row>
@@ -85,6 +86,7 @@ class BpaCheckboxContainer extends React.Component {
           key={fieldValue}
           control={
             <Checkbox
+              disabled={disabled==true?true:false}
               checked={fieldValue}
               onChange={this.handleChange(fieldValue)}
               value={fieldValue}

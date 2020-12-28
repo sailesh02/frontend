@@ -224,7 +224,6 @@ class DocumentList extends Component {
   };
 
   handleChange = (key, event) => {
-
     const { bparegDocumentDetailsUploadRedux, prepareFinalObject } = this.props;
     let appDocumentList = {
       ...bparegDocumentDetailsUploadRedux,

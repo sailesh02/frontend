@@ -2682,36 +2682,8 @@ export const getLabelOnlyValue = (value, props = {}) => {
   };
 };
 
-export const checkOwnerAndArchitectMobileNo = (state, dispatch) =>{
-  let userInfo = JSON.parse(getUserInfo());
-
-  const ownerNo = get(
-    state.screenConfiguration.preparedFinalObject,
-    `BPA.landInfo.owners[0].mobileNumber`,
-    ""
-  );
-
-  const userMobileNo = userInfo.mobileNumber;
-  if(ownerNo == userMobileNo){
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Owner mobile number and Architect mobile number can not be same",
-          labelKey: "ERR_OWNER_AND_ARCHITECT_MOBILE_SAME_TOGGLE_MSG"
-        },
-        "error"
-      )
-    );
-    return false;
-  }else{
-    return true;
-  }
-}
 export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
   try {
-
-    checkOwnerAndArchitectMobileNo(state, dispatch);
     const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
     const ownerNo = get(
       state.screenConfiguration.preparedFinalObject,

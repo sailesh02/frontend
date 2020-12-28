@@ -14,9 +14,9 @@ import {
   prepareNOCUploadData,
   submitBpaApplication,
   updateBpaApplication,
-  getNocSearchResults
+  getNocSearchResults  
 } from "../../../../../ui-utils/commons";
-import { prepareNocFinalCards, compare, checkOwnerAndArchitectMobileNo } from "../../../specs/utils/index";
+import { prepareNocFinalCards, compare } from "../../../specs/utils/index";
 import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
@@ -150,14 +150,14 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
           obj.createdBy = "BPA Document Verifier"
         }
         else if (docDetail.wfState === "FIELDINSPECTION_PENDING") {
-          obj.createdBy = "BPA Field Inspector"
+          obj.createdBy = "BPA Field Inspector"   
         }
         else if (docDetail.wfState === "NOC_VERIFICATION_PENDING") {
-          obj.createdBy = "BPA Noc Verifier"
+          obj.createdBy = "BPA Noc Verifier"    
         } else {
           obj.createdBy = "BPA Architect"
         }
-
+        
         documentsPreview.push(obj);
       });
     }
@@ -180,7 +180,7 @@ const getSummaryRequiredDetails = async (state, dispatch) => {
   // dispatch(
   //   handleField(
   //     "apply",
-  //     "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.applyDocSummary.children.cardContent.children.uploadedDocumentDetailsCard",
+  //     "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.applyDocSummary.children.cardContent.children.uploadedDocumentDetailsCard",            
   //     "visible",
   //     false
   //   )
@@ -194,7 +194,7 @@ const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
-
+  
   let isFormValid = true;
   let hasFieldToaster = false;
 
@@ -228,7 +228,7 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 1) {
-
+    
     let isBuildingPlanScrutinyDetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.buildingPlanScrutinyDetails.children.cardContent.children.buildingPlanScrutinyDetailsContainer.children",
       state,
@@ -236,10 +236,10 @@ const callBackForNext = async (state, dispatch) => {
     );
    /*  let isBlockWiseOccupancyAndUsageDetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.blockWiseOccupancyAndUsageDetails.children.cardContent.children.blockWiseOccupancyAndUsageDetailscontainer.children.cardContent.children.applicantTypeSelection.children",
-      state,
+      state, 
       dispatch
     ); */
-
+   
     let isProposedBuildingDetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.totalBuildUpAreaDetailsContainer.children",
       state,
@@ -259,10 +259,10 @@ const callBackForNext = async (state, dispatch) => {
     // );
 
     // if (
-    //   !isBuildingPlanScrutinyDetailsCardValid ||
+    //   !isBuildingPlanScrutinyDetailsCardValid || 
     //   //!isBlockWiseOccupancyAndUsageDetailsCardValid ||
     //   !isProposedBuildingDetailsCardValid ||
-    //   !isDemolitiondetailsCardValid
+    //   !isDemolitiondetailsCardValid  
     //   // !isabstractProposedBuildingDetailsCardValid
     // ) {
     //   isFormValid = false;
@@ -298,10 +298,6 @@ const callBackForNext = async (state, dispatch) => {
       multipleApplicantCardPath,
       []
     );
-    if(!checkOwnerAndArchitectMobileNo(state, dispatch)){
-      isFormValid = false;
-    }
-
     let isMultipleApplicantCardValid = true;
     for (var j = 0; j < multipleApplicantCardItems.length; j++) {
       if (
@@ -358,7 +354,7 @@ const callBackForNext = async (state, dispatch) => {
           documentsFormat[i],
           "isDocumentTypeRequired"
         );
-
+  
         let documents = get(documentsFormat[i], "documents");
         if (isDocumentRequired) {
           if (documents && documents.length > 0) {
@@ -414,7 +410,7 @@ const callBackForNext = async (state, dispatch) => {
       }
       if (activeStep === 3) {
         let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
-        if(nocData && nocData.length > 0) {
+        if(nocData && nocData.length > 0) { 
           nocData.map(items => {
             if(!items.readOnly) items.readOnly = items.readOnly ? false : true;
           })
@@ -516,9 +512,9 @@ const callBackForNext = async (state, dispatch) => {
           { key: "sourceRefId", value: applicationNumber }
         ], state);
         payload.Noc.sort(compare);
-        dispatch(prepareFinalObject("Noc", payload.Noc));
+        dispatch(prepareFinalObject("Noc", payload.Noc)); 
         await prepareNOCUploadData(state, dispatch);
-        prepareNocFinalCards(state, dispatch);
+        prepareNocFinalCards(state, dispatch);   
       } else {
         if(activeStep === 0){
           const occupancytypeValid = get(
@@ -531,11 +527,11 @@ const callBackForNext = async (state, dispatch) => {
               labelName: "Please search scrutiny details linked to the scrutiny number",
               labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_SEARCH_TITLE"
             };
-            dispatch(toggleSnackbar(true, errorMessage, "warning"));
+            dispatch(toggleSnackbar(true, errorMessage, "warning")); 
           }else{
             responseStatus === "success" && changeStep(state, dispatch);
             /*let licenceType = get(
-              state.screenConfiguration.preparedFinalObject ,
+              state.screenConfiguration.preparedFinalObject , 
               "applyScreenMdmsData.licenceTypes", []
               );
             let bpaStatus = get(
@@ -743,7 +739,7 @@ export const callBackForPrevious = (state, dispatch) => {
   );
   if (activeStep === 4) {
     let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
-    if(nocData && nocData.length > 0) {
+    if(nocData && nocData.length > 0) { 
       nocData.map(items => {
         if(items.readOnly) items.readOnly = items.readOnly ? false : true;
       })

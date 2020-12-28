@@ -20,7 +20,7 @@ import { applicantDetails } from "./applyResource/applicantDetails";
 import {
   detailsofplot
 } from "./applyResource/boundarydetails";
-import { documentDetails } from "./applyResource/documentDetails";
+import { documentDetails,  additionalDocsInformation } from "./applyResource/documentDetails";
 import { statusOfNocDetails } from "./applyResource/updateNocDetails";
 import { getQueryArg, getFileUrlFromAPI, setBusinessServiceDataToLocalStorage, getTransformedLocale, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import {
@@ -96,7 +96,7 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    buildingPlanScrutinyDetails,  
+    buildingPlanScrutinyDetails,
     proposedBuildingDetails,
     demolitiondetails,
     abstractProposedBuildingDetails
@@ -124,6 +124,7 @@ export const formwizardFourthStep = {
   },
   children: {
     documentDetails,
+    additionalDocsInformation,
     nocDetailsApply
   },
   visible: false
@@ -258,7 +259,7 @@ const setSearchResponse = async (
     },
     { key: "applicationNo", value: applicationNumber }
   ]);
-  
+
   const edcrNumber = get(response, "BPA[0].edcrNumber");
   const ownershipCategory = get(response, "BPA[0].landInfo.ownershipCategory");
   const appDate = get(response, "BPA[0].auditDetails.createdTime");
@@ -292,7 +293,7 @@ const setSearchResponse = async (
   if(ownershipCategory) {
     dispatch(prepareFinalObject( "BPA.landInfo.ownerShipMajorType", ownershipCategory.split('.')[0] ));
   }
-  
+
  if(latitude && longitude) {
   dispatch(
     handleField(
@@ -329,17 +330,17 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
           docObj.isDocumentRequired = false;
         }
         else {
-          docObj.isDocumentRequired = doc.required;          
+          docObj.isDocumentRequired = doc.required;
         }
         docObj.isDocumentTypeRequired = doc.required;
         bpaDocs.push(docObj);
       })
     });
   }
-  
+
   let bpaDetails = get (state.screenConfiguration.preparedFinalObject, "BPA");
   let uploadedDocs = bpaDetails.documents;
-  
+
   if(uploadedDocs && uploadedDocs.length > 0) {
     let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
     let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
@@ -349,7 +350,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
         if(upDoc.documentType) bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
         if(bpaDetailsDoc == bpaDoc.documentCode) {
           let url = (fileUrls && fileUrls[upDoc.fileStoreId] && fileUrls[upDoc.fileStoreId].split(",")[0]) || "";
-          let name = (fileUrls[upDoc.fileStoreId] && 
+          let name = (fileUrls[upDoc.fileStoreId] &&
             decodeURIComponent(
               fileUrls[upDoc.fileStoreId]
                 .split(",")[0]
@@ -365,7 +366,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
             bpaDoc.documents.push(
               {
                 title: getTransformedLocale(bpaDoc.dropDownValues.value),
-                dropDownValues : bpaDoc.dropDownValues.value,    
+                dropDownValues : bpaDoc.dropDownValues.value,
                 name: name,
                 linkText: "View",
                 fileName : name,
@@ -373,14 +374,14 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
                 fileUrl : url,
                 wfState: upDoc.wfState ,
                 isClickable:false,
-                additionalDetails: upDoc.additionalDetails                                
+                additionalDetails: upDoc.additionalDetails
               }
             );
           }else{
             bpaDoc.documents = [
               {
                 title: getTransformedLocale(bpaDoc.dropDownValues.value),
-                dropDownValues : bpaDoc.dropDownValues.value,             
+                dropDownValues : bpaDoc.dropDownValues.value,
                 name: name,
                 linkText: "View",
                 fileName : name,
@@ -388,7 +389,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
                 fileUrl : url,
                 wfState: upDoc.wfState,
                 isClickable:false,
-                additionalDetails: upDoc.additionalDetails                                 
+                additionalDetails: upDoc.additionalDetails
               }
             ];
           }
@@ -396,25 +397,25 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
           // if(bpaDoc.documents ){
           //   bpaDoc.documents.push(
           //     {
-          //       title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+          //       title: getTransformedLocale(bpaDoc.dropDownValues.value),
           //       name: name,
           //       linkText: "View",
           //       fileName : name,
           //       fileStoreId : upDoc.fileStoreId,
           //       fileUrl : url,
-          //       wfState: upDoc.wfState                                
+          //       wfState: upDoc.wfState
           //     }
           //   );
           // }else{
           //   bpaDoc.documents = [
           //     {
-          //       title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+          //       title: getTransformedLocale(bpaDoc.dropDownValues.value),
           //       name: name,
           //       linkText: "View",
           //       fileName : name,
           //       fileStoreId : upDoc.fileStoreId,
           //       fileUrl : url,
-          //       wfState: upDoc.wfState                                
+          //       wfState: upDoc.wfState
           //     }
           //   ];
           // }
@@ -423,7 +424,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
     })
     let previewStoreIds = jp.query(bpaDocs, "$..[*].*.fileStoreId");
     let previewFileUrls = previewStoreIds.length > 0 ? await getFileUrlFromAPI(previewStoreIds) : {};
-      
+
     bpaDocs.forEach(doc => {
 
       if (doc.documents && doc.documents.length > 0) {
@@ -447,19 +448,19 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
 }
 const selectLicenceType = (state, dispatch) => {
   let value = get(
-    state.screenConfiguration.preparedFinalObject , 
+    state.screenConfiguration.preparedFinalObject ,
     "BPA.tradeType", ""
     );
   let plotArea = get(
-    state.screenConfiguration.preparedFinalObject , 
+    state.screenConfiguration.preparedFinalObject ,
     "scrutinyDetails.planDetail.plot.area"
     );
   let numOfFloors = get(
-    state.screenConfiguration.preparedFinalObject , 
+    state.screenConfiguration.preparedFinalObject ,
     "scrutinyDetails.planDetail.blocks[0].building.totalFloors"
     );
   let heighOfTheBuilding = get(
-    state.screenConfiguration.preparedFinalObject , 
+    state.screenConfiguration.preparedFinalObject ,
     "scrutinyDetails.planDetail.blocks[0].building.buildingHeight"
   )
   let tradeTypes = get(
@@ -471,8 +472,8 @@ const selectLicenceType = (state, dispatch) => {
     tradeTypes.forEach(type =>{
       if(type.code.split('.')[0] === value) {
         if(type.restrictions) {
-          if(plotArea <= type.restrictions.maxPlotArea && 
-            heighOfTheBuilding < type.restrictions.maxBulidingheight && 
+          if(plotArea <= type.restrictions.maxPlotArea &&
+            heighOfTheBuilding < type.restrictions.maxBulidingheight &&
             numOfFloors <= type.restrictions.maxBulidingheight) {
               isTrue = true;
             } else {
@@ -536,15 +537,15 @@ const setTaskStatus = async(state,applicationNumber,tenantId,dispatch,componentJ
     if (payload && payload.ProcessInstances.length > 0) {
       processInstances= orderWfProcessInstances(
         payload.ProcessInstances
-      );      
+      );
       dispatch(prepareFinalObject("BPAs.taskStatusProcessInstances",processInstances));
-      
+
       let sendToArchitect = (processInstances && processInstances.length>1 && processInstances[processInstances.length-1].action)||"";
-      
+
       if(sendToArchitect =="SEND_TO_ARCHITECT"){
         dispatch(handleField("apply", 'components.div.children.taskStatus', "visible", true));
       }
-     
+
     }
 }
 const screenConfig = {
@@ -604,6 +605,12 @@ const screenConfig = {
     });
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
+    // set(
+    //   action.screenConfig,
+    //   "components.div.children.formwizardFourthStep.children.additionalDetails1",
+    //   false
+    // );
+
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
       let intStep = parseInt(step);
@@ -659,7 +666,7 @@ const screenConfig = {
         taskStatus: {
           moduleName: "egov-workflow",
           uiFramework: "custom-containers-local",
-          componentPath: "WorkFlowContainer",          
+          componentPath: "WorkFlowContainer",
           visible: false,
           componentJsonpath:'components.div.children.taskStatus',
           props: {

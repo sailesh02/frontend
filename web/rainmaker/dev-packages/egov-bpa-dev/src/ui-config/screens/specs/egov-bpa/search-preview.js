@@ -26,11 +26,11 @@ import "../egov-bpa/applyResource/index.scss";
 import { permitConditions } from "../egov-bpa/summaryResource/permitConditions";
 import { permitListSummary } from "../egov-bpa/summaryResource/permitListSummary";
 import {
-  downloadFeeReceipt,
-  edcrDetailsToBpaDetails,
-  generateBillForBPA,
-  permitOrderNoDownload,
-  requiredDocumentsData,
+  downloadFeeReceipt, 
+  edcrDetailsToBpaDetails, 
+  generateBillForBPA, 
+  permitOrderNoDownload, 
+  requiredDocumentsData, 
   revocationPdfDownload,
   setProposedBuildingData,
   prepareNocFinalCards,
@@ -49,7 +49,6 @@ import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { nocDetailsSearch } from "./noc";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
-import { additionalDocsInformation } from "./applyResource/documentDetails";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -500,7 +499,7 @@ const setSearchResponse = async (
   const status = get(response, "BPA[0].status");
   dispatch(prepareFinalObject("BPA", response.BPA[0]));
   if (get(response, "BPA[0].status") == "CITIZEN_APPROVAL_INPROCESS") {
-    // TODO if required to show for architect before apply,
+    // TODO if required to show for architect before apply, 
     //this condition should extend to OR with status INPROGRESS
     let businessService = "BPA.NC_APP_FEE";
     if (get(response, "BPA[0].businessService") == "BPA_LOW") {
@@ -529,24 +528,6 @@ const setSearchResponse = async (
   );
 
   dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
-
-  let additionalDocTypes = ["DocTypes1", "DocTypes1", "DocTypes2", "DocTypes3", "DocTypes4", "DocTypes5", "DocTypes6", "DocTypes7"];
-
-
-
-  let scrutinyAdditionalInfo = edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments;
-  let addtionalDocTypesCheckboxesValues = {};
-  if (additionalDocTypes && additionalDocTypes.length > 0) {
-    for (let i = 0; i < additionalDocTypes.length; i++) {
-      if (scrutinyAdditionalInfo.includes(additionalDocTypes[i])) {
-
-        addtionalDocTypesCheckboxesValues[additionalDocTypes[i]] = true;
-      } else {
-        addtionalDocTypesCheckboxesValues[additionalDocTypes[i]] = false;
-      }
-    }
-  }
-  dispatch(prepareFinalObject("addtionalDocTypesCheckboxesValues", addtionalDocTypesCheckboxesValues));
 
   await edcrDetailsToBpaDetails(state, dispatch);
   let isCitizen = process.env.REACT_APP_NAME === "Citizen" ? true : false;
@@ -721,7 +702,7 @@ export const beforeSubmitHook = async () => {
   let state = store.getState();
   let bpaDetails = get(state, "screenConfiguration.preparedFinalObject.BPA", {});
   let isNocTrue = get(state, "screenConfiguration.preparedFinalObject.BPA.isNocTrue", false);
-  if (!isNocTrue) {
+  if(!isNocTrue) {
     const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
     let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
     if (Noc.length > 0) {
@@ -736,9 +717,9 @@ export const beforeSubmitHook = async () => {
           [],
           { Noc: Noc[data] }
         );
-        if (get(response, "ResponseInfo.status") == "successful") {
+        if(get(response, "ResponseInfo.status") == "successful") {
           count++;
-          if (Noc.length == count) {
+          if(Noc.length == count) {
             store.dispatch(prepareFinalObject("BPA.isNocTrue", true));
             return bpaDetails;
           }
@@ -944,7 +925,6 @@ const screenConfig = {
           basicSummary: basicSummary,
           scrutinySummary: scrutinySummary,
           applicantSummary: applicantSummary,
-          additionalDocsInformation: additionalDocsInformation,
           previewSummary: previewSummary,
           nocDetailsApply: nocDetailsSearch,
           declarationSummary: declarationSummary,

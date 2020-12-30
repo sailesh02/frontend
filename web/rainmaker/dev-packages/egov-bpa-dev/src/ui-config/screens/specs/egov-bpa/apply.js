@@ -605,6 +605,77 @@ const screenConfig = {
     });
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
+    let isMohallaSet = get(
+      state,
+      "screenConfiguration.preparedFinalObject.mohalla.tenant.localities",
+      []
+    );
+
+    if(!isMohallaSet && isMohallaSet.length < 1){
+
+      let cityValue = get(
+        state,
+        "screenConfiguration.preparedFinalObject.BPA.landInfo.address.city",
+        []
+      );
+      try {
+        let payload = httpRequest(
+          "post",
+          "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+          "_search",
+          [{ key: "tenantId", value: cityValue }],
+          {}
+        );
+        const mohallaData =
+          payload &&
+          payload.TenantBoundary[0] &&
+          payload.TenantBoundary[0].boundary &&
+          payload.TenantBoundary[0].boundary.reduce((result, item) => {
+            result.push({
+              ...item,
+              name: `${action.value
+                .toUpperCase()
+                .replace(
+                  /[.]/g,
+                  "_"
+                )}_REVENUE_${item.code
+                  .toUpperCase()
+                  .replace(/[._:-\s\/]/g, "_")}`
+            });
+            return result;
+          }, []);
+        dispatch(
+          prepareFinalObject(
+            "mohalla.tenant.localities",
+            mohallaData
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
+            "props.suggestions",
+            mohallaData
+            // payload.TenantBoundary && payload.TenantBoundary[0].boundary
+          )
+        );
+        const mohallaLocalePrefix = {
+          moduleName: action.value,
+          masterName: "REVENUE"
+        };
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
+            "props.localePrefix",
+            mohallaLocalePrefix
+          )
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
     // set(
     //   action.screenConfig,
     //   "components.div.children.formwizardFourthStep.children.additionalDetails1",

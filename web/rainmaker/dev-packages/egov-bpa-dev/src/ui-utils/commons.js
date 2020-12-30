@@ -518,7 +518,7 @@ let addtionalDocTypesCheckboxesValues = {};
     }
   }
 
-  dispatch(prepareFinalObject("addtionalDocTypesCheckboxesValues", addtionalDocTypesCheckboxesValues));
+
   let documents = [];
   let additinalDocs = [];
   /**
@@ -670,6 +670,9 @@ var tempArray;
   if(tempArray && tempArray.length > 0){
     myArray.push({code:"ADDL", title: "BPA_ADDL", cards:tempArray[0].cards});
 
+    dispatch(prepareFinalObject("documentsContract", myArray));
+    dispatch(prepareFinalObject("addtionalDocTypesCheckboxesValues", addtionalDocTypesCheckboxesValues));
+  }else{
     dispatch(prepareFinalObject("documentsContract", myArray));
   }
 

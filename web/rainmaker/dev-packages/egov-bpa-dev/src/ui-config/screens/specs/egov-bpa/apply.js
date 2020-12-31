@@ -316,6 +316,13 @@ const setSearchResponse = async (
   await prepareDocumentsUploadData(state, dispatch);
   await prepareDocumentDetailsUploadRedux(state, dispatch);
   setMohallaIfNotSet(state, dispatch, action, response.BPA[0].landInfo.address.city);
+  if(edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments < 1){
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFourthStep.children.additionalDocsInformation.visible",
+      false
+  );
+  }
 };
 
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {

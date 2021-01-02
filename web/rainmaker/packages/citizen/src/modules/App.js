@@ -11,7 +11,7 @@ import commonConfig from "config/common";
 import redirectionLink from "egov-ui-kit/config/smsRedirectionLinks";
 import routes from "./Routes";
 import { LoadingIndicator } from "components";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, setDefaultLocale, getDefaultLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import isEmpty from "lodash/isEmpty";
@@ -89,7 +89,7 @@ class App extends Component {
         logout()
         setRoute("/user/otp?smsLink=true");
        // setPreviousRoute(redirectionLink(href));
-      } 
+      }
     }else{
       setRoute("/user/otp?smsLink=true");
       setPreviousRoute(redirectionLink(href));
@@ -114,7 +114,18 @@ class App extends Component {
     const isPublicSearch = location && location.pathname && location.pathname.includes("/withoutAuth/pt-mutation/public-search");
     const isPublicSearchPay = location && location.pathname && location.pathname.includes("/withoutAuth/egov-common/pay");
     if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect && !isPrivacyPolicy && !isPublicSearch && !isPublicSearchPay) {
-      nextProps.hasLocalisation && this.props.history.replace("/language-selection");
+     // nextProps.hasLocalisation && this.props.history.replace("/language-selection");
+     if(nextProps.hasLocalisation){
+      if(window.location.search.includes("mobileno") && window.location.search.includes("ecno"))
+      {       
+
+           setDefaultLocale("en_IN");
+        }
+      if(getDefaultLocale()== null){
+
+        this.props.history.replace("/language-selection");
+      }
+    }
     }
   }
 

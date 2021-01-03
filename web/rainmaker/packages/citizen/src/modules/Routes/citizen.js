@@ -17,7 +17,7 @@ import { EventDetails } from "modules/common";
 import Events from "modules/citizen/Events";
 import MyCity from "modules/citizen/MyCity";
 import { ImageModalDisplay } from "modules/common";
-import HomePage from "modules/citizen/HomePage";
+//import HomePage from "modules/citizen/HomePage";
 
 // pgr specific screens
 
@@ -57,12 +57,12 @@ const routes = [
     needsAuthentication: false,
     redirectionUrl: "/user/register",
   },
-  {
-    path: "home",
-    component: HomePage,
-    needsAuthentication: false,
-    redirectionUrl: "/user/register",
-  },
+  // {
+  //   path: "home",
+  //   component: HomePage,
+  //   needsAuthentication: false,
+  //   redirectionUrl: "/user/register",
+  // },
 
   {
     path: "privacy-policy",

@@ -1418,6 +1418,8 @@ const updateNocApplication = async (state, dispatch, bpaAction) => {
         }
       }
     }
+  }else{
+    return "successful";
   }
 };
 

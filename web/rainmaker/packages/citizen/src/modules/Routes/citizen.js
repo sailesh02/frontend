@@ -55,7 +55,7 @@ const routes = [
     path: "language-selection",
     component: LanguageSelection,
     needsAuthentication: false,
-    redirectionUrl: "/user/register",
+    redirectionUrl: "/user/login",
   },
   // {
   //   path: "home",

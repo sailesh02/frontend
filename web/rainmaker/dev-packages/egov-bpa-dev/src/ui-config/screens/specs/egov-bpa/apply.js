@@ -323,6 +323,32 @@ const setSearchResponse = async (
       false
   );
   }
+  if (edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments.length > 0) {
+    let scrutinyAdditionalInfo = []
+    scrutinyAdditionalInfo = edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments;
+
+    let additionDocCheckboxes = get(
+      action.screenConfig,
+      "components.div.children.formwizardFourthStep.children.additionalDocsInformation.children.cardContent.children.applicantCard.children",
+      []
+    );
+
+    let additionalCheckboxArray = Object.keys(additionDocCheckboxes);
+
+    if (additionalCheckboxArray && additionalCheckboxArray.length > 0) {
+      for (let i = 0; i < additionalCheckboxArray.length; i++) {
+        if (!scrutinyAdditionalInfo.includes(additionalCheckboxArray[i])) {
+          set(
+            action.screenConfig,
+            `components.div.children.formwizardFourthStep.children.additionalDocsInformation.children.cardContent.children.applicantCard.children.${additionalCheckboxArray[i]}.visible`,
+            false
+          );
+
+        }
+      }
+    }
+  }
+
 };
 
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {

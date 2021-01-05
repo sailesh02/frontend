@@ -715,12 +715,35 @@ const setSearchResponse = async (
   await setDownloadMenu(action, state, dispatch, applicationNumber, tenantId);
   sendToArchDownloadMenu(action, state, dispatch);
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-  if(edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments.length < 1){
+  if (edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments.length < 1) {
     set(
       action.screenConfig,
       "components.div.children.body.children.cardContent.children.additionalDocsInformation.visible",
       false
-  );
+    );
+  }
+  if (edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments.length > 0) {
+    let scrutinyAdditionalInfo = []
+    scrutinyAdditionalInfo = edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments;
+    let additionDocCheckboxes = get(
+      action.screenConfig,
+      "components.div.children.body.children.cardContent.children.additionalDocsInformation.children.cardContent.children.applicantCard.children",
+      []
+    );
+
+    let additionalCheckboxArray = Object.keys(additionDocCheckboxes);
+    if (additionalCheckboxArray && additionalCheckboxArray.length > 0) {
+      for (let i = 0; i < additionalCheckboxArray.length; i++) {
+        if (!scrutinyAdditionalInfo.includes(additionalCheckboxArray[i])) {
+          set(
+            action.screenConfig,
+            `components.div.children.body.children.cardContent.children.additionalDocsInformation.children.cardContent.children.applicantCard.children.${additionalCheckboxArray[i]}.visible`,
+            false
+          );
+
+        }
+      }
+    }
   }
 
 };

@@ -82,6 +82,7 @@ class App extends Component {
     if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !isPrivacyPolicy) {
       //nextProps.hasLocalisation && this.props.history.replace("/user/login");
       //setDefaultLocale("en_IN");
+      
       if (nextProps.hasLocalisation) {
         if (getDefaultLocale() == "null")
           this.props.history.replace("/language-selection");

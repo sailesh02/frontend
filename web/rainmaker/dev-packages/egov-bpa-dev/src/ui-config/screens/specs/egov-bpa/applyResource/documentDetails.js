@@ -143,7 +143,7 @@ getCommonCard({
         },
         type: "array"
       },
-      docType2: {
+      DocTypes2: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",
         componentPath: "BpaCheckboxContainer",
@@ -159,7 +159,7 @@ getCommonCard({
         },
         type: "array"
       },
-      docType3: {
+      DocTypes3: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",
         componentPath: "BpaCheckboxContainer",
@@ -175,7 +175,7 @@ getCommonCard({
         },
         type: "array"
       },
-      docType4: {
+      DocTypes4: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",
         componentPath: "BpaCheckboxContainer",
@@ -191,7 +191,7 @@ getCommonCard({
         },
         type: "array"
       },
-      docType5: {
+      DocTypes5: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",
         componentPath: "BpaCheckboxContainer",
@@ -207,7 +207,7 @@ getCommonCard({
         },
         type: "array"
       },
-      docType6: {
+      DocTypes6: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",
         componentPath: "BpaCheckboxContainer",
@@ -223,7 +223,7 @@ getCommonCard({
         },
         type: "array"
       },
-      docType7: {
+      DocTypes7: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",
         componentPath: "BpaCheckboxContainer",

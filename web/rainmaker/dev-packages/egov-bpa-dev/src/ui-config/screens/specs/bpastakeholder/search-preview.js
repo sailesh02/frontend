@@ -119,12 +119,12 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     );
   const LicenseData = payload.Licenses[0];
   const fetchFromReceipt = sts !== "pending_payment";
-  createEstimateData(
+  /*createEstimateData(
     LicenseData,
     "LicensesTemp[0].estimateCardData",
     dispatch,
     {}
-  );
+  );*/
   let validTo = false;
   if(get(payload, "Licenses[0].validTo")) {
     validTo = true;
@@ -133,6 +133,12 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     action.screenConfig,
     "components.div.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewValidityPeriod.visible",
     validTo
+  );
+
+  set(
+    action.screenConfig,
+    "components.div.children.tradeReviewDetails.children.cardContent.children.estimate.visible",
+    false
   );
 
   //Fetch Bill and populate estimate card

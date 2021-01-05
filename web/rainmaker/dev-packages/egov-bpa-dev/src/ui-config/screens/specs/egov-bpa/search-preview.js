@@ -715,6 +715,14 @@ const setSearchResponse = async (
   await setDownloadMenu(action, state, dispatch, applicationNumber, tenantId);
   sendToArchDownloadMenu(action, state, dispatch);
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+  if(edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments.length < 1){
+    set(
+      action.screenConfig,
+      "components.div.children.body.children.cardContent.children.additionalDocsInformation.visible",
+      false
+  );
+  }
+
 };
 
 export const beforeSubmitHook = async () => {

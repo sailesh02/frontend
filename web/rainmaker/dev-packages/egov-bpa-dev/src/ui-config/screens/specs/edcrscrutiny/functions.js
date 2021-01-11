@@ -232,8 +232,8 @@ const scrutinizePlan = async (state, dispatch) => {
     let isOCApp = window.location.href.includes("ocapply");
     let tenantId = get(preparedFinalObject, "Scrutiny[0].tenantId");
     let appliactionType = isOCApp ? "BUILDING_OC_PLAN_SCRUTINY" : "BUILDING_PLAN_SCRUTINY";
-    let applicationSubType = "NEW_CONSTRUCTION";
-
+    //let applicationSubType = "NEW_CONSTRUCTION";
+    let applicationSubType = get(preparedFinalObject, "Scrutiny[0].applicationSubType");
     let userInfo = { id: userUUid, tenantId: userTenant }, edcrNumber = "";
 
     if (isOCApp) {
@@ -394,7 +394,16 @@ export const getMdmsData = async () => {
         {
           moduleName: "tenant",
           masterDetails: [{ name: "citymodule" }]
-        }
+        },
+        {
+          moduleName: "BPA",
+          masterDetails: [
+
+            {
+              name: "ServiceType"
+            }
+          ]
+        },
       ]
     }
   };
@@ -423,8 +432,14 @@ export const fetchMDMSData = async (action, state, dispatch) => {
         });
       }
     });
+
   }
+
   dispatch(prepareFinalObject("applyScreenMdmsData.tenantData", TenantList));
+  if (mdmsRes && mdmsRes.MdmsRes && mdmsRes.MdmsRes.BPA) {
+
+    dispatch(prepareFinalObject("applyScreenMdmsData.BPA", mdmsRes.MdmsRes.BPA));
+  }
 };
 
 export const fetchMDMSOCData = async (action, state, dispatch) => {

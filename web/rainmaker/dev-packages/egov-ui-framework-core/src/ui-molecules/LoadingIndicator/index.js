@@ -33,11 +33,11 @@ const style = {
     display: "block",
     position: "absolute",
     height: "100px",
-    width: "100px",
+    width: "300px",
     margin: "auto",
     top: 77,
     bottom: 0,
-    left: 170,
+    left: 363,
     right: 0,
     transform: "none",
     color: "#FE7A51"

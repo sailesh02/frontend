@@ -17,7 +17,7 @@ const style = {
     display: "none",
     position: "relative"
   },
-  refresh: {
+  /*refresh: {
     display: "block",
     position: "absolute",
     zIndex: 9999,
@@ -42,7 +42,25 @@ const style = {
     transform: "none",
     color: "#FE7A51"
 
+  },*/
+  refresh: {
+
+    position: "absolute",
+    zIndex: 9999,
+   // margin: "auto",
+    top: 8,
+    bottom: 0,
+    left: 438,
+    right: 0,
+    transform: "none",
+    color: "#FE7A51"
   },
+  plzwaitmsg: {
+  left: 500,
+  position: "absolute",
+  top: 21,
+  color: "#FE7A51"
+  }
 
 };
 

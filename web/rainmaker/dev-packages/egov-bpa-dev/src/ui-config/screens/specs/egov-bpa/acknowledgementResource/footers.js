@@ -69,6 +69,8 @@ export const applicationSuccessFooter = (
     billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
   } else if(businessService === "BPA_OC"){
     billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_OC_APP_FEE":"BPA.NC_OC_SAN_FEE");
+  }else{
+    billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
   }
   let purpose = getQueryArg(window.location.href, "purpose");
   let isTrue = false;
@@ -99,7 +101,7 @@ export const applicationSuccessFooter = (
         action: "page_change",
         path: `${getRedirectionURL()}`
       },
-     
+
     },
     downloadFormButton: {
       componentPath: "Button",
@@ -192,7 +194,7 @@ export const applicationSuccessFooter = (
         style: {
           minWidth: "180px",
           height: "48px",
-        
+
         }
       },
       children: {
@@ -351,7 +353,7 @@ export const paymentSuccessFooter = () => {
           generatePdf(state, dispatch, "receipt_download");
         }
       },
-      visible: false            
+      visible: false
     },
     printReceiptButton: {
       componentPath: "Button",
@@ -376,7 +378,7 @@ export const paymentSuccessFooter = () => {
           generatePdf(state, dispatch, "receipt_print");
         }
       },
-      visible: false      
+      visible: false
     },
     gotoHome: {
       componentPath: "Button",

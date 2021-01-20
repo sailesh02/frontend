@@ -280,7 +280,8 @@ const setSearchResponse = async (
     state.screenConfiguration.preparedFinalObject,
     "BPA.riskType"
   )
-  let bpaService = "BPA";
+  //let bpaService = "BPA";
+  let bpaService = response.BPA[0].businessService;
   if (riskType === "LOW") {
     bpaService = "BPA_LOW";
   }

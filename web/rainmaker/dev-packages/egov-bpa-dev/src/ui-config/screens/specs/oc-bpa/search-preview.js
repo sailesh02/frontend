@@ -18,7 +18,7 @@ import { getLocale, getTenantId, getUserInfo } from "egov-ui-kit/utils/localStor
 import get from "lodash/get";
 import set from "lodash/set";
 import { edcrHttpRequest, httpRequest } from "../../../../ui-utils/api";
-import { 
+import {
   getAppSearchResults,
   getNocSearchResults,
   prepareNOCUploadData,
@@ -28,12 +28,12 @@ import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { estimateSummary } from "../egov-bpa/summaryResource/estimateSummary";
 import {
-  applicantNameAppliedByMaping, 
-  downloadFeeReceipt, 
+  applicantNameAppliedByMaping,
+  downloadFeeReceipt,
   edcrDetailsToBpaDetails,
-  generateBillForBPA, 
-  permitOrderNoDownload, 
-  requiredDocumentsData, 
+  generateBillForBPA,
+  permitOrderNoDownload,
+  requiredDocumentsData,
   setProposedBuildingData,
   prepareNocFinalCards,
   compare
@@ -389,7 +389,7 @@ const setSearchResponse = async (
   const status = get(response, "BPA[0].status");
   dispatch(prepareFinalObject("BPA", response.BPA[0]));
   if (get(response, "BPA[0].status") == "CITIZEN_APPROVAL_INPROCESS") {
-    // TODO if required to show for architect before apply, 
+    // TODO if required to show for architect before apply,
     //this condition should extend to OR with status INPROGRESS
     generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_OC_APP_FEE");
     dispatch(
@@ -621,7 +621,7 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    let businessServicesValue = "BPA_OC";
+    let businessServicesValue = "BPA3";
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: businessServicesValue }
@@ -715,7 +715,7 @@ const screenConfig = {
           visible: true,
           props: {
             dataPath: "BPA",
-            moduleName: "BPA_OC",
+            moduleName: "BPA3",
             updateUrl: "/bpa-services/v1/bpa/_update",
             beforeSubmitHook: beforeSubmitHook
           }

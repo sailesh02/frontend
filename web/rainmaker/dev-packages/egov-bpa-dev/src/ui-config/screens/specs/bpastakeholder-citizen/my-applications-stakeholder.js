@@ -43,7 +43,7 @@ export const getWfBusinessData = async (action, state, dispatch, businessService
 }
 
 const getAllBusinessServicesDataForStatus = async (action, state, dispatch) => {
-  let businessServices = ["BPA", "BPA3", "ARCHITECT"];
+  let businessServices = ["BPA", "BPA_OC", "BPA1", "BPA2", "BPA3", "BPA4", "ARCHITECT"];
   businessServices.forEach(service => {
     getWfBusinessData(action, state, dispatch, service)
   })
@@ -178,7 +178,7 @@ export const fetchData = async (
       let type;
       if (businessService == "BPA_LOW") {
         type = "LOW"
-      } else if ((businessService == "BPA") || (businessService == "BPA3")) {
+      } else if ((businessService == "BPA") || (businessService == "BPA_OC")) {
         type = "HIGH"
       } else {
         type = "HIGH"
@@ -192,7 +192,7 @@ export const fetchData = async (
       let bService = get(element, "businessService");
       let appType = getBpaTextToLocalMapping("WF_BPA_BUILDING_PLAN_SCRUTINY");
       let serType = getBpaTextToLocalMapping(`WF_BPA_NEW_CONSTRUCTION`);
-      if (bService === "BPA3") {
+      if (bService === "BPA_OC") {
         appType = getBpaTextToLocalMapping("WF_BPA_BUILDING_OC_PLAN_SCRUTINY");
       }
       searchConvertedArray.push({

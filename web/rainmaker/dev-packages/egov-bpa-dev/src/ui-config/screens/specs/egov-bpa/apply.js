@@ -685,7 +685,10 @@ const screenConfig = {
       getTodaysDate(action, state, dispatch);
       const queryObject = [
         { key: "tenantId", value: tenantId },
-        { key: "businessServices", value: "BPA" }
+        { key: "businessServices", value: "BPA1" },
+        { key: "businessServices", value: "BPA2" },
+        { key: "businessServices", value: "BPA3" },
+        { key: "businessServices", value: "BPA4" },
       ];
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     }

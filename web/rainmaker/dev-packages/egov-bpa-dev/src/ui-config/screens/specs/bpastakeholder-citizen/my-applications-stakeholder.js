@@ -278,7 +278,7 @@ const onRowClick = rowData => {
         window.location.assign(`${origin}${environment}/egov-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);
         break;
       default:
-        window.location.assign(`${origin}${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}&type=${rowData[8]}`);
+        window.location.assign(`${origin}${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}&type=${rowData[8]}&bservice=${rowData[7]}`);
     }
   } else {
     switch (rowData[9]) {

@@ -794,7 +794,11 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    let businessServicesValue = "BPA";
+    const bService = getQueryArg(
+      window.location.href,
+      "bservice"
+    );
+    let businessServicesValue = bService;
     if (type) {
       if (type === "LOW") {
         businessServicesValue = "BPA_LOW";

@@ -104,7 +104,7 @@ class SingleApplication extends React.Component {
             }
             break;
           default:
-            setRoute(`/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}`);
+            setRoute(`/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}&bservice=${item.serviceType}`);
         }
       }
     } else if (moduleName === "PT-MUTATION") {

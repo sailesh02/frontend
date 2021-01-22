@@ -282,9 +282,9 @@ const setSearchResponse = async (
   )
   //let bpaService = "BPA";
   let bpaService = response.BPA[0].businessService;
-  if (riskType === "LOW") {
-    bpaService = "BPA_LOW";
-  }
+  // if (riskType === "LOW") {
+  //   bpaService = "BPA_LOW";
+  // }
   const queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "businessServices", value: bpaService }
@@ -676,19 +676,27 @@ const screenConfig = {
     if (applicationNumber && isEdit) {
       setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
     } else {
+      let bService ="BPA1";
       const edcrNumber = getQueryArg(window.location.href, "edcrNumber");
       if (edcrNumber) {
         dispatch(prepareFinalObject("BPA.edcrNumber", edcrNumber));
         getScrutinyDetails(state, dispatch);
+        const bServiceTemp = get(
+          state.screenConfiguration.preparedFinalObject,
+          "scrutinyDetails.planDetail.planInformation.businessService"
+        )
+        if(bServiceTemp){
+          bService = bServiceTemp;
+        }
+
       }
+
+console.log(bService, "nero bServiceTemp")
       setProposedBuildingData(state, dispatch);
       getTodaysDate(action, state, dispatch);
       const queryObject = [
         { key: "tenantId", value: tenantId },
-        { key: "businessServices", value: "BPA1" },
-        { key: "businessServices", value: "BPA2" },
-        { key: "businessServices", value: "BPA3" },
-        { key: "businessServices", value: "BPA4" },
+        { key: "businessServices", value: bService }
       ];
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     }

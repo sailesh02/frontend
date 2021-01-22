@@ -9,7 +9,7 @@ import {
   getFileUrlFromAPI, getLocaleLabels, getQueryArg,
 
 
-  getTransformedLocale, getTransformedLocalStorgaeLabels
+  getTransformedLocale, getTransformedLocalStorgaeLabels, setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
 import { printPdf } from "egov-ui-kit/utils/commons";
 import {
@@ -2147,6 +2147,12 @@ export const showCityPicker = (state, dispatch) => {
     state.screenConfiguration.screenConfig,
     "home.components.cityPickerDialogForOC.props.open", false
   );
+
+  const pcCityPicker = get(
+    state.screenConfiguration.screenConfig,
+    "home.components.cityPickerDialogForPC.props.open", false
+  );
+
   if (ocCityPicker) {
     let toggle = get(
       state.screenConfiguration.screenConfig["home"],
@@ -2156,6 +2162,17 @@ export const showCityPicker = (state, dispatch) => {
     dispatch(
       handleField("home", "components.cityPickerDialogForOC", "props.open", !toggle)
     );
+  } else if (pcCityPicker) {
+
+    let toggle = get(
+      state.screenConfiguration.screenConfig["home"],
+      "components.cityPickerDialogForPC.props.open",
+      false
+    );
+    dispatch(
+      handleField("home", "components.cityPickerDialogForPC", "props.open", !toggle)
+    );
+
   } else {
     let toggle = get(
       state.screenConfiguration.screenConfig["home"],
@@ -2682,7 +2699,7 @@ export const getLabelOnlyValue = (value, props = {}) => {
   };
 };
 
-export const checkOwnerAndArchitectMobileNo = (state, dispatch) =>{
+export const checkOwnerAndArchitectMobileNo = (state, dispatch) => {
   let userInfo = JSON.parse(getUserInfo());
 
   const ownerNo = get(
@@ -2692,7 +2709,7 @@ export const checkOwnerAndArchitectMobileNo = (state, dispatch) =>{
   );
 
   const userMobileNo = userInfo.mobileNumber;
-  if(ownerNo == userMobileNo){
+  if (ownerNo == userMobileNo) {
     dispatch(
       toggleSnackbar(
         true,
@@ -2704,7 +2721,7 @@ export const checkOwnerAndArchitectMobileNo = (state, dispatch) =>{
       )
     );
     return false;
-  }else{
+  } else {
     return true;
   }
 }
@@ -2957,9 +2974,9 @@ export const getRiskType = (state, dispatch, forBPA) => {
   //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
   // }
 
-  if(lowRiskBuilding){
+  if (lowRiskBuilding) {
     scrutinyRiskType = "LOW"
-  }else{
+  } else {
     scrutinyRiskType = "OTHER"
   }
 
@@ -3044,6 +3061,8 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       "&tenantId=" + tenantId,
       {}
     );
+    console.log(payload, "Nero Payload")
+    let bService = payload.edcrDetail[0].planDetail.planInformation.businessService;
     let queryObject = [
       {
         key: "tenantId",
@@ -3075,6 +3094,12 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
             )
           );
           isData = false;
+        }else{
+          const queryObject = [
+            { key: "tenantId", value: tenantId },
+            { key: "businessServices", value: bService }
+          ];
+          setBusinessServiceDataToLocalStorage(queryObject, dispatch);
         }
       })
 
@@ -3714,6 +3739,10 @@ export const applyForm = (state, dispatch) => {
     state.screenConfiguration.screenConfig,
     "home.components.cityPickerDialogForOC.props.open", false
   );
+  const pcCityPicker = get(
+    state.screenConfiguration.screenConfig,
+    "home.components.cityPickerDialogForPC.props.open", false
+  );
   if (ocCityPicker) {
     const isOcCityValid = validateFields(
       "components.cityPickerDialogForOC.children.dialogContent.children.popup.children.cityPicker.children",
@@ -3729,6 +3758,22 @@ export const applyForm = (state, dispatch) => {
           : process.env.REACT_APP_SELF_RUNNING === true
             ? `/egov-ui-framework/oc-bpa/apply?tenantId=${tenantId}`
             : `/oc-bpa/apply?tenantId=${tenantId}`;
+    };
+  } else if (pcCityPicker) {
+    const isPcCityValid = validateFields(
+      "components.cityPickerDialogForPC.children.dialogContent.children.popup.children.cityPicker.children",
+      state,
+      dispatch,
+      "home"
+    );
+
+    if (isPcCityValid) {
+      window.location.href =
+        process.env.NODE_ENV === "production"
+          ? `/citizen/pc-bpa/apply?tenantId=${tenantId}`
+          : process.env.REACT_APP_SELF_RUNNING === true
+            ? `/egov-ui-framework/pc-bpa/apply?tenantId=${tenantId}`
+            : `/pc-bpa/apply?tenantId=${tenantId}`;
     };
   } else {
     const isTradeDetailsValid = validateFields(
@@ -4381,7 +4426,7 @@ export const getLoggedinUserRole = (wfState) => {
         else if (wfState === "NOC_VERIFICATION_PENDING") {
           currentRole = "BPA Noc Verifier"
         }
-        else if (window.location.href.includes("noc-search-preview")){
+        else if (window.location.href.includes("noc-search-preview")) {
           currentRole = "NOC Approver"
         }
         else {
@@ -4418,10 +4463,10 @@ const getEditableUserRoleforNoc = (state, isVisibleTrue) => {
   // }
   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
   roles.map(role => {
-    if(isEmployee && isVisibleTrue && (role.code == "BPA_NOC_VERIFIER")) {
-        allowedToUpload = true;
+    if (isEmployee && isVisibleTrue && (role.code == "BPA_NOC_VERIFIER")) {
+      allowedToUpload = true;
     }
-    if(
+    if (
       window.location.href.includes("egov-bpa/apply") ||
       window.location.href.includes("oc-bpa/apply")) {
       allowedToUpload = true;
@@ -4460,38 +4505,38 @@ export const prepareNocDocumentsView = async (state, dispatch) => {
     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
   allDocuments.map((doc) => {
     doc.map((docs, index) => {
-    uploadedAppDocuments.push(docs);
-    let obj = {};
+      uploadedAppDocuments.push(docs);
+      let obj = {};
 
-    obj.title = getTransformedLocale(docs.documentType);
-    obj.fileStoreId = docs.fileStoreId;
-    obj.linkText = "View";
-    if (docs.auditDetails) {
-      obj["createdTime"] = docs.auditDetails.createdTime;
-    }
+      obj.title = getTransformedLocale(docs.documentType);
+      obj.fileStoreId = docs.fileStoreId;
+      obj.linkText = "View";
+      if (docs.auditDetails) {
+        obj["createdTime"] = docs.auditDetails.createdTime;
+      }
 
-    obj["link"] =
-      (fileUrls &&
-        fileUrls[docs.fileStoreId] &&
-        getFileUrl(fileUrls[docs.fileStoreId])) ||
-      "";
-    obj["name"] =
-      (fileUrls[docs.fileStoreId] &&
-        decodeURIComponent(
-          getFileUrl(fileUrls[docs.fileStoreId])
-            .split("?")[0]
-            .split("/")
-            .pop()
-            .slice(13)
-        )) ||
-      `Document - ${index + 1}`;
-    obj.createdBy = getLoggedinUserRole(docs.wfState);
-    obj.additionalDetails = docs.additionalDetails;
-    obj['auditDetails'] = docs.auditDetails;
-    // obj = Object.assign(docs);
-    documentsPreview.push(obj);
-    return obj;
-  })
+      obj["link"] =
+        (fileUrls &&
+          fileUrls[docs.fileStoreId] &&
+          getFileUrl(fileUrls[docs.fileStoreId])) ||
+        "";
+      obj["name"] =
+        (fileUrls[docs.fileStoreId] &&
+          decodeURIComponent(
+            getFileUrl(fileUrls[docs.fileStoreId])
+              .split("?")[0]
+              .split("/")
+              .pop()
+              .slice(13)
+          )) ||
+        `Document - ${index + 1}`;
+      obj.createdBy = getLoggedinUserRole(docs.wfState);
+      obj.additionalDetails = docs.additionalDetails;
+      obj['auditDetails'] = docs.auditDetails;
+      // obj = Object.assign(docs);
+      documentsPreview.push(obj);
+      return obj;
+    })
   });
   dispatch(prepareFinalObject("nocDocumentDetailsPreview", documentsPreview));
   return documentsPreview;
@@ -4699,18 +4744,18 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
     cards = documentCards[0].cards;
   }
 
-for (var i = 0; i < cards.length; i++) {
-  cards[i].documents && cards[i].documents.length &&
-  cards[i].documents.map(fidocs =>{
-    nocDocuments && nocDocuments.length &&
-    nocDocuments.forEach(doc => {
-      if(doc.fileStoreId === fidocs.fileStoreId) {
-        fidocs.link = get(doc, "link");
-        fidocs.name = get(doc, "name");
-      }
-    })
-  })
-}
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].documents && cards[i].documents.length &&
+      cards[i].documents.map(fidocs => {
+        nocDocuments && nocDocuments.length &&
+          nocDocuments.forEach(doc => {
+            if (doc.fileStoreId === fidocs.fileStoreId) {
+              fidocs.link = get(doc, "link");
+              fidocs.name = get(doc, "name");
+            }
+          })
+      })
+  }
 
   if (nocDocumentsFromMdms && nocDocumentsFromMdms.length > 0) {
     const allCards = [].concat(...nocDocumentsFromMdms.map(({ cards }) => cards || []));
@@ -4771,7 +4816,7 @@ const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMd
   }
 
   let sendBackCitizen = true;
-  if(bpaDetails.status && bpaDetails.status.includes("CITIZEN_ACTION_PENDING")) {
+  if (bpaDetails.status && bpaDetails.status.includes("CITIZEN_ACTION_PENDING")) {
     sendBackCitizen = false;
   }
 
@@ -5831,4 +5876,23 @@ function documentsSorting(a, b) {
     comparison = -1;
   }
   return comparison;
+}
+
+export const getPermitDetailForPc = async (state, dispatch, fieldInfo) => {
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  const permitNo = get(
+    state.screenConfiguration.preparedFinalObject,
+    `BPA.permitNumber`,
+    ""
+  )
+  let bpaDetails = await getPermitDetails(permitNo, "od.jatni");
+  console.log(bpaDetails, "Nero bpaDetails")
+  let primaryOwnerArray = get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true);
+  dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
+  //dispatch(prepareFinalObject(`BPA.riskType`, bpaDetails.riskType));
+  dispatch(prepareFinalObject(`BPA.riskType`, "LOW"));
+  let SHLicenseDetails = await getLicenseDetails(state, dispatch);
+  //dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
+  dispatch(prepareFinalObject("bpaDetails", bpaDetails));
+  dispatch(prepareFinalObject(`BPA.landInfo`, get(bpaDetails, "landInfo", {})));
 }

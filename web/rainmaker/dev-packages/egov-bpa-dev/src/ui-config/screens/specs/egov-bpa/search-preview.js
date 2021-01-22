@@ -799,16 +799,16 @@ const screenConfig = {
       "bservice"
     );
     let businessServicesValue = bService;
-    if (type) {
-      if (type === "LOW") {
-        businessServicesValue = "BPA_LOW";
-      }
+    // if (type) {
+    //   if (type === "LOW") {
+    //     businessServicesValue = "BPA_LOW";
+    //   }
       const queryObject = [
         { key: "tenantId", value: tenantId },
         { key: "businessServices", value: businessServicesValue }
       ];
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    }
+    //}
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 

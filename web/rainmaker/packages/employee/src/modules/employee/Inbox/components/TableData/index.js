@@ -297,11 +297,15 @@ class TableData extends Component {
       return item.businessId;
     });
     const businessServiceData = this.getBussinessServiceData();
-    const modules =
+    let modules = '';
+    if(businessServiceData &&
+      businessServiceData.length > 0){
+     modules =
       businessServiceData &&
       businessServiceData.map((item, index) => {
         return item.business;
       });
+    }
     const uniqueModules = uniq(modules)
 
     let localitymap = [];
@@ -374,7 +378,7 @@ class TableData extends Component {
           ),
       };
 
-      let row3 = { text: <Label label={get(item,'assignes[0].name','NA')} color="#000000" /> };
+      let row3 = { text: <Label label={get(item, 'assignes[0].name', 'NA')} color="#000000" /> };
       let row4 = { text: Math.round(sla), badge: true };
       let row5 = { historyButton: true };
 
@@ -452,9 +456,11 @@ class TableData extends Component {
   getMaxSLA() {
     const businessServiceData = this.getBussinessServiceData();
     let businessServiceSla = {}
-    businessServiceData.map(eachRow => {
-      businessServiceSla[eachRow.businessService.toUpperCase()] = this.convertMillisecondsToDays(eachRow.businessServiceSla);
-    })
+    if (businessServiceData && businessServiceData.length > 0) {
+      businessServiceData.map(eachRow => {
+        businessServiceSla[eachRow.businessService.toUpperCase()] = this.convertMillisecondsToDays(eachRow.businessServiceSla);
+      })
+    }
     this.setState({ businessServiceSla });
     return businessServiceSla;
   }
@@ -510,7 +516,7 @@ class TableData extends Component {
         "WF_INBOX_HEADER_LOCALITY",
         "WF_INBOX_HEADER_STATUS",
         "WF_INBOX_HEADER_CURRENT_OWNER",
-       // "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
+        // "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
       ];
       inboxData[0].headers = headersList;
       inboxData[0].rows = assignedDataRows;

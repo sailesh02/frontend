@@ -794,20 +794,27 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    const bService = getQueryArg(
-      window.location.href,
-      "bservice"
-    );
-    let businessServicesValue = bService;
-    // if (type) {
-    //   if (type === "LOW") {
-    //     businessServicesValue = "BPA_LOW";
-    //   }
+    const isUserEmployee = get(
+      state.auth.userInfo,
+      "type"
+    )
+    if (isUserEmployee != "EMPLOYEE") {
+      const bService = getQueryArg(
+        window.location.href,
+        "bservice"
+      );
+      let businessServicesValue = bService;
+      // if (type) {
+      //   if (type === "LOW") {
+      //     businessServicesValue = "BPA_LOW";
+      //   }
       const queryObject = [
         { key: "tenantId", value: tenantId },
         { key: "businessServices", value: businessServicesValue }
       ];
+
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    }
     //}
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);

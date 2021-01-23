@@ -316,7 +316,7 @@ const setSearchResponse = async (
   dispatch(prepareFinalObject("BPAs.appdate", appDate));
   await prepareDocumentsUploadData(state, dispatch);
   await prepareDocumentDetailsUploadRedux(state, dispatch);
-  setMohallaIfNotSet(state, dispatch, action, response.BPA[0].landInfo.address.city);
+  //setMohallaIfNotSet(state, dispatch, action, response.BPA[0].landInfo.address.city);
   if(edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments.length < 1){
     set(
       action.screenConfig,
@@ -662,7 +662,7 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
-
+    const appCity = getQueryArg(window.location.href, "tenantId");
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "BPA");
     getTenantMdmsData(action, state, dispatch).then(response => {
@@ -691,7 +691,7 @@ const screenConfig = {
 
       }
 
-console.log(bService, "nero bServiceTemp")
+
       setProposedBuildingData(state, dispatch);
       getTodaysDate(action, state, dispatch);
       const queryObject = [
@@ -701,6 +701,7 @@ console.log(bService, "nero bServiceTemp")
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     }
 
+    setMohallaIfNotSet(state, dispatch, action, appCity);
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
       // Set Dropdowns Data
@@ -719,6 +720,10 @@ console.log(bService, "nero bServiceTemp")
     });
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     setTaskStatus(state, applicationNumber, tenantId, dispatch, componentJsonpath);
+    // const appCity = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "BPA.landInfo.address.city"
+    // )
 
     // set(
     //   action.screenConfig,

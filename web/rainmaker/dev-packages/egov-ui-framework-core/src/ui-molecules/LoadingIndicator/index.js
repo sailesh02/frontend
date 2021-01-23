@@ -58,8 +58,9 @@ const style = {
   plzwaitmsg: {
   left: 500,
   position: "absolute",
-  top: 21,
-  color: "#FE7A51"
+  top: 14,
+  color: "#FE7A51",
+  width: "250px"
   }
 
 };

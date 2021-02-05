@@ -25,7 +25,7 @@ import { TrackLocation } from "modules/common";
 import frameworkScreens from "./frameworkScreens";
 import { PrivacyPolicy } from "modules/common";
 import TLHowItWorks from "../../ui-views/HowItWorks";
-// import pgrRoutes from "pgr-citizen/Routes/pgr-routes";
+import pgrRoutes from "pgr-citizen/Routes/pgr-routes";
 import ptRoutes from "pt-citizen/Routes/pt-routes";
 
 //Whatsapp Screen
@@ -203,7 +203,7 @@ const routes = [
       title: "",
     },
   },
-  // ...pgrRoutes,
+  ...pgrRoutes,
   ...ptRoutes,
   ...frameworkScreens,
 ];

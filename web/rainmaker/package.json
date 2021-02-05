@@ -77,6 +77,7 @@
     "go_tl": "yarn && yarn run build-css-common-tl && yarn run transpile-common-modules-tl && lerna bootstrap",
     "build-css-common-tl": "run-p build-css-egov-ui-kit build-css-egov-pt build-css-egov-common build-css-egov-ui-framework-core build-css-egov-workflow build-css-egov-tradelicence",
     "transpile-common-modules-tl": "run-p egov-ui-kit egov-pt egov-common egov-ui-framework egov-workflow egov-tradelicence",
+    "go_common_all": "yarn && yarn run build-css-common-all && yarn run transpile-common-modules-all && lerna bootstrap",
     "watch_tl": "babel dev-packages/egov-tradelicence-dev/src --out-dir packages/lib/egov-tradelicence --copy-files --watch"
   },
   "devDependencies": {

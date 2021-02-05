@@ -162,8 +162,8 @@ export const applicationSuccessFooter = (
         action: "page_change",
         path: redirectionURL
       }
-    },
-    proceedToPay: {
+    }
+   /* proceedToPay: {
       componentPath: "Button",
       visible: authlink,
       props: {
@@ -185,7 +185,7 @@ export const applicationSuccessFooter = (
         action: "page_change",
         path: payURL
       }
-    }
+    }*/
     // collectPaymentButton: {
     //   componentPath: "Button",
     //   props: {

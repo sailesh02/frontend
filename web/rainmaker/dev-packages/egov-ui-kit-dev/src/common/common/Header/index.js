@@ -39,7 +39,7 @@ class Header extends Component {
       const ulbLogo = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
       this.setState({ ulbLogo });
     }
-   
+
   }
 
   _handleToggleMenu = () => {
@@ -165,7 +165,7 @@ class Header extends Component {
     const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
     const currentCity = cities.filter((item) => item.code === tenantId);
     const ulbLogo =
-      currentCity.length > 0 ? get(currentCity[0], "logoId") : "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png";
+      currentCity.length > 0 ? get(currentCity[0], "logoId") : "https://digitaldesksujog051120.blob.core.windows.net/assets/Logos/odlogo.png";
     return (
       <div style={headerStyle}>
         <AppBar

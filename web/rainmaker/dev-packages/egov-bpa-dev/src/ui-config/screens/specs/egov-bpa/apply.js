@@ -316,13 +316,39 @@ const setSearchResponse = async (
   await prepareDocumentsUploadData(state, dispatch);
   await prepareDocumentDetailsUploadRedux(state, dispatch);
   setMohallaIfNotSet(state, dispatch, action, response.BPA[0].landInfo.address.city);
-  if(edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments < 1){
+  if(edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments.length < 1){
     set(
       action.screenConfig,
       "components.div.children.formwizardFourthStep.children.additionalDocsInformation.visible",
       false
   );
   }
+  if (edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments.length > 0) {
+    let scrutinyAdditionalInfo = []
+    scrutinyAdditionalInfo = edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments;
+
+    let additionDocCheckboxes = get(
+      action.screenConfig,
+      "components.div.children.formwizardFourthStep.children.additionalDocsInformation.children.cardContent.children.applicantCard.children",
+      []
+    );
+
+    let additionalCheckboxArray = Object.keys(additionDocCheckboxes);
+
+    if (additionalCheckboxArray && additionalCheckboxArray.length > 0) {
+      for (let i = 0; i < additionalCheckboxArray.length; i++) {
+        if (!scrutinyAdditionalInfo.includes(additionalCheckboxArray[i])) {
+          set(
+            action.screenConfig,
+            `components.div.children.formwizardFourthStep.children.additionalDocsInformation.children.cardContent.children.applicantCard.children.${additionalCheckboxArray[i]}.visible`,
+            false
+          );
+
+        }
+      }
+    }
+  }
+
 };
 
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {

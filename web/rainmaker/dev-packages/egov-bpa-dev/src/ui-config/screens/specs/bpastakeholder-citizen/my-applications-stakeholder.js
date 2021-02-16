@@ -43,7 +43,7 @@ export const getWfBusinessData = async (action, state, dispatch, businessService
 }
 
 const getAllBusinessServicesDataForStatus = async (action, state, dispatch) => {
-  let businessServices = ["BPA", "BPA_OC", "ARCHITECT"];
+  let businessServices = ["BPA", "BPA_OC", "BPA1", "BPA2", "BPA3", "BPA4", "ARCHITECT"];
   businessServices.forEach(service => {
     getWfBusinessData(action, state, dispatch, service)
   })
@@ -176,7 +176,13 @@ export const fetchData = async (
       let primaryowner = "-";
       let businessService = get(element, "businessService", null);
       let type;
-      if (businessService == "BPA_LOW") { type = "LOW" } else if ((businessService == "BPA") || (businessService == "BPA_OC")) { type = "HIGH" }
+      if (businessService == "BPA_LOW") {
+        type = "LOW"
+      } else if ((businessService == "BPA") || (businessService == "BPA_OC")) {
+        type = "HIGH"
+      } else {
+        type = "HIGH"
+      }
       let owners = get(element, "owners", [])
       owners.map(item => {
         if (item.isPrimaryOwner) {
@@ -255,6 +261,7 @@ export const fetchData = async (
 };
 
 const onRowClick = rowData => {
+
   const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
   const origin = process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
   if (rowData[7] === "BPAREG") {
@@ -265,13 +272,13 @@ const onRowClick = rowData => {
       default:
         window.location.assign(`${origin}${environment}/bpastakeholder/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`)
     }
-  } else if ((rowData[7] === "BPA") || rowData[7] == "BPA_LOW") {
+  } else if ((rowData[7] === "BPA") || (rowData[7] === "BPA1") || (rowData[7] === "BPA2") || (rowData[7] === "BPA3") || (rowData[7] === "BPA4") || rowData[7] == "BPA_LOW") {
     switch (rowData[9]) {
       case "INITIATED":
         window.location.assign(`${origin}${environment}/egov-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);
         break;
       default:
-        window.location.assign(`${origin}${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}&type=${rowData[8]}`);
+        window.location.assign(`${origin}${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}&type=${rowData[8]}&bservice=${rowData[7]}`);
     }
   } else {
     switch (rowData[9]) {

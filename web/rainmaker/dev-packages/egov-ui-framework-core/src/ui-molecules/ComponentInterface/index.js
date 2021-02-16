@@ -133,7 +133,7 @@ class ComponentInterface extends React.Component {
 
        return null;
     }
-    
+
     if (visible && !isEmpty(roleDefination)) {
       const splitList = get(roleDefination, "rolePath").split(".");
       const localdata = JSON.parse(localStorageGet(splitList[0]));
@@ -228,7 +228,7 @@ const mapStateToProps = state => {
     jsonPath = "FireNOCs[0].fireNOCDetails.status";
   } else if (moduleName === "NewTL") {
     jsonPath = "Licenses[0].status";
-  } else if ((moduleName === "BPA") || (moduleName === "BPA_LOW") || (moduleName === "BPA_OC")) {
+  } else if ((moduleName === "BPA") || (moduleName === "BPA_LOW") || (moduleName === "BPA_OC") || (moduleName === "BPA1") || (moduleName === "BPA2") || (moduleName === "BPA3") || (moduleName === "BPA4")) {
     jsonPath = "BPA.status";
   } else {
     jsonPath = "Licenses[0].status";

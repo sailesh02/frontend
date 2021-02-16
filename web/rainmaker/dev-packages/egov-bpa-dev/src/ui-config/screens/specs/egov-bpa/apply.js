@@ -280,10 +280,11 @@ const setSearchResponse = async (
     state.screenConfiguration.preparedFinalObject,
     "BPA.riskType"
   )
-  let bpaService = "BPA";
-  if (riskType === "LOW") {
-    bpaService = "BPA_LOW";
-  }
+  //let bpaService = "BPA";
+  let bpaService = response.BPA[0].businessService;
+  // if (riskType === "LOW") {
+  //   bpaService = "BPA_LOW";
+  // }
   const queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "businessServices", value: bpaService }
@@ -315,7 +316,7 @@ const setSearchResponse = async (
   dispatch(prepareFinalObject("BPAs.appdate", appDate));
   await prepareDocumentsUploadData(state, dispatch);
   await prepareDocumentDetailsUploadRedux(state, dispatch);
-  setMohallaIfNotSet(state, dispatch, action, response.BPA[0].landInfo.address.city);
+  //setMohallaIfNotSet(state, dispatch, action, response.BPA[0].landInfo.address.city);
   if(edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments.length < 1){
     set(
       action.screenConfig,
@@ -661,7 +662,7 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
-
+    const appCity = getQueryArg(window.location.href, "tenantId");
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "BPA");
     getTenantMdmsData(action, state, dispatch).then(response => {
@@ -675,20 +676,32 @@ const screenConfig = {
     if (applicationNumber && isEdit) {
       setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
     } else {
+      let bService ="BPA1";
       const edcrNumber = getQueryArg(window.location.href, "edcrNumber");
       if (edcrNumber) {
         dispatch(prepareFinalObject("BPA.edcrNumber", edcrNumber));
         getScrutinyDetails(state, dispatch);
+        const bServiceTemp = get(
+          state.screenConfiguration.preparedFinalObject,
+          "scrutinyDetails.planDetail.planInformation.businessService"
+        )
+        if(bServiceTemp){
+          bService = bServiceTemp;
+        }
+
       }
+
+
       setProposedBuildingData(state, dispatch);
       getTodaysDate(action, state, dispatch);
       const queryObject = [
         { key: "tenantId", value: tenantId },
-        { key: "businessServices", value: "BPA" }
+        { key: "businessServices", value: bService }
       ];
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     }
 
+    setMohallaIfNotSet(state, dispatch, action, appCity);
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
       // Set Dropdowns Data
@@ -707,6 +720,10 @@ const screenConfig = {
     });
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     setTaskStatus(state, applicationNumber, tenantId, dispatch, componentJsonpath);
+    // const appCity = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "BPA.landInfo.address.city"
+    // )
 
     // set(
     //   action.screenConfig,

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Label from "../../ui-containers/LabelContainer";
 
 const style = {
   container: {
@@ -16,7 +17,7 @@ const style = {
     display: "none",
     position: "relative"
   },
-  refresh: {
+  /*refresh: {
     display: "block",
     position: "absolute",
     zIndex: 9999,
@@ -27,7 +28,41 @@ const style = {
     right: 0,
     transform: "none",
     color: "#FE7A51"
+  },
+  plzwaitmsg: {
+    display: "block",
+    position: "absolute",
+    height: "100px",
+    width: "300px",
+    margin: "auto",
+    top: 77,
+    bottom: 0,
+    left: 363,
+    right: 0,
+    transform: "none",
+    color: "#FE7A51"
+
+  },*/
+  refresh: {
+
+    position: "absolute",
+    zIndex: 9999,
+   // margin: "auto",
+    top: 8,
+    bottom: 0,
+    left: 438,
+    right: 0,
+    transform: "none",
+    color: "#FE7A51"
+  },
+  plzwaitmsg: {
+  left: 500,
+  position: "absolute",
+  top: 14,
+  color: "#FE7A51",
+  width: "250px"
   }
+
 };
 
 const LoadingIndicator = ({ status = "loading", loadingColor }) => {
@@ -36,7 +71,13 @@ const LoadingIndicator = ({ status = "loading", loadingColor }) => {
       id="loading-indicator"
       style={status === "hide" ? style.containerHide : style.container}
     >
-      <CircularProgress style={style.refresh} size={50} />
+
+
+        <CircularProgress style={style.refresh} size={50} />
+        <div style={style.plzwaitmsg}><Label
+                labelKey="SPINNER_MSG"
+
+              /></div>
     </div>
   );
 };

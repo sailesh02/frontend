@@ -46,7 +46,8 @@ const BpaSearchAndResult = {
   beforeInitScreen: (action, state, dispatch) => {
     resetFields(state, dispatch);
     const tenantId = getTenantId();
-    const BSqueryObject = [
+
+    /*const BSqueryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "BPA" }
     ];
@@ -68,7 +69,9 @@ const BpaSearchAndResult = {
           status.filter(item => item.code != null)
         )
       );
-    }
+    }*/
+
+
     // getRequiredDocData(action, state, dispatch).then(() => {
     //   let documents = get(
     //     state,

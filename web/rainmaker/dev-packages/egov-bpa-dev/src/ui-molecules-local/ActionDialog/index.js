@@ -8,9 +8,9 @@ import {
 import CloseIcon from "@material-ui/icons/Close";
 import { withStyles } from "@material-ui/core/styles";
 import { UploadMultipleFiles } from "egov-ui-framework/ui-molecules";
-import { 
-  prepareFinalObject, 
-  toggleSnackbar, 
+import {
+  prepareFinalObject,
+  toggleSnackbar,
   handleScreenConfigurationFieldChange as handleField
  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -85,7 +85,7 @@ class ActionDialog extends React.Component {
         bpaDetails.workflow = {};
         bpaDetails.workflow.comments = value
       }
-      
+
       prepareFinalObject(`BPA`, bpaDetails);
     };
 
@@ -101,7 +101,7 @@ class ActionDialog extends React.Component {
         bpaDetails.assignees = [uuids];
         bpaDetails.assignee = [getId];
       }
-      if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "APPROVE") || (applicationAction === "FORWARD")) {
+      if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "APPROVE") || (applicationAction === "FORWARD") || (applicationAction === "INTIMATE_CONSTRUCT_START")) {
         let response = await httpRequest(
           "post",
           "bpa-services/v1/bpa/_update",
@@ -276,8 +276,8 @@ const mapDispatchToProps = dispatch => {
       setRoute: route => dispatch(setRoute(route)),
       handleField: value => dispatch(
         handleField(
-          "search-preview", 
-          "components.div.children.sendToArchPickerDialog", 
+          "search-preview",
+          "components.div.children.sendToArchPickerDialog",
           "props.open", false))
   };
 };

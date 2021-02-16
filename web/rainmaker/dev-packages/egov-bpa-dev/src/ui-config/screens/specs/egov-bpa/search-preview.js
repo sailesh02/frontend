@@ -37,7 +37,7 @@ import {
   compare
 } from "../utils/index";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
-import { citizenFooter, updateBpaApplication } from "./searchResource/citizenFooter";
+import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved } from "./searchResource/citizenFooter";
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
@@ -238,6 +238,26 @@ const sendToArchDownloadMenu = (action, state, dispatch) => {
   );
 }
 
+const buttonAfterApprovedMenu = (action, state, dispatch) => {
+  let downloadMenu = [];
+  let sendToArchObject = {
+    label: { labelName: "BPA_INTIMATE_CONSTRUCT_START_BUTTON", labelKey: "BPA_INTIMATE_CONSTRUCT_START_BUTTON", },
+    link: () => {
+      updateBpaApplication(state, dispatch, "INTIMATE_CONSTRUCT_START");
+    },
+  };
+
+  downloadMenu = [sendToArchObject];
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.citizenFooter.children.buttonAfterApproved.children.buttons.children.downloadMenu",
+      "props.data.menu",
+      downloadMenu
+    )
+  );
+}
+
 const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenantId) => {
   /** MenuButton data based on status */
   let status = get(
@@ -326,7 +346,7 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     `collection-services/payments/_search?tenantId=${tenantId}&consumerCodes=${applicationNumber}`
   );
 
-  if (riskType === "LOW") {
+  /*if (riskType === "LOW") {
     if (paymentPayload && paymentPayload.Payments.length == 1) {
       downloadMenu.push(lowAppFeeDownloadObject);
       printMenu.push(lowAppFeePrintObject);
@@ -353,7 +373,7 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
         printMenu = [];
         break;
     }
-  } else {
+  } else {*/
 
     if (paymentPayload && paymentPayload.Payments.length == 1) {
       if (get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_APP_FEE") {
@@ -388,7 +408,7 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
         printMenu = [];
         break;
     }
-  }
+  //}
   dispatch(
     handleField(
       "search-preview",
@@ -517,6 +537,19 @@ const setSearchResponse = async (
       )
     );
   }
+  if (get(response, "BPA[0].status") == "APPROVED" && ifUserRoleExists("CITIZEN")) {
+
+
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.citizenFooter.children.buttonAfterApproved",
+        "visible",
+        true
+      )
+    );
+  }
+
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary.visible",
@@ -714,6 +747,7 @@ const setSearchResponse = async (
   requiredDocumentsData(state, dispatch, action);
   await setDownloadMenu(action, state, dispatch, applicationNumber, tenantId);
   sendToArchDownloadMenu(action, state, dispatch);
+  buttonAfterApprovedMenu(action, state, dispatch);
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
   if (edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments.length < 1) {
     set(
@@ -794,17 +828,28 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    let businessServicesValue = "BPA";
-    if (type) {
-      if (type === "LOW") {
-        businessServicesValue = "BPA_LOW";
-      }
+    const isUserEmployee = get(
+      state.auth.userInfo,
+      "type"
+    )
+    if (isUserEmployee != "EMPLOYEE") {
+      const bService = getQueryArg(
+        window.location.href,
+        "bservice"
+      );
+      let businessServicesValue = bService;
+      // if (type) {
+      //   if (type === "LOW") {
+      //     businessServicesValue = "BPA_LOW";
+      //   }
       const queryObject = [
         { key: "tenantId", value: tenantId },
         { key: "businessServices", value: businessServicesValue }
       ];
+
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     }
+    //}
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 

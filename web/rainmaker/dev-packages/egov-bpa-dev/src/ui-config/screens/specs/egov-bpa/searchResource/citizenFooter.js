@@ -41,7 +41,7 @@ export const bpaMakePayment = async (state, dispatch) => {
 
 export const updateBpaApplication = async (state, dispatch, action) => {
   let bpaStatus = get(state, "screenConfiguration.preparedFinalObject.BPA.status");
-  let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");  
+  let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
   let bpaAction, isArchitect = false, isCitizen = false, isCitizenBack = false;
   if(action && action === "SEND_TO_ARCHITECT") {
     bpaAction = "SEND_TO_ARCHITECT",
@@ -55,6 +55,12 @@ export const updateBpaApplication = async (state, dispatch, action) => {
   if(bpaStatusAction) {
     bpaAction = "FORWARD",
     isCitizenBack = true;
+  }
+
+  if(action && action === "INTIMATE_CONSTRUCT_START") {
+    bpaAction = action,
+    isCitizen = true;
+    isDeclared = true;
   }
 
   let toggle = get(
@@ -74,10 +80,25 @@ export const updateBpaApplication = async (state, dispatch, action) => {
       labelName: "Please confirm the declaration!",
       labelKey: "BPA_DECLARATION_COMMON_LABEL"
     };
-    dispatch(toggleSnackbar(true, errorMessage, "warning")); 
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
 };
 
+export const updateBpaApplicationAfterApproved = async (state, dispatch, action) => {
+  let bpaAction = action;
+  let toggle = get(
+    state.screenConfiguration.screenConfig["search-preview"],
+    "components.div.children.sendToArchPickerDialog.props.open",
+    false
+  );
+    dispatch(
+      handleField("search-preview", "components.div.children.sendToArchPickerDialog", "props.open", !toggle)
+    );
+    dispatch(
+      handleField("search-preview", "components.div.children.sendToArchPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.applicationAction", bpaAction)
+    );
+
+};
 export const sendToArchContainer = () => {
   return {
     uiFramework: "custom-atoms",
@@ -102,6 +123,31 @@ export const sendToArchContainer = () => {
     },
   }
 };
+export const buttonAfterApproved = () => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      style: { textAlign: "right", display: "flex" }
+    },
+    children: {
+      downloadMenu: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-bpa",
+        componentPath: "MenuButton",
+        props: {
+          data: {
+            label: {labelName : "Take Action" , labelKey :"WF_TAKE_ACTION"},
+            rightIcon: "arrow_drop_down",
+            props: { variant: "contained", style: { height: "60px", color : "#fff", backgroundColor: "#FE7A51", } },
+            menu: {}
+          }
+        }
+      },
+    },
+  }
+};
+
 export const citizenFooter = getCommonApplyFooter({
   makePayment: {
     componentPath: "Button",
@@ -137,6 +183,18 @@ export const citizenFooter = getCommonApplyFooter({
               },
               children: {
                 buttons : sendToArchContainer()
+              },
+              visible: false
+  },
+  buttonAfterApproved: {
+    uiFramework: "custom-atoms",
+              componentPath: "Container",
+              props: {
+                color: "primary",
+                style: { justifyContent: "flex-end" }
+              },
+              children: {
+                buttons : buttonAfterApproved()
               },
               visible: false
   },

@@ -233,7 +233,8 @@ const scrutinizePlan = async (state, dispatch) => {
     let tenantId = get(preparedFinalObject, "Scrutiny[0].tenantId");
     let appliactionType = isOCApp ? "BUILDING_OC_PLAN_SCRUTINY" : "BUILDING_PLAN_SCRUTINY";
     //let applicationSubType = "NEW_CONSTRUCTION";
-    let applicationSubType = get(preparedFinalObject, "Scrutiny[0].applicationSubType");
+    //let applicationSubType = get(preparedFinalObject, "Scrutiny[0].applicationSubType");
+    let applicationSubType = get(preparedFinalObject, "scrutinyDetails.applicationSubType");
     let userInfo = { id: userUUid, tenantId: userTenant }, edcrNumber = "";
 
     if (isOCApp) {

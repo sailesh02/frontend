@@ -802,7 +802,7 @@ export const footerReview = (
                 callBack: () => {
                   dispatch(
                     setRoute(
-                      `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
+                      `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=NewTL`
                     )
                   );
                 },

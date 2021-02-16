@@ -32,7 +32,7 @@ export const callPGService = async (state, dispatch) => {
       },
       {
         key: "businessService",
-        value: "TL"
+        value: "NewTL"
       }
     ];
     const billPayload = await getBill(queryObj);
@@ -41,7 +41,7 @@ export const callPGService = async (state, dispatch) => {
       "billResponse.Bill[0].taxAndPayments",
       []
     ).map(item => {
-      if (item.businessService === "TL") {
+      if (item.businessService === "NewTL") {
         item.amountPaid = get(
           billPayload,
           "billResponse.Bill[0].billDetails[0].totalAmount"

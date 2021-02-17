@@ -275,7 +275,7 @@ const scrutinizePlan = async (state, dispatch) => {
     edcrRequest = { ...edcrRequest, appliactionType };
     edcrRequest = { ...edcrRequest, applicationSubType };
 
-    let url = `/edcr/rest/dcr/scrutinize?tenantId=${tenantId}`;
+    let url = `https://digitod.ddns.net/edcr/rest/dcr/scrutinize?tenantId=${tenantId}`;
     if (isOCApp) {
       edcrRequest = { ...edcrRequest, permitDate };
       edcrRequest = { ...edcrRequest, permitNumber };

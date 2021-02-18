@@ -1514,7 +1514,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
     };
     const DOWNLOADCONNECTIONDETAILS = {
         GET: {
-            URL: "https://digitod.ddns.net/pdf-service/v1/_create",
+            URL: "/pdf-service/v1/_create",
             ACTION: "_get",
         },
     };
@@ -1669,7 +1669,7 @@ export const downloadBill = (receiptQueryString, mode) => {
     };
     const DOWNLOADBILL = {
         GET: {
-            URL: "https://digitod.ddns.net/pdf-service/v1/_create",
+            URL: "/pdf-service/v1/_create",
             ACTION: "_get",
         },
     };
@@ -1885,7 +1885,7 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
 
     const DOWNLOADCONNECTIONDETAILS = {
         GET: {
-            URL: "https://digitod.ddns.net/pdf-service/v1/_create",
+            URL: "/pdf-service/v1/_create",
             ACTION: "_get",
         },
     };

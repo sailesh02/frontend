@@ -159,7 +159,7 @@ const moveToSuccess = (state, dispatch, edcrDetail, isOCApp) => {
 
 const getSearchResultsfromEDCR = async (action, state, dispatch) => {
   try {
-    let EDCRHost = "";
+    let EDCRHost = "https://digitod.ddns.net";
 
     const response = await axios.post(
       `${EDCRHost}/edcr/rest/dcr/scrutinydetails?tenantId=${getTenantId()}`,
@@ -194,7 +194,7 @@ export const getSearchResultsfromEDCRWithApplcationNo = async (
   tenantId
 ) => {
   try {
-    let EDCRHost = "";
+    let EDCRHost = "https://digitod.ddns.net";
     const response = await axios.post(
       `${EDCRHost}/edcr/rest/dcr/scrutinydetails?tenantId=${tenantId}&transactionNumber=${applicationNumber}`,
       {
@@ -275,7 +275,7 @@ const scrutinizePlan = async (state, dispatch) => {
     edcrRequest = { ...edcrRequest, appliactionType };
     edcrRequest = { ...edcrRequest, applicationSubType };
 
-    let url = `/edcr/rest/dcr/scrutinize?tenantId=${tenantId}`;
+    let url = `https://digitod.ddns.net/edcr/rest/dcr/scrutinize?tenantId=${tenantId}`;
     if (isOCApp) {
       edcrRequest = { ...edcrRequest, permitDate };
       edcrRequest = { ...edcrRequest, permitNumber };
@@ -611,7 +611,7 @@ export const getBuildingDetails = async (state, dispatch, fieldInfo) => {
 
     let edcrRes = await edcrHttpRequest(
       "post",
-      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "BPA[0].edcrNumber") + "&tenantId=" + tenantId,
+      "https://digitod.ddns.net/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "BPA[0].edcrNumber") + "&tenantId=" + tenantId,
       "search", []
     );
 

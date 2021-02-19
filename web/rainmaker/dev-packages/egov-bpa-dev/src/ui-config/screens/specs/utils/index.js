@@ -3056,7 +3056,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
     }
     let payload = await edcrHttpRequest(
       "post",
-      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+      "https://digitod.ddns.net/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
       scrutinyNo +
       "&tenantId=" + tenantId,
       {}
@@ -5194,7 +5194,7 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
 
   let payload = await edcrHttpRequest(
     "post",
-    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+    "https://digitod.ddns.net/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
     bpaDetails.edcrNumber +
     "&tenantId=" + bpaDetails.tenantId, "search", []
   );
@@ -5667,7 +5667,7 @@ export const getComparisonResult = async (state, dispatch, tenantId, ocEdcrNumbe
    */
   let comparisionRes = await edcrHttpRequest(
     "post",
-    "/edcr/rest/dcr/occomparison?tenantId=" + tenantId + "&ocdcrNumber=" + ocEdcrNumber + "&edcrNumber=" + bpaEdcrNumber,
+    "https://digitod.ddns.net/edcr/rest/dcr/occomparison?tenantId=" + tenantId + "&ocdcrNumber=" + ocEdcrNumber + "&edcrNumber=" + bpaEdcrNumber,
     "search", []
   );
   let comparisionSuccess = false;
@@ -5708,7 +5708,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     //get oc edcr details
     let ocpayload = await edcrHttpRequest(
       "post",
-      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+      "https://digitod.ddns.net/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
       scrutinyNo +
       "&tenantId=" + tenantId,
       {}
@@ -5769,7 +5769,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     //get permit edcr details
     let edcrPayload = await edcrHttpRequest(
       "post",
-      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+      "https://digitod.ddns.net/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
       bpaDetails.edcrNumber +
       "&tenantId=" + tenantId,
       {}

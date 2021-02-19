@@ -557,7 +557,7 @@ const setSearchResponse = async (
   );
   let edcrRes = await edcrHttpRequest(
     "post",
-    "https://digitod.ddns.net/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
     "search", []
   );
 

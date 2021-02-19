@@ -233,7 +233,7 @@ const setSearchResponse = async (
   dispatch(prepareFinalObject("BPA", response.BPA[0]));
   let edcrRes = await edcrHttpRequest(
     "post",
-    "https://digitod.ddns.net/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "BPA[0].edcrNumber") + "&tenantId=" + tenantId,
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "BPA[0].edcrNumber") + "&tenantId=" + tenantId,
     "search", []
     );
 

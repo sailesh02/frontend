@@ -134,6 +134,7 @@ class WorkFlowContainer extends React.Component {
       redirectQueryString,
       beforeSubmitHook
     } = this.props;
+    console.log("======bpa props", this.props)
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
     if (moduleName === "NewTL") {
@@ -185,6 +186,7 @@ class WorkFlowContainer extends React.Component {
       if (get(data, "workflow.comment")) {
         data.workflow.comments = get(data, "workflow.comment");
       }
+      console.log("====bpa data", data)
     }
     if (dataPath == 'Property') {
       if (data.workflow && data.workflow.wfDocuments) {
@@ -216,6 +218,9 @@ class WorkFlowContainer extends React.Component {
           data = beforeSubmitHook(data);
         }
       }
+
+      console.log("=======datapath", dataPath, data)
+
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });

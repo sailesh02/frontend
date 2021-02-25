@@ -827,9 +827,6 @@ export const beforeSubmitHook = async () => {
   let state = store.getState();
   let bpaDetails = get(state, "screenConfiguration.preparedFinalObject.BPA", {});
   let isNocTrue = get(state, "screenConfiguration.preparedFinalObject.BPA.isNocTrue", false);
-
-  console.log("=====state", state, bpaDetails, isNocTrue)
-
   if (!isNocTrue) {
     const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
     let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);

@@ -832,7 +832,7 @@ const screenConfig = {
       state.auth.userInfo,
       "type"
     )
-    if (isUserEmployee != "EMPLOYEE") {
+    // if (isUserEmployee != "EMPLOYEE") {
       const bService = getQueryArg(
         window.location.href,
         "bservice"
@@ -848,7 +848,7 @@ const screenConfig = {
       ];
 
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    }
+    // }
     //}
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);

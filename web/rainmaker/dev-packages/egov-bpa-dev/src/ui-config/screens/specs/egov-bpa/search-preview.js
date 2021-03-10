@@ -507,7 +507,12 @@ const setSearchResponse = async (
     "type", ""
   );
 
-  if (!type) {
+  const isUserEmployee = get(
+    state.auth.userInfo,
+    "type"
+  )
+
+  if (!type || isUserEmployee === "EMPLOYEE") {
     let businessService = get(response, "BPA[0].businessService");
     const queryObject = [
       { key: "tenantId", value: tenantId },

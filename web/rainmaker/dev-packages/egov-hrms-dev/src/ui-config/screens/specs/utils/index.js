@@ -603,7 +603,7 @@ export const showCityPicker = (state, dispatch) => {
 export const createEmployee = (state, dispatch) => {
   const tenantId = get(
     state.screenConfiguration.preparedFinalObject,
-    "citiesByModule.tenantId.value"
+    "citiesByModule.tenantId"
   );
   get(state.screenConfiguration.preparedFinalObject, "Employee") &&
     dispatch(prepareFinalObject("Employee", []));

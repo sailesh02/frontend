@@ -134,7 +134,8 @@ class ComponentInterface extends React.Component {
        return null;
     }
 
-    if (visible && !isEmpty(roleDefination)) {
+    if (visible && !isEmpty(roleDefination) && roleDefination.rolePath) {
+
       const splitList = get(roleDefination, "rolePath").split(".");
       const localdata = JSON.parse(localStorageGet(splitList[0]));
       const localRoles = get(

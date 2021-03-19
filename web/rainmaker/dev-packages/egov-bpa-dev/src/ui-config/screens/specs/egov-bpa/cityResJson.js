@@ -236,7 +236,7 @@ export const cityModuleMockJson = {
         "StateInfo": [
           {
             "name": "Panjab",
-            "code": "pb",
+            "code": "od",
             "bannerUrl": "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.testing/Punjab-bg-QA.jpg",
             "logoUrl": "https://raw.githubusercontent.com/egovernments/egov-web-app/rainmaker-v1-dynamic-state/web/rainmaker/packages/assets/images/pb/mseva-punjab.png",
             "hasLocalisation": true,
@@ -264,7 +264,7 @@ export const cityModuleMockJson = {
       "tenant": {
         "tenants": [
           {
-            "code": "pb",
+            "code": "od",
             "name": "Punjab",
             "description": "Punjab",
             "logoId": "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jalandhar/logo.png",
@@ -295,7 +295,7 @@ export const cityModuleMockJson = {
             "contactNumber": "0181-2227015"
           },
           {
-            "code": "pb.jalandhar",
+            "code": "od.jalandhar",
             "name": "Jalandhar",
             "description": "Jalandhar",
             "logoId": "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jalandhar/logo.png",
@@ -326,7 +326,7 @@ export const cityModuleMockJson = {
             "contactNumber": "0181-2227015"
           },
           {
-            "code": "pb.phagwara",
+            "code": "od.phagwara",
             "name": "Phagwara",
             "description": "Phagwara",
             "logoId": null,
@@ -357,7 +357,7 @@ export const cityModuleMockJson = {
             "contactNumber": "01824-260426"
           },
           {
-            "code": "pb.amritsar",
+            "code": "od.amritsar",
             "name": "Amritsar",
             "description": null,
             "logoId": null,
@@ -390,7 +390,7 @@ export const cityModuleMockJson = {
             "helpLineNumber": "0183-2210300"
           },
           {
-            "code": "pb.nawanshahr",
+            "code": "od.nawanshahr",
             "name": "Nawanshahr",
             "description": null,
             "logoId": null,
@@ -422,7 +422,7 @@ export const cityModuleMockJson = {
             "helpLineNumber": ""
           },
           {
-            "code": "pb.mohali",
+            "code": "od.mohali",
             "name": "Mohali",
             "description": "Mohali",
             "logoId": null,
@@ -453,7 +453,7 @@ export const cityModuleMockJson = {
             "contactNumber": "0172-5044907"
           },
           {
-            "code": "pb.nayagaon",
+            "code": "od.nayagaon",
             "name": "Nayagaon",
             "description": "Nayagaon",
             "logoId": "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nayagaon/logo.png",
@@ -484,7 +484,7 @@ export const cityModuleMockJson = {
             "contactNumber": "Not available"
           },
           {
-            "code": "pb.derabassi",
+            "code": "od.derabassi",
             "name": "Derabassi",
             "description": "Derabassi",
             "logoId": "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.derabassi/logo.png",
@@ -519,7 +519,7 @@ export const cityModuleMockJson = {
         ],
         "tenantInfo": [
           {
-            "code": "pb.jalandhar",
+            "code": "od.jalandhar",
             "districtCode": "Barnala",
             "population": "156716",
             "malePopulation": "82045",
@@ -533,7 +533,7 @@ export const cityModuleMockJson = {
             ]
           },
           {
-            "code": "pb.amritsar",
+            "code": "od.amritsar",
             "districtCode": "Bahadaur",
             "population": "116449",
             "malePopulation": "62554",
@@ -547,7 +547,7 @@ export const cityModuleMockJson = {
             ]
           },
           {
-            "code": "pb.patankot",
+            "code": "od.patankot",
             "districtCode": "Dhanaula",
             "population": "17331",
             "malePopulation": "10521",
@@ -561,7 +561,7 @@ export const cityModuleMockJson = {
             ]
           },
           {
-            "code": "pb.nawanshahr",
+            "code": "od.nawanshahr",
             "districtCode": "Dhanaula",
             "population": "12507",
             "malePopulation": "6810",
@@ -581,13 +581,13 @@ export const cityModuleMockJson = {
             "code": "PGR",
             "tenants": [
               {
-                "code": "pb.jalandhar"
+                "code": "od.jalandhar"
               },
               {
-                "code": "pb.phagwara"
+                "code": "od.phagwara"
               },
               {
-                "code": "pb.amritsar"
+                "code": "od.amritsar"
               }
             ]
           },
@@ -596,13 +596,13 @@ export const cityModuleMockJson = {
             "code": "PT",
             "tenants": [
               {
-                "code": "pb.jalandhar"
+                "code": "od.jalandhar"
               },
               {
-                "code": "pb.nawanshahr"
+                "code": "od.nawanshahr"
               },
               {
-                "code": "pb.amritsar"
+                "code": "od.amritsar"
               }
             ]
           },
@@ -611,19 +611,19 @@ export const cityModuleMockJson = {
             "code": "Finance",
             "tenants": [
               {
-                "code": "pb.jalandhar"
+                "code": "od.jalandhar"
               },
               {
-                "code": "pb.nawanshahr"
+                "code": "od.nawanshahr"
               },
               {
-                "code": "pb.amritsar"
+                "code": "od.amritsar"
               },
               {
-                "code": "pb.mohali"
+                "code": "od.mohali"
               },
               {
-                "code": "pb.nayagaon"
+                "code": "od.nayagaon"
               }
             ]
           },
@@ -632,16 +632,16 @@ export const cityModuleMockJson = {
             "code": "TL",
             "tenants": [
               {
-                "code": "pb.jalandhar"
+                "code": "od.jalandhar"
               },
               {
-                "code": "pb.nawanshahr"
+                "code": "od.nawanshahr"
               },
               {
-                "code": "pb.amritsar"
+                "code": "od.amritsar"
               },
               {
-                "code": "pb.derabassi"
+                "code": "od.derabassi"
               }
             ]
           },
@@ -650,13 +650,13 @@ export const cityModuleMockJson = {
             "code": "FIRENOC",
             "tenants": [
               {
-                "code": "pb.jalandhar"
+                "code": "od.jalandhar"
               },
               {
-                "code": "pb.nawanshahr"
+                "code": "od.nawanshahr"
               },
               {
-                "code": "pb.amritsar"
+                "code": "od.amritsar"
               }
             ]
           }

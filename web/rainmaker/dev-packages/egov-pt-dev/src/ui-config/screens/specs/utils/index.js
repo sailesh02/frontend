@@ -402,11 +402,11 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
       //New number search only
       let payload = await httpRequest(
         "post",
-        "/user/_search?tenantId=pb",
+        "/user/_search?tenantId=od",
         "_search",
         [],
         {
-          tenantId: "pb",
+          tenantId: "od",
           userName: `${ownerNo}`
         }
       );
@@ -693,7 +693,7 @@ export const getTodaysDateInYMD = () => {
 
 export const getRequiredDocData = async (action, state, dispatch) => {
   let tenantId =
-    process.env.REACT_APP_NAME === "Citizen" ? "pb.amritsar" : getTenantId();
+    process.env.REACT_APP_NAME === "Citizen" ? "od.amritsar" : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,

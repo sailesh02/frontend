@@ -58,7 +58,7 @@ class WhatsAppLocality extends React.Component {
     const values = queryString.parse(this.props.location.search)
     const cityname = values.tenantId || 'pb.amritsar';
     const phone = values.phone;
-    // fetchLocalizationLabel(getLocale(), cityname ||"pb.amritsar", cityname||"pb.amritsar");
+   // fetchLocalizationLabel(getLocale(), cityname ||"od.amritsar", cityname||"od.amritsar");
     this.setState({
       phone: phone,
     })
@@ -94,7 +94,7 @@ class WhatsAppLocality extends React.Component {
   getMDMSData = async (cityName) => {
     let mdmsBody = {
       MdmsCriteria: {
-        tenantId: cityName || "pb.amritsar",
+        tenantId: cityName || "od.amritsar",
         moduleDetails: [
           {
             moduleName: "egov-location",

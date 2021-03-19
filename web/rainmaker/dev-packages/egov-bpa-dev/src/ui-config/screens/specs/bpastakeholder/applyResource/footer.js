@@ -114,13 +114,16 @@ const getSummaryRequiredDetails = async (state, dispatch) => {
     "Licenses[0]",
     {}
   );
-  createEstimateData(
+
+  /*createEstimateData(
     LicenseData,
     "LicensesTemp[0].estimateCardData",
     dispatch,
     {},
     true
-  ); //get bill and populate estimate card
+  );
+  */
+  //get bill and populate estimate card
   let getLicenceValidData = get(
     state.screenConfiguration.preparedFinalObject,
     "applyScreenMdmsData.TradeLicense.tradeSubType[0].validityPeriod", 0
@@ -161,7 +164,7 @@ const getSummaryRequiredDetails = async (state, dispatch) => {
       false
     )
   );
- 
+
   prepareDocumentsDetailsView(state, dispatch);
 }
 
@@ -280,7 +283,7 @@ export const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
     } else {
       let isDocsEdit = get(
-        state.screenConfiguration.preparedFinalObject, 
+        state.screenConfiguration.preparedFinalObject,
         "LicensesTemp[0].isDocsEdit", ""
       );
       await getDocList(state, dispatch);
@@ -366,7 +369,7 @@ export const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "LicensesTemp.isDeclared"
     );
-    
+
     if (isDeclared) {
       isFormValid = await applyTradeLicense(state, dispatch, 2);
       moveToSuccess(LicenseData, dispatch);
@@ -376,7 +379,7 @@ export const callBackForNext = async (state, dispatch) => {
         labelName: "Please confirm the declaration!",
         labelKey: "ERR_FILL_DECLARATION_MESSAGE"
       };
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));      
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
   }
   if (activeStep !== 3) {

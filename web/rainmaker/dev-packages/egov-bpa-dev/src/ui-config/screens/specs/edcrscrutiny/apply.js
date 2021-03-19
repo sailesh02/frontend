@@ -99,6 +99,56 @@ const buildingInfoCard = getCommonCard({
         pattern: getPattern("Name"),
         jsonPath: "Scrutiny[0].applicantName"
       }),
+      dummyDiv1: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        visible: true,
+        props: {
+          disabled: true
+        }
+      },
+      servicetype: getSelectField({
+        label: {
+          labelName: "Service type",
+          labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Service Type",
+          labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "WF",
+          masterName: "BPA"
+        },
+        props:{
+          // disabled: true,
+          className : "tl-trade-type"
+        },
+        required: true,
+        //jsonPath: "Scrutiny[0].applicationSubType",
+        jsonPath: "scrutinyDetails.applicationSubType",
+        sourceJsonPath: "applyScreenMdmsData.BPA.ServiceType",
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        }
+      }),
+      dummyDiv2: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        visible: true,
+        props: {
+          disabled: true
+        }
+      },
       // serviceType: {
       //   ...getSelectField({
       //     label: {

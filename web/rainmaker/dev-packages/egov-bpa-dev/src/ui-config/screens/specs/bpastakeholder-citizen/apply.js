@@ -119,6 +119,11 @@ const screenConfig = {
         setNameOfUser(action, state, dispatch);
       }
     }
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.estimate.visible",
+      false
+  );
     return action;
   },
   components: {

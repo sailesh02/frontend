@@ -318,13 +318,32 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
       });
     }
     // const businessServiceData = this.getBussinessServiceData();
-    // const modules =this.state.showLocality&&
+    let modules = '';
+    if(businessServiceData &&
+      businessServiceData.length > 0){
+     modules =
+      businessServiceData &&
+      businessServiceData.map((item, index) => {
+        return item.business;
+      });
+    }
+    const uniqueModules = uniq(modules)
+    // if (isEmpty(data)) return [];
+    // const businessIds = data.map((item) => {
+    //   return item.businessId;
+    // });
+    // const businessServiceData = this.getBussinessServiceData();
+    // let modules = '';
+    // if(businessServiceData &&
+    //   businessServiceData.length > 0){
+    //  modules =
     //   businessServiceData &&
     //   businessServiceData.map((item, index) => {
     //     return item.business;
-    //   })||[];
+    //   });
+    // }
     // const uniqueModules = uniq(modules)
-    const uniqueModules = uniq(businessServices)
+
     let localitymap = [];
     if (this.state.showLocality && loadLocality) {
       try {
@@ -636,7 +655,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
         "WF_INBOX_HEADER_LOCALITY",
         "WF_INBOX_HEADER_STATUS",
         "WF_INBOX_HEADER_CURRENT_OWNER",
-        "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
+        // "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
       ];
       inboxData[0].headers = headersList;
       inboxData[0].rows = assignedDataRows;
@@ -811,6 +830,13 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
           </Tabs>
           <InboxData businessServiceSla={businessServiceSla} data={inboxData[value]} />
         </div>
+        <style>{
+          `
+            .inbox-data-table-bodycell-4{display:none;}
+
+            `
+        }
+        </style>
       </div>
     );
   }

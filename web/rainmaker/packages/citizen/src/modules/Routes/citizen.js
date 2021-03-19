@@ -17,6 +17,7 @@ import { EventDetails } from "modules/common";
 import Events from "modules/citizen/Events";
 import MyCity from "modules/citizen/MyCity";
 import { ImageModalDisplay } from "modules/common";
+//import HomePage from "modules/citizen/HomePage";
 
 // pgr specific screens
 
@@ -27,7 +28,7 @@ import TLHowItWorks from "../../ui-views/HowItWorks";
 import pgrRoutes from "pgr-citizen/Routes/pgr-routes";
 import ptRoutes from "pt-citizen/Routes/pt-routes";
 
-//Whatsapp Screen 
+//Whatsapp Screen
 import  WhatsAppCity from "modules/citizen/WhatsAppScreen/City";
 import  WhatsAppLocality from "modules/citizen/WhatsAppScreen/Locality";
 
@@ -54,8 +55,14 @@ const routes = [
     path: "language-selection",
     component: LanguageSelection,
     needsAuthentication: false,
-    redirectionUrl: "/user/register",
+    redirectionUrl: "/user/login",
   },
+  // {
+  //   path: "home",
+  //   component: HomePage,
+  //   needsAuthentication: false,
+  //   redirectionUrl: "/user/register",
+  // },
 
   {
     path: "privacy-policy",

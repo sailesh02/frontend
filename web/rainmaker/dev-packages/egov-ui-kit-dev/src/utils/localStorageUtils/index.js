@@ -18,6 +18,9 @@ export const getLocalization = (key) => {
 export const getLocale = () => {
   return localStorage.getItem("locale");
 };
+export const getDefaultLocale = () => {
+  return localStorage.getItem("defaultLocale");
+};
 export const getModule = () => {
   return localStorage.getItem("module");
 };
@@ -54,6 +57,9 @@ export const setStoredModulesList =(storedModuleList) =>{
   localStorage.setItem("storedModulesList", storedModuleList);
 };
 
+export const setDefaultLocale = (locale) => {
+  localStorageSet("defaultLocale", locale);
+};
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {
   Object.keys(localStorage).forEach((key) => {

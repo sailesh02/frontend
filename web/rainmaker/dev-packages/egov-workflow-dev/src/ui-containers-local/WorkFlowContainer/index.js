@@ -210,7 +210,7 @@ class WorkFlowContainer extends React.Component {
     this.props.showSpinner();
     try {
       if (beforeSubmitHook) {
-        if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_LOW") {
+        if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
           data = await beforeSubmitHook(data);
         } else {
           data = beforeSubmitHook(data);
@@ -341,15 +341,16 @@ class WorkFlowContainer extends React.Component {
     if (moduleName === "FIRENOC") {
       baseUrl = "fire-noc";
       bservice = "FIRENOC";
-    } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC") {
+    } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
       baseUrl = "egov-bpa";
-      if (moduleName === "BPA") {
+      if (moduleName === "BPA" || moduleName === "BPA_LOW"|| moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
         bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
-      } else if (moduleName === "BPA_OC") {
+      } //else if (moduleName === "BPA_OC") {
+      else {
         bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_OC_APP_FEE" : "BPA.NC_OC_SAN_FEE");
-      } else {
-        bservice = "BPA.LOW_RISK_PERMIT_FEE"
-      }
+      } //else {
+        //bservice = "BPA.LOW_RISK_PERMIT_FEE"
+      //}
     } else if (moduleName === "PT") {
       bservice = "PT"
     } else if (moduleName === "PT.CREATE" || moduleName === "PT.LEGACY") {
@@ -528,7 +529,7 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
     let showFooter = true;
-    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC') {
+    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC' || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     }
     if ((moduleName === 'Noc') && window.location.href.includes("isFromBPA=true")) {

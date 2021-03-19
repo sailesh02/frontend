@@ -4,9 +4,12 @@ import redirectionLink from "egov-ui-kit/config/smsRedirectionLinks";
 import { fetchCurrentLocation, fetchLocalizationLabel, setPreviousRoute, setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { logout } from "egov-ui-kit/redux/auth/actions";
 import { fetchMDMSData } from "egov-ui-kit/redux/common/actions";
+// import routes from "./Routes";
+// import { LoadingIndicator } from "components";
+import { getLocale, setDefaultLocale, getDefaultLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { addBodyClass, getQueryArg } from "egov-ui-kit/utils/commons";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+// import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import React, { Component } from "react";
@@ -119,7 +122,18 @@ class App extends Component {
     const isPublicSearch = location && location.pathname && (location.pathname.includes("/withoutAuth/pt-mutation/public-search") || location.pathname.includes("/withoutAuth/wns/public-search"));
     const isPublicSearchPay = location && location.pathname && location.pathname.includes("/withoutAuth/egov-common/pay");
     if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect && !isPrivacyPolicy && !isPublicSearch && !isPublicSearchPay) {
-      nextProps.hasLocalisation && this.props.history.replace("/language-selection");
+     // nextProps.hasLocalisation && this.props.history.replace("/language-selection");
+     if(nextProps.hasLocalisation){
+      if(window.location.search.includes("mobileno") && window.location.search.includes("ecno"))
+      {       
+
+           setDefaultLocale("en_IN");
+        }
+      if(getDefaultLocale()== null){
+
+        this.props.history.replace("/language-selection");
+      }
+    }
     }
   }
 

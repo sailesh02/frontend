@@ -27,6 +27,14 @@ export class Taskboard extends React.Component {
             }
           />
         ))}
+
+        <style>{
+          `
+            .inbox-worklist-card-hover-1, .inbox-worklist-card-hover-2{display:none;}
+
+            `
+        }
+        </style>
       </div>
     );
   }

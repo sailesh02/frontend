@@ -9,7 +9,7 @@ import Router from "./Router";
 import commonConfig from "config/common";
 // import logoMseva from "egov-ui-kit/assets/images/logo-white.png";
 import routes from "./Routes";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, setDefaultLocale, getDefaultLocale } from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty";
 import { LoadingIndicator, CommonShareContainer } from "components";
 
@@ -74,8 +74,17 @@ class App extends Component {
 
     const isPrivacyPolicy = location && location.pathname && location.pathname.includes("privacy-policy");
     if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !isPrivacyPolicy) {
-      nextProps.hasLocalisation && this.props.history.replace("/language-selection");
+      //nextProps.hasLocalisation && this.props.history.replace("/user/login");
+      //setDefaultLocale("en_IN");
+      if (nextProps.hasLocalisation) {
+        if (getDefaultLocale() == "null")
+          this.props.history.replace("/language-selection");
+      }
     }
+    //  if(getDefaultLocale()== null){
+
+    //    this.props.history.replace("/language-selection");
+    //  }
   }
 
   render() {

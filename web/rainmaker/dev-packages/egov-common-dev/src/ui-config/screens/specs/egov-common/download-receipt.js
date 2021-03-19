@@ -98,4 +98,4 @@ const screenConfig = {
 
 export default screenConfig;
 
-// egov-common/download-receipt?status=success&consumerCode=PB-TL-2020-05-18-006218&tenantId=pb.amritsar&receiptNumber=TEST/107/2020-21/064499&businessService=TL
+// egov-common/download-receipt?status=success&consumerCode=PB-TL-2020-05-18-006218&tenantId=od.amritsar&receiptNumber=TEST/107/2020-21/064499&businessService=TL

@@ -63,6 +63,32 @@ android {
 
 	flavorDimensions "default"
 	productFlavors {
+		EmployeeQASujog {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.employee'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "Sujog Employee"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
+			signingConfig signingConfigs.Employee
+
+			buildConfigField 'String', 'url', '"https://sujog-dev.odisha.gov.in/employee/user/login"'
+		}
+		CitizenQASujog {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.citizen'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "Sujog"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
+			signingConfig signingConfigs.Citizen
+
+			buildConfigField 'String', 'url', '"https://sujog-dev.odisha.gov.in/citizen/user/register"'
+		}
 		CitizenProd {
 			minSdkVersion 19
 			applicationId 'org.egovernment.mseva.citizen'

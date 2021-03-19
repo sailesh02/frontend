@@ -1,3 +1,7 @@
+import {
+  getQueryArg
+} from "egov-ui-framework/ui-utils/commons";
+
 export const getModuleName = (pathName, BPAtradeType) => {
   if (pathName && pathName.includes("fire-noc")) {
     return "FIRENOC";

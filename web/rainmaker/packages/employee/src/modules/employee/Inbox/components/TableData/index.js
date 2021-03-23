@@ -249,7 +249,7 @@ class TableData extends Component {
 
     let { taskboardData, tabData , showLoadingTaskboard } = this.state;
 if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
-  
+
   this.setState({showLoadingTaskboard:true})
 }
     taskboardData[0].head = showLoadingTaskboard?totalRows.length: totalRowCount;
@@ -317,7 +317,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
         return item.businessId;
       });
     }
-    // const businessServiceData = this.getBussinessServiceData();
+    const businessServiceData = this.getBussinessServiceData();
     let modules = '';
     if(businessServiceData &&
       businessServiceData.length > 0){
@@ -401,8 +401,8 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
               }
               const moduleWiseLocality = await httpRequest(`egov-searcher/locality/${uniqueModules[i]}/_get`, "search", [], requestBody);
               localitymap = [...localitymap, ...moduleWiseLocality.Localities];
-          
-            
+
+
             } else {
             const acknowledgementIds = [...businessIds];
               for (let i = 0; i <= businessIds.length + 200; i += 200) {
@@ -411,7 +411,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
                   const query = [{ key: "tenantId", value: getTenantId() },
                   { key: "acknowledgementIds", value: acknowledgementId.join(',') }]
                   const propertyResponse = await httpRequest("property-services/property/_search", "_search", query);
-  
+
                   const localities = propertyResponse.Properties && propertyResponse.Properties.map(property => {
                     return {
                       "referencenumber": property.acknowldgementNumber,
@@ -420,9 +420,9 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
                   })
                   localitymap = [...localitymap, ...localities];
                 }
-              } 
+              }
             }
-  
+
           } catch (e) {
             console.log("error");
           }
@@ -569,7 +569,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
         "error"
       );
      }
-   
+
     }
   };
 

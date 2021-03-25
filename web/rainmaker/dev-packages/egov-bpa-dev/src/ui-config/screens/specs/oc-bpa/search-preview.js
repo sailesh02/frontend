@@ -645,7 +645,7 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    let businessServicesValue = "BPA3";
+    let businessServicesValue = "BPA_OC";
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: businessServicesValue }

@@ -63,7 +63,9 @@ export const setDefaultLocale = (locale) => {
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {
   Object.keys(localStorage).forEach((key) => {
+    if (key.startsWith(appName)) {
       window.localStorage.removeItem(key);
+    }
   });
 };
 //Role specific get-set Methods

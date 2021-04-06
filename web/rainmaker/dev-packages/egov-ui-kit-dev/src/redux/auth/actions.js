@@ -135,6 +135,11 @@ export const logout = () => {
       const authToken = getAccessToken();
       if (authToken) {
         const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [], { "access_token" : authToken });
+        
+                // For Finance
+        if(process.env.REACT_APP_NAME !== "Citizen"){
+          const response_finance = await httpRequest(FINANCE.LOGOUT.URL, FINANCE.LOGOUT.ACTION, [{ key: "access_token", value: authToken }]);
+        }
       } else {
         clearUserDetails();
         process.env.REACT_APP_NAME === "Citizen"

@@ -28,7 +28,6 @@ const Miscellaneous = (props) => {
           id="gradient_ice-3"
           x1="-8.416"
           x2="52.6"
-          xlink:href="#gradient_ice"
           y1="56.692"
           y2="-1.55"
         />
@@ -64,7 +63,6 @@ const Miscellaneous = (props) => {
           id="gradient_ice-8"
           x1="12.868"
           x2="73.884"
-          xlink:href="#gradient_ice"
           y1="78.99"
           y2="20.748"
         />

@@ -6,7 +6,6 @@ const Miscellaneous = (props) => {
     <SvgIcon viewBox="0 0 64 64" className="custom-icon" {...props}>
       <g>
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
           id="gradient_ice"
           gradientUnits="userSpaceOnUse"
           x1="-10.312"
@@ -19,18 +18,13 @@ const Miscellaneous = (props) => {
           <stop stop-opacity="1" stop-color="#fe7a51" offset="1" />
         </linearGradient>
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-2"
           x1="-10.8"
           x2="50.216"
-          xlink:href="#gradient_ice"
           y1="54.195"
           y2="-4.047"
         />
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-3"
           x1="-8.416"
           x2="52.6"
@@ -39,48 +33,34 @@ const Miscellaneous = (props) => {
           y2="-1.55"
         />
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-4"
           x1="-.529"
           x2="60.486"
-          xlink:href="#gradient_ice"
           y1="64.954"
           y2="6.712"
         />
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-5"
           x1="5.444"
           x2="66.46"
-          xlink:href="#gradient_ice"
           y1="71.212"
           y2="12.97"
         />
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-6"
           x1="5.875"
           x2="66.891"
-          xlink:href="#gradient_ice"
           y1="71.664"
           y2="13.422"
         />
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-7"
           x1="9.372"
           x2="70.387"
-          xlink:href="#gradient_ice"
           y1="75.327"
           y2="17.085"
         />
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-8"
           x1="12.868"
           x2="73.884"
@@ -89,72 +69,51 @@ const Miscellaneous = (props) => {
           y2="20.748"
         />
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-9"
           x1="9.69"
           x2="70.705"
-          xlink:href="#gradient_ice"
           y1="75.66"
           y2="17.418"
         />
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-10"
           x1="13.186"
           x2="74.201"
-          xlink:href="#gradient_ice"
           y1="79.323"
           y2="21.08"
         />
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-11"
           x1="16.682"
           x2="77.698"
-          xlink:href="#gradient_ice"
           y1="82.985"
           y2="24.743"
         />
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-12"
           x1="13.504"
           x2="74.519"
-          xlink:href="#gradient_ice"
           y1="79.656"
           y2="21.413"
         />
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-13"
           x1="18.748"
           x2="79.764"
-          xlink:href="#gradient_ice"
           y1="85.15"
           y2="26.908"
         />
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-14"
           x1="-.89"
           x2="60.126"
-          xlink:href="#gradient_ice"
           y1="64.577"
           y2="6.335"
         />
         <linearGradient
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
           id="gradient_ice-15"
           x1="-3.069"
           x2="57.946"
-          xlink:href="#gradient_ice"
           y1="62.294"
           y2="4.051"
         />

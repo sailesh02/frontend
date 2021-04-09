@@ -67,6 +67,7 @@ export const clearUserDetails = () => {
       window.localStorage.removeItem(key);
     }
   });
+ window.sessionStorage.clear();
 };
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {

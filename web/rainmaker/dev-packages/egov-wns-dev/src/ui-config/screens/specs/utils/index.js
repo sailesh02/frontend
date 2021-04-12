@@ -1392,7 +1392,15 @@ export const resetFieldsForConnection = (state, dispatch) => {
       ""
     )
   );
-
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.propertyid",
+      "props.value",
+      ""
+    )
+  );
+  
   dispatch(
     handleField(
       "search",
@@ -1649,3 +1657,22 @@ export const triggerModificationsDisplay = (action, isModeEnable) => {
     setVisible('roadCuttingChargeContainer', !isModeEnable, action);
 }
 
+export const getDemand = async (queryObject, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/demand/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: error.message, labelKey: error.message },
+        "warning"
+        )
+      );
+  }
+};

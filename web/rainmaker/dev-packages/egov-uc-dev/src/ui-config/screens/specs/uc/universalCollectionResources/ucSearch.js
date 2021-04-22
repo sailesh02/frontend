@@ -84,7 +84,7 @@ export const UCSearchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreen.receiptNumbers",
+      jsonPath: "ucSearchScreen.receiptNumbers",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -108,33 +108,34 @@ export const UCSearchCard = getCommonCard({
           masterName: "BusinessService",
           moduleName: "BillingService"
         },
-        required: false,
+        required: true,
         isClearable: true,
         labelsFromLocalisation: true,
         sourceJsonPath: "applyScreenMdmsData.serviceCategories",
-        jsonPath: "searchScreenMdmsData.businessServiceSelected",
+        jsonPath: "ucSearchScreen.businessServices",
       },
-      jsonPath: "searchScreenMdmsData.businessServiceSelected",
+      required: true,
+      jsonPath: "ucSearchScreen.businessServices",
       gridDefination: {
         xs: 12,
         sm: 4
       },
       beforeFieldChange: async (action, state, dispatch) => {
-        const serviceCategory = get(
-          state.screenConfiguration,
-          "preparedFinalObject.applyScreenMdmsData.serviceCategories"
-        );
-        const selectedCategory = serviceCategory.find(
-          item => item.code === action.value
-        );
-        const serviceTypes =
-          selectedCategory &&
-          ((selectedCategory.child &&
-          selectedCategory.child.length > 0) ?
-          selectedCategory.child.map(item => item.code) : selectedCategory.code);
-        dispatch(
-          prepareFinalObject("searchScreen.businessServices", serviceTypes)
-        );
+        // const serviceCategory = get(
+        //   state.screenConfiguration,
+        //   "preparedFinalObject.applyScreenMdmsData.serviceCategories"
+        // );
+        // const selectedCategory = serviceCategory.find(
+        //   item => item.code === action.value
+        // );
+        // const serviceTypes =
+        //   selectedCategory &&
+        //   ((selectedCategory.child &&
+        //   selectedCategory.child.length > 0) ?
+        //   selectedCategory.child.map(item => item.code) : selectedCategory.code);
+        // dispatch(
+        //   prepareFinalObject("ucSearchScreen.businessServices", serviceTypes)
+        // );
         return action;
       }
     },
@@ -158,7 +159,7 @@ export const UCSearchCard = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "searchScreen.mobileNumber"
+      jsonPath: "ucSearchScreen.mobileNumber"
     }),
 
     fromDate: getDateField({
@@ -173,7 +174,7 @@ export const UCSearchCard = getCommonCard({
       required: false,
       visible: false,
       pattern: getPattern("Date"),
-      jsonPath: "searchScreen.fromDate",
+      jsonPath: "ucSearchScreen.fromDate",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -192,7 +193,7 @@ export const UCSearchCard = getCommonCard({
       visible: false,
       required: false,
       pattern: getPattern("Date"),
-      jsonPath: "searchScreen.toDate",
+      jsonPath: "ucSearchScreen.toDate",
 
       gridDefination: {
         xs: 12,

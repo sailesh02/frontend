@@ -24,6 +24,12 @@ export const getDefaultLocale = () => {
 export const getModule = () => {
   return localStorage.getItem("module");
 };
+export const getLocalizationLabels = () =>{
+  return localStorage.getItem(`localization_${getLocale()}`);
+};
+export const getStoredModulesList = () =>{
+  return localStorage.getItem("storedModulesList");
+};
 
 //SET methods
 export const setUserInfo = (userInfo) => {
@@ -47,6 +53,10 @@ export const setModule = (moduleName) => {
 export const setReturnUrl = (url) => {
   localStorageSet("returnUrl", url);
 };
+export const setStoredModulesList =(storedModuleList) =>{
+  localStorage.setItem("storedModulesList", storedModuleList);
+};
+
 export const setDefaultLocale = (locale) => {
   localStorageSet("defaultLocale", locale);
 };
@@ -57,6 +67,7 @@ export const clearUserDetails = () => {
       window.localStorage.removeItem(key);
     }
   });
+ window.sessionStorage.clear();
 };
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {

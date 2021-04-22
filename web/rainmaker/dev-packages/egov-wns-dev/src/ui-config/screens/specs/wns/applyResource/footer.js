@@ -14,39 +14,26 @@ import {
   applyForWater, applyForWaterOrSewerage,
 
   findAndReplace,
-
-
-
-
-
-
-
-
   isActiveProperty,
-
   isModifyMode,
   isModifyModeAction, prepareDocumentsUploadData,
-
   pushTheDocsUploadedToRedux,
-
-
-
-
-
-
   serviceConst,
-
-
-
   showHideFieldsFirstStep, validateConnHolderDetails, validateFeildsForBothWaterAndSewerage,
-
   validateFeildsForSewerage, validateFeildsForWater, isEditAction
 } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
+import commonConfig from "config/common.js";
+
 const isMode = isModifyMode();
 const isModeAction = isModifyModeAction();
 const setReviewPageRoute = (state, dispatch) => {
+  let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+  if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+    let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.isEmpty !== true);
+    dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
+  }
   let tenantId = getTenantIdCommon();
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
@@ -122,7 +109,7 @@ const getMdmsData = async (state, dispatch) => {
   );
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId, moduleDetails: [
+       tenantId: commonConfig.tenantId, moduleDetails: [
         { moduleName: "ws-services-masters", masterDetails: [{ name: "Documents" }] },
         { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }] }
       ]
@@ -421,6 +408,21 @@ const callBackForNext = async (state, dispatch) => {
         hasFieldToaster = false;
       }
     } else {
+      let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+      if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+        for (let i = 0; i < roadCuttingInfo.length; i++) {
+          if (roadCuttingInfo[i] == undefined) {
+            roadCuttingInfo[i] = {};
+            roadCuttingInfo[i].isEmpty = true;
+          }
+        }
+        let filteredInfo = [];
+        roadCuttingInfo.map(info => {
+          if(info.isDeleted !=false) filteredInfo.push(info);
+        });
+        dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
+      }
+
       if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
         setReviewPageRoute(state, dispatch);
       }
@@ -438,6 +440,11 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep === 3) {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
+    let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+    if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+      let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.isEmpty !== true);
+      dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
+    }
     if (waterId && sewerId) {
       isFormValid = await acknoledgementForBothWaterAndSewerage(state, activeStep, isFormValid, dispatch);
     } else if (waterId) {
@@ -556,7 +563,6 @@ const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) 
       prepareDocumentsUploadData(state, dispatch);
     }
     if (activeStep === 3) {
-      getMdmsData(state, dispatch);
       isFormValid = await applyForWaterOrSewerage(state, dispatch);
       let combinedArray = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
       if (isFormValid) { moveToSuccess(combinedArray, dispatch) }
@@ -594,7 +600,6 @@ const acknoledgementForSewerage = async (state, activeStep, isFormValid, dispatc
       prepareDocumentsUploadData(state, dispatch);
     }
     if (activeStep === 3) {
-      getMdmsData(state, dispatch);
       isFormValid = await applyForWaterOrSewerage(state, dispatch);
       let combinedArray = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
       if (isFormValid) { moveToSuccess(combinedArray, dispatch) }

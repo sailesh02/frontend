@@ -1,5 +1,5 @@
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTransformedLocale, transformById } from "egov-ui-framework/ui-utils/commons";
+import { getTransformedLocale, transformById, disableFieldAndShowSpinner, enableFieldAndHideSpinner } from "egov-ui-framework/ui-utils/commons";
 import { getLocalization, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { getSearchResults } from "../../../../../ui-utils/commons";
@@ -21,7 +21,7 @@ export const searchApiCall = async (state, dispatch) => {
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "ucSearchScreen",
     {}
   );
   const isSearchBoxFirstRowValid = validateFields(
@@ -80,6 +80,7 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
+    disableFieldAndShowSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
     const responseFromAPI = await getSearchResults(queryObject);
     dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
     const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
@@ -109,8 +110,10 @@ export const searchApiCall = async (state, dispatch) => {
         ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
         ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
         ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
-        ["TENANT_ID"]: item.tenantId || "-"
+        ["TENANT_ID"]: item.tenantId || "-",
+        ["SERVICE"]:item.businessService
       }));
+      enableFieldAndHideSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
       dispatch(
         handleField(
           "search",

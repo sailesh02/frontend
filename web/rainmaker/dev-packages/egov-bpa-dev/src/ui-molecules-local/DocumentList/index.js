@@ -269,7 +269,7 @@ class DocumentList extends Component {
           {card.required && requiredIcon}
           <Typography variant="caption">
             <LabelContainer
-              labelKey={getTransformedLocale("BPA_UPLOAD_RESTRICTIONS")}
+              labelKey={getTransformedLocale("BPA_UPLOAD_FILE_RESTRICTIONS")}
             />
           </Typography>
         </Grid>

@@ -79,6 +79,8 @@ const StatusIcon = ({ status }) => {
       return <Icon action="custom" name="reassign-request" style={statusCommonIconStyle} color={"#fe7a51"} />;
     case "assigned":
     case "re-assign":
+    case "escalatedlevel1pending":
+    case "escalatedlevel2pending":
       return <Icon action="custom" name="file-send" style={statusCommonIconStyle} color={"#fe7a51"} />;
     case "rejected":
       return <Icon action="content" name="clear" style={statusRejectedIconStyle} color={"#FFFFFF"} />;
@@ -95,6 +97,71 @@ var rejectStatusCount = 0;
 var resolveStatusCount = 0;
 var assigneeStatusCount = 0;
 var reassignRequestedCount = 0;
+let noReopen = true;
+
+const getImageSource = (imageSource, size) => {
+  const images = imageSource.split(",");
+  if (!images.length) {
+    return null;
+  }
+  switch (size) {
+    case "small":
+      imageSource = images[2];
+      break;
+    case "medium":
+      imageSource = images[1];
+      break;
+    case "large":
+    default:
+      imageSource = images[0];
+  }
+  return imageSource || images[0];
+};
+const handleLevel1 = (timeline1, timeline2) => {
+  if (timeline1.status === "escalatedlevel1pending") {
+    if (timeline2.status === "resolved") return "ES_COMPLAINT_ESCALATED_LEVEL1_HEADER";
+    else return "ES_COMPLAINT_ESCALATED_LEVEL1_SLA_BREACH";
+  }
+};
+
+// const getEscalatingStatus = (timeline, status) => {
+//   if (timeline && timeline.length > 2) {
+//     if (timeline[0].status === "escalatedlevel1pending") return handleLevel1(timeline[0], timeline[1]);
+
+//     if (timeline[0].status === "escalatedlevel2pending") {
+//       if (timeline[1].status === "resolved") return "ES_COMPLAINT_ESCALATED_LEVEL2_HEADER";
+//       else if (timeline[1].status === "escalatedlevel1pending" && status === "escalatedlevel1pending") return handleLevel1(timeline[1], timeline[2]);
+//       else return "ES_COMPLAINT_ESCALATED_LEVEL2_SLA_BREACH";
+//     }
+//   }
+// };
+
+const getEscalatingStatus = (timeline, status) => {
+
+  if(timeline && timeline.length > 0){
+	if(status === "escalatedlevel1pending"){
+			let statusIndex = timeline.findIndex( action => action.status === status);
+			const action = timeline.filter( (action,index) =>  index === (statusIndex+1));
+
+			if(action[0].status ==="resolved")
+				return "ES_COMPLAINT_ESCALATED_LEVEL1_HEADER";
+			else
+				return "ES_COMPLAINT_ESCALATED_LEVEL1_SLA_BREACH";
+	}
+
+	if(status === "escalatedlevel2pending"){
+				let statusIndex = timeline.findIndex( action => action.status === status);
+			const action = timeline.filter( (action,index) =>  index === (statusIndex+1));
+
+			if(action[0].status ==="resolved")
+				return "ES_COMPLAINT_ESCALATED_LEVEL2_HEADER";
+			else
+				return "ES_COMPLAINT_ESCALATED_LEVEL2_SLA_BREACH";
+  }
+}
+return;
+};
+
 
 const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating, role, filedBy, filedUserMobileNumber, reopenValidChecker }) => {
   var {
@@ -221,6 +288,10 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                       : "ES_COMPLAINT_ASSIGNED_HEADER"
                     : employeeName
                     ? "CS_COMMON_REASSIGNED_TO"
+                    : status === "escalatedlevel1pending"
+                    ? getEscalatingStatus(timeLine, status)
+                    : status === "escalatedlevel2pending"
+                    ? getEscalatingStatus(timeLine, status)
                     : "ES_COMPLAINT_REASSIGNED_HEADER"
                 }`}
               />
@@ -258,6 +329,10 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                       : "ES_COMPLAINT_ASSIGNED_HEADER"
                     : groName
                     ? "ES_COMPLAINT_DETAILS_REASSIGNED_BY"
+                    : status === "escalatedlevel1pending"
+                    ? getEscalatingStatus(timeLine, status)
+                    : status === "escalatedlevel2pending"
+                    ? getEscalatingStatus(timeLine, status)
                     : "ES_COMPLAINT_REASSIGNED_HEADER"
                 }`}
               />

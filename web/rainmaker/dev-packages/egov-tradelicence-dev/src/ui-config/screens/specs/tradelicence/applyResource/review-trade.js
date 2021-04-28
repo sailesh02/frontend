@@ -67,22 +67,22 @@ const accessoriesCard = {
   type: "array"
 };
 export const tradetypeDetails = {
-  reviewTradeCategory: getLabelWithValue(
-    {
-      labelName: "Trade Category",
-      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL"
-    },
-    {
-      jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-      localePrefix: {
-        moduleName: "TRADELICENSE",
-        masterName: "TRADETYPE"
-      },
-      callBack: value => {
-        return value ? value.split(".")[0] : "NA";
-      }
-    }
-  ),
+  // reviewTradeCategory: getLabelWithValue(
+  //   {
+  //     labelName: "Trade Category",
+  //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL"
+  //   },
+  //   {
+  //     jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+  //     localePrefix: {
+  //       moduleName: "TRADELICENSE",
+  //       masterName: "TRADETYPE"
+  //     },
+  //     callBack: value => {
+  //       return value ? value.split(".")[0] : "NA";
+  //     }
+  //   }
+  // ),
   reviewTradeType: getLabelWithValue(
     {
       labelName: "Trade Type",
@@ -95,7 +95,7 @@ export const tradetypeDetails = {
         masterName: "TRADETYPE"
       },
       callBack: value => {
-        return value ? value.split(".")[1] : "NA";
+        return value ? value.split(".")[0] : "NA";
       }
     }
   ),

@@ -2279,8 +2279,8 @@ export const updateMdmsDropDowns = async ( state, dispatch ) => {
         }
         triggerUpdateByKey(state, i, formObj, 'set');
 
-        triggerUpdateByKey(state, `tradeTypeTransformed.allDropdown[${i}]`, getObjectKeys(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeCat}`, [])) , dispatch);
-        triggerUpdateByKey(state, `tradeSubTypeTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeCat}.${tradeType}`, [])) , dispatch);
+        // triggerUpdateByKey(state, `tradeTypeTransformed.allDropdown[${i}]`, getObjectKeys(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeCat}`, [])) , dispatch);
+        triggerUpdateByKey(state, `tradeSubTypeTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeType}`, [])) , dispatch);
  
         triggerUpdateByKey(state, `selectedValues[${i}]`, formObj , dispatch);
       });

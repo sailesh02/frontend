@@ -184,14 +184,14 @@ const tradeUnitCard = {
             componentPath: "DynamicMdmsContainer",
             props: {
               dropdownFields: [
-                {
-                  key : 'tradeCategory',
-                  fieldType : "autosuggest",
-                  className:"applicant-details-error autocomplete-dropdown",
-                  callBack: tradeCategoryChange,
-                  isRequired : false,
-                  requiredValue : true
-                },
+                // {
+                //   key : 'tradeCategory',
+                //   fieldType : "autosuggest",
+                //   className:"applicant-details-error autocomplete-dropdown",
+                //   callBack: tradeCategoryChange,
+                //   isRequired : false,
+                //   requiredValue : true
+                // },
                 {
                   key : 'tradeType',
                   fieldType : "autosuggest",

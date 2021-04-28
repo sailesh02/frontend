@@ -2272,10 +2272,10 @@ export const updateMdmsDropDowns = async ( state, dispatch ) => {
   if (tradeSubTypes.length > 0) {
     try {
       tradeSubTypes.forEach((tradeSubType, i) => {
-        const tradeCat = tradeSubType.tradeType.split(".")[0];
-        const tradeType = tradeSubType.tradeType.split(".")[1];
+        // const tradeCat = tradeSubType.tradeType.split(".")[0];
+        const tradeType = tradeSubType.tradeType.split(".")[0];
         let formObj = {
-          tradeCategory: tradeCat, tradeType: tradeType, tradeSubType: tradeSubType.tradeType
+          tradeType: tradeType, tradeSubType: tradeSubType.tradeType
         }
         triggerUpdateByKey(state, i, formObj, 'set');
 

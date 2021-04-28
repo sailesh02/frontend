@@ -129,7 +129,8 @@ const buildingInfoCard = getCommonCard({
           className : "tl-trade-type"
         },
         required: true,
-        jsonPath: "Scrutiny[0].applicationSubType",
+        //jsonPath: "Scrutiny[0].applicationSubType",
+        jsonPath: "scrutinyDetails.applicationSubType",
         sourceJsonPath: "applyScreenMdmsData.BPA.ServiceType",
         gridDefination: {
           xs: 12,

@@ -86,7 +86,7 @@ export const UCSearchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreen.receiptNumbers",
+      jsonPath: "ucSearchScreen.receiptNumbers",
       // sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
       gridDefination: {
         xs: 12,
@@ -111,12 +111,13 @@ export const UCSearchCard = getCommonCard({
           moduleName: "BillingService"
         },
         className: "autocomplete-dropdown",
-        required: false,
+        required: true,
         isClearable: true,
         labelsFromLocalisation: true,
         sourceJsonPath: "applyScreenMdmsData.serviceCategories",
         jsonPath: "searchScreenMdmsData.businessServiceSelected",
       },
+      required: true,
       jsonPath: "searchScreenMdmsData.businessServiceSelected",
       gridDefination: {
         xs: 12,
@@ -132,7 +133,7 @@ export const UCSearchCard = getCommonCard({
         );
         const serviceTypes = selectedCategory && (selectedCategory.child && selectedCategory.child.length > 0 ? selectedCategory.child.map(item => item.code) : selectedCategory.code);
         dispatch(
-          prepareFinalObject("searchScreen.businessServices", serviceTypes)
+          prepareFinalObject("ucSearchScreen.businessServices", serviceTypes)
         );
         return action;
       }
@@ -157,7 +158,7 @@ export const UCSearchCard = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "searchScreen.mobileNumber"
+      jsonPath: "ucSearchScreen.mobileNumber"
     }),
 
     fromDate: getDateField({
@@ -172,7 +173,7 @@ export const UCSearchCard = getCommonCard({
       visible: false,
       required: false,
       pattern: getPattern("Date"),
-      jsonPath: "searchScreen.fromDate",
+      jsonPath: "ucSearchScreen.fromDate",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -191,7 +192,7 @@ export const UCSearchCard = getCommonCard({
       visible: false,
       required: false,
       pattern: getPattern("Date"),
-      jsonPath: "searchScreen.toDate",
+      jsonPath: "ucSearchScreen.toDate",
 
       gridDefination: {
         xs: 12,

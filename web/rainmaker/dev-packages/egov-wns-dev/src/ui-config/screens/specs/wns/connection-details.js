@@ -1,23 +1,41 @@
+import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
+
 import {
-  convertEpochToDate, getCommonCard,
-
-
-  getCommonContainer, getCommonHeader
+  convertEpochToDate,
+  getCommonCard,
+  getCommonContainer,
+  getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import set from "lodash/set";
-import { getDescriptionFromMDMS, getSearchResults, getSearchResultsForSewerage, serviceConst } from "../../../../ui-utils/commons";
-import { ifUserRoleExists } from "../utils";
+import get from "lodash/get";
+import { getBillAmdSearchResult } from "egov-billamend/ui-utils/commons";
+import { httpRequest } from "../../../../ui-utils/api";
+import {
+  getDescriptionFromMDMS,
+  getSearchResults,
+  getSearchResultsForSewerage,
+  serviceConst
+} from "../../../../ui-utils/commons";
+import { getDemand, ifUserRoleExists } from "../utils";
 import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
 import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
-import { connHolderDetailsSameAsOwnerSummary, connHolderDetailsSummary, getOwnerDetails } from "./connectionDetailsResource/owner-deatils";
+import {
+  connHolderDetailsSameAsOwnerSummary,
+  connHolderDetailsSummary,
+  getOwnerDetails
+} from "./connectionDetailsResource/owner-deatils";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
 
-const tenantId = getQueryArg(window.location.href, "tenantId")
+const tenantId = getQueryArg(window.location.href, "tenantId");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
-const service = getQueryArg(window.location.href, "service")
+const service = getQueryArg(window.location.href, "service");
 
 const getApplicationNumber = (dispatch, connectionsObj) => {
   let appNos = "";
@@ -30,9 +48,9 @@ const getApplicationNumber = (dispatch, connectionsObj) => {
     appNos = connectionsObj[0].applicationNo;
   }
   dispatch(prepareFinalObject("applicationNos", appNos));
-}
+};
 const showHideConnectionHolder = (dispatch, connectionHolders) => {
-  if (connectionHolders != 'NA' && connectionHolders.length > 0) {
+  if (connectionHolders != "NA" && connectionHolders.length > 0) {
     dispatch(
       handleField(
         "connection-details",
@@ -67,57 +85,111 @@ const showHideConnectionHolder = (dispatch, connectionHolders) => {
       )
     );
   }
-}
+};
 export const sortpayloadDataObj = (connectionObj) => {
-  return connectionObj.sort((a, b) => (a.additionalDetails.appCreatedDate < b.additionalDetails.appCreatedDate) ? 1 : -1)
-}
+  return connectionObj.sort((a, b) =>
+    a.additionalDetails.appCreatedDate < b.additionalDetails.appCreatedDate
+      ? 1
+      : -1
+  );
+};
 
 const getActiveConnectionObj = (connectionsObj) => {
   let getActiveConnectionObj = "";
   for (var i = 0; i < connectionsObj.length; i++) {
-    if (connectionsObj[i] &&
-      connectionsObj[i].applicationStatus === 'CONNECTION_ACTIVATED' ||
-      connectionsObj[i].applicationStatus === 'APPROVED') {
+    if (
+      (connectionsObj[i] &&
+        connectionsObj[i].applicationStatus === "CONNECTION_ACTIVATED") ||
+      connectionsObj[i].applicationStatus === "APPROVED"
+    ) {
       getActiveConnectionObj = connectionsObj[i];
       break;
     }
   }
   return getActiveConnectionObj;
-}
+};
 
 const searchResults = async (action, state, dispatch, connectionNumber) => {
   /**
    * This methods holds the api calls and the responses of fetch bill and search connection for both water and sewerage service
    */
-  let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNumber }];
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "connectionNumber", value: connectionNumber },
+  ];
   if (service === serviceConst.SEWERAGE) {
-    let payloadData = await getSearchResultsForSewerage(queryObject, dispatch);
-    if (payloadData !== null && payloadData !== undefined && payloadData.SewerageConnections.length > 0) {
-      payloadData.SewerageConnections = sortpayloadDataObj(payloadData.SewerageConnections);
+    let payloadData = await getSearchResultsForSewerage(
+      queryObject,
+      dispatch,
+      true
+    );
+    if (
+      payloadData !== null &&
+      payloadData !== undefined &&
+      payloadData.SewerageConnections.length > 0
+    ) {
+      payloadData.SewerageConnections = sortpayloadDataObj(
+        payloadData.SewerageConnections
+      );
 
-
-
-      let sewerageConnection = getActiveConnectionObj(payloadData.SewerageConnections);
+      let sewerageConnection = getActiveConnectionObj(
+        payloadData.SewerageConnections
+      );
       let propTenantId = sewerageConnection.property.tenantId.split(".")[0];
-      sewerageConnection.service = service
+      sewerageConnection.service = service;
 
       if (sewerageConnection.property.propertyType !== undefined) {
-        const propertyTpe = "[?(@.code  == " + JSON.stringify(sewerageConnection.property.propertyType) + ")]"
-        let propertyTypeParams = { MdmsCriteria: { tenantId: propTenantId, moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
-        const mdmsPropertyType = await getDescriptionFromMDMS(propertyTypeParams, dispatch)
-        if (mdmsPropertyType !== undefined && mdmsPropertyType !== null && mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !== undefined && mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !== null) {
-          sewerageConnection.property.propertyTypeData = mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name;//propertyType from Mdms
+        const propertyTpe =
+          "[?(@.code  == " +
+          JSON.stringify(sewerageConnection.property.propertyType) +
+          ")]";
+        let propertyTypeParams = {
+          MdmsCriteria: {
+            tenantId: propTenantId,
+            moduleDetails: [
+              {
+                moduleName: "PropertyTax",
+                masterDetails: [
+                  { name: "PropertyType", filter: `${propertyTpe}` },
+                ],
+              },
+            ],
+          },
+        };
+        const mdmsPropertyType = await getDescriptionFromMDMS(
+          propertyTypeParams,
+          dispatch
+        );
+        if (
+          mdmsPropertyType !== undefined &&
+          mdmsPropertyType !== null &&
+          mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !==
+          undefined &&
+          mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !== null
+        ) {
+          sewerageConnection.property.propertyTypeData =
+            mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name; //propertyType from Mdms
         } else {
-          sewerageConnection.property.propertyTypeData = "NA"
+          sewerageConnection.property.propertyTypeData = "NA";
         }
       }
 
-      if (sewerageConnection.noOfToilets === undefined) { sewerageConnection.noOfToilets = "NA" }
-      if (sewerageConnection.noOfToilets === 0) { sewerageConnection.noOfToilets = "0" }
-      sewerageConnection.connectionExecutionDate = convertEpochToDate(sewerageConnection.connectionExecutionDate)
-      const lat = sewerageConnection.property.address.locality.latitude ? sewerageConnection.property.address.locality.latitude : 'NA'
-      const long = sewerageConnection.property.address.locality.longitude ? sewerageConnection.property.address.locality.longitude : 'NA'
-      sewerageConnection.property.address.locality.locationOnMap = `${lat} ${long}`
+      if (sewerageConnection.noOfToilets === undefined) {
+        sewerageConnection.noOfToilets = "NA";
+      }
+      if (sewerageConnection.noOfToilets === 0) {
+        sewerageConnection.noOfToilets = "0";
+      }
+      sewerageConnection.connectionExecutionDate = convertEpochToDate(
+        sewerageConnection.connectionExecutionDate
+      );
+      const lat = sewerageConnection.property.address.locality.latitude
+        ? sewerageConnection.property.address.locality.latitude
+        : "NA";
+      const long = sewerageConnection.property.address.locality.longitude
+        ? sewerageConnection.property.address.locality.longitude
+        : "NA";
+      sewerageConnection.property.address.locality.locationOnMap = `${lat} ${long}`;
 
       /*if (sewerageConnection.property.usageCategory !== undefined) {
         const propertyUsageType = "[?(@.code  == " + JSON.stringify(sewerageConnection.property.usageCategory) + ")]"
@@ -130,33 +202,90 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         }
       }*/
       showHideConnectionHolder(dispatch, sewerageConnection.connectionHolders);
-      dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection))
+      const queryObjForBill = [
+        {
+          key: "tenantId",
+          value: tenantId,
+        },
+        {
+          key: "consumerCode",
+          value: connectionNumber,
+        },
+        {
+          key: "businessService",
+          value: "SW",
+        },
+      ];
+      const bill = await getDemand(queryObjForBill, dispatch);
+      let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
+      let amendments=get(billAMDSearch, "Amendments", []);
+      amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
+      dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
+      dispatch(prepareFinalObject("isAmendmentInWorkflow", amendments&&Array.isArray(amendments)&&amendments.length==0?true:false));
+
+      dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
       getApplicationNumber(dispatch, payloadData.SewerageConnections);
     }
   } else if (service === serviceConst.WATER) {
-    let payloadData = await getSearchResults(queryObject);
-    if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
-      payloadData.WaterConnection = sortpayloadDataObj(payloadData.WaterConnection);
+    let payloadData = await getSearchResults(queryObject, true);
+    if (
+      payloadData !== null &&
+      payloadData !== undefined &&
+      payloadData.WaterConnection.length > 0
+    ) {
+      payloadData.WaterConnection = sortpayloadDataObj(
+        payloadData.WaterConnection
+      );
       let waterConnection = getActiveConnectionObj(payloadData.WaterConnection);
       waterConnection.service = service;
       let propTenantId = waterConnection.property.tenantId.split(".")[0];
       if (waterConnection.connectionExecutionDate !== undefined) {
-        waterConnection.connectionExecutionDate = convertEpochToDate(waterConnection.connectionExecutionDate)
+        waterConnection.connectionExecutionDate = convertEpochToDate(
+          waterConnection.connectionExecutionDate
+        );
       } else {
-        waterConnection.connectionExecutionDate = 'NA'
+        waterConnection.connectionExecutionDate = "NA";
       }
-      if (waterConnection.noOfTaps === undefined) { waterConnection.noOfTaps = "NA" }
-      if (waterConnection.noOfTaps === 0) { waterConnection.noOfTaps = "0" }
-      if (waterConnection.pipeSize === 0) { waterConnection.pipeSize = "0" }
+      if (waterConnection.noOfTaps === undefined) {
+        waterConnection.noOfTaps = "NA";
+      }
+      if (waterConnection.noOfTaps === 0) {
+        waterConnection.noOfTaps = "0";
+      }
+      if (waterConnection.pipeSize === 0) {
+        waterConnection.pipeSize = "0";
+      }
       if (waterConnection.property.propertyType !== undefined) {
-        const propertyTpe = "[?(@.code  == " + JSON.stringify(waterConnection.property.propertyType) + ")]"
-        let propertyTypeParams = { MdmsCriteria: { tenantId: propTenantId, moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
-        const mdmsPropertyType = await getDescriptionFromMDMS(propertyTypeParams, dispatch)
-        waterConnection.property.propertyTypeData = mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !== undefined ? mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name : "NA";//propertyType from Mdms
+        const propertyTpe =
+          "[?(@.code  == " +
+          JSON.stringify(waterConnection.property.propertyType) +
+          ")]";
+        let propertyTypeParams = {
+          MdmsCriteria: {
+            tenantId: propTenantId,
+            moduleDetails: [
+              {
+                moduleName: "PropertyTax",
+                masterDetails: [
+                  { name: "PropertyType", filter: `${propertyTpe}` },
+                ],
+              },
+            ],
+          },
+        };
+        const mdmsPropertyType = await getDescriptionFromMDMS(
+          propertyTypeParams,
+          dispatch
+        );
+        waterConnection.property.propertyTypeData =
+          mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !==
+            undefined
+            ? mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name
+            : "NA"; //propertyType from Mdms
       }
       const lat = waterConnection.property.address.locality.latitude;
       const long = waterConnection.property.address.locality.longitude;
-      waterConnection.property.address.locality.locationOnMap = `${lat} ${long}`
+      waterConnection.property.address.locality.locationOnMap = `${lat} ${long}`;
 
       /*if (waterConnection.property.usageCategory !== undefined) {
         const propertyUsageType = "[?(@.code  == " + JSON.stringify(waterConnection.property.usageCategory) + ")]"
@@ -168,6 +297,26 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
           waterConnection.property.propertyTypeData = "NA"
         }
       }*/
+      const queryObjForBill = [
+        {
+          key: "tenantId",
+          value: tenantId,
+        },
+        {
+          key: "consumerCode",
+          value: connectionNumber,
+        },
+        {
+          key: "businessService",
+          value: "WS",
+        },
+      ];
+      const bill = await getDemand(queryObjForBill, dispatch);
+      let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
+      let amendments=get(billAMDSearch, "Amendments", []);
+      amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
+      dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
+      dispatch(prepareFinalObject("isAmendmentInWorkflow", amendments&&Array.isArray(amendments)&&amendments.length==0?true:false));
       showHideConnectionHolder(dispatch, waterConnection.connectionHolders);
       dispatch(prepareFinalObject("WaterConnection[0]", waterConnection));
       getApplicationNumber(dispatch, payloadData.WaterConnection);
@@ -178,7 +327,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
 const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
   //Search details for given application Number
   if (connectionNumber) {
-    (await searchResults(action, state, dispatch, connectionNumber));
+    await searchResults(action, state, dispatch, connectionNumber);
   }
 };
 
@@ -189,9 +338,9 @@ const headerrow = getCommonContainer({
     moduleName: "egov-wns",
     componentPath: "ConsumerNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "connectionNumber")
-    }
-  }
+      number: getQueryArg(window.location.href, "connectionNumber"),
+    },
+  },
 });
 
 const serviceDetails = getServiceDetails();
@@ -206,20 +355,107 @@ const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
 
 const getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP')) ? connectionDetailsFooter : {};
 
-export const connectionDetails = getCommonCard({ serviceDetails, propertyDetails, ownerDetails, connectionHolders, connectionHoldersSameAsOwner });
 
+export const connectionDetails = getCommonCard({
+  serviceDetails,
+  propertyDetails,
+  ownerDetails,
+  connectionHolders,
+  connectionHoldersSameAsOwner,
+});
+const getMDMSData = async (action, state, dispatch) => {
+  const tenantId = getTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "BillingService",
+          masterDetails: [
+            {
+              name: "BusinessService",
+            },
+          ],
+        },
+        {
+          moduleName: "BillAmendment",
+          masterDetails: [{ name: "documentObj" }],
+        },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "uiCommonPay",
+            },
+          ],
+        },
+        {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "tenants",
+            },
+          ],
+        },
+      ],
+    },
+  };
+  try {
+    getRequiredDocData(action, dispatch, [
+      {
+        moduleName: "BillAmendment",
+        masterDetails: [{ name: "documentObj" }],
+      },
+    ]);
+    const payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(service => service.isBillAmendmentEnabled)
+    dispatch(prepareFinalObject("connectDetailsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+const getDataForBillAmendment = async (action, state, dispatch) => {
+  await getMDMSData(action, state, dispatch);
+};
 const screenConfig = {
   uiFramework: "material-ui",
   name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
-    let connectionNo = getQueryArg(window.location.href, "connectionNumber")
+    let connectionNo = getQueryArg(window.location.href, "connectionNumber");   
+    getDataForBillAmendment(action, state, dispatch);
+
     beforeInitFn(action, state, dispatch, connectionNo);
+    getRequiredDocData(action, dispatch, [
+      {
+        moduleName: "BillAmendment",
+        masterDetails: [{ name: "documentObj" }],
+      },
+    ]);
     set(
       action,
       "screenConfig.components.div.children.headerDiv.children.header1.children.connectionNumber.props.number",
       connectionNo
     );
-    set(action, "components.div.children.getConnectionDetailsFooterAction.children.takeAction.props.connectionNumber", connectionNo)
+    set(
+      action,
+      "screenConfig.components.div.children.getConnectionDetailsFooterAction.children.takeAction.props.connectionNumber",
+      connectionNo
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.onClickDefination.path",
+      `meter-reading?connectionNos=${connectionNo}&tenantId=${getQueryArg(window.location.href, "tenantId")}`
+    );
+    
+    
+
+  
     return action;
   },
 
@@ -229,7 +465,7 @@ const screenConfig = {
       componentPath: "Div",
       props: {
         className: "common-div-css search-preview",
-        id: "connection-details"
+        id: "connection-details",
       },
       children: {
         headerDiv: {
@@ -239,33 +475,45 @@ const screenConfig = {
             header1: {
               gridDefination: {
                 xs: 12,
-                sm: 7
+                sm: 7,
               },
-              ...headerrow
+              ...headerrow,
             },
             helpSection: {
               uiFramework: "custom-atoms",
               componentPath: "Container",
               props: {
                 color: "primary",
-                style: { justifyContent: "flex-end" } //, dsplay: "block"
+                style: { justifyContent: "flex-end" }, //, dsplay: "block"
               },
               gridDefination: {
                 xs: 12,
                 sm: 5,
-                align: "right"
+                align: "right",
               },
               children: {
-                connectionDetailsDownload
-              }
-            }
-          }
+                connectionDetailsDownload,
+              },
+            },
+          },
         },
         connectionDetails,
-        getConnectionDetailsFooterAction
-      }
-    }
-  }
+        getConnectionDetailsFooterAction,
+      },
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: false,
+        screenKey: "connection-details",
+      },
+      children: {
+        popup: {},
+      },
+    },
+  },
 };
 
 export default screenConfig;

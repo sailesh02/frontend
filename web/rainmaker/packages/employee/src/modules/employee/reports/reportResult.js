@@ -79,18 +79,23 @@ class ShowField extends Component {
 
   getExportOptions = () => {
     let _this = this;
+    let flag = false;
 
     for (let key in _this.state.ck) {
       if (_this.state.ck[key]) {
+        flag = true;
         break;
       }
     }
 
-    const { tabLabel, metaData } = _this.props;
+    const { reportResult, searchForm, tabLabel, metaData } = _this.props;
+    const { reportName } = _this.state;
     const reportDetails = metaData.hasOwnProperty("reportDetails") ? metaData.reportDetails : {};
     const additionalConfig = reportDetails.hasOwnProperty("additionalConfig") && reportDetails.additionalConfig ? reportDetails.additionalConfig: {};
     const reportHeader = reportDetails.hasOwnProperty("reportHeader") ? reportDetails.reportHeader : [];
+    const columns = ":visible";
     const pageSize = (additionalConfig.print && additionalConfig.print.pdfPageSize)? additionalConfig.print.pdfPageSize: "LEGAL"
+    const exportOptions = flag ? { rows: ".selected", columns } : { columns };
     let reportTitle = this.getReportTitle();
     let orientation = reportHeader.length > 6 ? "landscape" : "portrait";
 
@@ -109,8 +114,9 @@ class ShowField extends Component {
         footer: true,
         customize: function(doc) {
           doc.content[0].text = [];
-          doc.content[0].text.push({ text: "mSeva System Reports\n\n", bold: true, fontSize: 20 });
+          doc.content[0].text.push({ text: "mChandigarh Application\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
+          doc.content[1].margin = [ 80, 0, 80, 0 ]
         },
         className: "report-pdf-button",
       },
@@ -118,7 +124,7 @@ class ShowField extends Component {
         extend: "excel",
         text: "XLS",
         filename: _this.state.reportName,
-        title: reportTitle,
+        title: Array.isArray(reportTitle) ? reportTitle.join("") : reportTitle,
         messageTop: tabLabel,
         footer: true,
         className: "report-excel-button",
@@ -129,7 +135,7 @@ class ShowField extends Component {
   };
 
   componentDidUpdate() {
-    let { tabLabel, metaData } = this.props;
+    let { reportResult, tabLabel, metaData } = this.props;
     let { reportDetails = {} } = metaData;
     let tableConfig;
     if (get(reportDetails, "additionalConfig.tableConfig")) {
@@ -145,7 +151,7 @@ class ShowField extends Component {
     };
     rTable = $("#reportTable").DataTable({
       dom:
-        "<'&nbsp''row'<'col-sm-2 col-xs-12 text-center'l><'col-sm-4 col-xs-12 text-center'f><'col-sm-6 col-xs-12 text-center'B>><'row margin0'<'col-sm-12't>><'&nbsp''row'<'col-sm-5 col-xs-12'i><'col-sm-7 col-xs-12'p>>",
+        "<'row margin0'<'col-sm-2 col-xs-12 text-center'l><'col-sm-4 col-xs-12 text-center'f><'col-sm-6 col-xs-12 text-center'B>><'row margin0'<'col-sm-12't>><'&nbsp''row'<'col-sm-5 col-xs-12'i><'col-sm-7 col-xs-12'p>>",
       displayStart: displayStart,
       buttons: self.getExportOptions(),
       searching: true,
@@ -180,9 +186,11 @@ class ShowField extends Component {
       searchForm,
       setReportResult,
       setFlag,
+      toggleSnackbarAndSetText,
       searchParams,
       setRoute,
       match,
+      metaData,
       pushReportHistory,
     } = this.props;
     let object = reportResult.reportHeader[i2];
@@ -214,7 +222,7 @@ class ShowField extends Component {
 
       var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
 
-      commonApiPost(
+      let response = commonApiPost(
         "/report/" + "pgr" + "/_get",
         {},
         {
@@ -305,6 +313,30 @@ class ShowField extends Component {
       ) {
         return this.addCommas(Number(val) % 1 === 0 ? Number(val) : Number(val).toFixed(2));
       } else {
+        if(window.location.pathname.includes('EmployeeReport') &&
+          reportResult &&
+          reportResult.reportHeader &&
+          reportResult.reportHeader.length &&
+          reportResult.reportHeader[i] && reportResult.reportHeader[i].name== "department")
+          {
+          return( <Label
+            className=""
+            labelStyle={{ wordWrap: "unset", wordBreak: "unset"}}
+            label={`PGRDEPT.${val.toUpperCase().replace(/ /g, "")}`}
+          />)
+        }
+        else if(
+          reportResult &&
+          reportResult.reportHeader &&
+          reportResult.reportHeader.length &&
+          reportResult.reportHeader[i] && (reportResult.reportHeader[i].name== "servicecode" || reportResult.reportHeader[i].name== "complainttype"))
+        {
+          return( <Label
+            className=""
+            labelStyle={{ wordWrap: "unset", wordBreak: "unset" }}
+            label={`SERVICEDEFS.${val.toUpperCase().replace(/ /g, "")}`}
+          />)
+        }
         return val;
       }
     }
@@ -381,7 +413,7 @@ class ShowField extends Component {
 
   printSelectedDetails() {
     let rows = { ...this.state.rows };
-    let { reportResult, searchParams, setRoute, match } = this.props;
+    let { reportResult, searchForm, setReportResult, setFlag, toggleSnackbarAndSetText, searchParams, setRoute, match, metaData } = this.props;
     let header = this.props.reportResult.reportHeader;
     let defaultValue = "";
     for (let key in header) {
@@ -421,6 +453,7 @@ class ShowField extends Component {
       let resulturl = getResultUrl(match.params.moduleName);
 
       var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
+      let response =
         resulturl &&
         commonApiPost(
           resulturl,
@@ -501,9 +534,11 @@ class ShowField extends Component {
                   </td>
                 )}
                 {dataItem.map((item, itemIndex) => {
+                  var columnObj = {};
                   //array for particular row
                   var respHeader = reportHeaderObj[itemIndex];
                   if (respHeader.showColumn) {
+                    columnObj = {};
                     return (
                       <td
                         key={itemIndex}
@@ -615,7 +650,8 @@ class ShowField extends Component {
   };
 
   subHeader = (moduleName) => {
-    let { metaData } = this.props;
+    let { metaData, searchParams } = this.props;
+    let paramsLength = searchParams.length;
     if (_.isEmpty(metaData)) {
       return;
     }
@@ -643,9 +679,14 @@ class ShowField extends Component {
   };
 
   render() {
-    let { isTableShow, metaData, reportResult } = this.props;
+    let { drillDown, checkIfDate } = this;
+    let { isTableShow, metaData, reportResult, tabLabel } = this.props;
     let self = this;
+    let { reportName } = this.state;
+
     const viewTabel = () => {
+      let { searchForm } = this.props;
+
       return (
         <div>
           <table
@@ -688,10 +729,17 @@ class ShowField extends Component {
   }
 }
 const mapStateToProps = (state) => {
+let reportData ;
+  if( state.report.reportResult &&  state.report.reportResult.reportResponses && state.report.reportResult.reportResponses[0]) {
+    reportData = state.report.reportResult.reportResponses[0];
+  }
+  else{
+    reportData = state.report.reportResult;
+  }
   return {
     isTableShow: state.formtemp.showTable,
     metaData: state.report.metaData,
-    reportResult: state.report.reportResult,
+    reportResult:reportData ,
     flag: state.report.flag,
     searchForm: state.formtemp.form,
     searchParams: state.report.searchParams,

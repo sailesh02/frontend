@@ -1,7 +1,7 @@
 import { propertyDetails, locationDetails, propertyOwnerDetail, connectionHolderDetails, connectionHolderSameAsOwnerDetails } from "egov-wns/ui-config/screens/specs/wns/applyResource/review-trade";
 import { connDetailsWater, connDetailsSewerage } from "egov-wns/ui-config/screens/specs/wns/applyResource/task-connectiondetails";
 import { plumberDetails, roadDetails, additionDetailsWater, additionDetailsSewerage, activateDetailsMeter, activateDetailsNonMeter } from "egov-wns/ui-config/screens/specs/wns/applyResource/review-owner";
-import get from "lodash/get";
+import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 import { reviewModificationsEffectiveDate } from "egov-wns/ui-config/screens/specs/wns/applyResource/reviewModificationsEffective";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard, generateKeyValueForModify } from "./generatePDF";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -44,17 +44,21 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     }
 
 
-    let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');
-    let WaterConnection = get(preparedFinalObject, 'WaterConnection[0]', {});
+    let UlbLogoForPdf = getFromObject(preparedFinalObject, 'UlbLogoForPdf', '');
+    let WaterConnection = getFromObject(preparedFinalObject, 'WaterConnection[0]', {});
     let isMode = (WaterConnection.applicationType !== null) ? WaterConnection.applicationType.split("_")[0] : "";
     let reviewModificationsEffective = [];
     let plumberDetail = [];
     let roadDetail = [];
+    let roadDetailInfo = [];
     if (isMode === "MODIFY") {
         reviewModificationsEffective = generateKeyValueForModify(preparedFinalObject, reviewModificationsEffectiveDate);
     } else {
         plumberDetail = generateKeyValue(preparedFinalObject, plumberDetails);
-        roadDetail = generateKeyValue(preparedFinalObject, roadDetails);
+        if (WaterConnection.roadCuttingInfo && WaterConnection.roadCuttingInfo.length > 0) {
+            roadDetailInfo = getMultiItems(preparedFinalObject, roadDetails, 'WaterConnection[0].roadCuttingInfo')
+            roadDetail = getMultipleItemCard(roadDetailInfo, 'WS_ROAD_CUTTING_CHARGE_DETAILS');
+        }
     }
 
     let connHolderDetail = {};
@@ -78,7 +82,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     } else {
         ownerDetail = generateKeyValue(preparedFinalObject, propertyOwnerDetail);
     }
-    const documentsUploadRedux = get(preparedFinalObject, 'DocumentsData', []);
+    const documentsUploadRedux = getFromObject(preparedFinalObject, 'DocumentsData', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
     const tenantId = getQueryArg(window.location.href, "tenantId");
 
@@ -96,7 +100,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_DOCUMENTS_DETAILS_HEADER', items: documentCard, hide: documentCard.length === 0 },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ADDITIONAL_CONNECTION_HEADER', items: additionDetail },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PLUMBER_DETAILS_HEADER', items: plumberDetail, hide: plumberDetail.length === 0 },
-            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ROAD_CHARGES_HEADER', items: roadDetail, hide: roadDetail.length === 0 },
+            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ROAD_CHARGES_HEADER', items: roadDetailInfo, type: roadDetailInfo.length > 1 ? 'multiItem' : 'singleItem',  hide: roadDetailInfo.length === 0},
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ACTIVATION_DETAILS_HEADER', items: activateDetail },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_MODIFY_EFFECTIVE_DATE_HEADER', items: reviewModificationsEffective, hide: reviewModificationsEffective.length === 0 },
 

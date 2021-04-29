@@ -158,13 +158,13 @@ const structureSubTypeChange = (reqObj) => {
   } catch (e){
     console.log(e);
   }
-}  
+}
 
 const tradeUnitCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
   props: {
-    
+
     scheama: getCommonGrayCard({
       header: getCommonSubHeader(
         {
@@ -214,7 +214,7 @@ const tradeUnitCard = {
               rootBlockSub : 'tradeUnits',
               filter: "[?(@.type=='TL')]",
               callBackEdit: updateMdmsDropDowns,
-              isDependency : "DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType"
+              //isDependency : "DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType"
             }
           },
           tradeUOM: getTextField({
@@ -612,7 +612,7 @@ export const tradeDetails = getCommonCard({
     //     sm: 6
     //   },
     //   props:{
-    //     disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
+    //     disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false
     //   },
     //   iconObj: {
     //     iconName: "search",
@@ -715,7 +715,7 @@ export const tradeDetails = getCommonCard({
       props:{
         className:"applicant-details-error",
         disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-      }, 
+      },
       placeholder: {
         labelName: "Example Diljit Da Dhaba",
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_PLACEHOLDER"
@@ -768,34 +768,34 @@ export const tradeDetails = getCommonCard({
       }),
       visible: false
     },
-    dynamicMdmsStructureType : {
-      uiFramework: "custom-containers",
-      componentPath: "DynamicMdmsContainer",
-      props: {
-        dropdownFields: [
-          {
-            key : 'structureType',
-            isDisabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-            fieldType : "autosuggest",
-            className:"applicant-details-error autocomplete-dropdown",
-            isRequired : false,
-            requiredValue : true
-          },
-          {
-            key : 'structureSubType',
-            callBack : structureSubTypeChange,
-            fieldType : "autosuggest",
-            className:"applicant-details-error autocomplete-dropdown",
-            isRequired : false,
-            requiredValue : true
-          }
-        ],
-        moduleName: "common-masters",
-        masterName: "StructureType",
-        rootBlockSub : 'structureTypes',
-        callBackEdit: updateStructureTypes
-      }
-    },
+    // dynamicMdmsStructureType : {
+    //   uiFramework: "custom-containers",
+    //   componentPath: "DynamicMdmsContainer",
+    //   props: {
+    //     dropdownFields: [
+    //       {
+    //         key : 'structureType',
+    //         isDisabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+    //         fieldType : "autosuggest",
+    //         className:"applicant-details-error autocomplete-dropdown",
+    //         isRequired : false,
+    //         requiredValue : true
+    //       },
+    //       {
+    //         key : 'structureSubType',
+    //         callBack : structureSubTypeChange,
+    //         fieldType : "autosuggest",
+    //         className:"applicant-details-error autocomplete-dropdown",
+    //         isRequired : false,
+    //         requiredValue : true
+    //       }
+    //     ],
+    //     moduleName: "common-masters",
+    //     masterName: "StructureType",
+    //     rootBlockSub : 'structureTypes',
+    //     callBackEdit: updateStructureTypes
+    //   }
+    // },
     tradeCommencementDate: getDateField({
       label: {
         labelName: "Trade Commencement Date",
@@ -865,7 +865,7 @@ export const tradeDetails = getCommonCard({
   {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"cursor":"not-allowed"}:{}},
   ),
   tradeUnitCard,
-  accessoriesCard
+  //accessoriesCard
 });
 
 const setFieldsOnAddItem = (state, multiItemContent) => {

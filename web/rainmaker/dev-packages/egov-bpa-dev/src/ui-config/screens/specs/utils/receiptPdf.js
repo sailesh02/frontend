@@ -762,19 +762,19 @@ const getCertificateData = (transformedData, ulbLogo) => {
           }
         ]
       },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: "Accessories"
-          },
-          {
-            width: "*",
-            text: `${transformedData.accessoriesList}`
-          }
-        ]
-      },
+      // {
+      //   style: "tl-certificate-data-2",
+      //   columns: [
+      //     {
+      //       width: 160,
+      //       text: "Accessories"
+      //     },
+      //     {
+      //       width: "*",
+      //       text: `${transformedData.accessoriesList}`
+      //     }
+      //   ]
+      // },
       {
         style: "tl-certificate-data-2",
         columns: [

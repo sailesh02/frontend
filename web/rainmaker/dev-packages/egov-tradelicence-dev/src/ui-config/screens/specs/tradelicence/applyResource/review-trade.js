@@ -95,7 +95,7 @@ export const tradetypeDetails = {
         masterName: "TRADETYPE"
       },
       callBack: value => {
-        return value ? value.split(".")[1] : "NA";
+        return value ? value.split(".")[0] : "NA";
       }
     }
   ),

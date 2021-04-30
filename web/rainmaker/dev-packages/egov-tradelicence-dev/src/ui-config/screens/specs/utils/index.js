@@ -1914,22 +1914,22 @@ export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
       { accessories: [], tradeTypeData: [] }
     );
 
-  const accessories = getUniqueItemsFromArray(
-    processedData.accessories,
-    "code"
-  );
-  let structureTypes = getUniqueItemsFromArray(
-    processedData.tradeTypeData,
-    "structureType"
-  );
-  structureTypes = commonTransform(
-    {
-      StructureType: structureTypes.map(item => {
-        return { code: item.structureType, active: true };
-      })
-    },
-    "StructureType"
-  );
+  // const accessories = getUniqueItemsFromArray(
+  //   processedData.accessories,
+  //   "code"
+  // );
+  // let structureTypes = getUniqueItemsFromArray(
+  //   processedData.tradeTypeData,
+  //   "structureType"
+  // );
+  // structureTypes = commonTransform(
+  //   {
+  //     StructureType: structureTypes.map(item => {
+  //       return { code: item.structureType, active: true };
+  //     })
+  //   },
+  //   "StructureType"
+  // );
   let licenseTypes = getUniqueItemsFromArray(
     processedData.tradeTypeData,
     "licenseType"
@@ -1937,30 +1937,30 @@ export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
   licenseTypes = licenseTypes.map(item => {
     return { code: item.licenseType, active: true };
   });
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.common-masters.StructureType",
-      structureTypes.StructureType
-    )
-  );
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
-      accessories
-    )
-  );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "applyScreenMdmsData.common-masters.StructureType",
+  //     structureTypes.StructureType
+  //   )
+  // );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
+  //     accessories
+  //   )
+  // );
   dispatch(
     prepareFinalObject(
       "applyScreenMdmsData.TradeLicense.licenseType",
       licenseTypes
     )
   );
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.common-masters.StructureTypeTransformed",
-      objectToDropdown(structureTypes.StructureType)
-    )
-  );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "applyScreenMdmsData.common-masters.StructureTypeTransformed",
+  //     objectToDropdown(structureTypes.StructureType)
+  //   )
+  // );
   dispatch(
     prepareFinalObject(
       "applyScreenMdmsData.TradeLicense.TradeType",
@@ -2272,15 +2272,15 @@ export const updateMdmsDropDowns = async ( state, dispatch ) => {
   if (tradeSubTypes.length > 0) {
     try {
       tradeSubTypes.forEach((tradeSubType, i) => {
-        const tradeCat = tradeSubType.tradeType.split(".")[0];
-        const tradeType = tradeSubType.tradeType.split(".")[1];
+        // const tradeCat = tradeSubType.tradeType.split(".")[0];
+        const tradeType = tradeSubType.tradeType.split(".")[0];
         let formObj = {
-          tradeCategory: tradeCat, tradeType: tradeType, tradeSubType: tradeSubType.tradeType
+          tradeType: tradeType, tradeSubType: tradeSubType.tradeType
         }
         triggerUpdateByKey(state, i, formObj, 'set');
 
-        triggerUpdateByKey(state, `tradeTypeTransformed.allDropdown[${i}]`, getObjectKeys(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeCat}`, [])) , dispatch);
-        triggerUpdateByKey(state, `tradeSubTypeTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeCat}.${tradeType}`, [])) , dispatch);
+        // triggerUpdateByKey(state, `tradeTypeTransformed.allDropdown[${i}]`, getObjectKeys(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeCat}`, [])) , dispatch);
+        triggerUpdateByKey(state, `tradeSubTypeTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeType}`, [])) , dispatch);
  
         triggerUpdateByKey(state, `selectedValues[${i}]`, formObj , dispatch);
       });

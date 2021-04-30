@@ -1914,22 +1914,22 @@ export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
       { accessories: [], tradeTypeData: [] }
     );
 
-  const accessories = getUniqueItemsFromArray(
-    processedData.accessories,
-    "code"
-  );
-  let structureTypes = getUniqueItemsFromArray(
-    processedData.tradeTypeData,
-    "structureType"
-  );
-  structureTypes = commonTransform(
-    {
-      StructureType: structureTypes.map(item => {
-        return { code: item.structureType, active: true };
-      })
-    },
-    "StructureType"
-  );
+  // const accessories = getUniqueItemsFromArray(
+  //   processedData.accessories,
+  //   "code"
+  // );
+  // let structureTypes = getUniqueItemsFromArray(
+  //   processedData.tradeTypeData,
+  //   "structureType"
+  // );
+  // structureTypes = commonTransform(
+  //   {
+  //     StructureType: structureTypes.map(item => {
+  //       return { code: item.structureType, active: true };
+  //     })
+  //   },
+  //   "StructureType"
+  // );
   let licenseTypes = getUniqueItemsFromArray(
     processedData.tradeTypeData,
     "licenseType"
@@ -1937,18 +1937,18 @@ export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
   licenseTypes = licenseTypes.map(item => {
     return { code: item.licenseType, active: true };
   });
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.common-masters.StructureType",
-      structureTypes.StructureType
-    )
-  );
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
-      accessories
-    )
-  );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "applyScreenMdmsData.common-masters.StructureType",
+  //     structureTypes.StructureType
+  //   )
+  // );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
+  //     accessories
+  //   )
+  // );
   dispatch(
     prepareFinalObject(
       "applyScreenMdmsData.TradeLicense.licenseType",

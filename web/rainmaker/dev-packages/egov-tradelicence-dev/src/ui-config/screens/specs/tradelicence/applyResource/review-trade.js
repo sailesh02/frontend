@@ -67,22 +67,22 @@ const accessoriesCard = {
   type: "array"
 };
 export const tradetypeDetails = {
-  reviewTradeCategory: getLabelWithValue(
-    {
-      labelName: "Trade Category",
-      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL"
-    },
-    {
-      jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-      localePrefix: {
-        moduleName: "TRADELICENSE",
-        masterName: "TRADETYPE"
-      },
-      callBack: value => {
-        return value ? value.split(".")[0] : "NA";
-      }
-    }
-  ),
+  // reviewTradeCategory: getLabelWithValue(
+  //   {
+  //     labelName: "Trade Category",
+  //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL"
+  //   },
+  //   {
+  //     jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+  //     localePrefix: {
+  //       moduleName: "TRADELICENSE",
+  //       masterName: "TRADETYPE"
+  //     },
+  //     callBack: value => {
+  //       return value ? value.split(".")[0] : "NA";
+  //     }
+  //   }
+  // ),
   reviewTradeType: getLabelWithValue(
     {
       labelName: "Trade Type",
@@ -197,29 +197,29 @@ export const tradeReviewDetails = {
       callBack: convertEpochToDate
     }
   ),
-  reviewStructureType: getLabelWithValue(
-    { labelName: "Structure Type", labelKey: "TL_STRUCTURE_TYPE" },
-    {
-      jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "STRUCTURETYPE"
-      },
-      callBack: value => {
-        return value ? value.split(".")[0] : "NA";
-      }
-    }
-  ),
-  reviewSubStructureType: getLabelWithValue(
-    { labelName: "Structure Sub Type", labelKey: "TL_STRUCTURE_SUB_TYPE" },
-    {
-      jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "STRUCTURETYPE"
-      },
-    }
-  ),
+  // reviewStructureType: getLabelWithValue(
+  //   { labelName: "Structure Type", labelKey: "TL_STRUCTURE_TYPE" },
+  //   {
+  //     jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
+  //     localePrefix: {
+  //       moduleName: "common-masters",
+  //       masterName: "STRUCTURETYPE"
+  //     },
+  //     callBack: value => {
+  //       return value ? value.split(".")[0] : "NA";
+  //     }
+  //   }
+  // ),
+  // reviewSubStructureType: getLabelWithValue(
+  //   { labelName: "Structure Sub Type", labelKey: "TL_STRUCTURE_SUB_TYPE" },
+  //   {
+  //     jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
+  //     localePrefix: {
+  //       moduleName: "common-masters",
+  //       masterName: "STRUCTURETYPE"
+  //     },
+  //   }
+  // ),
   reviewCommencementDate: getLabelWithValue(
     {
       labelName: "Commencement Date",

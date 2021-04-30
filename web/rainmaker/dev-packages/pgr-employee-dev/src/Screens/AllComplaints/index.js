@@ -68,7 +68,7 @@ class AllComplaints extends Component {
     } else {
       let { fetchComplaints } = this.props;
 
-      let complaintCountRequest = [
+      /*let complaintCountRequest = [
         { key: "tenantId", value: getTenantId() },
         {
           key: "status",
@@ -76,6 +76,16 @@ class AllComplaints extends Component {
             role === "csr"
               ? "assigned,open,reassignrequested"
               : "assigned,reassignrequested",
+        },
+      ];*/
+      let complaintCountRequest = [
+        { key: "tenantId", value: getTenantId() },
+        {
+          key: "status",
+          value:
+            role === "csr"
+              ? "assigned,open,reassignrequested"
+              : "escalatedlevel1pending,escalatedlevel2pending",
         },
       ];
       let payloadCount = await httpRequest(
@@ -95,7 +105,8 @@ class AllComplaints extends Component {
         { key: "tenantId", value: getTenantId() },
         {
           key: "status",
-          value: "assigned",
+         // value: "assigned",
+         value: "assigned,escalatedlevel1pending,escalatedlevel2pending",
         },
       ];
       let assignedTotalComplaints = await httpRequest(
@@ -143,7 +154,7 @@ class AllComplaints extends Component {
           false
         );
       } else {
-        fetchComplaints(
+        /*fetchComplaints(
           [
             {
               key: "status",
@@ -155,7 +166,21 @@ class AllComplaints extends Component {
           ],
           true,
           true
+        );*/
+        fetchComplaints(
+          [
+            {
+              key: "status",
+              value:
+                rawRole === "EMPLOYEE"
+                  ? "escalatedlevel1pending,escalatedlevel2pending"
+                  : "assigned,open,reassignrequested",
+            },
+          ],
+          true,
+          true
         );
+
       }
     }
     let inputType = document.getElementsByTagName("input");
@@ -223,6 +248,11 @@ class AllComplaints extends Component {
     const { complaintNo, mobileNo } = this.state;
     const { fetchComplaints, toggleSnackbarAndSetText } = this.props;
     let queryObj = [];
+    if (role === "eo") {
+      queryObj.push({ key: "status", value: "assigned,escalatedlevel1pending,escalatedlevel2pending,reassignrequested" });
+    }else if (role === "employee") {
+      queryObj.push({ key: "status", value: "open,reassignrequested,assigned" });
+    }
     if (complaintNo) {
       queryObj.push({ key: "serviceRequestId", value: complaintNo });
     }
@@ -274,7 +304,7 @@ class AllComplaints extends Component {
       sortPopOpen,
       errorText,
     } = this.state;
-  
+
     const tabStyle = {
       letterSpacing: "0.6px",
     };
@@ -298,7 +328,7 @@ class AllComplaints extends Component {
       width: "90%",
       overflow: "hidden",
     };
-   
+
     return role === "ao" ? (
       <div>
         <div
@@ -813,8 +843,10 @@ const mapStateToProps = (state) => {
     csrComplaints = [];
   let filteredEmployeeComplaints = transformedComplaints.filter(
     (complaint) =>
-      complaint.complaintStatus === "ASSIGNED" ||
-      complaint.rawStatus === "reassignrequested"
+    complaint.complaintStatus === "ASSIGNED" ||
+    complaint.rawStatus === "reassignrequested" ||
+    complaint.rawStatus === "escalatedlevel1pending" ||
+    complaint.rawStatus === "escalatedlevel2pending"
   );
 
   let searchFilterEmployeeComplaints = transformedComplaints.filter(
@@ -935,9 +967,9 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(toggleSnackbarAndSetText(open, message, error)),
     prepareFinalObject: (jsonPath, value) =>
       dispatch(prepareFinalObject(jsonPath, value)),
-    resetCityFieldValue:()=>dispatch(setFieldProperty("complaint","city","value","")), 
-    resetMohallaFieldValue:()=>dispatch(setFieldProperty("complaint","mohalla","value","")), 
-    resetFormData:()=>dispatch(prepareFormData("services",[{}])), 
+    resetCityFieldValue:()=>dispatch(setFieldProperty("complaint","city","value","")),
+    resetMohallaFieldValue:()=>dispatch(setFieldProperty("complaint","mohalla","value","")),
+    resetFormData:()=>dispatch(prepareFormData("services",[{}])),
     fetchComplaintCategories: () => dispatch(fetchComplaintCategories()),
     fetchpgrConstants: () => dispatch(fetchpgrConstants()),
     fetchUiCommonConfig: () => dispatch(fetchUiCommonConfig()),

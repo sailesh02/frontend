@@ -1955,12 +1955,12 @@ export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
       licenseTypes
     )
   );
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.common-masters.StructureTypeTransformed",
-      objectToDropdown(structureTypes.StructureType)
-    )
-  );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "applyScreenMdmsData.common-masters.StructureTypeTransformed",
+  //     objectToDropdown(structureTypes.StructureType)
+  //   )
+  // );
   dispatch(
     prepareFinalObject(
       "applyScreenMdmsData.TradeLicense.TradeType",

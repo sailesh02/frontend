@@ -9,16 +9,16 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
     tradeLocationDetails.reviewMohalla.localiseValue = true;
     tradeLocationDetails.reviewCity.localiseValue = true;
 
-    tradetypeDetails.reviewTradeCategory.localiseValue = true;
+    // tradetypeDetails.reviewTradeCategory.localiseValue = true;
     tradetypeDetails.reviewTradeType.localiseValue = true;
     tradetypeDetails.reviewTradeSubtype.localiseValue = true;
 
-    tradeAccessoriesDetails.reviewAccessoryType.localiseValue = true;
+    // tradeAccessoriesDetails.reviewAccessoryType.localiseValue = true;
 
     tradeReviewDetails.reviewApplicationType.localiseValue = true;
     tradeReviewDetails.reviewLicenceType.localiseValue = true;
-    tradeReviewDetails.reviewStructureType.localiseValue = true;
-    tradeReviewDetails.reviewSubStructureType.localiseValue = true;
+    // tradeReviewDetails.reviewStructureType.localiseValue = true;
+    // tradeReviewDetails.reviewSubStructureType.localiseValue = true;
 
     tradeOwnerDetails.reviewOwnerGender.localiseValue = true;
     tradeOwnerDetails.reviewownershipType.localiseValue = true;
@@ -42,14 +42,14 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
         tradeTypeSummary = getMultipleItemCard(tradeTypeSummaryInfo, "TL_TRADE_UNIT");
     }
 
-    let tradeAccessoriesSummary = []
-    let tradeAccessoriesSummaryInfo = []
-    if (getFromObject(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.accessories', []).length === 1) {
-        tradeAccessoriesSummary = generateKeyValue(preparedFinalObject, tradeAccessoriesDetails); //
-    } else if (getFromObject(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.accessories', []).length > 1) {
-        tradeAccessoriesSummaryInfo = getMultiItems(preparedFinalObject, tradeAccessoriesDetails, 'Licenses[0].tradeLicenseDetail.accessories')
-        tradeAccessoriesSummary = getMultipleItemCard(tradeAccessoriesSummaryInfo, "TL_TRADE_ACCESSORY");
-    }
+    // let tradeAccessoriesSummary = []
+    // let tradeAccessoriesSummaryInfo = []
+    // if (getFromObject(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.accessories', []).length === 1) {
+    //     tradeAccessoriesSummary = generateKeyValue(preparedFinalObject, tradeAccessoriesDetails); //
+    // } else if (getFromObject(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.accessories', []).length > 1) {
+    //     tradeAccessoriesSummaryInfo = getMultiItems(preparedFinalObject, tradeAccessoriesDetails, 'Licenses[0].tradeLicenseDetail.accessories')
+    //     tradeAccessoriesSummary = getMultipleItemCard(tradeAccessoriesSummaryInfo, "TL_TRADE_ACCESSORY");
+    // }
 
     let tradeOwnerSummary = []
     let tradeOwnerSummaryInfo = []
@@ -78,7 +78,7 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
             { items: estimateDetails, type: 'estimate' },
             { header: "TL_COMMON_TR_DETAILS", items: tradeReviewSummary },
             { header: '-1', items: tradeTypeSummary, type: tradeTypeSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
-            { header: '-1', items: tradeAccessoriesSummary, type: tradeAccessoriesSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
+            // { header: '-1', items: tradeAccessoriesSummary, type: tradeAccessoriesSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
             { header: '-1', items: tradeLocationSummary },
             { header: "TL_COMMON_OWN_DETAILS", items: tradeOwnerSummary, type: tradeOwnerSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
             { header: 'TL_COMMON_DOCS', items: documentCard }]

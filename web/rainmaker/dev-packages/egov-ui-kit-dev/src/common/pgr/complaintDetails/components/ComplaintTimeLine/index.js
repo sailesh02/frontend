@@ -292,9 +292,11 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                     : employeeName
                     ? "CS_COMMON_REASSIGNED_TO"
                     : status === "escalatedlevel1pending"
-                    ? getEscalatingStatus(timeLine, status)
+                   // ? getEscalatingStatus(timeLine, status)
+                   ? "ES_COMPLAINT_ESCALATED_LEVEL1_HEADER"
                     : status === "escalatedlevel2pending"
-                    ? getEscalatingStatus(timeLine, status)
+                   // ? getEscalatingStatus(timeLine, status)
+                   ? "ES_COMPLAINT_ESCALATED_LEVEL2_HEADER"
                     : "ES_COMPLAINT_REASSIGNED_HEADER"
                 }`}
               />

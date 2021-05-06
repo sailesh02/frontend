@@ -40,6 +40,16 @@ const fieldConfig = {
       labelName: "Enter Comments",
       labelKey: "WF_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
     }
+  },
+  assessmentFee: {
+    label: {
+      labelName: "Assessment Fee",
+      labelKey: "WF_ASSESSMENT_FEE"
+    },
+    placeholder: {
+      labelName: "Enter Assessment Fee",
+      labelKey: "WF_ASSESSMENT_FEE_PLACEHOLDER"
+    }
   }
 };
 
@@ -110,14 +120,14 @@ class ActionDialog extends React.Component {
     }
     if (dataPath === "FireNOCs") {
       dataPath = `${dataPath}[0].fireNOCDetails.additionalDetail`
-    } else if (dataPath === "Assessment"||dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
+    } else if (dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
       dataPath = `${dataPath}.workflow`;
     } else {
       dataPath = `${dataPath}[0]`;
     }
     let assigneePath= '';
     /* The path for Assignee in Property and Assessment has latest workflow contract and it is Array of user object  */
-    if (dataPath.includes("Assessment")||dataPath.includes("Property")){
+    if (dataPath.includes("Property")){
       assigneePath=`${dataPath}.assignes[0].uuid`;
     }else{
       assigneePath=`${dataPath}.assignee[0]`;
@@ -204,6 +214,23 @@ class ActionDialog extends React.Component {
                       />
                     </Grid>
                   )}
+                  {dataPath === "Assessment" && (<Grid sm="12">
+                    <TextFieldContainer
+                    InputLabelProps={{ shrink: true }}
+                    label= {fieldConfig.assessmentFee.label}
+                    onChange={e =>
+                      {
+                        handleFieldChange(`${dataPath}.assessmentAmount`, e.target.value)
+                        // eb_payment_config[ind].isError = false
+                      }
+                    }
+                    required = {true}
+                    jsonPath={`${dataPath}.assessmentAmount`}
+                    placeholder={fieldConfig.assessmentFee.placeholder}
+                    inputProps={{ maxLength: 120 }}
+                    /> 
+                    {/* {!!payment.isError && (<span style={{color: "red"}}>{getLocaleLabels(payment.errorMessage, payment.errorMessage)}</span>)} */}
+                    </Grid>)}
                   <Grid item sm="12">
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}

@@ -62,13 +62,14 @@ class AllComplaints extends Component {
     this.props.resetFormData();
     let rawRole =
       userInfo && userInfo.roles && userInfo.roles[0].code.toUpperCase();
+
     //const numberOfComplaints = role === "employee" ? numEmpComplaint : role === "csr" ? numCSRComplaint : 0;
     if (rawRole === "PGR-ADMIN") {
       this.props.history.push("/report/rainmaker-pgr/DepartmentWiseReport");
     } else {
       let { fetchComplaints } = this.props;
 
-      /*let complaintCountRequest = [
+     /* let complaintCountRequest = [
         { key: "tenantId", value: getTenantId() },
         {
           key: "status",
@@ -85,8 +86,14 @@ class AllComplaints extends Component {
           value:
             role === "csr"
               ? "assigned,open,reassignrequested"
-              : "escalatedlevel1pending,escalatedlevel2pending",
-        },
+              :role ==="eo"
+              ? "escalatedlevel1pending,escalatedlevel2pending"
+              :role ==="eo1"
+              ? "escalatedlevel1pending"
+              :role ==="eo2"
+              ? "escalatedlevel2pending"
+              : "assigned,reassignrequested"
+        }
       ];
       let payloadCount = await httpRequest(
         "rainmaker-pgr/v1/requests/_count",
@@ -105,8 +112,8 @@ class AllComplaints extends Component {
         { key: "tenantId", value: getTenantId() },
         {
           key: "status",
-         // value: "assigned",
-         value: "assigned,escalatedlevel1pending,escalatedlevel2pending",
+          value: "assigned",
+         //value: "assigned,escalatedlevel1pending,escalatedlevel2pending",
         },
       ];
       let assignedTotalComplaints = await httpRequest(
@@ -153,8 +160,42 @@ class AllComplaints extends Component {
           true,
           false
         );
-      } else {
-        /*fetchComplaints(
+      } else if(role === "eo"){
+        fetchComplaints(
+          [
+            {
+              key: "status",
+              value:"escalatedlevel1pending,escalatedlevel2pending"
+            }
+          ],
+          true,
+          true
+        );
+      }else if(role === "eo1"){
+        fetchComplaints(
+          [
+            {
+              key: "status",
+              value:"escalatedlevel1pending"
+            }
+          ],
+          true,
+          true
+        );
+      }else if(role === "eo2"){
+        fetchComplaints(
+          [
+            {
+              key: "status",
+              value:"escalatedlevel2pending"
+            }
+          ],
+          true,
+          true
+        );
+      }else {
+        console.log(role, "Nero role", rawRole, "Nero rawRole")
+        fetchComplaints(
           [
             {
               key: "status",
@@ -166,8 +207,8 @@ class AllComplaints extends Component {
           ],
           true,
           true
-        );*/
-        fetchComplaints(
+        );
+       /* fetchComplaints(
           [
             {
               key: "status",
@@ -179,7 +220,7 @@ class AllComplaints extends Component {
           ],
           true,
           true
-        );
+        ); */
 
       }
     }
@@ -246,13 +287,13 @@ class AllComplaints extends Component {
 
   onSearch = () => {
     const { complaintNo, mobileNo } = this.state;
-    const { fetchComplaints, toggleSnackbarAndSetText } = this.props;
+    const { fetchComplaints, toggleSnackbarAndSetText, role } = this.props;
     let queryObj = [];
-    if (role === "eo") {
-      queryObj.push({ key: "status", value: "assigned,escalatedlevel1pending,escalatedlevel2pending,reassignrequested" });
-    }else if (role === "employee") {
-      queryObj.push({ key: "status", value: "open,reassignrequested,assigned" });
-    }
+    // if (role === "eo") {
+    //   queryObj.push({ key: "status", value: "assigned,escalatedlevel1pending,escalatedlevel2pending,reassignrequested" });
+    // }else if (role === "employee") {
+    //   queryObj.push({ key: "status", value: "open,reassignrequested,assigned" });
+    // }
     if (complaintNo) {
       queryObj.push({ key: "serviceRequestId", value: complaintNo });
     }
@@ -822,13 +863,27 @@ const mapStateToProps = (state) => {
     : true;
   const { citizenById, employeeById } = common || {};
   const { userInfo } = state.auth;
-  const role =
+  /*const role =
     roleFromUserInfo(userInfo.roles, "GRO") ||
     roleFromUserInfo(userInfo.roles, "DGRO")
       ? "ao"
       : roleFromUserInfo(userInfo.roles, "CSR")
       ? "csr"
-      : "employee";
+      : "employee"; */
+      const role =
+      roleFromUserInfo(userInfo.roles, "GRO") ||
+      roleFromUserInfo(userInfo.roles, "DGRO")
+        ? "ao"
+        :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER1") &&
+        roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER2")
+        ? "eo"
+        :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER1")
+        ? 'eo1'
+        :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER2")
+        ? "eo2"
+        : roleFromUserInfo(userInfo.roles, "CSR")
+        ? "csr"
+        : "employee";
   let transformedComplaints = transformComplaintForComponent(
     complaints,
     role,

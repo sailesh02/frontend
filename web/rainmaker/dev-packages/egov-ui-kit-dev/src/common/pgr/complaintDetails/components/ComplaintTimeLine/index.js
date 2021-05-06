@@ -71,6 +71,7 @@ const connectorStyle = {
 };
 
 const StatusIcon = ({ status }) => {
+  console.log(status, "Nero Status complaintt")
   switch (status) {
     case "open":
     case "pending":
@@ -270,6 +271,8 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
         </div>
       );
     case "assigned":
+      case "escalatedlevel1pending":
+     case "escalatedlevel2pending":
       assigneeStatusCount++;
       switch (role && role.toLowerCase()) {
         case "ao":
@@ -330,9 +333,9 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                     : groName
                     ? "ES_COMPLAINT_DETAILS_REASSIGNED_BY"
                     : status === "escalatedlevel1pending"
-                    ? getEscalatingStatus(timeLine, status)
+                    ? "ES_COMPLAINT_ESCALATED_LEVEL1_HEADER"
                     : status === "escalatedlevel2pending"
-                    ? getEscalatingStatus(timeLine, status)
+                    ? "ES_COMPLAINT_ESCALATED_LEVEL2_HEADER"
                     : "ES_COMPLAINT_REASSIGNED_HEADER"
                 }`}
               />

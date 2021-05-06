@@ -269,6 +269,8 @@ class ComplaintDetails extends Component {
       complaintLoc = { lat: complaint.latitude, lng: complaint.longitude };
     }
     if (complaint) {
+      console.log(role, "Nero role");
+      console.log(complaint.complaintStatus, "Nero complaint.complaintStatus")
       if (role === "ao") {
         if (complaint.complaintStatus.toLowerCase() === "unassigned") {
           btnOneLabel = "ES_REJECT_BUTTON";
@@ -282,6 +284,9 @@ class ComplaintDetails extends Component {
       } else if (role === "employee") {
         if (complaint.complaintStatus.toLowerCase() === "assigned") {
           btnOneLabel = "ES_REQUEST_REQUEST_RE_ASSIGN";
+          btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
+        } else if (complaint.complaintStatus.toLowerCase() === "escalatedlevel1pending" || complaint.complaintStatus.toLowerCase() === "escalatedlevel2pending") {
+          btnOneLabel = "ES_REJECT_BUTTON";
           btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
         }
       }
@@ -336,10 +341,11 @@ class ComplaintDetails extends Component {
               <div>
                 {(role === "ao" &&
                   complaint.complaintStatus.toLowerCase() !== "closed") ||
-                (role === "employee" &&
-                  isAssignedToEmployee &&
-                  complaint.complaintStatus.toLowerCase() === "assigned" &&
-                  complaint.complaintStatus.toLowerCase() !== "closed") ? (
+                  (role === "employee" &&
+                    isAssignedToEmployee &&
+                    complaint.complaintStatus.toLowerCase() === "assigned" || complaint.status.toLowerCase() === "escalatedlevel1pending"||
+                    complaint.status.toLowerCase() === "escalatedlevel2pending"  &&
+                    complaint.complaintStatus.toLowerCase() !== "closed") ? (
                   <ActionButton
                     btnOneLabel={btnOneLabel}
                     btnOneOnClick={() =>
@@ -415,6 +421,12 @@ const getLatestStatus = status => {
     case "reassignrequested":
       transformedStatus = "REASSIGN";
       break;
+    case "escalatedlevel1pending":
+      transformedStatus = "ESCALATEDLEVEL1PENDING";
+      break;
+    case "escalatedlevel2pending":
+      transformedStatus = "ESCALATEDLEVEL2PENDING";
+      break;
     default:
       transformedStatus = "CLOSED";
       break;
@@ -446,7 +458,7 @@ const mapStateToProps = (state, ownProps) => {
   const serviceRequestId = ownProps.match.params.serviceRequestId;
   let selectedComplaint =
     complaints["byId"][
-      decodeURIComponent(ownProps.match.params.serviceRequestId)
+    decodeURIComponent(ownProps.match.params.serviceRequestId)
     ];
   let filedUserName =
     selectedComplaint &&
@@ -464,11 +476,11 @@ const mapStateToProps = (state, ownProps) => {
     )[1] === "Citizen Service Representative";
   const role =
     roleFromUserInfo(userInfo.roles, "GRO") ||
-    roleFromUserInfo(userInfo.roles, "DGRO")
+      roleFromUserInfo(userInfo.roles, "DGRO")
       ? "ao"
       : roleFromUserInfo(userInfo.roles, "CSR")
-      ? "csr"
-      : "employee";
+        ? "csr"
+        : "employee";
 
   let isAssignedToEmployee = true;
   if (selectedComplaint) {
@@ -566,8 +578,8 @@ const mapStateToProps = (state, ownProps) => {
           getPropertyFromObj(
             designationsById,
             employeeById &&
-              employeeById[gro] &&
-              employeeById[gro].assignments[0].designation,
+            employeeById[gro] &&
+            employeeById[gro].assignments[0].designation,
             "name",
             ""
           );

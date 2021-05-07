@@ -233,10 +233,10 @@ class WorkFlowContainer extends React.Component {
           )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
           return;
         }
-        if (moduleName == "ASMT") {
-          this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
+        if (moduleName == "PT.ASSESSMENT") {
+          this.props.setRoute(`/pt-assessment/acknowledgement?${this.getPurposeString(
             label
-          )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Assessments[0].assessmentNumber', "")}&tenantId=${get(payload, 'Assessments[0].tenantId', "")}`);
+          )}&moduleName=${moduleName}&applicationNumber=${applicationNumber}&tenantId=${tenant}`);
           return;
         }
         if (moduleName == 'Amendment') {

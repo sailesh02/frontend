@@ -12,7 +12,6 @@ import { downloadCertificateForm, downloadReceitForm, getpayments, prepareDocume
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { documentsSummary } from "../pt-mutation/summaryResource/documentsSummary";
 import { propertySummary } from "../pt-mutation/summaryResource/propertySummary";
-import { registrationSummary } from '../pt-mutation/summaryResource/registrationSummary';
 import { getCommonGrayCard, getCommonSubHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { transferorSummaryDetails } from "../pt-mutation/searchPreviewResource/transferorSummary";
 
@@ -322,11 +321,6 @@ const screenConfig = {
     );
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.registrationSummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
-    set(
-      action,
       "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
@@ -399,7 +393,6 @@ const screenConfig = {
           },
           propertySummary: propertySummary,
           ownerSummary: ownerSummary,
-          registrationSummary: registrationSummary,
           documentsSummary: documentsSummary
         })
       }

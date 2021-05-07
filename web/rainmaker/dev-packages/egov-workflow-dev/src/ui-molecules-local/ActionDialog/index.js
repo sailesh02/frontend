@@ -154,7 +154,7 @@ class ActionDialog extends React.Component {
         });
     
     const rolecheck = rolearray.length > 0 ? true : false;
-
+    const assessmentCheck = dataPath === "Assessment" && !!rolecheck && buttonLabel === "APPROVE"
     return (
       <Dialog
         fullScreen={fullscreen}
@@ -199,7 +199,7 @@ class ActionDialog extends React.Component {
                   >
                     <CloseIcon />
                   </Grid>
-                  {showEmployeeList && showAssignee && (
+                  {showEmployeeList && showAssignee && !assessmentCheck &&  (
                     <Grid
                       item
                       sm="12"
@@ -227,7 +227,7 @@ class ActionDialog extends React.Component {
                       />
                     </Grid>
                   )}
-                  {dataPath === "Assessment" && !!rolecheck && buttonLabel === "APPROVE" && (<Grid sm="12">
+                  { !!assessmentCheck && (<Grid sm="12">
                     <TextFieldContainer
                     InputLabelProps={{ shrink: true }}
                     label= {fieldConfig.assessmentFee.label}

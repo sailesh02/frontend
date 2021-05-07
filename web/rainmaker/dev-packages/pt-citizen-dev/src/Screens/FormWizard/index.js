@@ -224,25 +224,25 @@ class FormWizard extends Component {
             }
           }
         },
-        () => {
-          {
-            if (activeTab >= 4 && !isCompletePayment) {
-              this.estimate().then(estimateResponse => {
-                if (estimateResponse) {
-                  this.setState({
-                    estimation:
-                      estimateResponse && estimateResponse.Calculation,
-                    totalAmountToBePaid: get(
-                      estimateResponse,
-                      "Calculation[0].totalAmount",
-                      0
-                    )
-                  });
-                }
-              });
-            }
-          }
-        }
+        // () => {
+        //   {
+        //     if (activeTab >= 4 && !isCompletePayment) {
+        //       this.estimate().then(estimateResponse => {
+        //         if (estimateResponse) {
+        //           this.setState({
+        //             estimation:
+        //               estimateResponse && estimateResponse.Calculation,
+        //             totalAmountToBePaid: get(
+        //               estimateResponse,
+        //               "Calculation[0].totalAmount",
+        //               0
+        //             )
+        //           });
+        //         }
+        //       });
+        //     }
+        //   }
+        // }
       );
     } catch (e) {
       console.log("e", e);
@@ -515,7 +515,7 @@ class FormWizard extends Component {
             stepZero={this.renderStepperContent(0, fromReviewPage)}
             stepOne={this.renderStepperContent(1, fromReviewPage)}
             stepTwo={this.renderStepperContent(2, fromReviewPage)}
-            estimationDetails={estimation}
+            // estimationDetails={estimation}
             financialYr={financialYearFromQuery}
             totalAmountToBePaid={totalAmountToBePaid}
             updateTotalAmount={updateTotalAmount}
@@ -535,7 +535,7 @@ class FormWizard extends Component {
             termsAccepted={termsAccepted}
             termsError={termsError}
             calculationScreenData={this.state.calculationScreenData}
-            getEstimates={this.getEstimates}
+            // getEstimates={this.getEstimates}
           />
         </div>)
       case 5:

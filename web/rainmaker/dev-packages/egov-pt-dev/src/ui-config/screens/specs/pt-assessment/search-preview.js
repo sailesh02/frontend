@@ -7,7 +7,7 @@ import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/form
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getAssessmentSearchResults, getSearchResults } from "../../../../ui-utils/commons";
 import { downloadCertificateForm, downloadReceitForm, getpayments, prepareDocumentsView, searchBill, showHideMutationDetailsCard } from "../utils/index";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { documentsSummary } from "../pt-mutation/summaryResource/documentsSummary";
@@ -187,9 +187,6 @@ const setSearchResponse = async (
   const assessments = get(response, "Assessments", [])
   const propertyId = get(response, "Assessments[0].propertyId", []);
 
-
-//   const properties = get(response, "Properties", []);
-
   const auditResponse = await getSearchResults([
     {
       key: "tenantId",
@@ -316,6 +313,11 @@ const screenConfig = {
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.ownerSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
     set(

@@ -13,6 +13,7 @@ import { UploadMultipleFiles } from "egov-ui-framework/ui-molecules";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 const styles = theme => ({
   root: {
@@ -54,10 +55,84 @@ const fieldConfig = {
   }
 };
 
+let pt_assessment_payment_config = [
+  {
+    label: {
+      labelName: "Assessment Fee",
+      labelKey: "PT_ASSESSMENT_FEE"
+    },
+    placeholder: {
+      labelName: "Enter Assessment Fee",
+      labelKey: "PT_ASSESSMENT_FEE_PLACEHOLDER"
+    },
+    path: "assessmentAmount",
+    errorMessage: "PT_ERR_ASSESSMENT_CHARGES",
+    showError: false,
+    required: true
+  },
+  {
+    label: {
+      labelName: "Usage Exemption Amount",
+      labelKey: "PT_USAGE_EXEMPTION_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter Usage Exemption Amount",
+      labelKey: "PT_USAGE_EXEMPTION_AMOUNT_PLACEHOLDER"
+    },
+    path: "usageExemptionAmount",
+    errorMessage: "PT_ERR_USAGE_EXEMPTION_AMOUNT",
+    showError: false,
+    required: true
+  },
+  {
+    label: {
+      labelName: "Owner Exemption Amount",
+      labelKey: "PT_OWNER_EXEMPTION_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter Owner Exemption Amount",
+      labelKey: "PT_OWNER_EXEMPTION_AMOUNT_PLACEHOLDER"
+    },
+    path: "ownerExemptionAmount",
+    errorMessage: "PT_ERR_OWNER_EXEMPTION_AMOUNT",
+    showError: false,
+    required: true
+  },
+  {
+    label: {
+      labelName: "Fire Cess Amount",
+      labelKey: "PT_FIRE_CESS_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter Fire Cess Amount",
+      labelKey: "PT_FIRE_CESS_AMOUNT_PLACEHOLDER"
+    },
+    path: "fireCessAmount",
+    errorMessage: "PT_ERR_FIRE_CESS_AMOUNT",
+    showError: false,
+    required: true
+  },
+  {
+    label: {
+      labelName: "Cancer Cess Amount",
+      labelKey: "PT_CANCER_CESS_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter Cancer Cess Amount",
+      labelKey: "PT_CANCER_CESS_AMOUNT_PLACEHOLDER"
+    },
+    path: "cancerCessAmount",
+    errorMessage: "PT_ERR_CANCER_CESS_AMOUNT",
+    showError: false,
+    required: true
+  }
+]
+
 class ActionDialog extends React.Component {
   state = {
     employeeList: [],
-    roles: ""
+    roles: "",
+    paymentErr: false
   };
 
   // onEmployeeClick = e => {
@@ -94,6 +169,25 @@ class ActionDialog extends React.Component {
         return label;
     }
   };
+
+  assementForward = (buttonLabel, isDocRequired) => {
+    pt_assessment_payment_config = pt_assessment_payment_config.map((payment) => ({
+      ...payment,
+      isError: payment.required
+        ? !data[payment.path]
+        : !!data[payment.path]
+        ? isNaN(data[payment.path])
+        : false,
+    }));
+    const isError = pt_assessment_payment_config.some(payment => !!payment.isError)
+    if(isError) {
+      this.setState({
+        paymentErr: true
+      })
+      return
+    }
+    this.props.onButtonClick(buttonLabel, isDocRequired)
+  }
 
   render() {
         
@@ -227,7 +321,24 @@ class ActionDialog extends React.Component {
                       />
                     </Grid>
                   )}
-                  { !!assessmentCheck && (<Grid sm="12">
+                  {!!assessmentCheck && pt_assessment_payment_config.map(payment => (
+                    <Grid payment sm="12">
+                    <TextFieldContainer
+                    InputLabelProps={{ shrink: true }}
+                    label= {payment.label}
+                    onChange={e =>{
+                      handleFieldChange(`${dataPath}.${payment.path}`, e.target.value)
+                      pt_assessment_payment_config[ind].isError = false
+                    }}
+                    required = {true}
+                    jsonPath={`${dataPath}.${payment.path}`}
+                    placeholder={payment.placeholder}
+                    inputProps={{ maxLength: 120 }}
+                    /> 
+                    {!!payment.isError && (<span style={{color: "red"}}>{getLocaleLabels(payment.errorMessage, payment.errorMessage)}</span>)}
+                    </Grid>
+                  ))}
+                  {/* { !!assessmentCheck && (<Grid sm="12">
                     <TextFieldContainer
                     InputLabelProps={{ shrink: true }}
                     label= {fieldConfig.assessmentFee.label}
@@ -242,8 +353,8 @@ class ActionDialog extends React.Component {
                     placeholder={fieldConfig.assessmentFee.placeholder}
                     inputProps={{ maxLength: 120 }}
                     /> 
-                    {/* {!!payment.isError && (<span style={{color: "red"}}>{getLocaleLabels(payment.errorMessage, payment.errorMessage)}</span>)} */}
-                    </Grid>)}
+                    {!!payment.isError && (<span style={{color: "red"}}>{getLocaleLabels(payment.errorMessage, payment.errorMessage)}</span>)}
+                    </Grid>)} */}
                   <Grid item sm="12">
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
@@ -310,7 +421,7 @@ class ActionDialog extends React.Component {
                           height: "48px"
                         }}
                         className="bottom-button"
-                        onClick={() =>
+                        onClick={!!assessmentCheck ? () => this.assementForward(buttonLabel, isDocRequired) : () =>
                           onButtonClick(buttonLabel, isDocRequired)
                         }
                       >

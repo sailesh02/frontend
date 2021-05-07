@@ -233,7 +233,7 @@ const setSearchResponse = async (
   await loadPdfGenerationData(applicationNumber, tenantId);
 //   setDownloadMenu(state, dispatch, tenantId, applicationNumber);
 };
-export const setData = async (state, dispatch, applicationNumber, tenantId) => {
+const setData = async (state, dispatch, applicationNumber, tenantId) => {
   const response = await getSearchResults([
     {
       key: "tenantId",

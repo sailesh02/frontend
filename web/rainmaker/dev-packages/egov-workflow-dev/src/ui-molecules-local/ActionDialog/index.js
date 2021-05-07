@@ -12,6 +12,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { UploadMultipleFiles } from "egov-ui-framework/ui-molecules";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const styles = theme => ({
   root: {
@@ -120,7 +121,10 @@ class ActionDialog extends React.Component {
     }
     if (dataPath === "FireNOCs") {
       dataPath = `${dataPath}[0].fireNOCDetails.additionalDetail`
-    } else if (dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
+    } else if(dataPath === "Assessment") {
+      dataPath = dataPath
+    }
+     else if (dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
       dataPath = `${dataPath}.workflow`;
     } else {
       dataPath = `${dataPath}[0]`;
@@ -141,7 +145,16 @@ class ActionDialog extends React.Component {
     } else {
       wfDocumentsPath = `${dataPath}.wfDocuments`
     }
-   
+
+    const rolearray =
+        getUserInfo() &&
+        JSON.parse(getUserInfo()).roles.filter(item => {
+          if (item.code == "PT_APPROVER")
+            return true;
+        });
+    
+    const rolecheck = rolearray.length > 0 ? true : false;
+
     return (
       <Dialog
         fullScreen={fullscreen}
@@ -214,7 +227,7 @@ class ActionDialog extends React.Component {
                       />
                     </Grid>
                   )}
-                  {dataPath === "Assessment" && (<Grid sm="12">
+                  {dataPath === "Assessment" && !!rolecheck && buttonLabel === "APPROVE" && (<Grid sm="12">
                     <TextFieldContainer
                     InputLabelProps={{ shrink: true }}
                     label= {fieldConfig.assessmentFee.label}

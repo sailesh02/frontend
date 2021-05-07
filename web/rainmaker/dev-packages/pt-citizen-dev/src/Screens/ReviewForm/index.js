@@ -218,7 +218,7 @@ class ReviewForm extends Component {
       isAssesment,
       toggleTerms
     } = this.props;
-    let { totalAmount } = estimationDetails[0] || {};
+    // let { totalAmount } = estimationDetails[0] || {};
     const { generalMDMSDataById = {}, location = {}, OldProperty } = this.props;
 
     const { search } = location;

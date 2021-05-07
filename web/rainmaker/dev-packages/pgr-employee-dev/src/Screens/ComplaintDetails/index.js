@@ -182,6 +182,17 @@ class ComplaintDetails extends Component {
     }
   };
 
+  btnThreeOnClick = (complaintNo, label) => {
+    //Action for second button
+    let { history } = this.props;
+    switch (label) {
+
+      case "ES_RESOLVE_MARK_RESOLVED":
+        history.push(`/complaint-resolved/${complaintNo}`);
+        break;
+    }
+  };
+
   ShareButtonOnClick = () => {
     const complaintData = this.props.transformedComplaint.complaint;
     const name = complaintData.filedBy ? complaintData.filedBy : "NA";
@@ -263,6 +274,7 @@ class ComplaintDetails extends Component {
     } = this.props;
     let btnOneLabel = "";
     let btnTwoLabel = "";
+    let btnThreeLabel = "";
     let action;
     let complaintLoc = {};
     if (complaint && complaint.latitude) {
@@ -275,11 +287,13 @@ class ComplaintDetails extends Component {
         if (complaint.complaintStatus.toLowerCase() === "unassigned") {
           btnOneLabel = "ES_REJECT_BUTTON";
           btnTwoLabel = "ES_COMMON_ASSIGN";
+
         } else if (complaint.complaintStatus.toLowerCase() === "reassign") {
           btnOneLabel = "ES_REJECT_BUTTON";
           btnTwoLabel = "ES_COMMON_REASSIGN";
         } else if (complaint.complaintStatus.toLowerCase() === "assigned") {
           btnTwoLabel = "ES_COMMON_REASSIGN";
+          btnThreeLabel = "ES_RESOLVE_MARK_RESOLVED";
         }
       } else if (role === "employee") {
         if (complaint.complaintStatus.toLowerCase() === "assigned") {
@@ -339,13 +353,29 @@ class ComplaintDetails extends Component {
                 />
               </div>
               <div>
-                {(role === "ao" &&
-                  complaint.complaintStatus.toLowerCase() !== "closed") ||
+                {
                   (role === "employee" &&
                     isAssignedToEmployee &&
-                    complaint.complaintStatus.toLowerCase() === "assigned" || complaint.status.toLowerCase() === "escalatedlevel1pending"||
-                    complaint.status.toLowerCase() === "escalatedlevel2pending"  &&
+                    complaint.complaintStatus.toLowerCase() === "assigned" || complaint.status.toLowerCase() === "escalatedlevel1pending" ||
+                    complaint.status.toLowerCase() === "escalatedlevel2pending" &&
                     complaint.complaintStatus.toLowerCase() !== "closed") ? (
+                    <ActionButton
+                      btnOneLabel={btnOneLabel}
+                      btnOneOnClick={() =>
+                        this.btnOneOnClick(serviceRequestId, btnOneLabel)
+                      }
+                      btnTwoLabel={btnTwoLabel}
+                      btnTwoOnClick={() =>
+                        this.btnTwoOnClick(serviceRequestId, btnTwoLabel)
+                      }
+                      groResolveButton={false}
+                    />
+                  ) : (
+                    ""
+                  )}
+
+                {(role === "ao" &&
+                  complaint.complaintStatus.toLowerCase() !== "closed" && complaint.complaintStatus.toLowerCase() == "assigned") ? (
                   <ActionButton
                     btnOneLabel={btnOneLabel}
                     btnOneOnClick={() =>
@@ -355,6 +385,31 @@ class ComplaintDetails extends Component {
                     btnTwoOnClick={() =>
                       this.btnTwoOnClick(serviceRequestId, btnTwoLabel)
                     }
+
+                    btnThreeLabel={btnThreeLabel}
+                    btnThreeOnClick={() =>
+                      this.btnThreeOnClick(serviceRequestId, btnThreeLabel)
+                    }
+                    groResolveButton={true}
+                  />
+                ) : (
+                  ""
+                )}
+
+                {(role === "ao" &&
+                  complaint.complaintStatus.toLowerCase() !== "closed" && complaint.complaintStatus.toLowerCase() == "unassigned") ? (
+                  <ActionButton
+                    btnOneLabel={btnOneLabel}
+                    btnOneOnClick={() =>
+                      this.btnOneOnClick(serviceRequestId, btnOneLabel)
+                    }
+                    btnTwoLabel={btnTwoLabel}
+                    btnTwoOnClick={() =>
+                      this.btnTwoOnClick(serviceRequestId, btnTwoLabel)
+                    }
+
+
+                    groResolveButton={false}
                   />
                 ) : (
                   ""

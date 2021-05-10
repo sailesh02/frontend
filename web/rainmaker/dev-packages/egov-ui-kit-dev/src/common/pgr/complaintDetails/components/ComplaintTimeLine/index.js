@@ -166,7 +166,7 @@ return;
 };
 
 
-const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating, role, filedBy, filedUserMobileNumber, reopenValidChecker, stepsCount }) => {
+const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating, role, filedBy, filedUserMobileNumber, reopenValidChecker, escl4Exists }) => {
   var {
     action,
     when: date,

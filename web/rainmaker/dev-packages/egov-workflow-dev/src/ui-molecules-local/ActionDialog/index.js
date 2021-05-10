@@ -12,6 +12,8 @@ import { withStyles } from "@material-ui/core/styles";
 import { UploadMultipleFiles } from "egov-ui-framework/ui-molecules";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 const styles = theme => ({
   root: {
@@ -40,13 +42,125 @@ const fieldConfig = {
       labelName: "Enter Comments",
       labelKey: "WF_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
     }
+  },
+  assessmentFee: {
+    label: {
+      labelName: "Assessment Fee",
+      labelKey: "WF_ASSESSMENT_FEE"
+    },
+    placeholder: {
+      labelName: "Enter Assessment Fee",
+      labelKey: "WF_ASSESSMENT_FEE_PLACEHOLDER"
+    }
   }
 };
+
+let pt_assessment_payment_config = [
+  {
+    label: {
+      labelName: "Assessment Fee",
+      labelKey: "PT_ASSESSMENT_FEE"
+    },
+    placeholder: {
+      labelName: "Enter Assessment Fee",
+      labelKey: "PT_ASSESSMENT_FEE_PLACEHOLDER"
+    },
+    path: "assessmentAmount",
+    errorMessage: "PT_ERR_ASSESSMENT_CHARGES",
+    showError: false,
+    required: true
+  },
+  {
+    label: {
+      labelName: "Usage Exemption Amount",
+      labelKey: "PT_USAGE_EXEMPTION_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter Usage Exemption Amount",
+      labelKey: "PT_USAGE_EXEMPTION_AMOUNT_PLACEHOLDER"
+    },
+    path: "usageExemptionAmount",
+    errorMessage: "PT_ERR_USAGE_EXEMPTION_AMOUNT",
+    showError: false,
+    required: true
+  },
+  {
+    label: {
+      labelName: "Owner Exemption Amount",
+      labelKey: "PT_OWNER_EXEMPTION_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter Owner Exemption Amount",
+      labelKey: "PT_OWNER_EXEMPTION_AMOUNT_PLACEHOLDER"
+    },
+    path: "ownerExemptionAmount",
+    errorMessage: "PT_ERR_OWNER_EXEMPTION_AMOUNT",
+    showError: false,
+    required: true
+  },
+  {
+    label: {
+      labelName: "Fire Cess Amount",
+      labelKey: "PT_FIRE_CESS_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter Fire Cess Amount",
+      labelKey: "PT_FIRE_CESS_AMOUNT_PLACEHOLDER"
+    },
+    path: "fireCessAmount",
+    errorMessage: "PT_ERR_FIRE_CESS_AMOUNT",
+    showError: false,
+    required: true
+  },
+  {
+    label: {
+      labelName: "Cancer Cess Amount",
+      labelKey: "PT_CANCER_CESS_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter Cancer Cess Amount",
+      labelKey: "PT_CANCER_CESS_AMOUNT_PLACEHOLDER"
+    },
+    path: "cancerCessAmount",
+    errorMessage: "PT_ERR_CANCER_CESS_AMOUNT",
+    showError: false,
+    required: true
+  },
+  {
+    label: {
+      labelName: "Adhoc Penalty Amount",
+      labelKey: "PT_ADHOC_PENALTY_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter Adhoc Penalty Amount",
+      labelKey: "PT_ADHOC_PENALTY_AMOUNT_PLACEHOLDER"
+    },
+    path: "adhocPenaltyAmount",
+    errorMessage: "PT_ERR_ADHOC_PENALTY_AMOUNT",
+    showError: false,
+    required: true
+  },
+  {
+    label: {
+      labelName: "Adhoc Rebate Amount",
+      labelKey: "PT_ADHOC_REBATE_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter Adhoc Rebate Amount",
+      labelKey: "PT_ADHOC_REBATE_AMOUNT_PLACEHOLDER"
+    },
+    path: "adhocRebateAmount",
+    errorMessage: "PT_ERR_ADHOC_REBATE_AMOUNT",
+    showError: false,
+    required: true
+  }
+]
 
 class ActionDialog extends React.Component {
   state = {
     employeeList: [],
-    roles: ""
+    roles: "",
+    paymentErr: false
   };
 
   // onEmployeeClick = e => {
@@ -84,6 +198,25 @@ class ActionDialog extends React.Component {
     }
   };
 
+  assementForward = (buttonLabel, isDocRequired) => {
+    pt_assessment_payment_config = pt_assessment_payment_config.map((payment) => ({
+      ...payment,
+      isError: payment.required
+        ? !data[payment.path]
+        : !!data[payment.path]
+        ? isNaN(data[payment.path])
+        : false,
+    }));
+    const isError = pt_assessment_payment_config.some(payment => !!payment.isError)
+    if(isError) {
+      this.setState({
+        paymentErr: true
+      })
+      return
+    }
+    this.props.onButtonClick(buttonLabel, isDocRequired)
+  }
+
   render() {
         
     let {
@@ -110,14 +243,17 @@ class ActionDialog extends React.Component {
     }
     if (dataPath === "FireNOCs") {
       dataPath = `${dataPath}[0].fireNOCDetails.additionalDetail`
-    } else if (dataPath === "Assessment"||dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
+    } else if(dataPath === "Assessment") {
+      dataPath = dataPath
+    }
+     else if (dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
       dataPath = `${dataPath}.workflow`;
     } else {
       dataPath = `${dataPath}[0]`;
     }
     let assigneePath= '';
     /* The path for Assignee in Property and Assessment has latest workflow contract and it is Array of user object  */
-    if (dataPath.includes("Assessment")||dataPath.includes("Property")){
+    if (dataPath.includes("Property")){
       assigneePath=`${dataPath}.assignes[0].uuid`;
     }else{
       assigneePath=`${dataPath}.assignee[0]`;
@@ -131,7 +267,16 @@ class ActionDialog extends React.Component {
     } else {
       wfDocumentsPath = `${dataPath}.wfDocuments`
     }
-   
+
+    const rolearray =
+        getUserInfo() &&
+        JSON.parse(getUserInfo()).roles.filter(item => {
+          if (item.code == "PT_APPROVER")
+            return true;
+        });
+    
+    const rolecheck = rolearray.length > 0 ? true : false;
+    const assessmentCheck = dataPath === "Assessment" && !!rolecheck && buttonLabel === "APPROVE"
     return (
       <Dialog
         fullScreen={fullscreen}
@@ -176,7 +321,7 @@ class ActionDialog extends React.Component {
                   >
                     <CloseIcon />
                   </Grid>
-                  {showEmployeeList && showAssignee && (
+                  {showEmployeeList && showAssignee && !assessmentCheck &&  (
                     <Grid
                       item
                       sm="12"
@@ -204,6 +349,40 @@ class ActionDialog extends React.Component {
                       />
                     </Grid>
                   )}
+                  {!!assessmentCheck && pt_assessment_payment_config.map(payment => (
+                    <Grid payment sm="12">
+                    <TextFieldContainer
+                    InputLabelProps={{ shrink: true }}
+                    label= {payment.label}
+                    onChange={e =>{
+                      handleFieldChange(`${dataPath}.${payment.path}`, e.target.value)
+                      pt_assessment_payment_config[ind].isError = false
+                    }}
+                    required = {true}
+                    jsonPath={`${dataPath}.${payment.path}`}
+                    placeholder={payment.placeholder}
+                    inputProps={{ maxLength: 120 }}
+                    /> 
+                    {!!payment.isError && (<span style={{color: "red"}}>{getLocaleLabels(payment.errorMessage, payment.errorMessage)}</span>)}
+                    </Grid>
+                  ))}
+                  {/* { !!assessmentCheck && (<Grid sm="12">
+                    <TextFieldContainer
+                    InputLabelProps={{ shrink: true }}
+                    label= {fieldConfig.assessmentFee.label}
+                    onChange={e =>
+                      {
+                        handleFieldChange(`${dataPath}.assessmentAmount`, e.target.value)
+                        // eb_payment_config[ind].isError = false
+                      }
+                    }
+                    required = {true}
+                    jsonPath={`${dataPath}.assessmentAmount`}
+                    placeholder={fieldConfig.assessmentFee.placeholder}
+                    inputProps={{ maxLength: 120 }}
+                    /> 
+                    {!!payment.isError && (<span style={{color: "red"}}>{getLocaleLabels(payment.errorMessage, payment.errorMessage)}</span>)}
+                    </Grid>)} */}
                   <Grid item sm="12">
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
@@ -270,7 +449,7 @@ class ActionDialog extends React.Component {
                           height: "48px"
                         }}
                         className="bottom-button"
-                        onClick={() =>
+                        onClick={!!assessmentCheck ? () => this.assementForward(buttonLabel, isDocRequired) : () =>
                           onButtonClick(buttonLabel, isDocRequired)
                         }
                       >

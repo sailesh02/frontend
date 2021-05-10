@@ -124,7 +124,10 @@ class SingleApplication extends React.Component {
             setRoute("/property-tax/application-preview?propertyId=" + item.propertyId + "&applicationNumber=" + item.acknowldgementNumber + "&tenantId=" + item.tenantId + "&type=property");
           }else if (businessService == 'PT.LEGACY') {
             setRoute("/property-tax/application-preview?propertyId=" + item.propertyId + "&applicationNumber=" + item.acknowldgementNumber + "&tenantId=" + item.tenantId + "&type=legacy");
-          } else {
+          } else if(businessService == 'PT.ASSESSMENT') {
+            setRoute("/pt-assessment/search-preview?applicationNumber=" + item.acknowldgementNumber + "&tenantId=" + item.tenantId);
+          } 
+          else {
             console.log('Navigation Error');
           }
         } else {

@@ -125,6 +125,34 @@ let pt_assessment_payment_config = [
     errorMessage: "PT_ERR_CANCER_CESS_AMOUNT",
     showError: false,
     required: true
+  },
+  {
+    label: {
+      labelName: "Adhoc Penalty Amount",
+      labelKey: "PT_ADHOC_PENALTY_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter Adhoc Penalty Amount",
+      labelKey: "PT_ADHOC_PENALTY_AMOUNT_PLACEHOLDER"
+    },
+    path: "adhocPenaltyAmount",
+    errorMessage: "PT_ERR_ADHOC_PENALTY_AMOUNT",
+    showError: false,
+    required: true
+  },
+  {
+    label: {
+      labelName: "Adhoc Rebate Amount",
+      labelKey: "PT_ADHOC_REBATE_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter Adhoc Rebate Amount",
+      labelKey: "PT_ADHOC_REBATE_AMOUNT_PLACEHOLDER"
+    },
+    path: "adhocRebateAmount",
+    errorMessage: "PT_ERR_ADHOC_REBATE_AMOUNT",
+    showError: false,
+    required: true
   }
 ]
 

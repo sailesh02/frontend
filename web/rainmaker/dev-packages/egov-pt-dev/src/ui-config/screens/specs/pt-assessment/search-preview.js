@@ -202,7 +202,7 @@ const setSearchResponse = async (
   if (!assessment.workflow) {
     let workflow = {
       tenantId: getQueryArg(window.location.href, "tenantId"),
-      businessService: "PT.ASSESSMENT",
+      businessService: "ASMT",
       businessId: getQueryArg(window.location.href, "applicationNumber"),
       action: "",
       moduleName: "PT",

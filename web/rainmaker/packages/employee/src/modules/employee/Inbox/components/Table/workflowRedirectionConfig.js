@@ -52,7 +52,7 @@ export const getWFConfig = (module, businessService) => {
           INITIATED: "/property-tax/application-preview",
           DEFAULT: "/property-tax/application-preview",
         };
-      } else if(businessService === "PT.ASSESSMENT") {
+      } else if(businessService === "ASMT") {
         return {
           INITIATED: "/pt-assessment/search-preview",
           DEFAULT: "/pt-assessment/search-preview",

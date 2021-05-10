@@ -41,7 +41,7 @@ class ReviewForm extends Component {
 
   componentDidMount() {
     this.getImportantDates();
-    this.props.getEstimates();
+    // this.props.getEstimates();
   }
 
   getImportantDates = async () => {
@@ -218,7 +218,7 @@ class ReviewForm extends Component {
       isAssesment,
       toggleTerms
     } = this.props;
-    let { totalAmount } = estimationDetails[0] || {};
+    // let { totalAmount } = estimationDetails[0] || {};
     const { generalMDMSDataById = {}, location = {}, OldProperty } = this.props;
 
     const { search } = location;
@@ -238,12 +238,12 @@ class ReviewForm extends Component {
                 />
 
               </div>
-              {formWizardConstants[purpose].isEstimateDetails && <PropertyTaxDetailsCard
+              {/* {formWizardConstants[purpose].isEstimateDetails && <PropertyTaxDetailsCard
                 estimationDetails={estimationDetails}
                 importantDates={importantDates}
                 openCalculationDetails={this.openCalculationDetails}
                 optionSelected={valueSelected}
-              />}
+              />} */}
               <PropertyAddressInfo OldProperty={OldProperty} generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].isEditButton ? <EditIcon onIconClick={() => onEditButtonClick(0)} /> : null}></PropertyAddressInfo>
               <AssessmentInfo OldProperty={OldProperty} generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].isEditButton ? <EditIcon onIconClick={() => onEditButtonClick(1)} /> : null}></AssessmentInfo>
               <OwnerInfo OldProperty={OldProperty} generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].canEditOwner ? <EditIcon onIconClick={() => onEditButtonClick(2)} /> : null}></OwnerInfo>

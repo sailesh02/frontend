@@ -228,7 +228,7 @@ class InboxData extends React.Component {
     else if (row[0].subtext === "PT.LEGACY") {
       queryParams += '&type=legacy';
     }
-    else if (row[0].subtext === "PT.ASSESSMENT") {
+    else if (row[0].subtext === "ASMT") {
       queryParams += '&type=assessment';
     }
     else if (row[0].subtext === "NewWS1") {

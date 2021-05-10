@@ -92,6 +92,10 @@ class AllComplaints extends Component {
               ? "escalatedlevel1pending"
               :role ==="eo2"
               ? "escalatedlevel2pending"
+              :role ==="eo3"
+              ? "escalatedlevel3pending"
+              :role ==="eo4"
+              ? "escalatedlevel4pending"
               : "assigned,reassignrequested"
         }
       ];
@@ -188,6 +192,28 @@ class AllComplaints extends Component {
             {
               key: "status",
               value:"escalatedlevel2pending"
+            }
+          ],
+          true,
+          true
+        );
+      }else if(role === "eo3"){
+        fetchComplaints(
+          [
+            {
+              key: "status",
+              value:"escalatedlevel3pending"
+            }
+          ],
+          true,
+          true
+        );
+      }else if(role === "eo4"){
+        fetchComplaints(
+          [
+            {
+              key: "status",
+              value:"escalatedlevel4pending"
             }
           ],
           true,
@@ -881,6 +907,10 @@ const mapStateToProps = (state) => {
         ? 'eo1'
         :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER2")
         ? "eo2"
+        :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER3")
+        ? 'eo3'
+        :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER4")
+        ? "eo4"
         : roleFromUserInfo(userInfo.roles, "CSR")
         ? "csr"
         : "employee";
@@ -901,7 +931,9 @@ const mapStateToProps = (state) => {
     complaint.complaintStatus === "ASSIGNED" ||
     complaint.rawStatus === "reassignrequested" ||
     complaint.rawStatus === "escalatedlevel1pending" ||
-    complaint.rawStatus === "escalatedlevel2pending"
+    complaint.rawStatus === "escalatedlevel2pending" ||
+    complaint.rawStatus === "escalatedlevel3pending" ||
+    complaint.rawStatus === "escalatedlevel4pending"
   );
 
   let searchFilterEmployeeComplaints = transformedComplaints.filter(

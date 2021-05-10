@@ -299,7 +299,7 @@ class ComplaintDetails extends Component {
         if (complaint.complaintStatus.toLowerCase() === "assigned") {
           btnOneLabel = "ES_REQUEST_REQUEST_RE_ASSIGN";
           btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
-        } else if (complaint.complaintStatus.toLowerCase() === "escalatedlevel1pending" || complaint.complaintStatus.toLowerCase() === "escalatedlevel2pending") {
+        } else if (complaint.complaintStatus.toLowerCase() === "escalatedlevel1pending" || complaint.complaintStatus.toLowerCase() === "escalatedlevel2pending" || complaint.complaintStatus.toLowerCase() === "escalatedlevel3pending" || complaint.complaintStatus.toLowerCase() === "escalatedlevel4pending") {
           btnOneLabel = "ES_REJECT_BUTTON";
           btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
         }
@@ -357,7 +357,8 @@ class ComplaintDetails extends Component {
                   (role === "employee" &&
                     isAssignedToEmployee &&
                     complaint.complaintStatus.toLowerCase() === "assigned" || complaint.status.toLowerCase() === "escalatedlevel1pending" ||
-                    complaint.status.toLowerCase() === "escalatedlevel2pending" &&
+                    complaint.status.toLowerCase() === "escalatedlevel2pending" || complaint.status.toLowerCase() === "escalatedlevel3pending" ||
+                    complaint.status.toLowerCase() === "escalatedlevel4pending" &&
                     complaint.complaintStatus.toLowerCase() !== "closed") ? (
                     <ActionButton
                       btnOneLabel={btnOneLabel}
@@ -481,6 +482,12 @@ const getLatestStatus = status => {
       break;
     case "escalatedlevel2pending":
       transformedStatus = "ESCALATEDLEVEL2PENDING";
+      break;
+    case "escalatedlevel3pending":
+      transformedStatus = "ESCALATEDLEVEL3PENDING";
+      break;
+    case "escalatedlevel4pending":
+      transformedStatus = "ESCALATEDLEVEL4PENDING";
       break;
     default:
       transformedStatus = "CLOSED";

@@ -10,14 +10,23 @@ import commonConfig from "config/common.js";
 class ActionMenu extends Component {
   componentDidMount = async () => {
     let userInfo = JSON.parse(getUserInfo());
+
     let { fetchActionMenu } = this.props;
     const roles = get(userInfo, "roles");
     const roleCodes = roles
       ? roles.map((role) => {
-          if (role.tenantId == getTenantId()) {
+
+        if (role.tenantId == getTenantId()) {
+          return role.code;
+        } else {
+          let arrayLength = role.tenantId.split(".");
+          let userTenantIdInRole = arrayLength && arrayLength.length;
+          if(userTenantIdInRole < 2){
             return role.code;
-          }
-        })
+         }
+
+        }
+      })
       : [];
     await fetchActionMenu(
       {
@@ -52,9 +61,11 @@ class ActionMenu extends Component {
 const mapStateToProps = ({ app }) => {
   const actionListArr = app.menu || [];
   const activeRoutePath = app.activeRoutePath;
-  actionListArr.map(item=>{if(item.id==2024){
-    item.path= "bill-amend"
-  }})
+  actionListArr.map(item => {
+    if (item.id == 2024) {
+      item.path = "bill-amend"
+    }
+  })
   return { actionListArr, activeRoutePath };
 };
 

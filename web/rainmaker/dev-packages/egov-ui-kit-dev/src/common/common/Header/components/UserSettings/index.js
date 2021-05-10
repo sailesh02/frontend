@@ -134,10 +134,22 @@ class UserSettings extends Component {
     let tenantIdsList = get(userInfo, "roles", []).map((role) => {
       return role.tenantId;
     });
+    let userTenantIdInRole = 0;
+    let tenantIdOnlyState = '';
     tenantIdsList = [...new Set(tenantIdsList)];
     tenantIdsList = tenantIdsList.map((tenantId) => {
+      let arrayLength = tenantId.split(".");
+      userTenantIdInRole = arrayLength && arrayLength.length;
+
+        tenantIdOnlyState = tenantId;
+
       return { value: tenantId, label: getLocaleLabels(tenantId, "TENANT_TENANTS_" + getTransformedLocale(tenantId)) };
     });
+
+    if(userTenantIdInRole > 1){
+       tenantIdOnlyState = tenantSelected
+    }
+
 
     return (
       <div className="userSettingsContainer">
@@ -157,7 +169,7 @@ class UserSettings extends Component {
             style={style.baseTenantStyle}
             labelStyle={style.label}
             dropDownData={tenantIdsList}
-            value={tenantSelected}
+            value={tenantIdOnlyState}
             underlineStyle={{ borderBottom: "none" }}
           />
         )}
@@ -173,7 +185,7 @@ class UserSettings extends Component {
           />
         )}
 
-        {/* 
+        {/*
         <div>
           <Image width={"33px"} circular={true} source={userInfo.photo || emptyFace} />
           <DropDown

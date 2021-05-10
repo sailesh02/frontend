@@ -82,6 +82,8 @@ const StatusIcon = ({ status }) => {
     case "re-assign":
     case "escalatedlevel1pending":
     case "escalatedlevel2pending":
+      case "escalatedlevel3pending":
+        case "escalatedlevel4pending":
       return <Icon action="custom" name="file-send" style={statusCommonIconStyle} color={"#fe7a51"} />;
     case "rejected":
       return <Icon action="content" name="clear" style={statusRejectedIconStyle} color={"#FFFFFF"} />;
@@ -164,7 +166,7 @@ return;
 };
 
 
-const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating, role, filedBy, filedUserMobileNumber, reopenValidChecker }) => {
+const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating, role, filedBy, filedUserMobileNumber, reopenValidChecker, stepsCount }) => {
   var {
     action,
     when: date,
@@ -180,6 +182,7 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
     groMobileNumber,
     groDesignation,
   } = stepData;
+  console.log(stepData, "Nero StepData")
   const currDate = new Date().getTime();
   const resolvedDate = new Date(date).getTime();
   const isReopenValid = currDate - resolvedDate <= reopenValidChecker;
@@ -273,6 +276,8 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
     case "assigned":
       case "escalatedlevel1pending":
      case "escalatedlevel2pending":
+      case "escalatedlevel3pending":
+        case "escalatedlevel4pending":
       assigneeStatusCount++;
       switch (role && role.toLowerCase()) {
         case "ao":
@@ -297,6 +302,12 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                     : status === "escalatedlevel2pending"
                    // ? getEscalatingStatus(timeLine, status)
                    ? "ES_COMPLAINT_ESCALATED_LEVEL2_HEADER"
+                   : status === "escalatedlevel3pending"
+
+                   ? "ES_COMPLAINT_ESCALATED_LEVEL3_HEADER"
+                    : status === "escalatedlevel4pending"
+
+                   ? "ES_COMPLAINT_ESCALATED_LEVEL4_HEADER"
                     : "ES_COMPLAINT_REASSIGNED_HEADER"
                 }`}
               />
@@ -338,6 +349,10 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                     ? "ES_COMPLAINT_ESCALATED_LEVEL1_HEADER"
                     : status === "escalatedlevel2pending"
                     ? "ES_COMPLAINT_ESCALATED_LEVEL2_HEADER"
+                    : status === "escalatedlevel3pending"
+                    ? "ES_COMPLAINT_ESCALATED_LEVEL3_HEADER"
+                    : status === "escalatedlevel4pending"
+                    ? "ES_COMPLAINT_ESCALATED_LEVEL4_HEADER"
                     : "ES_COMPLAINT_REASSIGNED_HEADER"
                 }`}
               />
@@ -494,7 +509,7 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                   />
                 </div>
               )}
-              {isReopenValid && (
+              {isReopenValid && escl4Exists && escl4Exists.length < 1 &&  (
                 <div
                   className="complaint-details-timline-button"
                   onClick={(e) => {
@@ -580,6 +595,10 @@ class ComplaintTimeLine extends Component {
     if (timeLine && timeLine.length === 1 && timeLine[0].status === "open") {
       timeLine = [{ status: "pending" }, ...timeLine];
     }
+    let escl4Exists = timeLine.filter((item) => {
+      return item.status == "escalatedlevel4pending";
+    })
+
     let steps = timeLine.map((step, key) => {
       return {
         props: {
@@ -605,6 +624,7 @@ class ComplaintTimeLine extends Component {
             filedBy={filedBy}
             filedUserMobileNumber={filedUserMobileNumber}
             reopenValidChecker={reopenValidChecker}
+            escl4Exists={escl4Exists && escl4Exists}
           />
         ),
       };

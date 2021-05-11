@@ -14,6 +14,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import "./index.css";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { get } from "lodash";
 
 const styles = theme => ({
   root: {
@@ -199,6 +200,8 @@ class ActionDialog extends React.Component {
   };
 
   assementForward = (buttonLabel, isDocRequired) => {
+    let {dataPath, state} = this.props;
+    const data = get(state.screenConfiguration.preparedFinalObject, dataPath)
     pt_assessment_payment_config = pt_assessment_payment_config.map((payment) => ({
       ...payment,
       isError: payment.required

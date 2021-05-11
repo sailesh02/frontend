@@ -352,7 +352,7 @@ class ActionDialog extends React.Component {
                       />
                     </Grid>
                   )}
-                  {!!assessmentCheck && pt_assessment_payment_config.map(payment => (
+                  {!!assessmentCheck && pt_assessment_payment_config.map((payment, ind) => (
                     <Grid payment sm="12">
                     <TextFieldContainer
                     InputLabelProps={{ shrink: true }}

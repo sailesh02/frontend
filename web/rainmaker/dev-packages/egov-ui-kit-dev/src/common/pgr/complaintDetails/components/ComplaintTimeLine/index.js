@@ -584,6 +584,35 @@ const DueDate = ({ duedateText }) => {
   );
 };
 
+const EsclateDueToSlaExpired = ({changeRoute, applicationNo}) => {
+  return (
+    <div
+                  className="complaint-details-timline-button"
+                  style={{position:"absolute", right: "0px"}}
+                  onClick={(e) => {
+                     changeRoute.push(`/reopen-complaint/${encodeURIComponent(applicationNo)}`);
+                  }}
+                >
+                  <Label
+                    label="CS_COMPLAINT_DETAILS_ESCLATE"
+                    fontSize="12px"
+                    labelStyle={timelineButtonLabelStyle}
+                    containerStyle={timelineButtonContainerStyle}
+                  />
+                </div>
+
+
+  );
+};
+
+
+const dateDiffInDays = (a, b) => {
+  var millsPerDay = 1000 * 60 * 60 * 24;
+  var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+  var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+  return Math.floor((utc2 - utc1) / millsPerDay);
+};
+
 class ComplaintTimeLine extends Component {
   render() {
     openStatusCount = 0;
@@ -591,13 +620,55 @@ class ComplaintTimeLine extends Component {
     resolveStatusCount = 0;
     assigneeStatusCount = 0;
     reassignRequestedCount = 0;
-    let { status, history, role, timeLine, feedback, rating, filedBy, filedUserMobileNumber, timelineSLAStatus, reopenValidChecker } = this.props;
+    let { status, history, role, timeLine, feedback, rating, filedBy, filedUserMobileNumber, timelineSLAStatus, reopenValidChecker, slaEndTime, applicationNo } = this.props;
+    console.log(timeLine, "Nero Time Line")
+    const daysCount = dateDiffInDays(new Date(Date.now()), new Date(slaEndTime));
+
+    console.log(daysCount, "Nero DayScount")
     if (timeLine && timeLine.length === 1 && timeLine[0].status === "open") {
       timeLine = [{ status: "pending" }, ...timeLine];
     }
     let escl4Exists = timeLine.filter((item) => {
       return item.status == "escalatedlevel4pending";
     })
+    let escl4DaysCount = 1;
+    if(escl4Exists && escl4Exists.length > 0){
+      let esclated4Date = escl4Exists[0].when;
+       escl4DaysCount = dateDiffInDays(new Date(Date.now()), new Date(esclated4Date));
+
+    }
+    let escl3Exists = timeLine.filter((item) => {
+      return item.status == "escalatedlevel3pending";
+    })
+    let escl3DaysCount = 1;
+    if(escl3Exists && escl3Exists.length > 0){
+      let esclated3Date = escl3Exists[0].when;
+       escl3DaysCount = dateDiffInDays(new Date(Date.now()), new Date(esclated3Date));
+
+    }
+    let escl2Exists = timeLine.filter((item) => {
+      return item.status == "escalatedlevel2pending";
+    })
+    let escl2DaysCount = 1;
+    if(escl2Exists && escl2Exists.length > 0){
+      let esclated2Date = escl2Exists[0].when;
+       escl2DaysCount = dateDiffInDays(new Date(Date.now()), new Date(esclated2Date));
+
+    }
+    let escl1Exists = timeLine.filter((item) => {
+      return item.status == "escalatedlevel1pending";
+    })
+    let escl1DaysCount = 1;
+    if(escl1Exists && escl1Exists.length > 0){
+      let esclated1Date = escl1Exists[0].when;
+       escl1DaysCount = dateDiffInDays(new Date(Date.now()), new Date(esclated1Date));
+
+    }
+
+    console.log(escl1DaysCount, "Nero escl1DaysCount")
+    console.log(escl2DaysCount, "Nero escl2DaysCount")
+    console.log(escl3DaysCount, "Nero escl3DaysCount")
+    console.log(escl4DaysCount, "Nero escl4DaysCount")
 
     let steps = timeLine.map((step, key) => {
       return {
@@ -642,6 +713,19 @@ class ComplaintTimeLine extends Component {
                 <Icon action="action" name="timeline" color="#767676" />{" "}
                 <Label label="CS_COMPLAINT_DETAILS_COMPLAINT_TIMELINE" containerStyle={{ marginLeft: "13px" }} labelClassName="dark-heading" />
                 {timelineSLAStatus && role && role !== "citizen" && <DueDate duedateText={timelineSLAStatus} />}
+
+                {/* {daysCount > 0 && role && role == "citizen" && <EsclateDueToSlaExpired changeRoute={history} applicationNo={applicationNo} />} */}
+                {(()=>{
+                  if(daysCount < 1 && role && role == "citizen" && escl1Exists.length < 1){
+                  return <EsclateDueToSlaExpired changeRoute={history} applicationNo={applicationNo} />;
+                  }else if(escl1DaysCount < -2 && role && role == "citizen" && escl2Exists.length < 1){
+                    return <EsclateDueToSlaExpired changeRoute={history} applicationNo={applicationNo} />;
+                  }else if(escl2DaysCount < -2 && role && role == "citizen" && escl3Exists.length < 1){
+                    return <EsclateDueToSlaExpired changeRoute={history} applicationNo={applicationNo} />;
+                  }else if(escl3DaysCount < -2 && role && role == "citizen" && escl4Exists.length < 1){
+                    return <EsclateDueToSlaExpired changeRoute={history} applicationNo={applicationNo} />;
+                  }
+                })()}
               </div>
               <div className="complaintTimeLineContainer">
                 <TimeLine

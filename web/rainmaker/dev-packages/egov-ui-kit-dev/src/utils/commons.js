@@ -36,6 +36,10 @@ export const statusToLocalisationKeyMapping = {
   assigned: "CS_COMMON_STATUS_ASSIGNED",
   resolved: "CS_COMMON_STATUS_RESOLVED",
   reassignrequested: "CS_COMMON_STATUS_REASSIGN_REQUESTED",
+  escalatedlevel1pending: "CS_COMMON_STATUS_ESCLATEDLEVEL1PENDING",
+  escalatedlevel2pending: "CS_COMMON_STATUS_ESCLATEDLEVEL2PENDING",
+  escalatedlevel3pending: "CS_COMMON_STATUS_ESCLATEDLEVEL3PENDING",
+  escalatedlevel4pending: "CS_COMMON_STATUS_ESCLATEDLEVEL4PENDING",
 };
 
 export const displayStatus = (status) => {

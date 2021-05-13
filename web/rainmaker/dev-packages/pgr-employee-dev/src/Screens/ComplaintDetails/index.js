@@ -415,6 +415,25 @@ class ComplaintDetails extends Component {
                 ) : (
                   ""
                 )}
+
+                {(role === "ao" &&
+                  complaint.complaintStatus.toLowerCase() !== "closed" && complaint.complaintStatus.toLowerCase() == "reassign") ? (
+                  <ActionButton
+                    btnOneLabel={btnOneLabel}
+                    btnOneOnClick={() =>
+                      this.btnOneOnClick(serviceRequestId, btnOneLabel)
+                    }
+                    btnTwoLabel={btnTwoLabel}
+                    btnTwoOnClick={() =>
+                      this.btnTwoOnClick(serviceRequestId, btnTwoLabel)
+                    }
+
+
+                    groResolveButton={false}
+                  />
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           )}

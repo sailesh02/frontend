@@ -23,7 +23,7 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
         className="location-details-card common-padding-for-new-complaint-card"
         textChildren={
           <div>
-            <Link to={`/map?${formKey}`}>
+            {/* <Link to={`/map?${formKey}`}>
               <TextFieldIcon
                 id="addComplaint-location-details"
                 iconStyle={{ marginTop: "9px" }}
@@ -32,7 +32,7 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
                 Icon={TrackIcon}
                 name="location-details"
               />
-            </Link>
+            </Link> */}
             {/* <DropDown
               className="fix-for-layout-break"
               fullWidth={true}

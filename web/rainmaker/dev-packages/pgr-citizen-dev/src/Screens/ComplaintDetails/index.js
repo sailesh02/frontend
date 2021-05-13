@@ -22,7 +22,7 @@ class ComplaintDetails extends Component {
   }
 
   render() {
-    let { complaint, timeLine } = this.props.transformedComplaint;
+    let { complaint, timeLine, slaEndTime } = this.props.transformedComplaint;
     let { history, reopenValidChecker } = this.props;
     let action;
     if (timeLine && timeLine[0]) {
@@ -41,6 +41,8 @@ class ComplaintDetails extends Component {
               rating={complaint ? complaint.rating : ""}
               role={"citizen"}
               reopenValidChecker={reopenValidChecker}
+              slaEndTime = {complaint ? complaint.slaEndTime : 0}
+              applicationNo = {complaint ? complaint.applicationNo : ""}
             />
             <Comments role={"citizen"} />
           </div>
@@ -57,6 +59,7 @@ const mapStateToProps = (state, ownProps) => {
   let selectedComplaint = complaints["byId"][decodeURIComponent(ownProps.match.params.serviceRequestId)];
   const reopenValidChecker = get(state, "common.pgrContants.RAINMAKER-PGR.UIConstants[0].REOPENSLA", 4232000000)
   if (selectedComplaint) {
+    console.log(selectedComplaint, "Nero Selected Complaint");
     let details = {
       status: selectedComplaint.status || "",
       complaint: mapCompIDToName(complaints.categoriesById, selectedComplaint.serviceCode),
@@ -69,6 +72,7 @@ const mapStateToProps = (state, ownProps) => {
       images: fetchImages(selectedComplaint.actions).filter((imageSource) => isImage(imageSource)),
       feedback: selectedComplaint.feedback,
       rating: selectedComplaint.rating,
+      slaEndTime: selectedComplaint.slaEndTime
     };
     let timeLine = [];
     timeLine = selectedComplaint && selectedComplaint.actions.filter((action) => action.status && action.status);

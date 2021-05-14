@@ -71,7 +71,6 @@ const connectorStyle = {
 };
 
 const StatusIcon = ({ status }) => {
-  console.log(status, "Nero Status complaintt")
   switch (status) {
     case "open":
     case "pending":
@@ -182,7 +181,7 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
     groMobileNumber,
     groDesignation,
   } = stepData;
-  console.log(stepData, "Nero StepData")
+
   const currDate = new Date().getTime();
   const resolvedDate = new Date(date).getTime();
   const isReopenValid = currDate - resolvedDate <= reopenValidChecker;
@@ -311,7 +310,7 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                     : "ES_COMPLAINT_REASSIGNED_HEADER"
                 }`}
               />
-              <Label labelClassName="dark-color" containerStyle={nameContainerStyle} label={`${employeeName}`} />
+              {employeeName && <Label labelClassName="dark-color" containerStyle={nameContainerStyle} label={`${employeeName}`} />}
               {employeeMobileNumber && assigneeStatusCount === 1 && (
                 <a className="pgr-call-icon" href={`tel:+91${employeeMobileNumber}`} style={{ textDecoration: "none", position: "relative" }}>
                   <Icon action="communication" name="call" style={callIconStyle} color={"#22b25f"} />
@@ -624,7 +623,7 @@ class ComplaintTimeLine extends Component {
     console.log(timeLine, "Nero Time Line")
     const daysCount = dateDiffInDays(new Date(Date.now()), new Date(slaEndTime));
 
-    console.log(daysCount, "Nero DayScount")
+
     if (timeLine && timeLine.length === 1 && timeLine[0].status === "open") {
       timeLine = [{ status: "pending" }, ...timeLine];
     }
@@ -664,11 +663,6 @@ class ComplaintTimeLine extends Component {
        escl1DaysCount = dateDiffInDays(new Date(Date.now()), new Date(esclated1Date));
 
     }
-
-    console.log(escl1DaysCount, "Nero escl1DaysCount")
-    console.log(escl2DaysCount, "Nero escl2DaysCount")
-    console.log(escl3DaysCount, "Nero escl3DaysCount")
-    console.log(escl4DaysCount, "Nero escl4DaysCount")
 
     let steps = timeLine.map((step, key) => {
       return {

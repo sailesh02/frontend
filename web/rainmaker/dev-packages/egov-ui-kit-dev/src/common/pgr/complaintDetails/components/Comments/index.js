@@ -19,6 +19,8 @@ const WriteCommentHOC = formHoc({ formKey: "comment", isCoreConfiguration: true,
 class Comments extends Component {
   render() {
     const { selectedComplaint, userImage, userId, userName, role, isAssignedToEmployee, transformedCommentList, complainant } = this.props;
+    console.log(isAssignedToEmployee, "Nero isAssignedToEmployee");
+    console.log(role, "Nero role in comments")
     const items =
       transformedCommentList &&
       transformedCommentList.map((comment, index) => {
@@ -92,7 +94,7 @@ class Comments extends Component {
                   disabled={true}
                 />
 
-                {(isAssignedToEmployee && role === "employee") || role === "citizen" || role === "ao" || role === "csr"
+                {(isAssignedToEmployee && role === "employee") || role === "citizen" || role === "ao" || role === "csr" || role === "eo"
                   ? currentstatus &&
                     currentstatus.toLowerCase() !== "closed" && <WriteCommentHOC userImage={userImage} currentstatus={currentstatus} />
                   : ""}

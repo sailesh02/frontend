@@ -303,6 +303,11 @@ class ComplaintDetails extends Component {
           btnOneLabel = "ES_REJECT_BUTTON";
           btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
         }
+      }else if (role === "eo") {
+        if (complaint.complaintStatus.toLowerCase() === "escalatedlevel1pending" || complaint.complaintStatus.toLowerCase() === "escalatedlevel2pending" || complaint.complaintStatus.toLowerCase() === "escalatedlevel3pending" || complaint.complaintStatus.toLowerCase() === "escalatedlevel4pending") {
+          btnOneLabel = "ES_REJECT_BUTTON";
+          btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
+        }
       }
     }
     if (timeLine && timeLine[0]) {
@@ -359,6 +364,26 @@ class ComplaintDetails extends Component {
                     complaint.complaintStatus.toLowerCase() === "assigned" || complaint.status.toLowerCase() === "escalatedlevel1pending" ||
                     complaint.status.toLowerCase() === "escalatedlevel2pending" || complaint.status.toLowerCase() === "escalatedlevel3pending" ||
                     complaint.status.toLowerCase() === "escalatedlevel4pending" &&
+                    complaint.complaintStatus.toLowerCase() !== "closed") ? (
+                    <ActionButton
+                      btnOneLabel={btnOneLabel}
+                      btnOneOnClick={() =>
+                        this.btnOneOnClick(serviceRequestId, btnOneLabel)
+                      }
+                      btnTwoLabel={btnTwoLabel}
+                      btnTwoOnClick={() =>
+                        this.btnTwoOnClick(serviceRequestId, btnTwoLabel)
+                      }
+                      groResolveButton={false}
+                    />
+                  ) : (
+                    ""
+                  )}
+
+                 {
+                  (role === "eo" && (complaint.status.toLowerCase() === "escalatedlevel1pending" ||
+                    complaint.status.toLowerCase() === "escalatedlevel2pending" || complaint.status.toLowerCase() === "escalatedlevel3pending" ||
+                    complaint.status.toLowerCase() === "escalatedlevel4pending") &&
                     complaint.complaintStatus.toLowerCase() !== "closed") ? (
                     <ActionButton
                       btnOneLabel={btnOneLabel}
@@ -559,6 +584,11 @@ const mapStateToProps = (state, ownProps) => {
     roleFromUserInfo(userInfo.roles, "GRO") ||
       roleFromUserInfo(userInfo.roles, "DGRO")
       ? "ao"
+      : roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER1") ||
+        roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER2") ||
+        roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER3") ||
+        roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER4")
+        ? "eo"
       : roleFromUserInfo(userInfo.roles, "CSR")
         ? "csr"
         : "employee";

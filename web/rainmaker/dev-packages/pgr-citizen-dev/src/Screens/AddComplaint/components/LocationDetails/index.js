@@ -93,7 +93,7 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
               pattern={mohalla.pattern}
               isClearable={true}
             />}
-            <TextField id="addComplaint-house-no" {...houseNo} onChange={(e, value) => handleFieldChange("houseNo", value)} name="house-no" />
+            <TextField required={true} id="addComplaint-house-no" {...houseNo} onChange={(e, value) => handleFieldChange("houseNo", value)} name="house-no" />
             <TextField
               id="addComplaint-landmark-details"
               {...landmark}

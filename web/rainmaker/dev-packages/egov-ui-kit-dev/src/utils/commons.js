@@ -533,6 +533,7 @@ export const getTenantForLatLng = async (lat, lng) => {
 };
 
 export const findLatestAssignee = (actionArray) => {
+  console.log(actionArray, "Nero ActionArray")
   for (let i = 0; i < actionArray.length; i++) {
     if (actionArray[i].status === "assigned") {
       return actionArray[i].assignee;

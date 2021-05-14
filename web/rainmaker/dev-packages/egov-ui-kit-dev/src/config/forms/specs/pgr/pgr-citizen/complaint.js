@@ -30,6 +30,7 @@ const formConfig = {
       floatingLabelText: "CS_ADDCOMPLAINT_COMPLAINT_DETAILS",
       hintText: "CS_ADDCOMPLAINT_COMPLAINT_DETAILS_PLACEHOLDER",
       errorMessage: "Landmark should be less than 300 characters",
+      required: true,
     },
     latitude: {
       id: "latitude",
@@ -101,6 +102,7 @@ const formConfig = {
       floatingLabelText: "CS_ADDCOMPLAINT_HOUSE_NO",
       hintText: "CS_ADDCOMPLAINT_HOUSE_NO_PLACEHOLDER",
       errorMessage: "PT_HOUSE_NO_ERROR_MESSAGE",
+      required: true,
     },
     landmark: {
       id: "landmark",

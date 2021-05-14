@@ -32,6 +32,7 @@ const ComplaintTypeField = ({ additionalDetails = {}, categories, handleFieldCha
               onChange={(e, value) => handleFieldChange("additionalDetails", value)}
               name="additional-details"
               multiLine={true}
+              required={true}
             />
           </div>
         }

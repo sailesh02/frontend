@@ -202,30 +202,30 @@ class FormWizard extends Component {
       this.props.updatePTForms(currentDraft.draftRecord);
 
       //Get estimate from bill in case of complete payment
-      if (isCompletePayment) {
-        const billResponse =
-          activeTab >= 3 &&
-          isCompletePayment &&
-          (await this.callGetBill(
-            propertyId,
-            assessmentId,
-            financialYearFromQuery,
-            tenantId,
-            false
-          ));
-        const estimateFromGetBill = billResponse
-          ? getEstimateFromBill(billResponse.Bill)
-          : [];
-        this.setState({
-          estimation: estimateFromGetBill,
-          totalAmountToBePaid:
-            (estimateFromGetBill &&
-              estimateFromGetBill[0] &&
-              estimateFromGetBill[0].totalAmount) ||
-            0,
-          Bill: billResponse && billResponse.Bill
-        });
-      }
+      // if (isCompletePayment) {
+      //   const billResponse =
+      //     activeTab >= 3 &&
+      //     isCompletePayment &&
+      //     (await this.callGetBill(
+      //       propertyId,
+      //       assessmentId,
+      //       financialYearFromQuery,
+      //       tenantId,
+      //       false
+      //     ));
+      //   const estimateFromGetBill = billResponse
+      //     ? getEstimateFromBill(billResponse.Bill)
+      //     : [];
+      //   this.setState({
+      //     estimation: estimateFromGetBill,
+      //     totalAmountToBePaid:
+      //       (estimateFromGetBill &&
+      //         estimateFromGetBill[0] &&
+      //         estimateFromGetBill[0].totalAmount) ||
+      //       0,
+      //     Bill: billResponse && billResponse.Bill
+      //   });
+      // }
       this.setState(
         {
           ownerInfoArr: ownerDetails,
@@ -239,26 +239,26 @@ class FormWizard extends Component {
             }
           }
         },
-        () => {
-          {
-            if (activeTab >= 4 && !isCompletePayment) {
-              this.estimate().then(estimateResponse => {
-                if (estimateResponse) {
-                  this.setState({
-                    estimation:
-                      estimateResponse && estimateResponse.Calculation,
-                    totalAmountToBePaid: get(
-                      estimateResponse,
-                      "Calculation[0].totalAmount",
-                      0
-                    )
-                  });
-                }
-              });
-            }
-            if (activeTab === 5) this.pay();
-          }
-        }
+        // () => {
+        //   {
+        //     if (activeTab >= 4 && !isCompletePayment) {
+        //       this.estimate().then(estimateResponse => {
+        //         if (estimateResponse) {
+        //           this.setState({
+        //             estimation:
+        //               estimateResponse && estimateResponse.Calculation,
+        //             totalAmountToBePaid: get(
+        //               estimateResponse,
+        //               "Calculation[0].totalAmount",
+        //               0
+        //             )
+        //           });
+        //         }
+        //       });
+        //     }
+        //     if (activeTab === 5) this.pay();
+        //   }
+        // }
       );
     } catch (e) {
       console.log(e);
@@ -549,14 +549,14 @@ class FormWizard extends Component {
               stepZero={this.renderStepperContent(0, fromReviewPage)}
               stepOne={this.renderStepperContent(1, fromReviewPage)}
               stepTwo={this.renderStepperContent(2, fromReviewPage)}
-              estimationDetails={estimation}
+              // estimationDetails={estimation}
               updateEstimate={updateEstimate}
               importantDates={importantDates}
               location={this.props.location}
               totalAmount={totalAmountToBePaid}
               isCompletePayment={isCompletePayment}
               calculationScreenData={this.state.calculationScreenData}
-              getEstimates={this.getEstimates}
+              // getEstimates={this.getEstimates}
             />
           </div>
         );

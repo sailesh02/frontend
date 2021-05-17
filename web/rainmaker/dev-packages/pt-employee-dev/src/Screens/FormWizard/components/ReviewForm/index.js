@@ -35,7 +35,7 @@ class ReviewForm extends Component {
   };
 
   componentDidMount() {
-    this.props.getEstimates();
+    // this.props.getEstimates();
   }
   handleOptionsChange = (event, value) => {
     this.setState({ valueSelected: value });
@@ -97,12 +97,12 @@ class ReviewForm extends Component {
                   fontSize="20px"
                 />
               </div>
-              {formWizardConstants[purpose].isEstimateDetails && <PropertyTaxDetailsCard
+              {/* {formWizardConstants[purpose].isEstimateDetails && <PropertyTaxDetailsCard
                 estimationDetails={estimationDetails}
                 importantDates={importantDates}
                 addRebateBox={addRebateBox}
                 openCalculationDetails={this.openCalculationDetails}
-              />}
+              />} */}
               <PropertyAddressInfo OldProperty={OldProperty} generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].isEditButton ? <EditIcon onIconClick={() => onEditButtonClick(0)} /> : null}></PropertyAddressInfo>
               <AssessmentInfo OldProperty={OldProperty} generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].isEditButton ? <EditIcon onIconClick={() => onEditButtonClick(1)} /> : null}></AssessmentInfo>
               <OwnerInfo OldProperty={OldProperty} generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].canEditOwner ? <EditIcon onIconClick={() => onEditButtonClick(2)} /> : null}></OwnerInfo>

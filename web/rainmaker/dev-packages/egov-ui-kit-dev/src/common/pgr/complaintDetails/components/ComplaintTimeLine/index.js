@@ -331,6 +331,7 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
           );
           break;
         case "employee":
+          case "eo":
           return (
             <div className="complaint-timeline-content-section">
               <Label labelClassName="rainmaker-small-font complaint-timeline-date" label={getDateFromEpoch(date)} />

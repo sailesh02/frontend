@@ -394,7 +394,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
   /* validations for Additional /Docuemnts details screen */
-  if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
+  if (activeStep === 2 && (isModifyMode() || process.env.REACT_APP_NAME !== "Citizen")) {
     if (isModifyMode()) {
       if (moveToReview(state, dispatch)) {
         await pushTheDocsUploadedToRedux(state, dispatch);
@@ -703,6 +703,7 @@ export const changeStep = (
 }
 
 export const isNextButton = (activeStep) => {
+  if(isModifyMode() && activeStep < 3) { return true; }
   if (process.env.REACT_APP_NAME === "Citizen" && activeStep < 2) { return true; }
   else if (process.env.REACT_APP_NAME !== "Citizen" && activeStep < 3) { return true; }
   else return false

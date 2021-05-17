@@ -126,8 +126,8 @@ class Footer extends React.Component {
     //if(applicationType === "MODIFY"){
     downloadMenu && downloadMenu.push(editButton);
     if (
-      businessService.includes("ws-services-calculation") ||
-      businessService.includes("sw-services-calculation")
+      (businessService.includes("ws-services-calculation") ||
+      businessService.includes("sw-services-calculation")) && process.env.REACT_APP_NAME !== "Citizen"
     ) {
       if (bill.Demands && bill.Demands.length > 0 &&isAmendmentInWorkflow) {
         downloadMenu && downloadMenu.push(BillAmendment);

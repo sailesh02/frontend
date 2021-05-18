@@ -601,6 +601,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                       owner.ownerType &&
                       generalMDMSDataById &&
                       generalMDMSDataById["OwnerType"] &&
+                      generalMDMSDataById["OwnerType"][owner.ownerType] &&
                       generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
                     "NA",
                 },

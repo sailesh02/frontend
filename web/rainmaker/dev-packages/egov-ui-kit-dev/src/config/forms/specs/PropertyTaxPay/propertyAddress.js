@@ -68,6 +68,7 @@ const formConfig = {
       errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
+      required: true,
     },
     colony: {
       id: "property-colony",
@@ -90,6 +91,7 @@ const formConfig = {
       errorMessage: "PT_PROPERTY_DETAILS_STREET_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
+      required: true,
     },
     ...mohalla,
     pincode: {
@@ -103,6 +105,7 @@ const formConfig = {
       errorMessage: "PT_PINCODE_ERROR_MESSAGE",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       pattern: "^([0-9]){6}$",
+      required: true,
     },
     oldPID: {
       id: "oldpid",

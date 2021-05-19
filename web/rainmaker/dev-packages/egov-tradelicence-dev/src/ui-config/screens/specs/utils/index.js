@@ -1126,7 +1126,7 @@ const getEstimateData = (ResponseData, isPaid, LicenseData) => {
               labelName: item.accountDescription.split("-")[0],
               labelKey: item.accountDescription.split("-")[0]
             },
-            // value: getTaxValue(item)            
+            // value: getTaxValue(item)
             value: item.amount,
             info: getToolTipInfo(
               item.accountDescription.split("-")[0],
@@ -1476,12 +1476,12 @@ export const validateFields = (
             );
           }
         });
-        
+
       }
     }
   }
   return isFormValid;
-};  
+};
 export const epochToYmdDate = et => {
   if (!et) return null;
   if (typeof et === "string") return et;
@@ -2261,6 +2261,8 @@ export const checkValueForNA = value => {
   return value ? value : "NA";
 };
 export const triggerUpdateByKey = (state, keyIndex, value, dispatch) => {
+  console.log(keyIndex, "Nero KeyIndex");
+  console.log(value, "Nero Value s")
   if(dispatch == "set"){
     set(state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.selectedValues[${keyIndex}]`, value);
   } else {
@@ -2272,6 +2274,7 @@ export const updateMdmsDropDowns = async ( state, dispatch ) => {
   if (tradeSubTypes.length > 0) {
     try {
       tradeSubTypes.forEach((tradeSubType, i) => {
+        console.log(tradeSubType, "Nero tradeSubType", i)
         // const tradeCat = tradeSubType.tradeType.split(".")[0];
         const tradeType = tradeSubType.tradeType.split(".")[0];
         let formObj = {
@@ -2281,7 +2284,7 @@ export const updateMdmsDropDowns = async ( state, dispatch ) => {
 
         // triggerUpdateByKey(state, `tradeTypeTransformed.allDropdown[${i}]`, getObjectKeys(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeCat}`, [])) , dispatch);
         triggerUpdateByKey(state, `tradeSubTypeTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeType}`, [])) , dispatch);
- 
+
         triggerUpdateByKey(state, `selectedValues[${i}]`, formObj , dispatch);
       });
     } catch (e) {
@@ -2302,7 +2305,7 @@ export const updateStructureTypes = async ( state, dispatch ) => {
     );
     try {
       dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.selectedValues[0].structureType`, structType.split(".")[0] ));
-      
+
       dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.common-masters.structureTypes.structureTypesTransformed.${structType.split(".")[0]}`, [])) ));
 
       dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType`, structType ));
@@ -2314,7 +2317,7 @@ export const updateStructureTypes = async ( state, dispatch ) => {
         );
     } catch (e) {
       console.log(e);
-    }    
+    }
   }
 }
 export const updateOwnerShipEdit = async ( state, dispatch ) => {
@@ -2341,7 +2344,7 @@ export const updateOwnerShipEdit = async ( state, dispatch ) => {
       "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
       tradeSubOwnershipCat
     );
-    
+
       dispatch(
         prepareFinalObject(
           "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",

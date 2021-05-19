@@ -15,7 +15,7 @@ class DynamicMdmsContainer extends Component {
   triggerInitilaApi = async () => {
     let { rootBlockSub, state, moduleName, masterName, filter, dispatch, callBackEdit, isDependency, dropdownFields, index = 0 } = this.props;
     const isDependencyCheck = isDependency ? get(state.screenConfiguration.preparedFinalObject, isDependency, false) : true;
-    if (isDependencyCheck) {
+   // if (isDependencyCheck) {
       let reqObj = {
         setPath: `DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`,
         setTransformPath: `DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}Transformed`,
@@ -38,7 +38,7 @@ class DynamicMdmsContainer extends Component {
           }
         });
       }
-    }
+    //}
   }
   componentWillUpdate() {
     let { state, moduleName, rootBlockSub } = this.props;
@@ -211,7 +211,7 @@ class DynamicMdmsContainer extends Component {
             }
           })
         };
-      //Populate first drop down data if not available 
+      //Populate first drop down data if not available
       if (i == 0) {
         let isCheckData = get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.${key}Transformed.allDropdown[${index}]`);
         !isCheckData && this.triggerValueByKey(null, 0);
@@ -241,7 +241,7 @@ const mapStateToProps = (state, ownprops) => {
    const moduleName1 = DynamicMdms[moduleName]||{};
    const rootBlockSub1 = moduleName1[rootBlockSub]||{};
    const key1 = rootBlockSub1[`${key}Transformed`]||{};
- 
+
    const allDropdown1 = key1['allDropdown']||[];
    return {moduleName1,rootBlockSub1,key1,allDropdown1}
  })

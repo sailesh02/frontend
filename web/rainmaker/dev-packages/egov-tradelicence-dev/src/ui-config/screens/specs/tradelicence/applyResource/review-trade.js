@@ -183,20 +183,38 @@ export const tradeReviewDetails = {
     },
     { jsonPath: "Licenses[0].tradeName" }
   ),
-  reviewFromDate: getLabelWithValue(
-    { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
+  // reviewFromDate: getLabelWithValue(
+  //   { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
+  //   {
+  //     jsonPath: "Licenses[0].validFrom",
+  //     callBack: convertEpochToDate
+  //   }
+  // ),
+  // reviewToDate: getLabelWithValue(
+  //   { labelName: "To Date", labelKey: "TL_COMMON_TO_DATE_LABEL" },
+  //   {
+  //     jsonPath: "Licenses[0].validTo",
+  //     callBack: convertEpochToDate
+  //   }
+  // ),
+  reviewCommencementDate: getLabelWithValue(
     {
-      jsonPath: "Licenses[0].validFrom",
+      labelName: "Commencement Date",
+      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
+    },
+    {
+      jsonPath: "Licenses[0].commencementDate",
       callBack: convertEpochToDate
     }
   ),
-  reviewToDate: getLabelWithValue(
-    { labelName: "To Date", labelKey: "TL_COMMON_TO_DATE_LABEL" },
+  reviewTlPeriod: getLabelWithValue(
+    { labelName: "Licence Period", labelKey: "TL_COMMON_LICENCE_PERIOD_LABEL" },
     {
-      jsonPath: "Licenses[0].validTo",
-      callBack: convertEpochToDate
+      jsonPath: "TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview",
+      callback: checkValueForNA
     }
   ),
+
   // reviewStructureType: getLabelWithValue(
   //   { labelName: "Structure Type", labelKey: "TL_STRUCTURE_TYPE" },
   //   {
@@ -220,16 +238,7 @@ export const tradeReviewDetails = {
   //     },
   //   }
   // ),
-  reviewCommencementDate: getLabelWithValue(
-    {
-      labelName: "Commencement Date",
-      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
-    },
-    {
-      jsonPath: "Licenses[0].commencementDate",
-      callBack: convertEpochToDate
-    }
-  ),
+
   reviewGSTNo: getLabelWithValue(
     {
       labelName: "GST No.",

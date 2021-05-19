@@ -135,6 +135,19 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     {},
     fetchFromReceipt
   );
+console.log(payload, "Nero payload cus")
+  if(payload && payload.Licenses.length > 0){
+
+    let licenseType = get(payload, "Licenses[0].licenseType");
+    let tlPeriod = get(payload, "Licenses[0].tradeLicenseDetail.additionalDetail.licensePeriod")
+    console.log(licenseType, "Nero licenseType")
+    if(licenseType === "PERMANENT"){
+      dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", `${tlPeriod} Years`));
+    }else{
+      dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", `${tlPeriod} Days`));
+    }
+
+   }
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
@@ -191,12 +204,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         }
       })
       applicationDocs=applicationDocs.filter(document=>document);
-      
+
       let removedDocs=get(data, "LicensesTemp[0].removedDocs",[]);
       if(removedDocs.length>0){
           removedDocs.map(removedDoc=>{
             applicationDocs=applicationDocs.filter(appDocument=>!(appDocument.documentType===removedDoc.documentType&&appDocument.fileStoreId===removedDoc.fileStoreId))
-          })             
+          })
       }
       dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments",applicationDocs));
       await setDocuments(
@@ -386,6 +399,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
+
   }
 };
 
@@ -503,7 +517,7 @@ export const beforeSubmitHook =  (Licenses=[{}]) => {
     JSON.stringify(get(state, "screenConfiguration.preparedFinalObject.LicensesTemp[0].oldOwners", {}))
   );
   Licenses&&Array.isArray(Licenses)&&Licenses.length>0&& set(Licenses[0] ,"tradeLicenseDetail.owners", checkValidOwners(get(Licenses[0], "tradeLicenseDetail.owners",[]),oldOwners));
-  
+
 return Licenses;
 
 }

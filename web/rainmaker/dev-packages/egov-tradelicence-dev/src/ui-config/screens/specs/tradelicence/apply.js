@@ -124,6 +124,8 @@ export const getMdmsData = async (action, state, dispatch) => {
     if (localities && localities.length > 0) {
       payload.MdmsRes.tenant.localities = localities;
     }
+    payload.MdmsRes.TradeLicense.TlPeriod = [{code: "1", active: true},{code: "2", active: true}, {code: "3", active: true}, {code: "4", active: true}, {code: "5", active: true}]
+
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
     let financialYearData = get(
       payload,

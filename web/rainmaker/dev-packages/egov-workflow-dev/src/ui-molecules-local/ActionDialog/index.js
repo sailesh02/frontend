@@ -56,7 +56,7 @@ const fieldConfig = {
   }
 };
 
-let pt_assessment_payment_config = [
+let pt_payment_config = [
   {
     label: {
       labelName: "Assessment Fee",
@@ -69,7 +69,8 @@ let pt_assessment_payment_config = [
     path: "assessmentAmount",
     errorMessage: "PT_ERR_ASSESSMENT_CHARGES",
     showError: false,
-    required: true
+    required: false,
+    filter: "PT.ASSESSMENT"
   },
   {
     label: {
@@ -83,7 +84,8 @@ let pt_assessment_payment_config = [
     path: "usageExemptionAmount",
     errorMessage: "PT_ERR_USAGE_EXEMPTION_AMOUNT",
     showError: false,
-    required: true
+    required: false,
+    filter: "PT.ASSESSMENT"
   },
   {
     label: {
@@ -97,7 +99,8 @@ let pt_assessment_payment_config = [
     path: "ownerExemptionAmount",
     errorMessage: "PT_ERR_OWNER_EXEMPTION_AMOUNT",
     showError: false,
-    required: true
+    required: false,
+    filter: "PT.ASSESSMENT"
   },
   {
     label: {
@@ -111,7 +114,8 @@ let pt_assessment_payment_config = [
     path: "fireCessAmount",
     errorMessage: "PT_ERR_FIRE_CESS_AMOUNT",
     showError: false,
-    required: true
+    required: false,
+    filter: "PT.ASSESSMENT"
   },
   {
     label: {
@@ -125,7 +129,8 @@ let pt_assessment_payment_config = [
     path: "cancerCessAmount",
     errorMessage: "PT_ERR_CANCER_CESS_AMOUNT",
     showError: false,
-    required: true
+    required: false,
+    filter: "PT.ASSESSMENT"
   },
   {
     label: {
@@ -139,7 +144,8 @@ let pt_assessment_payment_config = [
     path: "adhocPenaltyAmount",
     errorMessage: "PT_ERR_ADHOC_PENALTY_AMOUNT",
     showError: false,
-    required: true
+    required: false,
+    filter: "PT.ASSESSMENT"
   },
   {
     label: {
@@ -153,7 +159,188 @@ let pt_assessment_payment_config = [
     path: "adhocRebateAmount",
     errorMessage: "PT_ERR_ADHOC_REBATE_AMOUNT",
     showError: false,
-    required: true
+    required: false,
+    filter: "PT.ASSESSMENT"
+  },
+  {
+    label: {
+      labelName: "Holding Tax",
+      labelKey: "PT_HOLDING_TAX"
+    },
+    placeholder: {
+      labelName: "Enter Holding Tax",
+      labelKey: "PT_HOLDING_TAX_PLACEHOLDER"
+    },
+    path: "holdingTax",
+    errorMessage: "PT_ERR_HOLDING_TAX",
+    showError: false,
+    required: false,
+    filter: "PT.CREATE"
+  },
+  {
+    label: {
+      labelName: "Light Tax",
+      labelKey: "PT_LIGHT_TAX"
+    },
+    placeholder: {
+      labelName: "Enter Light Tax",
+      labelKey: "PT_LIGHT_TAX_PLACEHOLDER"
+    },
+    path: "lightTax",
+    errorMessage: "PT_ERR_LIGHT_TAX",
+    showError: false,
+    required: false,
+    filter: "PT.CREATE"
+  },
+  {
+    label: {
+      labelName: "Water Tax",
+      labelKey: "PT_WATER_TAX"
+    },
+    placeholder: {
+      labelName: "Enter Water Tax",
+      labelKey: "PT_WATER_TAX_PLACEHOLDER"
+    },
+    path: "waterTax",
+    errorMessage: "PT_ERR_WATER_TAX",
+    showError: false,
+    required: false,
+    filter: "PT.CREATE"
+  },
+  {
+    label: {
+      labelName: "Drainage Tax",
+      labelKey: "PT_DRAINAGE_TAX"
+    },
+    placeholder: {
+      labelName: "Enter Drainage Tax",
+      labelKey: "PT_DRAINAGE_TAX_PLACEHOLDER"
+    },
+    path: "drainageTax",
+    errorMessage: "PT_ERR_DRINAGE_TAX",
+    showError: false,
+    required: false,
+    filter: "PT.CREATE"
+  },
+  {
+    label: {
+      labelName: "Latrine Tax",
+      labelKey: "PT_LATRINE_TAX"
+    },
+    placeholder: {
+      labelName: "Enter Latrine Tax",
+      labelKey: "PT_LATRINE_TAX_PLACEHOLDER"
+    },
+    path: "latrineTax",
+    errorMessage: "PT_ERR_LATRINE_TAX",
+    showError: false,
+    required: false,
+    filter: "PT.CREATE"
+  },
+  {
+    label: {
+      labelName: "Parking Tax",
+      labelKey: "PT_PARKING_TAX"
+    },
+    placeholder: {
+      labelName: "Enter Parking Tax",
+      labelKey: "PT_PARKING_TAX_PLACEHOLDER"
+    },
+    path: "parkingTax",
+    errorMessage: "PT_ERR_PARKING_TAX",
+    showError: false,
+    required: false,
+    filter: "PT.CREATE"
+  },
+  {
+    label: {
+      labelName: "Solid Waste User Charges",
+      labelKey: "PT_SOLID_WASTER_USER_CHARGES"
+    },
+    placeholder: {
+      labelName: "Enter Solid Waste User Charges",
+      labelKey: "PT_SOLID_WASTER_USER_CHARGES_PLACEHOLDER"
+    },
+    path: "solidWasteUserCharges",
+    errorMessage: "PT_ERR_SOLID_WASTER_USER_CHARGES",
+    showError: false,
+    required: false,
+    filter: "PT.CREATE"
+  },
+  {
+    label: {
+      labelName: "Ownership Exemption",
+      labelKey: "PT_OWNERSHIP_EXEMPTION"
+    },
+    placeholder: {
+      labelName: "Enter Ownership Exemption",
+      labelKey: "PT_OWNERSHIP_EXEMPTION_PLACEHOLDER"
+    },
+    path: "ownershipExemption",
+    errorMessage: "PT_ERR_OWNERSHIP_EXEMPTION",
+    showError: false,
+    required: false,
+    filter: "PT.CREATE"
+  },
+  {
+    label: {
+      labelName: "Usage Exemption",
+      labelKey: "PT_USAGE_EXEMPTION"
+    },
+    placeholder: {
+      labelName: "Enter Usage Exemption",
+      labelKey: "PT_USAGE_EXEMPTION_PLACEHOLDER"
+    },
+    path: "usageExemption",
+    errorMessage: "PT_ERR_USAGE_EXEMPTION",
+    showError: false,
+    required: false,
+    filter: "PT.CREATE"
+  },
+  {
+    label: {
+      labelName: "Interest",
+      labelKey: "PT_INTEREST"
+    },
+    placeholder: {
+      labelName: "Enter Interest",
+      labelKey: "PT_INTEREST_PLACEHOLDER"
+    },
+    path: "interest",
+    errorMessage: "PT_ERR_INTEREST",
+    showError: false,
+    required: false,
+    filter: "PT.CREATE"
+  },
+  {
+    label: {
+      labelName: "Penalty",
+      labelKey: "PT_PENALTY"
+    },
+    placeholder: {
+      labelName: "Enter Interest",
+      labelKey: "PT_PENALTY_PLACEHOLDER"
+    },
+    path: "penalty",
+    errorMessage: "PT_ERR_PENALTY",
+    showError: false,
+    required: false,
+    filter: "PT.CREATE"
+  },
+  {
+    label: {
+      labelName: "Mutation Charge",
+      labelKey: "PT_MUTATION_CHARGE"
+    },
+    placeholder: {
+      labelName: "Enter Mutation Charge",
+      labelKey: "PT_MUTATION_CHARGE_PLACEHOLDER"
+    },
+    path: "mutationCharge",
+    errorMessage: "PT_ERR_MUTATION_CHARGE",
+    showError: false,
+    required: false,
+    filter: "PT.MUTATION"
   }
 ]
 
@@ -200,17 +387,24 @@ class ActionDialog extends React.Component {
   };
 
   assementForward = (buttonLabel, isDocRequired) => {
-    let {dataPath, state} = this.props;
-    const data = get(state.screenConfiguration.preparedFinalObject, dataPath)
-    pt_assessment_payment_config = pt_assessment_payment_config.map((payment) => ({
+    let {dataPath, state, dialogData} = this.props;
+    const {moduleName} = dialogData
+    let data = get(state.screenConfiguration.preparedFinalObject, dataPath)
+    pt_payment_config = pt_payment_config.map((payment) => {
+      if(!data[payment.path]) {
+        data[payment.path] = "0"
+      }
+      return {
       ...payment,
-      isError: payment.required
+      isError: payment.filter === moduleName ? payment.required
         ? !data[payment.path]
         : !!data[payment.path]
         ? isNaN(data[payment.path])
-        : false,
-    }));
-    const isError = pt_assessment_payment_config.some(payment => !!payment.isError)
+        : false : false
+      }
+    });
+    handleFieldChange(dataPath, data);
+    const isError = pt_payment_config.some(payment => !!payment.isError)
     if(isError) {
       this.setState({
         paymentErr: true
@@ -274,12 +468,13 @@ class ActionDialog extends React.Component {
     const rolearray =
         getUserInfo() &&
         JSON.parse(getUserInfo()).roles.filter(item => {
-          if (item.code == "PT_APPROVER")
+          if (item.code == "PT_FIELD_INSPECTOR")
             return true;
         });
     
     const rolecheck = rolearray.length > 0 ? true : false;
-    const assessmentCheck = dataPath === "Assessment" && !!rolecheck && buttonLabel === "APPROVE"
+    const showPaymentCheck = (this.props.dataPath === "Assessment" || this.props.dataPath === "Property") && !!rolecheck && buttonLabel === "FORWARD"
+    // const paymentFields = pt_payment_config.filter(item => item.filter === moduleName)
     return (
       <Dialog
         fullScreen={fullscreen}
@@ -324,7 +519,7 @@ class ActionDialog extends React.Component {
                   >
                     <CloseIcon />
                   </Grid>
-                  {showEmployeeList && showAssignee && !assessmentCheck &&  (
+                  {showEmployeeList && showAssignee &&  (
                     <Grid
                       item
                       sm="12"
@@ -352,40 +547,24 @@ class ActionDialog extends React.Component {
                       />
                     </Grid>
                   )}
-                  {!!assessmentCheck && pt_assessment_payment_config.map((payment, ind) => (
+                  {!!showPaymentCheck && pt_payment_config.map((payment, ind) => {
+                    return payment.filter === moduleName ? (
                     <Grid payment sm="12">
                     <TextFieldContainer
                     InputLabelProps={{ shrink: true }}
                     label= {payment.label}
                     onChange={e =>{
-                      handleFieldChange(`${dataPath}.${payment.path}`, e.target.value)
-                      pt_assessment_payment_config[ind].isError = false
+                      handleFieldChange(`${this.props.dataPath}.additionalDetails.${payment.path}`, e.target.value)
+                      pt_payment_config[ind].isError = false
                     }}
                     required = {true}
-                    jsonPath={`${dataPath}.${payment.path}`}
+                    jsonPath={`${this.props.dataPath}.additionalDetails.${payment.path}`}
                     placeholder={payment.placeholder}
                     inputProps={{ maxLength: 120 }}
                     /> 
                     {!!payment.isError && (<span style={{color: "red"}}>{getLocaleLabels(payment.errorMessage, payment.errorMessage)}</span>)}
                     </Grid>
-                  ))}
-                  {/* { !!assessmentCheck && (<Grid sm="12">
-                    <TextFieldContainer
-                    InputLabelProps={{ shrink: true }}
-                    label= {fieldConfig.assessmentFee.label}
-                    onChange={e =>
-                      {
-                        handleFieldChange(`${dataPath}.assessmentAmount`, e.target.value)
-                        // eb_payment_config[ind].isError = false
-                      }
-                    }
-                    required = {true}
-                    jsonPath={`${dataPath}.assessmentAmount`}
-                    placeholder={fieldConfig.assessmentFee.placeholder}
-                    inputProps={{ maxLength: 120 }}
-                    /> 
-                    {!!payment.isError && (<span style={{color: "red"}}>{getLocaleLabels(payment.errorMessage, payment.errorMessage)}</span>)}
-                    </Grid>)} */}
+                  ) : null})}
                   <Grid item sm="12">
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
@@ -452,7 +631,7 @@ class ActionDialog extends React.Component {
                           height: "48px"
                         }}
                         className="bottom-button"
-                        onClick={!!assessmentCheck ? () => this.assementForward(buttonLabel, isDocRequired) : () =>
+                        onClick={!!showPaymentCheck ? () => this.assementForward(buttonLabel, isDocRequired) : () =>
                           onButtonClick(buttonLabel, isDocRequired)
                         }
                       >

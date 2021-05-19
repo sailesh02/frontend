@@ -546,7 +546,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       createOwnersBackup(dispatch, searchResponse);
       dispatch(prepareFinalObject("Licenses[0].TlPeriod", TlPeriod));
     } else {
-      
+
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
       // let owners = get(queryObject[0], "tradeLicenseDetail.owners");

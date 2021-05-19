@@ -218,7 +218,7 @@ export const callBackForNext = async (state, dispatch) => {
       get(
         state.screenConfiguration.preparedFinalObject,
         "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
-      ) === "INDIVIDUAL.MULTIPLEOWNERS" 
+      ) === "INDIVIDUAL.MULTIPLEOWNERS"
       &&
       get(
         state.screenConfiguration.preparedFinalObject,
@@ -835,6 +835,7 @@ export const footerReviewTop = (
   tenantId,
   financialYear
 ) => {
+  console.log(status, "Nero Status in FooterRiew")
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
@@ -863,6 +864,25 @@ export const footerReviewTop = (
     },
     leftIcon: "book"
   };
+
+  let tlPLDownloadObject = {
+    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
+    link: () => {
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses);
+    },
+    leftIcon: "book"
+  };
+  let tlPLPrintObject = {
+    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
+    link: () => {
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses, 'print');
+    },
+    leftIcon: "book"
+  };
+
+
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
@@ -871,7 +891,7 @@ export const footerReviewTop = (
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "businessService", value:'TL' }    
+        { key: "businessService", value:'TL' }
       ]
       download(receiptQueryString, "download", receiptKey, state);
       // generateReceipt(state, dispatch, "receipt_download");
@@ -884,7 +904,7 @@ export const footerReviewTop = (
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "businessService", value:'TL' }   
+        { key: "businessService", value:'TL' }
       ]
       download(receiptQueryString, "print", receiptKey, state);
       // generateReceipt(state, dispatch, "receipt_print");
@@ -913,6 +933,42 @@ export const footerReviewTop = (
     leftIcon: "assignment"
   };
 
+  // switch (status) {
+  //   case "APPROVED":
+  //     downloadMenu = [
+  //       tlCertificateDownloadObject,
+  //       receiptDownloadObject,
+  //       applicationDownloadObject
+  //     ];
+  //     printMenu = [
+  //       tlCertificatePrintObject,
+  //       receiptPrintObject,
+  //       applicationPrintObject
+  //     ];
+  //     break;
+  //   case "APPLIED":
+  //   case "CITIZENACTIONREQUIRED":
+  //   case "FIELDINSPECTION":
+  //   case "PENDINGAPPROVAL":
+  //   case "PENDINGPAYMENT":
+  //     downloadMenu = [applicationDownloadObject];
+  //     printMenu = [applicationPrintObject];
+  //     break;
+  //   case "pending_approval":
+  //     downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+  //     printMenu = [receiptPrintObject, applicationPrintObject];
+  //     break;
+  //   case "CANCELLED":
+  //     downloadMenu = [applicationDownloadObject];
+  //     printMenu = [applicationPrintObject];
+  //     break;
+  //   case "REJECTED":
+  //     downloadMenu = [applicationDownloadObject];
+  //     printMenu = [applicationPrintObject];
+  //     break;
+  //   default:
+  //     break;
+  // }
   switch (status) {
     case "APPROVED":
       downloadMenu = [
@@ -926,17 +982,24 @@ export const footerReviewTop = (
         applicationPrintObject
       ];
       break;
-    case "APPLIED":
-    case "CITIZENACTIONREQUIRED":
-    case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
+    case "FIELDINSPECTION":
+    case "DOCVERIFICATION":
+      downloadMenu = [
+        tlPLDownloadObject,
+        receiptDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        tlPLPrintObject,
+        receiptPrintObject,
+        applicationPrintObject
+      ];
+      break;
+    case "APPLIED":
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
-      break;
-    case "pending_approval":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
       break;
     case "CANCELLED":
       downloadMenu = [applicationDownloadObject];
@@ -1012,6 +1075,7 @@ export const downloadPrintContainer = (
   applicationNumber,
   tenantId
 ) => {
+  console.log(status, "Nero Satus in Employee")
   /** MenuButton data based on status */
   const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
   const receiptKey = get(uiCommonConfig, "receiptKey");
@@ -1033,13 +1097,33 @@ export const downloadPrintContainer = (
     },
     leftIcon: "book"
   };
+
+
+  let tlPLDownloadObject = {
+    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
+    link: () => {
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses);
+    },
+    leftIcon: "book"
+  };
+  let tlPLPrintObject = {
+    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
+    link: () => {
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses, 'print');
+    },
+    leftIcon: "book"
+  };
+
+
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "businessService", value:'TL' }   
+        { key: "businessService", value:'TL' }
       ]
       download(receiptQueryString, "download", receiptKey);
     },
@@ -1051,7 +1135,7 @@ export const downloadPrintContainer = (
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "businessService", value:'TL' }   
+        { key: "businessService", value:'TL' }
       ]
       download(receiptQueryString, "print", receiptKey);
     },
@@ -1079,6 +1163,38 @@ export const downloadPrintContainer = (
     },
     leftIcon: "assignment"
   };
+  // switch (status) {
+  //   case "APPROVED":
+  //     downloadMenu = [
+  //       tlCertificateDownloadObject,
+  //       receiptDownloadObject,
+  //       applicationDownloadObject
+  //     ];
+  //     printMenu = [
+  //       tlCertificatePrintObject,
+  //       receiptPrintObject,
+  //       applicationPrintObject
+  //     ];
+  //     break;
+  //   case "APPLIED":
+  //   case "CITIZENACTIONREQUIRED":
+  //   case "FIELDINSPECTION":
+  //   case "PENDINGAPPROVAL":
+  //   case "PENDINGPAYMENT":
+  //     downloadMenu = [applicationDownloadObject];
+  //     printMenu = [applicationPrintObject];
+  //     break;
+  //   case "CANCELLED":
+  //     downloadMenu = [applicationDownloadObject];
+  //     printMenu = [applicationPrintObject];
+  //     break;
+  //   case "REJECTED":
+  //     downloadMenu = [applicationDownloadObject];
+  //     printMenu = [applicationPrintObject];
+  //     break;
+  //   default:
+  //     break;
+  // }
   switch (status) {
     case "APPROVED":
       downloadMenu = [
@@ -1092,10 +1208,21 @@ export const downloadPrintContainer = (
         applicationPrintObject
       ];
       break;
-    case "APPLIED":
-    case "CITIZENACTIONREQUIRED":
-    case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
+    case "FIELDINSPECTION":
+    case "DOCVERIFICATION":
+      downloadMenu = [
+        tlPLDownloadObject,
+        receiptDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        tlPLPrintObject,
+        receiptPrintObject,
+        applicationPrintObject
+      ];
+      break;
+    case "APPLIED":
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];

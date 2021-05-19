@@ -358,7 +358,7 @@ class OwnerInfo extends Component {
 
 
   render() {
-    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue, mdmsMutationDocuments, OldProperty } = this.props;
+    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue, mdmsMutationDocuments, OldProperty, showTransferOwner } = this.props;
     let ownerInfo = [];
     let multipleOwner = false;
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
@@ -396,7 +396,7 @@ class OwnerInfo extends Component {
                   </div>
                   {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>}
                   {/* Transfer ownership button and View History button */}
-                  {(viewHistory || ownershipTransfer) && (
+                  {(viewHistory || ownershipTransfer) && showTransferOwner && (
                     <div id="pt-header-button-container" className="header-button-container">
                       <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} />
                       <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />

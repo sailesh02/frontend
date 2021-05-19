@@ -179,7 +179,8 @@ const AssessmentList = ({properties,
   generalMDMSDataById,
   totalBillAmountDue,
   documentsUploaded,
-  toggleSnackbarAndSetText
+  toggleSnackbarAndSetText,
+  showTransferOwner
 }) => {
   return items.length == 0 ? (
     <BlankAssessment
@@ -212,6 +213,7 @@ const AssessmentList = ({properties,
         totalBillAmountDue={totalBillAmountDue}
         documentsUploaded={documentsUploaded}
         toggleSnackbarAndSetText={toggleSnackbarAndSetText}
+        showTransferOwner={showTransferOwner}
       />)
 
 

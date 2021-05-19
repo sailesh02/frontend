@@ -149,6 +149,7 @@ class PTInformation extends React.Component {
                   ownershipTransfer={true}
                   viewHistory={true}
                   propertiesAudit={propertiesAudit}
+                  showTransferOwner={showTransferOwner}
                 ></OwnerInfo>
                 <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                 <div id="property-assess-form">

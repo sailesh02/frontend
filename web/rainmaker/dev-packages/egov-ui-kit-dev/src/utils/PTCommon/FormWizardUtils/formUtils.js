@@ -270,6 +270,16 @@ export const formWizardConstants = {
     isEditButton: true,
     canEditOwner: true,
     isEstimateDetails: false
+  },
+  [PROPERTY_FORM_PURPOSE.LINK]: {
+    header: 'PT_LINK_PROPERTY',
+    parentButton: 'PT_LINK',
+    isSubHeader: true,
+    isFinancialYear: true,
+    buttonLabel: 'PT_LINK_PROPERTY_BUTTON',
+    isEditButton: false,
+    canEditOwner: false,
+    isEstimateDetails: false
   }
 }
 

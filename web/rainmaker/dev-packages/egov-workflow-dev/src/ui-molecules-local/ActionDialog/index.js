@@ -403,7 +403,7 @@ class ActionDialog extends React.Component {
         : false : false
       }
     });
-    handleFieldChange(dataPath, data);
+    this.props.handleFieldChange(dataPath, data);
     const isError = pt_payment_config.some(payment => !!payment.isError)
     if(isError) {
       this.setState({
@@ -423,7 +423,8 @@ class ActionDialog extends React.Component {
       handleFieldChange,
       onButtonClick,
       dialogData,
-      dataPath
+      dataPath,
+      state
     } = this.props;
     const {
       buttonLabel,
@@ -551,6 +552,7 @@ class ActionDialog extends React.Component {
                     return payment.filter === moduleName ? (
                     <Grid payment sm="12">
                     <TextFieldContainer
+                    defaultValue={0}
                     InputLabelProps={{ shrink: true }}
                     label= {payment.label}
                     onChange={e =>{

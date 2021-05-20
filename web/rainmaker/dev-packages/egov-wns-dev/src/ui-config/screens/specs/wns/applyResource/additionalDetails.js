@@ -153,14 +153,16 @@ export const additionDetails = getCommonCard({
           jsonPath: "applyScreen.connectionType"
         }),
         afterFieldChange: async (action, state, dispatch) => {
-          let connType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
-          console.log('connType');
-          console.log(connType);
-          if (connType === undefined || connType === "Non Metered" || connType === "Bulk-supply" || connType !== "Metered") {
-            showHideFeilds(dispatch, false);
-          }
-          else {
-            showHideFeilds(dispatch, true);
+          if(process.env.REACT_APP_NAME !== "Citizen") {
+            let connType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
+            console.log('connType');
+            console.log(connType);
+            if (connType === undefined || connType === "Non Metered" || connType === "Bulk-supply" || connType !== "Metered") {
+              showHideFeilds(dispatch, false);
+            }
+            else {
+              showHideFeilds(dispatch, true);
+            }
           }
         }
       },
@@ -336,7 +338,8 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("Date"),
         errorMessage: "ERR_INVALID_DATE",
-        jsonPath: "applyScreen.connectionExecutionDate"
+        jsonPath: "applyScreen.connectionExecutionDate",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
       }),
       meterID: getTextField({
         label: {
@@ -352,7 +355,8 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: /^[a-z0-9]+$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.meterId"
+        jsonPath: "applyScreen.meterId",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
       }),
       meterInstallationDate: getDateField({
         label: { labelName: "meterInstallationDate", labelKey: "WS_ADDN_DETAIL_METER_INSTALL_DATE" },
@@ -367,7 +371,8 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("Date"),
         errorMessage: "ERR_INVALID_DATE",
-        jsonPath: "applyScreen.meterInstallationDate"
+        jsonPath: "applyScreen.meterInstallationDate",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
       }),
       initialMeterReading: getTextField({
         label: {
@@ -383,7 +388,8 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.additionalDetails.initialMeterReading"
+        jsonPath: "applyScreen.additionalDetails.initialMeterReading",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
       })
     })
   }),
@@ -403,6 +409,7 @@ export const additionDetails = getCommonCard({
         errorMessage: "ERR_INVALID_DATE",
         jsonPath: "applyScreen.dateEffectiveFrom",
         props: {
+          disabled: process.env.REACT_APP_NAME === "Citizen",
           inputProps: {
             min: getTodaysDateInYMD()
           }

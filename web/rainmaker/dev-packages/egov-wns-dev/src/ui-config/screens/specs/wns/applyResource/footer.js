@@ -647,11 +647,11 @@ export const changeStep = (
         null
       );
       if (isDocsUploaded) {
-        activeStep = process.env.REACT_APP_NAME === "Citizen" ? 3 : 2;
+        activeStep = process.env.REACT_APP_NAME === "Citizen" && !isModifyMode() ? 3 : 2;
       } else if (isModifyMode()) {
         activeStep = 2;
       }
-    } else if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 3) {
+    } else if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 3 && !isModifyMode()) {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 2;
     } else {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
@@ -698,7 +698,7 @@ export const changeStep = (
     }
   ];
   dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
-  if (process.env.REACT_APP_NAME === "Citizen") { renderStepsCitizen(activeStep, dispatch); }
+  if (process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) { renderStepsCitizen(activeStep, dispatch); }
   else { renderSteps(activeStep, dispatch); }
 }
 
@@ -795,7 +795,7 @@ export const renderStepsCitizen = (activeStep, dispatch) => {
 
 export const getActionDefinationForStepper = path => {
   let actionDefination = [];
-  if (process.env.REACT_APP_NAME === "Citizen") {
+  if (process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) {
     actionDefination = [
       {
         path: "components.div.children.formwizardFirstStep",

@@ -135,7 +135,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     {},
     fetchFromReceipt
   );
-console.log(payload, "Nero payload cus")
+
   if(payload && payload.Licenses.length > 0){
 
     let licenseType = get(payload, "Licenses[0].licenseType");

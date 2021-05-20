@@ -119,7 +119,7 @@ class Property extends Component {
   linkProperty = async () => {
     let userInfo = JSON.parse(getUserInfo());
     let Property = this.props.selPropertyDetails
-    Property = {...Property, creationReason: "LINK", owners: [{...owners[0], mobileNumber: userInfo.mobileNumber ? userInfo.mobileNumber : userInfo.userName}]}
+    Property = {...Property, creationReason: "LINK", owners: [{...Property.owners[0], mobileNumber: userInfo.mobileNumber ? userInfo.mobileNumber : userInfo.userName}]}
     try {
       const propertyResponse = await httpRequest(
         `property-services/property/_update`,

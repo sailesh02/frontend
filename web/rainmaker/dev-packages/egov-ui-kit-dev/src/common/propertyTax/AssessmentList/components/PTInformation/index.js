@@ -80,7 +80,8 @@ class PTInformation extends React.Component {
       documentsUploaded,
       toggleSnackbarAndSetText,
       cities,
-      propertiesAudit
+      propertiesAudit,
+      showTransferOwner
     } = this.props;
     const { businessServiceInfoItem } = this.state;
     let logoUrl = "";

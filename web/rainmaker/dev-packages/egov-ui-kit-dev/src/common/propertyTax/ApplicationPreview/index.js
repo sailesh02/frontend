@@ -21,8 +21,9 @@ import DocumentsInfo from "../Property/components/DocumentsInfo";
 import OwnerInfo from "../Property/components/OwnerInfo";
 import PdfHeader from "../Property/components/PdfHeader";
 import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
+import AdditionalInformation from '../Property/components/AdditionalInformation'
 import "./index.css";
-
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const innerDivStyle = {
   padding: "0",
@@ -342,6 +343,14 @@ class ApplicationPreview extends Component {
     let logoUrl = "";
     let corpCity = "";
     let ulbGrade = "";
+    let userInfo = JSON.parse(getUserInfo());
+    const roleCodes =
+        userInfo && userInfo.roles
+          ? userInfo.roles.map((role) => {
+            return role.code;
+          })
+          : [];
+    const isApprover = roleCodes.includes("PT_APPROVER")
     if (get(properties, "tenantId")) {
       let tenantid = get(properties, "tenantId");
       // logoUrl = get(properties, "tenantId") ? this.getLogoUrl(get(properties, "tenantId")) : "";
@@ -371,6 +380,11 @@ class ApplicationPreview extends Component {
                     }}>
                   </PdfHeader>
                   <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
+                  {!!isApprover && !!properties.additionalDetails && (
+                    <AdditionalInformation 
+                    additionalInformation={properties.additionalDetails}
+                    />
+                  )}
                   <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></AssessmentInfo>
                   <OwnerInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></OwnerInfo>
                   <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>

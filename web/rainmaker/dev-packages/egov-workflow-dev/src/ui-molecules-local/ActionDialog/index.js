@@ -582,7 +582,7 @@ class ActionDialog extends React.Component {
                   <TextFieldContainer
                     value={pt_payment_config.reduce((prev, curr) => {
                       const val = Number(get(this.props.state, `screenConfiguration.preparedFinalObject.${this.props.dataPath}.additionalDetails.${curr.path}`) || 0)
-                      prev = payment.filter === moduleName ? prev + (curr.subtract ? -val : val): prev
+                      prev = curr.filter === moduleName ? prev + (curr.subtract ? -val : val): prev
                       return prev
                     }, 0)
                     }

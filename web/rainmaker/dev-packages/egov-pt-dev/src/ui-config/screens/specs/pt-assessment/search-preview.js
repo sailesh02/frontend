@@ -12,8 +12,109 @@ import { downloadCertificateForm, downloadReceitForm, getpayments, prepareDocume
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { documentsSummary } from "../pt-mutation/summaryResource/documentsSummary";
 import { propertySummary } from "../pt-mutation/summaryResource/propertySummary";
-import { getCommonGrayCard, getCommonSubHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { transferorSummaryDetails } from "../pt-mutation/searchPreviewResource/transferorSummary";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import {
+  getCommonContainer,
+  getCommonGrayCard,
+  getCommonSubHeader,
+  getLabelWithValue
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+const demandSummary = getCommonGrayCard({
+  header: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: { marginBottom: "10px" }
+    },
+    children: {
+      header: {
+        gridDefination: {
+          xs: 8
+        },
+        ...getCommonSubHeader({
+          labelName: "Additional Details",
+          labelKey: "PT_ASSESSMENT_ADDITIONAL_DETAILS"
+        })
+      }
+    }
+  },
+  body: getCommonContainer({
+    assessmentFee: getLabelWithValue(
+      {
+        labelName: "Assessment Fee",
+      labelKey: "PT_ASSESSMENT_FEE"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.assessmentAmount"
+      }
+    ),
+    usageExemptionAmount: getLabelWithValue(
+      {
+        labelName: "Usage Exemption Amount",
+        labelKey: "PT_USAGE_EXEMPTION_AMOUNT"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.usageExemptionAmount"
+      }
+    ),
+    ownerExemptionAmount: getLabelWithValue(
+      {
+        labelName: "Owner Exemption Amount",
+        labelKey: "PT_OWNER_EXEMPTION_AMOUNT"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.ownerExemptionAmount"
+      }
+    ),
+    fireCessAmount: getLabelWithValue(
+      {
+        labelName: "Fire Cess Amount",
+        labelKey: "PT_FIRE_CESS_AMOUNT"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.fireCessAmount"
+      }
+    ),
+    cancerCessAmount: getLabelWithValue(
+      {
+        labelName: "Cancer Cess Amount",
+        labelKey: "PT_CANCER_CESS_AMOUNT"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.cancerCessAmount"
+      }
+    ),
+    adhocPenaltyAmount: getLabelWithValue(
+      {
+        labelName: "Adhoc Penalty Amount",
+        labelKey: "PT_ADHOC_PENALTY_AMOUNT"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.adhocPenaltyAmount"
+      }
+    ),
+    adhocPenaltyAmount: getLabelWithValue(
+      {
+        labelName: "Adhoc Penalty Amount",
+      labelKey: "PT_ADHOC_PENALTY_AMOUNT"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.adhocPenaltyAmount"
+      }
+    ),
+    adhocRebateAmount: getLabelWithValue(
+      {
+        labelName: "Adhoc Rebate Amount",
+        labelKey: "PT_ADHOC_REBATE_AMOUNT"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.adhocRebateAmount"
+      }
+    )
+  })
+})
+
 
 const ownerSummary = getCommonGrayCard({
   header: {
@@ -309,6 +410,14 @@ const screenConfig = {
    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     // Hide edit buttons
     // setData(state, dispatch, applicationNumber, tenantId);
+    let userInfo = JSON.parse(getUserInfo());
+    const roleCodes =
+        userInfo && userInfo.roles
+          ? userInfo.roles.map((role) => {
+            return role.code;
+          })
+          : [];
+    const isApprover = roleCodes.includes("PT_APPROVER")
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",
@@ -324,6 +433,14 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
+
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.demandSummary.visible",
+      !!isApprover
+    )
+
+
     // const printCont = downloadPrintContainer(
     //   action,
     //   state,
@@ -392,6 +509,7 @@ const screenConfig = {
             componentPath: "pdfHeader"
           },
           propertySummary: propertySummary,
+          demandSummary: demandSummary,
           ownerSummary: ownerSummary,
           documentsSummary: documentsSummary
         })

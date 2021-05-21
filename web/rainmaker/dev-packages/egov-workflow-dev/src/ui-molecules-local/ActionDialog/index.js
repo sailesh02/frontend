@@ -473,9 +473,15 @@ class ActionDialog extends React.Component {
             return true;
         });
     
+    const approveRoleArray = getUserInfo() &&
+    JSON.parse(getUserInfo()).roles.filter(item => {
+      if (item.code == "PT_APPROVER")
+        return true;
+    });
+    
     const rolecheck = rolearray.length > 0 ? true : false;
     const showPaymentCheck = (this.props.dataPath === "Assessment" || this.props.dataPath === "Property") && !!rolecheck && buttonLabel === "FORWARD"
-    // const paymentFields = pt_payment_config.filter(item => item.filter === moduleName)
+    const employeeDropdownShow = (this.props.dataPath === "Assessment" || this.props.dataPath === "Property") && !!approveRoleArray.length && buttonLabel === "APPROVE"
     return (
       <Dialog
         fullScreen={fullscreen}
@@ -520,7 +526,7 @@ class ActionDialog extends React.Component {
                   >
                     <CloseIcon />
                   </Grid>
-                  {showEmployeeList && showAssignee &&  (
+                  {showEmployeeList && showAssignee && !employeeDropdownShow &&  (
                     <Grid
                       item
                       sm="12"

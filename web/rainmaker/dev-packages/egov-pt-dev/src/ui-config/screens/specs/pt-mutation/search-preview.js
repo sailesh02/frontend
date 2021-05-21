@@ -1,4 +1,4 @@
-import { getCommonCard, getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonCard, getCommonContainer, getCommonHeader, getCommonGrayCard, getCommonSubHeader, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
@@ -18,6 +18,39 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
 import "./index.css";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
+const demandSummary = getCommonGrayCard({
+  header: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: { marginBottom: "10px" }
+    },
+    children: {
+      header: {
+        gridDefination: {
+          xs: 8
+        },
+        ...getCommonSubHeader({
+          labelName: "Additional Details",
+          labelKey: "PT_MUTATION_ADDITIONAL_DETAILS"
+        })
+      }
+    }
+  },
+  body: getCommonContainer({
+    mutationCharge: getLabelWithValue(
+      {
+        labelName: "Mutation Charge",
+        labelKey: "PT_MUTATION_CHARGE"
+      },
+      {
+        jsonPath: "Property.additionalDetails.mutationCharge"
+      }
+    )
+  })
+})
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -446,6 +479,21 @@ const screenConfig = {
       false
     );
 
+    let userInfo = JSON.parse(getUserInfo());
+    const roleCodes =
+        userInfo && userInfo.roles
+          ? userInfo.roles.map((role) => {
+            return role.code;
+          })
+          : [];
+    const isApprover = roleCodes.includes("PT_APPROVER")
+
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.demandSummary.visible",
+      !!isApprover
+    )
+
     // set(
     //   action,
     //   "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
@@ -519,6 +567,7 @@ const screenConfig = {
             componentPath: "pdfHeader"
           },
           propertySummary: propertySummary,
+          demandSummary: demandSummary,
           transferorSummary: transferorSummary,
           transferorInstitutionSummary: transferorInstitutionSummary,
           transfereeSummary: transfereeSummary,

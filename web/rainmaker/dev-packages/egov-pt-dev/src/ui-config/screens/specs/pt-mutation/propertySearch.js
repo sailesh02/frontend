@@ -8,6 +8,17 @@ import get from "lodash/get";
 import { resetFields } from "./mutation-methods";
 import propertySearchTabs from "./property-search-tabs";
 import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
+let userInfo = JSON.parse(getUserInfo());
+const roleCodes =
+    userInfo && userInfo.roles
+      ? userInfo.roles.map((role) => {
+        return role.code;
+      })
+      : [];
+const showAddProperty = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
+
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -136,7 +147,7 @@ const screenConfig = {
                 sm: 6,
                 align: "right"
               },
-              visible: enableButton,
+              visible: showAddProperty,
               props: {
                 variant: "contained",
                 color: "primary",

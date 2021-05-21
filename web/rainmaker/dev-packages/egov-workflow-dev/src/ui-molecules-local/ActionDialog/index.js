@@ -559,7 +559,7 @@ class ActionDialog extends React.Component {
                     </Grid>
                   )}
                   {!!showPaymentCheck && 
-                  (<div>
+                  (<React.Fragment>
                   {pt_payment_config.map((payment, ind) => {
                     return payment.filter === moduleName ? (
                     <Grid payment sm="12">
@@ -579,6 +579,7 @@ class ActionDialog extends React.Component {
                     {!!payment.isError && (<span style={{color: "red"}}>{getLocaleLabels(payment.errorMessage, payment.errorMessage)}</span>)}
                     </Grid>
                   ) : null})}
+                  <Grid item sm="12">
                   <TextFieldContainer
                     value={pt_payment_config.reduce((prev, curr) => {
                       const val = Number(get(this.props.state, `screenConfiguration.preparedFinalObject.${this.props.dataPath}.additionalDetails.${curr.path}`) || 0)
@@ -591,7 +592,8 @@ class ActionDialog extends React.Component {
                     placeholder= "PT_PAYMENT_TOTAL"
                     inputProps={{disabled: true}}
                     /> 
-                  </div>)}
+                  </Grid>
+                  </React.Fragment>)}
                   <Grid item sm="12">
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}

@@ -70,7 +70,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_ASSESSMENT_CHARGES",
     showError: false,
     required: false,
-    filter: "PT.ASSESSMENT"
+    filter: "ASMT"
   },
   {
     label: {
@@ -85,7 +85,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_USAGE_EXEMPTION_AMOUNT",
     showError: false,
     required: false,
-    filter: "PT.ASSESSMENT",
+    filter: "ASMT",
     subtract: true
   },
   {
@@ -101,7 +101,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_OWNER_EXEMPTION_AMOUNT",
     showError: false,
     required: false,
-    filter: "PT.ASSESSMENT",
+    filter: "ASMT",
     subtract: true
   },
   {
@@ -117,7 +117,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_FIRE_CESS_AMOUNT",
     showError: false,
     required: false,
-    filter: "PT.ASSESSMENT"
+    filter: "ASMT"
   },
   {
     label: {
@@ -132,7 +132,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_CANCER_CESS_AMOUNT",
     showError: false,
     required: false,
-    filter: "PT.ASSESSMENT"
+    filter: "ASMT"
   },
   {
     label: {
@@ -147,7 +147,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_ADHOC_PENALTY_AMOUNT",
     showError: false,
     required: false,
-    filter: "PT.ASSESSMENT"
+    filter: "ASMT"
   },
   {
     label: {
@@ -162,7 +162,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_ADHOC_REBATE_AMOUNT",
     showError: false,
     required: false,
-    filter: "PT.ASSESSMENT"
+    filter: "ASMT"
   },
   {
     label: {

@@ -35,76 +35,103 @@ const demandSummary = getCommonGrayCard({
     }
   },
   body: getCommonContainer({
-    assessmentFee: getLabelWithValue(
+    holdingTax: getLabelWithValue(
       {
-        labelName: "Assessment Fee",
-      labelKey: "PT_ASSESSMENT_FEE"
+        labelName: "Holding Tax",
+        labelKey: "PT_HOLDING_TAX"
       },
       {
-        jsonPath: "Assessment.additionalDetails.assessmentAmount"
+        jsonPath: "Assessment.additionalDetails.holdingTax"
       }
     ),
-    usageExemptionAmount: getLabelWithValue(
+    lightTax: getLabelWithValue(
       {
-        labelName: "Usage Exemption Amount",
-        labelKey: "PT_USAGE_EXEMPTION_AMOUNT"
+        labelName: "Light Tax",
+        labelKey: "PT_LIGHT_TAX"
       },
       {
-        jsonPath: "Assessment.additionalDetails.usageExemptionAmount"
+        jsonPath: "Assessment.additionalDetails.lightTax"
       }
     ),
-    ownerExemptionAmount: getLabelWithValue(
+    waterTax: getLabelWithValue(
       {
-        labelName: "Owner Exemption Amount",
-        labelKey: "PT_OWNER_EXEMPTION_AMOUNT"
+        labelName: "Water Tax",
+        labelKey: "PT_WATER_TAX"
       },
       {
-        jsonPath: "Assessment.additionalDetails.ownerExemptionAmount"
+        jsonPath: "Assessment.additionalDetails.waterTax"
       }
     ),
-    fireCessAmount: getLabelWithValue(
+    drainageTax: getLabelWithValue(
       {
-        labelName: "Fire Cess Amount",
-        labelKey: "PT_FIRE_CESS_AMOUNT"
+        labelName: "Drainage Tax",
+        labelKey: "PT_DRAINAGE_TAX"
       },
       {
-        jsonPath: "Assessment.additionalDetails.fireCessAmount"
+        jsonPath: "Assessment.additionalDetails.drainageTax"
       }
     ),
-    cancerCessAmount: getLabelWithValue(
+    latrineTax: getLabelWithValue(
       {
-        labelName: "Cancer Cess Amount",
-        labelKey: "PT_CANCER_CESS_AMOUNT"
+        labelName: "Latrine Tax",
+        labelKey: "PT_LATRINE_TAX"
       },
       {
-        jsonPath: "Assessment.additionalDetails.cancerCessAmount"
+        jsonPath: "Assessment.additionalDetails.latrineTax"
       }
     ),
-    adhocPenaltyAmount: getLabelWithValue(
+    parkingTax: getLabelWithValue(
       {
-        labelName: "Adhoc Penalty Amount",
-        labelKey: "PT_ADHOC_PENALTY_AMOUNT"
+        labelName: "Parking Tax",
+        labelKey: "PT_PARKING_TAX"
       },
       {
-        jsonPath: "Assessment.additionalDetails.adhocPenaltyAmount"
+        jsonPath: "Assessment.additionalDetails.parkingTax"
       }
     ),
-    adhocPenaltyAmount: getLabelWithValue(
+    solidWasteUserCharges: getLabelWithValue(
       {
-        labelName: "Adhoc Penalty Amount",
-      labelKey: "PT_ADHOC_PENALTY_AMOUNT"
+        labelName: "Solid Waste User Charges",
+        labelKey: "PT_SOLID_WASTER_USER_CHARGES"
       },
       {
-        jsonPath: "Assessment.additionalDetails.adhocPenaltyAmount"
+        jsonPath: "Assessment.additionalDetails.solidWasteUserCharges"
       }
     ),
-    adhocRebateAmount: getLabelWithValue(
+    ownershipExemption: getLabelWithValue(
       {
-        labelName: "Adhoc Rebate Amount",
-        labelKey: "PT_ADHOC_REBATE_AMOUNT"
+        labelName: "Ownership Exemption",
+        labelKey: "PT_OWNERSHIP_EXEMPTION"
       },
       {
-        jsonPath: "Assessment.additionalDetails.adhocRebateAmount"
+        jsonPath: "Assessment.additionalDetails.ownershipExemption"
+      }
+    ),
+    usageExemption: getLabelWithValue(
+      {
+        labelName: "Usage Exemption",
+        labelKey: "PT_USAGE_EXEMPTION"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.usageExemption"
+      }
+    ),
+    interest: getLabelWithValue(
+      {
+        labelName: "Interest",
+        labelKey: "PT_INTEREST"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.interest"
+      }
+    ),
+    penalty: getLabelWithValue(
+      {
+        labelName: "Penalty",
+        labelKey: "PT_PENALTY"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.penalty"
       }
     )
   })

@@ -59,113 +59,6 @@ const fieldConfig = {
 let pt_payment_config = [
   {
     label: {
-      labelName: "Assessment Fee",
-      labelKey: "PT_ASSESSMENT_FEE"
-    },
-    placeholder: {
-      labelName: "Enter Assessment Fee",
-      labelKey: "PT_ASSESSMENT_FEE_PLACEHOLDER"
-    },
-    path: "assessmentAmount",
-    errorMessage: "PT_ERR_ASSESSMENT_CHARGES",
-    showError: false,
-    required: false,
-    filter: "ASMT"
-  },
-  {
-    label: {
-      labelName: "Usage Exemption Amount",
-      labelKey: "PT_USAGE_EXEMPTION_AMOUNT"
-    },
-    placeholder: {
-      labelName: "Enter Usage Exemption Amount",
-      labelKey: "PT_USAGE_EXEMPTION_AMOUNT_PLACEHOLDER"
-    },
-    path: "usageExemptionAmount",
-    errorMessage: "PT_ERR_USAGE_EXEMPTION_AMOUNT",
-    showError: false,
-    required: false,
-    filter: "ASMT",
-    subtract: true
-  },
-  {
-    label: {
-      labelName: "Owner Exemption Amount",
-      labelKey: "PT_OWNER_EXEMPTION_AMOUNT"
-    },
-    placeholder: {
-      labelName: "Enter Owner Exemption Amount",
-      labelKey: "PT_OWNER_EXEMPTION_AMOUNT_PLACEHOLDER"
-    },
-    path: "ownerExemptionAmount",
-    errorMessage: "PT_ERR_OWNER_EXEMPTION_AMOUNT",
-    showError: false,
-    required: false,
-    filter: "ASMT",
-    subtract: true
-  },
-  {
-    label: {
-      labelName: "Fire Cess Amount",
-      labelKey: "PT_FIRE_CESS_AMOUNT"
-    },
-    placeholder: {
-      labelName: "Enter Fire Cess Amount",
-      labelKey: "PT_FIRE_CESS_AMOUNT_PLACEHOLDER"
-    },
-    path: "fireCessAmount",
-    errorMessage: "PT_ERR_FIRE_CESS_AMOUNT",
-    showError: false,
-    required: false,
-    filter: "ASMT"
-  },
-  {
-    label: {
-      labelName: "Cancer Cess Amount",
-      labelKey: "PT_CANCER_CESS_AMOUNT"
-    },
-    placeholder: {
-      labelName: "Enter Cancer Cess Amount",
-      labelKey: "PT_CANCER_CESS_AMOUNT_PLACEHOLDER"
-    },
-    path: "cancerCessAmount",
-    errorMessage: "PT_ERR_CANCER_CESS_AMOUNT",
-    showError: false,
-    required: false,
-    filter: "ASMT"
-  },
-  {
-    label: {
-      labelName: "Adhoc Penalty Amount",
-      labelKey: "PT_ADHOC_PENALTY_AMOUNT"
-    },
-    placeholder: {
-      labelName: "Enter Adhoc Penalty Amount",
-      labelKey: "PT_ADHOC_PENALTY_AMOUNT_PLACEHOLDER"
-    },
-    path: "adhocPenaltyAmount",
-    errorMessage: "PT_ERR_ADHOC_PENALTY_AMOUNT",
-    showError: false,
-    required: false,
-    filter: "ASMT"
-  },
-  {
-    label: {
-      labelName: "Adhoc Rebate Amount",
-      labelKey: "PT_ADHOC_REBATE_AMOUNT"
-    },
-    placeholder: {
-      labelName: "Enter Adhoc Rebate Amount",
-      labelKey: "PT_ADHOC_REBATE_AMOUNT_PLACEHOLDER"
-    },
-    path: "adhocRebateAmount",
-    errorMessage: "PT_ERR_ADHOC_REBATE_AMOUNT",
-    showError: false,
-    required: false,
-    filter: "ASMT"
-  },
-  {
-    label: {
       labelName: "Holding Tax",
       labelKey: "PT_HOLDING_TAX"
     },
@@ -177,7 +70,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_HOLDING_TAX",
     showError: false,
     required: false,
-    filter: "PT.CREATE"
+    filter: ["PT.CREATE", "ASMT"]
   },
   {
     label: {
@@ -192,7 +85,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_LIGHT_TAX",
     showError: false,
     required: false,
-    filter: "PT.CREATE"
+    filter: ["PT.CREATE", "ASMT"]
   },
   {
     label: {
@@ -207,7 +100,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_WATER_TAX",
     showError: false,
     required: false,
-    filter: "PT.CREATE"
+    filter: ["PT.CREATE", "ASMT"]
   },
   {
     label: {
@@ -222,7 +115,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_DRINAGE_TAX",
     showError: false,
     required: false,
-    filter: "PT.CREATE"
+    filter: ["PT.CREATE", "ASMT"]
   },
   {
     label: {
@@ -237,7 +130,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_LATRINE_TAX",
     showError: false,
     required: false,
-    filter: "PT.CREATE"
+    filter: ["PT.CREATE", "ASMT"]
   },
   {
     label: {
@@ -252,7 +145,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_PARKING_TAX",
     showError: false,
     required: false,
-    filter: "PT.CREATE"
+    filter: ["PT.CREATE", "ASMT"]
   },
   {
     label: {
@@ -267,7 +160,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_SOLID_WASTER_USER_CHARGES",
     showError: false,
     required: false,
-    filter: "PT.CREATE"
+    filter: ["PT.CREATE", "ASMT"]
   },
   {
     label: {
@@ -282,7 +175,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_OWNERSHIP_EXEMPTION",
     showError: false,
     required: false,
-    filter: "PT.CREATE",
+    filter: ["PT.CREATE", "ASMT"],
     subtract: true
   },
   {
@@ -298,7 +191,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_USAGE_EXEMPTION",
     showError: false,
     required: false,
-    filter: "PT.CREATE",
+    filter: ["PT.CREATE", "ASMT"],
     subtract: true
   },
   {
@@ -314,7 +207,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_INTEREST",
     showError: false,
     required: false,
-    filter: "PT.CREATE"
+    filter: ["PT.CREATE", "ASMT"]
   },
   {
     label: {
@@ -329,7 +222,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_PENALTY",
     showError: false,
     required: false,
-    filter: "PT.CREATE"
+    filter: ["PT.CREATE", "ASMT"]
   },
   {
     label: {
@@ -344,7 +237,7 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_MUTATION_CHARGE",
     showError: false,
     required: false,
-    filter: "PT.MUTATION"
+    filter: ["PT.MUTATION"]
   }
 ]
 
@@ -400,7 +293,7 @@ class ActionDialog extends React.Component {
       }
       return {
       ...payment,
-      isError: payment.filter === moduleName ? payment.required
+      isError: payment.filter.includes(moduleName) ? payment.required
         ? !data[payment.path]
         : !!data[payment.path]
         ? isNaN(data[payment.path])
@@ -561,7 +454,7 @@ class ActionDialog extends React.Component {
                   {!!showPaymentCheck && 
                   (<React.Fragment>
                   {pt_payment_config.map((payment, ind) => {
-                    return payment.filter === moduleName ? (
+                    return payment.filter.includes(moduleName) ? (
                     <Grid payment sm="12">
                     <TextFieldContainer
                     defaultValue={0}
@@ -583,7 +476,7 @@ class ActionDialog extends React.Component {
                   <TextFieldContainer
                     value={pt_payment_config.reduce((prev, curr) => {
                       const val = Number(get(this.props.state, `screenConfiguration.preparedFinalObject.${this.props.dataPath}.additionalDetails.${curr.path}`) || 0)
-                      prev = curr.filter === moduleName ? prev + (curr.subtract ? -val : val): prev
+                      prev = curr.filter.includes(moduleName) ? prev + (curr.subtract ? -val : val): prev
                       return prev
                     }, 0)
                     }

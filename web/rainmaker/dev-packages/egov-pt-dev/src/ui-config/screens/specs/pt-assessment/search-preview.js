@@ -1,4 +1,4 @@
-import { getCommonCard, getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonCard, getCommonContainer, getCommonHeader, getCommonGrayCard, getCommonSubHeader, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
@@ -14,12 +14,7 @@ import { documentsSummary } from "../pt-mutation/summaryResource/documentsSummar
 import { propertySummary } from "../pt-mutation/summaryResource/propertySummary";
 import { transferorSummaryDetails } from "../pt-mutation/searchPreviewResource/transferorSummary";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import {
-  getCommonContainer,
-  getCommonGrayCard,
-  getCommonSubHeader,
-  getLabelWithValue
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+
 const demandSummary = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",

@@ -380,12 +380,12 @@ class Property extends Component {
               buttonStyle={{ border: "1px solid #fe7a51" }}
               style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
             />
-            <Button
+            {/* <Button
               onClick={() => this.onAssessPayClick()}
               label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.ASSESS].parentButton} fontSize="16px" />}
               primary={true}
               style={{ lineHeight: "auto", minWidth: "45%" }}
-            />
+            /> */}
             </div>) : (
               <Button
               onClick={() => this.linkProperty()}

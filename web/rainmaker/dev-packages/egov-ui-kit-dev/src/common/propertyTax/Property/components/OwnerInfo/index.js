@@ -20,6 +20,17 @@ import PropertyInfoCard from "../PropertyInfoCard";
 import TransferOwnerShipDialog from "../TransferOwnerShipDialog";
 import ViewHistoryDialog from "../ViewHistory";
 import "./index.css";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
+let userInfo = JSON.parse(getUserInfo());
+const roleCodes =
+    userInfo && userInfo.roles
+      ? userInfo.roles.map((role) => {
+        return role.code;
+      })
+      : [];
+const transferAllowed = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
+
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
 
@@ -396,7 +407,7 @@ class OwnerInfo extends Component {
                   </div>
                   {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>}
                   {/* Transfer ownership button and View History button */}
-                  {(viewHistory || ownershipTransfer) && showTransferOwner && (
+                  {(viewHistory || ownershipTransfer) && showTransferOwner && !!transferAllowed && (
                     <div id="pt-header-button-container" className="header-button-container">
                       <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} />
                       <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />

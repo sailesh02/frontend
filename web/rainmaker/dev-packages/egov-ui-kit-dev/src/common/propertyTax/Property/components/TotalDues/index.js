@@ -9,6 +9,16 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { TotalDuesButton } from "./components";
 import "./index.css";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
+let userInfo = JSON.parse(getUserInfo());
+const roleCodes =
+    userInfo && userInfo.roles
+      ? userInfo.roles.map((role) => {
+        return role.code;
+      })
+      : [];
+const showPay = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
 
 const labelStyle = {
   color: "rgba(0, 0, 0, 0.6)",
@@ -77,7 +87,7 @@ class TotalDues extends React.Component {
               }}
             /> */}
           </div>
-        {(totalBillAmountDue > 0 || (totalBillAmountDue === 0 && isAdvanceAllowed)) && (
+        {(totalBillAmountDue > 0 || (totalBillAmountDue === 0 && isAdvanceAllowed)) && !!showPay && (
           <div id="pt-flex-child-button" className="col-xs-12 col-sm-3 flex-child-button">
             <div style={{ float: "right" }}>
               <TotalDuesButton

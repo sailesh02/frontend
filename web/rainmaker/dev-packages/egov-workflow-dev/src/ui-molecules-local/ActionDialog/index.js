@@ -85,7 +85,8 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_USAGE_EXEMPTION_AMOUNT",
     showError: false,
     required: false,
-    filter: "PT.ASSESSMENT"
+    filter: "PT.ASSESSMENT",
+    subtract: true
   },
   {
     label: {
@@ -100,7 +101,8 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_OWNER_EXEMPTION_AMOUNT",
     showError: false,
     required: false,
-    filter: "PT.ASSESSMENT"
+    filter: "PT.ASSESSMENT",
+    subtract: true
   },
   {
     label: {
@@ -280,7 +282,8 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_OWNERSHIP_EXEMPTION",
     showError: false,
     required: false,
-    filter: "PT.CREATE"
+    filter: "PT.CREATE",
+    subtract: true
   },
   {
     label: {
@@ -295,7 +298,8 @@ let pt_payment_config = [
     errorMessage: "PT_ERR_USAGE_EXEMPTION",
     showError: false,
     required: false,
-    filter: "PT.CREATE"
+    filter: "PT.CREATE",
+    subtract: true
   },
   {
     label: {
@@ -554,7 +558,9 @@ class ActionDialog extends React.Component {
                       />
                     </Grid>
                   )}
-                  {!!showPaymentCheck && pt_payment_config.map((payment, ind) => {
+                  {!!showPaymentCheck && 
+                  (<div>
+                  {pt_payment_config.map((payment, ind) => {
                     return payment.filter === moduleName ? (
                     <Grid payment sm="12">
                     <TextFieldContainer
@@ -573,6 +579,19 @@ class ActionDialog extends React.Component {
                     {!!payment.isError && (<span style={{color: "red"}}>{getLocaleLabels(payment.errorMessage, payment.errorMessage)}</span>)}
                     </Grid>
                   ) : null})}
+                  <TextFieldContainer
+                    value={pt_payment_config.reduce((prev, curr) => {
+                      const val = Number(get(this.props.state, `screenConfiguration.preparedFinalObject.${this.props.dataPath}.additionalDetails.${curr.path}`) || 0)
+                      prev = payment.filter === moduleName ? prev + (curr.subtract ? -val : val): prev
+                      return prev
+                    }, 0)
+                    }
+                    InputLabelProps={{ shrink: true }}
+                    label= "PT_PAYMENT_TOTAL"
+                    placeholder= "PT_PAYMENT_TOTAL"
+                    inputProps={{disabled: true}}
+                    /> 
+                  </div>)}
                   <Grid item sm="12">
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}

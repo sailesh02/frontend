@@ -102,6 +102,7 @@ class WorkFlowContainer extends React.Component {
       case "RESUBMIT_APPLICATION":
         return "purpose=forward&status=success";
       case "SEND_BACK_TO_CITIZEN":
+      case "SENT_BACK_TO_CITIZEN":
         return "purpose=sendback&status=success";
       case "VERIFY_AND_FORWARD":
         return "purpose=forward&status=success";
@@ -492,7 +493,7 @@ class WorkFlowContainer extends React.Component {
         isLast: item.action === "PAY" ? true : false,
         buttonUrl: getRedirectUrl(item.action, businessId, businessService),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: (businessService === "NewWS1" || businessService === "ModifyWSConnection" || businessService === "ModifySWConnection" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_CONNECTION" && item.action !== "APPROVE_FOR_CONNECTION" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
+        showEmployeeList: (businessService === "NewWS1" || businessService === "ModifyWSConnection" || businessService === "ModifySWConnection" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_CONNECTION" && item.action !== "APPROVE_FOR_CONNECTION" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN" && item.action !== "SENT_BACK_TO_CITIZEN",
         roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
         isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
       };

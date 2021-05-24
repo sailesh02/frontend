@@ -84,6 +84,7 @@ export const callBackForNext = async (state, dispatch) => {
   );
   let isFormValid = true;
   let hasFieldToaster = true;
+  let isTradeSubTypeValidForTempTL = true;
   if (activeStep === 0) {
     const isTradeDetailsValid = validateFields(
       "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children",
@@ -137,11 +138,31 @@ export const callBackForNext = async (state, dispatch) => {
       )
         isTradeUnitValid = false;
     }
+
+    let queryObject = JSON.parse(
+      JSON.stringify(
+        get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
+      )
+    );
+
+    let tlType = get(queryObject[0], "licenseType");
+
+    let combinedTradeUnits = get(queryObject[0], "tradeLicenseDetail");
+
+    let selectedTradeUnits = combinedTradeUnits && combinedTradeUnits.tradeUnits && combinedTradeUnits.tradeUnits.length > 0 ? combinedTradeUnits.tradeUnits[0].tempUom : '';
+
+
+    if(tlType && tlType === "TEMPORARY" && !selectedTradeUnits){
+       isTradeSubTypeValidForTempTL = false;
+
+    }
+
     if (
       !isTradeDetailsValid ||
       !isTradeLocationValid ||
       !isAccessoriesValid ||
-      !isTradeUnitValid
+      !isTradeUnitValid ||
+      !isTradeSubTypeValidForTempTL
     ) {
       isFormValid = false;
     }
@@ -362,7 +383,7 @@ export const callBackForNext = async (state, dispatch) => {
           errorMessage = {
             labelName:
               "Please fill all mandatory fields for Trade Details, then do next !",
-            labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
+            labelKey: isTradeSubTypeValidForTempTL ? "ERR_FILL_TRADE_MANDATORY_FIELDS" : "ERR_FILL_TRADE_SUB_TYPE_NOT_VALID_FOR_TEMP_TL"
           };
           break;
         case 1:
@@ -835,7 +856,7 @@ export const footerReviewTop = (
   tenantId,
   financialYear
 ) => {
-  console.log(status, "Nero Status in FooterRiew")
+
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
@@ -1075,7 +1096,7 @@ export const downloadPrintContainer = (
   applicationNumber,
   tenantId
 ) => {
-  console.log(status, "Nero Satus in Employee")
+
   /** MenuButton data based on status */
   const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
   const receiptKey = get(uiCommonConfig, "receiptKey");

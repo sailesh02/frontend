@@ -258,7 +258,7 @@ const formConfig = {
       const dropdownData = getOwnerCategory(Object.values(OwnerTypes));
       set(action, "form.fields.ownerCategory.dropDownData", dropdownData);
       const ownerShipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", "");
-      if (ownerShipType === "SINGLEOWNER") {
+      if (ownerShipType === "SO") {
         set(action, "form.fields.ownerGender.value", get(state, "form.ownerInfo.fields.ownerGender.value", "Male"));
       }
       return action;

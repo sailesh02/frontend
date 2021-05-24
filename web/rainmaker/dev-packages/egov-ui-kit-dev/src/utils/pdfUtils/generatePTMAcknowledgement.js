@@ -49,7 +49,7 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
     let transferorDetailsInfo = []
     if (getFromObject(property, "ownershipCategoryInit", "").startsWith("INSTITUTION")) {
         transferorDetails = generateKeyValue(preparedFinalObject, transferorInstitutionSummaryDetails)
-    } else if (getFromObject(property, "ownershipCategoryInit", "").includes("SINGLEOWNER")) {
+    } else if (getFromObject(property, "ownershipCategoryInit", "").includes("SO")) {
         transferorDetails = generateKeyValue(preparedFinalObject, transferorSummaryDetails)
     } else {
         transferorDetailsInfo = getMultiItems(preparedFinalObject, transferorSummaryDetails, 'Property.ownersTemp[0]')
@@ -59,7 +59,7 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
     let transfereeDetailsInfo = []
     if (getFromObject(property, "ownershipCategoryTemp", "").startsWith("INSTITUTION")) {
         transfereeDetails = generateKeyValue(preparedFinalObject, transfereeInstitutionSummaryDetails)
-    } else if (getFromObject(property, "ownershipCategoryTemp", "").includes("SINGLEOWNER")) {
+    } else if (getFromObject(property, "ownershipCategoryTemp", "").includes("SO")) {
         transfereeDetails = generateKeyValue(preparedFinalObject, transfereeSummaryDetails)
     } else {
         transfereeDetailsInfo = getMultiItems(preparedFinalObject, transfereeSummaryDetails, 'Property.ownersInit[0]')

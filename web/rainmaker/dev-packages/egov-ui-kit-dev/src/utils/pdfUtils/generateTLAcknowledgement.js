@@ -57,7 +57,7 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
     const ownershipType = getFromObject(License, "tradeLicenseDetail.subOwnerShipCategory", "");
     if (ownershipType.startsWith("INSTITUTION")) {
         tradeOwnerSummary = generateKeyValue(preparedFinalObject, tradeInstitutionDetails);
-    } else if (ownershipType.includes("SINGLEOWNER")) {
+    } else if (ownershipType.includes("SO")) {
         tradeOwnerSummary = generateKeyValue(preparedFinalObject, tradeOwnerDetails);
     } else {
         tradeOwnerSummaryInfo = getMultiItems(preparedFinalObject, tradeOwnerDetails, 'Licenses[0].tradeLicenseDetail.owners')

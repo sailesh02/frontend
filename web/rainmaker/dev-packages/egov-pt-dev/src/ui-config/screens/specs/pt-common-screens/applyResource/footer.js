@@ -108,14 +108,14 @@ const callBackForApply = async (state, dispatch) => {
   let isPropertyOwnerDetailsValid = true;
   let multiOwnerItems;
   if (propertyPayload.ownershipCategory) {
-    if (propertyPayload.ownershipCategory === 'INDIVIDUAL.SINGLEOWNER') {
+    if (propertyPayload.ownershipCategory === 'INDIVIDUAL.SO') {
       isPropertyOwnerDetailsValid = validateFields(
         "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
         state,
         dispatch,
         screenKey
       );
-    } else if (propertyPayload.ownershipCategory === 'INDIVIDUAL.MULTIPLEOWNERS') {
+    } else if (propertyPayload.ownershipCategory === 'INDIVIDUAL.MO') {
 
       multiOwnerItems = get(
         state,

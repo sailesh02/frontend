@@ -614,7 +614,7 @@ export const sampleSingleSearch = () => {
             }
           },
           applicantDetails: {
-            ownerShipType: "INDIVIDUAL.SINGLEOWNER",
+            ownerShipType: "INDIVIDUAL.SO",
             owners: [
               {
                 id: 23442,

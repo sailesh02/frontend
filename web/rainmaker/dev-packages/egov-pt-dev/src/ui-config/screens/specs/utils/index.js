@@ -1111,7 +1111,7 @@ export const setCardVisibility = (state, action, dispatch) => {
       state,
       "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
       ""
-    ).includes("MULTIPLEOWNERS")
+    ).includes("MO")
   ) {
     set(
       action.screenConfig,

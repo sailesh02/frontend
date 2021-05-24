@@ -152,7 +152,7 @@ export const callBackForNext = async (state, dispatch) => {
     );
     // ownership = ownership.split(".")[0];
     let subOwnerShipCategoryType = ownership.split(".")[1];
-      if (subOwnerShipCategoryType === "MULTIPLEOWNERS") {
+      if (subOwnerShipCategoryType === "MO") {
         dispatch(
           handleField(
             "apply",
@@ -218,7 +218,7 @@ export const callBackForNext = async (state, dispatch) => {
       get(
         state.screenConfiguration.preparedFinalObject,
         "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
-      ) === "INDIVIDUAL.MULTIPLEOWNERS" 
+      ) === "INDIVIDUAL.MO" 
       &&
       get(
         state.screenConfiguration.preparedFinalObject,

@@ -86,8 +86,8 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
     properties[0].institution.tenantId = properties[0].tenantId;
   }
   properties[0].superBuiltUpArea = properties[0].buildUpArea && Number(properties[0].buildUpArea);
-  properties[0].superBuiltUpArea = properties[0].superBuiltUpArea && (Number(properties[0].superBuiltUpArea.toFixed(2)) * 0.11111).toFixed(2);
-
+  properties[0].superBuiltUpArea = properties[0].superBuiltUpArea && Number(properties[0].superBuiltUpArea.toFixed(2));
+  properties[0].landArea = properties[0].landArea && Number(properties[0].landArea) && (Number(properties[0].landArea) / 9).toFixed(2)
   properties[0].propertyType =
     properties[0].propertySubType === "SHAREDPROPERTY" || properties[0].propertySubType === "INDEPENDENTPROPERTY"
       ? properties[0].propertyType + "." + properties[0].propertySubType

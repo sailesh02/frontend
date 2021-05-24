@@ -296,6 +296,45 @@ const combinationToFormkeyMapping = {
     hasPlot: true,
     hasFloor: false,
   },
+  "GOVFACILITIES-INDEPENDENTPROPERTY": {
+    path: "PropertyTaxPay/GovFacilitiesIndependantProperty",
+    plotForm: formHoc({
+      formKey: "plotDetails",
+      isCoreConfiguration: true,
+      path: "PropertyTaxPay/GovFacilitiesIndependantProperty",
+      isCoreConfiguration: true,
+    })(GenericForm),
+    floorForm: formHoc({ formKey: "floorDetails", makeCopy: true, path: "PropertyTaxPay/GovFacilitiesIndependantProperty", isCoreConfiguration: true })(
+      GenericForm
+    ),
+    floorObject: {
+      formKey: "floorDetails",
+      isCoreConfiguration: true,
+      makeCopy: true,
+      copyName: "floorDetails",
+      path: "PropertyTaxPay/GovFacilitiesIndependantProperty",
+    },
+    hasPlot: true,
+    hasFloor: true,
+  },
+  "GOVFACILITIES-SHAREDPROPERTY": {
+    path: "PropertyTaxPay/GovFacilitiesSharedProperty",
+    plotForm: formHoc({
+      formKey: "plotDetails",
+      isCoreConfiguration: true,
+      path: "PropertyTaxPay/GovFacilitiesSharedProperty",
+      isCoreConfiguration: true,
+    })(GenericForm),
+    floorObject: {
+      formKey: "floorDetails",
+      isCoreConfiguration: true,
+      makeCopy: true,
+      copyName: "floorDetails",
+      path: "PropertyTaxPay/GovFacilitiesIndependantProperty",
+    },
+    hasPlot: true,
+    hasFloor: false,
+  },
 };
 
 export const getPlotAndFloorFormConfigPath = (usage, propertyType) => {

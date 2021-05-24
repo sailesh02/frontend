@@ -140,7 +140,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 
     let licenseType = get(payload, "Licenses[0].licenseType");
     let tlPeriod = get(payload, "Licenses[0].tradeLicenseDetail.additionalDetail.licensePeriod")
-    console.log(licenseType, "Nero licenseType")
+
     if(licenseType === "PERMANENT"){
       dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", `${tlPeriod} Years`));
     }else{

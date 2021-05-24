@@ -51,7 +51,7 @@ export const getUsageTypeInfo = (propertyDetails) => {
 
 export const getPlotSizeInfo = (propertyDetails) => {
   return propertyDetails.propertySubType === "SHAREDPROPERTY"
-    ? "NA" : propertyDetails.uom ? `${propertyDetails.landArea} ${propertyDetails.uom}` : `${Math.round(propertyDetails.landArea * 100) / 100} sq yards`;
+    ? "NA" : propertyDetails.uom ? `${Math.round(propertyDetails.landArea * 9)} ${propertyDetails.uom}` : `${Math.round(propertyDetails.landArea * 9)} sq feet`;
 }
 
 export const getRainWaterHarvestingInfo = (properties) => {
@@ -134,8 +134,8 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
       }, {
 
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
-        value: unit.unitArea ? unit.unitArea + '' : "NA",
-        oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && (`${Math.round(oldPropertydetails.units[index].unitArea * 9 * 100) / 100}`) || "NA",
+        value: unit.unitArea ? unit.unitArea * 9 + '' : "NA",
+        oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && (`${Math.round(oldPropertydetails.units[index].unitArea * 9)}`) || "NA",
       }];
       if (unit.occupancyType === "RENTED") {
         floor.push({

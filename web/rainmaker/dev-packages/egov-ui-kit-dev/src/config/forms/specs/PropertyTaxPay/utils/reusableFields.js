@@ -312,7 +312,7 @@ export const beforeInitForm = {
 
     const unitFormUpdate = (usageCategoryMinor, skipMajorUpdate = true) => {
       var usageCategorySubMinorData = get(state, "common.generalMDMSDataById.UsageCategoryMinor")
-      usageCategorySubMinorData = Object.values(usageCategorySubMinorData).map(item => ({label: item.name, code: item.code, usageCategoryMajor: item.usageCategoryMajor}))
+      usageCategorySubMinorData = Object.values(usageCategorySubMinorData).map(item => ({label: item.name, value: item.code, usageCategoryMajor: item.usageCategoryMajor}))
       // var filteredSubUsageMinor = filter(
       //   prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
       //   (subUsageMinor) => {
@@ -412,7 +412,7 @@ export const beforeInitFormForPlot = {
         //   }
         //   );
       var usageCategorySubMinorData = get(state, "common.generalMDMSDataById.UsageCategoryMinor")
-      usageCategorySubMinorData = Object.values(usageCategorySubMinorData).map(item => ({label: item.name, code: item.code, usageCategoryMajor: item.usageCategoryMajor}))
+      usageCategorySubMinorData = Object.values(usageCategorySubMinorData).map(item => ({label: item.name, value: item.code, usageCategoryMajor: item.usageCategoryMajor}))
       var filteredSubUsageMinor = filter(
         usageCategorySubMinorData,
         (subUsageMinor) => {

@@ -199,7 +199,7 @@ tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
     );
     // ownership = ownership.split(".")[0];
     let subOwnerShipCategoryType = ownership.split(".")[1];
-      if (subOwnerShipCategoryType === "MO") {
+      if (subOwnerShipCategoryType === "MULTIPLEOWNERS") {
         dispatch(
           handleField(
             "apply",

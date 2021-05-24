@@ -31,7 +31,15 @@ import get from "lodash/get";
 import filter from "lodash/filter";
 import "./index.css";
 
+const getCurrentDate = () => {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
 
+  today = yyyy + '-' + mm + '-' + dd;
+  return today;
+}
 const tradeCategoryChange = (reqObj) => {
   try {
     let { dispatch, index } = reqObj;
@@ -59,10 +67,22 @@ const tradeSubTypeChange = (reqObj) => {
       `DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}${keyValueRow}`,
       []
     );
+
+    let queryObject = JSON.parse(
+      JSON.stringify(
+        get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
+      )
+    );
+
+    let tlType = get(queryObject[0], "licenseType");
     let currentObject = filter(tradeSubTypes, {
       code: value
     });
-    if (currentObject[0] && currentObject[0].uom !== null) {
+
+
+    if (currentObject[0] && currentObject[0].uom !== null && tlType && tlType === "PERMANENT") {
+
+
       dispatch(
         handleField(
           "apply",
@@ -71,6 +91,7 @@ const tradeSubTypeChange = (reqObj) => {
           currentObject[0].uom
         )
       );
+
       dispatch(
         handleField(
           "apply",
@@ -87,7 +108,35 @@ const tradeSubTypeChange = (reqObj) => {
           false
         )
       );
-    } else {
+    } else if (currentObject[0] && currentObject[0].tempUom !== null && tlType && tlType === "TEMPORARY") {
+
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM`,
+          "props.value",
+          currentObject[0].tempUom
+        )
+      );
+
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+          "props.required",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+          "props.disabled",
+          false
+        )
+      );
+    }else {
+
       dispatch(
         handleField(
           "apply",
@@ -145,6 +194,8 @@ const tradeSubTypeChange = (reqObj) => {
       );
     }
     dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tradeType`, value));
+
+    dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tempUom`, currentObject[0].tempUom));
   } catch (e) {
     console.log(e);
   }
@@ -233,7 +284,7 @@ const tradeUnitCard = {
             jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom",
             gridDefination: {
               xs: 12,
-              sm: 4
+              sm: 6
             }
           }),
           tradeUOMValue: getTextField({
@@ -255,7 +306,7 @@ const tradeUnitCard = {
             jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue",
             gridDefination: {
               xs: 12,
-              sm: 4
+              sm: 6
             }
           })
         },
@@ -759,7 +810,12 @@ export const tradeDetails = getCommonCard({
       },
       props: {
         className: "applicant-details-error",
-        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false
+        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
+        inputProps: {
+          //min: "2021-05-21",
+          min: getCurrentDate()
+
+        }
       },
       placeholder: {
         labelName: "Enter Trade Commencement Date",
@@ -767,7 +823,8 @@ export const tradeDetails = getCommonCard({
       },
       required: true,
       pattern: getPattern("Date"),
-      jsonPath: "Licenses[0].commencementDate"
+      jsonPath: "Licenses[0].commencementDate",
+
     }),
     tradeLicensePeriod: {
       ...getSelectField({

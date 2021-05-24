@@ -150,15 +150,43 @@ class Footer extends React.Component {
       `Licenses`
     );
     this.props.showSpinner();
-    const nextFinancialYear = await getNextFinancialYearForRenewal(
-      financialYear
+    // const nextFinancialYear = await getNextFinancialYearForRenewal(
+    //   financialYear
+    // );
+
+    const validTo = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].validTo`
     );
 
+    const tlType = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].licenseType`
+    );
+
+    const TlPeriod = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].tradeLicenseDetail.additionalDetail.licensePeriod`
+    );
+
+    const validFrom = 1000 * 60 * 60 * 24 + validTo;
+    let reNewDurationInMiliSeconds = 0;
+    if(tlType && tlType === "TEMPORARY"){
+       reNewDurationInMiliSeconds =  1000 * 60 * 60 * 24 * Number(TlPeriod);
+    }else{
+       reNewDurationInMiliSeconds =  1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
+    }
+
+console.log(validFrom, "Nero validFrom fff")
+
+console.log(validFrom+reNewDurationInMiliSeconds, "Nero validTo fff")
     const wfCode = "DIRECTRENEWAL";
     set(licences[0], "action", "INITIATE");
     set(licences[0], "workflowCode", wfCode);
     set(licences[0], "applicationType", "RENEWAL");
-    set(licences[0], "financialYear", nextFinancialYear);
+    set(licences[0], "validFrom", validFrom);
+    set(licences[0], "validTo", validFrom+reNewDurationInMiliSeconds);
+   // set(licences[0], "financialYear", nextFinancialYear);
 
     try {
       const response = await httpRequest(
@@ -173,8 +201,11 @@ class Footer extends React.Component {
       const renewedapplicationNo = get(response, `Licenses[0].applicationNumber`);
       const licenseNumber = get(response, `Licenses[0].licenseNumber`);
       this.props.hideSpinner();
+      // setRoute(
+      //   `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
+      // );
       setRoute(
-        `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
+        `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=${wfCode}`
       );
     } catch (exception) {
       this.props.hideSpinner();

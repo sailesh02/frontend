@@ -23,7 +23,7 @@ import {
       required: true,
       pattern: getPattern("MobileNo"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "connectionHolders[0].mobileNumber",
+      jsonPath: "applyScreen.property.owners[0].mobileNumber",
       gridDefination: {
         xs: 12,
         sm: 6
@@ -41,7 +41,7 @@ import {
       required: true,
       pattern: getPattern("Name"),
       errorMessage: "Invalid Name",
-      jsonPath: "connectionHolders[0].name",
+      jsonPath: "applyScreen.property.owners[0].name",
       gridDefination: {
         xs: 12,
         sm: 6
@@ -54,7 +54,7 @@ import {
         xs: 12,
         sm: 6
       },
-      jsonPath: "connectionHolders[0].gender",
+      jsonPath: "applyScreen.property.owners[0].gender",
       props: {
         label: { name: "Gender", key: "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL" },
         className: "applicant-details-error",
@@ -75,7 +75,7 @@ import {
             value: "TRANSGENDER"
           }
         ],
-        jsonPath: "connectionHolders[0].gender",
+        jsonPath: "applyScreen.property.owners[0].gender",
         required: true,
         errorMessage: "Required",
       },
@@ -94,7 +94,7 @@ import {
       required: true,
       pattern: getPattern("Name"),
       errorMessage: "Invalid Name",
-      jsonPath: "connectionHolders[0].fatherOrHusbandName",
+      jsonPath: "applyScreen.property.owners[0].fatherOrHusbandName",
       gridDefination: {
         xs: 12,
         sm: 6
@@ -110,7 +110,7 @@ import {
         labelKey: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_PLACEHOLDER"
       },
       required: true,
-      jsonPath: "connectionHolders[0].relationship",
+      jsonPath: "applyScreen.property.owners[0].relationship",
       data: [{ code: "FATHER" }, { code: "HUSBAND" }],
       localePrefix: {
         moduleName: "common-masters",
@@ -134,7 +134,7 @@ import {
       pattern: getPattern("Address"),
       required: true,
       errorMessage: "Invalid Address",
-      jsonPath: "connectionHolders[0].correspondenceAddress",
+      jsonPath: "applyScreen.property.owners[0].correspondenceAddress",
       gridDefination: {
         xs: 12,
         sm: 6
@@ -152,7 +152,7 @@ import {
         labelName: "Select Special Applicant Category",
         labelKey: "WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_PLACEHOLDER"
       },
-      jsonPath: "connectionHolders[0].ownerType",
+      jsonPath: "applyScreen.property.owners[0].ownerType",
       required: true,
       localePrefix: {
         moduleName: "common-masters",

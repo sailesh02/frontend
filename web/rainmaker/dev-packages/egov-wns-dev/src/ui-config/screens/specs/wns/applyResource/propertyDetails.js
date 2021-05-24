@@ -63,7 +63,7 @@ export const propertyID = getCommonContainer({
     label: { labelKey: "WS_PROPERTY_ID_LABEL" },
     placeholder: { labelKey: "WS_PROPERTY_ID_PLACEHOLDER" },
     gridDefination: { xs: 12, sm: 5, md: 5 },
-    required: true,
+    // required: true,
     props: {
       style: {
         width: "100%"

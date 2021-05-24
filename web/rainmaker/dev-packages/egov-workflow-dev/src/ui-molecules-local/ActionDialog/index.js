@@ -215,7 +215,7 @@ let pt_payment_config = [
       labelKey: "PT_PENALTY"
     },
     placeholder: {
-      labelName: "Enter Interest",
+      labelName: "Enter Penalty",
       labelKey: "PT_PENALTY_PLACEHOLDER"
     },
     path: "penalty",

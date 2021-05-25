@@ -480,7 +480,7 @@ export const propertyOwnershipDetails = getCommonCard({
             "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
           let institutionTypeContainerJsonPath = "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
 
-          if (action.value.includes("SO")) {
+          if (action.value.includes("SINGLEOWNER")) {
             showComponent(
               dispatch,
               singleApplicantContainerJsonPath,
@@ -580,7 +580,7 @@ export const propertyOwnershipDetails = getCommonCard({
               )
             );
           }
-          else if (action.value.includes("MO")) {
+          else if (action.value.includes("MULTIPLEOWNERS")) {
             showComponent(
               dispatch,
               singleApplicantContainerJsonPath,

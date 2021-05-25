@@ -240,7 +240,7 @@ const getApplicationData = async (action, state, dispatch) => {
       payload.Properties[0].institutionTemp = payload.Properties[0].institution;
       payload.Properties[0].institutionInit = null;
       payload.Properties[0].institution = null;
-      if (!payload.Properties[0].ownershipCategoryTemp.includes("SO")) {
+      if (!payload.Properties[0].ownershipCategoryTemp.includes("SINGLEOWNER")) {
         onChangeTypeOfOwnership({ value: payload.Properties[0].ownershipCategoryTemp }, state, dispatch, false);
       }
       if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {

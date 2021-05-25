@@ -33,26 +33,35 @@ const formConfig = {
       dropDownData: [],
       formName: "plotDetails",
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
-        if (!isEmpty(minorObject)) {
-          dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryMinor")[0]}usageCategoryMajor`, minorObject.usageCategoryMajor));
-          var filteredSubUsageMinor = filter(
-            prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
-            (subUsageMinor) => {
-              return subUsageMinor.usageCategoryMinor === field.value;
-            }
-          );
-          if (filteredSubUsageMinor.length > 0) {
-            var filteredUsageCategoryDetails = getPresentMasterObj(
-              prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
-              filteredSubUsageMinor,
-              "usageCategorySubMinor"
-            );
-            setDependentFields(["subUsageType"], dispatch, formKey, false);
-            const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
-            const subUsageData = sortDropdown(mergedMaster, "label", true);
-            setDependentFields(["subUsageType"], dispatch, formKey, subUsageData, "dropDownData");
+
+        let minorObject = get(state, 'common.generalMDMSDataById.UsageCategoryMinor');
+        minorObject = Object.values(minorObject).map(item => ({label: item.name, value: item.code, usageCategoryMajor: item.usageCategoryMajor}))
+        var filteredSubUsageMinor = filter(
+          minorObject,
+          (subUsageMinor) => {
+            return subUsageMinor.usageCategoryMajor === field.value;
           }
+        );
+        // let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
+        // if (!isEmpty(minorObject)) {
+        //   dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryMinor")[0]}usageCategoryMajor`, minorObject.usageCategoryMajor));
+        //   var filteredSubUsageMinor = filter(
+        //     prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
+        //     (subUsageMinor) => {
+        //       return subUsageMinor.usageCategoryMinor === field.value;
+        //     }
+        //   );
+          if (filteredSubUsageMinor.length > 0) {
+            // var filteredUsageCategoryDetails = getPresentMasterObj(
+            //   prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
+            //   filteredSubUsageMinor,
+            //   "usageCategorySubMinor"
+            // );
+            setDependentFields(["subUsageType"], dispatch, formKey, false);
+            // const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
+            // const subUsageData = sortDropdown(mergedMaster, "label", true);
+            setDependentFields(["subUsageType"], dispatch, formKey, filteredSubUsageMinor, "dropDownData");
+          // }
         } else {
           setDependentFields(["subUsageType"], dispatch, formKey, true);
           dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryMinor")[0]}usageCategoryMajor`, field.value));

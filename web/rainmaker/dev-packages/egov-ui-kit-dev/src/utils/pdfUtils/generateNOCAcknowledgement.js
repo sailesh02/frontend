@@ -69,7 +69,7 @@ export const generateNOCAcknowledgement = async (preparedFinalObject, fileName =
     const ownershipType = getFromObject(FireNOC, "fireNOCDetails.applicantDetails.ownerShipType", "");
     if (ownershipType.startsWith("INSTITUTION")) {
         applicantSummary = generateKeyValue(preparedFinalObject, institutionSummaryDetail)
-    } else if (ownershipType.includes("SO")) {
+    } else if (ownershipType.includes("SINGLEOWNER")) {
         applicantSummary = generateKeyValue(preparedFinalObject, applicantSummaryDetails)
     } else {
         applicantSummaryInfo = getMultiItems(preparedFinalObject, applicantSummaryDetails, 'FireNOCs[0].fireNOCDetails.applicantDetails.owners')

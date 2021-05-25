@@ -414,9 +414,9 @@ class FormWizard extends Component {
     const { purpose } = this.state;
     const disableOwner = !formWizardConstants[purpose].canEditOwner;
     switch (ownerType) {
-      case "SO":
+      case "SINGLEOWNER":
         return <OwnerInfoHOC disabled={disableOwner} />;
-      case "MO":
+      case "MULTIPLEOWNERS":
         return (
           <MultipleOwnerInfoHOC
             addOwner={() => {
@@ -628,7 +628,7 @@ class FormWizard extends Component {
         assessmentId
       );
     }
-    if (selectedownerShipCategoryType === "SO") {
+    if (selectedownerShipCategoryType === "SINGLEOWNER") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -650,7 +650,7 @@ class FormWizard extends Component {
       );
     }
 
-    if (selectedownerShipCategoryType === "MO") {
+    if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -872,7 +872,7 @@ class FormWizard extends Component {
               ownershipType,
               "fields.typeOfOwnership.value"
             );
-            if (ownershipTypeSelected === "SO") {
+            if (ownershipTypeSelected === "SINGLEOWNER") {
               const { ownerInfo } = form;
               const isOwnerInfoFormValid = validateForm(ownerInfo);
               if (isOwnerInfoFormValid) {
@@ -888,7 +888,7 @@ class FormWizard extends Component {
               } else {
                 displayFormErrorsAction("ownerInfo");
               }
-            } else if (ownershipTypeSelected === "MO") {
+            } else if (ownershipTypeSelected === "MULTIPLEOWNERS") {
               let ownerValidation = true;
               for (const variable in form) {
                 if (variable.search("ownerInfo_") !== -1) {
@@ -1282,7 +1282,7 @@ class FormWizard extends Component {
       );
     }
 
-    if (selectedownerShipCategoryType === "SO") {
+    if (selectedownerShipCategoryType === "SINGLEOWNER") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -1304,7 +1304,7 @@ class FormWizard extends Component {
       );
     }
 
-    if (selectedownerShipCategoryType === "MO") {
+    if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",

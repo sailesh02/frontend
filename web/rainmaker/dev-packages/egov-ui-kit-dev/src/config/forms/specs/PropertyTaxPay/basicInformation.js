@@ -43,13 +43,13 @@ const formConfig = {
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         removeFormKey(formKey, field, dispatch, state);
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, []));
-        let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
-        if (!isEmpty(minorObject)) {
-          dispatch(prepareFormData("Properties[0].propertyDetails[0].usageCategoryMajor", minorObject.usageCategoryMajor));
-        } else {
+        // let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
+        // if (!isEmpty(minorObject)) {
+        //   dispatch(prepareFormData("Properties[0].propertyDetails[0].usageCategoryMajor", minorObject.usageCategoryMajor));
+        // } else {
           dispatch(prepareFormData("Properties[0].propertyDetails[0].usageCategoryMajor", field.value));
           dispatch(prepareFormData("Properties[0].propertyDetails[0].usageCategoryMinor", null));
-        }
+        // }
       },
       dropDownData: [],
     },

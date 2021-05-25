@@ -26,7 +26,7 @@ export default class AdditionalInformation extends Component {
                     <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                       <Label
                         labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
-                        label={`PT_PROPERTY_${item.toUpperCase}`}
+                        label={`PT_PROPERTY_${item.toUpperCase()}`}
                         fontSize="12px"
                       />
                     </div>

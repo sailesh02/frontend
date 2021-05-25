@@ -49,9 +49,9 @@ export const getUsageTypeInfo = (propertyDetails) => {
   return propertyDetails.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMajor, localizationLabelsData) : "NA";
 }
 
-export const getPlotSizeInfo = (propertyDetails) => {
+export const getPlotSizeInfo = (propertyDetails, editIcon) => {
   return propertyDetails.propertySubType === "SHAREDPROPERTY"
-    ? "NA" : propertyDetails.uom ? `${Math.round(propertyDetails.landArea * 9)} ${propertyDetails.uom}` : `${Math.round(propertyDetails.landArea * 9)} sq feet`;
+    ? "NA" : propertyDetails.uom ? `${Math.round(!!editIcon ? propertyDetails.landArea : propertyDetails.landArea * 9)} ${propertyDetails.uom}` : `${Math.round(!!editIcon ? propertyDetails.landArea : propertyDetails.landArea * 9)} sq feet`;
 }
 
 export const getRainWaterHarvestingInfo = (properties) => {
@@ -71,7 +71,7 @@ export const getOccupancyInfo = (unit) => {
   return unit && unit.occupancyType ? getTranslatedLabel('PROPERTYTAX_OCCUPANCYTYPE_' + unit && unit.occupancyType, localizationLabelsData) : "NA";
 }
 
-export const getAssessmentInfo = (propertyDetails, generalMDMSDataById, properties, oldPropertydetails, OldProperty) => {
+export const getAssessmentInfo = (propertyDetails, generalMDMSDataById, properties, oldPropertydetails, OldProperty, editIcon) => {
   const { units = [], noOfFloors } = propertyDetails || {};
 
   return (
@@ -88,8 +88,8 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById, properti
       },
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_PLOT_SIZE", localizationLabelsData),
-        value: getPlotSizeInfo(propertyDetails),
-        oldValue: oldPropertydetails && getPlotSizeInfo(oldPropertydetails),
+        value: getPlotSizeInfo(propertyDetails, editIcon),
+        oldValue: oldPropertydetails && getPlotSizeInfo(oldPropertydetails, editIcon),
       },
       propertyDetails.propertySubType === "SHAREDPROPERTY"
         ? {
@@ -116,7 +116,7 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById, properti
   );
 };
 
-export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => {
+export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails, editIcon) => {
   units = units || [];
   units = units && units.filter(unit => unit && (unit.active || unit.id == undefined));
   let floors = [];
@@ -134,7 +134,7 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
       }, {
 
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
-        value: unit.unitArea ? unit.unitArea * 9 + '' : "NA",
+        value: unit.unitArea ? !!editIcon ? unit.unitArea : unit.unitArea * 9 + '' : "NA",
         oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && (`${Math.round(oldPropertydetails.units[index].unitArea * 9)}`) || "NA",
       }];
       if (unit.occupancyType === "RENTED") {
@@ -167,8 +167,8 @@ const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById, OldProperty
   if (properties) {
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
-      subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0], oldPropertydetails);
-      assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById, properties, oldPropertydetails, OldProperty);
+      subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0], oldPropertydetails, editIcon);
+      assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById, properties, oldPropertydetails, OldProperty, editIcon);
       if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {
         hideSubsectionLabel = true;
       }

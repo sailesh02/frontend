@@ -88,7 +88,7 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
     if (financialYearFromQuery) {
       set(prepareFormData, "Properties[0].propertyDetails[0].financialYear", financialYearFromQuery);
     }
-    if (selectedownerShipCategoryType === "SO") {
+    if (selectedownerShipCategoryType === "SINGLEOWNER") {
       set(prepareFormData, "Properties[0].propertyDetails[0].owners", getSingleOwnerInfo(self));
       set(
         prepareFormData,
@@ -96,7 +96,7 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
         get(common, `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`, "INDIVIDUAL")
       );
       set(prepareFormData, "Properties[0].propertyDetails[0].subOwnershipCategory", selectedownerShipCategoryType);
-    } else if (selectedownerShipCategoryType === "MO") {
+    } else if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
       set(prepareFormData, "Properties[0].propertyDetails[0].owners", getMultipleOwnerInfo(self));
       set(
         prepareFormData,
@@ -538,7 +538,7 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
         }
         return unitTotal;
       }, 0);
-      const plotSizeInFt = parseFloat(plotDetails.fields.plotSize.value) * 9;
+      const plotSizeInFt = parseFloat(plotDetails.fields.plotSize.value);
       if (unitTotal > plotSizeInFt) {
         alert(`Total area of floor ${floorNo} has exceeded the plot size`);
         isValid = false;

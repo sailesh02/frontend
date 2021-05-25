@@ -339,7 +339,7 @@ const validateMobileNumber = (state) => {
     //     err = "OWNER_NUMBER_SAME";
     //   }
     // })
-    if (!err && ownershipCategoryTemp.includes('MO') && newOwners.length == 1) {
+    if (!err && ownershipCategoryTemp.includes('MULTIPLEOWNERS') && newOwners.length == 1) {
       err = "OWNERSHIPTYPE_CANNOT_BE_MULTIPLE";
     }
   }

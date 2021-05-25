@@ -349,8 +349,8 @@ export const beforeInitForm = {
       }
     };
 
-    if (usageCategoryMinor && usageCategoryMajor !== "MIXED") {
-      unitFormUpdate("common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMinor");
+    if (usageCategoryMajor && usageCategoryMajor !== "MIXED") {
+      unitFormUpdate("common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor");
     } else {
       if (usageCategoryMajor === "MIXED") {
         var masterOne = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
@@ -361,7 +361,7 @@ export const beforeInitForm = {
         set(action, "form.fields.usageType.disabled", false);
         const usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);
         set(action, "form.fields.usageType.dropDownData", usageTypeData);
-        unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`, false);
+        unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMajor`, false);
       } else {
         set(action, "form.fields.subUsageType.hideField", true);
       }
@@ -404,7 +404,7 @@ export const beforeInitFormForPlot = {
       var usageCategoryMajor = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor");
       set(action, "form.fields.subUsageType.hideField", false);
 
-      if (usageCategoryMinor && usageCategoryMajor !== "MIXED") {
+      if (usageCategoryMajor && usageCategoryMajor !== "MIXED") {
         // var filteredSubUsageMinor = filter(
         //   prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
         //   (subUsageMinor) => {
@@ -416,7 +416,7 @@ export const beforeInitFormForPlot = {
       var filteredSubUsageMinor = filter(
         usageCategorySubMinorData,
         (subUsageMinor) => {
-          return subUsageMinor.usageCategoryMajor === usageCategoryMinor;
+          return subUsageMinor.usageCategoryMajor === usageCategoryMajor;
         }
       );
         if (filteredSubUsageMinor.length > 0) {

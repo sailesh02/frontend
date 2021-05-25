@@ -4,6 +4,8 @@ import {
   getCommonContainer,
   getLabelWithValue,
   getTextField,
+  getPattern,
+  getSelectField,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { propertySearchApiCall } from './functions';
@@ -54,6 +56,11 @@ if(isMode==="MODIFY"){
 }
 export const propertyHeader = getCommonSubHeader({
   lKey:resetScreen(),
+  labelKey: "WS_COMMON_PROP_DETAIL",
+  labelName: "Property Details"
+})
+
+export const NoIdHeader = getCommonSubHeader({
   labelKey: "WS_COMMON_PROP_DETAIL",
   labelName: "Property Details"
 })
@@ -189,7 +196,112 @@ const propertyDetails = getCommonContainer({
   )
 })
 
+const propertyDetailsNoId = getCommonContainer({
+  noOfFlats: getTextField({
+    label: {
+      labelName: "No of Flats",
+      labelKey: "WS_PROPERTY_NO_OF_FLATS_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter No of Flats.",
+      labelKey: "WS_PROPERTY_NO_OF_FLATS_PLACEHOLDER"
+    },
+    required: true,
+    // pattern: getPattern("MobileNo"),
+    // errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    jsonPath: "applyScreen.property.owners[0].mobileNumber",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
+  }),
+  connectionCategory: getSelectField({
+    label: {
+      labelName: "Connection Category",
+      labelKey: "WS_PROPERTY_CONNECTION_CATEGORY_LABEL"
+    },
+    placeholder: {
+      labelName: "Select Connection Category",
+      labelKey: "WS_PROPERTY_CONNECTION_CATEGORY_PLACEHOLDER"
+    },
+    required: true,
+    jsonPath: "applyScreen.property.owners[0].relationship",
+    data: [{ code: "TEMPORARY" }, { code: "PERMANENT" }],
+    localePrefix: {
+      moduleName: "common-masters",
+      masterName: "OwnerType"
+    },
+    //sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    }
+  }),
+  connectionType: getSelectField({
+    label: {
+      labelName: "Connection Type",
+      labelKey: "WS_PROPERTY_CONNECTION_TYPE_LABEL"
+    },
+    placeholder: {
+      labelName: "Select Connection Type",
+      labelKey: "WS_PROPERTY_CONNECTION_TYPE_LABEL"
+    },
+    jsonPath: "applyScreen.property.owners[0].ownerType",
+    required: true,
+    localePrefix: {
+      moduleName: "common-masters",
+      masterName: "OwnerType"
+    },
+    data: [{ code: "METERED" }, { code: "NON METERED" }],
+    // sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    }
+  }),
+  usageCategory: getSelectField({
+    label: {
+      labelName: "Usage Category",
+      labelKey: "WS_SELECT_USAGE_TYPE_LABEL"
+    },
+    placeholder: {
+      labelName: "Select Usage Category",
+      labelKey: "WS_SELECT_USAGE_TYPE_PLACEHOLDER"
+    },
+    jsonPath: "applyScreen.property.owners[0].ownerType",
+    required: true,
+    localePrefix: {
+      moduleName: "common-masters",
+      masterName: "OwnerType"
+    },
+    sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    }
+  })
+});
 
+export const getPropertyDetailsNoId = (isEditable = true) => {
+  return getCommonContainer({
+    headerDiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      props: {
+        style: { marginBottom: "10px" }
+      },
+      children: {
+        header: {
+          gridDefination: {
+            xs: 12,
+            sm: 10
+          }
+        },
+      }
+    },
+    holderDetails: propertyDetailsNoId
+  });
+};
 
 export const getPropertyIDDetails = (isEditable = true) => {
   return getCommonContainer({

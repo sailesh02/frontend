@@ -81,7 +81,7 @@ const formConfig = {
       dropDownData: [
         { label: "Father", value: "FATHER" },
         { label: "Husband", value: "HUSBAND" },
-        {label: "Mother", value: "MOTHER"}, {label: "Brother", value: "BROTHER"}, {label: "Sister", value: "SISTER"}, {label: "Grand Father", value: "GRANDFATHER"}, {label: "Grand Mother", value: "GRANDMOTHER"}, {label: "Father-In-Law", value: "FATHERINLAW"}, {label: "MOther-In-Law", value: "MOTHERINLAW"}, {LABEL: "Other Guardian", value: "OTHER"}
+        {label: "Mother", value: "MOTHER"}, {label: "Brother", value: "BROTHER"}, {label: "Sister", value: "SISTER"}, {label: "Grand Father", value: "GRANDFATHER"}, {label: "Grand Mother", value: "GRANDMOTHER"}, {label: "Father-In-Law", value: "FATHERINLAW"}, {label: "Mother-In-Law", value: "MOTHERINLAW"}, {LABEL: "Other Guardian", value: "OTHER"}
       ],
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       disabled: true

@@ -224,7 +224,7 @@ export const getMdmsData = async dispatch => {
 
 const showHideFieldModifyConnection = (action) => {
   let fieldsChanges = [
-    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard", false],
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard", true],
     ["components.div.children.formwizardFourthStep.children.snackbarWarningMessage.children.clickHereLink", true],
     ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSeven", false],
     ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewEight", false],
@@ -490,13 +490,13 @@ let holderDetails = getHolderDetails();
 export let ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
 export let IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
 export let Details = getCommonCard({ propertyDetail });
-export let connectionHolderDetails = getCommonCard({ holderHeader, sameAsOwner, holderDetails })
+export let connectionHolderDetails = getCommonCard({ holderHeader, holderDetails })
 
 export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form1" },
-  children: { IDDetails, Details, ownerDetails, connectionHolderDetails, OwnerInfoCard }
+  children: { IDDetails, Details, connectionHolderDetails, OwnerInfoCard }
 };
 export const formwizardSecondStep = {
   uiFramework: "custom-atoms",
@@ -603,6 +603,16 @@ const screenConfig = {
       }
     } else {
       togglePropertyFeilds(action, false)
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.connectionHolderDetails.visible",
+        true
+      );
+      // set(
+      //   action.screenConfig,
+      //   "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.visible",
+      //   value
+      // );
       if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
         toggleWaterFeilds(action, true);
         toggleSewerageFeilds(action, true);

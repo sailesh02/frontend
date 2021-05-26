@@ -27,9 +27,9 @@ let mode = getQueryArg(window.location.href, "mode");
 
 
 const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"}]
-const meteredTemporary = [{code:"Temporary Water Supply For Contractors."}]
-const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"For every additional taps"},{code:"BPL Category"},{code:"ROAD SIDE EATERS"},
-{code:"Stand Post/Mucipalty/Association"}]
+const meteredTemporary = [{code:"TWSFC"}]
+const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL_CATEGORY"},{code:"ROADSIDEEATERS"},
+{code:"SPMA"}]
 const nonMeteredTemporory = [{code:"DOMESTIC"}]
 
 let modifyLink;

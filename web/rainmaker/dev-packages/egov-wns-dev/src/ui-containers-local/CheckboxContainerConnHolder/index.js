@@ -8,7 +8,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import get from "lodash/get";
-import { toggleConnHolderDetails } from "../CheckboxContainer/toggleFeilds"
+import { toggleConnHolderDetails,toggleFlatDetails } from "../CheckboxContainer/toggleFeilds"
 
 const styles = {
   root: {
@@ -69,15 +69,25 @@ class CheckboxLabels extends React.Component {
       screenKey,
       preparedFinalObject,
       approveCheck,
-      jsonPath
+      jsonPath,
+      isApartment
     } = this.props;
 
     const isChecked = event.target.checked;
-    if (isChecked) {
-      toggleConnHolderDetails(onFieldChange, false);
-    } else {
-      toggleConnHolderDetails(onFieldChange, true);
+    if(isApartment){
+      if (isChecked) {
+        toggleFlatDetails(onFieldChange, true);
+      } else {
+        toggleFlatDetails(onFieldChange, false);
+      }
+    }else{
+      if (isChecked) {
+        toggleConnHolderDetails(onFieldChange, false);
+      } else {
+        toggleConnHolderDetails(onFieldChange, true);
+      }
     }
+   
 
     this.setState({ [name]: isChecked }, () =>
       approveCheck(jsonPath, isChecked)
@@ -85,7 +95,7 @@ class CheckboxLabels extends React.Component {
   };
 
   render() {
-    const { classes, content, label } = this.props;
+    const { classes, content, label, isApartment } = this.props;
     let isChecked = (this.state.checkedG === null)?this.props.isChecked:this.state.checkedG;
     return (
       <FormGroup row>

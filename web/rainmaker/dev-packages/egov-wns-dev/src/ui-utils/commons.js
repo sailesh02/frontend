@@ -601,6 +601,7 @@ const parserFunction = (state) => {
         }
     }
     queryObject = { ...queryObject, ...parsedObject }
+    queryObject = {...queryObject,property:null}
     return queryObject;
 }
 

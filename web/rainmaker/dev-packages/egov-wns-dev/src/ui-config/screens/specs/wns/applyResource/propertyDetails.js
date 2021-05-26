@@ -407,16 +407,25 @@ const propertyDetailsNoId = getCommonContainer({
     },
     afterFieldChange: (action, state, dispatch) => {
       if(action.value){
-        if(action.value == 'Domestic')
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.apartment",
-            "visible",
-            true
-          )
-        );
-        
+        if(action.value == 'Domestic'){
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.apartment",
+              "visible",
+              true
+            )
+          );
+        }else{
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.apartment",
+              "visible",
+              false
+            )
+          );
+        } 
       }
   },
     gridDefination: {

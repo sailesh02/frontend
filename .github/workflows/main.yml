@@ -2,7 +2,7 @@ name: A workflow to build egov frontend
 on: 
  push:
     branches:
-      - feature/od-deploy
+      - dev-release-v2.3
 jobs:
   build:
     name: Build citizen
@@ -32,11 +32,6 @@ jobs:
         with:
           name: citizen
           path: ./web/rainmaker/packages/citizen/build
-      - name: Inform Dev server to deploy
-        uses: satak/webrequest-action@master
-        with:
-          url: https://od-dev.transerve.com/github/deploy/Transerve-PwC/frontend/citizen
-          method: GET
   build-employee:
     name: Build Employee
     runs-on: ubuntu-latest
@@ -65,9 +60,3 @@ jobs:
         with:
           name: employee
           path: ./web/rainmaker/packages/employee/build
-      - name: Inform Dev server to deploy
-        uses: satak/webrequest-action@master
-        with:
-          url: https://od-dev.transerve.com/github/deploy/Transerve-PwC/frontend/employee
-          method: GET
-

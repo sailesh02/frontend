@@ -27,11 +27,11 @@ class Applications extends React.Component {
     let applicationType = data.applicationType;
     if (connectionNo && connectionNo !== 'NA' && applicationType.includes('MODIFY')) {
       store.dispatch(
-        setRoute(`/wns/search-preview?applicationNumber=${data.applicationNo}&tenantId=${data.property.tenantId}&history=true&service=${data.service}&mode=MODIFY`)
+        setRoute(`/wns/search-preview?applicationNumber=${data.applicationNo}&tenantId=${data.tenantId}&history=true&service=${data.service}&mode=MODIFY`)
       )
     } else {
       store.dispatch(
-        setRoute(`/wns/search-preview?applicationNumber=${data.applicationNo}&tenantId=${data.property.tenantId}&history=true&service=${data.service}`)
+        setRoute(`/wns/search-preview?applicationNumber=${data.applicationNo}&tenantId=${data.tenantId}&history=true&service=${data.service}`)
       )
     }
   }
@@ -97,7 +97,7 @@ class Applications extends React.Component {
                         </Grid>
                         <Grid item md={8} xs={6}>
                           <LabelContainer
-                            labelName={item.property.owners.map(owner => owner.name).join(",")}
+                            labelName={item.connectionHolders.map(owner => owner.name).join(",")}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />

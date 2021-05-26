@@ -135,7 +135,7 @@ const callBackForNext = async (state, dispatch) => {
     //   isFormValid = await appl;
     // }
 
-    validateFields("components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children", state, dispatch)
+    // validateFields("components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children", state, dispatch)
     validateFields("components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.children", state, dispatch)
 
     validateFields("components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children", state, dispatch)
@@ -294,6 +294,7 @@ const callBackForNext = async (state, dispatch) => {
             let sewerChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")
             let modifyAppCreated = get(state, "screenConfiguration.preparedFinalObject.modifyAppCreated")
             if (isFormValid) {
+              debugger
               if ((waterData && waterData.length > 0) || (sewerData && sewerData.length > 0)) {
                 if (waterChecked && sewerChecked) {
                   dispatch(

@@ -601,7 +601,6 @@ const parserFunction = (state) => {
         }
     }
     queryObject = { ...queryObject, ...parsedObject }
-    queryObject = {...queryObject,property:null}
     return queryObject;
 }
 
@@ -909,6 +908,7 @@ export const applyForWater = async (state, dispatch) => {
             }
             queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.property.address.locality.code;
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
+            queryObjectForUpdate.property = null
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResults(searchQueryObject);
@@ -927,6 +927,7 @@ export const applyForWater = async (state, dispatch) => {
             if (isModifyMode()) {
                 set(queryObject, "waterSource", getWaterSource(queryObject.waterSource, queryObject.waterSubSource));
             }
+            queryObject.property = null
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
@@ -980,6 +981,7 @@ export const applyForSewerage = async (state, dispatch) => {
             }
             queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.property.address.locality.code;
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
+            // queryObjectForUpdate.property = null
             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResultsForSewerage(searchQueryObject, dispatch);
@@ -995,6 +997,7 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObject.additionalDetails.locality = queryObject.property.address.locality.code;
             set(queryObject, "processInstance.action", "INITIATE");
             queryObject = findAndReplace(queryObject, "NA", null);
+            // queryObject.property = null;
             response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
@@ -1071,6 +1074,8 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
                 queryObjectForUpdateSewerage.additionalDetails = {};
             }
             queryObjectForUpdateSewerage.additionalDetails.locality = queryObjectForUpdateSewerage.property.address.locality.code;
+            // queryObjectForUpdateSewerage.property = null
+            queryObjectForUpdateWater.property = null
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdateWater });
             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdateSewerage });
             let searchQueryObjectWater = [
@@ -1096,6 +1101,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             queryObject.additionalDetails.locality = queryObject.property.address.locality.code;
             set(queryObject, "processInstance.action", "INITIATE");
             queryObject = findAndReplace(queryObject, "NA", null);
+            // queryObject.property = null;
             response = await httpRequest("post", "/ws-services/wc/_create", "_create", [], { WaterConnection: queryObject });
             const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "_create", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));

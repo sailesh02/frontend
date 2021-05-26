@@ -29,7 +29,7 @@ import { getHolderDetails, holderHeader, sameAsOwner } from "./applyResource/con
 import { footer } from "./applyResource/footer";
 import { getOwnerDetails, ownerDetailsHeader, ownershipType } from "./applyResource/ownerDetails";
 import { getPropertyDetails } from "./applyResource/property-locationDetails";
-import { getPropertyIDDetails, propertyHeader, propertyID } from "./applyResource/propertyDetails";
+import { getPropertyIDDetails, propertyHeader, propertyID, NoIdHeader, getPropertyDetailsNoId } from "./applyResource/propertyDetails";
 import { reviewConnectionDetails, snackbarWarningMessage } from "./applyResource/reviewConnectionDetails";
 import { reviewDocuments } from "./applyResource/reviewDocuments";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
@@ -224,7 +224,7 @@ export const getMdmsData = async dispatch => {
 
 const showHideFieldModifyConnection = (action) => {
   let fieldsChanges = [
-    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard", false],
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard", true],
     ["components.div.children.formwizardFourthStep.children.snackbarWarningMessage.children.clickHereLink", true],
     ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSeven", false],
     ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewEight", false],
@@ -486,17 +486,22 @@ let propertyDetail = getPropertyDetails();
 let propertyIDDetails = getPropertyIDDetails();
 let ownerDetail = getOwnerDetails();
 let holderDetails = getHolderDetails();
+let propertyDetailsNoId = getPropertyDetailsNoId()
 
 export let ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
-export let IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
+// export let IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
+export let IDDetails = getCommonCard({ propertyHeader, propertyID });
 export let Details = getCommonCard({ propertyDetail });
-export let connectionHolderDetails = getCommonCard({ holderHeader, sameAsOwner, holderDetails })
+export let connectionHolderDetails = getCommonCard({ holderHeader, holderDetails })
 
+//if property id is not entered to fetch property details while apply for water and sewerage
+export let PropertyDetailsNoId = getCommonCard({ NoIdHeader, propertyDetailsNoId })
 export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form1" },
-  children: { IDDetails, Details, ownerDetails, connectionHolderDetails, OwnerInfoCard }
+  children: { IDDetails, PropertyDetailsNoId, connectionHolderDetails, OwnerInfoCard }
+  // children: { IDDetails, Details, PropertyDetailsNoId, connectionHolderDetails, OwnerInfoCard }
 };
 export const formwizardSecondStep = {
   uiFramework: "custom-atoms",
@@ -545,6 +550,7 @@ const pageReset = (dispatch) => {
   propertyIDDetails = getPropertyIDDetails();
   ownerDetail = getOwnerDetails();
   holderDetails = getHolderDetails();
+  propertyDetailsNoId = getPropertyDetailsNoId();
   ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
   IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
   Details = getCommonCard({ propertyDetail });
@@ -603,6 +609,16 @@ const screenConfig = {
       }
     } else {
       togglePropertyFeilds(action, false)
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.connectionHolderDetails.visible",
+        true
+      );
+      // set(
+      //   action.screenConfig,
+      //   "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.visible",
+      //   value
+      // );
       if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
         toggleWaterFeilds(action, true);
         toggleSewerageFeilds(action, true);

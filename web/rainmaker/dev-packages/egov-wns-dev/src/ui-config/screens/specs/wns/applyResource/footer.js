@@ -129,13 +129,17 @@ const callBackForNext = async (state, dispatch) => {
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   let isFormValid = true;
   let hasFieldToaster = false;
+  const searchPropertyId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreen.propertyIds"
+  )
   /* validations for property details screen */
   if (activeStep === 0) {
     // if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
     //   isFormValid = await appl;
     // }
 
-    validateFields("components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children", state, dispatch)
+    // validateFields("components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children", state, dispatch)
     validateFields("components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.children", state, dispatch)
 
     validateFields("components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children", state, dispatch)
@@ -170,7 +174,7 @@ const callBackForNext = async (state, dispatch) => {
         applyScreenObj.connectionHolders = arrayHolderData;
       }
 
-      if (!isActiveProperty(applyScreenObj.property)) {
+      if ( !!searchPropertyId && !isActiveProperty(applyScreenObj.property)) {
         dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObj.property.status}`, labelName: `Property Status is ${applyScreenObj.property.status}` }, "warning"));
         showHideFieldsFirstStep(dispatch, "", false);
         dispatch(prepareFinalObject("applyScreen", applyScreenObj));
@@ -208,9 +212,9 @@ const callBackForNext = async (state, dispatch) => {
         arrayHolderData.push(holderData);
         applyScreenObject.connectionHolders = arrayHolderData;
       }
-      if (searchPropertyId !== undefined && searchPropertyId !== "") {
+      // if (searchPropertyId !== undefined && searchPropertyId !== "") {
 
-        if (!isActiveProperty(applyScreenObject.property)) {
+        if (!!searchPropertyId && !isActiveProperty(applyScreenObject.property)) {
           dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObject.property.status}`, labelName: `Property Status is ${applyScreenObject.property.status}` }, "warning"));
           showHideFieldsFirstStep(dispatch, "", false);
           return false;
@@ -221,12 +225,12 @@ const callBackForNext = async (state, dispatch) => {
           isFormValid = true;
           hasFieldToaster = false;
           if (applyScreenObject.water || applyScreenObject.sewerage) {
-            if (
-              applyScreenObject.hasOwnProperty("property") &&
-              !_.isUndefined(applyScreenObject["property"]) &&
-              !_.isNull(applyScreenObject["property"]) &&
-              !_.isEmpty(applyScreenObject["property"])
-            ) {
+            // if (
+            //   applyScreenObject.hasOwnProperty("property") &&
+            //   !_.isUndefined(applyScreenObject["property"]) &&
+            //   !_.isNull(applyScreenObject["property"]) &&
+            //   !_.isEmpty(applyScreenObject["property"])
+            // ) {
               if (water && sewerage) {
                 if (validateFeildsForBothWaterAndSewerage(applyScreenObject)) {
                   isFormValid = true;
@@ -276,18 +280,18 @@ const callBackForNext = async (state, dispatch) => {
                   )
                 }
               }
-            } else {
-              isFormValid = false;
-              dispatch(
-                toggleSnackbar(
-                  true, {
-                  labelKey: "ERR_WS_PROP_NOT_FOUND",
-                  labelName: "No Property records found, please search or create a new property"
-                },
-                  "warning"
-                )
-              );
-            }
+            // } else {
+            //   isFormValid = false;
+            //   dispatch(
+            //     toggleSnackbar(
+            //       true, {
+            //       labelKey: "ERR_WS_PROP_NOT_FOUND",
+            //       labelName: "No Property records found, please search or create a new property"
+            //     },
+            //       "warning"
+            //     )
+            //   );
+            // }
             let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
             let sewerData = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection")
             let waterChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.water");
@@ -358,18 +362,18 @@ const callBackForNext = async (state, dispatch) => {
             )
           )
         }
-      } else {
-        isFormValid = false;
-        dispatch(
-          toggleSnackbar(
-            true, {
-            labelKey: "WS_FILL_REQUIRED_FIELDS",
-            labelName: "Please fill Required details"
-          },
-            "warning"
-          )
-        );
-      }
+      // } else {
+      //   isFormValid = false;
+      //   dispatch(
+      //     toggleSnackbar(
+      //       true, {
+      //       labelKey: "WS_FILL_REQUIRED_FIELDS",
+      //       labelName: "Please fill Required details"
+      //     },
+      //       "warning"
+      //     )
+      //   );
+      // }
     }
     prepareDocumentsUploadData(state, dispatch);
   }
@@ -431,7 +435,7 @@ const callBackForNext = async (state, dispatch) => {
     let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
     let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
     dispatch(handleField("apply", "components.div.children.formwizardFourthStep.children.snackbarWarningMessage", "props.propertyId", get(applyScreenObj, "property.propertyId", '')));
-    if (isActiveProperty(applyScreenObj.property)) {
+    if (!!searchPropertyId && isActiveProperty(applyScreenObj.property)) {
       dispatch(handleField("apply", "components.div.children.formwizardFourthStep.children.snackbarWarningMessage", "visible", false));
     }
 

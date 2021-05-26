@@ -253,6 +253,15 @@ export const toggleConnHolderDetails = (onFieldChange, value) => {
   );
 }
 
+export const toggleFlatDetails = (onFieldChange, value) => {
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.noOfFlats",
+    "visible",
+    value
+  );
+}
+
 export const togglePropertyFeilds = (action, value) => {
   set(
     action.screenConfig,

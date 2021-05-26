@@ -8,6 +8,9 @@ import {
   getSelectField,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import get from "lodash/get";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 import { propertySearchApiCall } from './functions';
 import { handlePropertySubUsageType, handleNA, resetFieldsForApplication } from '../../utils';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -21,6 +24,13 @@ let action = getQueryArg(window.location.href, "action");
 let modeaction = getQueryArg(window.location.href, "modeaction");
 
 let mode = getQueryArg(window.location.href, "mode");
+
+
+const meteredPermanent = [{code: "Domestic"},{code: "Industrial"},{code: "Commercial"},{code:"Institutional"}]
+const meteredTemporary = [{code:"Temporary Water Supply For Contractors."}]
+const nonMeteredPermanent = [{code:"Domestic"},{code:"For every additional taps"},{code:"BPL Category"},{code:"ROAD SIDE EATERS"},
+{code:"Stand Post/Mucipalty/Association"}]
+const nonMeteredTemporory = [{code:"Domestic"}]
 
 let modifyLink;
 if(isMode==="MODIFY"){
@@ -197,24 +207,25 @@ const propertyDetails = getCommonContainer({
 })
 
 const propertyDetailsNoId = getCommonContainer({
-  noOfFlats: getTextField({
-    label: {
-      labelName: "No of Flats",
-      labelKey: "WS_PROPERTY_NO_OF_FLATS_LABEL"
+  apartment: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-wns",
+    componentPath: "CheckboxContainerConnHolder",
+    gridDefination: { xs: 12, sm: 12, md: 12 },
+    visible:false,
+    props: {
+      label: {
+        name: "Apartment",
+        key: "WS_COMMON_APARTMENT",
+      },
+      jsonPath: "applyScreen.apartment",
+      required: false,
+      isChecked: false,
+      isApartment:true
     },
-    placeholder: {
-      labelName: "Enter No of Flats.",
-      labelKey: "WS_PROPERTY_NO_OF_FLATS_PLACEHOLDER"
-    },
-    required: true,
-    // pattern: getPattern("MobileNo"),
-    // errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-    jsonPath: "applyScreen.property.owners[0].mobileNumber",
-    gridDefination: {
-      xs: 12,
-      sm: 6
-    },
-  }),
+    type: "array",
+    jsonPath: "applyScreen.apartment",
+  },
   connectionCategory: getSelectField({
     label: {
       labelName: "Connection Category",
@@ -224,18 +235,78 @@ const propertyDetailsNoId = getCommonContainer({
       labelName: "Select Connection Category",
       labelKey: "WS_PROPERTY_CONNECTION_CATEGORY_PLACEHOLDER"
     },
-    required: true,
-    jsonPath: "applyScreen.property.owners[0].relationship",
+    // required: true,
+    jsonPath: "applyScreen.connectionCategory",
+    value:'TEMPORARY',
     data: [{ code: "TEMPORARY" }, { code: "PERMANENT" }],
     localePrefix: {
-      moduleName: "common-masters",
-      masterName: "OwnerType"
+      moduleName: "WS",
+      masterName: "PROPTYPE"
     },
     //sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
     gridDefination: {
       xs: 12,
       sm: 6
-    }
+    },
+    afterFieldChange: (action, state, dispatch) => {
+      if(action){
+        const meteredNonMetered = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionType", "")
+        switch(action.value){
+          case 'TEMPORARY':
+            if(meteredNonMetered == "METERED"){
+              dispatch(
+                handleField(
+                  "apply",
+                  "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                  "data",
+                  meteredTemporary
+                )
+              );
+            }else{
+              dispatch(
+                handleField(
+                  "apply",
+                  "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                  "data",
+                  nonMeteredTemporory
+                )
+              );
+            }
+            break;
+          case 'PERMANENT' :
+              if(meteredNonMetered == "METERED"){
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    meteredPermanent
+                  )
+                );
+              }else{
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    nonMeteredPermanent
+                  )
+                );
+              }
+            break;
+          default:
+              dispatch(
+                handleField(
+                  "apply",
+                  "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                  "data",
+                  nonMeteredTemporory
+                )
+              );
+            break;  
+        }
+      }
+  }
   }),
   connectionType: getSelectField({
     label: {
@@ -246,14 +317,73 @@ const propertyDetailsNoId = getCommonContainer({
       labelName: "Select Connection Type",
       labelKey: "WS_PROPERTY_CONNECTION_TYPE_LABEL"
     },
-    jsonPath: "applyScreen.property.owners[0].ownerType",
-    required: true,
+    value:{ code: "METERED" },
+    jsonPath: "applyScreen.connectionType",
+    // required: true,
     localePrefix: {
-      moduleName: "common-masters",
-      masterName: "OwnerType"
+      moduleName: "WS",
+      masterName: "PROPTYPE"
     },
     data: [{ code: "METERED" }, { code: "NON METERED" }],
-    // sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+    afterFieldChange: (action, state, dispatch) => {
+      if(action){
+        const connectionCategory = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionCategory", "")
+        switch(action.value){
+          case 'METERED':
+            if(connectionCategory == "TEMPORARY"){
+              dispatch(
+                handleField(
+                  "apply",
+                  "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                  "data",
+                  meteredTemporary
+                )
+              );
+            }else{
+              dispatch(
+                handleField(
+                  "apply",
+                  "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                  "data",
+                  meteredPermanent
+                )
+              );
+            }
+            break;
+          case 'NON METERED' :
+              if(connectionCategory == "TEMPORARY"){
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    nonMeteredTemporory
+                  )
+                );
+              }else{
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    nonMeteredPermanent
+                  )
+                );
+              }
+            break;
+          default:
+              dispatch(
+                handleField(
+                  "apply",
+                  "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                  "data",
+                  nonMeteredTemporory
+                )
+              );
+            break;  
+        }
+      }
+  },
     gridDefination: {
       xs: 12,
       sm: 6
@@ -268,18 +398,50 @@ const propertyDetailsNoId = getCommonContainer({
       labelName: "Select Usage Category",
       labelKey: "WS_SELECT_USAGE_TYPE_PLACEHOLDER"
     },
-    jsonPath: "applyScreen.property.owners[0].ownerType",
-    required: true,
+    data: [],
+    jsonPath: "applyScreen.usageCategory",
+    // required: true,
     localePrefix: {
-      moduleName: "common-masters",
-      masterName: "OwnerType"
+      moduleName: "WS",
+      masterName: "PROPTYPE"
     },
-    sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+    afterFieldChange: (action, state, dispatch) => {
+      if(action.value){
+        if(action.value == 'Domestic')
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.apartment",
+            "visible",
+            true
+          )
+        );
+        
+      }
+  },
     gridDefination: {
       xs: 12,
       sm: 6
     }
-  })
+  }),
+
+  noOfFlats: getTextField({
+    label: {
+      labelName: "No of Flats",
+      labelKey: "WS_PROPERTY_NO_OF_FLATS_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter No of Flats.",
+      labelKey: "WS_PROPERTY_NO_OF_FLATS_PLACEHOLDER"
+    },
+    visible:false,
+    jsonPath: "applyScreen.noOfFlats",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
+  }),
+
 });
 
 export const getPropertyDetailsNoId = (isEditable = true) => {

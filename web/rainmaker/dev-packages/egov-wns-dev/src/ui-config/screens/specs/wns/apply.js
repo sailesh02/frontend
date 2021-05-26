@@ -489,7 +489,8 @@ let holderDetails = getHolderDetails();
 let propertyDetailsNoId = getPropertyDetailsNoId()
 
 export let ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
-export let IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
+// export let IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
+export let IDDetails = getCommonCard({ propertyHeader, propertyID });
 export let Details = getCommonCard({ propertyDetail });
 export let connectionHolderDetails = getCommonCard({ holderHeader, holderDetails })
 
@@ -499,7 +500,8 @@ export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form1" },
-  children: { IDDetails, Details, PropertyDetailsNoId, connectionHolderDetails, OwnerInfoCard }
+  children: { IDDetails, PropertyDetailsNoId, connectionHolderDetails, OwnerInfoCard }
+  // children: { IDDetails, Details, PropertyDetailsNoId, connectionHolderDetails, OwnerInfoCard }
 };
 export const formwizardSecondStep = {
   uiFramework: "custom-atoms",

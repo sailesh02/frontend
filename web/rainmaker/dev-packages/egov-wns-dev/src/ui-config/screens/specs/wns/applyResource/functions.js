@@ -63,7 +63,9 @@ export const propertySearchApiCall = async (state, dispatch) => {
         if(!isActiveProperty(propertyData)){
           dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${propertyData.status}`, labelName: `Property Status is ${propertyData.status}` }, "warning"));     
           showHideFieldsFirstStep(dispatch,propertyData.propertyId,false); 
-          dispatch(prepareFinalObject("applyScreen.property", propertyData))         
+          dispatch(prepareFinalObject("applyScreen.property", propertyData)) 
+          dispatch(prepareFinalObject("connectionHolders", propertyData.owners ? propertyData.owners : []))
+          dispatch(prepareFinalObject("applyScreen.usageCategory", propertyData.usageCategory ? propertyData.usageCategory : ""))        
         }else{          
           let contractedCorAddress = "";
 
@@ -85,6 +87,8 @@ export const propertySearchApiCall = async (state, dispatch) => {
             }    
           }
           dispatch(prepareFinalObject("applyScreen.property", propertyData))
+          dispatch(prepareFinalObject("connectionHolders", propertyData.owners ? propertyData.owners : []))
+          dispatch(prepareFinalObject("applyScreen.usageCategory", propertyData.usageCategory ? propertyData.usageCategory : ""))        
           showHideFields(dispatch, true);
         }
       } else {

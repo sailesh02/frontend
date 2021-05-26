@@ -429,19 +429,19 @@ export const validateConnHolderDetails = (holderData) => {
 }
 
 export const validateFeildsForWater = (applyScreenObject) => {
-    let rValue = false;
-    if (applyScreenObject.hasOwnProperty("property") &&
-        applyScreenObject['property'] !== undefined &&
-        applyScreenObject["property"] !== "") {
-        rValue = true;
-        if (isModifyMode()) {
-            return rValue
-        }
-    }
+    let rValue = true;
+    // if (applyScreenObject.hasOwnProperty("property") &&
+    //     applyScreenObject['property'] !== undefined &&
+    //     applyScreenObject["property"] !== "") {
+    //     rValue = true;
+    //     if (isModifyMode()) {
+    //         return rValue
+    //     }
+    // }
     if (rValue &&
-        applyScreenObject.hasOwnProperty("property") &&
-        applyScreenObject['property'] !== undefined &&
-        applyScreenObject["property"] !== "" &&
+        // applyScreenObject.hasOwnProperty("property") &&
+        // applyScreenObject['property'] !== undefined &&
+        // applyScreenObject["property"] !== "" &&
         applyScreenObject.hasOwnProperty("water") &&
         applyScreenObject["water"] !== undefined &&
         applyScreenObject["water"] !== "" &&
@@ -883,10 +883,12 @@ export const applyForWater = async (state, dispatch) => {
     let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = waterId ? "UPDATE" : "CREATE";
+    debugger
     try {
-        const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
+        const tenantId = commonConfig.tenantId
+        // const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
         let response;
-        queryObject.tenantId = (queryObject && queryObject.property && queryObject.property.tenantId) ? queryObject.property.tenantId : null;
+        queryObject.tenantId = commonConfig.tenantId;
         if (method === "UPDATE") {
             queryObject.additionalDetails.appCreatedDate = get(
                 state.screenConfiguration.preparedFinalObject,
@@ -906,7 +908,7 @@ export const applyForWater = async (state, dispatch) => {
             if (typeof queryObjectForUpdate.additionalDetails !== 'object') {
                 queryObjectForUpdate.additionalDetails = {};
             }
-            queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.property.address.locality.code;
+            // queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.property.address.locality.code;
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             queryObjectForUpdate.property = null
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
@@ -921,7 +923,7 @@ export const applyForWater = async (state, dispatch) => {
             if (typeof queryObject.additionalDetails !== 'object') {
                 queryObject.additionalDetails = {};
             }
-            queryObject.additionalDetails.locality = queryObject.property.address.locality.code;
+            // queryObject.additionalDetails.locality = queryObject.property.address.locality.code;
             set(queryObject, "processInstance.action", "INITIATE")
             queryObject = findAndReplace(queryObject, "NA", null);
             if (isModifyMode()) {

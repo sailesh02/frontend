@@ -65,7 +65,7 @@ export const propertySearchApiCall = async (state, dispatch) => {
           showHideFieldsFirstStep(dispatch,propertyData.propertyId,false); 
           dispatch(prepareFinalObject("applyScreen.property", propertyData)) 
           dispatch(prepareFinalObject("connectionHolders", propertyData.owners ? propertyData.owners : []))
-          dispatch(prepareFinalObject("applyScreen.usageCategory", propertyData.usageCategory ? propertyData.usageCategory : ""))        
+          dispatch(prepareFinalObject("applyScreen.usageCategory", propertyData.usageCategory ? propertyData.usageCategory.split('.')[1] : ""))        
         }else{          
           let contractedCorAddress = "";
 
@@ -88,7 +88,7 @@ export const propertySearchApiCall = async (state, dispatch) => {
           }
           dispatch(prepareFinalObject("applyScreen.property", propertyData))
           dispatch(prepareFinalObject("connectionHolders", propertyData.owners ? propertyData.owners : []))
-          dispatch(prepareFinalObject("applyScreen.usageCategory", propertyData.usageCategory ? propertyData.usageCategory : ""))        
+          dispatch(prepareFinalObject("applyScreen.usageCategory", propertyData.usageCategory ? propertyData.usageCategory.split('.')[1] : ""))        
           showHideFields(dispatch, true);
         }
       } else {

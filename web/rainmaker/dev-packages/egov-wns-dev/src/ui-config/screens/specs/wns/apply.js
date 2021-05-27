@@ -2,11 +2,11 @@ import commonConfig from "config/common.js";
 import {
   getBreak, getCommonCard,
   getCommonContainer, getCommonHeader,
-
-
-
   getCommonParagraph, getCommonTitle, getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import sortBy from "lodash/sortBy";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { set } from "lodash";
@@ -35,6 +35,7 @@ import { reviewDocuments } from "./applyResource/reviewDocuments";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 import { reviewOwner } from "./applyResource/reviewOwner";
 import './index.css'
+import { fetchDropdownData, getTranslatedLabel } from "egov-ui-kit/utils/commons";
 
 let isMode = isModifyMode();
 export const stepperData = () => {
@@ -130,11 +131,12 @@ export const documentDetails = getCommonCard({
   }
 });
 
-export const getMdmsData = async dispatch => {
+export const getMdmsData = async (dispatch,state) => {
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
       moduleDetails: [
+        { moduleName:"tenant","masterDetails":[{"name":"tenants"},{"name":"citymodule"}]},
         { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }] },
         { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
         { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }, { name: "RoadType" }] },
@@ -196,12 +198,13 @@ export const getMdmsData = async dispatch => {
       payload.MdmsRes['ws-services-masters'].SURFACE = SURFACE;
       payload.MdmsRes['ws-services-masters'].BULKSUPPLY = BULKSUPPLY;
     }
-
+    // payload.MdmsRes['tenants'] = payload.MdmsRes.tenant.tenants
     //related to ownershipcategory
     let OwnerShipCategory = get(
       payload,
       "MdmsRes.common-masters.OwnerShipCategory"
     )
+   
     let institutions = []
     OwnerShipCategory = OwnerShipCategory.map(category => {
       if (category.code.includes("INDIVIDUAL")) {
@@ -216,8 +219,13 @@ export const getMdmsData = async dispatch => {
     OwnerShipCategory = OwnerShipCategory.filter((v, i, a) => a.indexOf(v) === i)
     OwnerShipCategory = OwnerShipCategory.map(val => { return { code: val, active: true } });
 
+    let tenants = get(
+      payload,
+      "MdmsRes.common-masters.tenant.tenants"
+    )
     payload.MdmsRes['common-masters'].Institutions = institutions;
     payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
+    payload.MdmsRes['common-masters'].tenants = tenants;
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) { console.log(e); }
 };
@@ -247,7 +255,7 @@ export const getData = async (action, state, dispatch) => {
   const propertyID = getQueryArg(window.location.href, "propertyId");
   const actionType = getQueryArg(window.location.href, "action");
   let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep';
-  await getMdmsData(dispatch);
+  await getMdmsData(dispatch,state);
   if (applicationNo) {
     //Edit/Update Flow ----
     let queryObject = [
@@ -463,6 +471,7 @@ export const getData = async (action, state, dispatch) => {
     getApplyPropertyDetails(queryObject, dispatch, propertyID)
   }
 };
+
 const  getApplicationNoLabel= () => {
   if (isModifyMode()&& !isModifyModeAction()) {
     return "WS_ACKNO_CONNECTION_NO_LABEL";

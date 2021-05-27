@@ -238,7 +238,7 @@ const propertyDetailsNoId = getCommonContainer({
       labelKey: "PT_COMMONS_SELECT_PLACEHOLDER"
     },
     data: [],
-    jsonPath: "applyScreen.tenandId",
+    jsonPath: "applyScreen.tenantId",
     sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
     localePrefix: { moduleName: "tenant", masterName: "tenants" },
     gridDefination: {

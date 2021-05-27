@@ -90,11 +90,11 @@ export const getReviewConnectionDetails = (isEditable = true) => {
       }
     },
     viewOne: getPropertyDetails,
-    viewTwo: propertyLocationDetails,
-    viewThree: ownerDetails,
+    // viewTwo: propertyLocationDetails,
+    // viewThree: ownerDetails,
     viewFour: getConnectionDetails(),
     viewFive:taskConnHolderDetailsSummary(),
-    viewSix:connHolderDetailsSameAsOwnerSummary()
+    // viewSix:connHolderDetailsSameAsOwnerSummary()
 
   });
 };
@@ -207,33 +207,33 @@ export const propertyDetails={
     },
     { jsonPath: "WaterConnectionOld[0].property.propertyId", callBack: handleNA },
   ),
-  reviewPropertyType: getLabelWithValueForModifiedLabel(
-    {
-      labelName: "Property Type",
-      labelKey: "WS_PROPERTY_TYPE_LABEL"
-    },
-    {
-      jsonPath: "WaterConnection[0].property.propertyType",
-      callBack: handleNA,
-      localePrefix: {
-        moduleName: "WS",
-        masterName: "PROPTYPE"
-      }
+  // reviewPropertyType: getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Property Type",
+  //     labelKey: "WS_PROPERTY_TYPE_LABEL"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnection[0].property.propertyType",
+  //     callBack: handleNA,
+  //     localePrefix: {
+  //       moduleName: "WS",
+  //       masterName: "PROPTYPE"
+  //     }
       
-    },
-    {
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    {
-      jsonPath: "WaterConnectionOld[0].property.propertyType",
-      callBack: handleNA,
-      localePrefix: {
-        moduleName: "WS",
-        masterName: "PROPTYPE"
-      }
+  //   },
+  //   {
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].property.propertyType",
+  //     callBack: handleNA,
+  //     localePrefix: {
+  //       moduleName: "WS",
+  //       masterName: "PROPTYPE"
+  //     }
       
-    },
-  ),
+  //   },
+  // ),
   reviewPropertyUsageType: getLabelWithValueForModifiedLabel(
     {
       labelName: "Property Usage Type",
@@ -261,72 +261,72 @@ export const propertyDetails={
     }
   ),
 
-  reviewPropertySubUsageType: getLabelWithValueForModifiedLabel(
-    {
-      labelName: "Property Sub usage type",
-      labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
-    },
-    { jsonPath: "WaterConnection[0].property.units[0].usageCategory",
-      callBack: handlePropertySubUsageType,
-      localePrefix: {
-        moduleName: "WS",
-        masterName: "PROPSUBUSGTYPE"
-      }
-    },{
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    {
-      jsonPath: "WaterConnectionOld[0].property.units[0].usageCategory",
-      callBack: handleNA,
-      localePrefix: {
-        moduleName: "WS",
-        masterName: "PROPSUBUSGTYPE"
-      }
+  // reviewPropertySubUsageType: getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Property Sub usage type",
+  //     labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
+  //   },
+  //   { jsonPath: "WaterConnection[0].property.units[0].usageCategory",
+  //     callBack: handlePropertySubUsageType,
+  //     localePrefix: {
+  //       moduleName: "WS",
+  //       masterName: "PROPSUBUSGTYPE"
+  //     }
+  //   },{
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].property.units[0].usageCategory",
+  //     callBack: handleNA,
+  //     localePrefix: {
+  //       moduleName: "WS",
+  //       masterName: "PROPSUBUSGTYPE"
+  //     }
       
-    }
-  ),
-  reviewPlotSize: getLabelWithValueForModifiedLabel(
-    {
-      labelName: "Plot Size (in sq metres)",
-      labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
-    },
-    { jsonPath: "WaterConnection[0].property.landArea",
-    callBack: handleNA },{
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    {
-      jsonPath: "WaterConnectionOld[0].property.landArea",
-      callBack: handleNA      
-    }
-  ),
-  reviewNumberOfFloors: getLabelWithValueForModifiedLabel(
-    {
-      labelName: "Number Of Floors",
-      labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
-    },
-    { jsonPath: "WaterConnection[0].property.noOfFloors",
-    callBack: handleNA },{
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    {
-      jsonPath: "WaterConnectionOld[0].property.noOfFloors",
-      callBack: handleNA      
-    }
-  ),
-  rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
-    {
-      labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
-      labelName: "Rain Water Harvesting Facility"
-    },
-    { jsonPath: "WaterConnection[0].property.additionalDetails.isRainwaterHarvesting",
-    callBack: handleNA },{
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    {
-      jsonPath: "WaterConnectionOld[0].property.additionalDetails.isRainwaterHarvesting",
-      callBack: handleNA      
-    }
-  )
+  //   }
+  // ),
+  // reviewPlotSize: getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Plot Size (in sq metres)",
+  //     labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
+  //   },
+  //   { jsonPath: "WaterConnection[0].property.landArea",
+  //   callBack: handleNA },{
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].property.landArea",
+  //     callBack: handleNA      
+  //   }
+  // ),
+  // reviewNumberOfFloors: getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Number Of Floors",
+  //     labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
+  //   },
+  //   { jsonPath: "WaterConnection[0].property.noOfFloors",
+  //   callBack: handleNA },{
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].property.noOfFloors",
+  //     callBack: handleNA      
+  //   }
+  // ),
+  // rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
+  //     labelName: "Rain Water Harvesting Facility"
+  //   },
+  //   { jsonPath: "WaterConnection[0].property.additionalDetails.isRainwaterHarvesting",
+  //   callBack: handleNA },{
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].property.additionalDetails.isRainwaterHarvesting",
+  //     callBack: handleNA      
+  //   }
+  // )
 }
 
 const getPropertyDetails = {

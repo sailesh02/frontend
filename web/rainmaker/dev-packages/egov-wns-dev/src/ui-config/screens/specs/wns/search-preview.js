@@ -471,7 +471,7 @@ export const summaryScreen = getCommonCard({
   reviewConnectionDetails,
   reviewModificationsDetails,
   reviewDocumentDetails,
-  reviewOwnerDetails
+  // reviewOwnerDetails
 })
 
 const screenConfig = {

@@ -29,14 +29,14 @@ export const fetchData = async (action, state, dispatch) => {
       dispatch(
         prepareFinalObject("myApplicationsCount", response.Properties.length)
       );
-      dispatch(
-        handleField(
-          "my-applications",
-          "components.div.children.header.children.key",
-          "props.dynamicArray",
-          response.Properties.length ? [response.Properties.length] : [0]
-        )
-      )
+      // dispatch(
+      //   handleField(
+      //     "my-applications",
+      //     "components.div.children.header.children.key",
+      //     "props.dynamicArray",
+      //     response.Properties.length ? [response.Properties.length] : [0]
+      //   )
+      // )
     }
   } catch (error) {
     console.log(error);

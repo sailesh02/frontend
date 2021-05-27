@@ -667,7 +667,8 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
               .toUpperCase()
               .replace(/[._:-\s\/]/g, "_")}`;
             option = {
-              label: getTranslatedLabel(mohallaCode, localizationLabels),
+              label: item.name,
+              // label: getTranslatedLabel(mohallaCode, localizationLabels),
               value: item.code,
             };
           } else {

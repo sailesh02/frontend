@@ -525,11 +525,6 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
-          pdfHeader: {
-            uiFramework: "custom-atoms-local",
-            moduleName: "egov-pt",
-            componentPath: "pdfHeader"
-          },
           propertySummary: propertySummary,
           demandSummary: demandSummary,
           ownerSummary: ownerSummary,

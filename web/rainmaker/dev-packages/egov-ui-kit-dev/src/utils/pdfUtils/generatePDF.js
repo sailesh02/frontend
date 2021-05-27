@@ -382,7 +382,8 @@ export const loadUlbLogo = tenantid => {
         localStorage.setItem("UlbLogoForPdf", canvas.toDataURL());
         canvas = null;
     };
-    img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
+    // img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
+    img.src = "https://digitaldesksujog051120.blob.core.windows.net/assets/Logos/odlogo.png"
 };
 
 const getHeaderCard = (applicationData, logo) => {

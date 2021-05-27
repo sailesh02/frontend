@@ -6,7 +6,7 @@ import "./index.css";
 export default class AdditionalInformation extends Component {
   render() {
     const { additionalInformation } = this.props;
-    const labelKeys = Object.keys(additionalInformation);
+    const labelKeys = ["holdingTax", "lightTax", "waterTax", "drainageTax", "latrineTax", "parkingTax", "solidWasteUserCharges", "ownershipExemption", "usageExemption", "interest", "penalty"]
     return (
       <div>
         <Card
@@ -33,7 +33,7 @@ export default class AdditionalInformation extends Component {
                     <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                       <Label
                         labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                        label={additionalInformation[item] ? additionalInformation[item] : "NA"}
+                        label={additionalInformation[item] ? additionalInformation[item] + "" : "NA"}
                         fontSize="16px"
                       />
                     </div>

@@ -883,12 +883,11 @@ export const applyForWater = async (state, dispatch) => {
     let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = waterId ? "UPDATE" : "CREATE";
-    debugger
     try {
-        const tenantId = commonConfig.tenantId
-        // const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
+        // const tenantId = commonConfig.tenantId
+        const tenantId = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tenantId");
         let response;
-        queryObject.tenantId = commonConfig.tenantId;
+        queryObject.tenantId = tenantId;
         if (method === "UPDATE") {
             queryObject.additionalDetails.appCreatedDate = get(
                 state.screenConfiguration.preparedFinalObject,
@@ -908,7 +907,7 @@ export const applyForWater = async (state, dispatch) => {
             if (typeof queryObjectForUpdate.additionalDetails !== 'object') {
                 queryObjectForUpdate.additionalDetails = {};
             }
-            // queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.property.address.locality.code;
+            queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality;
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             queryObjectForUpdate.property = null
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
@@ -923,7 +922,7 @@ export const applyForWater = async (state, dispatch) => {
             if (typeof queryObject.additionalDetails !== 'object') {
                 queryObject.additionalDetails = {};
             }
-            // queryObject.additionalDetails.locality = queryObject.property.address.locality.code;
+            queryObject.additionalDetails.locality = queryObject.locality;
             set(queryObject, "processInstance.action", "INITIATE")
             queryObject = findAndReplace(queryObject, "NA", null);
             if (isModifyMode()) {

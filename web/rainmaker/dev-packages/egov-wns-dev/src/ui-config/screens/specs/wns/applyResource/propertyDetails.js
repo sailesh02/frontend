@@ -9,11 +9,13 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { httpRequest } from "egov-ui-kit/utils/api";
 import { propertySearchApiCall } from './functions';
 import { handlePropertySubUsageType, handleNA, resetFieldsForApplication } from '../../utils';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import {getTranslatedLabel} from "egov-ui-kit/utils/commons"
 
 let isMode = getQueryArg(window.location.href, "mode");
 isMode = (isMode) ? isMode.toUpperCase() : "";
@@ -226,6 +228,115 @@ const propertyDetailsNoId = getCommonContainer({
     type: "array",
     jsonPath: "applyScreen.apartment",
   },
+  city: getSelectField({
+    label: {
+      labelName: "City",
+      labelKey: "CORE_COMMON_CITY"
+    },
+    placeholder: {
+      labelName: "Select City",
+      labelKey: "PT_COMMONS_SELECT_PLACEHOLDER"
+    },
+    data: [],
+    jsonPath: "applyScreen.tenandId",
+    sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+    localePrefix: { moduleName: "tenant", masterName: "tenants" },
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
+    afterFieldChange:async (action, state, dispatch) => {
+      if(action.value){
+        const dataFetchConfig = {
+          url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+          action: "",
+          queryParams: [{
+            key: "tenantId",
+            value: action.value
+          }],
+          requestBody: {},
+          isDependent: true,
+          hierarchyType: "REVENUE"
+        }
+        let url = dataFetchConfig.url
+        let fieldKey = "mohalla"
+        try {
+          if (url) {
+            let localizationLabels = {};
+            if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+            const payloadSpec = await httpRequest(url, dataFetchConfig.action, dataFetchConfig.queryParams || [], dataFetchConfig.requestBody);
+            const dropdownData = true
+              ? // ? jp.query(payloadSpec, dataFetchConfig.dataPath)
+              payloadSpec.TenantBoundary[0].boundary
+              : dataFetchConfig.dataPath.reduce((dropdownData, path) => {
+                dropdownData = [...dropdownData, ...get(payloadSpec, path)];
+                return dropdownData;
+              }, []);
+            // const ddData =
+            //   dropdownData &&
+            //   dropdownData.length > 0 &&
+            //   dropdownData.reduce((ddData, item) => {
+            //     let option = {};
+            //     if (fieldKey === "mohalla" && item.code) {
+            //       const mohallaCode = `${dataFetchConfig.queryParams[0].value.toUpperCase().replace(/[.]/g, "_")}_${dataFetchConfig.hierarchyType}_${item.code
+            //         .toUpperCase()
+            //         .replace(/[._:-\s\/]/g, "_")}`;
+            //       option = {
+            //         code: getTranslatedLabel(mohallaCode, localizationLabels),
+            //         value: item.code,
+            //       };
+            //     } else {
+            //       option = {
+            //         label: item.name,
+            //         value: item.code,
+            //       };
+            //     }
+            //     item.area && (option.area = item.area);
+            //     ddData.push(option);
+            //     return ddData;
+            //   }, []);
+              dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", dropdownData));
+
+            // dispatch(setFieldProperty(formKey, fieldKey, "dropDownData", ddData));
+          }
+        } 
+        catch (error) {
+          const { message } = error;
+          console.log(error);
+          if (fieldKey === "mohalla") {
+            dispatch(
+              toggleSnackbarAndSetText(
+                true,
+                { labelName: "There is no admin boundary data available for this tenant", labelKey: "ERR_NO_ADMIN_BOUNDARY_FOR_TENANT" },
+                "error"
+              )
+            );
+          } else {
+            dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
+          }
+          return;
+        }      
+      }
+    }
+  }),
+  mohalla: getSelectField({
+    label: {
+      labelName: "Mohalla",
+      labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
+    },
+    placeholder: {
+      labelName: "Locality",
+      labelKey: "PT_PROPERTY_DETAILS_PLACEHOLDER"
+    },
+    data: [],
+    jsonPath: "applyScreen.locality",
+    sourceJsonPath: "applyScreenMdmsData.mohalla",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    }
+  
+  }),
   connectionCategory: getSelectField({
     label: {
       labelName: "Connection Category",
@@ -433,7 +544,6 @@ const propertyDetailsNoId = getCommonContainer({
       sm: 6
     }
   }),
-
   noOfFlats: getTextField({
     label: {
       labelName: "No of Flats",
@@ -449,7 +559,8 @@ const propertyDetailsNoId = getCommonContainer({
       xs: 12,
       sm: 6
     },
-  }),
+  })
+ 
 
 });
 

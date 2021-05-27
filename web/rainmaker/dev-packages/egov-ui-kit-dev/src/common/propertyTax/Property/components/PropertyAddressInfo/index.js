@@ -47,6 +47,8 @@ export const getAddressItems = (properties, OldProperty) => {
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
+        // value: (getTranslatedLabel((`${localityCode.split(".").pop()}`), localizationLabelsData)) || "NA",
+        // oldValue: (getTranslatedLabel((`${oldLocality.split(".").pop()}`), localizationLabelsData)) || "NA",
         value: (getTranslatedLabel((`${stateId}_${cityId}_REVENUE_${localityCode}`), localizationLabelsData)) || "NA",
         oldValue: (getTranslatedLabel((`${oldStateId}_${oldCityId}_REVENUE_${oldLocality}`), localizationLabelsData)) || "NA",
       },

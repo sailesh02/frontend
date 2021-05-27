@@ -10,15 +10,6 @@ import { getFormattedDate } from "../../../../../../../utils/PTCommon";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
-let userInfo = JSON.parse(getUserInfo());
-const roleCodes =
-    userInfo && userInfo.roles
-      ? userInfo.roles.map((role) => {
-        return role.code;
-      })
-      : [];
-const reassessAllowed = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
-
 export const getFullRow = (labelKey, labelValue, rowGrid = 12) => {
     let subRowGrid = 1;
     if (rowGrid == 6) {
@@ -89,6 +80,14 @@ class AssessmentHistory extends Component {
             alignItems: "right",
         };
         const { Assessments = [], history, propertyId } = this.props;
+        let userInfo = JSON.parse(getUserInfo());
+        const roleCodes =
+            userInfo && userInfo.roles
+            ? userInfo.roles.map((role) => {
+                return role.code;
+            })
+            : [];
+        const reassessAllowed = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
 
         const assessmentHistoryItems = this.getLatestAssessments(Assessments).map((Assessment) => {
             return (

@@ -143,7 +143,65 @@ if (purpose === "approve" && status === "success") {
       },
       gotoHomeFooter
     };
-  } 
+  } else if(purpose === "sendback" && status === "success") {
+    return {
+      header: getHeader(applicationNumber, moduleName),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Sent Back Successfully",
+              labelKey: "PT_SENT_BACK_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+              labelKey: "PT_APPLICATION_SENT_BACK_SUCCESS"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "PT_MUTATION_APPLICATION_NO"
+            },
+            number: applicationNumber
+          }),
+        }
+      },
+      gotoHomeFooter
+    };
+  } else if(purpose === "reject" && status === "success") {
+    return {
+      header: getHeader(applicationNumber, moduleName),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Rejected Successfully",
+              labelKey: "PT_REJECT_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+              labelKey: "PT_APPLICATION_REJECT_SUCCESS"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "PT_MUTATION_APPLICATION_NO"
+            },
+            number: applicationNumber
+          }),
+        }
+      },
+      gotoHomeFooter
+    };
+  }
 };
 
 const screenConfig = {

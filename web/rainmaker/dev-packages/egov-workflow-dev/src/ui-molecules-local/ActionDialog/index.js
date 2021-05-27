@@ -338,10 +338,8 @@ class ActionDialog extends React.Component {
     }
     if (dataPath === "FireNOCs") {
       dataPath = `${dataPath}[0].fireNOCDetails.additionalDetail`
-    } else if(dataPath === "Assessment") {
-      dataPath = dataPath
     }
-     else if (dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
+     else if (dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc" || dataPath === "Assessment") {
       dataPath = `${dataPath}.workflow`;
     } else {
       dataPath = `${dataPath}[0]`;
@@ -467,7 +465,7 @@ class ActionDialog extends React.Component {
                     required = {true}
                     jsonPath={`${this.props.dataPath}.additionalDetails.${payment.path}`}
                     placeholder={payment.placeholder}
-                    inputProps={{ maxLength: 120 }}
+                    inputProps={{ maxLength: 120, type: "number" }}
                     /> 
                     {!!payment.isError && (<span style={{color: "red"}}>{getLocaleLabels(payment.errorMessage, payment.errorMessage)}</span>)}
                     </Grid>
@@ -481,8 +479,7 @@ class ActionDialog extends React.Component {
                     }, 0)
                     }
                     InputLabelProps={{ shrink: true }}
-                    label= "PT_PAYMENT_TOTAL"
-                    placeholder= "PT_PAYMENT_TOTAL"
+                    label= {{labelName: "Total Amount", labelKey: "PT_PAYMENT_TOTAL"}}
                     inputProps={{disabled: true}}
                     /> 
                   </Grid>

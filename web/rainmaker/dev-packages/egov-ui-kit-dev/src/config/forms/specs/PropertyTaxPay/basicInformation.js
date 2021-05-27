@@ -40,6 +40,7 @@ const formConfig = {
         xs: 12,
         sm: 6
       },
+      
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         removeFormKey(formKey, field, dispatch, state);
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, []));

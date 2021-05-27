@@ -99,11 +99,11 @@ export const reviewConnectionDetails = (isEditable = true) => {
       }
     },
     viewOne: getPropertyDetails,
-    viewTwo: propertyLocationDetails ,
-    viewThree: propertyOwnerDetails(),
+    // viewTwo: propertyLocationDetails ,
+    // viewThree: propertyOwnerDetails(),
     viewFour: getConnectionDetails(),
     viewFive:connHolderDetailsSummary(),
-    viewSix:connHolderDetailsSameAsOwnerSummary()
+    // viewSix:connHolderDetailsSameAsOwnerSummary()
   });
 };
 
@@ -219,31 +219,31 @@ const getPropertyDetails = {
               callBack: handleNA,
             },
           ),
-          reviewPropertyType: getLabelWithValueForModifiedLabel(
-            {
-              labelName: "Property Type",
-              labelKey: "WS_PROPERTY_TYPE_LABEL"
-            },
-            {
-              jsonPath: "applyScreen.property.propertyType",
-              callBack: handleNA,
-              localePrefix: {
-                moduleName: "WS",
-                masterName: "PROPTYPE"
-              }
-            },
-            {
-              labelKey: "WS_OLD_LABEL_NAME"
-            },
-            {
-              jsonPath: "applyScreenOld.property.propertyType",
-              callBack: handleNA,
-              localePrefix: {
-                moduleName: "WS",
-                masterName: "PROPTYPE"
-              }
-            }
-          ),
+          // reviewPropertyType: getLabelWithValueForModifiedLabel(
+          //   {
+          //     labelName: "Property Type",
+          //     labelKey: "WS_PROPERTY_TYPE_LABEL"
+          //   },
+          //   {
+          //     jsonPath: "applyScreen.property.propertyType",
+          //     callBack: handleNA,
+          //     localePrefix: {
+          //       moduleName: "WS",
+          //       masterName: "PROPTYPE"
+          //     }
+          //   },
+          //   {
+          //     labelKey: "WS_OLD_LABEL_NAME"
+          //   },
+          //   {
+          //     jsonPath: "applyScreenOld.property.propertyType",
+          //     callBack: handleNA,
+          //     localePrefix: {
+          //       moduleName: "WS",
+          //       masterName: "PROPTYPE"
+          //     }
+          //   }
+          // ),
           reviewPropertyUsageType: getLabelWithValueForModifiedLabel(
             {
               labelName: "Property Usage Type",
@@ -271,71 +271,71 @@ const getPropertyDetails = {
 
           ),
 
-          reviewPropertySubUsageType: getLabelWithValueForModifiedLabel(
-            {
-              labelName: "Property Sub usage type",
-              labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
-            },
-            {
-              jsonPath: "applyScreen.property.units[0].usageCategory",
-              callBack: handlePropertySubUsageType,
-              localePrefix: {
-                moduleName: "WS",
-                masterName: "PROPSUBUSGTYPE"
-              }
-            },
-            {
-              labelKey: "WS_OLD_LABEL_NAME"
-            },
-            {
-              jsonPath: "applyScreenOld.property.units[0].usageCategory",
-              callBack: handlePropertySubUsageType,
-              localePrefix: {
-                moduleName: "WS",
-                masterName: "PROPSUBUSGTYPE"
-              }
-            }
+          // reviewPropertySubUsageType: getLabelWithValueForModifiedLabel(
+          //   {
+          //     labelName: "Property Sub usage type",
+          //     labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
+          //   },
+          //   {
+          //     jsonPath: "applyScreen.property.units[0].usageCategory",
+          //     callBack: handlePropertySubUsageType,
+          //     localePrefix: {
+          //       moduleName: "WS",
+          //       masterName: "PROPSUBUSGTYPE"
+          //     }
+          //   },
+          //   {
+          //     labelKey: "WS_OLD_LABEL_NAME"
+          //   },
+          //   {
+          //     jsonPath: "applyScreenOld.property.units[0].usageCategory",
+          //     callBack: handlePropertySubUsageType,
+          //     localePrefix: {
+          //       moduleName: "WS",
+          //       masterName: "PROPSUBUSGTYPE"
+          //     }
+          //   }
 
-          ),
-          reviewPlotSize: getLabelWithValueForModifiedLabel(
-            {
-              labelName: "Plot Size (in sq metres)",
-              labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
-            },
-            { jsonPath: "applyScreen.property.landArea", callBack: handleNA },
-            {
-              labelKey: "WS_OLD_LABEL_NAME"
-            },
-            { jsonPath: "applyScreenOld.property.landArea", callBack: handleNA },
-          ),
-          reviewNumberOfFloors: getLabelWithValueForModifiedLabel(
-            {
-              labelName: "Number Of Floors",
-              labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
-            },
-            { jsonPath: "applyScreen.property.noOfFloors", callBack: handleNA },
-            {
-              labelKey: "WS_OLD_LABEL_NAME"
-            },
-            { jsonPath: "applyScreenOld.property.noOfFloors", callBack: handleNA },
-          ),
-          rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
-            {
-              labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
-              labelName: "Rain Water Harvesting Facility"
-            },
-            {
-              jsonPath: "applyScreen.property.additionalDetails.isRainwaterHarvesting",
-              callBack: handleNA
-            },
-            {
-              labelKey: "WS_OLD_LABEL_NAME"
-            },
-            {
-              jsonPath: "applyScreenOld.property.additionalDetails.isRainwaterHarvesting",
-              callBack: handleNA
-            },
-          )
+          // ),
+          // reviewPlotSize: getLabelWithValueForModifiedLabel(
+          //   {
+          //     labelName: "Plot Size (in sq metres)",
+          //     labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
+          //   },
+          //   { jsonPath: "applyScreen.property.landArea", callBack: handleNA },
+          //   {
+          //     labelKey: "WS_OLD_LABEL_NAME"
+          //   },
+          //   { jsonPath: "applyScreenOld.property.landArea", callBack: handleNA },
+          // ),
+          // reviewNumberOfFloors: getLabelWithValueForModifiedLabel(
+          //   {
+          //     labelName: "Number Of Floors",
+          //     labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
+          //   },
+          //   { jsonPath: "applyScreen.property.noOfFloors", callBack: handleNA },
+          //   {
+          //     labelKey: "WS_OLD_LABEL_NAME"
+          //   },
+          //   { jsonPath: "applyScreenOld.property.noOfFloors", callBack: handleNA },
+          // ),
+          // rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
+          //   {
+          //     labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
+          //     labelName: "Rain Water Harvesting Facility"
+          //   },
+          //   {
+          //     jsonPath: "applyScreen.property.additionalDetails.isRainwaterHarvesting",
+          //     callBack: handleNA
+          //   },
+          //   {
+          //     labelKey: "WS_OLD_LABEL_NAME"
+          //   },
+          //   {
+          //     jsonPath: "applyScreenOld.property.additionalDetails.isRainwaterHarvesting",
+          //     callBack: handleNA
+          //   },
+          // )
         })
     }),
     items: [],

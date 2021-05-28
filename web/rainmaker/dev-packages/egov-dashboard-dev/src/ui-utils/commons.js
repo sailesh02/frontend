@@ -1227,15 +1227,20 @@ export const getDescriptionReport = async ( dispatch, data ) => {
   }
 };
 
-
 // Get Description Report New Function
 export const getDescriptionReportDashboard = async ( dispatch, data ) => {
 
   //debugger;
   let tenantId = getTenantId();
   const moduleName = "rainmaker-pgr"
-  const reportName = "DescriptionReport"
+  let reportName = "DescriptionReport"
+  if(data && data.reportSortBy.value === "tenantid"){
+     reportName = "ULBReport"
+  }
+
+
   var payloadData = data
+
   payloadData["reportName"] = reportName;
   payloadData["moduleName"] = moduleName;
 
@@ -1244,7 +1249,7 @@ export const getDescriptionReportDashboard = async ( dispatch, data ) => {
     const DescriptionReport = await httpRequest(
       "post",
       // "/hc-services/serviceRequest/_get_DEMO_DASHBOARD",
-      `/report/pgr/DescriptionReport/_get?tenantId=${tenantId}&pageSize=false&offset=0`,
+      `/report/pgr/${reportName}/_get?tenantId=${tenantId}&pageSize=false&offset=0`,
       "",
       [],
       payloadData
@@ -1278,6 +1283,7 @@ export const getDescriptionReportDashboard = async ( dispatch, data ) => {
     );
   }
 };
+
 
 // Get Dashboard Data for Horticulture
 export const getHCDashboardData = async ( dispatch, data ) => {

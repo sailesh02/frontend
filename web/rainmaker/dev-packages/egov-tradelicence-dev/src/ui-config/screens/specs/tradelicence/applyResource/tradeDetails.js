@@ -58,6 +58,223 @@ const tradeTypeChange = (reqObj) => {
   }
 }
 
+const tradeSubTypeChangeBackup = (reqObj) => {
+  //This function is just backup of TradeUOM as select Box. And user will choose applicable option from drop box
+  try {
+    let { moduleName, rootBlockSub, keyValue, value, state, dispatch, index } = reqObj;
+    let keyValueRow = keyValue.replace(`.${value}`, ``);
+    let tradeSubTypes = get(
+      state.screenConfiguration.preparedFinalObject,
+      `DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}${keyValueRow}`,
+      []
+    );
+
+    let queryObject = JSON.parse(
+      JSON.stringify(
+        get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
+      )
+    );
+
+    let tlType = get(queryObject[0], "licenseType");
+    let currentObject = filter(tradeSubTypes, {
+      code: value
+    });
+
+
+    if (currentObject[0] && currentObject[0].uom !== null && tlType && tlType === "PERMANENT") {
+      var uomString = currentObject[0].uom;
+      let UOMDropBoxValues = uomString && uomString.split(",").map( (item) => {
+      return {code: item, active: true}
+      })
+
+      // dispatch(
+      //   handleField(
+      //     "apply",
+      //     `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM`,
+      //     "props.value",
+      //     currentObject[0].uom
+      //   )
+      // );
+
+      dispatch(
+        pFO(
+          `applyScreenMdmsData.TradeLicense.UOMDropBoxValues`,
+          UOMDropBoxValues
+        )
+      );
+
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+          "props.required",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+          "props.disabled",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM`,
+          "props.required",
+          true
+        )
+      );
+      let firstValueSelected = UOMDropBoxValues[0].code;
+
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM`,
+          "props.value",
+          firstValueSelected
+        )
+      );
+    } else if (currentObject[0] && currentObject[0].tempUom !== null && tlType && tlType === "TEMPORARY") {
+
+      // dispatch(
+      //   handleField(
+      //     "apply",
+      //     `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM`,
+      //     "props.value",
+      //     currentObject[0].tempUom
+      //   )
+      // );
+      var uomString = currentObject[0].tempUom;
+      let UOMDropBoxValues = uomString && uomString.split(",").map( (item) => {
+      return {code: item, active: true}
+      })
+
+      dispatch(
+        pFO(
+          `applyScreenMdmsData.TradeLicense.UOMDropBoxValues`,
+          UOMDropBoxValues
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+          "props.required",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+          "props.disabled",
+          false
+        )
+      );
+
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM`,
+          "props.required",
+          true
+        )
+      );
+      let firstValueSelected = UOMDropBoxValues[0].code;
+
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM`,
+          "props.value",
+          firstValueSelected
+        )
+      );
+    }else {
+
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+          "props.required",
+          false
+        )
+      );
+
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+          "props.disabled",
+          true
+        )
+      );
+
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM`,
+          "props.value",
+          ""
+        )
+      );
+
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM`,
+          "props.required",
+          false
+        )
+      );
+
+      dispatch(
+        pFO(
+          `applyScreenMdmsData.TradeLicense.UOMDropBoxValues`,
+          []
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+          "props.value",
+          ""
+        )
+      );
+
+      dispatch(
+        pFO(
+          `Licenses[0].tradeLicenseDetail.tradeUnits[${index}].uom`,
+          null
+        )
+      );
+      dispatch(
+        pFO(
+          `Licenses[0].tradeLicenseDetail.tradeUnits[${index}].uomValue`,
+          null
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+          "props.error",
+          false
+        )
+      );
+    }
+    dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tradeType`, value));
+
+    dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tempUom`, currentObject[0].tempUom));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 const tradeSubTypeChange = (reqObj) => {
   try {
     let { moduleName, rootBlockSub, keyValue, value, state, dispatch, index } = reqObj;
@@ -287,6 +504,27 @@ const tradeUnitCard = {
               sm: 6
             }
           }),
+
+          // tradeUOM: {
+          //   ...getSelectField({
+          //     label: {
+          //       labelName: "UOM (Unit of Measurement)",
+          //       labelKey: "TL_NEW_TRADE_DETAILS_UOM_LABEL"
+          //     },
+          //     placeholder: {
+          //       labelName: "Select applicable UOM",
+          //       labelKey: "TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER"
+          //     },
+          //     required: false,
+          //     jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom",
+          //     props: {
+          //       // disabled: true,
+          //       value: "PERMANENT",
+          //       className: "tl-trade-type"
+          //     },
+          //     sourceJsonPath: "applyScreenMdmsData.TradeLicense.UOMDropBoxValues"
+          //   })
+          // },
           tradeUOMValue: getTextField({
             label: {
               labelName: "UOM Value",
@@ -803,7 +1041,8 @@ export const tradeDetails = getCommonCard({
     //   }),
     //   visible: false
     // },
-    tradeCommencementDate: getDateField({
+    tradeCommencementDate: {
+      ...getDateField({
       label: {
         labelName: "Trade Commencement Date",
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
@@ -826,6 +1065,29 @@ export const tradeDetails = getCommonCard({
       jsonPath: "Licenses[0].commencementDate",
 
     }),
+    beforeFieldChange: (action, state, dispatch) => {
+      if (action.value) {
+
+
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+            "props.inputProps.min",
+            action.value
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+            "props.disabled",
+            false
+          )
+        );
+      }
+    },
+  },
     tradeLicensePeriod: {
       ...getSelectField({
         label: {
@@ -861,11 +1123,19 @@ export const tradeDetails = getCommonCard({
         required: true,
         pattern: getPattern("Date"),
         jsonPath: "Licenses[0].validTo",
+        // props: {
+        //   disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
+        //   inputProps: {
+        //     min: getNextMonthDateInYMD(),
+        //     max: getFinancialYearDates("yyyy-mm-dd").endDate
+        //   }
+        // }
         props: {
-          disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
+          disabled: true,
           inputProps: {
-            min: getNextMonthDateInYMD(),
-            max: getFinancialYearDates("yyyy-mm-dd").endDate
+
+            min: getCurrentDate()
+
           }
         }
       }),

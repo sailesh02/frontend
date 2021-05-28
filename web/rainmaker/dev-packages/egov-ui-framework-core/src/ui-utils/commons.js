@@ -804,9 +804,11 @@ export const getObjectKeys = objData => {
 };
 export const getMdmsJson = async (state, dispatch, reqObj) => {
   let { setPath, setTransformPath, dispatchPath, moduleName, name, filter } = reqObj;
+  const tenantId = getQueryArg(window.location.href, "tenantId");
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      //tenantId: commonConfig.tenantId,
+      tenantId: tenantId,
       moduleDetails: [
         {
           moduleName,
@@ -817,6 +819,7 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
       ]
     }
   };
+
   try {
     let payload = null;
     payload = await httpRequest(

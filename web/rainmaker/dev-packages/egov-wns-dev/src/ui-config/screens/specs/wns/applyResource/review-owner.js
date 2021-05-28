@@ -98,10 +98,10 @@ export const getReviewOwner = (isEditable = true) => {
     viewSixWS: renderServiceForWater(),
     viewSixVS: renderServiceForSW(),
     // viewSix: connectionDetails,
-    // viewSeven: connectionChargeDetailsHeader,
-    // viewEight: connectionChargeDetails,
-    viewNine: roadCuttingChargesHeader,
-    viewTen: roadCuttingCharges,
+    viewSeven: connectionChargeDetailsHeader,
+    viewEight: connectionChargeDetails,
+    // viewNine: roadCuttingChargesHeader,
+    // viewTen: roadCuttingCharges,
     viewEleven: activationDetailsHeader,
     viewTwelve: activationDetails
   })

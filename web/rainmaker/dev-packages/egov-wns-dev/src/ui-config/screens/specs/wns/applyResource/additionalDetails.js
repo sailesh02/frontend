@@ -223,103 +223,103 @@ export const additionDetails = getCommonCard({
       })
     }),
   }),
-  // plumberDetailsContainer: getCommonGrayCard({
-  //   subHeader: getCommonTitle({
-  //     labelKey: "WS_COMMON_PLUMBER_DETAILS"
-  //   }),
-  //   plumberDetails: getCommonContainer({
-  //     getPlumberRadioButton,
-  //     plumberLicenceNo: getTextField({
-  //       label: {
-  //         labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL"
-  //       },
-  //       placeholder: {
-  //         labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_PLACEHOLDER"
-  //       },
-  //       gridDefination: {
-  //         xs: 12,
-  //         sm: 6
-  //       },
-  //       required: false,
-  //       pattern: /^[0-9]*$/i,
-  //       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-  //       jsonPath: "applyScreen.plumberInfo[0].licenseNo"
-  //     }),
-  //     plumberName: getTextField({
-  //       label: {
-  //         labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL"
-  //       },
-  //       placeholder: {
-  //         labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_PLACEHOLDER"
-  //       },
-  //       gridDefination: {
-  //         xs: 12,
-  //         sm: 6
-  //       },
-  //       required: false,
-  //       pattern: getPattern("Name"),
-  //       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-  //       jsonPath: "applyScreen.plumberInfo[0].name"
-  //     }),
-  //     plumberMobNo: getTextField({
-  //       label: {
-  //         labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL"
-  //       },
-  //       placeholder: {
-  //         labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL_PLACEHOLDER"
-  //       },
-  //       gridDefination: { xs: 12, sm: 6 },
-  //       iconObj: { label: "+91 |", position: "start" },
-  //       required: false,
-  //       pattern: getPattern("MobileNo"),
-  //       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-  //       jsonPath: "applyScreen.plumberInfo[0].mobileNumber"
-  //     }),
-  //   })
-  // }),
-  roadCuttingChargeContainer: getCommonCard({
-    header: getCommonSubHeader(
-      {
-        labelName: "Road Cutting Charge",
-        labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
-      },
-      {
-        style: {
-          marginBottom: 18
-        }
-      }
-    ),
-    applicantTypeContainer: getCommonContainer({
-      roadCuttingChargeInfoCard : {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        props: {
-          style: {
-            // display: "none"
-            // width: 
-          }
-        },
-        children: {
-          multipleApplicantInfo: {
-            uiFramework: "custom-containers",
-            componentPath: "MultiItem",
-            props: {
-              scheama: commonRoadCuttingChargeInformation(),
-              items: [],
-              addItemLabel: {
-                labelName: "Add Road Type",
-                labelKey: "WS_ADD_ROAD_TYPE_LABEL"
-              },
-              isReviewPage: false,
-              sourceJsonPath: "applyScreen.roadCuttingInfo",
-              prefixSourceJsonPath: "children.cardContent.children.roadDetails.children"
-            },
-            type: "array"
-          }
-        }
-      },
+    plumberDetailsContainer: getCommonGrayCard({
+      subHeader: getCommonTitle({
+        labelKey: "WS_COMMON_PLUMBER_DETAILS"
+      }),
+      plumberDetails: getCommonContainer({
+        getPlumberRadioButton,
+        plumberLicenceNo: getTextField({
+          label: {
+            labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL"
+          },
+          placeholder: {
+            labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_PLACEHOLDER"
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          },
+          required: false,
+          pattern: /^[0-9]*$/i,
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          jsonPath: "applyScreen.plumberInfo[0].licenseNo"
+        }),
+        plumberName: getTextField({
+          label: {
+            labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL"
+          },
+          placeholder: {
+            labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_PLACEHOLDER"
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          },
+          required: false,
+          pattern: getPattern("Name"),
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          jsonPath: "applyScreen.plumberInfo[0].name"
+        }),
+        plumberMobNo: getTextField({
+          label: {
+            labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL"
+          },
+          placeholder: {
+            labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL_PLACEHOLDER"
+          },
+          gridDefination: { xs: 12, sm: 6 },
+          iconObj: { label: "+91 |", position: "start" },
+          required: false,
+          pattern: getPattern("MobileNo"),
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          jsonPath: "applyScreen.plumberInfo[0].mobileNumber"
+        }),
+      })
     }),
-  }),
+  // roadCuttingChargeContainer: getCommonCard({
+  //   header: getCommonSubHeader(
+  //     {
+  //       labelName: "Road Cutting Charge",
+  //       labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
+  //     },
+  //     {
+  //       style: {
+  //         marginBottom: 18
+  //       }
+  //     }
+  //   ),
+  //   applicantTypeContainer: getCommonContainer({
+  //     roadCuttingChargeInfoCard : {
+  //       uiFramework: "custom-atoms",
+  //       componentPath: "Div",
+  //       props: {
+  //         style: {
+  //           // display: "none"
+  //           // width: 
+  //         }
+  //       },
+  //       children: {
+  //         multipleApplicantInfo: {
+  //           uiFramework: "custom-containers",
+  //           componentPath: "MultiItem",
+  //           props: {
+  //             scheama: commonRoadCuttingChargeInformation(),
+  //             items: [],
+  //             addItemLabel: {
+  //               labelName: "Add Road Type",
+  //               labelKey: "WS_ADD_ROAD_TYPE_LABEL"
+  //             },
+  //             isReviewPage: false,
+  //             sourceJsonPath: "applyScreen.roadCuttingInfo",
+  //             prefixSourceJsonPath: "children.cardContent.children.roadDetails.children"
+  //           },
+  //           type: "array"
+  //         }
+  //       }
+  //     },
+  //   }),
+  // }),
   activationDetailsContainer: getCommonGrayCard({
     subHeader: getCommonTitle({
       labelKey: "WS_ACTIVATION_DETAILS"

@@ -338,7 +338,7 @@ const propertyDetailsNoId = getCommonContainer({
         const meteredNonMetered = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionType", "")
         switch(action.value){
           case 'TEMPORARY':
-            if(meteredNonMetered == "METERED"){
+            if(meteredNonMetered == "Metered"){
               dispatch(
                 handleField(
                   "apply",
@@ -359,7 +359,7 @@ const propertyDetailsNoId = getCommonContainer({
             }
             break;
           case 'PERMANENT' :
-              if(meteredNonMetered == "METERED"){
+              if(meteredNonMetered == "Metered"){
                 dispatch(
                   handleField(
                     "apply",
@@ -402,19 +402,18 @@ const propertyDetailsNoId = getCommonContainer({
       labelName: "Select Connection Type",
       labelKey: "WS_PROPERTY_CONNECTION_TYPE_LABEL"
     },
-    value:{ code: "METERED" },
     jsonPath: "applyScreen.connectionType",
     // required: true,
     localePrefix: {
       moduleName: "WS",
       masterName: "PROPTYPE"
     },
-    data: [{ code: "METERED" }, { code: "NON METERED" }],
+    data: [{ code: "Metered",name:'Metered' }, { code: "Non Metered",name:'Non Metered' }],
     afterFieldChange: (action, state, dispatch) => {
       if(action){
         const connectionCategory = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionCategory", "")
         switch(action.value){
-          case 'METERED':
+          case 'Metered':
             if(connectionCategory == "TEMPORARY"){
               dispatch(
                 handleField(
@@ -435,7 +434,7 @@ const propertyDetailsNoId = getCommonContainer({
               );
             }
             break;
-          case 'NON METERED' :
+          case 'Non Metered' :
               if(connectionCategory == "TEMPORARY"){
                 dispatch(
                   handleField(

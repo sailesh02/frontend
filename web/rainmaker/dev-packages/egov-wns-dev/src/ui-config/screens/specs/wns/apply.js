@@ -332,10 +332,10 @@ export const getData = async (action, state, dispatch) => {
         try { 
         payloadWater = await getSearchResults(queryObject)
         // to prefill dropdown data while editing
-        if((actionType && (actionType.toUpperCase() === "EDIT")) && payloadWater && payloadWater.waterConnection && payloadWater.waterConnection[0].connectionCategory && payloadWater.waterConnection[0].connectionType){
-          switch(payloadWater.waterConnection[0].connectionCategory){
+        if((actionType && (actionType.toUpperCase() === "EDIT")) && payloadWater && payloadWater.WaterConnection && payloadWater.WaterConnection[0].connectionCategory && payloadWater.WaterConnection[0].connectionType){
+          switch(payloadWater.WaterConnection[0].connectionCategory){
             case 'TEMPORARY':
-              if(payloadWater.waterConnection[0].connectionType == "METERED"){
+              if(payloadWater.WaterConnection[0].connectionType == "Metered"){
                 dispatch(
                   handleField(
                     "apply",
@@ -356,7 +356,7 @@ export const getData = async (action, state, dispatch) => {
               }
               break;
             case 'PERMANENT' :
-                if(payloadWater.waterConnection[0].connectionType == "METERED"){
+                if(payloadWater.WaterConnection[0].connectionType == "Metered"){
                   dispatch(
                     handleField(
                       "apply",
@@ -433,7 +433,7 @@ export const getData = async (action, state, dispatch) => {
       }
 
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
-      dispatch(prepareFinalObject("applyScreen.usageCategory",combinedArray ? combinedArray[0].usageCategory.split('.')[1] : ''))
+      dispatch(prepareFinalObject("applyScreen.usageCategory",combinedArray ? combinedArray[0].usageCategory : ''))
       dispatch(prepareFinalObject("applyScreen.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
 
       // For oldvalue display

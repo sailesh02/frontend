@@ -275,8 +275,11 @@ export const getData = async (action, state, dispatch) => {
         payloadSewerage.SewerageConnections[0].sewerage = true;
         payloadSewerage.SewerageConnections[0].service = "Sewerage";
         dispatch(prepareFinalObject("SewerageConnection", payloadSewerage.SewerageConnections));
-      } else {
-        try { payloadWater = await getSearchResults(queryObject) } catch (error) { console.error(error); };
+      } 
+      else {
+        try { 
+        payloadWater = await getSearchResults(queryObject) 
+       } catch (error) { console.error(error); };
         payloadWater.WaterConnection[0].water = true;
         payloadWater.WaterConnection[0].sewerage = false;
         payloadWater.WaterConnection[0].service = "Water";
@@ -303,12 +306,12 @@ export const getData = async (action, state, dispatch) => {
       }
       let combinedArray = waterConnections.concat(sewerageConnections);
 
-      if (!window.location.href.includes("propertyId")) {
-        if (!isActiveProperty(combinedArray[0].property)) {
-          dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${combinedArray[0].property.status}`, labelName: `Property Status is ${combinedArray[0].property.status}` }, "warning"));
-          showHideFieldsFirstStep(dispatch, "", false);
-        }
-      }
+      // if (!window.location.href.includes("propertyId")) {
+      //   if (!isActiveProperty(combinedArray[0].property)) {
+      //     dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${combinedArray[0].property.status}`, labelName: `Property Status is ${combinedArray[0].property.status}` }, "warning"));
+      //     showHideFieldsFirstStep(dispatch, "", false);
+      //   }
+      // }
       // For Modify connection details
       if (isModifyMode() && !isModifyModeAction()) {
         // this delete for initiate modify connection 
@@ -452,13 +455,13 @@ export const getData = async (action, state, dispatch) => {
           );
         }
       }
-      if (propertyID) {
-        let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
-        getApplyPropertyDetails(queryObject, dispatch, propertyID)
-      } else {
-        let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
-        dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
-      }
+      // if (propertyID) {
+      //   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
+      //   getApplyPropertyDetails(queryObject, dispatch, propertyID)
+      // } else {
+      //   let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
+      //   dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
+      // }
       //For Modify Connection hide the connection details card
       if (isModifyMode()) {
         showHideFieldModifyConnection(action);
@@ -466,10 +469,11 @@ export const getData = async (action, state, dispatch) => {
       let docs = get(state, "screenConfiguration.preparedFinalObject");
       await prefillDocuments(docs, "displayDocs", dispatch);
     }
-  } else if (propertyID) {
-    let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
-    getApplyPropertyDetails(queryObject, dispatch, propertyID)
-  }
+  } 
+  // else if (propertyID) {
+  //   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
+  //   getApplyPropertyDetails(queryObject, dispatch, propertyID)
+  // }
 };
 
 const  getApplicationNoLabel= () => {

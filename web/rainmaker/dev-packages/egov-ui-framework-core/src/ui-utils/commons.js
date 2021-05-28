@@ -805,10 +805,13 @@ export const getObjectKeys = objData => {
 export const getMdmsJson = async (state, dispatch, reqObj) => {
   let { setPath, setTransformPath, dispatchPath, moduleName, name, filter } = reqObj;
   const tenantId = getQueryArg(window.location.href, "tenantId");
+  console.log(reqObj, "Nero ReqObject");
+  console.log(window.location.href, "Nero window.location.href")
+
   let mdmsBody = {
     MdmsCriteria: {
-      //tenantId: commonConfig.tenantId,
-      tenantId: tenantId,
+      tenantId: moduleName === "TradeLicense" ? tenantId: commonConfig.tenantId,
+
       moduleDetails: [
         {
           moduleName,

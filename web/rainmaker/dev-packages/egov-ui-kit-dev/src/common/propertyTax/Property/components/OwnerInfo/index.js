@@ -22,19 +22,8 @@ import ViewHistoryDialog from "../ViewHistory";
 import "./index.css";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
-let userInfo = JSON.parse(getUserInfo());
-const roleCodes =
-    userInfo && userInfo.roles
-      ? userInfo.roles.map((role) => {
-        return role.code;
-      })
-      : [];
-const transferAllowed = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
-
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
-
-
 
 const checkDocument = (owner) => {
   if (owner) {
@@ -387,6 +376,15 @@ class OwnerInfo extends Component {
         }
       }
     }
+    
+    let userInfo = JSON.parse(getUserInfo());
+    const roleCodes =
+        userInfo && userInfo.roles
+          ? userInfo.roles.map((role) => {
+            return role.code;
+          })
+          : [];
+    const transferAllowed = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
 
     return (
       <div>

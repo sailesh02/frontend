@@ -55,6 +55,10 @@ const getDropDownData = async (action, state, dispatch) => {
   "name" : "Complaint By Department",
   "code" : "department"
   },
+  {
+    "name" : "Complaint By ULB",
+    "code" : "tenantid"
+    },
   ]
   var selectedDefaultData = {value: "status", label: "Complaint By Status"};
 

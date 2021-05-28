@@ -125,6 +125,7 @@ export const getMdmsData = async (action, state, dispatch) => {
       payload.MdmsRes.tenant.localities = localities;
     }
     payload.MdmsRes.TradeLicense.TlPeriod = [{code: "1", active: true},{code: "2", active: true}, {code: "3", active: true}, {code: "4", active: true}, {code: "5", active: true}]
+   // payload.MdmsRes.TradeLicense.UOMDropBoxValues = []
 
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
     let financialYearData = get(

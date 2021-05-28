@@ -332,7 +332,6 @@ export const getData = async (action, state, dispatch) => {
         try { 
         payloadWater = await getSearchResults(queryObject)
         // to prefill dropdown data while editing
-        payloadWater.waterConnection[0].usageCategory = 'DOMESTIC' 
         if((actionType && (actionType.toUpperCase() === "EDIT")) && payloadWater && payloadWater.waterConnection && payloadWater.waterConnection[0].connectionCategory && payloadWater.waterConnection[0].connectionType){
           switch(payloadWater.waterConnection[0].connectionCategory){
             case 'TEMPORARY':

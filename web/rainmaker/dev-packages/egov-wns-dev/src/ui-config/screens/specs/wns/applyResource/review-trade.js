@@ -240,7 +240,7 @@ export const propertyDetails={
       labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
     },
     {
-      jsonPath: "WaterConnection[0].property.usageCategory",
+      jsonPath: "WaterConnection[0].usageCategory",
       callBack: handleNA,
       localePrefix: {
         moduleName: "WS",
@@ -251,7 +251,7 @@ export const propertyDetails={
       labelKey: "WS_OLD_LABEL_NAME"
     },
     {
-      jsonPath: "WaterConnectionOld[0].property.usageCategory",
+      jsonPath: "WaterConnectionOld[0].usageCategory",
       callBack: handleNA,
       localePrefix: {
         moduleName: "WS",
@@ -260,6 +260,138 @@ export const propertyDetails={
       
     }
   ),
+  city: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "City",
+      labelKey: "CORE_COMMON_CITY"
+    },
+    {
+      jsonPath: "WaterConnection[0].tenantId",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "tenant", masterName: "tenants"
+      }
+    },
+    {
+      labelKey: "CORE_COMMON_CITY"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].tenantId",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "tenant", masterName: "tenants"
+      }
+    }
+
+  ),
+  mohalla: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "mohalla",
+      labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.locality",
+      callBack: handleNA,
+    },
+    {
+      labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.locality",
+      callBack: handleNA   
+    }
+
+  ),
+  connectionCategory: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Connection Category",
+      labelKey: "WS_PROPERTY_CONNECTION_CATEGORY_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].connectionCategory",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPTYPE"
+      },
+    },
+    {
+      labelKey: "WS_PROPERTY_CONNECTION_CATEGORY_LABEL"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].connectionCategory",
+      callBack: handleNA ,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPTYPE"
+      },  
+    }
+
+  ),
+  connectionType: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Connection Type",
+      labelKey: "WS_PROPERTY_CONNECTION_TYPE_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].connectionType",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPTYPE"
+      },
+    },
+    {
+      labelKey: "WS_PROPERTY_CONNECTION_TYPE_LABEL"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].connectionType",
+      callBack: handleNA ,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPTYPE"
+      },  
+    }
+
+  ),
+  noOfFlats: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "No of Flats",
+      labelKey: "WS_PROPERTY_NO_OF_FLATS_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].noOfFlats",
+      // callBack: handleNA
+     
+    },
+    {
+      labelKey: "WS_PROPERTY_NO_OF_FLATS_LABEL"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].noOfFlats",
+      // callBack: handleNA 
+    }
+
+  ),
+  apartment: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Apartment",
+      labelKey: "WS_COMMON_APARTMENT"
+    },
+    {
+      jsonPath: "WaterConnection[0].apartment",
+      callBack: handleNA
+     
+    },
+    {
+      labelKey: "WS_COMMON_APARTMENT"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].apartment",
+      callBack: handleNA 
+    }
+
+  )
 
   // reviewPropertySubUsageType: getLabelWithValueForModifiedLabel(
   //   {

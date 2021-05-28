@@ -250,7 +250,7 @@ const getPropertyDetails = {
               labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
             },
             {
-              jsonPath: "applyScreen.property.usageCategory",
+              jsonPath: "applyScreen.usageCategory",
               callBack: handleNA,
               localePrefix: {
                 moduleName: "WS",
@@ -261,7 +261,7 @@ const getPropertyDetails = {
               labelKey: "WS_OLD_LABEL_NAME"
             },
             {
-              jsonPath: "applyScreenOld.property.usageCategory",
+              jsonPath: "applyScreenOld.usageCategory",
               callBack: handleNA,
               localePrefix: {
                 moduleName: "WS",
@@ -336,6 +336,138 @@ const getPropertyDetails = {
           //     callBack: handleNA
           //   },
           // )
+          city: getLabelWithValueForModifiedLabel(
+            {
+              labelName: "City",
+              labelKey: "CORE_COMMON_CITY"
+            },
+            {
+              jsonPath: "applyScreen.tenantId",
+              callBack: handleNA,
+              localePrefix: {
+                moduleName: "tenant", masterName: "tenants"
+              }
+            },
+            {
+              labelKey: "CORE_COMMON_CITY"
+            },
+            {
+              jsonPath: "applyScreenOld.tenantId",
+              callBack: handleNA,
+              localePrefix: {
+                moduleName: "tenant", masterName: "tenants"
+              }
+            }
+
+          ),
+          mohalla: getLabelWithValueForModifiedLabel(
+            {
+              labelName: "mohalla",
+              labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
+            },
+            {
+              jsonPath: "applyScreen.locality",
+              callBack: handleNA,
+            },
+            {
+              labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
+            },
+            {
+              jsonPath: "applyScreenOld.locality",
+              callBack: handleNA   
+            }
+
+          ),
+          connectionCategory: getLabelWithValueForModifiedLabel(
+            {
+              labelName: "Connection Category",
+              labelKey: "WS_PROPERTY_CONNECTION_CATEGORY_LABEL"
+            },
+            {
+              jsonPath: "applyScreen.connectionCategory",
+              callBack: handleNA,
+              localePrefix: {
+                moduleName: "WS",
+                masterName: "PROPTYPE"
+              },
+            },
+            {
+              labelKey: "WS_PROPERTY_CONNECTION_CATEGORY_LABEL"
+            },
+            {
+              jsonPath: "applyScreenOld.connectionCategory",
+              callBack: handleNA ,
+              localePrefix: {
+                moduleName: "WS",
+                masterName: "PROPTYPE"
+              },  
+            }
+
+          ),
+          connectionType: getLabelWithValueForModifiedLabel(
+            {
+              labelName: "Connection Type",
+              labelKey: "WS_PROPERTY_CONNECTION_TYPE_LABEL"
+            },
+            {
+              jsonPath: "applyScreen.connectionType",
+              callBack: handleNA,
+              localePrefix: {
+                moduleName: "WS",
+                masterName: "PROPTYPE"
+              },
+            },
+            {
+              labelKey: "WS_PROPERTY_CONNECTION_TYPE_LABEL"
+            },
+            {
+              jsonPath: "applyScreenOld.connectionType",
+              callBack: handleNA ,
+              localePrefix: {
+                moduleName: "WS",
+                masterName: "PROPTYPE"
+              },  
+            }
+
+          ),
+          noOfFlats: getLabelWithValueForModifiedLabel(
+            {
+              labelName: "No of Flats",
+              labelKey: "WS_PROPERTY_NO_OF_FLATS_LABEL"
+            },
+            {
+              jsonPath: "applyScreen.noOfFlats",
+              callBack: handleNA
+             
+            },
+            {
+              labelKey: "WS_PROPERTY_NO_OF_FLATS_LABEL"
+            },
+            {
+              jsonPath: "applyScreenOld.noOfFlats",
+              callBack: handleNA 
+            }
+
+          ),
+          apartment: getLabelWithValueForModifiedLabel(
+            {
+              labelName: "Apartment",
+              labelKey: "WS_COMMON_APARTMENT"
+            },
+            {
+              jsonPath: "applyScreen.apartment",
+              callBack: handleNA
+             
+            },
+            {
+              labelKey: "WS_COMMON_APARTMENT"
+            },
+            {
+              jsonPath: "applyScreenOld.apartment",
+              callBack: handleNA 
+            }
+
+          )
         })
     }),
     items: [],

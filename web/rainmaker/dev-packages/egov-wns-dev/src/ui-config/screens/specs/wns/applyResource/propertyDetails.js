@@ -272,32 +272,7 @@ const propertyDetailsNoId = getCommonContainer({
                 dropdownData = [...dropdownData, ...get(payloadSpec, path)];
                 return dropdownData;
               }, []);
-            // const ddData =
-            //   dropdownData &&
-            //   dropdownData.length > 0 &&
-            //   dropdownData.reduce((ddData, item) => {
-            //     let option = {};
-            //     if (fieldKey === "mohalla" && item.code) {
-            //       const mohallaCode = `${dataFetchConfig.queryParams[0].value.toUpperCase().replace(/[.]/g, "_")}_${dataFetchConfig.hierarchyType}_${item.code
-            //         .toUpperCase()
-            //         .replace(/[._:-\s\/]/g, "_")}`;
-            //       option = {
-            //         code: getTranslatedLabel(mohallaCode, localizationLabels),
-            //         value: item.code,
-            //       };
-            //     } else {
-            //       option = {
-            //         label: item.name,
-            //         value: item.code,
-            //       };
-            //     }
-            //     item.area && (option.area = item.area);
-            //     ddData.push(option);
-            //     return ddData;
-            //   }, []);
               dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", dropdownData));
-
-            // dispatch(setFieldProperty(formKey, fieldKey, "dropDownData", ddData));
           }
         } 
         catch (error) {
@@ -348,7 +323,6 @@ const propertyDetailsNoId = getCommonContainer({
     },
     // required: true,
     jsonPath: "applyScreen.connectionCategory",
-    value:'TEMPORARY',
     data: [{ code: "TEMPORARY" }, { code: "PERMANENT" }],
     localePrefix: {
       moduleName: "WS",

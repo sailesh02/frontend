@@ -6,6 +6,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import sortBy from "lodash/sortBy";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -36,6 +37,11 @@ import { reviewModificationsEffective } from "./applyResource/reviewModification
 import { reviewOwner } from "./applyResource/reviewOwner";
 import './index.css'
 import { fetchDropdownData, getTranslatedLabel } from "egov-ui-kit/utils/commons";
+const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"}]
+const meteredTemporary = [{code:"TWSFC"}]
+const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL_CATEGORY"},{code:"ROADSIDEEATERS"},
+{code:"SPMA"}]
+const nonMeteredTemporory = [{code:"DOMESTIC"}]
 
 let isMode = isModifyMode();
 export const stepperData = () => {
@@ -257,6 +263,52 @@ export const getData = async (action, state, dispatch) => {
   let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   await getMdmsData(dispatch,state);
   if (applicationNo) {
+    if(tenantId && (actionType && (actionType.toUpperCase() === "EDIT"))){
+      const dataFetchConfig = {
+        url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+        action: "_search",
+        queryParams: [{
+          key: "tenantId",
+          value: tenantId
+        }],
+        requestBody: {},
+        isDependent: true,
+        hierarchyType: "REVENUE"
+      }
+      let url = dataFetchConfig.url
+      let fieldKey = "mohalla"
+      try {
+        if (url) {
+          let localizationLabels = {};
+          if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+          const payloadSpec = await httpRequest("post", url,"_search",dataFetchConfig.queryParams || [], dataFetchConfig.requestBody);
+          const dropdownData = true
+            ? // ? jp.query(payloadSpec, dataFetchConfig.dataPath)
+            payloadSpec.TenantBoundary[0].boundary
+            : dataFetchConfig.dataPath.reduce((dropdownData, path) => {
+              dropdownData = [...dropdownData, ...get(payloadSpec, path)];
+              return dropdownData;
+            }, []);
+            dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", dropdownData));
+        }
+      } 
+      catch (error) {
+        const { message } = error;
+        console.log(error);
+        if (fieldKey === "mohalla") {
+          dispatch(
+            toggleSnackbarAndSetText(
+              true,
+              { labelName: "There is no admin boundary data available for this tenant", labelKey: "ERR_NO_ADMIN_BOUNDARY_FOR_TENANT" },
+              "error"
+            )
+          );
+        } else {
+          dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
+        }
+        return;
+      } 
+    }
     //Edit/Update Flow ----
     let queryObject = [
       { key: "tenantId", value: tenantId },
@@ -278,8 +330,67 @@ export const getData = async (action, state, dispatch) => {
       } 
       else {
         try { 
-        payloadWater = await getSearchResults(queryObject) 
+        payloadWater = await getSearchResults(queryObject)
+        // to prefill dropdown data while editing
+        payloadWater.waterConnection[0].usageCategory = 'DOMESTIC' 
+        if((actionType && (actionType.toUpperCase() === "EDIT")) && payloadWater && payloadWater.waterConnection && payloadWater.waterConnection[0].connectionCategory && payloadWater.waterConnection[0].connectionType){
+          switch(payloadWater.waterConnection[0].connectionCategory){
+            case 'TEMPORARY':
+              if(payloadWater.waterConnection[0].connectionType == "METERED"){
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    meteredTemporary
+                  )
+                );
+              }else{
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    nonMeteredTemporory
+                  )
+                );
+              }
+              break;
+            case 'PERMANENT' :
+                if(payloadWater.waterConnection[0].connectionType == "METERED"){
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                      "data",
+                      meteredPermanent
+                    )
+                  );
+                }else{
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                      "data",
+                      nonMeteredPermanent
+                    )
+                  );
+                }
+              break;
+            default:
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    nonMeteredTemporory
+                  )
+                );
+              break;  
+          }
+        }
        } catch (error) { console.error(error); };
+       
         payloadWater.WaterConnection[0].water = true;
         payloadWater.WaterConnection[0].sewerage = false;
         payloadWater.WaterConnection[0].service = "Water";
@@ -297,13 +408,13 @@ export const getData = async (action, state, dispatch) => {
         }
       }
       const waterConnections = payloadWater ? payloadWater.WaterConnection : []
-      if (waterConnections.length > 0) {
-        waterConnections[0].additionalDetails.locality = get(waterConnections[0], "property.address.locality.code");
-      }
+      // if (waterConnections.length > 0) {
+      //   waterConnections[0].additionalDetails.locality = get(waterConnections[0], "additionalDetails.locality");
+      // }
       const sewerageConnections = payloadSewerage ? payloadSewerage.SewerageConnections : [];
-      if (sewerageConnections.length > 0) {
-        sewerageConnections[0].additionalDetails.locality = get(sewerageConnections[0], "property.address.locality.code");
-      }
+      // if (sewerageConnections.length > 0) {
+      //   sewerageConnections[0].additionalDetails.locality = get(sewerageConnections[0], "property.address.locality.code");
+      // }
       let combinedArray = waterConnections.concat(sewerageConnections);
 
       // if (!window.location.href.includes("propertyId")) {
@@ -323,6 +434,9 @@ export const getData = async (action, state, dispatch) => {
       }
 
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
+      dispatch(prepareFinalObject("applyScreen.usageCategory",combinedArray ? combinedArray[0].usageCategory.split('.')[1] : ''))
+      dispatch(prepareFinalObject("applyScreen.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
+
       // For oldvalue display
       let oldcombinedArray = cloneDeep(combinedArray[0]);
       dispatch(prepareFinalObject("applyScreenOld", findAndReplace(oldcombinedArray, "null", "NA")));

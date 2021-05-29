@@ -645,11 +645,13 @@ export const changeStep = (
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   if (defaultActiveStep === -1) {
     if (activeStep === 1 && mode === "next") {
-      const isDocsUploaded = get(
-        state.screenConfiguration.preparedFinalObject,
-        "applyScreen.documents",
-        null
-      );
+      // const isDocsUploaded = get(
+      //   state.screenConfiguration.preparedFinalObject,
+      //   "applyScreen.documents",
+      //   null
+      // );
+      //since docs section is non mandatory now
+      const isDocsUploaded = true;
       if (isDocsUploaded) {
         activeStep = process.env.REACT_APP_NAME === "Citizen" && !isModifyMode() ? 3 : 2;
       } else if (isModifyMode()) {
@@ -703,7 +705,7 @@ export const changeStep = (
   ];
   dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
   if (process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) { renderStepsCitizen(activeStep, dispatch); }
-  else { renderSteps(activeStep, dispatch); }
+  else { renderSteps(activeStep, dispatch,state); }
 }
 
 export const isNextButton = (activeStep) => {
@@ -713,7 +715,7 @@ export const isNextButton = (activeStep) => {
   else return false
 }
 
-export const renderSteps = (activeStep, dispatch) => {
+export const renderSteps = (activeStep, dispatch, state) => {
   switch (activeStep) {
     case 0:
       dispatchMultipleFieldChangeAction(
@@ -745,6 +747,26 @@ export const renderSteps = (activeStep, dispatch) => {
       );
       break;
     default:
+      const sewerage = get(state.screenConfiguration.preparedFinalObject,"applyScreen.sewerage",false)
+      if(sewerage){
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.connectionType",
+            "visible",
+            false
+          )
+        );
+      }else{
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.connectionType",
+            "visible",
+            true
+          )
+        );
+      }
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(

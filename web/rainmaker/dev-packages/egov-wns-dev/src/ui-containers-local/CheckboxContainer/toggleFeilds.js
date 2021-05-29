@@ -262,6 +262,15 @@ export const toggleFlatDetails = (onFieldChange, value) => {
   );
 }
 
+export const toggleConnectionTypeDetails = (onFieldChange, value) => {
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType",
+    "visible",
+    value
+  );
+}
+
 export const togglePropertyFeilds = (action, value) => {
   set(
     action.screenConfig,

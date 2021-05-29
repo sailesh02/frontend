@@ -18,6 +18,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {getTranslatedLabel} from "egov-ui-kit/utils/commons"
 
 let isMode = getQueryArg(window.location.href, "mode");
+
 isMode = (isMode) ? isMode.toUpperCase() : "";
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
@@ -30,10 +31,12 @@ let mode = getQueryArg(window.location.href, "mode");
 
 const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"}]
 const meteredTemporary = [{code:"TWSFC"}]
-const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL_CATEGORY"},{code:"ROADSIDEEATERS"},
+const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL"},{code:"ROADSIDEEATERS"},
 {code:"SPMA"}]
 const nonMeteredTemporory = [{code:"DOMESTIC"}]
-
+const temporary = [{code: "DOMESTIC"}, {code:"TWSFC"}]
+const permanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"TWSFC"},
+, {code:"BPL"},{code:"ROADSIDEEATERS"}, {code:"SPMA"} ]
 let modifyLink;
 if(isMode==="MODIFY"){
   modifyLink=`/wns/apply?`;
@@ -336,36 +339,19 @@ const propertyDetailsNoId = getCommonContainer({
     afterFieldChange: (action, state, dispatch) => {
       if(action){
         const meteredNonMetered = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionType", "")
-        switch(action.value){
-          case 'TEMPORARY':
-            if(meteredNonMetered == "Metered"){
-              dispatch(
-                handleField(
-                  "apply",
-                  "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-                  "data",
-                  meteredTemporary
-                )
-              );
-            }else{
-              dispatch(
-                handleField(
-                  "apply",
-                  "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-                  "data",
-                  nonMeteredTemporory
-                )
-              );
-            }
-            break;
-          case 'PERMANENT' :
+        const water = get(state.screenConfiguration.preparedFinalObject,"applyScreen.water",false)
+        const sewerage = get(state.screenConfiguration.preparedFinalObject,"applyScreen.sewerage",false)
+
+        if(water || (water && sewerage)){
+          switch(action.value){
+            case 'TEMPORARY':
               if(meteredNonMetered == "Metered"){
                 dispatch(
                   handleField(
                     "apply",
                     "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
                     "data",
-                    meteredPermanent
+                    meteredTemporary
                   )
                 );
               }else{
@@ -374,22 +360,79 @@ const propertyDetailsNoId = getCommonContainer({
                     "apply",
                     "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
                     "data",
-                    nonMeteredPermanent
+                    nonMeteredTemporory
                   )
                 );
               }
-            break;
-          default:
-              dispatch(
-                handleField(
-                  "apply",
-                  "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-                  "data",
-                  nonMeteredTemporory
-                )
-              );
-            break;  
+              break;
+            case 'PERMANENT' :
+                if(meteredNonMetered == "Metered"){
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                      "data",
+                      meteredPermanent
+                    )
+                  );
+                }else{
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                      "data",
+                      nonMeteredPermanent
+                    )
+                  );
+                }
+              break;
+            default:
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    nonMeteredTemporory
+                  )
+                );
+              break;  
+          }
+        }else{
+          switch(action.value){
+            case 'TEMPORARY':
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    temporary
+                  )
+                );
+            
+              break;
+            case 'PERMANENT' :
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                      "data",
+                      permanent
+                    )
+                  );
+              break;
+            default:
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    temporary
+                  )
+                );
+              break;  
+          }
         }
+      
       }
   }
   }),
@@ -403,7 +446,7 @@ const propertyDetailsNoId = getCommonContainer({
       labelKey: "WS_PROPERTY_CONNECTION_TYPE_LABEL"
     },
     jsonPath: "applyScreen.connectionType",
-    // required: true,
+    visible: true,
     localePrefix: {
       moduleName: "WS",
       masterName: "PROPTYPE"
@@ -412,36 +455,17 @@ const propertyDetailsNoId = getCommonContainer({
     afterFieldChange: (action, state, dispatch) => {
       if(action){
         const connectionCategory = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionCategory", "")
-        switch(action.value){
-          case 'Metered':
-            if(connectionCategory == "TEMPORARY"){
-              dispatch(
-                handleField(
-                  "apply",
-                  "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-                  "data",
-                  meteredTemporary
-                )
-              );
-            }else{
-              dispatch(
-                handleField(
-                  "apply",
-                  "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-                  "data",
-                  meteredPermanent
-                )
-              );
-            }
-            break;
-          case 'Non Metered' :
+        const water = get(state.screenConfiguration.preparedFinalObject,"applyScreen.water",false)
+        if(water){
+          switch(action.value){
+            case 'Metered':
               if(connectionCategory == "TEMPORARY"){
                 dispatch(
                   handleField(
                     "apply",
                     "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
                     "data",
-                    nonMeteredTemporory
+                    meteredTemporary
                   )
                 );
               }else{
@@ -450,22 +474,45 @@ const propertyDetailsNoId = getCommonContainer({
                     "apply",
                     "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
                     "data",
-                    nonMeteredPermanent
+                    meteredPermanent
                   )
                 );
               }
-            break;
-          default:
-              dispatch(
-                handleField(
-                  "apply",
-                  "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-                  "data",
-                  nonMeteredTemporory
-                )
-              );
-            break;  
+              break;
+            case 'Non Metered' :
+                if(connectionCategory == "TEMPORARY"){
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                      "data",
+                      nonMeteredTemporory
+                    )
+                  );
+                }else{
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                      "data",
+                      nonMeteredPermanent
+                    )
+                  );
+                }
+              break;
+            default:
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    nonMeteredTemporory
+                  )
+                );
+              break;  
+          }
         }
+       
       }
   },
     gridDefination: {
@@ -491,7 +538,7 @@ const propertyDetailsNoId = getCommonContainer({
     },
     afterFieldChange: (action, state, dispatch) => {
       if(action.value){
-        if(action.value == 'Domestic'){
+        if(action.value == 'DOMESTIC'){
           dispatch(
             handleField(
               "apply",
@@ -526,6 +573,7 @@ const propertyDetailsNoId = getCommonContainer({
       labelName: "Enter No of Flats.",
       labelKey: "WS_PROPERTY_NO_OF_FLATS_PLACEHOLDER"
     },
+    value:0,
     visible:false,
     jsonPath: "applyScreen.noOfFlats",
     gridDefination: {

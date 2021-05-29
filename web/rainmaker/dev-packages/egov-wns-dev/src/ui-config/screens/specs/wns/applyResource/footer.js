@@ -705,7 +705,7 @@ export const changeStep = (
   ];
   dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
   if (process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) { renderStepsCitizen(activeStep, dispatch); }
-  else { renderSteps(activeStep, dispatch); }
+  else { renderSteps(activeStep, dispatch,state); }
 }
 
 export const isNextButton = (activeStep) => {
@@ -715,7 +715,7 @@ export const isNextButton = (activeStep) => {
   else return false
 }
 
-export const renderSteps = (activeStep, dispatch) => {
+export const renderSteps = (activeStep, dispatch, state) => {
   switch (activeStep) {
     case 0:
       dispatchMultipleFieldChangeAction(
@@ -747,6 +747,26 @@ export const renderSteps = (activeStep, dispatch) => {
       );
       break;
     default:
+      const sewerage = get(state.screenConfiguration.preparedFinalObject,"applyScreen.sewerage",false)
+      if(sewerage){
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.connectionType",
+            "visible",
+            false
+          )
+        );
+      }else{
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.connectionType",
+            "visible",
+            true
+          )
+        );
+      }
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(

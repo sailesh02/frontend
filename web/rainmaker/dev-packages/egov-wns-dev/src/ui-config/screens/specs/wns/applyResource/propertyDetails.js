@@ -18,6 +18,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {getTranslatedLabel} from "egov-ui-kit/utils/commons"
 
 let isMode = getQueryArg(window.location.href, "mode");
+
 isMode = (isMode) ? isMode.toUpperCase() : "";
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");

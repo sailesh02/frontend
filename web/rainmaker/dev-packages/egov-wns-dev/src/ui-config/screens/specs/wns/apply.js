@@ -39,9 +39,12 @@ import './index.css'
 import { fetchDropdownData, getTranslatedLabel } from "egov-ui-kit/utils/commons";
 const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"}]
 const meteredTemporary = [{code:"TWSFC"}]
-const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL_CATEGORY"},{code:"ROADSIDEEATERS"},
+const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL"},{code:"ROADSIDEEATERS"},
 {code:"SPMA"}]
 const nonMeteredTemporory = [{code:"DOMESTIC"}]
+const temporary = [{code: "DOMESTIC"}, {code:"TWSFC"}]
+const permanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"TWSFC"},
+, {code:"BPL"},{code:"ROADSIDEEATERS"}, {code:"SPMA"} ]
 
 let isMode = isModifyMode();
 export const stepperData = () => {
@@ -327,6 +330,41 @@ export const getData = async (action, state, dispatch) => {
         payloadSewerage.SewerageConnections[0].sewerage = true;
         payloadSewerage.SewerageConnections[0].service = "Sewerage";
         dispatch(prepareFinalObject("SewerageConnection", payloadSewerage.SewerageConnections));
+        if((actionType && (actionType.toUpperCase() === "EDIT")) && payloadSewerage && payloadSewerage.SewerageConnections && payloadSewerage.SewerageConnections[0].connectionCategory){
+          switch(payloadSewerage.SewerageConnections[0].connectionCategory){
+            case 'TEMPORARY':
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    temporary
+                  )
+                );
+              
+              break;
+            case 'PERMANENT' :
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                      "data",
+                      permanent
+                    )
+                  );
+              break;
+            default:
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    temporary
+                  )
+                );
+              break;  
+          }
+        }
       } 
       else {
         try { 
@@ -626,7 +664,7 @@ export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form1" },
-  children: { IDDetails, PropertyDetailsNoId, connectionHolderDetails, OwnerInfoCard }
+  children: { IDDetails, OwnerInfoCard, PropertyDetailsNoId, connectionHolderDetails }
   // children: { IDDetails, Details, PropertyDetailsNoId, connectionHolderDetails, OwnerInfoCard }
 };
 export const formwizardSecondStep = {

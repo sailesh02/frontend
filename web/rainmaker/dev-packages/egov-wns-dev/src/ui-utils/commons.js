@@ -15,6 +15,7 @@ export const serviceConst = {
 }
 
 export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
+    debugger
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];
     if (reduxDocuments !== null && reduxDocuments !== undefined) {

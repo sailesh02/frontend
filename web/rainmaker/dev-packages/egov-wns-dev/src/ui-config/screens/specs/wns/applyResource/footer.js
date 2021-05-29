@@ -645,11 +645,13 @@ export const changeStep = (
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   if (defaultActiveStep === -1) {
     if (activeStep === 1 && mode === "next") {
-      const isDocsUploaded = get(
-        state.screenConfiguration.preparedFinalObject,
-        "applyScreen.documents",
-        null
-      );
+      // const isDocsUploaded = get(
+      //   state.screenConfiguration.preparedFinalObject,
+      //   "applyScreen.documents",
+      //   null
+      // );
+      //since docs section is non mandatory now
+      const isDocsUploaded = true;
       if (isDocsUploaded) {
         activeStep = process.env.REACT_APP_NAME === "Citizen" && !isModifyMode() ? 3 : 2;
       } else if (isModifyMode()) {

@@ -5,6 +5,7 @@ import {
   getLabelWithValue,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleNA } from '../../utils';
 
 import { changeStep } from "../viewBillResource/footer";
 
@@ -30,38 +31,144 @@ const propertyLocationDetailsHeader = getHeader({
   labelKey: "WS_COMMON_PROP_LOC_DETAIL_HEADER"
 });
 
-const propertyDetails = getCommonContainer({
-  propertyType: getLabelWithValue(
+// const propertyDetails = getCommonContainer({
+//   propertyType: getLabelWithValue(
+//     {
+//       labelKey: "WS_PROPERTY_TYPE_LABEL"
+//     },
+//     {
+//       jsonPath:
+//       "WaterConnection[0].property.propertyType",
+//       localePrefix: {
+//         moduleName: "WS",
+//         masterName: "PROPTYPE"
+//       }
+//     }
+//   ),
+//   propertyUsageType: getLabelWithValue(
+//     {
+//       labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
+//     },
+//     { jsonPath: "WaterConnection[0].property.usageCategory",
+//     localePrefix: {
+//       moduleName: "WS",
+//       masterName: "PROPUSGTYPE"
+//     }
+//  }
+//   ),
+//   plotSize: getLabelWithValue(
+//     {
+//       labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
+//     },
+//     {
+//       jsonPath: "WaterConnection[0].property.landArea"
+//     }
+//   )
+// })
+ 
+const propertyDetails= getCommonContainer({
+  reviewPropertyId: getLabelWithValue(
     {
-      labelKey: "WS_PROPERTY_TYPE_LABEL"
+      labelName: "Property Id",
+      labelKey: "WS_PROPERTY_ID_LABEL"
     },
     {
-      jsonPath:
-      "WaterConnection[0].property.propertyType",
+      jsonPath: "WaterConnection[0].property.propertyId",
+      callBack: handleNA
+    }
+  ),
+  reviewPropertyUsageType: getLabelWithValue(
+    {
+      labelName: "Property Usage Type",
+      labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].usageCategory",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPUSGTYPE"
+      }        
+    }
+  ),
+  city: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "CORE_COMMON_CITY"
+    },
+    {
+      jsonPath: "WaterConnection[0].tenantId",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "tenant", masterName: "tenants"
+      }
+    }
+
+  ),
+  mohalla: getLabelWithValue(
+    {
+      labelName: "mohalla",
+      labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.locality",
+      callBack: handleNA,
+    }
+
+  ),
+  connectionCategory: getLabelWithValue(
+    {
+      labelName: "Connection Category",
+      labelKey: "WS_PROPERTY_CONNECTION_CATEGORY_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].connectionCategory",
+      callBack: handleNA,
       localePrefix: {
         moduleName: "WS",
         masterName: "PROPTYPE"
-      }
+      },
     }
+
   ),
-  propertyUsageType: getLabelWithValue(
+  connectionType: getLabelWithValue(
     {
-      labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
-    },
-    { jsonPath: "WaterConnection[0].property.usageCategory",
-    localePrefix: {
-      moduleName: "WS",
-      masterName: "PROPUSGTYPE"
-    }
- }
-  ),
-  plotSize: getLabelWithValue(
-    {
-      labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
+      labelName: "Connection Type",
+      labelKey: "WS_PROPERTY_CONNECTION_TYPE_LABEL"
     },
     {
-      jsonPath: "WaterConnection[0].property.landArea"
+      jsonPath: "WaterConnection[0].connectionType",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPTYPE"
+      },
     }
+
+  ),
+  noOfFlats: getLabelWithValue(
+    {
+      labelName: "No of Flats",
+      labelKey: "WS_PROPERTY_NO_OF_FLATS_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].noOfFlats",
+      // callBack: handleNA
+     
+    }
+
+  ),
+  apartment: getLabelWithValue(
+    {
+      labelName: "Apartment",
+      labelKey: "WS_COMMON_APARTMENT"
+    },
+    {
+      jsonPath: "WaterConnection[0].apartment",
+      callBack: handleNA
+     
+    }
+
   )
 })
 
@@ -186,8 +293,8 @@ export const getPropertyDetails = (isEditable = true) => {
 
     viewOne: properyDetailsHeader,
     viewTwo: propertyDetails,
-    viewThree: propertyLocationDetailsHeader,
-    viewFour: propertyLocationDetails
+    // viewThree: propertyLocationDetailsHeader,
+    // viewFour: propertyLocationDetails
   });
 };
 

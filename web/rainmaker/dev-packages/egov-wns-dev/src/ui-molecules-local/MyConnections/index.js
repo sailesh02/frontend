@@ -27,7 +27,7 @@ class MyConnections extends React.Component {
   getConnectionDetails = data => {
     store.dispatch(
       setRoute(
-        `/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+        `/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
       )
     );
   }

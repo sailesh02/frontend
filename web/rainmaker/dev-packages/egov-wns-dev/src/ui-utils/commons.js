@@ -367,15 +367,15 @@ export const getConsumptionDetails = async (queryObject, dispatch) => {
 };
 
 export const validateFeildsForBothWaterAndSewerage = (applyScreenObject) => {
-    let rValue = false;
-    if (applyScreenObject.hasOwnProperty("property") &&
-        applyScreenObject['property'] !== undefined &&
-        applyScreenObject["property"] !== "") {
-        rValue = true;
-        if (isModifyMode()) {
-            return rValue
-        }
-    }
+    let rValue = true;
+    // if (applyScreenObject.hasOwnProperty("property") &&
+    //     applyScreenObject['property'] !== undefined &&
+    //     applyScreenObject["property"] !== "") {
+    //     rValue = true;
+    //     if (isModifyMode()) {
+    //         return rValue
+    //     }
+    // }
     if (rValue &&
         applyScreenObject.hasOwnProperty("water") &&
         applyScreenObject["water"] !== undefined &&
@@ -459,15 +459,15 @@ export const validateFeildsForWater = (applyScreenObject) => {
 }
 
 export const validateFeildsForSewerage = (applyScreenObject) => {
-    let rValue = false;
-    if (applyScreenObject.hasOwnProperty("property") &&
-        applyScreenObject['property'] !== undefined &&
-        applyScreenObject["property"] !== "") {
-        rValue = true;
-        if (isModifyMode()) {
-            return rValue
-        }
-    }
+    let rValue = true;
+    // if (applyScreenObject.hasOwnProperty("property") &&
+    //     applyScreenObject['property'] !== undefined &&
+    //     applyScreenObject["property"] !== "") {
+    //     rValue = true;
+    //     if (isModifyMode()) {
+    //         return rValue
+    //     }
+    // }
     if (rValue &&
         applyScreenObject.hasOwnProperty("water") &&
         applyScreenObject["water"] !== undefined &&
@@ -962,10 +962,11 @@ export const applyForSewerage = async (state, dispatch) => {
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let method = sewerId ? "UPDATE" : "CREATE";
     try {
-        const tenantId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].property.tenantId");
+        const tenantId = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tenantId");
+        // const tenantId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].property.tenantId");
         let response;
         set(queryObject, "tenantId", tenantId);
-        queryObject.tenantId = (queryObject && queryObject.property && queryObject.property.tenantId) ? queryObject.property.tenantId : null;
+        // queryObject.tenantId = (queryObject && queryObject.property && queryObject.property.tenantId) ? queryObject.property.tenantId : null;
         if (method === "UPDATE") {
             queryObject.additionalDetails.appCreatedDate = get(
                 state.screenConfiguration.preparedFinalObject,
@@ -980,7 +981,7 @@ export const applyForSewerage = async (state, dispatch) => {
             if (typeof queryObjectForUpdate.additionalDetails !== 'object') {
                 response.SewerageConnection[0].additionalDetails = {};
             }
-            queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.property.address.locality.code;
+            queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality;
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             // queryObjectForUpdate.property = null
             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdate });
@@ -995,10 +996,10 @@ export const applyForSewerage = async (state, dispatch) => {
             if (typeof queryObject.additionalDetails !== 'object') {
                 response.SewerageConnection[0].additionalDetails = {};
             }
-            queryObject.additionalDetails.locality = queryObject.property.address.locality.code;
+            queryObject.additionalDetails.locality = queryObject.locality;
             set(queryObject, "processInstance.action", "INITIATE");
             queryObject = findAndReplace(queryObject, "NA", null);
-            // queryObject.property = null;
+            queryObject.property = null;
             response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
@@ -1031,10 +1032,11 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     if (waterId && sewerId) { method = "UPDATE" } else { method = "CREATE" };
     try {
-        const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
+        const tenantId = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tenantId");
+        // const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
         let response;
         set(queryObject, "tenantId", tenantId);
-        queryObject.tenantId = (queryObject && queryObject.property && queryObject.property.tenantId) ? queryObject.property.tenantId : null;
+        // queryObject.tenantId = (queryObject && queryObject.property && queryObject.property.tenantId) ? queryObject.property.tenantId : null;
         if (method === "UPDATE") {
             let queryObjectForUpdateWater = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
             let waterSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSourceType", null);
@@ -1070,12 +1072,12 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             if (typeof queryObjectForUpdateWater.additionalDetails !== 'object') {
                 queryObjectForUpdateWater.additionalDetails = {};
             }
-            queryObjectForUpdateWater.additionalDetails.locality = queryObjectForUpdateWater.property.address.locality.code;
+            queryObjectForUpdateWater.additionalDetails.locality = queryObjectForUpdateWater.locality;
             if (typeof queryObjectForUpdateSewerage.additionalDetails !== 'object') {
                 queryObjectForUpdateSewerage.additionalDetails = {};
             }
-            queryObjectForUpdateSewerage.additionalDetails.locality = queryObjectForUpdateSewerage.property.address.locality.code;
-            // queryObjectForUpdateSewerage.property = null
+            queryObjectForUpdateSewerage.additionalDetails.locality = queryObjectForUpdateSewerage.locality;
+            queryObjectForUpdateSewerage.property = null
             queryObjectForUpdateWater.property = null
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdateWater });
             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdateSewerage });
@@ -1099,7 +1101,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             if (typeof queryObject.additionalDetails !== 'object') {
                 queryObject.additionalDetails = {};
             }
-            queryObject.additionalDetails.locality = queryObject.property.address.locality.code;
+            queryObject.additionalDetails.locality = queryObject.locality;
             set(queryObject, "processInstance.action", "INITIATE");
             queryObject = findAndReplace(queryObject, "NA", null);
             // queryObject.property = null;

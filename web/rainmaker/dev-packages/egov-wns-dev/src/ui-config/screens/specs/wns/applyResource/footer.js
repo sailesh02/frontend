@@ -747,26 +747,6 @@ export const renderSteps = (activeStep, dispatch, state) => {
       );
       break;
     default:
-      const sewerage = get(state.screenConfiguration.preparedFinalObject,"applyScreen.sewerage",false)
-      if(sewerage){
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.connectionType",
-            "visible",
-            false
-          )
-        );
-      }else{
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.connectionType",
-            "visible",
-            true
-          )
-        );
-      }
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(

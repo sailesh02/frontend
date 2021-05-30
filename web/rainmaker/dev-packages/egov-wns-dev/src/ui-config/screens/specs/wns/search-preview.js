@@ -124,6 +124,25 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     }
 
+    if(service === serviceConst.WATER){
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.connectionType",
+          "visible",
+          true
+        )
+      );
+    }else{
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.connectionType",
+          "visible",
+          false
+        )
+      );
+    }
     if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber, processInstanceAppStatus));
     } else {

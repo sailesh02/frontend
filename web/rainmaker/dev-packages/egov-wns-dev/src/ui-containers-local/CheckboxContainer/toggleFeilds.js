@@ -1,5 +1,6 @@
 import set from "lodash/set";
 import { isModifyMode } from "./../../ui-utils/commons";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const toggleWater = (onFieldChange, value) => {
   let isMode = isModifyMode();
@@ -268,7 +269,18 @@ export const toggleConnectionTypeDetails = (onFieldChange, value) => {
     "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType",
     "visible",
     value
-  );
+  ); 
+
+  // dispatch(
+  //   handleField(
+  //     "apply",
+  //     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.connectionType",
+  //     "visible",
+  //     value
+  //   )
+  // );
+
+
 }
 
 export const togglePropertyFeilds = (action, value) => {

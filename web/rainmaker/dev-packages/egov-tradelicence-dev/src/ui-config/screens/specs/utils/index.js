@@ -1063,6 +1063,52 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
   }
 }
 
+export const downloadProvisionalCertificateForm = async (Licenses, mode = 'download') => {
+  let tenantId = get(Licenses[0], "tenantId");
+  let applicationNumber = get(Licenses[0], "applicationNumber")
+  const applicationType = Licenses && Licenses.length > 0 ? get(Licenses[0], "applicationType") : "NEW";
+  const queryStr = [
+    { key: "key", value: "tplcertificate" },
+    { key: "tenantId", value: tenantId ? tenantId.split(".")[0] : commonConfig.tenantId }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    {
+      key: "applicationNumber",
+      value: applicationNumber
+    }
+  ];
+  const LicensesPayload = await getSearchResults(queryObject);
+  const updatedLicenses = get(LicensesPayload, "Licenses");
+  const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
+  if (oldFileStoreId) {
+    downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+  }
+  else {
+    try {
+      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        .then(res => {
+          res.filestoreIds[0]
+          if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+            res.filestoreIds.map(fileStoreId => {
+              downloadReceiptFromFilestoreID(fileStoreId, mode)
+            })
+          } else {
+            console.log("Error In Acknowledgement form Download");
+          }
+        });
+    } catch (exception) {
+      alert('Some Error Occured while downloading Acknowledgement form!');
+    }
+  }
+}
+
 export const prepareDocumentTypeObj = documents => {
   let documentsArr =
     documents.length > 0

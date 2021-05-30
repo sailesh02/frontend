@@ -7,7 +7,7 @@ import {
   getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
-import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA } from '../../utils';
+import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA,handleConnectionType  } from '../../utils';
 
 
 const getHeader = label => {
@@ -411,7 +411,7 @@ const getPropertyDetails = {
             },
             {
               jsonPath: "applyScreen.connectionType",
-              callBack: handleNA,
+              callBack: handleConnectionType,
               localePrefix: {
                 moduleName: "WS",
                 masterName: "PROPTYPE"

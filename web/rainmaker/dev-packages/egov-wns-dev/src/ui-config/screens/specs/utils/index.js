@@ -13,6 +13,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import filter from "lodash/filter";
 import { httpRequest } from "../../../../ui-utils/api";
+import store from "ui-redux/store";
 import {
   prepareFinalObject,
   initScreen
@@ -258,6 +259,17 @@ export const handleNA = params => {
   if (params !== undefined && params !== null && params !== "" && params!==0) {
     return params;
   } else { return "NA"; }
+}
+
+export const handleConnectionType = params => {
+  let state = store.getState();
+  let water = get(state,"screenConfiguration.preparedFinalObject.applyScreen.water",false);
+  if(water){
+    return params
+  }else{
+    return 'NA'
+  }
+
 }
 
 export const handleRoadType = params =>{

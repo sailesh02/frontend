@@ -324,10 +324,45 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   }
 };
 
-const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
+const beforeInitFn = async (action, state, dispatch, connectionNumber,service) => {
   //Search details for given application Number
   if (connectionNumber) {
     await searchResults(action, state, dispatch, connectionNumber);
+  }
+  if(service == 'WATER'){
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.connectionType",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.propertyDetails.children.cardContent.children.viewTwo.children.connectionType",
+        "visible",
+        true
+      )
+    );
+  }else{
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.propertyDetails.children.cardContent.children.viewTwo.children.connectionType",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.connectionType",
+        "visible",
+        false
+      )
+    );
   }
 };
 
@@ -427,10 +462,11 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
-    let connectionNo = getQueryArg(window.location.href, "connectionNumber");   
+    let connectionNo = getQueryArg(window.location.href, "connectionNumber"); 
+    let service = getQueryArg(window.location.href,"service")  
     getDataForBillAmendment(action, state, dispatch);
 
-    beforeInitFn(action, state, dispatch, connectionNo);
+    beforeInitFn(action, state, dispatch, connectionNo,service);
     getRequiredDocData(action, dispatch, [
       {
         moduleName: "BillAmendment",

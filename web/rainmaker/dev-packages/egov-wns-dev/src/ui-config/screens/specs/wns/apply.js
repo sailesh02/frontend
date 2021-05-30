@@ -325,6 +325,14 @@ export const getData = async (action, state, dispatch) => {
       }
       let payloadWater, payloadSewerage;
       if (applicationNo.includes("SW")) {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType",
+            "visible",
+            false
+          )
+        );
         try { payloadSewerage = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.error(error); }
         payloadSewerage.SewerageConnections[0].water = false;
         payloadSewerage.SewerageConnections[0].sewerage = true;
@@ -367,6 +375,14 @@ export const getData = async (action, state, dispatch) => {
         }
       } 
       else {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType",
+            "visible",
+            true
+          )
+        );
         try { 
         payloadWater = await getSearchResults(queryObject)
         // to prefill dropdown data while editing

@@ -11,7 +11,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import some from "lodash/some";
 import { applyTradeLicense, checkValidOwners, getNextFinancialYearForRenewal } from "../../../../../ui-utils/commons";
-import {createEstimateData,downloadCertificateForm, getButtonVisibility,getCommonApplyFooter,getDocList, setMultiOwnerForApply,setValidToFromVisibilityForApply,validateFields} from "../../utils";
+import {createEstimateData,downloadCertificateForm, getButtonVisibility,getCommonApplyFooter,getDocList, setMultiOwnerForApply,setValidToFromVisibilityForApply,validateFields, downloadProvisionalCertificateForm} from "../../utils";
 import "./index.css";
 
 const moveToSuccess = (LicenseData, dispatch) => {
@@ -890,7 +890,7 @@ export const footerReviewTop = (
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses);
+      downloadProvisionalCertificateForm(Licenses);
     },
     leftIcon: "book"
   };
@@ -898,7 +898,7 @@ export const footerReviewTop = (
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses, 'print');
+      downloadProvisionalCertificateForm(Licenses, 'print');
     },
     leftIcon: "book"
   };
@@ -1124,7 +1124,7 @@ export const downloadPrintContainer = (
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses);
+      downloadProvisionalCertificateForm(Licenses);
     },
     leftIcon: "book"
   };
@@ -1132,7 +1132,7 @@ export const downloadPrintContainer = (
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses, 'print');
+      downloadProvisionalCertificateForm(Licenses, 'print');
     },
     leftIcon: "book"
   };

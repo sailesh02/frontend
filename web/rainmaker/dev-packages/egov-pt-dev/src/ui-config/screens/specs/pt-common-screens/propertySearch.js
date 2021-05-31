@@ -16,6 +16,7 @@ import { getQueryRedirectUrl, searchPropertyTable } from "./searchResource/searc
 import get from "lodash/get";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
+const redirectUrl = getQueryArg(window.location.href,"redirectUrl")
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 const tenant = getTenantId();
@@ -120,7 +121,7 @@ const screenConfig = {
                 sm: 6,
                 align: "right"
               },
-              visible: enableButton,
+              visible: redirectUrl == "/wns/apply" ? false : enableButton,
               props: {
                 variant: "contained",
                 color: "primary",

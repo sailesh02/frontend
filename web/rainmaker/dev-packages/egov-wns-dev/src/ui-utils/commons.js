@@ -445,9 +445,9 @@ export const validateFeildsForWater = (applyScreenObject) => {
         applyScreenObject.hasOwnProperty("water") &&
         applyScreenObject["water"] !== undefined &&
         applyScreenObject["water"] !== "" &&
-        applyScreenObject.hasOwnProperty("sewerage") &&
-        applyScreenObject["sewerage"] !== undefined &&
-        applyScreenObject["sewerage"] !== "" &&
+        // applyScreenObject.hasOwnProperty("sewerage") &&
+        // applyScreenObject["sewerage"] !== undefined &&
+        // applyScreenObject["sewerage"] !== "" &&
         applyScreenObject.hasOwnProperty("proposedTaps") &&
         applyScreenObject["proposedTaps"] !== undefined &&
         applyScreenObject["proposedTaps"] !== "" &&

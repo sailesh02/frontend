@@ -124,9 +124,9 @@ export const searchApiCall = async (state, dispatch) => {
               dueDate: updatedDueDate,
               service: element.service,
               connectionNo: element.connectionNo,
-              name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
+              name: (element.connectionHolders && element.connectionHolders !== "NA" && element.connectionHolders.length > 0) ? element.connectionHolders[0].name:'',
               status: element.status,
-              address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
+              address: (element.connectionHolders && element.connectionHolders !== "NA" && element.connectionHolders.length > 0) ? element.connectionHolders[0].correspondenceAddress:'',
               tenantId: element.tenantId,
               connectionType: element.connectionType
             }
@@ -136,9 +136,9 @@ export const searchApiCall = async (state, dispatch) => {
             dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
-            name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
+            name: (element.connectionHolders && element.connectionHolders !== "NA" && element.connectionHolders.length > 0) ? element.connectionHolders[0].name:'',
             status: element.status,
-            address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
+            address: (element.connectionHolders && element.connectionHolders !== "NA" && element.connectionHolders.length > 0) ? element.connectionHolders[0].correspondenceAddress:'',
             tenantId: element.tenantId,
             connectionType: element.connectionType
           })

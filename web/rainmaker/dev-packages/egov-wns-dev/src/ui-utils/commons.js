@@ -942,6 +942,7 @@ export const applyForWater = async (state, dispatch) => {
                 response.WaterConnection[0].waterSource = waterSource[0];
                 response.WaterConnection[0].service = "Water";
                 response.WaterConnection[0].waterSubSource = waterSource[1];
+                response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
             }

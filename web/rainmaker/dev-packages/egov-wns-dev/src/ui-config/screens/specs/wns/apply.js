@@ -469,7 +469,7 @@ export const getData = async (action, state, dispatch) => {
       //   sewerageConnections[0].additionalDetails.locality = get(sewerageConnections[0], "property.address.locality.code");
       // }
       let combinedArray = waterConnections.concat(sewerageConnections);
-
+      combinedArray[0].locality = combinedArray[0].additionalDetails.locality
       // if (!window.location.href.includes("propertyId")) {
       //   if (!isActiveProperty(combinedArray[0].property)) {
       //     dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${combinedArray[0].property.status}`, labelName: `Property Status is ${combinedArray[0].property.status}` }, "warning"));
@@ -493,6 +493,9 @@ export const getData = async (action, state, dispatch) => {
       // For oldvalue display
       let oldcombinedArray = cloneDeep(combinedArray[0]);
       dispatch(prepareFinalObject("applyScreenOld", findAndReplace(oldcombinedArray, "null", "NA")));
+      dispatch(prepareFinalObject("applyScreenOld.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
+      dispatch(prepareFinalObject("applyScreenOld.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
+
       if (combinedArray[0].connectionHolders && combinedArray[0].connectionHolders !== "NA") {
         combinedArray[0].connectionHolders[0].sameAsPropertyAddress = false;
         dispatch(prepareFinalObject("connectionHolders", combinedArray[0].connectionHolders));

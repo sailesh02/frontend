@@ -203,7 +203,8 @@ const mapStateToProps = (state) => {
     connectionObj && connectionObj.length > 0
       ? connectionObj[0].applicationNo
       : "";
-  const businessService = connectDetailsData.BillingService.BusinessService.map(
+  const businessService = connectDetailsData && 
+  connectDetailsData.BillingService && connectDetailsData.BillingService.BusinessService && connectDetailsData.BillingService.BusinessService.map(
     (item) => {
       return item.businessService;
     }

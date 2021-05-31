@@ -35,7 +35,7 @@ export const searchResults = {
       {
         name: "Action",
         labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
-	options: {
+	      options: {
           filter: false,
           customBodyRender: (value, data) => {
             if (data.rowData[4] !== undefined && typeof data.rowData[4] === 'number') {

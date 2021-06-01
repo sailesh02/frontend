@@ -14,6 +14,11 @@ export const serviceConst = {
     "SEWERAGE": "SEWERAGE"
 }
 
+export const APPLICATIONSTATE = {
+    "CONNECTIONACTIVATED" : "CONNECTION_ACTIVATED",
+    "STATUS" : "Active"
+}
+
 export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];

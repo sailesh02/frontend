@@ -96,11 +96,11 @@ const waterAndSewerageSearchAndResult = {
                         route: "my-connections"
                     }
                 },
-                listCard3: {
-                    uiFramework: "custom-molecules-local",
-                    moduleName: "egov-wns",
-                    componentPath: "HowItWorks",
-                }
+                // listCard3: {
+                //     uiFramework: "custom-molecules-local",
+                //     moduleName: "egov-wns",
+                //     componentPath: "HowItWorks",
+                // }
             }
         },
         adhocDialog: {

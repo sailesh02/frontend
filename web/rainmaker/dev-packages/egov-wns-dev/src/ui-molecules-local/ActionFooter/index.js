@@ -124,7 +124,7 @@ class Footer extends React.Component {
       },
     };
     //if(applicationType === "MODIFY"){
-    downloadMenu && downloadMenu.push(editButton);
+    downloadMenu && process.env.REACT_APP_NAME !== "Citizen" && downloadMenu.push(editButton);
     if (
       (businessService && businessService.includes("ws-services-calculation") ||
       businessService && businessService.includes("sw-services-calculation")) && process.env.REACT_APP_NAME !== "Citizen"
@@ -152,11 +152,11 @@ class Footer extends React.Component {
       menu: downloadMenu,
     };
 
-    return (
+    return ( 
       <div className="wf-wizard-footer" id="custom-atoms-footer">
         <Container>
           <Item xs={12} sm={12} className="wf-footer-container">
-            <MenuButton data={buttonItems} />
+            {downloadMenu && downloadMenu.length > 0 && <MenuButton data={buttonItems} />}
           </Item>
         </Container>
       </div>

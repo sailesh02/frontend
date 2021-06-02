@@ -1872,7 +1872,7 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
         return false;
     }
 
-    let tenantName = wnsConnection[0].property.tenantId;
+    let tenantName = wnsConnection[0].tenantId;
     tenantName = tenantName.split('.')[1];
 
     wnsConnection[0].tenantName = tenantName.toUpperCase();
@@ -1883,7 +1883,7 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
     if (wnsConnection[0].service === serviceConst.WATER) {
 
         // for Estimate api 
-        if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
+        if (wnsConnection[0].property && wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
             if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_YES') {
                 wnsConnection[0].property.rainWaterHarvesting = true
             } else if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_NO') {

@@ -261,6 +261,13 @@ export const handleNA = params => {
   } else { return "NA"; }
 }
 
+export const handleLocality = params => {
+  if (params !== undefined && params !== null && params !== "" && params!==0) {
+    return getTextToLocalMapping(params);
+  } else { return "NA"; }
+}
+
+
 export const handleConnectionType = params => {
   let state = store.getState();
   let water = get(state,"screenConfiguration.preparedFinalObject.applyScreen.water",false);
@@ -1647,6 +1654,13 @@ export const getTextToLocalMapping = label => {
         "WS_HOME_SEARCH_APPLICATION_RESULTS_TABLE_HEADING",
         localisationLabels
       );
+    
+    default:
+        return getLocaleLabels(
+          label,
+          label,
+          localisationLabels
+        );
 
     // case "MY_APPLICATIONS":
     //   return getLocaleLabels(

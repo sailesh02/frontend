@@ -210,6 +210,7 @@ const getPropertyDetails = {
             },
             {
               jsonPath: "applyScreen.property.propertyId",
+              callBack: handleNA,
             },
             {
               labelKey: "WS_OLD_LABEL_NAME"

@@ -7,7 +7,7 @@ import {
   getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
-import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA,handleConnectionType  } from '../../utils';
+import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA,handleLocality,handleConnectionType  } from '../../utils';
 
 
 const getHeader = label => {
@@ -368,7 +368,7 @@ const getPropertyDetails = {
             },
             {
               jsonPath: "applyScreen.locality",
-              callBack: handleNA,
+              callBack: handleLocality,
             },
             {
               labelKey: "PT_PROPERTY_DETAILS_MOHALLA"

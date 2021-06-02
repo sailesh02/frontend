@@ -154,11 +154,8 @@ import {
       },
       jsonPath: "connectionHolders[0].ownerType",
       required: true,
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "OwnerType"
-      },
-      sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+      localePrefix: { moduleName: "PropertyTax", masterName: "OwnerType" },
+      sourceJsonPath: "applyScreenMdmsData.PropertyTax.OwnerType",
       gridDefination: {
         xs: 12,
         sm: 6

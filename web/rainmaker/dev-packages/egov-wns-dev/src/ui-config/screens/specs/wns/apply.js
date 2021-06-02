@@ -159,7 +159,7 @@ export const getMdmsData = async (dispatch,state) => {
             { name: "PropertySearch" }
           ]
         },
-        { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" }]}
+        { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" },{name: "OwnerType"}]}
       ]
     }
   };
@@ -213,6 +213,11 @@ export const getMdmsData = async (dispatch,state) => {
       payload,
       "MdmsRes.common-masters.OwnerShipCategory"
     )
+
+    let specialOwnerType = get(
+      payload,
+      "MdmsRes.PropertyTax.OwnerType"
+    )
    
     let institutions = []
     OwnerShipCategory = OwnerShipCategory.map(category => {
@@ -227,6 +232,7 @@ export const getMdmsData = async (dispatch,state) => {
     });
     OwnerShipCategory = OwnerShipCategory.filter((v, i, a) => a.indexOf(v) === i)
     OwnerShipCategory = OwnerShipCategory.map(val => { return { code: val, active: true } });
+    specialOwnerType = specialOwnerType.map(val => { return { code: val, active: true } });
 
     let tenants = get(
       payload,
@@ -234,6 +240,7 @@ export const getMdmsData = async (dispatch,state) => {
     )
     payload.MdmsRes['common-masters'].Institutions = institutions;
     payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
+    payload.MdmsRes['common-masters'].specialOwnerType = specialOwnerType
     payload.MdmsRes['common-masters'].tenants = tenants;
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) { console.log(e); }

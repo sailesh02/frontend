@@ -292,7 +292,27 @@ export const getData = async (action, state, dispatch) => {
               dropdownData = [...dropdownData, ...get(payloadSpec, path)];
               return dropdownData;
             }, []);
-            dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", dropdownData));
+            const ddData =
+            dropdownData &&
+            dropdownData.length > 0 &&
+            dropdownData.reduce((ddData, item) => {
+              let option = {};
+              if (fieldKey === "mohalla" && item.code) {
+                option = {
+                  label: item.name,
+                  code: item.name,
+                };
+              } else {
+                option = {
+                  label: item.name,
+                  value: item.code,
+                };
+              }
+              item.area && (option.area = item.area);
+              ddData.push(option);
+              return ddData;
+            }, []);
+            dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", ddData));   
         }
       } 
       catch (error) {

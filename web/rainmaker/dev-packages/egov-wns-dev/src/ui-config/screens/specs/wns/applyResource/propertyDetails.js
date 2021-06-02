@@ -275,7 +275,30 @@ const propertyDetailsNoId = getCommonContainer({
                 dropdownData = [...dropdownData, ...get(payloadSpec, path)];
                 return dropdownData;
               }, []);
-              dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", dropdownData));
+              const ddData =
+              dropdownData &&
+              dropdownData.length > 0 &&
+              dropdownData.reduce((ddData, item) => {
+                let option = {};
+                if (fieldKey === "mohalla" && item.code) {
+                  option = {
+                    label: item.name,
+                    code: item.name,
+                    // label: getTranslatedLabel(mohallaCode, localizationLabels),
+                    value: item.code,
+                  };
+                } else {
+                  option = {
+                    label: item.name,
+                    value: item.code,
+                  };
+                }
+                item.area && (option.area = item.area);
+                ddData.push(option);
+                return ddData;
+              }, []);
+            // dispatch(setFieldProperty(formKey, fieldKey, "dropDownData", ddData));
+              dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", ddData));
           }
         } 
         catch (error) {
@@ -307,6 +330,8 @@ const propertyDetailsNoId = getCommonContainer({
       labelKey: "PT_PROPERTY_DETAILS_PLACEHOLDER"
     },
     data: [],
+    optionValue: "code",
+    optionLabel: "label",
     jsonPath: "applyScreen.locality",
     sourceJsonPath: "applyScreenMdmsData.mohalla",
     gridDefination: {

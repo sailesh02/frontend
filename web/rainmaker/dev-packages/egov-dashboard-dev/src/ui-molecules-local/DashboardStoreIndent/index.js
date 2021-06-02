@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -41,7 +41,7 @@ class DashboardStoreIndent extends React.Component {
     }
   }
 
-    // PDF function 
+    // PDF function
     pdfDownload = (e) => {
 
         e.preventDefault();
@@ -69,7 +69,7 @@ class DashboardStoreIndent extends React.Component {
                 const demo1 = rowData[i]
                 var demo2 = tableColumnData[j].replace(".", ",");
                 demo2 = demo2.split(",")
-                if(typeof(demo2) === "object"){   
+                if(typeof(demo2) === "object"){
                     if(demo2.length > 1){
                         rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                     }
@@ -89,8 +89,8 @@ class DashboardStoreIndent extends React.Component {
         }
 
 
-        
-        // PDF Code 
+
+        // PDF Code
         const unit = "pt";
         const size = "A4"; // Use A1, A2, A3 or A4
         const orientation = "portrait"; // portrait or landscape
@@ -100,7 +100,7 @@ class DashboardStoreIndent extends React.Component {
         var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
         var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-        doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
+        doc.text("Sujog Application", pageWidth / 2, 20, 'center');
 
         doc.setFontSize(10);
         const pdfTitle = this.state.graphHardOneData.title ? this.state.graphHardOneData.title : "Title"
@@ -131,7 +131,7 @@ class DashboardStoreIndent extends React.Component {
     for(var i=0;i<coldata.length; i++){
         if(coldata[i]["show"]){
             unchangeData.push(coldata[i])
-        }   
+        }
     }
     return unchangeData
 
@@ -156,7 +156,7 @@ class DashboardStoreIndent extends React.Component {
     })
     }
 
-    // Toggle Column 
+    // Toggle Column
     toggleColumn = (e) => {
     e.preventDefault();
 
@@ -168,7 +168,7 @@ class DashboardStoreIndent extends React.Component {
 
     // graphSorting Function for all type
     graphSorting = ( propSortBy, sortBy, data, checkGraph ) => {
-        
+
         debugger;
         if(propSortBy === "indentingStore"){
             if(checkGraph === "ONE"){
@@ -177,13 +177,13 @@ class DashboardStoreIndent extends React.Component {
                     r[a[sortBy[0]][0][sortBy[1]][sortBy[2]]] = [...r[a[sortBy[0]][0][sortBy[1]][sortBy[2]]] || [], a];
                     return r;
                     }, {});
-        
+
                 var graphOneLabel = Object.keys(group);
                 var graphOneData = []
                 for(var i=0; i<Object.keys(group).length ; i++){
                     graphOneData.push(group[graphOneLabel[i]].length);
                 }
-        
+
                 return [ graphOneLabel, graphOneData, group ]
             }
             if(checkGraph === "TWO"){
@@ -193,7 +193,7 @@ class DashboardStoreIndent extends React.Component {
                     // r[a["materialIssueStatus"]] = [...r[a["materialIssueStatus"]] || [], a];
                     return r;
                     }, {});
-        
+
                 var graphOneLabel = Object.keys(group);
                 var graphOneData = []
                 for(var i=0; i<Object.keys(group).length ; i++){
@@ -208,18 +208,18 @@ class DashboardStoreIndent extends React.Component {
                     r[a[sortBy[0]][sortBy[1]][sortBy[2]][sortBy[3]]] = [...r[a[sortBy[0]][sortBy[1]][sortBy[2]][sortBy[3]]] || [], a];
                     return r;
                     }, {});
-        
+
                 var graphOneLabel = Object.keys(group);
                 var graphOneData = []
                 for(var i=0; i<Object.keys(group).length ; i++){
                     graphOneData.push(group[graphOneLabel[i]].length);
                 }
-        
+
                 return [ graphOneLabel, graphOneData, group ]
             }
 
         }else if( typeof(sortBy) === "object" && propSortBy === "purchaseOrders" ){
-            
+
             debugger;
             if(checkGraph === "ONE"){
 
@@ -227,13 +227,13 @@ class DashboardStoreIndent extends React.Component {
                     r[a[sortBy[0]][0][sortBy[1]][sortBy[2]]] = [...r[a[sortBy[0]][0][sortBy[1]][sortBy[2]]] || [], a];
                     return r;
                     }, {});
-        
+
                 var graphOneLabel = Object.keys(group);
                 var graphOneData = []
                 for(var i=0; i<Object.keys(group).length ; i++){
                     graphOneData.push(group[graphOneLabel[i]].length);
                 }
-        
+
                 return [ graphOneLabel, graphOneData, group ]
             }
             if(checkGraph === "TWO"){
@@ -242,7 +242,7 @@ class DashboardStoreIndent extends React.Component {
                     r[a[sortBy]] = [...r[a[sortBy]] || [], a];
                     return r;
                     }, {});
-        
+
                 var graphOneLabel = Object.keys(group);
                 var graphOneData = []
                 for(var i=0; i<Object.keys(group).length ; i++){
@@ -267,20 +267,20 @@ class DashboardStoreIndent extends React.Component {
                 return [ graphOneLabel, graphOneData, group ]
             }
         }else if( typeof(sortBy) === "object" && propSortBy === "MaterialReceipt" ){
-            
+
             if(checkGraph === "ONE"){
 
                 var group = data.reduce((r, a) => {
                     r[a[sortBy[0]][0][sortBy[1]][sortBy[2]]] = [...r[a[sortBy[0]][0][sortBy[1]][sortBy[2]]] || [], a];
                     return r;
                     }, {});
-        
+
                 var graphOneLabel = Object.keys(group);
                 var graphOneData = []
                 for(var i=0; i<Object.keys(group).length ; i++){
                     graphOneData.push(group[graphOneLabel[i]].length);
                 }
-        
+
                 return [ graphOneLabel, graphOneData, group ]
             }
             if(checkGraph === "TWO"){
@@ -289,7 +289,7 @@ class DashboardStoreIndent extends React.Component {
                     r[a[sortBy]] = [...r[a[sortBy]] || [], a];
                     return r;
                     }, {});
-        
+
                 var graphOneLabel = Object.keys(group);
                 var graphOneData = []
                 for(var i=0; i<Object.keys(group).length ; i++){
@@ -304,13 +304,13 @@ class DashboardStoreIndent extends React.Component {
                     r[a[sortBy[0]][sortBy[1]][sortBy[2]]] = [...r[a[sortBy[0]][sortBy[1]][sortBy[2]]] || [], a];
                     return r;
                     }, {});
-        
+
                 var graphOneLabel = Object.keys(group);
                 var graphOneData = []
                 for(var i=0; i<Object.keys(group).length ; i++){
                     graphOneData.push(group[graphOneLabel[i]].length);
                 }
-        
+
                 return [ graphOneLabel, graphOneData, group ]
             }
 
@@ -322,19 +322,19 @@ class DashboardStoreIndent extends React.Component {
                 r[a[sortBy]] = [...r[a[sortBy]] || [], a];
                 return r;
                 }, {});
-    
+
             var graphOneLabel = Object.keys(group);
             var graphOneData = []
             for(var i=0; i<Object.keys(group).length ; i++){
                 graphOneData.push(group[graphOneLabel[i]].length);
             }
-    
+
             return [ graphOneLabel, graphOneData, group ]
         }
-    
+
     }
 
-    // CamelCase Column Name 
+    // CamelCase Column Name
     camelize = (str) =>  {
     // var res = str.substr(0, 1);
     var res = String(str).substr(0, 1);
@@ -347,14 +347,14 @@ class DashboardStoreIndent extends React.Component {
 
     // Stacked Graph config
     stackDataconfig = ( sortBy, graphOneData2 ) => {
-        
+
         debugger;
         var stackDataSet = [];
         var cnt = 0;
         var stackBgColor = [];
         var color =  ["#0000FF", "#FF0000", "#00FF00", "#FFFF00"];
         if(sortBy === "indentingStore"){
-            
+
             var stackGraphData = []
             for(var i=0; i<graphOneData2[0].length; i++){
                 var group = graphOneData2[2][graphOneData2[0][i]].reduce((r, a) => {
@@ -369,7 +369,7 @@ class DashboardStoreIndent extends React.Component {
             // for(var i=0; i<stackGraphData.length; i++){
             //     var datset = []
             //     for(var j=0; j<4; j++){
-            //         var dtSET = stackGraphData[i][Object.keys(stackGraphData[i])[j]] ? 
+            //         var dtSET = stackGraphData[i][Object.keys(stackGraphData[i])[j]] ?
             //         stackGraphData[i][Object.keys(stackGraphData[i])[j]].length : 0;
             //         datset.push(dtSET);
             //     }
@@ -389,7 +389,7 @@ class DashboardStoreIndent extends React.Component {
 
         }
         if(sortBy === "purchaseOrders"){
-            
+
             var stackGraphData = []
             for(var i=0; i<graphOneData2[0].length; i++){
                 var group = graphOneData2[2][graphOneData2[0][i]].reduce((r, a) => {
@@ -404,7 +404,7 @@ class DashboardStoreIndent extends React.Component {
             // for(var i=0; i<stackGraphData.length; i++){
             //     var datset = []
             //     for(var j=0; j<4; j++){
-            //         var dtSET = stackGraphData[i][Object.keys(stackGraphData[i])[j]] ? 
+            //         var dtSET = stackGraphData[i][Object.keys(stackGraphData[i])[j]] ?
             //         stackGraphData[i][Object.keys(stackGraphData[i])[j]].length : 0;
             //         datset.push(dtSET);
             //     }
@@ -422,7 +422,7 @@ class DashboardStoreIndent extends React.Component {
                 stackDataSet.push(datset)
             }
         }if(sortBy === "MaterialReceipt"){
-            
+
             var stackGraphData = []
             for(var i=0; i<graphOneData2[0].length; i++){
                 var group = graphOneData2[2][graphOneData2[0][i]].reduce((r, a) => {
@@ -437,7 +437,7 @@ class DashboardStoreIndent extends React.Component {
             // for(var i=0; i<stackGraphData.length; i++){
             //     var datset = []
             //     for(var j=0; j<4; j++){
-            //         var dtSET = stackGraphData[i][Object.keys(stackGraphData[i])[j]] ? 
+            //         var dtSET = stackGraphData[i][Object.keys(stackGraphData[i])[j]] ?
             //         stackGraphData[i][Object.keys(stackGraphData[i])[j]].length : 0;
             //         datset.push(dtSET);
             //     }
@@ -454,9 +454,9 @@ class DashboardStoreIndent extends React.Component {
                 }
                 stackDataSet.push(datset)
             }
-            
+
         }
-        
+
         for(var i=0; i<stackDataSet.length; i++){
             var colList = [];
             for(var j=0; j<stackDataSet[i].length; j++){
@@ -472,20 +472,20 @@ class DashboardStoreIndent extends React.Component {
     }
 
     componentDidMount(){
-        debugger; 
+        debugger;
         const propData = this.props.data
         if(propData.length > 0){
             debugger;
             const propSortBy = propData[1].reportSortBy.value;
             // const propSortBy = "materialIssueStatus";
-    
+
             // const propSortBy = "purchaseOrders";
             // const propSortBy = "MaterialReceipt";
-    
+
             var fromDT = propData[1].fromDate;
             var toDT = propData[1].toDate;
             // var toDT = "1614162633574";
-    
+
             var data = []
         if(propSortBy === "indentingStore" || propSortBy === "materialIssueStatus" ){
             data = propData[0];
@@ -509,38 +509,38 @@ class DashboardStoreIndent extends React.Component {
             data = sortPurchaseData;
         }
 
-        const hardJSON = propSortBy === "indentingStore" ? [{ 
+        const hardJSON = propSortBy === "indentingStore" ? [{
             "sortBy": ["indent","indentStore", "department", "name"],
             "msgX": "Department",
             "msgY": "No of Application",
             "title": "Indent Issue Store Management Dashboard"
             },
-            { 
+            {
             "sortBy": ["materialIssueDetails","material","name"],
             "msgX": "Material",
             "msgY": "No of Application",
             "title": "Indent Departmentwise Store Material Dashboard"
             },
-            { 
+            {
             "sortBy": "materialIssueStatus",
             "msgX": "Material Status",
             "msgY": "No of Order",
             "title": "Indent MaterialWise Store Order Dashboard"
             }
             ]: propSortBy === "purchaseOrders" ? [
-                    { 
+                    {
                     "sortBy": ["store", "department", "code"],
                     "msgX": "Department",
                     "msgY": "No of Application",
                     "title": "Purchase Order Store Management Dashboard"
                     },
-                    { 
+                    {
                     "sortBy":  ["purchaseOrderDetails","material","name"],
                     "msgX": "Material",
                     "msgY": "No of Application",
                     "title": "Departmentwise Purchase Order Material Report"
                     },
-                    { 
+                    {
                     "sortBy":  "status",
                     "msgX": "Order Status",
                     "msgY": "No of Application",
@@ -548,19 +548,19 @@ class DashboardStoreIndent extends React.Component {
                     }
                     ]
                 : propSortBy === "MaterialReceipt" ? [
-                    { 
+                    {
                     "sortBy": ["receivingStore", "department", "code"],
                     "msgX": "Department",
                     "msgY": "No of Application",
                     "title": "Material Receipt Store Management Dashboard"
                     },
-                    { 
+                    {
                     "sortBy":  ["receiptDetails","material","name"],
                     "msgX": "Material",
                     "msgY": "No of Application",
                     "title": "Departmentwise Material Reciept Material Report"
                     },
-                    { 
+                    {
                     "sortBy":  "mrnStatus",
                     "msgX": "Order Status",
                     "msgY": "No of Application",
@@ -569,15 +569,15 @@ class DashboardStoreIndent extends React.Component {
                     ]
                     : []
 
-        // Graph One Sorting Function 
+        // Graph One Sorting Function
         var graphOneData2 = this.graphSorting( propSortBy, hardJSON[0].sortBy, data, "" );
-        
+
         const stackdata = this.stackDataconfig( propSortBy, graphOneData2 )
-        
+
         // Column Data
         const tableData = data[0] ? Object.keys(data[0]) : [];
         var columnData = []
-        
+
         if(propSortBy === "purchaseOrders"){
             for(var i=0; i<tableData.length; i++){
                 var itemHeader = {}
@@ -585,7 +585,7 @@ class DashboardStoreIndent extends React.Component {
                 itemHeader["accessor"] = tableData[i];
                 itemHeader["show"]= (i === 1 || i === 3 || i === 5 || i === 16 || i === 21 ) ? true : false ;
                 columnData.push(itemHeader);
-            }  
+            }
         }else if(propSortBy === "indentingStore" || propSortBy === "materialIssueStatus" ){
             for(var i=0; i<tableData.length; i++){
                 var itemHeader = {}
@@ -604,7 +604,7 @@ class DashboardStoreIndent extends React.Component {
             }
         }
 
-        // Column Unchange Data 
+        // Column Unchange Data
         const unchangeColumnData = this.columnUnchange(columnData)
 
         this.setState({
@@ -631,14 +631,14 @@ class DashboardStoreIndent extends React.Component {
             debugger;
             const propSortBy = propData[1].reportSortBy.value;
             // const propSortBy = "materialIssueStatus";
-    
+
             // const propSortBy = "purchaseOrders";
             // const propSortBy = "MaterialReceipt";
-    
+
             var fromDT = propData[1].fromDate;
             var toDT = propData[1].toDate;
             // var toDT = "1614162633574";
-    
+
             var data = []
         if(propSortBy === "indentingStore" || propSortBy === "materialIssueStatus" ){
             data = propData[0];
@@ -662,38 +662,38 @@ class DashboardStoreIndent extends React.Component {
             data = sortPurchaseData;
         }
 
-        const hardJSON = propSortBy === "indentingStore" ? [{ 
+        const hardJSON = propSortBy === "indentingStore" ? [{
             "sortBy": ["indent","indentStore", "department", "name"],
             "msgX": "Department",
             "msgY": "No of Application",
             "title": "Indent Issue Store Management Dashboard"
             },
-            { 
+            {
             "sortBy": ["materialIssueDetails","material","name"],
             "msgX": "Material",
             "msgY": "No of Application",
             "title": "Indent Departmentwise Store Material Dashboard"
             },
-            { 
+            {
             "sortBy": "materialIssueStatus",
             "msgX": "Material Status",
             "msgY": "No of Order",
             "title": "Indent MaterialWise Store Order Dashboard"
             }
             ]: propSortBy === "purchaseOrders" ? [
-                    { 
+                    {
                     "sortBy": ["store", "department", "code"],
                     "msgX": "Department",
                     "msgY": "No of Application",
                     "title": "Purchase Order Store Management Dashboard"
                     },
-                    { 
+                    {
                     "sortBy":  ["purchaseOrderDetails","material","name"],
                     "msgX": "Material",
                     "msgY": "No of Application",
                     "title": "Departmentwise Purchase Order Material Report"
                     },
-                    { 
+                    {
                     "sortBy":  "status",
                     "msgX": "Order Status",
                     "msgY": "No of Application",
@@ -701,19 +701,19 @@ class DashboardStoreIndent extends React.Component {
                     }
                     ]
                 : propSortBy === "MaterialReceipt" ? [
-                    { 
+                    {
                     "sortBy": ["receivingStore", "department", "code"],
                     "msgX": "Department",
                     "msgY": "No of Application",
                     "title": "Material Receipt Store Management Dashboard"
                     },
-                    { 
+                    {
                     "sortBy":  ["receiptDetails","material","name"],
                     "msgX": "Material",
                     "msgY": "No of Application",
                     "title": "Departmentwise Material Reciept Material Report"
                     },
-                    { 
+                    {
                     "sortBy":  "mrnStatus",
                     "msgX": "Order Status",
                     "msgY": "No of Application",
@@ -722,15 +722,15 @@ class DashboardStoreIndent extends React.Component {
                     ]
                     : []
 
-        // Graph One Sorting Function 
+        // Graph One Sorting Function
         var graphOneData2 = this.graphSorting( propSortBy, hardJSON[0].sortBy, data, "" );
-        
+
         const stackdata = this.stackDataconfig( propSortBy, graphOneData2 )
-        
+
         // Column Data
         const tableData = data[0] ? Object.keys(data[0]) : [];
         var columnData = []
-        
+
         if(propSortBy === "purchaseOrders"){
             for(var i=0; i<tableData.length; i++){
                 var itemHeader = {}
@@ -738,7 +738,7 @@ class DashboardStoreIndent extends React.Component {
                 itemHeader["accessor"] = tableData[i];
                 itemHeader["show"]= (i === 1 || i === 3 || i === 5 || i === 16 || i === 21 ) ? true : false ;
                 columnData.push(itemHeader);
-            }  
+            }
         }else if(propSortBy === "indentingStore" || propSortBy === "materialIssueStatus" ){
             for(var i=0; i<tableData.length; i++){
                 var itemHeader = {}
@@ -757,7 +757,7 @@ class DashboardStoreIndent extends React.Component {
             }
         }
 
-        // Column Unchange Data 
+        // Column Unchange Data
         const unchangeColumnData = this.columnUnchange(columnData)
 
         this.setState({
@@ -777,7 +777,7 @@ class DashboardStoreIndent extends React.Component {
     }
 
     render() {
-    
+
     // Stacked/ Mixed Graph
     var stackGraphData = {
         labels: this.state.graphOneLabel,
@@ -863,7 +863,7 @@ class DashboardStoreIndent extends React.Component {
             // backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -889,7 +889,7 @@ class DashboardStoreIndent extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.hardJSON[0] ? this.state.hardJSON[0].msgX : ""
-                    }, 
+                    },
             }],
             yAxes: [{
                 stacked: true,
@@ -905,7 +905,7 @@ class DashboardStoreIndent extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.hardJSON[0] ? this.state.hardJSON[0].msgY : ""
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -924,9 +924,9 @@ class DashboardStoreIndent extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
-                
-                var ind = element[0]._index;   
+
+
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphOneLabel[ind];
                 // var graphSorting = this.graphSorting( this.state.graphHardTwoData.sortBy, this.state.dataOne[selectedVal] );
                 const hardval = this.state.hardJSON[1]
@@ -939,10 +939,10 @@ class DashboardStoreIndent extends React.Component {
                     graphClicked: 1,
                     rowData: this.state.dataOne[selectedVal]
                 })
-                
+
             }
         },
-    }    
+    }
 
     // First Double Bar Graph Graph
     var PIEgraphOneSortedData = {
@@ -979,7 +979,7 @@ class DashboardStoreIndent extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -1004,7 +1004,7 @@ class DashboardStoreIndent extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.hardJSON[0] ? this.state.hardJSON[0].msgX : ""
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -1019,7 +1019,7 @@ class DashboardStoreIndent extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.hardJSON[0] ? this.state.hardJSON[0].msgY : ""
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -1038,14 +1038,14 @@ class DashboardStoreIndent extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
-                
-                // var ind = element[0]._index;   
+
+
+                // var ind = element[0]._index;
                 // const selectedVal = this.state.graphOneLabel[ind];
                 // // var graphSorting = this.graphSorting( this.state.graphHardTwoData.sortBy, this.state.dataOne[selectedVal] );
                 // const hardval = this.state.hardJSON[1]
                 // var graphSorting = this.graphSorting( this.state.propSortBy, hardval.sortBy, this.state.dataOne[selectedVal], "" );
-                
+
                 // this.setState({
                 //     graphTwoLabel: graphSorting[0],
                 //     graphTwoData: graphSorting[1],
@@ -1053,11 +1053,11 @@ class DashboardStoreIndent extends React.Component {
                 //     graphClicked: 1,
                 //     rowData: this.state.dataOne[selectedVal]
                 // })
-                
+
             }
         },
     }
-    
+
 
     // Second Horizontal Graph
     var graphTwoSortedData = {
@@ -1091,7 +1091,7 @@ class DashboardStoreIndent extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -1110,14 +1110,14 @@ class DashboardStoreIndent extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
+
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphTwoLabel[ind];
                 // var graphSorting = this.graphSorting( this.state.graphHardTwoData.sortBy, this.state.dataOne[selectedVal] );
                 const hardval = this.state.hardJSON[2]
                 var graphSorting = this.graphSorting( this.state.propSortBy, hardval.sortBy, this.state.dataTwo[selectedVal], "TWO" );
-                
+
                 this.setState({
                     graphThirdLabel: graphSorting[0],
                     graphThirdData: graphSorting[1],
@@ -1141,7 +1141,7 @@ class DashboardStoreIndent extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.hardJSON[1] ? this.state.hardJSON[1].msgX : ""
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -1155,7 +1155,7 @@ class DashboardStoreIndent extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.hardJSON[1] ? this.state.hardJSON[1].msgY : ""
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -1206,7 +1206,7 @@ class DashboardStoreIndent extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -1228,7 +1228,7 @@ class DashboardStoreIndent extends React.Component {
                 var ind = element[0]._index;
                 debugger;
                 const selectedVal = this.state.graphThirdLabel[ind];
-                
+
                 this.setState({
                     graphClicked: 2,
                     rowData: this.state.dataThird[selectedVal]
@@ -1249,7 +1249,7 @@ class DashboardStoreIndent extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.hardJSON[2] ? this.state.hardJSON[2].msgX : ""
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -1263,7 +1263,7 @@ class DashboardStoreIndent extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.hardJSON[2] ? this.state.hardJSON[2].msgY : ""
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -1283,16 +1283,16 @@ class DashboardStoreIndent extends React.Component {
     }
 
 
-        
+
     return (
         <div >
             {
-                this.state.graphClicked >= 0 ? 
+                this.state.graphClicked >= 0 ?
                 <CardContent style={{height:"500px", width:"100%"}}>
                     <React.Fragment>
                         <Bar
                         data={ stackGraphData }
-                        options={ stackGraphOption } 
+                        options={ stackGraphOption }
                         />
                     </React.Fragment>
                 </CardContent>
@@ -1306,11 +1306,11 @@ class DashboardStoreIndent extends React.Component {
                 <CardContent  className="halfGraph">
                     <React.Fragment>
                         <Bar
-                        data={ graphTwoSortedData } 
-                        options={ graphTwoOption } 
+                        data={ graphTwoSortedData }
+                        options={ graphTwoOption }
                         />
                     </React.Fragment>
-                </CardContent> 
+                </CardContent>
                 :null
             }
 
@@ -1319,11 +1319,11 @@ class DashboardStoreIndent extends React.Component {
                 <CardContent className="halfGraph">
                     <React.Fragment>
                         <Bar
-                        data={ graphThirdSortedData } 
-                        options={ graphThirdOption } 
+                        data={ graphThirdSortedData }
+                        options={ graphThirdOption }
                         />
                     </React.Fragment>
-                </CardContent> 
+                </CardContent>
                 :null
             }
             </div>
@@ -1331,7 +1331,7 @@ class DashboardStoreIndent extends React.Component {
         {/* Table Feature  */}
         <div className= {this.state.graphClicked >= 0 ? "tableContainer" : ""}>
         {
-            this.state.unchangeColumnData.length > 0  ? 
+            this.state.unchangeColumnData.length > 0  ?
             <div className="tableFeature">
                 <div className="columnToggle-Text"> Download As: </div>
                 <button className="columnToggleBtn" onClick={this.pdfDownload}> PDF </button>
@@ -1347,12 +1347,12 @@ class DashboardStoreIndent extends React.Component {
                 {
                     this.state.unchangeColumnData.map((data, index)=>{
                         return(
-                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul> 
+                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul>
                         )
                     })
                 }
             </dl>
-            </div> 
+            </div>
             : null
         }
 
@@ -1360,12 +1360,12 @@ class DashboardStoreIndent extends React.Component {
             this.state.graphClicked >= 0 ?
             <ReactTable id="customReactTable"
             // PaginationComponent={Pagination}
-            data={ this.state.rowData }  
-            columns={ this.state.columnData }  
+            data={ this.state.rowData }
+            columns={ this.state.columnData }
             defaultPageSize = {this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
-            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}  
-            pageSizeOptions = {[20,40,60]}  
-            /> 
+            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
+            pageSizeOptions = {[20,40,60]}
+            />
             :null
         }
         </div>

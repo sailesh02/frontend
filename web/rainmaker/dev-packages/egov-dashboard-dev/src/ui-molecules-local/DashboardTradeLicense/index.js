@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
@@ -42,9 +42,9 @@ class LicensesRenewalDashboard extends React.Component {
             unchangeColumnData: []
         }
       }
-    
-    
-    // PDF function 
+
+
+    // PDF function
     pdfDownload = (e) => {
 
     debugger;
@@ -73,7 +73,7 @@ class LicensesRenewalDashboard extends React.Component {
             const demo1 = rowData[i]
             var demo2 = tableColumnData[j].replace(".", ",");
             demo2 = demo2.split(",")
-            if(typeof(demo2) === "object"){   
+            if(typeof(demo2) === "object"){
                 if(demo2.length > 1){
                     rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                 }
@@ -94,7 +94,7 @@ class LicensesRenewalDashboard extends React.Component {
 
 
     debugger;
-    // PDF Code 
+    // PDF Code
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -104,7 +104,7 @@ class LicensesRenewalDashboard extends React.Component {
     var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
     var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-    doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
+    doc.text("Sujog Application", pageWidth / 2, 20, 'center');
 
     doc.setFontSize(10);
     const pdfTitle = "TradeLicenseDashboard"
@@ -135,7 +135,7 @@ class LicensesRenewalDashboard extends React.Component {
         for(var i=0;i<coldata.length; i++){
             if(coldata[i]["show"]){
                 unchangeData.push(coldata[i])
-            }   
+            }
         }
         return unchangeData
 
@@ -160,7 +160,7 @@ class LicensesRenewalDashboard extends React.Component {
         })
     }
 
-    // Toggle Column 
+    // Toggle Column
     toggleColumn = (e) => {
         // e.preventDefault();
         debugger;
@@ -169,7 +169,7 @@ class LicensesRenewalDashboard extends React.Component {
             toggleColumnCheck : !this.state.toggleColumnCheck
         })
     }
-    
+
     graphSorting = ( sortBy, data, checkGraph ) => {
 
     if(checkGraph === "MonthWise"){
@@ -221,10 +221,10 @@ class LicensesRenewalDashboard extends React.Component {
     }
 
     return [ graphOneLabel, graphOneData, group ]
-    
+
     }
 
-    // CamelCase Column Name 
+    // CamelCase Column Name
     camelize = (str) =>  {
     // var res = str.substr(0, 1);
     var res = String(str).substr(0, 1);
@@ -266,14 +266,14 @@ class LicensesRenewalDashboard extends React.Component {
         })
 
     }
-    
+
     componentDidUpdate(){
-        
+
         debugger;
         const propData = this.props.data
         if(JSON.stringify(this.state.dataCheck) !== JSON.stringify(this.props.data)){
             const data = this.props.data
-            
+
             var dropdownSelected = data[1].reportSortBy.value;
             var fromDate = data[1].strFromDate;
             var toDate = data[1].strToDate;
@@ -284,7 +284,7 @@ class LicensesRenewalDashboard extends React.Component {
                 r[a["businessService"]] = [...r[a["businessService"]] || [], a];
                 return r;
                 }, {});
-            
+
             var type1 = [];
             var type2 = []
             for(var i=0; i<Object.keys(group).length; i++){
@@ -308,10 +308,10 @@ class LicensesRenewalDashboard extends React.Component {
                 itemHeader["Header"] = this.camelize(keys[i]);
                 itemHeader["accessor"] = keys[i];
                 if(i===3 || i===4 || i===5 || i===7 || i===22){
-                    itemHeader["show"]= true ; 
+                    itemHeader["show"]= true ;
                     coldata.push(itemHeader)
                 }
-                
+
             }
 
             this.setState({
@@ -321,16 +321,16 @@ class LicensesRenewalDashboard extends React.Component {
                 dropdownSelected: dropdownSelected
             })
             var graphOneData2 = this.graphSorting( [fromDate, toDate], data, "MonthWise" );
-            
+
             this.setState({
                 dataCheck : this.props.data
-            })       
+            })
         }
-        
+
     }
 
     render() {
-    
+
 
         // First Double Bar Graph Graph
         var PIEgraphOneSortedData = {
@@ -356,7 +356,7 @@ class LicensesRenewalDashboard extends React.Component {
                 }
             ]
         }
-    
+
         var PIEgraphOneOption = {
             responsive : true,
             // aspectRatio : 3,
@@ -367,7 +367,7 @@ class LicensesRenewalDashboard extends React.Component {
                 backgroundColor : "rgba(0, 0, 0, 0.1)",
                 weight: 0
                 }
-            ], 
+            ],
             legend: {
                 display: false,
                 position: 'bottom',
@@ -392,7 +392,7 @@ class LicensesRenewalDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "Months"
-                        }, 
+                        },
                 }],
                 yAxes: [{
                     gridLines: {
@@ -406,7 +406,7 @@ class LicensesRenewalDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "No of Application"
-                        }, 
+                        },
                 }]
             },
             plugins: {
@@ -425,14 +425,14 @@ class LicensesRenewalDashboard extends React.Component {
             },
             onClick: (e, element) => {
                 if (element.length > 0) {
-                    
+
                     debugger;
-                    var ind = element[0]._index;   
+                    var ind = element[0]._index;
                     const selectedVal = this.state.graphOneLabel[ind];
                     var graphSorting = this.graphSorting( "licenseType", this.state.dataOne[selectedVal] );
                     // const hardval = this.state.hardJSON[1]
                     // var graphSorting = this.graphSorting( hardval.sortBy, this.state.dataOne[selectedVal] );
-                    
+
                     this.setState({
                         graphTwoLabel: graphSorting[0],
                         graphTwoData: graphSorting[1],
@@ -440,12 +440,12 @@ class LicensesRenewalDashboard extends React.Component {
                         graphClicked: 1,
                         rowData: this.state.dataOne[selectedVal]
                     })
-                    
+
                 }
             },
         }
-        
-    
+
+
         // Second Horizontal Graph
         var graphTwoSortedData = {
             labels: this.state.graphTwoLabel,
@@ -469,7 +469,7 @@ class LicensesRenewalDashboard extends React.Component {
                 }
             ]
         }
-    
+
         var graphTwoOption = {
             responsive : true,
             // aspectRatio : 3,
@@ -480,7 +480,7 @@ class LicensesRenewalDashboard extends React.Component {
                 backgroundColor : "rgba(0, 0, 0, 0.1)",
                 weight: 0
                 }
-            ], 
+            ],
             legend: {
                 display: false,
                 position: 'bottom',
@@ -500,12 +500,12 @@ class LicensesRenewalDashboard extends React.Component {
             onClick: (e, element) => {
                 if (element.length > 0) {
                     debugger;
-                    var ind = element[0]._index;   
+                    var ind = element[0]._index;
                     const selectedVal = this.state.graphTwoLabel[ind];
                     var graphSorting = this.graphSorting( "status", this.state.dataTwo[selectedVal] );
                     // const hardval = this.state.hardJSON[1]
                     // var graphSorting = this.graphSorting( hardval.sortBy, this.state.dataOne[selectedVal] );
-                    
+
                     this.setState({
                         graphThirdLabel: graphSorting[0],
                         graphThirdData: graphSorting[1],
@@ -528,7 +528,7 @@ class LicensesRenewalDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "License Types"
-                        }, 
+                        },
                 }],
                 yAxes: [{
                     gridLines: {
@@ -541,7 +541,7 @@ class LicensesRenewalDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "No of Application"
-                        }, 
+                        },
                 }]
             },
             plugins: {
@@ -559,7 +559,7 @@ class LicensesRenewalDashboard extends React.Component {
                 }
                 }
         }
-    
+
         // Third Horizontal Graph
         var graphThirdSortedData = {
             labels: this.state.graphThirdLabel,
@@ -583,7 +583,7 @@ class LicensesRenewalDashboard extends React.Component {
                 }
             ]
         }
-    
+
         var graphThirdOption = {
             responsive : true,
             // aspectRatio : 3,
@@ -594,7 +594,7 @@ class LicensesRenewalDashboard extends React.Component {
                 backgroundColor : "rgba(0, 0, 0, 0.1)",
                 weight: 0
                 }
-            ], 
+            ],
             legend: {
                 display: false,
                 position: 'bottom',
@@ -614,12 +614,12 @@ class LicensesRenewalDashboard extends React.Component {
             onClick: (e, element) => {
                 if (element.length > 0) {
                     debugger;
-                    var ind = element[0]._index;   
+                    var ind = element[0]._index;
                     const selectedVal = this.state.graphThirdLabel[ind];
                     var graphSorting = this.graphSorting( "action", this.state.dataThird[selectedVal] );
                     // const hardval = this.state.hardJSON[1]
                     // var graphSorting = this.graphSorting( hardval.sortBy, this.state.dataOne[selectedVal] );
-                    
+
                     this.setState({
                         graphFourthLabel: graphSorting[0],
                         graphFourthData: graphSorting[1],
@@ -642,7 +642,7 @@ class LicensesRenewalDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "Status of Application"
-                        }, 
+                        },
                 }],
                 yAxes: [{
                     gridLines: {
@@ -655,7 +655,7 @@ class LicensesRenewalDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "No of Application"
-                        }, 
+                        },
                 }]
             },
             plugins: {
@@ -673,7 +673,7 @@ class LicensesRenewalDashboard extends React.Component {
                 }
                 }
         }
-    
+
         // Third Horizontal Graph
         var graphFourthSortedData = {
             labels: this.state.graphFourthLabel,
@@ -697,7 +697,7 @@ class LicensesRenewalDashboard extends React.Component {
                 }
             ]
         }
-    
+
         var graphFourthOption = {
             responsive : true,
             // aspectRatio : 3,
@@ -708,7 +708,7 @@ class LicensesRenewalDashboard extends React.Component {
                 backgroundColor : "rgba(0, 0, 0, 0.1)",
                 weight: 0
                 }
-            ], 
+            ],
             legend: {
                 display: false,
                 position: 'bottom',
@@ -730,7 +730,7 @@ class LicensesRenewalDashboard extends React.Component {
                     var ind = element[0]._index;
                     debugger;
                     const selectedVal = this.state.graphFourthLabel[ind];
-                    
+
                     this.setState({
                         rowData: this.state.dataFourth[selectedVal]
                     })
@@ -749,7 +749,7 @@ class LicensesRenewalDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "Action taken on Application"
-                        }, 
+                        },
                 }],
                 yAxes: [{
                     gridLines: {
@@ -762,7 +762,7 @@ class LicensesRenewalDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "No of Application"
-                        }, 
+                        },
                 }]
             },
             plugins: {
@@ -780,37 +780,37 @@ class LicensesRenewalDashboard extends React.Component {
                 }
                 }
         }
-    
-    
-            
+
+
+
         return (
             <div>
             <div className="graphDashboard">
-            
-    
+
+
             {
                 this.state.graphClicked >= 0 ?
                 <CardContent className="halfGraph">
                     <React.Fragment>
                         <Bar
                         data={ PIEgraphOneSortedData }
-                        options={ PIEgraphOneOption } 
+                        options={ PIEgraphOneOption }
                         />
                     </React.Fragment>
                 </CardContent>
                 :null
             }
-    
+
             {
                 this.state.graphClicked > 0 ?
                 <CardContent className="halfGraph">
                     <React.Fragment>
                         <Bar
-                        data={ graphTwoSortedData } 
-                        options={ graphTwoOption } 
+                        data={ graphTwoSortedData }
+                        options={ graphTwoOption }
                         />
                     </React.Fragment>
-                </CardContent> 
+                </CardContent>
                 :null
             }
             </div>
@@ -820,36 +820,36 @@ class LicensesRenewalDashboard extends React.Component {
                 <CardContent className="halfGraph">
                     <React.Fragment>
                         <Bar
-                        data={ graphThirdSortedData } 
-                        options={ graphThirdOption } 
+                        data={ graphThirdSortedData }
+                        options={ graphThirdOption }
                         />
                     </React.Fragment>
-                </CardContent> 
+                </CardContent>
                 :null
             }
-    
+
             {
                 this.state.graphClicked > 2 ?
                 <CardContent className="halfGraph">
                     <React.Fragment>
                         <Bar
-                        data={ graphFourthSortedData } 
-                        options={ graphFourthOption } 
+                        data={ graphFourthSortedData }
+                        options={ graphFourthOption }
                         />
                     </React.Fragment>
-                </CardContent> 
+                </CardContent>
                 :null
             }
             </div>
-    
+
             {/* Table Feature  */}
             <div className="tableContainer">
             {
-                this.state.unchangeColumnData.length > 0  ? 
+                this.state.unchangeColumnData.length > 0  ?
                 <div className="tableFeature">
                     <div className="columnToggle-Text"> Download As: </div>
                     <button className="columnToggleBtn" onClick={this.pdfDownload}> PDF </button>
-    
+
                     <button className="columnToggleBtn" onClick={this.toggleColumn}> Column Visibility </button>
                 </div>
                 :null
@@ -861,25 +861,25 @@ class LicensesRenewalDashboard extends React.Component {
                     {
                         this.state.unchangeColumnData.map((data, index)=>{
                             return(
-                                <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul> 
+                                <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul>
                             )
                         })
                     }
                 </dl>
-                </div> 
+                </div>
                : null
             }
-    
+
             {
                 this.state.graphClicked >= 0 ?
                 <ReactTable id="customReactTable"
                 // PaginationComponent={Pagination}
-                data={ this.state.rowData }  
-                columns={ this.state.columnData }  
+                data={ this.state.rowData }
+                columns={ this.state.columnData }
                 defaultPageSize = {this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
-                pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}  
-                pageSizeOptions = {[20,40,60]}  
-                /> 
+                pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
+                pageSizeOptions = {[20,40,60]}
+                />
                 :null
             }
             </div>

@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -32,9 +32,9 @@ class SportCultureDashboard extends React.Component {
             unchangeColumnData: []
         }
       }
-    
-    
-    // PDF function 
+
+
+    // PDF function
     pdfDownload = (e) => {
 
     debugger;
@@ -63,7 +63,7 @@ class SportCultureDashboard extends React.Component {
             const demo1 = rowData[i]
             var demo2 = tableColumnData[j].replace(".", ",");
             demo2 = demo2.split(",")
-            if(typeof(demo2) === "object"){   
+            if(typeof(demo2) === "object"){
                 if(demo2.length > 1){
                     rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                 }
@@ -84,7 +84,7 @@ class SportCultureDashboard extends React.Component {
 
 
     debugger;
-    // PDF Code 
+    // PDF Code
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -94,7 +94,7 @@ class SportCultureDashboard extends React.Component {
     var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
     var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-    doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
+    doc.text("Sujog Application", pageWidth / 2, 20, 'center');
 
     doc.setFontSize(10);
     const pdfTitle = "Sports and Culture Dashboard"
@@ -125,7 +125,7 @@ class SportCultureDashboard extends React.Component {
         for(var i=0;i<coldata.length; i++){
             if(coldata[i]["show"]){
                 unchangeData.push(coldata[i])
-            }   
+            }
         }
         return unchangeData
 
@@ -150,7 +150,7 @@ class SportCultureDashboard extends React.Component {
         })
     }
 
-    // Toggle Column 
+    // Toggle Column
     toggleColumn = (e) => {
         // e.preventDefault();
         debugger;
@@ -159,7 +159,7 @@ class SportCultureDashboard extends React.Component {
             toggleColumnCheck : !this.state.toggleColumnCheck
         })
     }
-    
+
     graphSorting = ( sortBy, data, checkGraph ) => {
         debugger;
         var sortNo = null;
@@ -176,7 +176,7 @@ class SportCultureDashboard extends React.Component {
 
         return [ graphOneLabel, graphOneData, group ]
     }
-    // CamelCase Column Name 
+    // CamelCase Column Name
     camelize = (str) =>  {
     // var res = str.substr(0, 1);
     var res = String(str).substr(0, 1);
@@ -220,21 +220,21 @@ class SportCultureDashboard extends React.Component {
                     var itemHeader = {}
                     itemHeader["Header"] = this.camelize(tableData[i]);
                     itemHeader["accessor"] = tableData[i];
-                    if(i === 3 || i === 4 || i === 9 || i === 13 
+                    if(i === 3 || i === 4 || i === 9 || i === 13
                         || i === 15 || i === 18 || i === 20
                         || i === 23 || i === 24 || i === 33 || i === 35 ){
                             itemHeader["show"] = true;
                             columnData.push(itemHeader);
                     }
-                    
+
                 }
                 debugger;
-                
-        
-                // Column Unchange Data 
+
+
+                // Column Unchange Data
                 const unchangeColumnData = columnData
-        
-                
+
+
                 this.setState({
                     graphOneLabel: graphData[0],
                     graphOneData: graphData[1],
@@ -252,12 +252,12 @@ class SportCultureDashboard extends React.Component {
             this.setState({
                checkData : this.props.data,
                recordNotFound : recordNotFound
-           }) 
+           })
         }
     }
 
     render() {
-    
+
 
         // First Double Bar Graph Graph
         var PIEgraphOneSortedData = {
@@ -283,7 +283,7 @@ class SportCultureDashboard extends React.Component {
                 }
             ]
         }
-    
+
         var PIEgraphOneOption = {
             responsive : true,
             // aspectRatio : 3,
@@ -294,7 +294,7 @@ class SportCultureDashboard extends React.Component {
                 backgroundColor : "rgba(0, 0, 0, 0.1)",
                 weight: 0
                 }
-            ], 
+            ],
             legend: {
                 display: false,
                 position: 'bottom',
@@ -309,7 +309,7 @@ class SportCultureDashboard extends React.Component {
             },
             title: {
                 display: true,
-                text: this.state.dropdownSelected === "PUBLISHED" ? "Published Event Statuswise Dashboard" : "Cancelled Event Statuswise Dashboard" 
+                text: this.state.dropdownSelected === "PUBLISHED" ? "Published Event Statuswise Dashboard" : "Cancelled Event Statuswise Dashboard"
             },
             scales: {
                 xAxes: [{
@@ -319,7 +319,7 @@ class SportCultureDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "Event"
-                        }, 
+                        },
                 }],
                 yAxes: [{
                     gridLines: {
@@ -333,7 +333,7 @@ class SportCultureDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "No of Event"
-                        }, 
+                        },
                 }]
             },
             plugins: {
@@ -352,18 +352,18 @@ class SportCultureDashboard extends React.Component {
             },
             onClick: (e, element) => {
                 if (element.length > 0) {
-                    
+
                     debugger;
-                    var ind = element[0]._index;   
+                    var ind = element[0]._index;
                     const selectedVal = this.state.graphOneLabel[ind];
                     const data = this.state.dataOne[selectedVal];
                     var graphData = this.graphSorting("sector", data, "checkGraph");
-            
+
                     debugger;
                     // var graphSorting = this.graphSorting( this.state.graphHardTwoData.sortBy, this.state.dataOne[selectedVal] );
                     // const hardval = this.state.hardJSON[1]
                     // var graphSorting = this.graphSorting( hardval.sortBy, this.state.dataOne[selectedVal] );
-                    
+
                     this.setState({
                         graphTwoLabel: graphData[0],
                         graphTwoData: graphData[1],
@@ -371,12 +371,12 @@ class SportCultureDashboard extends React.Component {
                         graphClicked: 1,
                         rowData: this.state.dataOne[selectedVal]
                     })
-                    
+
                 }
             },
         }
-        
-    
+
+
         // Second Horizontal Graph
         var graphTwoSortedData = {
             labels: this.state.graphTwoLabel,
@@ -400,7 +400,7 @@ class SportCultureDashboard extends React.Component {
                 }
             ]
         }
-    
+
         var graphTwoOption = {
             responsive : true,
             // aspectRatio : 3,
@@ -411,7 +411,7 @@ class SportCultureDashboard extends React.Component {
                 backgroundColor : "rgba(0, 0, 0, 0.1)",
                 weight: 0
                 }
-            ], 
+            ],
             legend: {
                 display: false,
                 position: 'bottom',
@@ -431,16 +431,16 @@ class SportCultureDashboard extends React.Component {
             onClick: (e, element) => {
                 if (element.length > 0) {
                     debugger;
-                    var ind = element[0]._index;   
+                    var ind = element[0]._index;
                     const selectedVal = this.state.graphTwoLabel[ind];
                     const data = this.state.dataTwo[selectedVal];
                     var graphData = this.graphSorting("area", data, "checkGraph");
-            
+
                     debugger;
                     // var graphSorting = this.graphSorting( this.state.graphHardTwoData.sortBy, this.state.dataOne[selectedVal] );
                     // const hardval = this.state.hardJSON[1]
                     // var graphSorting = this.graphSorting( hardval.sortBy, this.state.dataOne[selectedVal] );
-                    
+
                     this.setState({
                         graphThirdLabel: graphData[0],
                         graphThirdData: graphData[1],
@@ -463,7 +463,7 @@ class SportCultureDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "Event Sector"
-                        }, 
+                        },
                 }],
                 yAxes: [{
                     gridLines: {
@@ -476,7 +476,7 @@ class SportCultureDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "No of Events"
-                        }, 
+                        },
                 }]
             },
             plugins: {
@@ -494,7 +494,7 @@ class SportCultureDashboard extends React.Component {
                 }
                 }
         }
-    
+
         // Third Horizontal Graph
         var graphThirdSortedData = {
             labels: this.state.graphThirdLabel,
@@ -518,7 +518,7 @@ class SportCultureDashboard extends React.Component {
                 }
             ]
         }
-    
+
         var graphThirdOption = {
             responsive : true,
             // aspectRatio : 3,
@@ -529,7 +529,7 @@ class SportCultureDashboard extends React.Component {
                 backgroundColor : "rgba(0, 0, 0, 0.1)",
                 weight: 0
                 }
-            ], 
+            ],
             legend: {
                 display: false,
                 position: 'bottom',
@@ -549,16 +549,16 @@ class SportCultureDashboard extends React.Component {
             onClick: (e, element) => {
                 if (element.length > 0) {
                     debugger;
-                    // var ind = element[0]._index;   
+                    // var ind = element[0]._index;
                     // const selectedVal = this.state.graphTwoLabel[ind];
                     // const data = this.state.dataTwo[selectedVal];
                     // var graphData = this.graphSorting("area", data, "checkGraph");
-            
+
                     // debugger;
                     // // var graphSorting = this.graphSorting( this.state.graphHardTwoData.sortBy, this.state.dataOne[selectedVal] );
                     // // const hardval = this.state.hardJSON[1]
                     // // var graphSorting = this.graphSorting( hardval.sortBy, this.state.dataOne[selectedVal] );
-                    
+
                     // this.setState({
                     //     graphThirdLabel: graphData[0],
                     //     graphThirdData: graphData[1],
@@ -581,7 +581,7 @@ class SportCultureDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "Area"
-                        }, 
+                        },
                 }],
                 yAxes: [{
                     gridLines: {
@@ -594,7 +594,7 @@ class SportCultureDashboard extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "No of Events"
-                        }, 
+                        },
                 }]
             },
             plugins: {
@@ -612,11 +612,11 @@ class SportCultureDashboard extends React.Component {
                 }
                 }
         }
-            
+
         return (
-            <div>            
+            <div>
             <div className="graphDashboard">
-            <div> {this.state.recordNotFound} </div> 
+            <div> {this.state.recordNotFound} </div>
 
             {
                 this.state.graphClicked >=0 ?
@@ -624,48 +624,48 @@ class SportCultureDashboard extends React.Component {
                 <React.Fragment>
                     <Bar
                     data={ PIEgraphOneSortedData }
-                    options={ PIEgraphOneOption } 
+                    options={ PIEgraphOneOption }
                     />
                 </React.Fragment>
                 </CardContent>
                 :null
             }
-    
+
             {
                 this.state.graphClicked > 0 ?
                 <CardContent className="halfGraph">
                     <React.Fragment>
                         <Bar
-                        data={ graphTwoSortedData } 
-                        options={ graphTwoOption } 
+                        data={ graphTwoSortedData }
+                        options={ graphTwoOption }
                         />
                     </React.Fragment>
-                </CardContent> 
+                </CardContent>
                 :null
             }
-    
+
             </div>
             {
                 this.state.graphClicked > 1 ?
                 <CardContent style={{"height": "350px"}}>
                     <React.Fragment>
                         <Bar
-                        data={ graphThirdSortedData } 
-                        options={ graphThirdOption } 
+                        data={ graphThirdSortedData }
+                        options={ graphThirdOption }
                         />
                     </React.Fragment>
-                </CardContent> 
+                </CardContent>
                 :null
             }
-    
+
             {/* Table Feature  */}
             <div className={this.state.graphClicked >=0 ? "tableContainer" : ""}>
             {
-                this.state.unchangeColumnData.length > 0  ? 
+                this.state.unchangeColumnData.length > 0  ?
                 <div className="tableFeature">
                     <div className="columnToggle-Text"> Download As: </div>
                     <button className="columnToggleBtn" onClick={this.pdfDownload}> PDF </button>
-    
+
                     <button className="columnToggleBtn" onClick={this.toggleColumn}> Column Visibility </button>
                 </div>
                 :null
@@ -677,25 +677,25 @@ class SportCultureDashboard extends React.Component {
                     {
                         this.state.unchangeColumnData.map((data, index)=>{
                             return(
-                                <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul> 
+                                <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul>
                             )
                         })
                     }
                 </dl>
-                </div> 
+                </div>
                : null
             }
-    
+
             {
                 this.state.graphClicked >= 0 ?
                 <ReactTable id="customReactTable"
                 // PaginationComponent={Pagination}
-                data={ this.state.rowData }  
-                columns={ this.state.columnData }  
+                data={ this.state.rowData }
+                columns={ this.state.columnData }
                 defaultPageSize = {this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
-                pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}  
-                pageSizeOptions = {[20,40,60]}  
-                /> 
+                pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
+                pageSizeOptions = {[20,40,60]}
+                />
                 :null
             }
             </div>

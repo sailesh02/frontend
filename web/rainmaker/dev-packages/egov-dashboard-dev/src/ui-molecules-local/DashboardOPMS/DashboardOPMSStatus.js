@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf'
 import 'jspdf-autotable';
@@ -29,20 +29,20 @@ class DashboardOPMSStatus extends React.Component {
             secondData : [],
         }
       }
-        // PDF function 
+        // PDF function
         pdfDownload = (e) => {
-    
+
             debugger;
             e.preventDefault();
             var columnData = this.state.tableHeader
             // var columnDataCamelize = this.state.columnData
             var rowData = this.state.tableRow
-        
+
             var group = columnData.reduce((r, a) => {
                 r[a["show"]] = [...r[a["show"]] || [], a];
                 return r;
                 }, {});
-        
+
             columnData = group["true"]
             var tableColumnData = []
             var tableColumnDataCamel = []
@@ -50,7 +50,7 @@ class DashboardOPMSStatus extends React.Component {
                 tableColumnData.push(columnData[i]["accessor"]);
                 // tableColumnDataCamel.push(columnDataCamelize[i]["accessor"])
             }
-        
+
             var tableRowData = [];
             for(var i=0; i<rowData.length; i++){
                 var rowItem = [];
@@ -58,7 +58,7 @@ class DashboardOPMSStatus extends React.Component {
                     const demo1 = rowData[i]
                     var demo2 = tableColumnData[j].replace(".", ",");
                     demo2 = demo2.split(",")
-                    if(typeof(demo2) === "object"){   
+                    if(typeof(demo2) === "object"){
                         if(demo2.length > 1){
                             rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                         }
@@ -71,33 +71,33 @@ class DashboardOPMSStatus extends React.Component {
                 }
                 tableRowData.push(rowItem);
             }
-        
+
             var tableRowDataFinal = []
             for(var i=0; i<tableRowData.length; i++){
                 tableRowDataFinal.push(tableRowData[i]);
             }
-        
-        
+
+
             debugger;
-            // PDF Code 
+            // PDF Code
             const unit = "pt";
             const size = "A4"; // Use A1, A2, A3 or A4
             const orientation = "portrait"; // portrait or landscape
             const marginLeft = 40;
             const doc = new jsPDF(orientation, unit, size);
-        
+
             var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
             var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
-        
-            doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
-        
+
+            doc.text("Sujog Application", pageWidth / 2, 20, 'center');
+
             doc.setFontSize(10);
             const pdfTitle =  "OPMS Dashboard"
             doc.text(pdfTitle, pageWidth / 2, 40, 'center');
-        
+
             doc.autoTable({ html: '#my-table' });
             doc.setFontSize(5);
-        
+
             doc.autoTable({
                 // head: [tableColumnDataCamel],
                 head: [tableColumnData],
@@ -107,11 +107,11 @@ class DashboardOPMSStatus extends React.Component {
                 },
                 body:tableRowData
             });
-        
+
             doc.save(pdfTitle+".pdf");
-        
+
             }
-        
+
         // Column Unchange Data
         columnUnchange=(e)=>{
             debugger;
@@ -120,10 +120,10 @@ class DashboardOPMSStatus extends React.Component {
             for(var i=0;i<coldata.length; i++){
                 if(coldata[i]["show"]){
                     unchangeData.push(coldata[i])
-                }   
+                }
             }
             return unchangeData
-    
+
         }
         // Hide / Show Column
         showHideColumn = (e) => {
@@ -133,20 +133,20 @@ class DashboardOPMSStatus extends React.Component {
             const removeIndex = parseInt(e.target.value);
             // sortColumn.splice(removeIndex, 1)
             sortColumn[removeIndex]["show"] = !(sortColumn[removeIndex]["show"]);
-    
+
             var sortColumn2 = JSON.parse(JSON.stringify(this.state.tableHeader));
             const removeIndex2 = parseInt(e.target.value);
             // sortColumn.splice(removeIndex, 1)
             sortColumn2[removeIndex2]["show"] = !(sortColumn2[removeIndex2]["show"])
-    
+
             this.setState({
                 columnData: sortColumn,
                 unchangeColumnData: sortColumn2,
                 tableHeader: sortColumn
             })
         }
-    
-        // Toggle Column 
+
+        // Toggle Column
         toggleColumn = (e) => {
             e.preventDefault();
             debugger;
@@ -155,8 +155,8 @@ class DashboardOPMSStatus extends React.Component {
                 toggleColumnCheck : !this.state.toggleColumnCheck
             })
         }
-    
-        // CamelCase Column Name 
+
+        // CamelCase Column Name
         camelize = (str) =>  {
         // var res = str.substr(0, 1);
         var res = String(str).substr(0, 1);
@@ -166,9 +166,9 @@ class DashboardOPMSStatus extends React.Component {
         return res.toUpperCase();
         });
         }
-    
+
         graphSorting = ( sortBy, data, checkGraph ) => {
-    
+
             if(checkGraph === "STATUS"){
                 debugger;
                 var sortNo = null;
@@ -176,13 +176,13 @@ class DashboardOPMSStatus extends React.Component {
                     r[a[sortBy]] = [...r[a[sortBy]] || [], a];
                     return r;
                     }, {});
-    
+
                 var graphOneLabel = Object.keys(group);
                 var graphOneData = []
                 for(var i=0; i<Object.keys(group).length ; i++){
                     graphOneData.push(group[graphOneLabel[i]].length);
                 }
-    
+
                 return [ graphOneLabel, graphOneData, group ];
             }
             if(checkGraph === "AREA"){
@@ -192,13 +192,13 @@ class DashboardOPMSStatus extends React.Component {
                     r[a[sortBy]] = [...r[a[sortBy]] || [], a];
                     return r;
                     }, {});
-    
+
                 var graphOneLabel = Object.keys(group);
                 var graphOneData = []
                 for(var i=0; i<Object.keys(group).length ; i++){
                     graphOneData.push(group[graphOneLabel[i]].length);
                 }
-    
+
                 return [ graphOneLabel, graphOneData, group ];
             }
             if(checkGraph === "MonthWise"){
@@ -207,27 +207,27 @@ class DashboardOPMSStatus extends React.Component {
                 var monthJSON = {0:"JAN",1:"FEB",2:"MAR",3:"APR",4:"MAY",5:"JUN",6:"JUL",7:"AUG",
                 8:"SEP",9:"OCT",10:"NOV",11:"DEC"}
                 var dateRange = this.dateRange(this.state.fromDate, this.state.toDate);
-    
+
                 var group = data.reduce((r, a) => {
-                    r[new Date(parseInt(a[sortBy])).getFullYear()+"-"+monthJSON[new Date(parseInt(a[sortBy])).getMonth()]] = 
+                    r[new Date(parseInt(a[sortBy])).getFullYear()+"-"+monthJSON[new Date(parseInt(a[sortBy])).getMonth()]] =
                     [...r[new Date(parseInt(a[sortBy])).getFullYear()+"-"+monthJSON[new Date(parseInt(a[sortBy])).getMonth()]] || [], a];
                     return r;
                     }, {});
-    
+
                 var graphOneLabel = Object.keys(group);
                 var graphOneData = []
                 // for(var i=0; i<Object.keys(group).length ; i++){
                 //     graphOneData.push(group[graphOneLabel[i]].length);
                 // }
-    
+
                 // graphOneLabel = dateRange;
-                
+
                 var demo = {};
                 for(var i=0; i<dateRange.length; i++){
                     demo[dateRange[i]] = group[dateRange[i]] ? group[dateRange[i]].length : 0;
                 }
                 debugger
-    
+
                 return [ dateRange, Object.values(demo), group ];
             }
             else{
@@ -237,17 +237,17 @@ class DashboardOPMSStatus extends React.Component {
                     r[a[sortBy]] = [...r[a[sortBy]] || [], a];
                     return r;
                     }, {});
-        
+
                 var graphOneLabel = Object.keys(group);
                 var graphOneData = []
                 for(var i=0; i<Object.keys(group).length ; i++){
                     graphOneData.push(group[graphOneLabel[i]].length);
                 }
-        
+
                 return [ graphOneLabel, graphOneData, group ];
             }
         }
-    
+
         dateRange = (startDate, endDate) => {
             var monthJSON = {"01":"JAN","02":"FEB","03":"MAR","04":"APR","05":"MAY","06":"JUN","07":"JUL",
             "08":"AUG","09":"SEP","10":"OCT","11":"NOV","12":"DEC"};
@@ -256,7 +256,7 @@ class DashboardOPMSStatus extends React.Component {
             var startYear  = parseInt(start[0]);
             var endYear    = parseInt(end[0]);
             var dates      = [];
-    
+
             for(var i = startYear; i <= endYear; i++) {
                 var endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
                 var startMon = i === startYear ? parseInt(start[1])-1 : 0;
@@ -269,9 +269,9 @@ class DashboardOPMSStatus extends React.Component {
             }
             return dates;
         }
-    
+
         dateTimeToForma = (frommDT, toDT) => {
-            var dt1 = new Date(frommDT); 
+            var dt1 = new Date(frommDT);
             var dateCnt = dt1.getDate() < 10 ? "0"+dt1.getDate() : dt1.getDate();
             var month = dt1.getMonth() < 10 ? "0"+(dt1.getMonth()+1) : dt1.getMonth()+1;
             var year = dt1.getFullYear();
@@ -281,8 +281,8 @@ class DashboardOPMSStatus extends React.Component {
             month = dt2.getMonth() < 10 ? "0"+(dt2.getMonth()+1) : dt2.getMonth()+1;
             year = dt2.getFullYear();
             dt2 = year+"-"+month+"-"+dateCnt
-    
-    
+
+
             return [dt1, dt2]
         }
 
@@ -295,20 +295,20 @@ class DashboardOPMSStatus extends React.Component {
             var formatDate = this.dateTimeToForma(fromDT, toDT);
             var fromDate = formatDate[0];
             var toDate = formatDate[1];
-    
-    
-        
+
+
+
             var graphLabel = Object.keys(data);
             var graphData = [];
             for(var i=0; i<graphLabel.length; i++){
                 graphData.push(data[graphLabel[i]].length)
             }
-    
+
             var mergeData = [];
             for(var i=0; i<graphLabel.length; i++){
                 mergeData = mergeData.concat(data[graphLabel[i]]);
             }
-    
+
             var col = [];
             for(var i=0; i<Object.keys(mergeData[0]).length; i++){
                 var item = {};
@@ -318,7 +318,7 @@ class DashboardOPMSStatus extends React.Component {
                 col.push(item)
             }
             var row = mergeData;
-    
+
             this.setState({
                 data : data,
                 sortBy: sortBy,
@@ -331,18 +331,18 @@ class DashboardOPMSStatus extends React.Component {
                 toDate : toDate,
                 graphClicked : 0,
                 checkData : this.props
-            })  
-    
+            })
+
             this.setState({
                 checkdata: this.props.data
             })
         }
-    
+
         componentDidUpdate(){
             debugger;
             var data = this.props.data;
             if(JSON.stringify(this.props) !== JSON.stringify(this.state.checkdata)){
-            
+
             var data = this.props.data;
             var sortBy = this.props.sortBy;
             var fromDT = this.props.statsPayload.dataPayload.fromDate;
@@ -350,19 +350,19 @@ class DashboardOPMSStatus extends React.Component {
             var formatDate = this.dateTimeToForma(fromDT, toDT);
             var fromDate = formatDate[0];
             var toDate = formatDate[1];
-    
-        
+
+
             var graphLabel = Object.keys(data);
             var graphData = [];
             for(var i=0; i<graphLabel.length; i++){
                 graphData.push(data[graphLabel[i]].length)
             }
-    
+
             var mergeData = [];
             for(var i=0; i<graphLabel.length; i++){
                 mergeData = mergeData.concat(data[graphLabel[i]]);
             }
-    
+
             var col = [];
             for(var i=0; i<Object.keys(mergeData[0]).length; i++){
                 var item = {};
@@ -372,7 +372,7 @@ class DashboardOPMSStatus extends React.Component {
                 col.push(item)
             }
             var row = mergeData;
-    
+
             this.setState({
                 data : data,
                 sortBy: sortBy,
@@ -384,15 +384,15 @@ class DashboardOPMSStatus extends React.Component {
                 fromDate : fromDate,
                 toDate : toDate,
                 graphClicked : 0
-            })  
-                
+            })
+
             this.setState({
                 checkdata: this.props
             })
             }
-    
+
         }
-        
+
         render() {
             // First Bar Graph Graph
             var graphOneData = {
@@ -418,7 +418,7 @@ class DashboardOPMSStatus extends React.Component {
                     }
                 ]
             }
-    
+
             var graphOneOption = {
                 responsive : true,
                 // aspectRatio : 3,
@@ -429,7 +429,7 @@ class DashboardOPMSStatus extends React.Component {
                     backgroundColor : "rgba(0, 0, 0, 0.1)",
                     weight: 0
                     }
-                ], 
+                ],
                 legend: {
                     display: false,
                     position: 'bottom',
@@ -454,7 +454,7 @@ class DashboardOPMSStatus extends React.Component {
                         scaleLabel: {
                             display: true,
                             labelString: "Application Type"
-                            }, 
+                            },
                     }],
                     yAxes: [{
                         gridLines: {
@@ -468,7 +468,7 @@ class DashboardOPMSStatus extends React.Component {
                         scaleLabel: {
                             display: true,
                             labelString: "No of Application"
-                            }, 
+                            },
                     }]
                 },
                 plugins: {
@@ -492,8 +492,8 @@ class DashboardOPMSStatus extends React.Component {
                         var selectedVal = this.state.firstGraphLabel[ind];
                         var data = this.state.firstData[selectedVal];
                         var graphSortedData = this.graphSorting("createdTime", data, "MonthWise")
-                    
-                        // Table 
+
+                        // Table
                         // debugger;
                         // var col = [];
                         // var item = {};
@@ -501,19 +501,19 @@ class DashboardOPMSStatus extends React.Component {
                         // item["accessor"] = "applicationStatus";
                         // item["show"] = true;
                         // col.push(item)
-                        
+
                         // var item = {};
                         // item["Header"] = "No of Request";
                         // item["accessor"] = "noofRequest";
                         // item["show"] = true;
                         // col.push(item)
-    
+
                         // debugger;
-                        // var row = [];        
+                        // var row = [];
                         // for(var i=0; i<graphSortedData[0].length; i++){
                         //     var item = {};
                         //     item[col[0].accessor] = graphSortedData[0][i];
-                        //     item[col[1].accessor] = graphSortedData[1][i];  
+                        //     item[col[1].accessor] = graphSortedData[1][i];
                         //     row.push(item)
                         // }
                         var row = data;
@@ -528,7 +528,7 @@ class DashboardOPMSStatus extends React.Component {
                     }
                 },
             }
-    
+
             // Second Graph
             var graphTwoData = {
                 labels: this.state.secondGraphLabel,
@@ -553,7 +553,7 @@ class DashboardOPMSStatus extends React.Component {
                     }
                 ]
             }
-    
+
             var graphTwoOption = {
                 responsive : true,
                 // aspectRatio : 3,
@@ -564,7 +564,7 @@ class DashboardOPMSStatus extends React.Component {
                     backgroundColor : "rgba(0, 0, 0, 0.1)",
                     weight: 0
                     }
-                ], 
+                ],
                 legend: {
                     display: false,
                     position: 'bottom',
@@ -589,7 +589,7 @@ class DashboardOPMSStatus extends React.Component {
                         scaleLabel: {
                             display: true,
                             labelString: "Months"
-                            }, 
+                            },
                     }],
                     yAxes: [{
                         gridLines: {
@@ -603,7 +603,7 @@ class DashboardOPMSStatus extends React.Component {
                         scaleLabel: {
                             display: true,
                             labelString: "No of Application"
-                            }, 
+                            },
                     }]
                 },
                 plugins: {
@@ -627,8 +627,8 @@ class DashboardOPMSStatus extends React.Component {
                         var selectedVal = this.state.secondGraphLabel[ind];
                         var data = this.state.secondData[selectedVal];
                         var graphSortedData = this.graphSorting("applicationStatus", data, "STATUS")
-                    
-                        // Table 
+
+                        // Table
                         // debugger;
                         // var col = [];
                         // var item = {};
@@ -636,19 +636,19 @@ class DashboardOPMSStatus extends React.Component {
                         // item["accessor"] = "applicationStatus";
                         // item["show"] = true;
                         // col.push(item)
-                        
+
                         // var item = {};
                         // item["Header"] = "No of Request";
                         // item["accessor"] = "noofRequest";
                         // item["show"] = true;
                         // col.push(item)
-    
+
                         // debugger;
-                        // var row = [];        
+                        // var row = [];
                         // for(var i=0; i<graphSortedData[0].length; i++){
                         //     var item = {};
                         //     item[col[0].accessor] = graphSortedData[0][i];
-                        //     item[col[1].accessor] = graphSortedData[1][i];  
+                        //     item[col[1].accessor] = graphSortedData[1][i];
                         //     row.push(item)
                         // }
                         var row = data;
@@ -663,7 +663,7 @@ class DashboardOPMSStatus extends React.Component {
                     }
                 },
             }
-    
+
             // Third Graph
             var graphThirdData = {
                 labels: this.state.thirdGraphLabel,
@@ -688,7 +688,7 @@ class DashboardOPMSStatus extends React.Component {
                     }
                 ]
             }
-    
+
             var graphThirdOption = {
                 responsive : true,
                 // aspectRatio : 3,
@@ -699,7 +699,7 @@ class DashboardOPMSStatus extends React.Component {
                     backgroundColor : "rgba(0, 0, 0, 0.1)",
                     weight: 0
                     }
-                ], 
+                ],
                 legend: {
                     display: false,
                     position: 'bottom',
@@ -724,7 +724,7 @@ class DashboardOPMSStatus extends React.Component {
                         scaleLabel: {
                             display: true,
                             labelString: "Application Status"
-                            }, 
+                            },
                     }],
                     yAxes: [{
                         gridLines: {
@@ -738,7 +738,7 @@ class DashboardOPMSStatus extends React.Component {
                         scaleLabel: {
                             display: true,
                             labelString: "No of Application"
-                            }, 
+                            },
                     }]
                 },
                 plugins: {
@@ -762,8 +762,8 @@ class DashboardOPMSStatus extends React.Component {
                         var selectedVal = this.state.thirdGraphLabel[ind];
                         var data = this.state.thirdData[selectedVal];
                         var graphSortedData = this.graphSorting("sector", data, "AREA")
-                    
-                        // Table 
+
+                        // Table
                         // debugger;
                         // var col = [];
                         // var item = {};
@@ -771,19 +771,19 @@ class DashboardOPMSStatus extends React.Component {
                         // item["accessor"] = "applicationStatus";
                         // item["show"] = true;
                         // col.push(item)
-                        
+
                         // var item = {};
                         // item["Header"] = "No of Request";
                         // item["accessor"] = "noofRequest";
                         // item["show"] = true;
                         // col.push(item)
-    
+
                         // debugger;
-                        // var row = [];        
+                        // var row = [];
                         // for(var i=0; i<graphSortedData[0].length; i++){
                         //     var item = {};
                         //     item[col[0].accessor] = graphSortedData[0][i];
-                        //     item[col[1].accessor] = graphSortedData[1][i];  
+                        //     item[col[1].accessor] = graphSortedData[1][i];
                         //     row.push(item)
                         // }
                         var row = data;
@@ -798,7 +798,7 @@ class DashboardOPMSStatus extends React.Component {
                     }
                 },
             }
-    
+
             // Third Graph
             var graphFourthData = {
                 labels: this.state.fourthGraphLabel,
@@ -823,7 +823,7 @@ class DashboardOPMSStatus extends React.Component {
                     }
                 ]
             }
-    
+
             var graphFourthOption = {
                 responsive : true,
                 // aspectRatio : 3,
@@ -834,7 +834,7 @@ class DashboardOPMSStatus extends React.Component {
                     backgroundColor : "rgba(0, 0, 0, 0.1)",
                     weight: 0
                     }
-                ], 
+                ],
                 legend: {
                     display: false,
                     position: 'bottom',
@@ -859,7 +859,7 @@ class DashboardOPMSStatus extends React.Component {
                         scaleLabel: {
                             display: true,
                             labelString: "Area (Sector)"
-                            }, 
+                            },
                     }],
                     yAxes: [{
                         gridLines: {
@@ -873,7 +873,7 @@ class DashboardOPMSStatus extends React.Component {
                         scaleLabel: {
                             display: true,
                             labelString: "No of Application"
-                            }, 
+                            },
                     }]
                 },
                 plugins: {
@@ -903,60 +903,60 @@ class DashboardOPMSStatus extends React.Component {
                     }
                 },
             }
-    
+
         return (
             <div>
-    
+
                 <div className={this.state.graphClicked >= -1 ? "graphDashboard" : "" }>
-                    {this.state.graphClicked >= 0 ? 
+                    {this.state.graphClicked >= 0 ?
                     <CardContent className="halfGraph">
                         <React.Fragment>
                             <Bar
                             data={ graphOneData }
-                            options={ graphOneOption } 
+                            options={ graphOneOption }
                             />
                         </React.Fragment>
                     </CardContent>
                     : null}
-    
+
                     {this.state.graphClicked > 0 ?
                     <CardContent className="halfGraph">
                         <React.Fragment>
                             <Bar
                             data={ graphTwoData }
-                            options={ graphTwoOption } 
+                            options={ graphTwoOption }
                             />
                         </React.Fragment>
                     </CardContent>
                     : null}
                 </div>
-    
+
                 <div className={this.state.graphClicked >= 1 ? "graphDashboard" : "" }>
-                {this.state.graphClicked > 1 ? 
+                {this.state.graphClicked > 1 ?
                 <CardContent className="halfGraph">
                     <React.Fragment>
                         <Bar
                         data={ graphThirdData }
-                        options={ graphThirdOption } 
+                        options={ graphThirdOption }
                         />
                     </React.Fragment>
                 </CardContent>
                 : null}
-    
-                {this.state.graphClicked > 2 ? 
+
+                {this.state.graphClicked > 2 ?
                 <CardContent className="halfGraph">
                     <React.Fragment>
                         <Bar
                         data={ graphFourthData }
-                        options={ graphFourthOption } 
+                        options={ graphFourthOption }
                         />
                     </React.Fragment>
                 </CardContent>
                 : null}
                 </div>
-    
-    
-    
+
+
+
                 {/* Table Feature  */}
                 <div className="tableContainer">
                 {
@@ -964,7 +964,7 @@ class DashboardOPMSStatus extends React.Component {
                     <div className="tableFeature">
                         <div className="columnToggle-Text"> Download As: </div>
                         <button className="columnToggleBtn" onClick={this.pdfDownload}> PDF </button>
-    
+
                         <button className="columnToggleBtn" onClick={this.toggleColumn}> Column Visibility </button>
                     </div>
                     // :null
@@ -976,25 +976,25 @@ class DashboardOPMSStatus extends React.Component {
                         {
                             this.state.tableHeader.map((data, index)=>{
                                 return(
-                                    <ul className={ this.state.tableHeader[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.tableHeader[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.tableHeader[index]["Header"] } </button></ul> 
+                                    <ul className={ this.state.tableHeader[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.tableHeader[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.tableHeader[index]["Header"] } </button></ul>
                                 )
                             })
                         }
                     </dl>
-                    </div> 
+                    </div>
                 : null
                 }
-    
+
                 {
                     this.state.graphClicked >= 0 ?
                     <ReactTable id="customReactTable"
                     // PaginationComponent={Pagination}
-                    data={ this.state.tableRow }  
-                    columns={ this.state.tableHeader }  
+                    data={ this.state.tableRow }
+                    columns={ this.state.tableHeader }
                     defaultPageSize = {5}
-                    pageSize={ 5 }  
-                    pageSizeOptions = {[20,40,60]}  
-                    /> 
+                    pageSize={ 5 }
+                    pageSizeOptions = {[20,40,60]}
+                    />
                     :null
                 }
                 </div>

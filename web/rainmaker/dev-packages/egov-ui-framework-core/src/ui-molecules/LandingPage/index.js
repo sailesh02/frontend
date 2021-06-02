@@ -50,6 +50,12 @@ class LandingPage extends React.Component {
           { "fireNOCDetails.fireNOCType": "NEW" }
         ]);
       }
+
+      if (route && route.moduleName === "TL") {
+
+        window.localStorage.setItem('TLApplyfor', route.applyFor);
+
+      }
       let toggle = get(
         screenConfig[route.screenKey],
         `${route.jsonPath}.props.open`,

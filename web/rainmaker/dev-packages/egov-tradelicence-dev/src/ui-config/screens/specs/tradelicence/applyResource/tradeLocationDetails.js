@@ -116,34 +116,34 @@ export const tradeLocationDetails = getCommonCard(
           }
         }
       },
-      tradeLocPropertyID: getTextField({
-        label: {
-          labelName: "Property ID",
-          labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Property ID",
-          labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_PLACEHOLDER"
-        },
-        iconObj: {
-          iconName: "search",
-          position: "end",
-          color: "#FE7A51",
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch) => {
-              getDetailsFromProperty(state, dispatch);
-            }
-          }
-        },
-        title: {
-          value:
-            "If you have already assessed your property, then please search your property by your PAID",
-          key: "TL_PROPERTY_ID_TOOLTIP_MESSAGE"
-        },
-        infoIcon: "info_circle",
-        jsonPath: "Licenses[0].propertyId"
-      }),
+      // tradeLocPropertyID: getTextField({
+      //   label: {
+      //     labelName: "Property ID",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Enter Property ID",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_PLACEHOLDER"
+      //   },
+      //   iconObj: {
+      //     iconName: "search",
+      //     position: "end",
+      //     color: "#FE7A51",
+      //     onClickDefination: {
+      //       action: "condition",
+      //       callBack: (state, dispatch) => {
+      //         getDetailsFromProperty(state, dispatch);
+      //       }
+      //     }
+      //   },
+      //   title: {
+      //     value:
+      //       "If you have already assessed your property, then please search your property by your PAID",
+      //     key: "TL_PROPERTY_ID_TOOLTIP_MESSAGE"
+      //   },
+      //   infoIcon: "info_circle",
+      //   jsonPath: "Licenses[0].propertyId"
+      // }),
       tradeLocDoorHouseNo: getTextField({
         label: {
           labelName: "Door/House No.",
@@ -157,7 +157,8 @@ export const tradeLocationDetails = getCommonCard(
           labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.doorNo"
+        jsonPath: "Licenses[0].tradeLicenseDetail.address.doorNo",
+        required: true,
       }),
       tradeLocBuilidingName: getTextField({
         label: {
@@ -172,7 +173,8 @@ export const tradeLocationDetails = getCommonCard(
           labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_PLACEHOLDER"
         },
         pattern: getPattern("BuildingStreet"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.buildingName"
+        jsonPath: "Licenses[0].tradeLicenseDetail.address.buildingName",
+        required: true,
       }),
       tradeLocStreetName: getTextField({
         label: {
@@ -187,7 +189,8 @@ export const tradeLocationDetails = getCommonCard(
           labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_PLACEHOLDER"
         },
         pattern: getPattern("BuildingStreet"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.street"
+        jsonPath: "Licenses[0].tradeLicenseDetail.address.street",
+        required: true,
       }),
       tradeLocMohalla: {
         uiFramework: "custom-containers-local",
@@ -246,55 +249,56 @@ export const tradeLocationDetails = getCommonCard(
           labelKey: "TL_NEW_TRADE_DETAILS_PIN_PLACEHOLDER"
         },
         pattern: getPattern("Pincode"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode"
+        jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode",
+        required: true,
       }),
-      tradeLocGISCoord: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        props: {
-          className: "gis-div-css",
-          style: {
-            width: "100%",
-            cursor: "pointer"
-          }
-        },
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.latitude",
-        onClickDefination: {
-          action: "condition",
-          callBack: showHideMapPopup
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        children: {
-          gisTextField: {
-            ...getTextField({
-              label: {
-                labelName: "GIS Coordinates",
-                labelKey: "TL_NEW_TRADE_DETAILS_GIS_CORD_LABEL"
-              },
-              placeholder: {
-                labelName: "Select your trade location on map",
-                labelKey: "TL_NEW_TRADE_DETAILS_GIS_CORD_PLACEHOLDER"
-              },
-              jsonPath: "Licenses[0].tradeLicenseDetail.address.latitude",
-              iconObj: {
-                iconName: "gps_fixed",
-                position: "end"
-              },
-              gridDefination: {
-                xs: 12,
-                sm: 12
-              },
-              props: {
-                disabled: true,
-                cursor: "pointer"
-              }
-            })
-          }
-        }
-      },
+      // tradeLocGISCoord: {
+      //   uiFramework: "custom-atoms",
+      //   componentPath: "Div",
+      //   props: {
+      //     className: "gis-div-css",
+      //     style: {
+      //       width: "100%",
+      //       cursor: "pointer"
+      //     }
+      //   },
+      //   jsonPath: "Licenses[0].tradeLicenseDetail.address.latitude",
+      //   onClickDefination: {
+      //     action: "condition",
+      //     callBack: showHideMapPopup
+      //   },
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 6
+      //   },
+      //   children: {
+      //     gisTextField: {
+      //       ...getTextField({
+      //         label: {
+      //           labelName: "GIS Coordinates",
+      //           labelKey: "TL_NEW_TRADE_DETAILS_GIS_CORD_LABEL"
+      //         },
+      //         placeholder: {
+      //           labelName: "Select your trade location on map",
+      //           labelKey: "TL_NEW_TRADE_DETAILS_GIS_CORD_PLACEHOLDER"
+      //         },
+      //         jsonPath: "Licenses[0].tradeLicenseDetail.address.latitude",
+      //         iconObj: {
+      //           iconName: "gps_fixed",
+      //           position: "end"
+      //         },
+      //         gridDefination: {
+      //           xs: 12,
+      //           sm: 12
+      //         },
+      //         props: {
+      //           disabled: true,
+      //           cursor: "pointer"
+      //         }
+      //       })
+      //     }
+      //   }
+      // },
       tradeLocElectricity: getTextField({
         label: {
           labelName: "Electricity Connection No.",
@@ -310,7 +314,7 @@ export const tradeLocationDetails = getCommonCard(
       })
     },
     {
-      style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{} 
+      style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}
     }
     ),
     mapsDialog: {

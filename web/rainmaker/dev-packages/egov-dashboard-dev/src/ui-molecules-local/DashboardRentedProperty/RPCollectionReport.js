@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
@@ -36,7 +36,7 @@ class RPCollectionReport extends React.Component {
         columnData1: [],
         rowData2: [],
         columnData2: [],
-        
+
         columnData: [],
         // Feature Table
         toggleColumnCheck: false,
@@ -46,9 +46,9 @@ class RPCollectionReport extends React.Component {
         typeSelected : ""
         }
       }
-    
-    
-    // PDF function 
+
+
+    // PDF function
     pdfDownload = (e) => {
         debugger;
         e.preventDefault();
@@ -59,16 +59,16 @@ class RPCollectionReport extends React.Component {
          "Colony",
         "Name", "Mobile Number", "Transaction Number", "Payment Type", "Total Amount"];
         if(this.state.graphClicked === 0){
-            
+
             var columnData = this.state.unchangeColumnData
             // var columnDataCamelize = this.state.columnData
             var rowData = this.state.rowData
-        
+
             var group = columnData.reduce((r, a) => {
                 r[a["show"]] = [...r[a["show"]] || [], a];
                 return r;
                 }, {});
-        
+
             columnData = group["true"]
             var tableColumnData = []
             var tableColumnDataCamel = []
@@ -76,7 +76,7 @@ class RPCollectionReport extends React.Component {
                 tableColumnData.push(columnData[i]["accessor"]);
                 // tableColumnDataCamel.push(columnDataCamelize[i]["accessor"])
             }
-        
+
             var tableRowData = [];
             for(var i=0; i<rowData.length; i++){
                 var rowItem = [];
@@ -84,7 +84,7 @@ class RPCollectionReport extends React.Component {
                     var demo1 = rowData[i]
                     var demo2 = tableColumnData[j].replace(".", ",");
                     demo2 = demo2.split(",")
-                    if(typeof(demo2) === "object"){   
+                    if(typeof(demo2) === "object"){
                         if(demo2.length > 1){
                             rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                         }
@@ -97,33 +97,33 @@ class RPCollectionReport extends React.Component {
                 }
                 tableRowData.push(rowItem);
             }
-        
+
             var tableRowDataFinal = []
             for(var i=0; i<tableRowData.length; i++){
                 tableRowDataFinal.push(tableRowData[i]);
             }
-        
-        
+
+
             debugger;
-            // PDF Code 
+            // PDF Code
             var unit = "pt";
             var size = "A4"; // Use A1, A2, A3 or A4
             var orientation = "portrait"; // portrait or landscape
             var marginLeft = 40;
             var doc = new jsPDF(orientation, unit, size);
-        
+
             var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
             var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
-        
-            doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
-        
+
+            doc.text("Sujog Application", pageWidth / 2, 20, 'center');
+
             doc.setFontSize(10);
             var pdfTitle = "OwnerShipTransfer Dashboard Data"
             doc.text(pdfTitle, pageWidth / 2, 40, 'center');
-        
+
             doc.autoTable({ html: '#my-table' });
             doc.setFontSize(5);
-        
+
             doc.autoTable({
                 // head: [tableColumnDataCamel],
                 head: [tableDataHeader1],
@@ -133,19 +133,19 @@ class RPCollectionReport extends React.Component {
                 },
                 body:tableRowData
             });
-        
+
             doc.save(pdfTitle+".pdf");
-    
+
             // Table 2
             var columnData = this.state.unchangeColumnData1
             // var columnDataCamelize = this.state.columnData
             var rowData = this.state.rowData1
-        
+
             var group = columnData.reduce((r, a) => {
                 r[a["show"]] = [...r[a["show"]] || [], a];
                 return r;
                 }, {});
-        
+
             columnData = group["true"]
             var tableColumnData = []
             var tableColumnDataCamel = []
@@ -153,7 +153,7 @@ class RPCollectionReport extends React.Component {
                 tableColumnData.push(columnData[i]["accessor"]);
                 // tableColumnDataCamel.push(columnDataCamelize[i]["accessor"])
             }
-        
+
             var tableRowData = [];
             for(var i=0; i<rowData.length; i++){
                 var rowItem = [];
@@ -161,7 +161,7 @@ class RPCollectionReport extends React.Component {
                     var demo1 = rowData[i]
                     var demo2 = tableColumnData[j].replace(".", ",");
                     demo2 = demo2.split(",")
-                    if(typeof(demo2) === "object"){   
+                    if(typeof(demo2) === "object"){
                         if(demo2.length > 1){
                             rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                         }
@@ -174,33 +174,33 @@ class RPCollectionReport extends React.Component {
                 }
                 tableRowData.push(rowItem);
             }
-        
+
             var tableRowDataFinal = []
             for(var i=0; i<tableRowData.length; i++){
                 tableRowDataFinal.push(tableRowData[i]);
             }
-        
-        
+
+
             debugger;
-            // PDF Code 
+            // PDF Code
             var unit = "pt";
             var size = "A4"; // Use A1, A2, A3 or A4
             var orientation = "portrait"; // portrait or landscape
             var marginLeft = 40;
             var doc = new jsPDF(orientation, unit, size);
-        
+
             var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
             var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
-        
+
             doc.text("Chandigarh Application", pageWidth / 2, 20, 'center');
-        
+
             doc.setFontSize(10);
             var pdfTitle = "Duplicate Copy Dashboard Data"
             doc.text(pdfTitle, pageWidth / 2, 40, 'center');
-        
+
             doc.autoTable({ html: '#my-table' });
             doc.setFontSize(5);
-        
+
             doc.autoTable({
                 // head: [tableColumnDataCamel],
                 head: [tableDataHeader1],
@@ -210,19 +210,19 @@ class RPCollectionReport extends React.Component {
                 },
                 body:tableRowData
             });
-        
+
             doc.save(pdfTitle+".pdf");
-    
+
             // Table 3
             var columnData = this.state.unchangeColumnData2
             // var columnDataCamelize = this.state.columnData
             var rowData = this.state.rowData2
-        
+
             var group = columnData.reduce((r, a) => {
                 r[a["show"]] = [...r[a["show"]] || [], a];
                 return r;
                 }, {});
-        
+
             columnData = group["true"]
             var tableColumnData = []
             var tableColumnDataCamel = []
@@ -230,7 +230,7 @@ class RPCollectionReport extends React.Component {
                 tableColumnData.push(columnData[i]["accessor"]);
                 // tableColumnDataCamel.push(columnDataCamelize[i]["accessor"])
             }
-        
+
             var tableRowData = [];
             for(var i=0; i<rowData.length; i++){
                 var rowItem = [];
@@ -238,7 +238,7 @@ class RPCollectionReport extends React.Component {
                     var demo1 = rowData[i]
                     var demo2 = tableColumnData[j].replace(".", ",");
                     demo2 = demo2.split(",")
-                    if(typeof(demo2) === "object"){   
+                    if(typeof(demo2) === "object"){
                         if(demo2.length > 1){
                             rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                         }
@@ -251,33 +251,33 @@ class RPCollectionReport extends React.Component {
                 }
                 tableRowData.push(rowItem);
             }
-        
+
             var tableRowDataFinal = []
             for(var i=0; i<tableRowData.length; i++){
                 tableRowDataFinal.push(tableRowData[i]);
             }
-        
-        
+
+
             debugger;
-            // PDF Code 
+            // PDF Code
             var unit = "pt";
             var size = "A4"; // Use A1, A2, A3 or A4
             var orientation = "portrait"; // portrait or landscape
             var marginLeft = 40;
             var doc = new jsPDF(orientation, unit, size);
-        
+
             var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
             var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
-        
+
             doc.text("Chandigarh Application", pageWidth / 2, 20, 'center');
-        
+
             doc.setFontSize(10);
             var pdfTitle = "Rented Property Dashboard Data"
             doc.text(pdfTitle, pageWidth / 2, 40, 'center');
-        
+
             doc.autoTable({ html: '#my-table' });
             doc.setFontSize(5);
-        
+
             doc.autoTable({
                 // head: [tableColumnDataCamel],
                 head: [tableDataHeader2],
@@ -287,7 +287,7 @@ class RPCollectionReport extends React.Component {
                 },
                 body:tableRowData
             });
-        
+
             doc.save(pdfTitle+".pdf");
         }else{
             var tableDataHeader = [];
@@ -303,12 +303,12 @@ class RPCollectionReport extends React.Component {
             var columnData = this.state.unchangeColumnData
             // var columnDataCamelize = this.state.columnData
             var rowData = this.state.rowData
-        
+
             var group = columnData.reduce((r, a) => {
                 r[a["show"]] = [...r[a["show"]] || [], a];
                 return r;
                 }, {});
-        
+
             columnData = group["true"];
             var tableCol = [];
             for(var i=0; i<columnData.length; i++){
@@ -320,7 +320,7 @@ class RPCollectionReport extends React.Component {
                 tableColumnData.push(columnData[i]["accessor"]);
                 // tableColumnDataCamel.push(columnDataCamelize[i]["accessor"])
             }
-        
+
             var tableRowData = [];
             for(var i=0; i<rowData.length; i++){
                 var rowItem = [];
@@ -328,7 +328,7 @@ class RPCollectionReport extends React.Component {
                     var demo1 = rowData[i]
                     var demo2 = tableColumnData[j].replace(".", ",");
                     demo2 = demo2.split(",")
-                    if(typeof(demo2) === "object"){   
+                    if(typeof(demo2) === "object"){
                         if(demo2.length > 1){
                             rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                         }
@@ -341,33 +341,33 @@ class RPCollectionReport extends React.Component {
                 }
                 tableRowData.push(rowItem);
             }
-        
+
             var tableRowDataFinal = []
             for(var i=0; i<tableRowData.length; i++){
                 tableRowDataFinal.push(tableRowData[i]);
             }
-        
-        
+
+
             debugger;
-            // PDF Code 
+            // PDF Code
             var unit = "pt";
             var size = "A4"; // Use A1, A2, A3 or A4
             var orientation = "portrait"; // portrait or landscape
             var marginLeft = 40;
             var doc = new jsPDF(orientation, unit, size);
-        
+
             var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
             var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
-        
+
             doc.text("Chandigarh Application", pageWidth / 2, 20, 'center');
-        
+
             doc.setFontSize(10);
             var pdfTitle = this.state.typeSelected+" Dashboard"
             doc.text(pdfTitle, pageWidth / 2, 40, 'center');
-        
+
             doc.autoTable({ html: '#my-table' });
             doc.setFontSize(5);
-        
+
             doc.autoTable({
                 // head: [tableColumnDataCamel],
                 head: [tableCol],
@@ -377,10 +377,10 @@ class RPCollectionReport extends React.Component {
                 },
                 body:tableRowData
             });
-        
+
             doc.save(pdfTitle+".pdf");
         }
-    
+
         }
 
     // Column Unchange Data
@@ -391,7 +391,7 @@ class RPCollectionReport extends React.Component {
         for(var i=0;i<coldata.length; i++){
             if(coldata[i]["show"]){
                 unchangeData.push(coldata[i])
-            }   
+            }
         }
         return unchangeData
 
@@ -416,7 +416,7 @@ class RPCollectionReport extends React.Component {
         })
     }
 
-    // Toggle Column 
+    // Toggle Column
     toggleColumn = (e) => {
         e.preventDefault();
         debugger;
@@ -425,7 +425,7 @@ class RPCollectionReport extends React.Component {
             toggleColumnCheck : !this.state.toggleColumnCheck
         })
     }
-    
+
     graphSorting = ( sortBy, data, checkGraph ) => {
 
     debugger;
@@ -481,7 +481,7 @@ class RPCollectionReport extends React.Component {
             graphOneData.push(amtTotal);
         }
         // graphOneData = [];
-        // Random Color 
+        // Random Color
         var dynamicColors = function() {
             var r = Math.floor(Math.random() * 255);
             var g = Math.floor(Math.random() * 255);
@@ -491,7 +491,7 @@ class RPCollectionReport extends React.Component {
 
         var coloR = [];
         var ict_unit = [];
-        var efficiency = [];    
+        var efficiency = [];
         var labelData = graphOneLabel;
         for (var i in labelData) {
             ict_unit.push("ICT Unit " + labelData[i].ict_unit);
@@ -522,10 +522,10 @@ class RPCollectionReport extends React.Component {
 
         return [ graphOneLabel, graphOneData, group ]
     }
-    
+
     }
 
-    // CamelCase Column Name 
+    // CamelCase Column Name
     camelize = (str) =>  {
     // var res = str.substr(0, 1);
     var res = String(str).substr(0, 1);
@@ -537,7 +537,7 @@ class RPCollectionReport extends React.Component {
     }
 
     dateTimeToForma = (frommDT, toDT) => {
-        var dt1 = new Date(frommDT); 
+        var dt1 = new Date(frommDT);
         var dateCnt = dt1.getDate() < 10 ? "0"+dt1.getDate() : dt1.getDate();
         var month = dt1.getMonth() < 10 ? "0"+(dt1.getMonth()+1) : dt1.getMonth()+1;
         var year = dt1.getFullYear();
@@ -586,13 +586,13 @@ class RPCollectionReport extends React.Component {
         var monthJSON = {"0":"JAN","1":"FEB","2":"MAR","3":"APR","4":"MAY","5":"JUN","6":"JUL",
         "7":"AUG","8":"SEP","9":"OCT","10":"NOV","11":"DEC"};
 
-        const hardJSON = propSortBy === "eventStatus" ? [{ 
+        const hardJSON = propSortBy === "eventStatus" ? [{
             "sortBy": "eventStatus",
             "msgX": "",
             "msgY": "",
             "title": ""
             },
-            { 
+            {
             "sortBy": "status",
             "msgX": "",
             "msgY": "",
@@ -602,7 +602,7 @@ class RPCollectionReport extends React.Component {
         var OwnershipTransfer = this.props.data[0].reportResponses[0].reportData;
         var DuplicateCopy = this.props.data[1].reportResponses[0].reportData;
         var PropertyRent = this.props.data[2].reportResponses[0].reportData;
-        
+
         var allGraphData = [OwnershipTransfer, DuplicateCopy, PropertyRent];
         var graphData = [];
 
@@ -615,10 +615,10 @@ class RPCollectionReport extends React.Component {
         allRowData = allRowData.concat(PropertyRent);
 
 
-        // Graph One Sorting Function 
+        // Graph One Sorting Function
         // var graphOneData2 = this.graphSorting( propSortBy, data, "dashboard 1" );
 
-        
+
         debugger;
         // Column Data 1
         var tableData = data[0] ? Object.keys(data[0]) : [];
@@ -641,7 +641,7 @@ class RPCollectionReport extends React.Component {
         // item["show"] = true;
         // columnData.push(item)
 
-        // Column Unchange Data 
+        // Column Unchange Data
         // var unchangeColumnData = this.columnUnchange(columnData)
         var unchangeColumnData = columnData
 
@@ -674,7 +674,7 @@ class RPCollectionReport extends React.Component {
         }
         var unchangeColumnData2 = columnData2
 
-        
+
         this.setState({
             graphOneLabel: [ "PropertyRent", "OwnershipTransfer", "DuplicateCopy"],
             graphOneData: graphData,
@@ -704,30 +704,30 @@ class RPCollectionReport extends React.Component {
             const propSortBy = "eventStatus";
             // const propSortBy = "status";
             const data = this.props.data;
-    
+
             var monthJSON = {"0":"JAN","1":"FEB","2":"MAR","3":"APR","4":"MAY","5":"JUN","6":"JUL",
             "7":"AUG","8":"SEP","9":"OCT","10":"NOV","11":"DEC"};
-    
-            const hardJSON = propSortBy === "eventStatus" ? [{ 
+
+            const hardJSON = propSortBy === "eventStatus" ? [{
                 "sortBy": "eventStatus",
                 "msgX": "",
                 "msgY": "",
                 "title": ""
                 },
-                { 
+                {
                 "sortBy": "status",
                 "msgX": "",
                 "msgY": "",
                 "title": ""
                 }] : []
-    
+
             var OwnershipTransfer = this.props.data[0].reportResponses[0].reportData;
             var DuplicateCopy = this.props.data[1].reportResponses[0].reportData;
             var PropertyRent = this.props.data[2].reportResponses[0].reportData;
-            
+
             var allGraphData = [OwnershipTransfer, DuplicateCopy, PropertyRent];
             var graphData = [];
-    
+
             for(var i=0;i<allGraphData.length; i++){
                 graphData.push(allGraphData[i].length);
             }
@@ -735,12 +735,12 @@ class RPCollectionReport extends React.Component {
             var allRowData = OwnershipTransfer;
             allRowData = allRowData.concat(DuplicateCopy);
             allRowData = allRowData.concat(PropertyRent);
-    
-    
-            // Graph One Sorting Function 
+
+
+            // Graph One Sorting Function
             // var graphOneData2 = this.graphSorting( propSortBy, data, "dashboard 1" );
-    
-            
+
+
             debugger;
         // Column Data 1
         var tableData = data[0] ? Object.keys(data[0]) : [];
@@ -763,7 +763,7 @@ class RPCollectionReport extends React.Component {
         // item["show"] = true;
         // columnData.push(item)
 
-        // Column Unchange Data 
+        // Column Unchange Data
         // var unchangeColumnData = this.columnUnchange(columnData)
         var unchangeColumnData = columnData
 
@@ -795,8 +795,8 @@ class RPCollectionReport extends React.Component {
             columnData2.push(itemHeader);
         }
         var unchangeColumnData2 = columnData2
-    
-            
+
+
             this.setState({
                 graphOneLabel: [ "PropertyRent", "OwnershipTransfer", "DuplicateCopy"],
             graphOneData: graphData,
@@ -817,7 +817,7 @@ class RPCollectionReport extends React.Component {
             // hardJSON: hardJSON,
             allGraphData: allGraphData,
                 checkData : this.props.data
-            }) 
+            })
         }
 
     }
@@ -847,7 +847,7 @@ class RPCollectionReport extends React.Component {
                 }
             ]
         }
-    
+
         var graphOneOption = {
             responsive : true,
             // aspectRatio : 3,
@@ -858,7 +858,7 @@ class RPCollectionReport extends React.Component {
                 backgroundColor : "rgba(0, 0, 0, 0.1)",
                 weight: 0
                 }
-            ], 
+            ],
             legend: {
                 display: true,
                 position: 'bottom',
@@ -883,7 +883,7 @@ class RPCollectionReport extends React.Component {
             //         scaleLabel: {
             //             display: true,
             //             labelString:"msgX"
-            //             }, 
+            //             },
             //     }],
             //     yAxes: [{
             //         gridLines: {
@@ -897,7 +897,7 @@ class RPCollectionReport extends React.Component {
             //         scaleLabel: {
             //             display: true,
             //             labelString: "msgY"
-            //             }, 
+            //             },
             //     }]
             // },
             plugins: {
@@ -916,9 +916,9 @@ class RPCollectionReport extends React.Component {
             },
             onClick: (e, element) => {
                 if (element.length > 0) {
-                    
+
                     debugger;
-                    var ind = element[0]._index;   
+                    var ind = element[0]._index;
                     var selectedVal = this.state.graphOneLabel[ind];
                     var data = this.state.allGraphData[ind];
                     var columnData1 = [];
@@ -927,7 +927,7 @@ class RPCollectionReport extends React.Component {
                         var graphData = this.graphSorting( 3, data, "" );
                         var tableDataHeader = ["Receipt Number", "Receipt Issue Date", "Transit Number", "Colony",
                         "Name", "Mobile Number", "Transaction Number", "Payment Type", "Total Amount"];
-    
+
                         columnData1 = []
                         for(var i=0; i<tableDataHeader.length; i++){
                             var itemHeader = {}
@@ -937,13 +937,13 @@ class RPCollectionReport extends React.Component {
                             columnData1.push(itemHeader);
                         }
                         unchangeColumnData1 = columnData1
-    
+
                     }else{
                         var graphData = this.graphSorting( 2, data, "" );
                         var tableDataHeader = ["Receipt Number", "Receipt Issue Date", "Colony", "Allotment Number",
                         "Allotment Date", "Name", "Mobile Number", "Transaction Number", "Status", "Application Type",
                         "Payment Type", "Total Amount"];
-                        
+
                         columnData1 = []
                         for(var i=0; i<tableDataHeader.length; i++){
                             var itemHeader = {}
@@ -955,9 +955,9 @@ class RPCollectionReport extends React.Component {
                         unchangeColumnData1 = columnData1
                     }
                     debugger;
-                    
-                    
-    
+
+
+
                     this.setState({
                         graphTwoLabel: graphData[0],
                         graphTwoData: graphData[1],
@@ -968,12 +968,12 @@ class RPCollectionReport extends React.Component {
                         unchangeColumnData : unchangeColumnData1,
                         typeSelected : selectedVal
                     })
-                    
+
                 }
             },
         }
-        
-    
+
+
         // Second Graph Colonywise
         var graphTwoSortedData = {
             labels: this.state.graphTwoLabel,
@@ -995,7 +995,7 @@ class RPCollectionReport extends React.Component {
                 }
             ]
         }
-    
+
         var graphTwoOption = {
             responsive : true,
             // aspectRatio : 3,
@@ -1006,7 +1006,7 @@ class RPCollectionReport extends React.Component {
                 backgroundColor : "rgba(0, 0, 0, 0.1)",
                 weight: 0
                 }
-            ], 
+            ],
             legend: {
                 display: false,
                 position: 'bottom',
@@ -1028,21 +1028,21 @@ class RPCollectionReport extends React.Component {
                     var ind = element[0]._index;
                     // debugger;
                     // var selectedVal = this.state.graphTwoLabel[ind];
-                    
+
                     // this.setState({
                     //     graphClicked: 2,
                     //     rowData: this.state.dataTwo[selectedVal]
                     // })
                     debugger;
-                    var ind = element[0]._index;   
+                    var ind = element[0]._index;
                     var selectedVal = this.state.graphTwoLabel[ind];
                     var data = this.state.dataTwo[selectedVal];
-    
+
                     var selectedData = [];
                     var amtGraphData = [];
                     if(this.state.typeSelected === "PropertyRent"){
                         var graphData = this.graphSorting( 7, data, "" );
-    
+
                         selectedData = graphData[2];
                         for(var i=0;i<Object.keys(selectedData).length;i++){
                             var amt = 0;
@@ -1052,10 +1052,10 @@ class RPCollectionReport extends React.Component {
                             }
                             amtGraphData.push(amt)
                         }
-    
+
                     }else{
                         var graphData = this.graphSorting( 10, data, "" );
-                        
+
                         selectedData = graphData[2];
                         for(var i=0;i<Object.keys(selectedData).length;i++){
                             var amt = 0;
@@ -1066,10 +1066,10 @@ class RPCollectionReport extends React.Component {
                             amtGraphData.push(amt)
                         }
                     }
-                    
+
                     debugger;
-                    
-                    
+
+
                     this.setState({
                         graphThirdLabel: graphData[0],
                         graphThirdData: amtGraphData,
@@ -1078,7 +1078,7 @@ class RPCollectionReport extends React.Component {
                         rowData: data,
                         // columnData : columnData
                     })
-    
+
                 }
             },
             scales: {
@@ -1094,7 +1094,7 @@ class RPCollectionReport extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "Colony"
-                        }, 
+                        },
                 }],
                 yAxes: [{
                     gridLines: {
@@ -1107,7 +1107,7 @@ class RPCollectionReport extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "Total Rented Report"
-                        }, 
+                        },
                 }]
             },
             plugins: {
@@ -1125,7 +1125,7 @@ class RPCollectionReport extends React.Component {
                 }
                 }
         }
-    
+
         // Third Graph Payment Type
         var graphThirdSortedData = {
             labels: this.state.graphThirdLabel,
@@ -1147,7 +1147,7 @@ class RPCollectionReport extends React.Component {
                 }
             ]
         }
-    
+
         var graphThirdOption = {
             responsive : true,
             // aspectRatio : 3,
@@ -1158,7 +1158,7 @@ class RPCollectionReport extends React.Component {
                 backgroundColor : "rgba(0, 0, 0, 0.1)",
                 weight: 0
                 }
-            ], 
+            ],
             legend: {
                 display: true,
                 position: 'bottom',
@@ -1180,7 +1180,7 @@ class RPCollectionReport extends React.Component {
                     var ind = element[0]._index;
                     debugger;
                     var selectedVal = this.state.graphThirdLabel[ind];
-                    
+
                     this.setState({
                         graphClicked: 3,
                         rowData: this.state.dataThird[selectedVal]
@@ -1200,7 +1200,7 @@ class RPCollectionReport extends React.Component {
             //         scaleLabel: {
             //             display: true,
             //             labelString: "Colony"
-            //             }, 
+            //             },
             //     }],
             //     yAxes: [{
             //         gridLines: {
@@ -1213,7 +1213,7 @@ class RPCollectionReport extends React.Component {
             //         scaleLabel: {
             //             display: true,
             //             labelString: "Due Amount (in Lakh)"
-            //             }, 
+            //             },
             //     }]
             // },
             plugins: {
@@ -1233,17 +1233,17 @@ class RPCollectionReport extends React.Component {
         }
 
 
-        
+
     return (
         <div style={this.state.rowData === 0 ? {display : "none"} :null}>
-        
+
         <div className="graphDashboard">
-        
+
         <CardContent className="halfGraph">
             <React.Fragment>
                 <Pie
                 data={ graphOneSortedData }
-                options={ graphOneOption } 
+                options={ graphOneOption }
                 />
             </React.Fragment>
         </CardContent>
@@ -1253,7 +1253,7 @@ class RPCollectionReport extends React.Component {
                 <React.Fragment>
                     <Bar
                     data={ graphTwoSortedData }
-                    options={ graphTwoOption } 
+                    options={ graphTwoOption }
                     />
                 </React.Fragment>
             </CardContent>
@@ -1263,12 +1263,12 @@ class RPCollectionReport extends React.Component {
         </div>
 
         <div className="graphDashboard" style={this.state.graphClicked < 2 ? {display : "none"} :null}>
-        
+
         <CardContent className="fullGraph">
             <React.Fragment>
                 <Pie
                 data={ graphThirdSortedData }
-                options={ graphThirdOption } 
+                options={ graphThirdOption }
                 />
             </React.Fragment>
         </CardContent>
@@ -1278,7 +1278,7 @@ class RPCollectionReport extends React.Component {
         <div className="tableBlock">
         <div className="tableContainerRented">
         {
-            this.state.unchangeColumnData.length > 0  ? 
+            this.state.unchangeColumnData.length > 0  ?
             <div className="tableFeature">
                 <div className="columnToggle-Text"> Download As: </div>
                 <button className="columnToggleBtn" onClick={this.pdfDownload}> PDF </button>
@@ -1294,12 +1294,12 @@ class RPCollectionReport extends React.Component {
                 {
                     this.state.unchangeColumnData.map((data, index)=>{
                         return(
-                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul> 
+                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul>
                         )
                     })
                 }
             </dl>
-            </div> 
+            </div>
            : null
         }
 
@@ -1308,12 +1308,12 @@ class RPCollectionReport extends React.Component {
             this.state.graphClicked >= 0 ?
             <ReactTable id="customReactTable"
             // PaginationComponent={Pagination}
-            data={ this.state.rowData }  
-            columns={ this.state.columnData }  
+            data={ this.state.rowData }
+            columns={ this.state.columnData }
             defaultPageSize = {this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
-            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}  
-            pageSizeOptions = {[20,40,60]}  
-            /> 
+            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
+            pageSizeOptions = {[20,40,60]}
+            />
             :null
         }
         </div>
@@ -1323,12 +1323,12 @@ class RPCollectionReport extends React.Component {
             this.state.graphClicked >= 0 ?
             <ReactTable id="customReactTable"
             // PaginationComponent={Pagination}
-            data={ this.state.rowData1 }  
-            columns={ this.state.columnData1 }  
+            data={ this.state.rowData1 }
+            columns={ this.state.columnData1 }
             defaultPageSize = {this.state.rowData1.length > 10 ? 10 : this.state.rowData1.length}
-            pageSize={this.state.rowData1.length > 10 ? 10 : this.state.rowData1.length}  
-            pageSizeOptions = {[20,40,60]}  
-            /> 
+            pageSize={this.state.rowData1.length > 10 ? 10 : this.state.rowData1.length}
+            pageSizeOptions = {[20,40,60]}
+            />
             :null
         }
         </div>
@@ -1338,12 +1338,12 @@ class RPCollectionReport extends React.Component {
             this.state.graphClicked >= 0 ?
             <ReactTable id="customReactTable"
             // PaginationComponent={Pagination}
-            data={ this.state.rowData2 }  
-            columns={ this.state.columnData2 }  
+            data={ this.state.rowData2 }
+            columns={ this.state.columnData2 }
             defaultPageSize = {this.state.rowData2.length > 10 ? 10 : this.state.rowData2.length}
-            pageSize={this.state.rowData2.length > 10 ? 10 : this.state.rowData2.length}  
-            pageSizeOptions = {[20,40,60]}  
-            /> 
+            pageSize={this.state.rowData2.length > 10 ? 10 : this.state.rowData2.length}
+            pageSizeOptions = {[20,40,60]}
+            />
             :null
         }
         </div>

@@ -26,9 +26,25 @@ const cardItems = [
       labelName: "Apply for Trade License"
     },
     icon: <TradeLicenseIcon />,
+
     route: {
       screenKey: "home",
-      jsonPath: "components.cityPickerDialog"
+      jsonPath: "components.cityPickerDialog",
+      applyFor: "PERMANENT",
+      moduleName: "TL",
+    }
+  },
+  {
+    label: {
+      labelKey: "TL_APPLY_TEMP_TRADELICENSE",
+      labelName: "Apply for Temporary Trade License"
+    },
+    icon: <TradeLicenseIcon />,
+    route: {
+      screenKey: "home",
+      jsonPath: "components.cityPickerDialog",
+      applyFor: "TEMPORARY",
+      moduleName: "TL",
     }
   },
   {

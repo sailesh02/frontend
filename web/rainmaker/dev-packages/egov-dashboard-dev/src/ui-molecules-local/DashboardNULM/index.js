@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
@@ -39,7 +39,7 @@ class NULMDashboard extends React.Component {
   }
 
 
-    // PDF function 
+    // PDF function
     pdfDownload = (e) => {
     debugger;
     e.preventDefault();
@@ -67,7 +67,7 @@ class NULMDashboard extends React.Component {
             const demo1 = rowData[i]
             var demo2 = tableColumnData[j].replace(".", ",");
             demo2 = demo2.split(",")
-            if(typeof(demo2) === "object"){   
+            if(typeof(demo2) === "object"){
                 if(demo2.length > 1){
                     rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                 }
@@ -88,7 +88,7 @@ class NULMDashboard extends React.Component {
 
 
     debugger;
-    // PDF Code 
+    // PDF Code
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -98,7 +98,7 @@ class NULMDashboard extends React.Component {
     var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
     var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-    doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
+    doc.text("Sujog Application", pageWidth / 2, 20, 'center');
 
     doc.setFontSize(10);
     const pdfTitle = this.state.graphHardOneData.title ? this.state.graphHardOneData.title : "Title"
@@ -129,7 +129,7 @@ class NULMDashboard extends React.Component {
         for(var i=0;i<coldata.length; i++){
             if(coldata[i]["show"]){
                 unchangeData.push(coldata[i])
-            }   
+            }
         }
         return unchangeData
 
@@ -154,7 +154,7 @@ class NULMDashboard extends React.Component {
         })
     }
 
-    // Toggle Column 
+    // Toggle Column
     toggleColumn = (e) => {
         e.preventDefault();
         debugger;
@@ -163,7 +163,7 @@ class NULMDashboard extends React.Component {
             toggleColumnCheck : !this.state.toggleColumnCheck
         })
     }
-    
+
     graphSorting = (data, sortBy, dropdownSelected, selectedDashboard ) => {
         var monthJSON = {"0":"JAN","1":"FEB","2":"MAR","3":"APR","4":"MAY","5":"JUN","6":"JUL",
         "7":"AUG","8":"SEP","9":"OCT","10":"NOV","11":"DEC"};
@@ -175,7 +175,7 @@ class NULMDashboard extends React.Component {
                  [...r[new Date(a["auditDetails"]["lastModifiedTime"]).getFullYear()+"-"+monthJSON[new Date(a["auditDetails"]["lastModifiedTime"]).getMonth()]] || [], a];
                 return r;
                 }, {});
-            
+
             var graphLabel = dateRange;
             var graphData = [];
             for(var i=0; i<graphLabel.length; i++){
@@ -197,25 +197,25 @@ class NULMDashboard extends React.Component {
                         itemHeader["show"]= true ;
                     }else{
                         itemHeader["show"]= false ;
-                    }                    
+                    }
                 }else if(dropdownSelected === "SMID Program"){
                     if(i === 1 || i === 3 || i === 5 || i === 13 || i === 15 || i === 19){
                         itemHeader["show"]= true ;
                     }else{
                         itemHeader["show"]= false ;
-                    }                    
+                    }
                 }else if(dropdownSelected === "SUSV Program"){
                     if(i === 1 || i === 3 || i === 5 || i === 6 || i === 7 || i === 14){
                         itemHeader["show"]= true ;
                     }else{
                         itemHeader["show"]= false ;
-                    }                    
+                    }
                 }else if(dropdownSelected === "SUH Program"){
                     if(i === 1 || i === 3 || i === 6 || i === 7 || i === 10 || i === 14){
                         itemHeader["show"]= true ;
                     }else{
                         itemHeader["show"]= false ;
-                    }                    
+                    }
                 }
                 headerData.push(itemHeader);
             }
@@ -232,7 +232,7 @@ class NULMDashboard extends React.Component {
                 graphClicked : 0,
                 dropdownSelected : dropdownSelected
             })
-                
+
         }if(selectedDashboard === "SEP Program Status"){
             debugger;
             var group = data.reduce((r, a) => {
@@ -244,8 +244,8 @@ class NULMDashboard extends React.Component {
             var graphData = []
             for(var i=0; i<Object.keys(group).length ; i++){
                 graphData.push(group[graphLabel[i]].length);
-            } 
-            
+            }
+
             var rowData = data;
 
             this.setState({
@@ -266,13 +266,13 @@ class NULMDashboard extends React.Component {
 
             var graphLabel = ["SEP", "SMID", "SUSV", "SUH"];
             var graphData = [SEP.length, SMID.length, SUSV.length, SUH.length];
-            
+
             var headerData = []
             // var keys = allData;
 
             var keys = Object.keys(allData[0]);
             for(var i=0; i<5; i++){
-                if(Object.keys(allData[0])[i] === "applicationDocument" || 
+                if(Object.keys(allData[0])[i] === "applicationDocument" ||
                 Object.keys(allData[0])[i] === "auditDetails" ||
                 Object.keys(allData[0])[i] === "applicationDocument" ||
                 Object.keys(allData[0])[i] === "documentAttachemnt" ||
@@ -281,7 +281,7 @@ class NULMDashboard extends React.Component {
                 Object.keys(allData[0])[i] === "addressPicture" ||
                 Object.keys(allData[0])[i] === "programPicture" ||
                 Object.keys(allData[0])[i] === "documentAttachment"){
-                    
+
                 }else{
                     var itemHeader = {}
                     itemHeader["Header"] = keys[i];
@@ -314,7 +314,7 @@ class NULMDashboard extends React.Component {
                  [...r[new Date(a["auditDetails"]["lastModifiedTime"]).getFullYear()+"-"+monthJSON[new Date(a["auditDetails"]["lastModifiedTime"]).getMonth()]] || [], a];
                 return r;
                 }, {});
-            
+
             var graphLabel = dateRange;
             var graphData = [];
             for(var i=0; i<graphLabel.length; i++){
@@ -336,7 +336,7 @@ class NULMDashboard extends React.Component {
             //             itemHeader["show"]= true ;
             //         }else{
             //             itemHeader["show"]= false ;
-            //         }                    
+            //         }
             //     }
             //     headerData.push(itemHeader);
             // }
@@ -367,8 +367,8 @@ class NULMDashboard extends React.Component {
             var graphData = []
             for(var i=0; i<Object.keys(group).length ; i++){
                 graphData.push(group[graphLabel[i]].length);
-            } 
-            
+            }
+
             var rowData = data;
 
             this.setState({
@@ -382,7 +382,7 @@ class NULMDashboard extends React.Component {
         }
     }
 
-    // CamelCase Column Name 
+    // CamelCase Column Name
     camelize = (str) =>  {
     // var res = str.substr(0, 1);
     var res = String(str).substr(0, 1);
@@ -420,7 +420,7 @@ class NULMDashboard extends React.Component {
         const data = this.props.data;
         if(data.length>0 && JSON.stringify(data) !== JSON.stringify(this.state.checkData)){
           const propData = data[0].ResponseBody;
-        
+
           this.setState({
             checkData : data
           })
@@ -432,7 +432,7 @@ class NULMDashboard extends React.Component {
         const data = this.props.data;
         if(data.length>0 && JSON.stringify(data) !== JSON.stringify(this.state.checkData)){
           const propData = data[0].ResponseBody;
-        // Payload values 
+        // Payload values
         var fromDate = data[1].fromDate;
         var toDate = data[1].toDate;
         var selectedVAL = data[1].reportSortBy.label;
@@ -448,19 +448,19 @@ class NULMDashboard extends React.Component {
         debugger;
         var JSONdata;
         if(dropdownSelected === "SEP Program"){
-            JSONdata = data[0].ResponseBody; 
+            JSONdata = data[0].ResponseBody;
             var sortData = this.graphSorting(JSONdata, dateRange, dropdownSelected, "Single Program");
         }
         if(dropdownSelected === "SMID Program"){
-            JSONdata = data[0].ResponseBody; 
+            JSONdata = data[0].ResponseBody;
             var sortData = this.graphSorting(JSONdata, dateRange, dropdownSelected, "Single Program");
         }
         if(dropdownSelected === "SUSV Program"){
-            JSONdata = data[0].ResponseBody; 
+            JSONdata = data[0].ResponseBody;
             var sortData = this.graphSorting(JSONdata, dateRange, dropdownSelected, "Single Program");
         }
         if(dropdownSelected === "SUH Program"){
-            JSONdata = data[0].ResponseBody; 
+            JSONdata = data[0].ResponseBody;
             var sortData = this.graphSorting(JSONdata, dateRange, dropdownSelected, "Single Program");
         }
         if(dropdownSelected === "All Program"){
@@ -477,7 +477,7 @@ class NULMDashboard extends React.Component {
     }
 
     render() {
-    
+
 
       // First Double Bar Graph Graph
       var PIEgraphOneSortedData = {
@@ -503,7 +503,7 @@ class NULMDashboard extends React.Component {
               }
           ]
       }
-  
+
       var PIEgraphOneOption = {
           responsive : true,
           // aspectRatio : 3,
@@ -514,7 +514,7 @@ class NULMDashboard extends React.Component {
               backgroundColor : "rgba(0, 0, 0, 0.1)",
               weight: 0
               }
-          ], 
+          ],
           legend: {
               display: false,
               position: 'bottom',
@@ -539,7 +539,7 @@ class NULMDashboard extends React.Component {
                   scaleLabel: {
                       display: true,
                       labelString: this.state.dropdownSelected === "All Program" ? "Programs" : "Months"
-                      }, 
+                      },
               }],
               yAxes: [{
                   gridLines: {
@@ -553,7 +553,7 @@ class NULMDashboard extends React.Component {
                   scaleLabel: {
                       display: true,
                       labelString: this.state.dropdownSelected === "All Program" ? "No of Application" : "No of Application"
-                      }, 
+                      },
               }]
           },
           plugins: {
@@ -572,9 +572,9 @@ class NULMDashboard extends React.Component {
           },
           onClick: (e, element) => {
               if (element.length > 0) {
-                  
+
                   debugger;
-                  var ind = element[0]._index;   
+                  var ind = element[0]._index;
                   const selectedVal = this.state.graphOneLabel[ind];
                   var data;
                   if(this.state.dropdownSelected === "All Program"){
@@ -590,7 +590,7 @@ class NULMDashboard extends React.Component {
                           var graphSorting = this.graphSorting(data, "applicationStatus", this.state.dropdownSelected, "SEP Program Status");
                       }else{return 0}
                   }
-                  
+
                   this.setState({
                   //     graphTwoLabel: graphSorting[0],
                   //     graphTwoData: graphSorting[1],
@@ -598,11 +598,11 @@ class NULMDashboard extends React.Component {
                       graphClicked: 1,
                   //     rowData: this.state.dataOne[selectedVal]
                   })
-                  
+
               }
           },
       }
-  
+
       // Second Graph
       var graphTwoSortedData = {
           labels: this.state.graphTwoLabel,
@@ -627,7 +627,7 @@ class NULMDashboard extends React.Component {
               }
           ]
       }
-  
+
       var graphTwoOption = {
           responsive : true,
           // aspectRatio : 3,
@@ -638,7 +638,7 @@ class NULMDashboard extends React.Component {
               backgroundColor : "rgba(0, 0, 0, 0.1)",
               weight: 0
               }
-          ], 
+          ],
           legend: {
               display: false,
               position: 'bottom',
@@ -663,7 +663,7 @@ class NULMDashboard extends React.Component {
                   scaleLabel: {
                       display: true,
                       labelString: this.state.dropdownSelected === "All Program" ? "Months" : "Application Status"
-                      }, 
+                      },
               }],
               yAxes: [{
                   gridLines: {
@@ -677,7 +677,7 @@ class NULMDashboard extends React.Component {
                   scaleLabel: {
                       display: true,
                       labelString: this.state.dropdownSelected === "All Program" ? "No of Application" : "No of Application"
-                      }, 
+                      },
               }]
           },
           plugins: {
@@ -696,13 +696,13 @@ class NULMDashboard extends React.Component {
           },
           onClick: (e, element) => {
               if (element.length > 0) {
-                  
+
                   debugger;
-                  var ind = element[0]._index;   
+                  var ind = element[0]._index;
                   const selectedVal = this.state.graphTwoLabel[ind];
-                  const data = this.state.dataTwo[selectedVal];              
+                  const data = this.state.dataTwo[selectedVal];
                   if(this.state.dropdownSelected === "All Program" && data){
-                      var graphSorting = this.graphSorting(data, "applicationStatus", this.state.dropdownSelected, "Final Dashboard");  
+                      var graphSorting = this.graphSorting(data, "applicationStatus", this.state.dropdownSelected, "Final Dashboard");
                   }else{
                       return 0;
                   }
@@ -713,7 +713,7 @@ class NULMDashboard extends React.Component {
               }
           },
       }
-  
+
       // Second Graph
       var graphThreeSortedData = {
           labels: this.state.graphThreeLabel,
@@ -738,7 +738,7 @@ class NULMDashboard extends React.Component {
               }
           ]
       }
-  
+
       var graphThreeOption = {
           responsive : true,
           // aspectRatio : 3,
@@ -749,7 +749,7 @@ class NULMDashboard extends React.Component {
               backgroundColor : "rgba(0, 0, 0, 0.1)",
               weight: 0
               }
-          ], 
+          ],
           legend: {
               display: false,
               position: 'bottom',
@@ -774,7 +774,7 @@ class NULMDashboard extends React.Component {
                   scaleLabel: {
                       display: true,
                       labelString:"Application Status"
-                      }, 
+                      },
               }],
               yAxes: [{
                   gridLines: {
@@ -788,7 +788,7 @@ class NULMDashboard extends React.Component {
                   scaleLabel: {
                       display: true,
                       labelString: "No of Application"
-                      }, 
+                      },
               }]
           },
           plugins: {
@@ -807,21 +807,21 @@ class NULMDashboard extends React.Component {
           },
           onClick: (e, element) => {
               if (element.length > 0) {
-                  
+
                   debugger;
-                  var ind = element[0]._index;   
+                  var ind = element[0]._index;
                   const selectedVal = this.state.graphThreeLabel[ind];
-                  const data = this.state.dataThird[selectedVal];              
+                  const data = this.state.dataThird[selectedVal];
                   this.setState({
                       rowData: data
                   })
-                  
+
               }
           },
       }
-  
-  
-          
+
+
+
       return (
           <div>
           <div className="graphDashboard">
@@ -831,49 +831,49 @@ class NULMDashboard extends React.Component {
             <React.Fragment>
                 <Bar
                 data={ PIEgraphOneSortedData }
-                options={ PIEgraphOneOption } 
+                options={ PIEgraphOneOption }
                 />
             </React.Fragment>
             </CardContent>
             :null
           }
-  
+
           {
               this.state.graphClicked > 0 ?
               <CardContent className="halfGraph">
                   <React.Fragment>
                       <Bar
                       data={ graphTwoSortedData }
-                      options={ graphTwoOption } 
+                      options={ graphTwoOption }
                       />
                   </React.Fragment>
               </CardContent>
           : null
           }
-  
+
           </div>
-  
+
           {
               this.state.graphClicked > 1 && this.state.dropdownSelected === "All Program" ?
               <CardContent style={{"height" : "350px"}}>
                   <React.Fragment>
                       <Bar
                       data={ graphThreeSortedData }
-                      options={ graphThreeOption } 
+                      options={ graphThreeOption }
                       />
                   </React.Fragment>
               </CardContent>
           : null
           }
-  
+
           {/* Table Feature  */}
           <div className="tableContainer">
           {
-              this.state.unchangeColumnData.length > 0  ? 
+              this.state.unchangeColumnData.length > 0  ?
               <div className="tableFeature">
                   <div className="columnToggle-Text"> Download As: </div>
                   <button className="columnToggleBtn" onClick={this.pdfDownload}> PDF </button>
-  
+
                   <button className="columnToggleBtn" onClick={this.toggleColumn}> Column Visibility </button>
               </div>
               :null
@@ -885,25 +885,25 @@ class NULMDashboard extends React.Component {
                   {
                       this.state.unchangeColumnData.map((data, index)=>{
                           return(
-                              <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul> 
+                              <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul>
                           )
                       })
                   }
               </dl>
-              </div> 
+              </div>
              : null
           }
-  
+
           {
               // this.state.graphClicked >= 0 ?
               <ReactTable id="customReactTable"
               // PaginationComponent={Pagination}
-              data={ this.state.rowData }  
-              columns={ this.state.columnData }  
+              data={ this.state.rowData }
+              columns={ this.state.columnData }
               defaultPageSize = {this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
-              pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}  
-              pageSizeOptions = {[20,40,60]}  
-              /> 
+              pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
+              pageSizeOptions = {[20,40,60]}
+              />
               // :null
           }
           </div>

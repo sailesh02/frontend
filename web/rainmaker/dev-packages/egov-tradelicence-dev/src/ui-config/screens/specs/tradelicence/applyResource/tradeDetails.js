@@ -950,8 +950,8 @@ export const tradeDetails = getCommonCard({
           masterName: "LICENSETYPE"
         },
         props: {
-          // disabled: true,
-          value: "PERMANENT",
+          disabled: true,
+          //value: "PERMANENT",
           className: "tl-trade-type"
         },
         sourceJsonPath: "applyScreenMdmsData.TradeLicense.licenseType"
@@ -1077,14 +1077,14 @@ export const tradeDetails = getCommonCard({
             action.value
           )
         );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
-            "props.disabled",
-            false
-          )
-        );
+        // dispatch(
+        //   handleField(
+        //     "apply",
+        //     "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+        //     "props.disabled",
+        //     false
+        //   )
+        // );
       }
     },
   },
@@ -1131,7 +1131,7 @@ export const tradeDetails = getCommonCard({
         //   }
         // }
         props: {
-          disabled: true,
+
           inputProps: {
 
             min: getCurrentDate()
@@ -1222,21 +1222,37 @@ export const tradeDetails = getCommonCard({
       pattern: getPattern("OperationalArea"),
       jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea"
     }),
-    tradeNoOfEmployee: getTextField({
+    // tradeNoOfEmployee: getTextField({
+    //   label: {
+    //     labelName: "No. Of Employee",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
+    //   },
+    //   props: {
+    //     className: "applicant-details-error",
+    //     disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
+    //   },
+    //   placeholder: {
+    //     labelName: "Enter No. Of Employee",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_PLACEHOLDER"
+    //   },
+    //   pattern: getPattern("NoOfEmp"),
+    //   jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
+    // })
+    tradePurpose: getTextField({
       label: {
-        labelName: "No. Of Employee",
-        labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
+        labelName: "Trade Purpose",
+        labelKey: "TL_NEW_TRADE_PURPOSE_LABEL"
       },
       props: {
         className: "applicant-details-error",
         disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
       },
       placeholder: {
-        labelName: "Enter No. Of Employee",
-        labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_PLACEHOLDER"
+        labelName: "Trade Purpose",
+        labelKey: "TL_NEW_TRADE_PURPOSE_PLACEHOLDER"
       },
-      pattern: getPattern("NoOfEmp"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
+      //pattern: getPattern("NoOfEmp"),
+      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.licensePurpose"
     })
   },
     { style: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? { "cursor": "not-allowed" } : {} },

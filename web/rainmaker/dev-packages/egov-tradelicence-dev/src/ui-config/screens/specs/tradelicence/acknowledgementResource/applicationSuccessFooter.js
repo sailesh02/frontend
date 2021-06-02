@@ -152,6 +152,38 @@ export const applicationSuccessFooter = (
         path: redirectionURL
       }
     },
+    makePayment: {
+      componentPath: "Button",
+      props: {
+       className: "apply-wizard-footer1",
+        variant: "contained",
+        color: "primary",
+        style: {
+          minWidth: "180px",
+          height: "48px",
+
+        }
+      },
+      children: {
+        submitButtonLabel: getLabel({
+          labelName: "MAKE PAYMENT",
+          labelKey: "TL_CITIZEN_MAKE_PAYMENT"
+        })
+      },
+      onClickDefination: {
+        action: "page_change",
+        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=TL`,
+          // process.env.REACT_APP_SELF_RUNNING === "true"
+          //   ? `BPA/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
+          //   : `/BPA/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
+      },
+      roleDefination: {
+        rolePath: "user-info.roles",
+        roles: ["CITIZEN"],
+        action: "PAY"
+      },
+      visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+    },
     downloadFormButton: {
       componentPath: "Button",
       props: {

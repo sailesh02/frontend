@@ -114,7 +114,7 @@ class ShowField extends Component {
         footer: true,
         customize: function(doc) {
           doc.content[0].text = [];
-          doc.content[0].text.push({ text: "mChandigarh Application\n\n", bold: true, fontSize: 20 });
+          doc.content[0].text.push({ text: "Sujog\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
           doc.content[1].margin = [ 80, 0, 80, 0 ]
         },

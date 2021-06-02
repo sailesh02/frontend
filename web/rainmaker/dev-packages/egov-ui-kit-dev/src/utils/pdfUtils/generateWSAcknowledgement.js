@@ -7,10 +7,10 @@ import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMult
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print", service, connType) => {
-    propertyDetails.reviewPropertyType.localiseValue = true;
-    propertyDetails.reviewPropertyType.localiseValue = true;
+    // propertyDetails.reviewPropertyType.localiseValue = true;
+    // propertyDetails.reviewPropertyType.localiseValue = true;
     propertyDetails.reviewPropertyUsageType.localiseValue = true;
-    propertyDetails.reviewPropertySubUsageType.localiseValue = true;
+    // propertyDetails.reviewPropertySubUsageType.localiseValue = true;
     roadDetails.reviewRoadType.localiseValue = true;
     propertyOwnerDetail.gender.localiseValue = true;
     let propDetail = generateKeyValue(preparedFinalObject, propertyDetails);
@@ -23,7 +23,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
             return ({ key: cur.key, value: cur.value })
         }
     })
-    const locationDetail = generateKeyValue(preparedFinalObject, locationDetails);
+    // const locationDetail = generateKeyValue(preparedFinalObject, locationDetails);
     let connectionDetail = {};
     if (service === "WATER") {
         connectionDetail = generateKeyValue(preparedFinalObject, connDetailsWater);
@@ -55,10 +55,10 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
         reviewModificationsEffective = generateKeyValueForModify(preparedFinalObject, reviewModificationsEffectiveDate);
     } else {
         plumberDetail = generateKeyValue(preparedFinalObject, plumberDetails);
-        if (WaterConnection.roadCuttingInfo && WaterConnection.roadCuttingInfo.length > 0) {
-            roadDetailInfo = getMultiItems(preparedFinalObject, roadDetails, 'WaterConnection[0].roadCuttingInfo')
-            roadDetail = getMultipleItemCard(roadDetailInfo, 'WS_ROAD_CUTTING_CHARGE_DETAILS');
-        }
+        // if (WaterConnection.roadCuttingInfo && WaterConnection.roadCuttingInfo.length > 0) {
+        //     roadDetailInfo = getMultiItems(preparedFinalObject, roadDetails, 'WaterConnection[0].roadCuttingInfo')
+        //     roadDetail = getMultipleItemCard(roadDetailInfo, 'WS_ROAD_CUTTING_CHARGE_DETAILS');
+        // }
     }
 
     let connHolderDetail = {};
@@ -76,12 +76,12 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
 
     let ownerDetail = []
     let ownerDetailInfo = []
-    if (WaterConnection.property.owners.length > 1) {
-        ownerDetailInfo = getMultiItems(preparedFinalObject, propertyOwnerDetail, 'WaterConnection[0].property.owners')
-        ownerDetail = getMultipleItemCard(ownerDetailInfo, 'WS_OWNER');
-    } else {
-        ownerDetail = generateKeyValue(preparedFinalObject, propertyOwnerDetail);
-    }
+    // if (WaterConnection.connectionHolders.length > 1) {
+    //     ownerDetailInfo = getMultiItems(preparedFinalObject, propertyOwnerDetail, 'WaterConnection[0].property.owners')
+    //     ownerDetail = getMultipleItemCard(ownerDetailInfo, 'WS_OWNER');
+    // } else {
+    //     ownerDetail = generateKeyValue(preparedFinalObject, propertyOwnerDetail);
+    // }
     const documentsUploadRedux = getFromObject(preparedFinalObject, 'DocumentsData', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
     const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -93,14 +93,14 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
         additionalHeader: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_APPLICATION_NO', additionalHeaderValue: WaterConnection.applicationNo,
         cards: [
             { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PROPERTY_DETAILS_HEADER", items: propertyDetail },
-            { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOCATION_DETAILS_HEADER", items: locationDetail },
-            { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OWNER_DETAILS_HEADER", items: ownerDetail, type: ownerDetailInfo.length > 1 ? 'multiItem' : 'singleItem' },
+            // { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOCATION_DETAILS_HEADER", items: locationDetail },
+            // { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OWNER_DETAILS_HEADER", items: ownerDetail, type: ownerDetailInfo.length > 1 ? 'multiItem' : 'singleItem' },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CONNECTION_DETAILS_HEADER', items: connectionDetail },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CONNECTION_HOLDER_DETAILS_HEADER', items: connHolderDetail },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_DOCUMENTS_DETAILS_HEADER', items: documentCard, hide: documentCard.length === 0 },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ADDITIONAL_CONNECTION_HEADER', items: additionDetail },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PLUMBER_DETAILS_HEADER', items: plumberDetail, hide: plumberDetail.length === 0 },
-            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ROAD_CHARGES_HEADER', items: roadDetailInfo, type: roadDetailInfo.length > 1 ? 'multiItem' : 'singleItem',  hide: roadDetailInfo.length === 0},
+            // { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ROAD_CHARGES_HEADER', items: roadDetailInfo, type: roadDetailInfo.length > 1 ? 'multiItem' : 'singleItem',  hide: roadDetailInfo.length === 0},
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ACTIVATION_DETAILS_HEADER', items: activateDetail },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_MODIFY_EFFECTIVE_DATE_HEADER', items: reviewModificationsEffective, hide: reviewModificationsEffective.length === 0 },
 

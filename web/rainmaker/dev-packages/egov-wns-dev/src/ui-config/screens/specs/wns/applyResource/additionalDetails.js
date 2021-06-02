@@ -175,6 +175,7 @@ export const additionDetails = getCommonCard({
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       }),
+      
       dynamicMdmsWaterSource : {
         uiFramework: "custom-containers",
         componentPath: "DynamicMdmsContainer",

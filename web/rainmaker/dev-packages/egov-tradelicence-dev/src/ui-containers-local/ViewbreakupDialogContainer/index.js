@@ -115,6 +115,43 @@ class ViewBreakupContainer extends React.Component {
       </Grid>
     );
   };
+  getTlPeriodLine = (tlPeriod, classes, style) => {
+    return (
+      <Grid sm={12} className={classes.container} container={true}>
+        <Grid sm={10}>
+          <LabelContainer
+            labelName={"Trade Duration (Years)"}
+            labelKey={"TL_NEW_TRADE_DETAILS_PERIOD_LABEL"}
+            style={
+              style
+                ? style
+                : {
+                    color: "rgba(0, 0, 0, 0.8700000047683716)",
+                    fontSize: "14px",
+                    fontWeigt: 400,
+                    lineSpacing: "17px"
+                  }
+            }
+          />
+        </Grid>
+        <Grid sm={2}>
+          <LabelContainer
+            labelName={`${tlPeriod}`}
+            style={
+              style
+                ? style
+                : {
+                    color: "rgba(0, 0, 0, 0.8700000047683716)",
+                    fontSize: "14px",
+                    fontWeigt: 400,
+                    lineSpacing: "17px"
+                  }
+            }
+          />
+        </Grid>
+      </Grid>
+    );
+  };
   getRebatePenalty = (label,total, classes, style) => {
     return (
       <Grid sm={12} className={classes.container} container={true}>
@@ -163,7 +200,8 @@ class ViewBreakupContainer extends React.Component {
       tradeTotal,
       accessoriesTotal,
       classes,
-      estimateCardData
+      estimateCardData,
+      tlPeriodinYears
     } = this.props;
     const RebateArray=estimateCardData&&estimateCardData.length>1  && estimateCardData.filter(item => item.name.labelKey === "TL_RENEWAL_REBATE");
     const PenaltyArray=estimateCardData && estimateCardData.length>1 &&estimateCardData.filter(item => item.name.labelKey === "TL_RENEWAL_PENALTY");
@@ -171,7 +209,7 @@ class ViewBreakupContainer extends React.Component {
     const PenaltyTotal=PenaltyArray&& get(PenaltyArray[0],"value",0);
     const { style } = this.state;
     const { getGridItem, handleClose } = this;
-    const totalBill = tradeTotal + accessoriesTotal+RebateTotal+PenaltyTotal;
+    const totalBill = tlPeriodinYears? (tradeTotal*tlPeriodinYears):tradeTotal + accessoriesTotal+RebateTotal+PenaltyTotal;
     return (
       <Dialog
         open={open}
@@ -218,6 +256,7 @@ class ViewBreakupContainer extends React.Component {
               {tradeUnitData &&
                 tradeUnitData.length > 0 &&
                 getMultiItem(tradeUnitData, classes)}
+
               <Divider className={classes.root} />
               {tradeUnitData &&
                 tradeUnitData.length > 0 &&
@@ -243,6 +282,14 @@ class ViewBreakupContainer extends React.Component {
               {accessoriesUnitData &&
                 accessoriesUnitData.length > 0 &&
                 getGridItem(accessoriesTotal, classes)}
+
+                {tlPeriodinYears && tlPeriodinYears  > 0 &&
+                this.getTlPeriodLine(tlPeriodinYears, classes)}
+
+                {tlPeriodinYears && <Divider className={classes.root} />}
+                {tlPeriodinYears && getGridItem((tradeTotal*tlPeriodinYears), classes)}
+                <Divider className={classes.root} />
+
              {RebateArray&&RebateArray.length>0 && (
               this.getRebatePenalty("TL_RENEWAL_REBATE",RebateTotal,classes,style)
               )}
@@ -303,7 +350,23 @@ const mapStateToProps = (state, ownProps) => {
   const estimateCardData = get(
     preparedFinalObject,
     "LicensesTemp[0].estimateCardData"
-  ); 
+  );
+
+  let tlPeriod = get(
+    preparedFinalObject,
+    "TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview"
+  );
+if(tlPeriod){
+  tlPeriod = Number(tlPeriod.split(" ")[0]);
+}
+  const tlType = get(
+    preparedFinalObject,
+    "Licenses[0].licenseType"
+  );
+let tlPeriodinYears = tlPeriod;
+  if(tlType === "TEMPORARY"){
+    tlPeriodinYears = null;
+  }
   const open = get(
     screenConfig,
     `${screenKey}.components.breakUpDialog.props.open`
@@ -317,7 +380,8 @@ const mapStateToProps = (state, ownProps) => {
     accessoriesTotal,
     screenKey,
     screenConfig,
-    estimateCardData 
+    estimateCardData,
+    tlPeriodinYears
   };
 };
 

@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
@@ -43,7 +43,7 @@ class WNSDashboardTwo extends React.Component {
   }
 
 
-    // PDF function 
+    // PDF function
     pdfDownload = (e) => {
     e.preventDefault();
     var columnData = this.state.unchangeColumnData
@@ -70,7 +70,7 @@ class WNSDashboardTwo extends React.Component {
             const demo1 = rowData[i]
             var demo2 = tableColumnData[j].replace(".", ",");
             demo2 = demo2.split(",")
-            if(typeof(demo2) === "object"){   
+            if(typeof(demo2) === "object"){
                 if(demo2.length > 1){
                     rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                 }
@@ -91,7 +91,7 @@ class WNSDashboardTwo extends React.Component {
 
 
     debugger;
-    // PDF Code 
+    // PDF Code
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -101,7 +101,7 @@ class WNSDashboardTwo extends React.Component {
     var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
     var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-    doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
+    doc.text("Sujog Application", pageWidth / 2, 20, 'center');
 
     doc.setFontSize(10);
     const pdfTitle = "Title"
@@ -133,7 +133,7 @@ class WNSDashboardTwo extends React.Component {
         for(var i=0;i<coldata.length; i++){
             if(coldata[i]["show"]){
                 unchangeData.push(coldata[i])
-            }   
+            }
         }
         return unchangeData
 
@@ -158,7 +158,7 @@ class WNSDashboardTwo extends React.Component {
         })
     }
 
-    // Toggle Column 
+    // Toggle Column
     toggleColumn = (e) => {
         e.preventDefault();
         debugger;
@@ -167,7 +167,7 @@ class WNSDashboardTwo extends React.Component {
             toggleColumnCheck : !this.state.toggleColumnCheck
         })
     }
-    
+
     graphSorting = ( sortBy, data, checkGraph, ind ) => {
         debugger;
         if(checkGraph === "dashboard 1"){
@@ -220,11 +220,11 @@ class WNSDashboardTwo extends React.Component {
                     // graphData.push(demo);
                     var check = new Date(demo.waterApplication.auditDetails.lastModifiedTime).getFullYear();
                     if(check < dt){
-                        prev[0].push(demo);  
+                        prev[0].push(demo);
                     }else{
                         newConn[0].push(demo);
                     }
-               } 
+               }
             }
             if(group[alldiv[1]]){
                 for(var i=0; i<group[alldiv[1]].length; i++){
@@ -232,11 +232,11 @@ class WNSDashboardTwo extends React.Component {
                      // graphData.push(demo);
                      var check = new Date(demo.waterApplication.auditDetails.lastModifiedTime).getFullYear();
                      if(check < dt){
-                         prev[1].push(demo);  
+                         prev[1].push(demo);
                      }else{
                          newConn[1].push(demo);
                      }
-                } 
+                }
              }
              if(group[alldiv[2]]){
                 for(var i=0; i<group[alldiv[2]].length; i++){
@@ -244,11 +244,11 @@ class WNSDashboardTwo extends React.Component {
                      // graphData.push(demo);
                      var check = new Date(demo.waterApplication.auditDetails.lastModifiedTime).getFullYear();
                      if(check < dt){
-                         prev[2].push(demo);  
+                         prev[2].push(demo);
                      }else{
                          newConn[2].push(demo);
                      }
-                } 
+                }
              }
              if(group[alldiv[3]]){
                 for(var i=0; i<group[alldiv[3]].length; i++){
@@ -256,11 +256,11 @@ class WNSDashboardTwo extends React.Component {
                      // graphData.push(demo);
                      var check = new Date(demo.waterApplication.auditDetails.lastModifiedTime).getFullYear();
                      if(check < dt){
-                         prev[3].push(demo);  
+                         prev[3].push(demo);
                      }else{
                          newConn[3].push(demo);
                      }
-                } 
+                }
              }
              if(group[alldiv[4]]){
                 for(var i=0; i<group[alldiv[4]].length; i++){
@@ -268,11 +268,11 @@ class WNSDashboardTwo extends React.Component {
                      // graphData.push(demo);
                      var check = new Date(demo.waterApplication.auditDetails.lastModifiedTime).getFullYear();
                      if(check < dt){
-                         prev[4].push(demo);  
+                         prev[4].push(demo);
                      }else{
                          newConn[4].push(demo);
                      }
-                } 
+                }
              }
 
             var prevCNT = [];
@@ -287,7 +287,7 @@ class WNSDashboardTwo extends React.Component {
 
             return [ graphLabel, graphData, group ];
         }else if(checkGraph === "dashboard 4"){
-            
+
             debugger;
             // graphLabel, graphData, group
             var subdiv = [[], [], [], [], [], []];
@@ -318,7 +318,7 @@ class WNSDashboardTwo extends React.Component {
                         subdiv[5].push(data[i]);
                     }
                 }
-    
+
                 var subdivCNT = [];
                 for(var i=0; i<6; i++){
                     subdivCNT.push(subdiv[i].length);
@@ -327,14 +327,14 @@ class WNSDashboardTwo extends React.Component {
                 group = data;
             }else{
                 group=[];
-                graphData = [];    
+                graphData = [];
             }
             graphLabel = ["Cycle 1", "Cycle 2", "Cycle 3", "Cycle 4", "Cycle 5", "Cycle 6"];
             return [ graphLabel, graphData, group ];
         }
     }
 
-    // CamelCase Column Name 
+    // CamelCase Column Name
     camelize = (str) =>  {
     // var res = str.substr(0, 1);
     var res = String(str).substr(0, 1);
@@ -377,7 +377,7 @@ class WNSDashboardTwo extends React.Component {
             r[a["applicationStatus"]] = [...r[a["applicationStatus"]] || [], a];
             return r;
            }, {});
-        
+
         debugger;
 
         var MonthMap = { 0: "Jan", 1: "Feb", 2: "Mar", 3: "Apr", 4: "May", 5: "Jun", 6: "Jul", 7: "Aug", 8: "Sep", 9: "Oct", 10: "Nov", 11: "Dec"}
@@ -426,7 +426,7 @@ class WNSDashboardTwo extends React.Component {
             itemHeader["accessor"] = tableData[i];
             itemHeader["show"]= (i === 3 || i === 4 || i === 5 || i === 21 ) ? true : false ;
             if(itemHeader.show === true){
-                columnData.push(itemHeader);    
+                columnData.push(itemHeader);
             }
         }
 
@@ -480,7 +480,7 @@ class WNSDashboardTwo extends React.Component {
             r[a["applicationStatus"]] = [...r[a["applicationStatus"]] || [], a];
             return r;
            }, {});
-        
+
         debugger;
 
         var MonthMap = { 0: "Jan", 1: "Feb", 2: "Mar", 3: "Apr", 4: "May", 5: "Jun", 6: "Jul", 7: "Aug", 8: "Sep", 9: "Oct", 10: "Nov", 11: "Dec"}
@@ -529,7 +529,7 @@ class WNSDashboardTwo extends React.Component {
             itemHeader["accessor"] = tableData[i];
             itemHeader["show"]= (i === 3 || i === 4 || i === 5 || i === 21 ) ? true : false ;
             if(itemHeader.show === true){
-                columnData.push(itemHeader);    
+                columnData.push(itemHeader);
             }
         }
 
@@ -551,8 +551,8 @@ class WNSDashboardTwo extends React.Component {
         }
     }
 
-    render() {  
-    
+    render() {
+
     var graphOneSortedData = {
         labels: this.state.graphOneLabel,
         // labels: ["Label1", "Label2", "Label3"],
@@ -585,7 +585,7 @@ class WNSDashboardTwo extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -610,7 +610,7 @@ class WNSDashboardTwo extends React.Component {
                 scaleLabel: {
                     display: false,
                     labelString:"Month"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -624,7 +624,7 @@ class WNSDashboardTwo extends React.Component {
                 scaleLabel: {
                     display: false,
                     labelString: "Rupees (Laks)"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -643,11 +643,11 @@ class WNSDashboardTwo extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
+
                 debugger;
                 var ind = element[0]._index;
                 var selectedVal = this.state.graphOneLabel[ind];
-                
+
                 // const graphSort = this.graphSorting(["waterApplication","applicationStatus"], this.state.dataOne[selectedVal], "dashboard 2");
                 // debugger;
 
@@ -719,7 +719,7 @@ class WNSDashboardTwo extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -744,7 +744,7 @@ class WNSDashboardTwo extends React.Component {
                 scaleLabel: {
                     display: false,
                     labelString:"Month"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -758,7 +758,7 @@ class WNSDashboardTwo extends React.Component {
                 scaleLabel: {
                     display: false,
                     labelString: "Rupees (Laks)"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -777,11 +777,11 @@ class WNSDashboardTwo extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
+
                 debugger;
                 var ind = element[0]._index;
                 const selectedVal = this.state.graphOneLabel[ind];
-                
+
                 // const graphSort = this.graphSorting(["waterApplication","applicationStatus"], this.state.dataOne[selectedVal], "dashboard 2");
                 // debugger;
 
@@ -805,9 +805,9 @@ class WNSDashboardTwo extends React.Component {
     return (
         <div>
         {/* <h2> WNS Dashboard 2 Graph </h2>  */}
-        
+
         <div className="graphDashboard">
-        
+
 
         {
             this.state.graphClicked >=0 ?
@@ -815,7 +815,7 @@ class WNSDashboardTwo extends React.Component {
                 <React.Fragment>
                     <Bar
                     data={ graphOneSortedData }
-                    options={ graphOneOption } 
+                    options={ graphOneOption }
                     />
                 </React.Fragment>
             </CardContent>
@@ -828,7 +828,7 @@ class WNSDashboardTwo extends React.Component {
                 <React.Fragment>
                     <Bar
                     data={ graphTwoSortedData }
-                    options={ graphTwoOption } 
+                    options={ graphTwoOption }
                     />
                 </React.Fragment>
             </CardContent>
@@ -840,7 +840,7 @@ class WNSDashboardTwo extends React.Component {
         {/* Table Feature  */}
         <div className="tableContainer">
         {
-            this.state.unchangeColumnData.length > 0  ? 
+            this.state.unchangeColumnData.length > 0  ?
             <div className="tableFeature">
                 <div className="columnToggle-Text"> Download As: </div>
                 <button className="columnToggleBtn" onClick={this.pdfDownload}> PDF </button>
@@ -856,12 +856,12 @@ class WNSDashboardTwo extends React.Component {
                 {
                     this.state.unchangeColumnData.map((data, index)=>{
                         return(
-                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul> 
+                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul>
                         )
                     })
                 }
             </dl>
-            </div> 
+            </div>
            : null
         }
 
@@ -869,12 +869,12 @@ class WNSDashboardTwo extends React.Component {
             this.state.graphClicked >= 0 ?
             <ReactTable id="customReactTable"
             // PaginationComponent={Pagination}
-            data={ this.state.rowData }  
-            columns={ this.state.columnData }  
+            data={ this.state.rowData }
+            columns={ this.state.columnData }
             defaultPageSize = {this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
-            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}  
-            pageSizeOptions = {[20,40,60]}  
-            /> 
+            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
+            pageSizeOptions = {[20,40,60]}
+            />
             :null
         }
         </div>

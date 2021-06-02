@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf'
 import 'jspdf-autotable';
@@ -49,9 +49,9 @@ class WorkDashboard extends React.Component {
             unchangeColumnData: []
         }
       }
-    
-    
-    // PDF function 
+
+
+    // PDF function
     pdfDownload = (e) => {
 
     debugger;
@@ -80,7 +80,7 @@ class WorkDashboard extends React.Component {
             const demo1 = rowData[i]
             var demo2 = tableColumnData[j].replace(".", ",");
             demo2 = demo2.split(",")
-            if(typeof(demo2) === "object"){   
+            if(typeof(demo2) === "object"){
                 if(demo2.length > 1){
                     rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                 }
@@ -101,7 +101,7 @@ class WorkDashboard extends React.Component {
 
 
     debugger;
-    // PDF Code 
+    // PDF Code
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -111,7 +111,7 @@ class WorkDashboard extends React.Component {
     var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
     var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-    doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
+    doc.text("Sujog Application", pageWidth / 2, 20, 'center');
 
     doc.setFontSize(10);
     const pdfTitle = this.state.graphHardOneData.title ? this.state.graphHardOneData.title : "Title"
@@ -142,7 +142,7 @@ class WorkDashboard extends React.Component {
         for(var i=0;i<coldata.length; i++){
             if(coldata[i]["show"]){
                 unchangeData.push(coldata[i])
-            }   
+            }
         }
         return unchangeData
 
@@ -167,7 +167,7 @@ class WorkDashboard extends React.Component {
         })
     }
 
-    // Toggle Column 
+    // Toggle Column
     toggleColumn = (e) => {
         e.preventDefault();
         debugger;
@@ -176,7 +176,7 @@ class WorkDashboard extends React.Component {
             toggleColumnCheck : !this.state.toggleColumnCheck
         })
     }
-    
+
     graphSorting = ( sortBy, data, checkGraph ) => {
 
         if(checkGraph === "workprogress_Vs_expenditure"){
@@ -212,7 +212,7 @@ class WorkDashboard extends React.Component {
             r[a[sortBy]] = [...r[a[sortBy]] || [], a];
             return r;
             }, {});
-        
+
         var graphLabel = Object.keys(group);
         var graphData = [];
         for(var i=0; i<graphLabel.length; i++){
@@ -221,7 +221,7 @@ class WorkDashboard extends React.Component {
         return [graphLabel, graphData, group]
     }
 
-    // CamelCase Column Name 
+    // CamelCase Column Name
     camelize = (str) =>  {
     // var res = str.substr(0, 1);
     var res = String(str).substr(0, 1);
@@ -233,7 +233,7 @@ class WorkDashboard extends React.Component {
     }
 
     dateTimeToForma = (frommDT, toDT) => {
-        var dt1 = new Date(frommDT); 
+        var dt1 = new Date(frommDT);
         var dateCnt = dt1.getDate() < 10 ? "0"+dt1.getDate() : dt1.getDate();
         var month = dt1.getMonth() < 10 ? "0"+(dt1.getMonth()+1) : dt1.getMonth()+1;
         var year = dt1.getFullYear();
@@ -297,8 +297,8 @@ class WorkDashboard extends React.Component {
             var propsData = [];
             if(dropdownSelected === "Approval Status of Estimates"){
                 propsData = repData.getAllEstimationPreparation.ResponseBody;
-                
-                var dateRangeData = []; 
+
+                var dateRangeData = [];
                 for(var i=0; i<propsData.length; i++){
                     if(new Date(propsData[i]["createddate"]).getTime() >= new Date(fromDT).getTime() && new Date(propsData[i]["createddate"]).getTime() <= new Date(toDT).getTime()){
                         dateRangeData.push(propsData[i]);
@@ -306,7 +306,7 @@ class WorkDashboard extends React.Component {
                 }
 
                 if(dateRangeData.length > 0){
-                     // Table Column Setting 
+                     // Table Column Setting
                     var headerData = []
                     var column = Object.keys(dateRangeData[0]);
                     for(var i=0; i<column.length; i++){
@@ -318,7 +318,7 @@ class WorkDashboard extends React.Component {
                             headerData.push(item);
                         }
                     }
-                    
+
                     var graphSortData = this.graphSorting("status", dateRangeData, dropdownSelected);
                     this.setState({
                         graphOneLabel : graphSortData[0],
@@ -340,8 +340,8 @@ class WorkDashboard extends React.Component {
             }
             if(dropdownSelected === "Approval Status of DNIT"){
                 propsData = repData.getAllDnit.ResponseBody;
-                
-                var dateRangeData = []; 
+
+                var dateRangeData = [];
                 for(var i=0; i<propsData.length; i++){
                     if(new Date(propsData[i]["createddate"]).getTime() >= new Date(fromDT).getTime() && new Date(propsData[i]["createddate"]).getTime() <= new Date(toDT).getTime()){
                         dateRangeData.push(propsData[i]);
@@ -349,7 +349,7 @@ class WorkDashboard extends React.Component {
                 }
 
                 if(dateRangeData.length > 0){
-                    // Table Column Setting 
+                    // Table Column Setting
                     var headerData = []
                     var column = Object.keys(dateRangeData[0]);
                     for(var i=0; i<column.length; i++){
@@ -361,7 +361,7 @@ class WorkDashboard extends React.Component {
                             headerData.push(item);
                         }
                     }
-                    
+
                     var graphSortData = this.graphSorting("works_wing", dateRangeData, dropdownSelected);
                     this.setState({
                         graphThirdLabel : graphSortData[0],
@@ -382,8 +382,8 @@ class WorkDashboard extends React.Component {
             }
             if(dropdownSelected === "Status of Project Dept wise"){
                 propsData = repData.getAllWorkAgreementByMilestone.ResponseBody;
-                
-                var dateRangeData = []; 
+
+                var dateRangeData = [];
                 for(var i=0; i<propsData.length; i++){
                     if(new Date(propsData[i]["createddate"]).getTime() >= new Date(fromDT).getTime() && new Date(propsData[i]["createddate"]).getTime() <= new Date(toDT).getTime()){
                         dateRangeData.push(propsData[i]);
@@ -391,7 +391,7 @@ class WorkDashboard extends React.Component {
                 }
 
                 if(dateRangeData.length > 0){
-                    // Table Column Setting 
+                    // Table Column Setting
                     var headerData = []
                     var column = Object.keys(dateRangeData[0]);
                     for(var i=0; i<column.length; i++){
@@ -403,7 +403,7 @@ class WorkDashboard extends React.Component {
                             headerData.push(item);
                         }
                     }
-                    
+
                     var graphSortData = this.graphSorting("executing_department", dateRangeData, dropdownSelected);
                     this.setState({
                         graphFourthLabel : graphSortData[0],
@@ -430,7 +430,7 @@ class WorkDashboard extends React.Component {
     }
 
     render() {
-    
+
 
     // First Double Bar Graph Graph
     var graphOneSortedData = {
@@ -465,7 +465,7 @@ class WorkDashboard extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: true,
             position: 'bottom',
@@ -490,7 +490,7 @@ class WorkDashboard extends React.Component {
         //         scaleLabel: {
         //             display: true,
         //             labelString:" this.state.graphHardThirdData.msgX"
-        //             }, 
+        //             },
         //     }],
         //     yAxes: [{
         //         gridLines: {
@@ -504,7 +504,7 @@ class WorkDashboard extends React.Component {
         //         scaleLabel: {
         //             display: true,
         //             labelString: "this.state.graphHardThirdData.msgY"
-        //             }, 
+        //             },
         //     }]
         // },
         plugins: {
@@ -524,7 +524,7 @@ class WorkDashboard extends React.Component {
         onClick: (e, element) => {
             if (element.length > 0) {
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphOneLabel[ind];
                 var data = this.state.dataOne[selectedVal];
                 var graphSortData = this.graphSorting("works_wing", data, "Approval Status of Estimates");
@@ -535,11 +535,11 @@ class WorkDashboard extends React.Component {
                     graphClicked : 1,
                     rowData : data
                 })
-                
+
             }
         },
     }
-    
+
 
     // Second Horizontal Graph
     var graphTwoSortedData = {
@@ -573,7 +573,7 @@ class WorkDashboard extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -610,7 +610,7 @@ class WorkDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "Work Wing (Department)"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -623,7 +623,7 @@ class WorkDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "No of Estimates"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -674,7 +674,7 @@ class WorkDashboard extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -694,7 +694,7 @@ class WorkDashboard extends React.Component {
         onClick: (e, element) => {
             if (element.length > 0) {
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphThirdLabel[ind];
                 var data = this.state.dataThird[selectedVal];
                 this.setState({
@@ -715,7 +715,7 @@ class WorkDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "Work Wing (Department)"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -728,7 +728,7 @@ class WorkDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "No of DNIT"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -779,7 +779,7 @@ class WorkDashboard extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -799,11 +799,11 @@ class WorkDashboard extends React.Component {
         onClick: (e, element) => {
             if (element.length > 0) {
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphFourthLabel[ind];
                 var data = this.state.dataFourth[selectedVal];
                 var graphSortData = this.graphSorting("status", data, "");
-                
+
                 var bgColor = this.colorRandom( graphSortData[0] );
                 this.setState({
                     graphFifthLabel : graphSortData[0],
@@ -828,7 +828,7 @@ class WorkDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "Department"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -841,7 +841,7 @@ class WorkDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "No of Work Agreement "
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -892,7 +892,7 @@ class WorkDashboard extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -913,7 +913,7 @@ class WorkDashboard extends React.Component {
             if (element.length > 0) {
                 debugger;
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphFifthLabel[ind];
                 var data = this.state.dataFifth[selectedVal];
                 var graphSortData = this.graphSorting("work_agreement_number", data, "workprogress_Vs_expenditure");
@@ -939,7 +939,7 @@ class WorkDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "Status"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -952,7 +952,7 @@ class WorkDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "No of Work Agreement"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -1018,7 +1018,7 @@ class WorkDashboard extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -1038,7 +1038,7 @@ class WorkDashboard extends React.Component {
         onClick: (e, element) => {
             if (element.length > 0) {
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphSixthLabel[ind];
                 var data = this.state.dataSixth[selectedVal];
                 this.setState({
@@ -1059,7 +1059,7 @@ class WorkDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "Work Agreemtn No"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -1072,7 +1072,7 @@ class WorkDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "Amount(Lakh INR) Progress(%)"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -1092,7 +1092,7 @@ class WorkDashboard extends React.Component {
     }
 
 
-        
+
     return (
         <div>
             <div style={this.state.rowData.length > 0 ? {display : "none"} :null}>
@@ -1106,7 +1106,7 @@ class WorkDashboard extends React.Component {
                 <React.Fragment>
                     <Pie
                     data={ graphOneSortedData }
-                    options={ graphOneOption } 
+                    options={ graphOneOption }
                     />
                 </React.Fragment>
             </CardContent>
@@ -1118,11 +1118,11 @@ class WorkDashboard extends React.Component {
             <CardContent className="halfGraph">
                 <React.Fragment>
                     <Bar
-                    data={ graphTwoSortedData } 
-                    options={ graphTwoOption } 
+                    data={ graphTwoSortedData }
+                    options={ graphTwoOption }
                     />
                 </React.Fragment>
-            </CardContent> 
+            </CardContent>
             :null
         }
         </div>
@@ -1134,11 +1134,11 @@ class WorkDashboard extends React.Component {
             <CardContent className="fullGraph">
                 <React.Fragment>
                     <Bar
-                    data={ graphThirdSortedData } 
-                    options={ graphThirdOption } 
+                    data={ graphThirdSortedData }
+                    options={ graphThirdOption }
                     />
                 </React.Fragment>
-            </CardContent> 
+            </CardContent>
             // :null
         }
         </div>
@@ -1150,11 +1150,11 @@ class WorkDashboard extends React.Component {
             <CardContent className="halfGraph">
                 <React.Fragment>
                     <Bar
-                    data={ graphFourthSortedData } 
-                    options={ graphFourthOption } 
+                    data={ graphFourthSortedData }
+                    options={ graphFourthOption }
                     />
                 </React.Fragment>
-            </CardContent> 
+            </CardContent>
             // :null
         }
         {
@@ -1162,11 +1162,11 @@ class WorkDashboard extends React.Component {
             <CardContent className="halfGraph">
                 <React.Fragment>
                     <Bar
-                    data={ graphFifthSortedData } 
-                    options={ graphFifthOption } 
+                    data={ graphFifthSortedData }
+                    options={ graphFifthOption }
                     />
                 </React.Fragment>
-            </CardContent> 
+            </CardContent>
             :null
         }
         </div>
@@ -1175,11 +1175,11 @@ class WorkDashboard extends React.Component {
             <CardContent style={{"height" : "250px"}} >
                 <React.Fragment>
                     <Bar
-                    data={ graphSixthSortedData } 
-                    options={ graphSixthOption } 
+                    data={ graphSixthSortedData }
+                    options={ graphSixthOption }
                     />
                 </React.Fragment>
-            </CardContent> 
+            </CardContent>
             :null
         }
         {/* Table Feature  */}
@@ -1188,10 +1188,10 @@ class WorkDashboard extends React.Component {
         <div className="tableContainer">
                 <div className="countBox" style={ this.state.dropdownSelected === "Status of Project Dept wise" ?
                 {display : "none"} : null}> {this.state.countBoxText} : {this.state.countBoxVal}</div>
-                
- 
+
+
         {
-            this.state.unchangeColumnData.length > 0  ? 
+            this.state.unchangeColumnData.length > 0  ?
             <div className="tableFeature">
                 <div className="columnToggle-Text"> Download As: </div>
                 <button className="columnToggleBtn" onClick={this.pdfDownload}> PDF </button>
@@ -1207,12 +1207,12 @@ class WorkDashboard extends React.Component {
                 {
                     this.state.unchangeColumnData.map((data, index)=>{
                         return(
-                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul> 
+                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul>
                         )
                     })
                 }
             </dl>
-            </div> 
+            </div>
            : null
         }
 
@@ -1220,12 +1220,12 @@ class WorkDashboard extends React.Component {
             this.state.graphClicked >= 0 ?
             <ReactTable id="customReactTable"
             // // PaginationComponent={Pagination}
-            data={ this.state.rowData }  
-            columns={ this.state.columnData }  
+            data={ this.state.rowData }
+            columns={ this.state.columnData }
             defaultPageSize = {this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
-            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}  
-            pageSizeOptions = {[20,40,60]}  
-            /> 
+            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
+            pageSizeOptions = {[20,40,60]}
+            />
             :null
         }
         </div>

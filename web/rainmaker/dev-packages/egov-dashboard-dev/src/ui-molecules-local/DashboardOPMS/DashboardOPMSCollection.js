@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf'
 import 'jspdf-autotable';
@@ -30,7 +30,7 @@ class DashboardOPMSCollection extends React.Component {
     }
   }
 
-    // PDF function 
+    // PDF function
     pdfDownload = (e) => {
 
     debugger;
@@ -59,7 +59,7 @@ class DashboardOPMSCollection extends React.Component {
             const demo1 = rowData[i]
             var demo2 = tableColumnData[j].replace(".", ",");
             demo2 = demo2.split(",")
-            if(typeof(demo2) === "object"){   
+            if(typeof(demo2) === "object"){
                 if(demo2.length > 1){
                     rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                 }
@@ -80,7 +80,7 @@ class DashboardOPMSCollection extends React.Component {
 
 
     debugger;
-    // PDF Code 
+    // PDF Code
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -90,7 +90,7 @@ class DashboardOPMSCollection extends React.Component {
     var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
     var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-    doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
+    doc.text("Sujog Application", pageWidth / 2, 20, 'center');
 
     doc.setFontSize(10);
     const pdfTitle =  "OPMS Collection Report Dashboard"
@@ -121,7 +121,7 @@ class DashboardOPMSCollection extends React.Component {
         for(var i=0;i<coldata.length; i++){
             if(coldata[i]["show"]){
                 unchangeData.push(coldata[i])
-            }   
+            }
         }
         return unchangeData
 
@@ -147,7 +147,7 @@ class DashboardOPMSCollection extends React.Component {
         })
     }
 
-    // Toggle Column 
+    // Toggle Column
     toggleColumn = (e) => {
         e.preventDefault();
         debugger;
@@ -157,7 +157,7 @@ class DashboardOPMSCollection extends React.Component {
         })
     }
 
-    // CamelCase Column Name 
+    // CamelCase Column Name
     camelize = (str) =>  {
     // var res = str.substr(0, 1);
     var res = String(str).substr(0, 1);
@@ -173,14 +173,14 @@ class DashboardOPMSCollection extends React.Component {
         debugger;
         var data = this.props.data;
         var sortBy = this.props.sortBy;
-        
+
         var reportGraphData = [];
         var graphLabel = [];
         var graphData = [];
         for(var i=0; i<data.revenueCollectionTypeWise[0].reportData.length; i++){
             reportGraphData.push(data.revenueCollectionTypeWise[0].reportData[i]);
-            graphLabel.push(data.revenueCollectionTypeWise[0].reportData[i][0]); 
-            graphData.push(data.revenueCollectionTypeWise[0].reportData[i][2]); 
+            graphLabel.push(data.revenueCollectionTypeWise[0].reportData[i][0]);
+            graphData.push(data.revenueCollectionTypeWise[0].reportData[i][2]);
         }
 
         var col = [];
@@ -189,7 +189,7 @@ class DashboardOPMSCollection extends React.Component {
         item["accessor"] = "applicationType";
         item["show"] = true;
         col.push(item)
-        
+
         var item = {};
         item["Header"] = "Collected Revenue";
         item["accessor"] = "revenueCollected";
@@ -197,11 +197,11 @@ class DashboardOPMSCollection extends React.Component {
         col.push(item)
 
         debugger;
-        var row = [];        
+        var row = [];
         for(var i=0; i<graphLabel.length; i++){
             var item = {};
             item[col[0].accessor] = graphLabel[i];
-            item[col[1].accessor] = graphData[i];  
+            item[col[1].accessor] = graphData[i];
             row.push(item)
         }
 
@@ -214,7 +214,7 @@ class DashboardOPMSCollection extends React.Component {
             tableHeader: col,
             tableRow: row,
             graphClicked : 0
-        })  
+        })
     }
 
     componentDidUpdate(){
@@ -230,8 +230,8 @@ class DashboardOPMSCollection extends React.Component {
         var graphData = [];
         for(var i=0; i<data.revenueCollectionTypeWise[0].reportData.length; i++){
             reportGraphData.push(data.revenueCollectionTypeWise[0].reportData[i]);
-            graphLabel.push(data.revenueCollectionTypeWise[0].reportData[i][0]); 
-            graphData.push(data.revenueCollectionTypeWise[0].reportData[i][2]); 
+            graphLabel.push(data.revenueCollectionTypeWise[0].reportData[i][0]);
+            graphData.push(data.revenueCollectionTypeWise[0].reportData[i][2]);
         }
 
         var col = [];
@@ -240,7 +240,7 @@ class DashboardOPMSCollection extends React.Component {
         item["accessor"] = "applicationType";
         item["show"] = true;
         col.push(item)
-        
+
         var item = {};
         item["Header"] = "Collected Revenue";
         item["accessor"] = "revenueCollected";
@@ -248,11 +248,11 @@ class DashboardOPMSCollection extends React.Component {
         col.push(item)
 
         debugger;
-        var row = [];        
+        var row = [];
         for(var i=0; i<graphLabel.length; i++){
             var item = {};
             item[col[0].accessor] = graphLabel[i];
-            item[col[1].accessor] = graphData[i];  
+            item[col[1].accessor] = graphData[i];
             row.push(item)
         }
 
@@ -265,7 +265,7 @@ class DashboardOPMSCollection extends React.Component {
             tableHeader: col,
             tableRow: row,
             graphClicked : 0
-        })  
+        })
         }
     }
 
@@ -305,7 +305,7 @@ class DashboardOPMSCollection extends React.Component {
                 backgroundColor : "rgba(0, 0, 0, 0.1)",
                 weight: 0
                 }
-            ], 
+            ],
             legend: {
                 display: false,
                 position: 'bottom',
@@ -330,7 +330,7 @@ class DashboardOPMSCollection extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "Application Type"
-                        }, 
+                        },
                 }],
                 yAxes: [{
                     gridLines: {
@@ -344,7 +344,7 @@ class DashboardOPMSCollection extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "Revenue Collection (INR)"
-                        }, 
+                        },
                 }]
             },
             plugins: {
@@ -367,22 +367,22 @@ class DashboardOPMSCollection extends React.Component {
                     debugger;
                     var selectedVal = this.state.firstGraphLabel[ind];
                     var data = this.state.data.revenueCollectionSectorWise[0].reportData;
-                    
+
                     var group = data.reduce((r, a) => {
                         r[a[0]] = [...r[a[0]] || [], a];
                         return r;
                         }, {});
-                    
+
                     var selectedData = group[selectedVal];
 
                     var reportGraphData = [];
                     var graphLabel = [];
                     var graphData = [];
-                    
+
                     for(var i=0; i<selectedData.length; i++){
                         reportGraphData.push(selectedData[i]);
-                        graphLabel.push(selectedData[i][1]); 
-                        graphData.push(selectedData[i][3]); 
+                        graphLabel.push(selectedData[i][1]);
+                        graphData.push(selectedData[i][3]);
                     }
 
                     var col = [];
@@ -391,7 +391,7 @@ class DashboardOPMSCollection extends React.Component {
                     item["accessor"] = "sector";
                     item["show"] = true;
                     col.push(item)
-                    
+
                     var item = {};
                     item["Header"] = "Revenue Collected";
                     item["accessor"] = "revenueCollected";
@@ -399,14 +399,14 @@ class DashboardOPMSCollection extends React.Component {
                     col.push(item)
 
                     debugger;
-                    var row = [];        
+                    var row = [];
                     for(var i=0; i<graphLabel.length; i++){
                         var item = {};
                         item[col[0].accessor] = graphLabel[i];
-                        item[col[1].accessor] = graphData[i];  
+                        item[col[1].accessor] = graphData[i];
                         row.push(item)
                     }
-                    
+
                     debugger;
 
                     this.setState({
@@ -456,7 +456,7 @@ class DashboardOPMSCollection extends React.Component {
                 backgroundColor : "rgba(0, 0, 0, 0.1)",
                 weight: 0
                 }
-            ], 
+            ],
             legend: {
                 display: false,
                 position: 'bottom',
@@ -481,7 +481,7 @@ class DashboardOPMSCollection extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "Application Type"
-                        }, 
+                        },
                 }],
                 yAxes: [{
                     gridLines: {
@@ -495,7 +495,7 @@ class DashboardOPMSCollection extends React.Component {
                     scaleLabel: {
                         display: true,
                         labelString: "Revenue Collection (INR)"
-                        }, 
+                        },
                 }]
             },
             plugins: {
@@ -519,7 +519,7 @@ class DashboardOPMSCollection extends React.Component {
                 }
             },
         }
-        
+
     return (
         <div>
             <div className="graphDashboard">
@@ -527,7 +527,7 @@ class DashboardOPMSCollection extends React.Component {
                     <React.Fragment>
                         <Bar
                         data={ graphOneData }
-                        options={ graphOneOption } 
+                        options={ graphOneOption }
                         />
                     </React.Fragment>
                 </CardContent>
@@ -538,10 +538,10 @@ class DashboardOPMSCollection extends React.Component {
                         <React.Fragment>
                             <Bar
                             data={ graphTwoData }
-                            options={ graphTwoOption } 
+                            options={ graphTwoOption }
                             />
                         </React.Fragment>
-                    </CardContent> 
+                    </CardContent>
                     :null
                 }
             </div>
@@ -565,12 +565,12 @@ class DashboardOPMSCollection extends React.Component {
                     {
                         this.state.tableHeader.map((data, index)=>{
                             return(
-                                <ul className={ this.state.tableHeader[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.tableHeader[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.tableHeader[index]["Header"] } </button></ul> 
+                                <ul className={ this.state.tableHeader[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.tableHeader[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.tableHeader[index]["Header"] } </button></ul>
                             )
                         })
                     }
                 </dl>
-                </div> 
+                </div>
             : null
             }
 
@@ -578,12 +578,12 @@ class DashboardOPMSCollection extends React.Component {
                 // this.state.graphClicked >= 0 ?
                 <ReactTable id="customReactTable"
                 // PaginationComponent={Pagination}
-                data={ this.state.tableRow }  
-                columns={ this.state.tableHeader }  
+                data={ this.state.tableRow }
+                columns={ this.state.tableHeader }
                 defaultPageSize = {5}
-                pageSize={ 5 }  
-                pageSizeOptions = {[20,40,60]}  
-                /> 
+                pageSize={ 5 }
+                pageSizeOptions = {[20,40,60]}
+                />
                 // :null
             }
             </div>

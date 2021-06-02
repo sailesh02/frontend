@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -36,9 +36,9 @@ class SewerageDashboard extends React.Component {
             unchangeColumnData: []
         }
       }
-    
-    
-    // PDF function 
+
+
+    // PDF function
     pdfDownload = (e) => {
     debugger;
     e.preventDefault();
@@ -66,7 +66,7 @@ class SewerageDashboard extends React.Component {
             const demo1 = rowData[i]
             var demo2 = tableColumnData[j].replace(".", ",");
             demo2 = demo2.split(",")
-            if(typeof(demo2) === "object"){   
+            if(typeof(demo2) === "object"){
                 if(demo2.length > 1){
                     rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                 }
@@ -87,7 +87,7 @@ class SewerageDashboard extends React.Component {
 
 
     debugger;
-    // PDF Code 
+    // PDF Code
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -97,7 +97,7 @@ class SewerageDashboard extends React.Component {
     var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
     var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-    doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
+    doc.text("Sujog Application", pageWidth / 2, 20, 'center');
 
     doc.setFontSize(10);
     const pdfTitle = this.state.graphHardOneData.title ? this.state.graphHardOneData.title : "Title"
@@ -128,7 +128,7 @@ class SewerageDashboard extends React.Component {
         for(var i=0;i<coldata.length; i++){
             if(coldata[i]["show"]){
                 unchangeData.push(coldata[i])
-            }   
+            }
         }
         return unchangeData
 
@@ -153,7 +153,7 @@ class SewerageDashboard extends React.Component {
         })
     }
 
-    // Toggle Column 
+    // Toggle Column
     toggleColumn = (e) => {
         e.preventDefault();
         debugger;
@@ -162,7 +162,7 @@ class SewerageDashboard extends React.Component {
             toggleColumnCheck : !this.state.toggleColumnCheck
         })
     }
-    
+
     graphSorting = (data, sortBy, dropdownSelected, selectedDashboard ) => {
         var monthJSON = {"0":"JAN","1":"FEB","2":"MAR","3":"APR","4":"MAY","5":"JUN","6":"JUL",
         "7":"AUG","8":"SEP","9":"OCT","10":"NOV","11":"DEC"};
@@ -174,7 +174,7 @@ class SewerageDashboard extends React.Component {
                     [...r[new Date(a["auditDetails"]["lastModifiedTime"]).getFullYear()+"-"+monthJSON[new Date(a["auditDetails"]["lastModifiedTime"]).getMonth()]] || [], a];
                 return r;
                 }, {});
-            
+
             var graphLabel = dateRange;
             var graphData = [];
             for(var i=0; i<graphLabel.length; i++){
@@ -196,7 +196,7 @@ class SewerageDashboard extends React.Component {
                         itemHeader["show"]= true ;
                     }else{
                         itemHeader["show"]= false ;
-                    }                    
+                    }
                 }
                 headerData.push(itemHeader);
             }
@@ -213,7 +213,7 @@ class SewerageDashboard extends React.Component {
                 graphClicked : 0,
                 dropdownSelected : dropdownSelected
             })
-                
+
         }if(selectedDashboard === "SEP Program Status"){
             debugger;
             var group = data.reduce((r, a) => {
@@ -225,8 +225,8 @@ class SewerageDashboard extends React.Component {
             var graphData = []
             for(var i=0; i<Object.keys(group).length ; i++){
                 graphData.push(group[graphLabel[i]].length);
-            } 
-            
+            }
+
             var rowData = data;
             var graphLablelDisplay = []
             for(var i=0; i<graphLabel.length; i++){
@@ -257,13 +257,13 @@ class SewerageDashboard extends React.Component {
 
             var graphLabel = ["SEP", "SMID", "SUSV", "SUH"];
             var graphData = [SEP.length, SMID.length, SUSV.length, SUH.length];
-            
+
             var headerData = []
             // var keys = allData;
 
             var keys = Object.keys(allData[0]);
             for(var i=0; i<5; i++){
-                if(Object.keys(allData[0])[i] === "applicationDocument" || 
+                if(Object.keys(allData[0])[i] === "applicationDocument" ||
                 Object.keys(allData[0])[i] === "auditDetails" ||
                 Object.keys(allData[0])[i] === "applicationDocument" ||
                 Object.keys(allData[0])[i] === "documentAttachemnt" ||
@@ -272,7 +272,7 @@ class SewerageDashboard extends React.Component {
                 Object.keys(allData[0])[i] === "addressPicture" ||
                 Object.keys(allData[0])[i] === "programPicture" ||
                 Object.keys(allData[0])[i] === "documentAttachment"){
-                    
+
                 }else{
                     var itemHeader = {}
                     itemHeader["Header"] = keys[i];
@@ -305,7 +305,7 @@ class SewerageDashboard extends React.Component {
                     [...r[new Date(a["auditDetails"]["lastModifiedTime"]).getFullYear()+"-"+monthJSON[new Date(a["auditDetails"]["lastModifiedTime"]).getMonth()]] || [], a];
                 return r;
                 }, {});
-            
+
             var graphLabel = dateRange;
             var graphData = [];
             for(var i=0; i<graphLabel.length; i++){
@@ -327,7 +327,7 @@ class SewerageDashboard extends React.Component {
             //             itemHeader["show"]= true ;
             //         }else{
             //             itemHeader["show"]= false ;
-            //         }                    
+            //         }
             //     }
             //     headerData.push(itemHeader);
             // }
@@ -365,8 +365,8 @@ class SewerageDashboard extends React.Component {
                 }
                 // graphData.push(group[graphLabel[i]].length);
                 graphData.push(amt);
-            } 
-            
+            }
+
             var rowData = data;
 
             this.setState({
@@ -380,7 +380,7 @@ class SewerageDashboard extends React.Component {
         }
     }
 
-    // CamelCase Column Name 
+    // CamelCase Column Name
     camelize = (str) =>  {
     // var res = str.substr(0, 1);
     var res = String(str).substr(0, 1);
@@ -414,7 +414,7 @@ class SewerageDashboard extends React.Component {
     }
 
     dateTimeToForma = (frommDT, toDT) => {
-        var dt1 = new Date(frommDT); 
+        var dt1 = new Date(frommDT);
         var dateCnt = dt1.getDate() < 10 ? "0"+dt1.getDate() : dt1.getDate();
         var month = dt1.getMonth() < 10 ? "0"+(dt1.getMonth()+1) : dt1.getMonth()+1;
         var year = dt1.getFullYear();
@@ -428,7 +428,7 @@ class SewerageDashboard extends React.Component {
 
         return [dt1, dt2]
     }
-    
+
     componentDidMount(){
         debugger;
         const propsData =  this.props.data;
@@ -448,7 +448,7 @@ class SewerageDashboard extends React.Component {
             var dropdownSelected = this.props.data[1].reportSortBy.value;
 
             var data;
-            data = this.props.data[0].SewerageConnections; 
+            data = this.props.data[0].SewerageConnections;
             if(data.length > 0){
                 var sortData = this.graphSorting(data, dateRange, dropdownSelected, "Single Program");
             }else{
@@ -471,7 +471,7 @@ class SewerageDashboard extends React.Component {
     }
 
     render() {
-    
+
 
     // First Double Bar Graph Graph
     var PIEgraphOneSortedData = {
@@ -508,7 +508,7 @@ class SewerageDashboard extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -533,7 +533,7 @@ class SewerageDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.dropdownSelected === "All Program" ? "Programs" : "Months"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -547,7 +547,7 @@ class SewerageDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.dropdownSelected === "All Program" ? "No of Application" : "No of Application"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -566,16 +566,16 @@ class SewerageDashboard extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
+
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphOneLabel[ind];
                 var data;
                 data = this.state.dataOne[selectedVal];
                     if(data){
                         var graphSorting = this.graphSorting(data, "applicationStatus", this.state.dropdownSelected, "SEP Program Status");
                     }else{return 0}
-                
+
                 this.setState({
                 //     graphTwoLabel: graphSorting[0],
                 //     graphTwoData: graphSorting[1],
@@ -583,7 +583,7 @@ class SewerageDashboard extends React.Component {
                     graphClicked: 1,
                 //     rowData: this.state.dataOne[selectedVal]
                 })
-                
+
             }
         },
     }
@@ -623,7 +623,7 @@ class SewerageDashboard extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -653,7 +653,7 @@ class SewerageDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.dropdownSelected === "All Program" ? "Months" : "Application Status"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -667,7 +667,7 @@ class SewerageDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.dropdownSelected === "All Program" ? "No of Application" : "No of Application"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -686,11 +686,11 @@ class SewerageDashboard extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
+
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphTwoLabel[ind];
-                const data = this.state.dataTwo[selectedVal];              
+                const data = this.state.dataTwo[selectedVal];
                 var graphSorting = this.graphSorting(data, "subdiv", this.state.dropdownSelected, "Final Dashboard");
                 this.setState({
                     rowData: data,
@@ -735,7 +735,7 @@ class SewerageDashboard extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -760,7 +760,7 @@ class SewerageDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString:"Division"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -774,7 +774,7 @@ class SewerageDashboard extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "Amount (INR)"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -793,31 +793,31 @@ class SewerageDashboard extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
+
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphThreeLabel[ind];
-                const data = this.state.dataThird[selectedVal];              
+                const data = this.state.dataThird[selectedVal];
                 this.setState({
                     rowData: data
                 })
-                
+
             }
         },
     }
 
 
-        
+
     return (
         <div>
         <div className="graphDashboard" style={this.state.rowData.length === 0 ? {display : "none"} : null}>
-        
+
         {this.state.graphClicked >= 0 ?
         <CardContent className="halfGraph">
             <React.Fragment>
                 <Bar
                 data={ PIEgraphOneSortedData }
-                options={ PIEgraphOneOption } 
+                options={ PIEgraphOneOption }
                 />
             </React.Fragment>
         </CardContent>
@@ -829,7 +829,7 @@ class SewerageDashboard extends React.Component {
                 <React.Fragment>
                     <HorizontalBar
                     data={ graphTwoSortedData }
-                    options={ graphTwoOption } 
+                    options={ graphTwoOption }
                     />
                 </React.Fragment>
             </CardContent>
@@ -844,7 +844,7 @@ class SewerageDashboard extends React.Component {
                 <React.Fragment>
                     <Bar
                     data={ graphThreeSortedData }
-                    options={ graphThreeOption } 
+                    options={ graphThreeOption }
                     />
                 </React.Fragment>
             </CardContent>
@@ -854,7 +854,7 @@ class SewerageDashboard extends React.Component {
         {/* Table Feature  */}
         <div className="tableContainer" style={this.state.rowData.length === 0 ? {display : "none"} : null}>
         {
-            this.state.unchangeColumnData.length > 0  ? 
+            this.state.unchangeColumnData.length > 0  ?
             <div className="tableFeature">
                 <div className="columnToggle-Text"> Download As: </div>
                 <button className="columnToggleBtn" onClick={this.pdfDownload}> PDF </button>
@@ -870,12 +870,12 @@ class SewerageDashboard extends React.Component {
                 {
                     this.state.unchangeColumnData.map((data, index)=>{
                         return(
-                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul> 
+                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul>
                         )
                     })
                 }
             </dl>
-            </div> 
+            </div>
             : null
         }
 
@@ -883,12 +883,12 @@ class SewerageDashboard extends React.Component {
             this.state.graphClicked >= 0 ?
             <ReactTable id="customReactTable"
             // PaginationComponent={Pagination}
-            data={ this.state.rowData }  
-            columns={ this.state.columnData }  
+            data={ this.state.rowData }
+            columns={ this.state.columnData }
             defaultPageSize = {this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
-            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}  
-            pageSizeOptions = {[20,40,60]}  
-            /> 
+            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
+            pageSizeOptions = {[20,40,60]}
+            />
             :null
         }
         </div>

@@ -259,26 +259,36 @@ export const tradeReviewDetails = {
       callBack: checkValueForNA
     }
   ),
-  reviewNoOfEmployee: getLabelWithValue(
+  // reviewNoOfEmployee: getLabelWithValue(
+  //   {
+  //     labelName: "No of Employees",
+  //     labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
+  //   },
+  //   {
+  //     jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees",
+  //     callBack: checkValueForNA
+  //   }
+  // )
+  tradePurpose: getLabelWithValue(
     {
-      labelName: "No of Employees",
-      labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
+      labelName: "Trade Purpose",
+      labelKey: "TL_NEW_TRADE_PURPOSE_LABEL"
     },
     {
-      jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees",
+      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.licensePurpose",
       callBack: checkValueForNA
     }
   )
 }
 
 export const tradeLocationDetails = {
-  reviewPropertyID: getLabelWithValue(
-    {
-      labelName: "Property Assessment ID",
-      labelKey: "TL_EMP_APPLICATION_PT_ASS_ID"
-    },
-    { jsonPath: "Licenses[0].propertyId", callBack: checkValueForNA }
-  ),
+  // reviewPropertyID: getLabelWithValue(
+  //   {
+  //     labelName: "Property Assessment ID",
+  //     labelKey: "TL_EMP_APPLICATION_PT_ASS_ID"
+  //   },
+  //   { jsonPath: "Licenses[0].propertyId", callBack: checkValueForNA }
+  // ),
   reviewCity: getLabelWithValue(
     {
       labelName: "City",

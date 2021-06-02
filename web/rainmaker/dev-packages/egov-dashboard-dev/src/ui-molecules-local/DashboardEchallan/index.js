@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 // import Chart from 'chart.js';
 // import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
@@ -53,7 +53,7 @@ class DashboardEchallan extends React.Component {
     }
   }
 
-    // PDF function 
+    // PDF function
     pdfDownload = (e) => {
 
     debugger;
@@ -82,7 +82,7 @@ class DashboardEchallan extends React.Component {
             const demo1 = rowData[i]
             var demo2 = tableColumnData[j].replace(".", ",");
             demo2 = demo2.split(",")
-            if(typeof(demo2) === "object"){   
+            if(typeof(demo2) === "object"){
                 if(demo2.length > 1){
                     rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                 }
@@ -103,7 +103,7 @@ class DashboardEchallan extends React.Component {
 
 
     debugger;
-    // PDF Code 
+    // PDF Code
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -113,7 +113,7 @@ class DashboardEchallan extends React.Component {
     var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
     var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-    doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
+    doc.text("Sujog Application", pageWidth / 2, 20, 'center');
 
     doc.setFontSize(10);
     const pdfTitle = this.state.graphHardOneData ? this.state.graphHardOneData.title : "Title"
@@ -145,7 +145,7 @@ class DashboardEchallan extends React.Component {
         for(var i=0;i<coldata.length; i++){
             if(coldata[i]["show"]){
                 unchangeData.push(coldata[i])
-            }   
+            }
         }
         return unchangeData
 
@@ -170,7 +170,7 @@ class DashboardEchallan extends React.Component {
         })
     }
 
-    // Toggle Column 
+    // Toggle Column
     toggleColumn = (e) => {
         e.preventDefault();
         debugger;
@@ -179,21 +179,21 @@ class DashboardEchallan extends React.Component {
             toggleColumnCheck : !this.state.toggleColumnCheck
         })
     }
-    
+
     graphSorting = ( sortBy, data, checkGraph ) => {
 
-    
+
     debugger;
     // passing sortBy, data
     if(typeof(sortBy) === "object" && checkGraph === this.state.graphHardThirdData.sortBy[2]){
         var sortNo = null;
 
-        const sortpaymentStatus = [sortBy[0],sortBy[1], checkGraph] 
+        const sortpaymentStatus = [sortBy[0],sortBy[1], checkGraph]
         var group = data.reduce((r, a) => {
             r[new Date(a[sortBy[0]][sortBy[1]]).getMonth()] = [...r[new Date(a[sortBy[0]][sortBy[1]]).getMonth()] || [], a];
             return r;
             }, {});
-        
+
         var graphOneLabel = Object.keys(group);
 
         var graphOneData = []
@@ -211,12 +211,12 @@ class DashboardEchallan extends React.Component {
             PAID.push(dataPAID);
             PENDING.push(dataPENDING)
             // graphOneData.push(group[graphOneLabel[i]].length);
-            
+
         }
         graphOneData.push(PAID, PENDING);
-    
+
         var monthData = {}
-        var mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];    
+        var mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         var graphOneLabel = Object.keys(group);
         for(var i=0; i<graphOneLabel.length; i++)
         {
@@ -224,13 +224,13 @@ class DashboardEchallan extends React.Component {
         }
 
         graphOneLabel = Object.values(monthData);
-        
+
 
         return [ graphOneLabel, graphOneData, group ]
 
     }else if(typeof(sortBy) === "object" && checkGraph === this.state.graphHardFourthData.sortBy[2]){
-        
-        
+
+
         // Graph for PAyment Online or Offline
         const nullJSON = sortBy[3]
         var sortedGroup ={}
@@ -248,7 +248,7 @@ class DashboardEchallan extends React.Component {
         var graphOneData = [];
 
         for(var i=0; i<Object.keys(group).length ; i++){
-            
+
             graphOneData.push(group[graphOneLabel[i]].length);
         }
 
@@ -269,19 +269,19 @@ class DashboardEchallan extends React.Component {
             r[a[sortBy]] = [...r[a[sortBy]] || [], a];
             return r;
             }, {});
-    
+
         var graphOneLabel = Object.keys(group);
         var graphOneData = []
         for(var i=0; i<Object.keys(group).length ; i++){
             graphOneData.push(group[graphOneLabel[i]].length);
         }
-    
+
         return [ graphOneLabel, graphOneData, group ]
     }
-    
+
     }
 
-    // CamelCase Column Name 
+    // CamelCase Column Name
     camelize = (str) =>  {
     // var res = str.substr(0, 1);
     var res = String(str).substr(0, 1);
@@ -293,44 +293,44 @@ class DashboardEchallan extends React.Component {
     }
 
     componentDidMount(){
-        
+
 
     debugger;
     const propsData = this.props.data;
     const propSortBy = propsData[1] ? propsData[1].value : [];
-    // Graph Hard JSON Create :: 
+    // Graph Hard JSON Create ::
     var hardJSON = propSortBy === "status" ? [
         {
         "sortBy": "status",
         "msgX": "Status",
         "msgY": "No of Challan",
         "title": "Statuswise Challan Report"
-        }, 
+        },
         {
         "sortBy": "encroachmentType",
         "msgX": "No of Challan",
         "msgY": "Encroachment Type",
         "title": "Encroachment Type wise Challan Status Report"
         },
-        { 
+        {
         "sortBy": ["paymentDetails","lastModifiedTime","paymentStatus","PAID","PENDING"],
         "msgX": "Months",
         "msgY": "No of Challan",
         "title": "Challan Monthly Payment Status"
         },
-        { 
+        {
         "sortBy": ["paymentDetails","paymentMode","PAIDPaymentMode",{"null":"PENDING"}],
         "msgX": "",
         "msgY": "",
         "title": "Payment Collection By Source"
         },
-        { 
+        {
         "sortBy": "siName",
         "msgX": "Challan By SI",
         "msgY": "No of Challan",
         "title": "Challan Generation SI Wise"
         },
-        { 
+        {
         "sortBy": "sector",
         "msgX": "Areawise Challan",
         "msgY": "No of Challan",
@@ -343,26 +343,26 @@ class DashboardEchallan extends React.Component {
         "msgX": "Encroachment Type",
         "msgY": "No of Challan",
         "title": "Encroachment Typewise Challan Report"
-        }, 
-        { 
+        },
+        {
         "sortBy": "siName",
         "msgX": "No of Challan",
         "msgY": "Challan By SI",
         "title": "Challan Generation SI Wise"
         },
-        { 
+        {
         "sortBy": ["paymentDetails","lastModifiedTime","paymentStatus","PAID","PENDING"],
         "msgX": "Months",
         "msgY": "No of Challan",
         "title": "Challan Monthly Payment Status"
         },
-        { 
+        {
         "sortBy": ["paymentDetails","paymentMode","PAIDPaymentMode",{"null":"PENDING"}],
         "msgX": "",
         "msgY": "",
         "title": "Payment Collection By Source"
         },
-        { 
+        {
         "sortBy": "sector",
         "msgX": "Areawise Challan",
         "msgY": "No of Challan",
@@ -375,25 +375,25 @@ class DashboardEchallan extends React.Component {
         "title": "Encroachment Typewise Challan Status Report"
         }
     ] : propSortBy === "siName" ? [
-        { 
+        {
         "sortBy": "siName",
         "msgX": "Challan By SI",
         "msgY": "No of Challan",
         "title": "Challan Generation SI Wise"
         },
-        { 
+        {
         "sortBy": "sector",
         "msgX": "No of Challan",
         "msgY": "Areawise Challan",
         "title": "Challan Generation Area Wise"
         },
-        { 
+        {
         "sortBy": ["paymentDetails","lastModifiedTime","paymentStatus","PAID","PENDING"],
         "msgX": "Months",
         "msgY": "No of Challan",
         "title": "Challan Monthly Payment Status"
         },
-        { 
+        {
         "sortBy": ["paymentDetails","paymentMode","PAIDPaymentMode",{"null":"PENDING"}],
         "msgX": "",
         "msgY": "",
@@ -412,7 +412,7 @@ class DashboardEchallan extends React.Component {
         "title": "Areawise Challan Encroachment Type Report"
         }
     ] : propSortBy === "sector" ? [
-        { 
+        {
         "sortBy": "sector",
         "msgX": "Areawise Challan",
         "msgY": "No of Challan",
@@ -424,13 +424,13 @@ class DashboardEchallan extends React.Component {
         "msgY": "Status",
         "title": "Statuswise Challan Area Report"
         },
-        { 
+        {
         "sortBy": ["paymentDetails","lastModifiedTime","paymentStatus","PAID","PENDING"],
         "msgX": "Months",
         "msgY": "No of Challan",
         "title": "Challan Monthly Payment Status"
         },
-        { 
+        {
         "sortBy": ["paymentDetails","paymentMode","PAIDPaymentMode",{"null":"PENDING"}],
         "msgX": "",
         "msgY": "",
@@ -442,7 +442,7 @@ class DashboardEchallan extends React.Component {
         "msgY": "No of Challan",
         "title": "Encroachment Type wise Challan Area Report"
         },
-        { 
+        {
         "sortBy": "siName",
         "msgX": "No of Challan",
         "msgY": "Challan By SI",
@@ -466,12 +466,12 @@ class DashboardEchallan extends React.Component {
     // const propSortBy = "siName";
     // const propSortBy = "sector";
     const data = propsData[0] ? propsData[0].ResponseBody : [];
-    
 
-    // Graph One Sorting Function 
+
+    // Graph One Sorting Function
     var graphOneData = this.graphSorting( propSortBy, data );
     debugger;
-    // Table Data Header 
+    // Table Data Header
     const tableData = data[0] ? Object.keys(data[0]) : [];
     var columnData = []
     for(var i=0; i<tableData.length; i++){
@@ -501,7 +501,7 @@ class DashboardEchallan extends React.Component {
     itemHeader["show"] = true
     columnData.push(itemHeader);
 
-    // Column Unchange Data 
+    // Column Unchange Data
     const unchangeColumnData = this.columnUnchange(columnData)
 
     debugger;
@@ -527,46 +527,46 @@ class DashboardEchallan extends React.Component {
         // const propSortBy = "encroachmentType";
         // const propSortBy = "siName";
         // const propSortBy = "sector";
-        
+
         const propSortBy = propsData[1] ? propsData[1].value : [];
         const data = propsData[0] ? propsData[0].ResponseBody : [];
 
-        // Graph One Sorting Function 
+        // Graph One Sorting Function
         var graphOneData = this.graphSorting( propSortBy, data );
 
-        // Graph Hard JSON Create :: 
+        // Graph Hard JSON Create ::
         var hardJSON = propSortBy === "status" ? [
             {
             "sortBy": "status",
             "msgX": "Status",
             "msgY": "No of Challan",
             "title": "Statuswise Challan Report"
-            }, 
+            },
             {
             "sortBy": "encroachmentType",
             "msgX": "No of Challan",
             "msgY": "Encroachment Type",
             "title": "Encroachment Type wise Challan Status Report"
             },
-            { 
+            {
             "sortBy": ["paymentDetails","lastModifiedTime","paymentStatus","PAID","PENDING"],
             "msgX": "Months",
             "msgY": "No of Challan",
             "title": "Challan Monthly Payment Status"
             },
-            { 
+            {
             "sortBy": ["paymentDetails","paymentMode","PAIDPaymentMode",{"null":"PENDING"}],
             "msgX": "",
             "msgY": "",
             "title": "Payment Collection By Source"
             },
-            { 
+            {
             "sortBy": "siName",
             "msgX": "Challan By SI",
             "msgY": "No of Challan",
             "title": "Challan Generation SI Wise"
             },
-            { 
+            {
             "sortBy": "sector",
             "msgX": "Areawise Challan",
             "msgY": "No of Challan",
@@ -579,26 +579,26 @@ class DashboardEchallan extends React.Component {
             "msgX": "Encroachment Type",
             "msgY": "No of Challan",
             "title": "Encroachment Typewise Challan Report"
-            }, 
-            { 
+            },
+            {
             "sortBy": "siName",
             "msgX": "No of Challan",
             "msgY": "Challan By SI",
             "title": "Challan Generation SI Wise"
             },
-            { 
+            {
             "sortBy": ["paymentDetails","lastModifiedTime","paymentStatus","PAID","PENDING"],
             "msgX": "Months",
             "msgY": "No of Challan",
             "title": "Challan Monthly Payment Status"
             },
-            { 
+            {
             "sortBy": ["paymentDetails","paymentMode","PAIDPaymentMode",{"null":"PENDING"}],
             "msgX": "",
             "msgY": "",
             "title": "Payment Collection By Source"
             },
-            { 
+            {
             "sortBy": "sector",
             "msgX": "Areawise Challan",
             "msgY": "No of Challan",
@@ -611,25 +611,25 @@ class DashboardEchallan extends React.Component {
             "title": "Encroachment Typewise Challan Status Report"
             }
         ] : propSortBy === "siName" ? [
-            { 
+            {
             "sortBy": "siName",
             "msgX": "Challan By SI",
             "msgY": "No of Challan",
             "title": "Challan Generation SI Wise"
             },
-            { 
+            {
             "sortBy": "sector",
             "msgX": "No of Challan",
             "msgY": "Areawise Challan",
             "title": "Challan Generation Area Wise"
             },
-            { 
+            {
             "sortBy": ["paymentDetails","lastModifiedTime","paymentStatus","PAID","PENDING"],
             "msgX": "Months",
             "msgY": "No of Challan",
             "title": "Challan Monthly Payment Status"
             },
-            { 
+            {
             "sortBy": ["paymentDetails","paymentMode","PAIDPaymentMode",{"null":"PENDING"}],
             "msgX": "",
             "msgY": "",
@@ -648,7 +648,7 @@ class DashboardEchallan extends React.Component {
             "title": "Areawise Challan Encroachment Type Report"
             }
         ] : propSortBy === "sector" ? [
-            { 
+            {
             "sortBy": "sector",
             "msgX": "Areawise Challan",
             "msgY": "No of Challan",
@@ -660,13 +660,13 @@ class DashboardEchallan extends React.Component {
             "msgY": "Status",
             "title": "Statuswise Challan Area Report"
             },
-            { 
+            {
             "sortBy": ["paymentDetails","lastModifiedTime","paymentStatus","PAID","PENDING"],
             "msgX": "Months",
             "msgY": "No of Challan",
             "title": "Challan Monthly Payment Status"
             },
-            { 
+            {
             "sortBy": ["paymentDetails","paymentMode","PAIDPaymentMode",{"null":"PENDING"}],
             "msgX": "",
             "msgY": "",
@@ -678,7 +678,7 @@ class DashboardEchallan extends React.Component {
             "msgY": "No of Challan",
             "title": "Encroachment Type wise Challan Area Report"
             },
-            { 
+            {
             "sortBy": "siName",
             "msgX": "No of Challan",
             "msgY": "Challan By SI",
@@ -687,7 +687,7 @@ class DashboardEchallan extends React.Component {
         ] : []
 
         debugger;
-        // Table Data Header 
+        // Table Data Header
         const tableData = data[0] ? Object.keys(data[0]) : [];
         var columnData = []
         for(var i=0; i<tableData.length; i++){
@@ -717,7 +717,7 @@ class DashboardEchallan extends React.Component {
         itemHeader["show"] = true
         columnData.push(itemHeader);
 
-        // Column Unchange Data 
+        // Column Unchange Data
         const unchangeColumnData = this.columnUnchange(columnData)
 
         debugger;
@@ -743,7 +743,7 @@ class DashboardEchallan extends React.Component {
     }
 
     render() {
-    
+
 
     // First Bar Graph
     var PIEgraphOneSortedData = {
@@ -778,11 +778,11 @@ class DashboardEchallan extends React.Component {
     onClick: (e, element) => {
         if (element.length > 0) {
             var ind = element[0]._index;
-            
+
             const selectedVal = this.state.graphOneLabel[ind];
             // var graphSorting = this.graphSorting( this.state.graphHardTwoData.sortBy, this.state.dataOne[selectedVal] );
             var graphSorting = this.graphSorting( this.state.graphHardTwoData.sortBy, this.state.dataOne[selectedVal] );
-            
+
             this.setState({
                 graphTwoLabel: graphSorting[0],
                 graphTwoData: graphSorting[1],
@@ -798,7 +798,7 @@ class DashboardEchallan extends React.Component {
         backgroundColor : "rgba(0, 0, 0, 0.1)",
         weight: 0
         }
-    ], 
+    ],
     legend: {
         display: false,
         position: 'bottom',
@@ -832,7 +832,7 @@ class DashboardEchallan extends React.Component {
             scaleLabel: {
                 display: true,
                 labelString: this.state.graphHardOneData ? this.state.graphHardOneData.msgY : "",
-                },  
+                },
             ticks: {
             // stepSize: 1
             },
@@ -885,7 +885,7 @@ class DashboardEchallan extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -909,7 +909,7 @@ class DashboardEchallan extends React.Component {
                 const selectedVal = this.state.graphTwoLabel[ind];
                 const sortingHard = this.state.graphHardThirdData.sortBy
                 var graphSorting = this.graphSorting( sortingHard, this.state.dataTwo[selectedVal], sortingHard[2] );
-                
+
                 this.setState({
                     graphThirdLabel: graphSorting[0],
                     graphThirdData: graphSorting[1],
@@ -932,7 +932,7 @@ class DashboardEchallan extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.graphHardTwoData ? this.state.graphHardTwoData.msgX : ""
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -945,7 +945,7 @@ class DashboardEchallan extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.graphHardTwoData ? this.state.graphHardTwoData.msgY : ""
-                    }, 
+                    },
             }]
         },
         // plugins: {
@@ -1013,7 +1013,7 @@ class DashboardEchallan extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -1038,7 +1038,7 @@ class DashboardEchallan extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.graphHardThirdData ?this.state.graphHardThirdData.msgX : ""
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -1052,7 +1052,7 @@ class DashboardEchallan extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: this.state.graphHardThirdData ? this.state.graphHardThirdData.msgY : ""
-                    }, 
+                    },
             }]
         },
         // plugins: {
@@ -1071,9 +1071,9 @@ class DashboardEchallan extends React.Component {
         // },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
+
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphThirdLabel[ind];
                 var monthNo = {
                     'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
@@ -1094,7 +1094,7 @@ class DashboardEchallan extends React.Component {
                     graphFourthData: graphSorting[1],
                     graphFourthLabel: graphSorting[0],
                     dataFourth: graphSorting[2],
-                })       
+                })
             }
         },
     }
@@ -1120,7 +1120,7 @@ class DashboardEchallan extends React.Component {
         }
     ]
     }
-    
+
     var graphFourthOption = {
     responsive : true,
     // aspectRatio : 3,
@@ -1133,9 +1133,9 @@ class DashboardEchallan extends React.Component {
 
             debugger;
             const selectedVal = this.state.graphFourthLabel[ind] === Object.values(this.state.graphHardFourthData.sortBy[3])[0] ? Object.keys(this.state.graphHardFourthData.sortBy[3])[0] : this.state.graphFourthLabel[ind];
-            
+
             var graphSorting = this.graphSorting( this.state.graphHardFifthData.sortBy, this.state.dataFourth[selectedVal] );
-            
+
             this.setState({
                 graphClicked: 4,
                 rowData: this.state.dataFourth[selectedVal],
@@ -1150,7 +1150,7 @@ class DashboardEchallan extends React.Component {
         backgroundColor : "rgba(0, 0, 0, 0.1)",
         weight: 0
         }
-    ], 
+    ],
     legend: {
         display: true,
         position: 'bottom',
@@ -1184,7 +1184,7 @@ class DashboardEchallan extends React.Component {
     //         scaleLabel: {
     //             display: true,
     //             labelString: this.state.graphHardOneData.msgY,
-    //             },  
+    //             },
     //         ticks: {
     //         stepSize: 1
     //         },
@@ -1226,7 +1226,7 @@ class DashboardEchallan extends React.Component {
         }
     ]
     }
-    
+
     var graphFifthOption = {
     responsive : true,
     // aspectRatio : 3,
@@ -1240,7 +1240,7 @@ class DashboardEchallan extends React.Component {
             debugger;
             const selectedVal = this.state.graphFifthLabel[ind];
             var graphSorting = this.graphSorting( this.state.graphHardSixthData.sortBy, this.state.dataFifth[selectedVal] );
-            
+
             this.setState({
                 graphClicked: 5,
                 rowData: this.state.dataFifth[selectedVal],
@@ -1255,7 +1255,7 @@ class DashboardEchallan extends React.Component {
         backgroundColor : "rgba(0, 0, 0, 0.1)",
         weight: 0
         }
-    ], 
+    ],
     legend: {
         display: false,
         position: 'bottom',
@@ -1289,7 +1289,7 @@ class DashboardEchallan extends React.Component {
             scaleLabel: {
                 display: true,
                 labelString: this.state.graphHardFifthData ? this.state.graphHardFifthData.msgY : "",
-                },  
+                },
             ticks: {
             stepSize: 1
             },
@@ -1331,7 +1331,7 @@ class DashboardEchallan extends React.Component {
         }
     ]
     }
-        
+
     var graphSixthOption = {
     responsive : true,
     // aspectRatio : 3,
@@ -1345,7 +1345,7 @@ class DashboardEchallan extends React.Component {
             debugger;
             const selectedVal = this.state.graphSixthLabel[ind];
             // var graphSorting = this.graphSorting( "siName", this.state.dataSixth[selectedVal] );
-            
+
             this.setState({
                 rowData: this.state.dataSixth[selectedVal]
             })
@@ -1356,7 +1356,7 @@ class DashboardEchallan extends React.Component {
         backgroundColor : "rgba(0, 0, 0, 0.1)",
         weight: 0
         }
-    ], 
+    ],
     legend: {
         display: false,
         position: 'bottom',
@@ -1390,7 +1390,7 @@ class DashboardEchallan extends React.Component {
             scaleLabel: {
                 display: true,
                 labelString: this.state.graphHardSixthData ? this.state.graphHardSixthData.msgY : "'",
-                },  
+                },
             ticks: {
             stepSize: 1
             },
@@ -1412,21 +1412,21 @@ class DashboardEchallan extends React.Component {
     }
 
 
-        
+
     return (
         <div>
         <div className="graphDashboard">
-        
 
-        {this.state.graphClicked >= 0 ? 
+
+        {this.state.graphClicked >= 0 ?
         <CardContent className="halfGraph">
             <React.Fragment>
                 <Bar
                 data={ PIEgraphOneSortedData }
-                options={ PIEgraphOneOption } 
+                options={ PIEgraphOneOption }
                 />
             </React.Fragment>
-        </CardContent> 
+        </CardContent>
         : null}
 
         {
@@ -1434,11 +1434,11 @@ class DashboardEchallan extends React.Component {
             <CardContent className="halfGraph">
                 <React.Fragment>
                     <HorizontalBar
-                    data={ graphTwoSortedData } 
-                    options={ graphTwoOption } 
+                    data={ graphTwoSortedData }
+                    options={ graphTwoOption }
                     />
                 </React.Fragment>
-            </CardContent> 
+            </CardContent>
             :null
         }
 
@@ -1455,7 +1455,7 @@ class DashboardEchallan extends React.Component {
                     <React.Fragment>
                         <Bar
                         data={ graphThirdSortedData }
-                        options={ graphThirdOption } 
+                        options={ graphThirdOption }
                         />
                     </React.Fragment>
                 </CardContent>
@@ -1468,17 +1468,17 @@ class DashboardEchallan extends React.Component {
                     <React.Fragment>
                         <Pie
                         data={ graphFourthSortedData }
-                        options={ graphFourthOption } 
+                        options={ graphFourthOption }
                         />
                     </React.Fragment>
                 </CardContent>
                 :null
-                
+
             }
             </div>
             : null
         }
-        
+
         {/* -------------------------- Dashboard layer 3 -------------------------------------------------------- */}
 
         {
@@ -1490,26 +1490,26 @@ class DashboardEchallan extends React.Component {
                     <React.Fragment>
                         <Bar
                         data={ graphFifthSortedData }
-                        options={ graphFifthOption } 
+                        options={ graphFifthOption }
                         />
                     </React.Fragment>
                 </CardContent>
                 :null
             }
-    
+
             {
                 this.state.graphClicked > 4 ?
                 <CardContent className="halfGraph">
                     <React.Fragment>
                         <Bar
                         data={ graphSixthSortedData }
-                        options={ graphSixthOption } 
+                        options={ graphSixthOption }
                         />
                     </React.Fragment>
-                </CardContent> 
+                </CardContent>
                 :null
             }
-            
+
             </div>
             :null
         }
@@ -1530,12 +1530,12 @@ class DashboardEchallan extends React.Component {
                 {
                     this.state.unchangeColumnData.map((data, index)=>{
                         return(
-                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul> 
+                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul>
                         )
                     })
                 }
             </dl>
-            </div> 
+            </div>
            : null
         }
 
@@ -1543,18 +1543,18 @@ class DashboardEchallan extends React.Component {
             this.state.graphClicked >= 0 ?
             <ReactTable
             // PaginationComponent={Pagination}
-            data={ this.state.rowData }  
-            columns={ this.state.columnData } 
+            data={ this.state.rowData }
+            columns={ this.state.columnData }
             defaultPageSize = {this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
-            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}  
-            pageSizeOptions = {[20,40,60]}  
-            /> 
+            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
+            pageSizeOptions = {[20,40,60]}
+            />
             :null
         }
         </div>
         :null}
         </div>
-        
+
     );
     }
 }

@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -35,7 +35,7 @@ class DashboardLegal extends React.Component {
     }
 
 
-    // PDF function 
+    // PDF function
     pdfDownload = (e) => {
 
     debugger;
@@ -64,7 +64,7 @@ class DashboardLegal extends React.Component {
             const demo1 = rowData[i]
             var demo2 = tableColumnData[j].replace(".", ",");
             demo2 = demo2.split(",")
-            if(typeof(demo2) === "object"){   
+            if(typeof(demo2) === "object"){
                 if(demo2.length > 1){
                     rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                 }
@@ -85,7 +85,7 @@ class DashboardLegal extends React.Component {
 
 
     debugger;
-    // PDF Code 
+    // PDF Code
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -95,7 +95,7 @@ class DashboardLegal extends React.Component {
     var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
     var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-    doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
+    doc.text("Sujog Application", pageWidth / 2, 20, 'center');
 
     doc.setFontSize(10);
     const pdfTitle = "Legal Dashboard"
@@ -126,7 +126,7 @@ class DashboardLegal extends React.Component {
         for(var i=0;i<coldata.length; i++){
             if(coldata[i]["show"]){
                 unchangeData.push(coldata[i])
-            }   
+            }
         }
         return unchangeData
 
@@ -151,7 +151,7 @@ class DashboardLegal extends React.Component {
         })
     }
 
-    // Toggle Column 
+    // Toggle Column
     toggleColumn = (e) => {
         e.preventDefault();
         debugger;
@@ -160,10 +160,10 @@ class DashboardLegal extends React.Component {
             toggleColumnCheck : !this.state.toggleColumnCheck
         })
     }
-    
+
     graphSorting = ( sortBy, data, checkGraph ) => {
 
-    
+
     debugger;
     var sortNo = null;
     var group = data.reduce((r, a) => {
@@ -178,10 +178,10 @@ class DashboardLegal extends React.Component {
     }
 
     return [ graphOneLabel, graphOneData, group ]
-    
+
     }
 
-    // CamelCase Column Name 
+    // CamelCase Column Name
     camelize = (str) =>  {
     // var res = str.substr(0, 1);
     var res = String(str).substr(0, 1);
@@ -218,52 +218,52 @@ class DashboardLegal extends React.Component {
                     sortedData.push(data[i]);
                 }
             }
-    
+
             // data = sortedData;
-    
-            const hardJSON = propSortBy === "courtName" ? [{ 
+
+            const hardJSON = propSortBy === "courtName" ? [{
                 "sortBy": "courtName",
                 "msgX": "",
                 "msgY": "",
                 "title": "Courtwise Legal Dashboard"
                 },
-                { 
+                {
                 "sortBy": "concernedBranch",
                 "msgX": "",
                 "msgY": "",
                 "title": "Branchwise Court Legal Dashboard"
                 },
-                { 
+                {
                 "sortBy": "judgmentTypeId",
                 "msgX": "",
                 "msgY": "",
                 "title": "Judgement wise Court Case Legal Dashboard"
                 }] : propSortBy === "iscaseImp" ? [
-                    { 
+                    {
                     "sortBy": "iscaseImp",
                     "msgX": "",
                     "msgY": "",
                     "title": "Imp Casewise Legal Dashboard"
                     },
-                    { 
+                    {
                     "sortBy": "caseStatus",
                     "msgX": "",
                     "msgY": "",
                     "title": "Case statuswise Imp Case Legal Dashboard"
                     },
-                    { 
+                    {
                     "sortBy": "judgmentTypeId",
                     "msgX": "",
                     "msgY": "",
                     "title": "Judgement wise Imp Case Legal Dashboard"
                     }
                     ] : []
-    
-    
-            // Graph One Sorting Function 
+
+
+            // Graph One Sorting Function
             var graphOneData2 = this.graphSorting( propSortBy, data );
-    
-            
+
+
             // Column Data
             const tableData = data[0] ? Object.keys(data[0]) : [];
             var columnData = []
@@ -271,15 +271,15 @@ class DashboardLegal extends React.Component {
                 var itemHeader = {}
                 itemHeader["Header"] = this.camelize(tableData[i]);
                 itemHeader["accessor"] = tableData[i];
-                itemHeader["show"]= (i === 0 || i === 1 || i === 6 || i === 9 
+                itemHeader["show"]= (i === 0 || i === 1 || i === 6 || i === 9
                     || i === 12 || i === 16 || i === 20 ) ? true : false ;
                 columnData.push(itemHeader);
             }
-    
-            // Column Unchange Data 
+
+            // Column Unchange Data
             const unchangeColumnData = this.columnUnchange(columnData)
-    
-            
+
+
             this.setState({
                 graphOneLabel: graphOneData2[0],
                 graphOneData: graphOneData2[1],
@@ -302,7 +302,7 @@ class DashboardLegal extends React.Component {
     }
 
     render() {
-    
+
 
     // First Double Bar Graph Graph
     var PIEgraphOneSortedData = {
@@ -339,7 +339,7 @@ class DashboardLegal extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: true,
             position: 'bottom',
@@ -364,7 +364,7 @@ class DashboardLegal extends React.Component {
         //         scaleLabel: {
         //             display: true,
         //             labelString:" this.state.graphHardThirdData.msgX"
-        //             }, 
+        //             },
         //     }],
         //     yAxes: [{
         //         gridLines: {
@@ -378,7 +378,7 @@ class DashboardLegal extends React.Component {
         //         scaleLabel: {
         //             display: true,
         //             labelString: "this.state.graphHardThirdData.msgY"
-        //             }, 
+        //             },
         //     }]
         // },
         plugins: {
@@ -397,14 +397,14 @@ class DashboardLegal extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
+
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphOneLabel[ind];
                 // var graphSorting = this.graphSorting( this.state.graphHardTwoData.sortBy, this.state.dataOne[selectedVal] );
                 const hardval = this.state.hardJSON[1]
                 var graphSorting = this.graphSorting( hardval.sortBy, this.state.dataOne[selectedVal] );
-                
+
                 this.setState({
                     graphTwoLabel: graphSorting[0],
                     graphTwoData: graphSorting[1],
@@ -412,11 +412,11 @@ class DashboardLegal extends React.Component {
                     graphClicked: 1,
                     rowData: this.state.dataOne[selectedVal]
                 })
-                
+
             }
         },
     }
-    
+
 
     // Second Horizontal Graph
     var graphTwoSortedData = {
@@ -450,7 +450,7 @@ class DashboardLegal extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: true,
             position: 'bottom',
@@ -470,12 +470,12 @@ class DashboardLegal extends React.Component {
         onClick: (e, element) => {
             if (element.length > 0) {
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphTwoLabel[ind];
                 // var graphSorting = this.graphSorting( this.state.graphHardTwoData.sortBy, this.state.dataOne[selectedVal] );
                 const hardval = this.state.hardJSON[2]
                 var graphSorting = this.graphSorting( hardval.sortBy, this.state.dataTwo[selectedVal] );
-                
+
                 this.setState({
                     graphThirdLabel: graphSorting[0],
                     graphThirdData: graphSorting[1],
@@ -498,7 +498,7 @@ class DashboardLegal extends React.Component {
         //         scaleLabel: {
         //             display: true,
         //             labelString: this.state.graphHardTwoData.msgX
-        //             }, 
+        //             },
         //     }],
         //     yAxes: [{
         //         gridLines: {
@@ -511,7 +511,7 @@ class DashboardLegal extends React.Component {
         //         scaleLabel: {
         //             display: true,
         //             labelString: this.state.graphHardTwoData.msgY
-        //             }, 
+        //             },
         //     }]
         // },
         plugins: {
@@ -562,7 +562,7 @@ class DashboardLegal extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: true,
             position: 'bottom',
@@ -584,7 +584,7 @@ class DashboardLegal extends React.Component {
                 var ind = element[0]._index;
                 debugger;
                 const selectedVal = this.state.graphTwoLabel[ind];
-                
+
                 this.setState({
                     graphClicked: 2,
                     rowData: this.state.dataTwo[selectedVal]
@@ -604,7 +604,7 @@ class DashboardLegal extends React.Component {
         //         scaleLabel: {
         //             display: true,
         //             labelString: this.state.graphHardTwoData.msgX
-        //             }, 
+        //             },
         //     }],
         //     yAxes: [{
         //         gridLines: {
@@ -617,7 +617,7 @@ class DashboardLegal extends React.Component {
         //         scaleLabel: {
         //             display: true,
         //             labelString: this.state.graphHardTwoData.msgY
-        //             }, 
+        //             },
         //     }]
         // },
         plugins: {
@@ -637,18 +637,18 @@ class DashboardLegal extends React.Component {
     }
 
 
-        
+
     return (
-        <div>        
+        <div>
         <div className="graphDashboard">
-    
+
         {
             this.state.graphClicked >= 0 ?
             <CardContent className="halfGraph">
                 <React.Fragment>
                     <Pie
                     data={ PIEgraphOneSortedData }
-                    options={ PIEgraphOneOption } 
+                    options={ PIEgraphOneOption }
                     />
                 </React.Fragment>
             </CardContent>
@@ -660,11 +660,11 @@ class DashboardLegal extends React.Component {
             <CardContent className="halfGraph">
                 <React.Fragment>
                     <Pie
-                    data={ graphTwoSortedData } 
-                    options={ graphTwoOption } 
+                    data={ graphTwoSortedData }
+                    options={ graphTwoOption }
                     />
                 </React.Fragment>
-            </CardContent> 
+            </CardContent>
             :null
         }
 
@@ -675,18 +675,18 @@ class DashboardLegal extends React.Component {
             <CardContent className="fullGraph">
                 <React.Fragment>
                     <Pie
-                    data={ graphThirdSortedData } 
-                    options={ graphThirdOption } 
+                    data={ graphThirdSortedData }
+                    options={ graphThirdOption }
                     />
                 </React.Fragment>
-            </CardContent> 
+            </CardContent>
             :null
         }
 
         {/* Table Feature  */}
         <div className="tableContainer" style={this.state.rowData.length === 0 ? {display : "none"} :null}>
         {
-            this.state.unchangeColumnData.length > 0  ? 
+            this.state.unchangeColumnData.length > 0  ?
             <div className="tableFeature">
                 <div className="columnToggle-Text"> Download As: </div>
                 <button className="columnToggleBtn" onClick={this.pdfDownload}> PDF </button>
@@ -702,12 +702,12 @@ class DashboardLegal extends React.Component {
                 {
                     this.state.unchangeColumnData.map((data, index)=>{
                         return(
-                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul> 
+                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul>
                         )
                     })
                 }
             </dl>
-            </div> 
+            </div>
            : null
         }
 
@@ -715,12 +715,12 @@ class DashboardLegal extends React.Component {
             this.state.graphClicked >= 0 ?
             <ReactTable id="customReactTable"
             // PaginationComponent={Pagination}
-            data={ this.state.rowData }  
-            columns={ this.state.columnData }  
+            data={ this.state.rowData }
+            columns={ this.state.columnData }
             defaultPageSize = {this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
-            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}  
-            pageSizeOptions = {[20,40,60]}  
-            /> 
+            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
+            pageSizeOptions = {[20,40,60]}
+            />
             :null
         }
         </div>

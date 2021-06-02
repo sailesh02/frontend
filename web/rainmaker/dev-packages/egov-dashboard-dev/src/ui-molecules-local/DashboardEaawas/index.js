@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
@@ -27,7 +27,7 @@ class DashboardEaawas extends React.Component {
 
   pdfDownload = (e) => {
 
-    
+
     debugger;
     e.preventDefault();
     var tableColumnData =[];
@@ -45,7 +45,7 @@ class DashboardEaawas extends React.Component {
         rowData.push(tableRowData)
     }
 
-    // PDF Code 
+    // PDF Code
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -55,7 +55,7 @@ class DashboardEaawas extends React.Component {
     var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
     var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-    doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
+    doc.text("Sujog Application", pageWidth / 2, 20, 'center');
 
     doc.setFontSize(10);
     const pdfTitle = "Title";
@@ -166,7 +166,7 @@ class DashboardEaawas extends React.Component {
         Header: '',
         accessor: 'col2'
       }]
-      
+
       this.setState({
           respData : data,
           graphLabel: graphLabel,
@@ -214,7 +214,7 @@ class DashboardEaawas extends React.Component {
         backgroundColor : "rgba(0, 0, 0, 0.1)",
         weight: 0
         }
-    ], 
+    ],
     legend: {
         display: false,
         position: 'bottom',
@@ -261,8 +261,8 @@ class DashboardEaawas extends React.Component {
         }
         }
     }
-  
-          
+
+
       return (
         <div>
             <div className="dashboardContainer">
@@ -270,7 +270,7 @@ class DashboardEaawas extends React.Component {
                 <React.Fragment>
                     <Bar
                     data={ graphData }
-                    options={ graphOption } 
+                    options={ graphOption }
                     />
                 </React.Fragment>
                 </CardContent>
@@ -284,13 +284,13 @@ class DashboardEaawas extends React.Component {
                     <div className="tableHeader"> Eaawas Stat </div>
                     <ReactTable id="customReactTable"
                     // PaginationComponent={Pagination}
-                    data={ this.state.rowData }  
-                    columns={ this.state.columnData }  
+                    data={ this.state.rowData }
+                    columns={ this.state.columnData }
                     defaultPageSize = {5}
                     showPaginationBottom={false}
-                    // pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}  
-                    // pageSizeOptions = {[20,40,60]}  
-                    /> 
+                    // pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
+                    // pageSizeOptions = {[20,40,60]}
+                    />
                 </div>
             </div>
 

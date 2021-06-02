@@ -90,7 +90,7 @@ class DescriptionDashboard extends React.Component {
         var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
         var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-        doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
+        doc.text("Sujog Application", pageWidth / 2, 20, 'center');
 
         doc.setFontSize(10);
         doc.text(this.state.graphOneData.title, pageWidth / 2, 40, 'center');

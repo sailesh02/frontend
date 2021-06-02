@@ -173,6 +173,30 @@ export const updatePFOforSearchResults = async (
   // const payload = await getSearchResults(queryObject)
   // getQueryArg(window.location.href, "action") === "edit" &&
   //   (await setDocsForEditFlow(state, dispatch));
+  console.log(queryValue, "Nero value")
+  let tlType = get(payload.Licenses[0],'licenseType',"PERMANENT");
+
+if(queryValue && tlType === "TEMPORARY"){
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+      "visible",
+      true
+    )
+  );
+}else{
+  const applyFor = getQueryArg(window.location.href, "applyFor");
+console.log(applyFor, "Nero applyFor")
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType",
+          "props.value",
+          applyFor
+        )
+      );
+}
 
   if (payload && payload.Licenses) {
 

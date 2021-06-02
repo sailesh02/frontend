@@ -96,6 +96,25 @@ const screenConfig = {
       updateSearchResults(action, state, dispatch, applicationNo, tenantId);
     } else {
       getData(action, state, dispatch, tenantId);
+
+      const applyFor = getQueryArg(window.location.href, "applyFor");
+
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType",
+          "props.value",
+          applyFor
+        )
+      );
+      // dispatch(
+      //   handleField(
+      //     "apply",
+      //     "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType",
+      //     "props.disabled",
+      //     true
+      //   )
+      // );
     }
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     return action;

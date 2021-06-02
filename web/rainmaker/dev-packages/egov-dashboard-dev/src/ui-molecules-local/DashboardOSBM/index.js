@@ -3,7 +3,7 @@ import { Doughnut, Bar, HorizontalBar, Line, Pie } from 'react-chartjs-2';
 import CardContent from '@material-ui/core/CardContent';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import ReactTable from "react-table-6";  
+import ReactTable from "react-table-6";
 import "react-table-6/react-table.css" ;
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -34,7 +34,7 @@ class DashboardOSBM extends React.Component {
         graphFifthData: [],
         graphSixthLabel: [],
         graphSixthData: [],
-        
+
         graphClicked: -1,
         hardJSON: [],
         graphHardOneData : {},
@@ -48,7 +48,7 @@ class DashboardOSBM extends React.Component {
     }
 
 
-    // PDF function 
+    // PDF function
     pdfDownload = (e) => {
     e.preventDefault();
     debugger;
@@ -77,7 +77,7 @@ class DashboardOSBM extends React.Component {
             const demo1 = rowData[i]
             var demo2 = tableColumnData[j].replace(".", ",");
             demo2 = demo2.split(",")
-            if(typeof(demo2) === "object"){   
+            if(typeof(demo2) === "object"){
                 if(demo2.length > 1){
                     rowItem.push(rowData[i][demo2[0]][demo2[1]]);
                 }
@@ -98,7 +98,7 @@ class DashboardOSBM extends React.Component {
 
 
     debugger;
-    // PDF Code 
+    // PDF Code
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -108,7 +108,7 @@ class DashboardOSBM extends React.Component {
     var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
     var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-    doc.text("mChandigarh Application", pageWidth / 2, 20, 'center');
+    doc.text("Sujog Application", pageWidth / 2, 20, 'center');
 
     doc.setFontSize(10);
     const pdfTitle = this.state.graphHardOneData.title ? this.state.graphHardOneData.title : "Title"
@@ -138,7 +138,7 @@ class DashboardOSBM extends React.Component {
         for(var i=0;i<coldata.length; i++){
             if(coldata[i]["show"]){
                 unchangeData.push(coldata[i])
-            }   
+            }
         }
         return unchangeData
 
@@ -162,7 +162,7 @@ class DashboardOSBM extends React.Component {
             unchangeColumnData: sortColumn2
         })
     }
-    // Toggle Column 
+    // Toggle Column
     toggleColumn = (e) => {
         e.preventDefault();
         debugger;
@@ -171,9 +171,9 @@ class DashboardOSBM extends React.Component {
             toggleColumnCheck : !this.state.toggleColumnCheck
         })
     }
-    
-    graphSorting = ( sortBy, data, checkGraph ) => { 
-        
+
+    graphSorting = ( sortBy, data, checkGraph ) => {
+
         debugger;
         if(sortBy === "dashboard1_bookingVenueType"){
             debugger;
@@ -274,8 +274,8 @@ class DashboardOSBM extends React.Component {
             }
             return [ graphLabel, graphData, group ]
         }
-        
-        
+
+
         debugger;
         var sortNo = null;
         var group = data.reduce((r, a) => {
@@ -287,10 +287,10 @@ class DashboardOSBM extends React.Component {
         for(var i=0; i<Object.keys(group).length ; i++){
             graphOneData.push(group[graphOneLabel[i]].length);
         }
-        return [ graphOneLabel, graphOneData, group ]    
+        return [ graphOneLabel, graphOneData, group ]
     }
 
-    // CamelCase Column Name 
+    // CamelCase Column Name
     camelize = (str) =>  {
     // var res = str.substr(0, 1);
     var res = String(str).substr(0, 1);
@@ -304,33 +304,33 @@ class DashboardOSBM extends React.Component {
     hardJSONconfig = (propSortBy) => {
 
         debugger;
-        const hardJSON = propSortBy === "bkApplicationStatus" ? [{ 
+        const hardJSON = propSortBy === "bkApplicationStatus" ? [{
             "sortBy": "bkApplicationStatus",
             "msgX": "",
             "msgY": "",
             "title": "Booking Application Status"
             },
-            { 
+            {
             "sortBy": "bkBookingType",
             "msgX": "",
             "msgY": "",
             "title": "Booking Statuswise Application Type"
             }] : propSortBy === "bkBookingType" ? [
-            { 
+            {
             "sortBy": "bkBookingType",
             "msgX": "",
             "msgY": "",
             "title": "Booking Application Type"
             },
-            { 
+            {
             "sortBy": "bkApplicationStatus",
             "msgX": "",
             "msgY": "",
             "title": "Booking Typewise Application status"
             }
             ] : []
-            
-            return hardJSON; 
+
+            return hardJSON;
     }
 
     colorRandom = (data) =>{
@@ -387,11 +387,11 @@ class DashboardOSBM extends React.Component {
             columnData.push(itemHeader);
         }
 
-        // Column Unchange Data 
+        // Column Unchange Data
         const unchangeColumnData = this.columnUnchange(columnData)
 
         if(propSortBy === "dashboard1_bookingVenueType"){
-            // Graph One Sorting Function 
+            // Graph One Sorting Function
             var graphOneData2 = this.graphSorting( propSortBy, reportData );
             var bgColcor = this.colorRandom( graphOneData2[0] );
             this.setState({
@@ -403,7 +403,7 @@ class DashboardOSBM extends React.Component {
             })
         }
         if(propSortBy === "dashboard2_status"){
-            // Graph One Sorting Function 
+            // Graph One Sorting Function
             var graphOneData2 = this.graphSorting( propSortBy, reportData );
             var bgColcor = this.colorRandom( graphOneData2[0] );
             this.setState({
@@ -415,7 +415,7 @@ class DashboardOSBM extends React.Component {
             })
         }
         if(propSortBy === "dashboard3_collectionReport"){
-            // Graph One Sorting Function 
+            // Graph One Sorting Function
             var graphOneData2 = this.graphSorting( propSortBy, reportData );
             var bgColcor = this.colorRandom( graphOneData2[0] );
             this.setState({
@@ -426,14 +426,14 @@ class DashboardOSBM extends React.Component {
                 bgColcor : bgColcor
             })
         }
-        
+
         this.setState({
             columnData: columnData,
             unchangeColumnData: unchangeColumnData,
             rowData: reportData,
             dropddownClicked : propSortBy
         })
-        
+
         this.setState({
           checkData: propsData
         })
@@ -441,7 +441,7 @@ class DashboardOSBM extends React.Component {
       // const propSortBy = "dashboard1_bookingVenueType"; // Dropdown 1
       // const propSortBy = "dashboard2_status";   // Dropdow 2
       // const propSortBy = "dashboard3_collectionReport";   // Dropdow 2
-      
+
       // const data = OSBM_data.reportResponses;
 
       // var reportHeader = data[0].reportHeader;
@@ -484,7 +484,7 @@ class DashboardOSBM extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -509,7 +509,7 @@ class DashboardOSBM extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "Booking Venue"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -523,7 +523,7 @@ class DashboardOSBM extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "No of Booking"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -542,12 +542,12 @@ class DashboardOSBM extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
+
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphOneLabel[ind];
                 var graphSorting = this.graphSorting( "dashboard1_status", this.state.dataOne[selectedVal] );
-                
+
                 this.setState({
                     graphTwoLabel: graphSorting[0],
                     graphTwoData: graphSorting[1],
@@ -555,11 +555,11 @@ class DashboardOSBM extends React.Component {
                     dataTwo: graphSorting[2],
                     rowData: this.state.dataOne[selectedVal]
                 })
-                
+
             }
         },
     }
-    
+
     var graphTwoSortedData = {
         labels: this.state.graphTwoLabel,
         datasets: [
@@ -591,7 +591,7 @@ class DashboardOSBM extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -613,7 +613,7 @@ class DashboardOSBM extends React.Component {
                 var ind = element[0]._index;
                 debugger;
                 const selectedVal = this.state.graphTwoLabel[ind];
-                
+
                 this.setState({
                     graphClicked: 2,
                     rowData: this.state.dataTwo[selectedVal]
@@ -633,7 +633,7 @@ class DashboardOSBM extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "Status"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -646,7 +646,7 @@ class DashboardOSBM extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "No of Booking request"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -700,7 +700,7 @@ class DashboardOSBM extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -725,7 +725,7 @@ class DashboardOSBM extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "Status"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -739,7 +739,7 @@ class DashboardOSBM extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "No of Bookings"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -758,12 +758,12 @@ class DashboardOSBM extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
+
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphThirdLabel[ind];
                 var graphSorting = this.graphSorting( "dashboard2_sector", this.state.dataThird[selectedVal] );
-                
+
                 this.setState({
                     graphFourthLabel: graphSorting[0],
                     graphFourthData: graphSorting[1],
@@ -771,7 +771,7 @@ class DashboardOSBM extends React.Component {
                     dataFourth: graphSorting[2],
                     rowData: this.state.dataThird[selectedVal]
                 })
-                
+
             }
         },
     }
@@ -810,7 +810,7 @@ class DashboardOSBM extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -835,7 +835,7 @@ class DashboardOSBM extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "Sector"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -849,7 +849,7 @@ class DashboardOSBM extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "No of Bookings"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -868,12 +868,12 @@ class DashboardOSBM extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
+
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphThirdLabel[ind];
                 // var graphSorting = this.graphSorting( "dashboard1_sector", this.state.dataThird[selectedVal] );
-                
+
                 this.setState({
                     // graphFourthLabel: graphSorting[0],
                     // graphFourthData: graphSorting[1],
@@ -881,11 +881,11 @@ class DashboardOSBM extends React.Component {
                     // dataFourth: graphSorting[2],
                     rowData: this.state.dataThird[selectedVal]
                 })
-                
+
             }
         },
     }
-    
+
     // Dropdown Three
     var graphFifthSortedData = {
         labels: this.state.graphFifthLabel,
@@ -921,7 +921,7 @@ class DashboardOSBM extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: false,
             position: 'bottom',
@@ -946,7 +946,7 @@ class DashboardOSBM extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "Sector"
-                    }, 
+                    },
             }],
             yAxes: [{
                 gridLines: {
@@ -960,7 +960,7 @@ class DashboardOSBM extends React.Component {
                 scaleLabel: {
                     display: true,
                     labelString: "Amount (INR)"
-                    }, 
+                    },
             }]
         },
         plugins: {
@@ -979,12 +979,12 @@ class DashboardOSBM extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
+
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphFifthLabel[ind];
                 var graphSorting = this.graphSorting( "dashboard3_bookingVenueType", this.state.dataFifth[selectedVal] );
-                
+
                 this.setState({
                     graphSixthLabel: graphSorting[0],
                     graphSixthData: graphSorting[1],
@@ -992,7 +992,7 @@ class DashboardOSBM extends React.Component {
                     dataSixth: graphSorting[2],
                     rowData: this.state.dataFifth[selectedVal]
                 })
-                
+
             }
         },
     }
@@ -1031,7 +1031,7 @@ class DashboardOSBM extends React.Component {
             backgroundColor : "rgba(0, 0, 0, 0.1)",
             weight: 0
             }
-        ], 
+        ],
         legend: {
             display: true,
             position: 'bottom',
@@ -1056,7 +1056,7 @@ class DashboardOSBM extends React.Component {
         //         scaleLabel: {
         //             display: true,
         //             labelString:" this.state.graphHardThirdData.msgX"
-        //             }, 
+        //             },
         //     }],
         //     yAxes: [{
         //         gridLines: {
@@ -1070,7 +1070,7 @@ class DashboardOSBM extends React.Component {
         //         scaleLabel: {
         //             display: true,
         //             labelString: "this.state.graphHardThirdData.msgY"
-        //             }, 
+        //             },
         //     }]
         // },
         plugins: {
@@ -1089,12 +1089,12 @@ class DashboardOSBM extends React.Component {
         },
         onClick: (e, element) => {
             if (element.length > 0) {
-                
+
                 debugger;
-                var ind = element[0]._index;   
+                var ind = element[0]._index;
                 const selectedVal = this.state.graphFifthLabel[ind];
                 var graphSorting = this.graphSorting( "dashboard1_sector", this.state.dataFifth[selectedVal] );
-                
+
                 this.setState({
                     graphSixthLabel: graphSorting[0],
                     graphSixthData: graphSorting[1],
@@ -1102,21 +1102,21 @@ class DashboardOSBM extends React.Component {
                     dataSixth: graphSorting[2],
                     rowData: this.state.dataFifth[selectedVal]
                 })
-                
+
             }
         },
     }
-    
+
     return (
         <div>
         <div className="graphDashboard" style={this.state.dropddownClicked !== "dashboard1_bookingVenueType" ? {display : "none"} : null}>
-        
+
 
         <CardContent className="halfGraph">
             <React.Fragment>
                 <Bar
                 data={ graphOneSortedData }
-                options={ graphOneOption } 
+                options={ graphOneOption }
                 />
             </React.Fragment>
         </CardContent>
@@ -1126,23 +1126,23 @@ class DashboardOSBM extends React.Component {
             <CardContent className="halfGraph">
                 <React.Fragment>
                     <Bar
-                    data={ graphTwoSortedData } 
-                    options={ graphTwoOption } 
+                    data={ graphTwoSortedData }
+                    options={ graphTwoOption }
                     />
                 </React.Fragment>
-            </CardContent> 
+            </CardContent>
             :null
         }
 
         </div>
 
         <div className="graphDashboard" style={this.state.dropddownClicked !== "dashboard2_status" ? {display : "none"} : null}>
-                
+
         <CardContent className="halfGraph">
             <React.Fragment>
                 <Bar
                 data={ graphThirdSortedData }
-                options={ graphThirdOption } 
+                options={ graphThirdOption }
                 />
             </React.Fragment>
         </CardContent>
@@ -1152,23 +1152,23 @@ class DashboardOSBM extends React.Component {
             <CardContent className="halfGraph">
                 <React.Fragment>
                     <Bar
-                    data={ graphFouthSortedData } 
-                    options={ graphFouthOption } 
+                    data={ graphFouthSortedData }
+                    options={ graphFouthOption }
                     />
                 </React.Fragment>
-            </CardContent> 
+            </CardContent>
             :null
         }
 
         </div>
 
         <div className="graphDashboard" style={this.state.dropddownClicked !== "dashboard3_collectionReport" ? {display : "none"} : null}>
-                
+
         <CardContent className="fullGraph">
             <React.Fragment>
                 <Bar
                 data={ graphFifthSortedData }
-                options={ graphFifthOption } 
+                options={ graphFifthOption }
                 />
             </React.Fragment>
         </CardContent>
@@ -1178,11 +1178,11 @@ class DashboardOSBM extends React.Component {
             // <CardContent className="halfGraph">
             //     <React.Fragment>
             //         <Pie
-            //         data={ graphSixthSortedData } 
-            //         options={ graphSixthOption } 
+            //         data={ graphSixthSortedData }
+            //         options={ graphSixthOption }
             //         />
             //     </React.Fragment>
-            // </CardContent> 
+            // </CardContent>
             // :null
         }
 
@@ -1194,7 +1194,7 @@ class DashboardOSBM extends React.Component {
         {/* Table Feature  */}
         <div className="tableContainer" style={this.state.rowData.length === 0 ? { display : "none"} : null}>
         {
-            this.state.unchangeColumnData.length > 0  ? 
+            this.state.unchangeColumnData.length > 0  ?
             <div className="tableFeature">
                 <div className="columnToggle-Text"> Download As: </div>
                 <button className="columnToggleBtn" onClick={this.pdfDownload}> PDF </button>
@@ -1210,12 +1210,12 @@ class DashboardOSBM extends React.Component {
                 {
                     this.state.unchangeColumnData.map((data, index)=>{
                         return(
-                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul> 
+                            <ul className={ this.state.unchangeColumnData[index]["show"] ? "" : "toggleBtnClicked" }><button value={index} className={ this.state.unchangeColumnData[index]["show"] ? "toggleBtn" : "toggleBtnClicked" } onClick={ this.showHideColumn }> { this.state.unchangeColumnData[index]["Header"] } </button></ul>
                         )
                     })
                 }
             </dl>
-            </div> 
+            </div>
            : null
         }
 
@@ -1223,12 +1223,12 @@ class DashboardOSBM extends React.Component {
             // this.state.graphClicked >= 0 ?
             <ReactTable id="customReactTable"
             // PaginationComponent={Pagination}
-            data={ this.state.rowData }  
-            columns={ this.state.columnData }  
+            data={ this.state.rowData }
+            columns={ this.state.columnData }
             defaultPageSize = {this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
-            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}  
-            pageSizeOptions = {[20,40,60]}  
-            /> 
+            pageSize={this.state.rowData.length > 10 ? 10 : this.state.rowData.length}
+            pageSizeOptions = {[20,40,60]}
+            />
             // :null
         }
         </div>

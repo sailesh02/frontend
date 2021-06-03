@@ -283,9 +283,9 @@ const propertyDetailsNoId = getCommonContainer({
                 if (fieldKey === "mohalla" && item.code) {
                   option = {
                     label: item.name,
-                    code: item.code,
+                    code: item.name,
                     // label: getTranslatedLabel(mohallaCode, localizationLabels),
-                    value: item.code,
+                    value: item.name,
                   };
                 } else {
                   option = {

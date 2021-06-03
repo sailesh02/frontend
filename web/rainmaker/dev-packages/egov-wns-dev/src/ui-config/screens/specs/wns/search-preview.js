@@ -22,7 +22,7 @@ import { findAndReplace, getDescriptionFromMDMS, getSearchResults, getSearchResu
 import {
   convertDateToEpoch, createEstimateData,
   getDialogButton, getFeesEstimateOverviewCard,
-  getTransformedStatus, showHideAdhocPopup
+  getTransformedStatus, showHideAdhocPopup,getTextToLocalMapping
 } from "../utils";
 import { downloadPrintContainer } from "../wns/acknowledgement";
 import { adhocPopup } from "./applyResource/adhocPopup";

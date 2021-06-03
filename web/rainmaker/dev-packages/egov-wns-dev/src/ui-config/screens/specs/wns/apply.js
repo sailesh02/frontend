@@ -307,8 +307,8 @@ export const getData = async (action, state, dispatch) => {
               if (fieldKey === "mohalla" && item.code) {
                 option = {
                   label: item.name,
-                  value: item.code,
-                  code:item.code
+                  value: item.name,
+                  code:item.name
                 };
               } else {
                 option = {

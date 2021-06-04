@@ -2113,7 +2113,7 @@ export const showCityPicker = (state, dispatch) => {
 
 export const applyForm = (state, dispatch, action) => {
 
-  let tlApplyFor = window.localStorage.getItem('TLApplyfor');
+  let tlApplyFor = window.localStorage.getItem('licenseType');
   const tenantId = get(
     state.screenConfiguration.preparedFinalObject,
     "citiesByModule.citizenTenantId"
@@ -2124,10 +2124,10 @@ export const applyForm = (state, dispatch, action) => {
     callBack: (state, dispatch) => {
       dispatch(prepareFinalObject('documentsUploadRedux', {}))
       const applyUrl = process.env.NODE_ENV === "production"
-        ? `/tradelicense-citizen/apply?tenantId=${tenantId}&applyFor=${tlApplyFor}`
+        ? `/tradelicense-citizen/apply?tenantId=${tenantId}&licenseType=${tlApplyFor}`
         : process.env.REACT_APP_SELF_RUNNING === true
           ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
-          : `/tradelicense-citizen/apply?tenantId=${tenantId}&applyFor=${tlApplyFor}`;
+          : `/tradelicense-citizen/apply?tenantId=${tenantId}&licenseType=${tlApplyFor}`;
       dispatch(setRoute(applyUrl))
     }
   })

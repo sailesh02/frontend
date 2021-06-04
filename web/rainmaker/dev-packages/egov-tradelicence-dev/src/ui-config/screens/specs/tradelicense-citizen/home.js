@@ -30,7 +30,7 @@ const cardItems = [
     route: {
       screenKey: "home",
       jsonPath: "components.cityPickerDialog",
-      applyFor: "PERMANENT",
+      licenseType: "PERMANENT",
       moduleName: "TL",
     }
   },
@@ -43,7 +43,7 @@ const cardItems = [
     route: {
       screenKey: "home",
       jsonPath: "components.cityPickerDialog",
-      applyFor: "TEMPORARY",
+      licenseType: "TEMPORARY",
       moduleName: "TL",
     }
   },

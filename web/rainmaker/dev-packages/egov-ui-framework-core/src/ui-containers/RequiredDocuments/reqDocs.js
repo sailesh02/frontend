@@ -172,14 +172,16 @@ const generateDocument = ( item, modulePrifx ) => {
   return getCommonGrayCard({
     subHeader: subHeader,
     break: getBreak(),
-    subParagraph1: modulePrifx === "TradeLicense" ? {} : subParagraph1,
-    break1: modulePrifx === "TradeLicense" ? {} : getBreak(),
+    subParagraph1: modulePrifx === "TradeLicense" || modulePrifx === "ws-services-masters" ? {} : subParagraph1,
+    break1: modulePrifx === "TradeLicense" || modulePrifx === "ws-services-masters" ? {} : getBreak(),
     docs: getCommonContainer({ ...docs }),
     subParagraph: subParagraph
   });
 };
 
 export const getRequiredDocuments = ( documents, moduleName, footerCallback ) => {
+  debugger
+
   let doc = documents.map(item => {
     return generateDocument( item, moduleName );
   });

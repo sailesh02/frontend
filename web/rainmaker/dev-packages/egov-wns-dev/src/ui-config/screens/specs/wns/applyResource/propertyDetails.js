@@ -76,7 +76,7 @@ export const propertyHeader = getCommonSubHeader({
 })
 
 export const NoIdHeader = getCommonSubHeader({
-  labelKey: "WS_COMMON_PROP_DETAIL",
+  labelKey: "WS_COMMON_PROP_DETAIL_NOT_MANDATORY",
   labelName: "Property Details"
 })
 

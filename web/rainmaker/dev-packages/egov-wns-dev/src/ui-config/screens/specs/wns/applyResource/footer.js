@@ -174,12 +174,12 @@ const callBackForNext = async (state, dispatch) => {
         applyScreenObj.connectionHolders = arrayHolderData;
       }
 
-      if ( !!searchPropertyId && !isActiveProperty(applyScreenObj.property)) {
-        dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObj.property.status}`, labelName: `Property Status is ${applyScreenObj.property.status}` }, "warning"));
-        showHideFieldsFirstStep(dispatch, "", false);
-        dispatch(prepareFinalObject("applyScreen", applyScreenObj));
-        return false;
-      }
+      // if ( !!searchPropertyId && !isActiveProperty(applyScreenObj.property)) {
+      //   dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObj.property.status}`, labelName: `Property Status is ${applyScreenObj.property.status}` }, "warning"));
+      //   showHideFieldsFirstStep(dispatch, "", false);
+      //   dispatch(prepareFinalObject("applyScreen", applyScreenObj));
+      //   return false;
+      // }
 
     } else {
       const water = get(
@@ -214,11 +214,11 @@ const callBackForNext = async (state, dispatch) => {
       }
       // if (searchPropertyId !== undefined && searchPropertyId !== "") {
 
-        if (!!searchPropertyId && !isActiveProperty(applyScreenObject.property)) {
-          dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObject.property.status}`, labelName: `Property Status is ${applyScreenObject.property.status}` }, "warning"));
-          showHideFieldsFirstStep(dispatch, "", false);
-          return false;
-        }
+        // if (!!searchPropertyId && !isActiveProperty(applyScreenObject.property)) {
+        //   dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObject.property.status}`, labelName: `Property Status is ${applyScreenObject.property.status}` }, "warning"));
+        //   showHideFieldsFirstStep(dispatch, "", false);
+        //   return false;
+        // }
         // TODO else part update propertyId.
 
         if (validateConnHolderDetails(applyScreenObject)) {
@@ -435,9 +435,9 @@ const callBackForNext = async (state, dispatch) => {
     let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
     let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
     dispatch(handleField("apply", "components.div.children.formwizardFourthStep.children.snackbarWarningMessage", "props.propertyId", get(applyScreenObj, "property.propertyId", '')));
-    if (!!searchPropertyId && isActiveProperty(applyScreenObj.property)) {
-      dispatch(handleField("apply", "components.div.children.formwizardFourthStep.children.snackbarWarningMessage", "visible", false));
-    }
+    // if (!!searchPropertyId && isActiveProperty(applyScreenObj.property)) {
+    //   dispatch(handleField("apply", "components.div.children.formwizardFourthStep.children.snackbarWarningMessage", "visible", false));
+    // }
 
 
   }

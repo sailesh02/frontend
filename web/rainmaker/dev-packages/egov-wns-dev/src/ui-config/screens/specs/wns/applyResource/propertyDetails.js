@@ -71,12 +71,12 @@ if(isMode==="MODIFY"){
 }
 export const propertyHeader = getCommonSubHeader({
   lKey:resetScreen(),
-  labelKey: "WS_COMMON_PROP_DETAIL",
+  labelKey: "WS_COMMON_PROP_DETAIL_NOT_MANDATORY",
   labelName: "Property Details"
 })
 
 export const NoIdHeader = getCommonSubHeader({
-  labelKey: "WS_COMMON_PROP_DETAIL_NOT_MANDATORY",
+  labelKey: "WS_COMMON_PROP_DETAIL",
   labelName: "Property Details"
 })
 

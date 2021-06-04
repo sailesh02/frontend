@@ -421,9 +421,9 @@ export const validateConnHolderDetails = (holderData) => {
                 holderOwners[i].hasOwnProperty("gender") &&
                 holderOwners[i]["gender"] !== undefined &&
                 holderOwners[i]["gender"] !== "" &&
-                holderOwners[i].hasOwnProperty("ownerType") &&
-                holderOwners[i]["ownerType"] !== undefined &&
-                holderOwners[i]["ownerType"] !== "" &&
+                // holderOwners[i].hasOwnProperty("ownerType") &&
+                // holderOwners[i]["ownerType"] !== undefined &&
+                // holderOwners[i]["ownerType"] !== "" &&
                 holderOwners[i].hasOwnProperty("relationship") &&
                 holderOwners[i]["relationship"] !== undefined &&
                 holderOwners[i]["relationship"] !== ""

@@ -143,24 +143,24 @@ import {
         className: "applicant-details-error"
       }
     }),
-    specialApplicantCategory: getSelectField({
-      label: {
-        labelName: "Special Applicant Category",
-        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Special Applicant Category",
-        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_PLACEHOLDER"
-      },
-      jsonPath: "connectionHolders[0].ownerType",
-      required: true,
-      localePrefix: { moduleName: "PropertyTax", masterName: "OwnerType" },
-      sourceJsonPath: "applyScreenMdmsData.PropertyTax.OwnerType",
-      gridDefination: {
-        xs: 12,
-        sm: 6
-      }
-    }),
+    // specialApplicantCategory: getSelectField({
+    //   label: {
+    //     labelName: "Special Applicant Category",
+    //     labelKey: "WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
+    //   },
+    //   placeholder: {
+    //     labelName: "Select Special Applicant Category",
+    //     labelKey: "WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_PLACEHOLDER"
+    //   },
+    //   jsonPath: "connectionHolders[0].ownerType",
+    //   required: true,
+    //   localePrefix: { moduleName: "PropertyTax", masterName: "OwnerType" },
+    //   sourceJsonPath: "applyScreenMdmsData.PropertyTax.OwnerType",
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 6
+    //   }
+    // }),
   });
   // const connHolderDetail = getCommonContainer({
   //   mobileNumber: getTextField({

@@ -914,7 +914,7 @@ export const connectionHolderDetails={
       jsonPath: "applyScreenOld.connectionHolders[0].correspondenceAddress",
       callBack: handleNA
     }
-  )
+  ),
   specialApplicantCategory: getLabelWithValueForModifiedLabel(
     {
       labelKey: "WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"

@@ -378,13 +378,23 @@ class OwnerInfo extends Component {
     }
     
     let userInfo = JSON.parse(getUserInfo());
+    console.log(userInfo,ownerInfo)
     const roleCodes =
         userInfo && userInfo.roles
           ? userInfo.roles.map((role) => {
             return role.code;
           })
           : [];
-    const transferAllowed = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
+      debugger
+    // to get owners mobile number      
+    let ownerMobileNumber = ownerInfo && ownerInfo.length > 0 &&  ownerInfo[0].items && ownerInfo[0].items.filter( key => {
+      if(key.key == "Mobile No:" ){
+        return key
+      }
+    }) 
+
+    const isSameOwner = userInfo.mobileNumber ==  ownerMobileNumber.value  ? true : false   
+    const transferAllowed = (roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")) && isSameOwner
 
     return (
       <div>

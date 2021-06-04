@@ -141,7 +141,14 @@ const formConfig = {
           dd.push({ label: getTranslatedLabel(label, localizationLabels), value: selected.code });
           return dd;
         }, []);
-        dispatch(setFieldProperty("propertyAddress", "city", "dropDownData", sortBy(dd, ["label"])));
+
+        const updatedData = dd && dd.length > 0 && dd.filter( data => {
+          if(!data.value.split('.')[1].endsWith('Mouza')){
+            return data
+          }
+        })
+        // console.log("TENANT_TENANTS_TENANT_TENANTS_",dd,updatedData)
+        dispatch(setFieldProperty("propertyAddress", "city", "dropDownData", sortBy(updatedData, ["label"])));
       }
       const tenant = get(state, 'form.propertyAddress.fields.city.value', null);
       const mohallaDropDownData = get(state, 'form.propertyAddress.fields.mohalla.dropDownData', []);

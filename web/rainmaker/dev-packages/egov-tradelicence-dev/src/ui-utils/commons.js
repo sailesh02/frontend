@@ -185,17 +185,6 @@ if(queryValue && tlType === "TEMPORARY"){
       true
     )
   );
-}else{
-  const applyFor = getQueryArg(window.location.href, "applyFor");
-console.log(applyFor, "Nero applyFor")
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType",
-          "props.value",
-          applyFor
-        )
-      );
 }
 
   if (payload && payload.Licenses) {

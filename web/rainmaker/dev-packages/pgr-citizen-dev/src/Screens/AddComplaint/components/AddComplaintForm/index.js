@@ -20,6 +20,7 @@ const AddComplaintForm = ({ formKey, localizationLabels, handleFieldChange, form
       <LocationDetailsCard
         formKey={formKey}
         handleFieldChange={handleFieldChange}
+        pinCode={fields.pinCode}
         landmark={fields.landmark}
         locationDetails={fields.address}
         houseNo={fields.houseNo}

@@ -52,8 +52,7 @@ class LandingPage extends React.Component {
       }
 
       if (route && route.moduleName === "TL") {
-
-        window.localStorage.setItem('TLApplyfor', route.applyFor);
+        window.localStorage.setItem('licenseType', route.licenseType);
 
       }
       let toggle = get(

@@ -805,12 +805,34 @@ export const getObjectKeys = objData => {
 export const getMdmsJson = async (state, dispatch, reqObj) => {
   let { setPath, setTransformPath, dispatchPath, moduleName, name, filter } = reqObj;
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  console.log(reqObj, "Nero ReqObject");
-  console.log(window.location.href, "Nero window.location.href")
 
-  let mdmsBody = {
+
+  let mdmsBody = '';
+
+
+  if(moduleName === "TradeLicense"){
+    let applyFor = window.localStorage.getItem('licenseType');
+    if(applyFor === "TEMPORARY"){
+      name = "TemporaryTradeType";
+        }
+     mdmsBody = {
+      MdmsCriteria: {
+        tenantId: tenantId,
+
+        moduleDetails: [
+          {
+            moduleName,
+            masterDetails: [
+              { name, filter }
+            ]
+          }
+        ]
+      }
+    };
+  }else{
+   mdmsBody = {
     MdmsCriteria: {
-      tenantId: moduleName === "TradeLicense" ? tenantId: commonConfig.tenantId,
+      tenantId: commonConfig.tenantId,
 
       moduleDetails: [
         {
@@ -822,6 +844,8 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
       ]
     }
   };
+  }
+
 
   try {
     let payload = null;

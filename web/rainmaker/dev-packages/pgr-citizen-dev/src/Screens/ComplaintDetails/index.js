@@ -67,6 +67,7 @@ const mapStateToProps = (state, ownProps) => {
       description: selectedComplaint.description,
       submittedDate: getDateFromEpoch(selectedComplaint.auditDetails.createdTime),
       landMark: selectedComplaint.landmark,
+      pinCode: selectedComplaint.pinCode,
       address: selectedComplaint.address,
       addressDetail: selectedComplaint.addressDetail ? selectedComplaint.addressDetail : {},
       images: fetchImages(selectedComplaint.actions).filter((imageSource) => isImage(imageSource)),

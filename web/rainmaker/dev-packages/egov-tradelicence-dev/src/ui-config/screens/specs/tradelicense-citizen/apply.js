@@ -7,6 +7,7 @@ import {
   getBoundaryData
 } from "../../../../ui-utils/commons";
 import get from "lodash/get";
+import set from "lodash/set";
 import { footer } from "../tradelicence/applyResource/footer";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
@@ -97,24 +98,20 @@ const screenConfig = {
     } else {
       getData(action, state, dispatch, tenantId);
 
-      const applyFor = getQueryArg(window.location.href, "applyFor");
+      const applyFor = window.localStorage.getItem('licenseType');
 
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType",
-          "props.value",
-          applyFor
-        )
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
+        applyFor
       );
-      // dispatch(
-      //   handleField(
-      //     "apply",
-      //     "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType",
-      //     "props.disabled",
-      //     true
-      //   )
-      // );
+      if(applyFor === "TEMPORARY"){
+      set(
+        action.screenConfig,
+        "components.div.children.headerDiv.children.header.children.header.children.key.props.labelKey",
+        "TL_APPLY_TEMP_TRADELICENSE"
+      );
+      }
     }
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     return action;

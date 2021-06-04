@@ -150,13 +150,13 @@ export const callBackForNext = async (state, dispatch) => {
 
     let combinedTradeUnits = get(queryObject[0], "tradeLicenseDetail");
 
-    let selectedTradeUnits = combinedTradeUnits && combinedTradeUnits.tradeUnits && combinedTradeUnits.tradeUnits.length > 0 ? combinedTradeUnits.tradeUnits[0].tempUom : '';
+    // let selectedTradeUnits = combinedTradeUnits && combinedTradeUnits.tradeUnits && combinedTradeUnits.tradeUnits.length > 0 ? combinedTradeUnits.tradeUnits[0].tempUom : '';
 
 
-    if(tlType && tlType === "TEMPORARY" && !combinedTradeUnits && combinedTradeUnits.tradeUnits && combinedTradeUnits.tradeUnits.length > 0 && combinedTradeUnits.tradeUnits[0].tempUom){
-       isTradeSubTypeValidForTempTL = false;
+    // if(tlType && tlType === "TEMPORARY" && !combinedTradeUnits && combinedTradeUnits.tradeUnits && combinedTradeUnits.tradeUnits.length > 0 && combinedTradeUnits.tradeUnits[0].tempUom){
+    //    isTradeSubTypeValidForTempTL = false;
 
-    }
+    // }
 
     let tlcommencementDate = get(queryObject[0], "commencementDate");
 
@@ -181,7 +181,7 @@ var pastDateTimeStamp = new Date(`${tlcommencementDate} 00:00:00`).getTime();
       !isTradeLocationValid ||
       !isAccessoriesValid ||
       !isTradeUnitValid ||
-      !isTradeSubTypeValidForTempTL ||
+      //!isTradeSubTypeValidForTempTL ||
       !isCommencementDateInPast
     ) {
       isFormValid = false;
@@ -410,7 +410,7 @@ var pastDateTimeStamp = new Date(`${tlcommencementDate} 00:00:00`).getTime();
           errorMessage = {
             labelName:
               "Please fill all mandatory fields for Trade Details, then do next !",
-            labelKey: isTradeSubTypeValidForTempTL ? "ERR_FILL_TRADE_MANDATORY_FIELDS" : "ERR_FILL_TRADE_SUB_TYPE_NOT_VALID_FOR_TEMP_TL"
+            labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
           };
         }
           break;

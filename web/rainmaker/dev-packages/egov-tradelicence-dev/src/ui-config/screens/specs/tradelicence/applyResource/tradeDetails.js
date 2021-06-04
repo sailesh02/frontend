@@ -58,6 +58,44 @@ const tradeTypeChange = (reqObj) => {
   }
 }
 
+const setTempTLUOMValue = (reqObj) => {
+  let { moduleName, rootBlockSub, keyValue, value, state, dispatch, index } = reqObj;
+  let queryObject = JSON.parse(
+    JSON.stringify(
+      get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
+    )
+  );
+  let validTo = get(queryObject[0], "validTo");
+  let tlType = get(queryObject[0], "licenseType");
+
+  let tlcommencementDate = get(queryObject[0], "commencementDate");
+
+  if (validTo && tlcommencementDate) {
+
+    //var date1 = new Date(tlcommencementDate);
+    var date2 = new Date(validTo);
+    // To calculate the time difference of two dates
+
+    var Difference_In_Time = date2.getTime() - new Date(tlcommencementDate).getTime();
+
+    // To calculate the no. of days between two dates
+    var Difference_In_Days = Math.ceil((((Difference_In_Time / 1000) / 60) / 60) / 24);
+
+
+
+    dispatch(
+      handleField(
+        "apply",
+        `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+        "props.value",
+        Difference_In_Days
+      )
+    );
+
+
+  }
+}
+
 const tradeSubTypeChangeBackup = (reqObj) => {
   //This function is just backup of TradeUOM as select Box. And user will choose applicable option from drop box
   try {
@@ -83,8 +121,8 @@ const tradeSubTypeChangeBackup = (reqObj) => {
 
     if (currentObject[0] && currentObject[0].uom !== null && tlType && tlType === "PERMANENT") {
       var uomString = currentObject[0].uom;
-      let UOMDropBoxValues = uomString && uomString.split(",").map( (item) => {
-      return {code: item, active: true}
+      let UOMDropBoxValues = uomString && uomString.split(",").map((item) => {
+        return { code: item, active: true }
       })
 
       // dispatch(
@@ -148,8 +186,8 @@ const tradeSubTypeChangeBackup = (reqObj) => {
       //   )
       // );
       var uomString = currentObject[0].tempUom;
-      let UOMDropBoxValues = uomString && uomString.split(",").map( (item) => {
-      return {code: item, active: true}
+      let UOMDropBoxValues = uomString && uomString.split(",").map((item) => {
+        return { code: item, active: true }
       })
 
       dispatch(
@@ -193,7 +231,7 @@ const tradeSubTypeChangeBackup = (reqObj) => {
           firstValueSelected
         )
       );
-    }else {
+    } else {
 
       dispatch(
         handleField(
@@ -325,14 +363,14 @@ const tradeSubTypeChange = (reqObj) => {
           false
         )
       );
-    } else if (currentObject[0] && currentObject[0].tempUom !== null && tlType && tlType === "TEMPORARY") {
+    } else if (currentObject[0] && currentObject[0].uom !== null && tlType && tlType === "TEMPORARY") {
 
       dispatch(
         handleField(
           "apply",
           `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM`,
           "props.value",
-          currentObject[0].tempUom
+          currentObject[0].uom
         )
       );
 
@@ -349,10 +387,14 @@ const tradeSubTypeChange = (reqObj) => {
           "apply",
           `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
           "props.disabled",
-          false
+          true
         )
       );
-    }else {
+
+      setTempTLUOMValue(reqObj);
+
+
+    } else {
 
       dispatch(
         handleField(
@@ -412,7 +454,7 @@ const tradeSubTypeChange = (reqObj) => {
     }
     dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tradeType`, value));
 
-    dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tempUom`, currentObject[0].tempUom));
+    //dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tempUom`, currentObject[0].tempUom));
   } catch (e) {
     console.log(e);
   }
@@ -1043,51 +1085,52 @@ export const tradeDetails = getCommonCard({
     // },
     tradeCommencementDate: {
       ...getDateField({
-      label: {
-        labelName: "Trade Commencement Date",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
-      },
-      props: {
-        className: "applicant-details-error",
-        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
-        inputProps: {
-          //min: "2021-05-21",
-          min: getCurrentDate()
+        label: {
+          labelName: "Trade Commencement Date",
+          labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
+        },
+        props: {
+          className: "applicant-details-error",
+          disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
+          inputProps: {
+            //min: "2021-05-21",
+            min: getCurrentDate()
+
+          }
+        },
+        placeholder: {
+          labelName: "Enter Trade Commencement Date",
+          labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_PLACEHOLDER"
+        },
+        required: true,
+        pattern: getPattern("Date"),
+        jsonPath: "Licenses[0].commencementDate",
+
+      }),
+      beforeFieldChange: (action, state, dispatch) => {
+        if (action.value) {
+
+
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+              "props.inputProps.min",
+              action.value
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+              "props.disabled",
+              false
+            )
+          );
 
         }
       },
-      placeholder: {
-        labelName: "Enter Trade Commencement Date",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_PLACEHOLDER"
-      },
-      required: true,
-      pattern: getPattern("Date"),
-      jsonPath: "Licenses[0].commencementDate",
-
-    }),
-    beforeFieldChange: (action, state, dispatch) => {
-      if (action.value) {
-
-
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
-            "props.inputProps.min",
-            action.value
-          )
-        );
-        // dispatch(
-        //   handleField(
-        //     "apply",
-        //     "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
-        //     "props.disabled",
-        //     false
-        //   )
-        // );
-      }
     },
-  },
     tradeLicensePeriod: {
       ...getSelectField({
         label: {
@@ -1121,6 +1164,7 @@ export const tradeDetails = getCommonCard({
           labelKey: "TL_TRADE_LICENCE_TO_DATE"
         },
         required: true,
+
         pattern: getPattern("Date"),
         jsonPath: "Licenses[0].validTo",
         // props: {
@@ -1131,7 +1175,7 @@ export const tradeDetails = getCommonCard({
         //   }
         // }
         props: {
-
+          disabled: true,
           inputProps: {
 
             min: getCurrentDate()
@@ -1139,6 +1183,51 @@ export const tradeDetails = getCommonCard({
           }
         }
       }),
+      beforeFieldChange: (action, state, dispatch) => {
+        if (action.value) {
+
+          let queryObject = JSON.parse(
+            JSON.stringify(
+              get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
+            )
+          );
+          let validTo = action.value;
+          let tlType = get(queryObject[0], "licenseType");
+
+          let tlcommencementDate = get(queryObject[0], "commencementDate");
+
+          if (validTo && tlcommencementDate) {
+
+            //var date1 = new Date(tlcommencementDate);
+            var date2 = new Date(validTo);
+            // To calculate the time difference of two dates
+
+            var Difference_In_Time = date2.getTime() - new Date(tlcommencementDate).getTime();
+
+            // To calculate the no. of days between two dates
+            var Difference_In_Days = Math.ceil((((Difference_In_Time / 1000) / 60) / 60) / 24);
+
+            let selectedTrades = get(
+              state.screenConfiguration.screenConfig.apply,
+              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items",
+              null
+            )
+            console.log(selectedTrades, "Nero selectedTrades")
+            if (selectedTrades && selectedTrades.length > 0) {
+              for (let i = 0; i < selectedTrades.length; i++) {
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${i}].item${i}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+                    "props.value",
+                    Difference_In_Days
+                  )
+                );
+              }
+            }
+          }
+        }
+      },
       visible: false
     },
     // tradeToDate: {
@@ -1206,22 +1295,22 @@ export const tradeDetails = getCommonCard({
       pattern: getPattern("GSTNo"),
       jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
     }),
-    tradeOperationalArea: getTextField({
-      label: {
-        labelName: "Operatonal Area (Sq Ft)",
-        labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
-      },
-      props: {
-        className: "applicant-details-error",
-        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
-      },
-      placeholder: {
-        labelName: "Enter Operatonal Area in Sq Ft",
-        labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_PLACEHOLDER"
-      },
-      pattern: getPattern("OperationalArea"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea"
-    }),
+    // tradeOperationalArea: getTextField({
+    //   label: {
+    //     labelName: "Operatonal Area (Sq Ft)",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
+    //   },
+    //   props: {
+    //     className: "applicant-details-error",
+    //     disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
+    //   },
+    //   placeholder: {
+    //     labelName: "Enter Operatonal Area in Sq Ft",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_PLACEHOLDER"
+    //   },
+    //   pattern: getPattern("OperationalArea"),
+    //   jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea"
+    // }),
     // tradeNoOfEmployee: getTextField({
     //   label: {
     //     labelName: "No. Of Employee",

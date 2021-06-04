@@ -3,8 +3,9 @@ import { Card, TextFieldIcon, TextField, AutoSuggestDropdown } from "components"
 import { Link } from "react-router-dom";
 import TrackIcon from "material-ui/svg-icons/maps/my-location";
 import { AutosuggestContainer } from "egov-ui-framework/ui-containers";
+import Label from "egov-ui-kit/utils/translationNode";
 
-const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, houseNo, handleFieldChange }) => {
+const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, houseNo, pinCode, handleFieldChange }) => {
   if(city && city.dropDownData && city.dropDownData.length > 0) {
     city.dropDownData.map((item, key)=>{
       city.dropDownData[key].code = item.value;
@@ -19,6 +20,7 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
   }
   return (
     <div className="location-details-main-cont">
+
       <Card
         className="location-details-card common-padding-for-new-complaint-card"
         textChildren={
@@ -39,6 +41,7 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
               onChange={(e, value, selectedValue) => handleFieldChange("city", selectedValue)}
               {...city}
             /> */}
+            <Label labelClassName="complaint-location-label" label="CS_COMPLAINT_LOCATION_LABEL" fontSize="16px" />
             {city && <AutosuggestContainer
               className="fix-for-layout-break autocomplete-dropdown"
               fullWidth={true}
@@ -94,6 +97,12 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
               isClearable={true}
             />}
             <TextField required={true} id="addComplaint-house-no" {...houseNo} onChange={(e, value) => handleFieldChange("houseNo", value)} name="house-no" />
+            <TextField
+              id="addComplaint-pincode-details"
+              {...pinCode}
+              onChange={(e, value) => handleFieldChange("pinCode", value)}
+              name="pincode-details"
+            />
             <TextField
               id="addComplaint-landmark-details"
               {...landmark}

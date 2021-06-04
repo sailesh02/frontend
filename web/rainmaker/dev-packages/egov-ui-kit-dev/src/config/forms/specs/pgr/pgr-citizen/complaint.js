@@ -111,6 +111,14 @@ const formConfig = {
       hintText: "CS_ADDCOMPLAINT_LANDMARK_PLACEHOLDER",
       errorMessage: "PT_LANDMARK_ERROR_MESSAGE",
     },
+    pinCode: {
+      id: "pinCode",
+      jsonPath: "services[0].addressDetail.pinCode",
+      floatingLabelText: "CS_ADDCOMPLAINT_PINCODE",
+      hintText: "CS_ADDCOMPLAINT_PINCODE_PLACEHOLDER",
+      errorMessage: "PT_PINCODE_ERROR_MESSAGE",
+      required: true,
+    },
     tenantId: {
       id: "add-complaint-tenantid",
       jsonPath: "services[0].tenantId",

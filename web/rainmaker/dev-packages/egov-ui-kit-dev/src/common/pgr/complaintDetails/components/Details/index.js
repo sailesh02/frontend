@@ -33,7 +33,7 @@ class Details extends Component {
 
   render() {
     const { status, complaint, applicationNo, description, submittedDate, address, addressDetail, mapAction, images, action, role } = this.props;
-    const { houseNoAndStreetName, landmark, mohalla, city, locality } = addressDetail || "";
+    const { houseNoAndStreetName, landmark, mohalla, city, locality, pinCode } = addressDetail || "";
     const icon = {};
     icon.name = "location";
     icon.style = {
@@ -209,6 +209,18 @@ class Details extends Component {
                       label={address}
                       className="status-result-color"
                       id="complaint-details-complaint-location"
+                      labelStyle={{ color: "inherit" }}
+                    />
+                  </div>
+                )}
+
+              {pinCode && (
+                  <div className="complaint-detail-detail-section-status row">
+                    <Label className="col-xs-6  col-sm-4 col-md-2 status-color" label={"CS_ADDCOMPLAINT_PINCODE"} />
+                    <Label
+                      className="col-xs-6  col-sm-8 col-md-10 no-padding status-result-color"
+                      label={pinCode}
+                      id="complaint-details-submission-date"
                       labelStyle={{ color: "inherit" }}
                     />
                   </div>

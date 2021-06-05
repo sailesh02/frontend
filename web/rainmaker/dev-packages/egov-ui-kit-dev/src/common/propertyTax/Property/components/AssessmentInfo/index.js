@@ -134,7 +134,8 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails, edi
       }, {
 
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
-        value: unit.unitArea ? !!editIcon ? unit.unitArea : unit.unitArea * 9 + '' : "NA",
+        value: unit.unitArea ? !!editIcon ? unit.unitArea : Math.round(unit.unitArea * 9) + '' : "NA",
+        // value: unit.unitArea ? !!editIcon ? unit.unitArea : unit.unitArea * 9 + '' : "NA",
         oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && (`${Math.round(oldPropertydetails.units[index].unitArea * 9)}`) || "NA",
       }];
       if (unit.occupancyType === "RENTED") {

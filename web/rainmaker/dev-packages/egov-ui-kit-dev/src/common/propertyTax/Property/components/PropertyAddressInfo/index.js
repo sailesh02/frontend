@@ -15,12 +15,12 @@ export const getAddressItems = (properties, OldProperty) => {
   const tenantInfo = tenantId.split('.') || [];
   const stateId = tenantInfo && tenantInfo.length === 2 && tenantInfo[0] ? tenantInfo[0].toUpperCase() : 'NA';
   const cityId = tenantInfo && tenantInfo.length === 2 && tenantInfo[1] ? tenantInfo[1].toUpperCase() : 'NA';
-  const localityCode = address.locality && address.locality.code ? address.locality.code : 'NA';
+  const localityCode = address.locality && address.locality.name ? address.locality.name : 'NA';
   if(OldProperty){
    oldTenantInfo = OldProperty.tenantId.split(".");
    oldStateId = oldTenantInfo[0].toUpperCase();
    oldCityId = oldTenantInfo[1].toUpperCase();
-   oldLocality = OldProperty.address && OldProperty.address.locality && OldProperty.address.locality.code || 'NA';
+   oldLocality = OldProperty.address && OldProperty.address.locality && OldProperty.address.locality.name || 'NA';
   }
 
   return (
@@ -47,10 +47,10 @@ export const getAddressItems = (properties, OldProperty) => {
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
-        // value: (getTranslatedLabel((`${localityCode.split(".").pop()}`), localizationLabelsData)) || "NA",
-        // oldValue: (getTranslatedLabel((`${oldLocality.split(".").pop()}`), localizationLabelsData)) || "NA",
-        value: (getTranslatedLabel((`${stateId}_${cityId}_REVENUE_${localityCode}`), localizationLabelsData)) || "NA",
-        oldValue: (getTranslatedLabel((`${oldStateId}_${oldCityId}_REVENUE_${oldLocality}`), localizationLabelsData)) || "NA",
+        value: localityCode ? localityCode : 'NA',
+        oldValue: oldLocality ? oldLocality :   "NA",
+        // value: (getTranslatedLabel((`${stateId}_${cityId}_REVENUE_${localityCode}`), localizationLabelsData)) || "NA",
+        // oldValue: (getTranslatedLabel((`${oldStateId}_${oldCityId}_REVENUE_${oldLocality}`), localizationLabelsData)) || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PINCODE", localizationLabelsData),

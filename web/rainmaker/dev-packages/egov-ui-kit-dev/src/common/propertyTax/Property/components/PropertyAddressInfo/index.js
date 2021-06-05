@@ -27,39 +27,39 @@ export const getAddressItems = (properties, OldProperty) => {
     address && [
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_CITY", localizationLabelsData),
-        value: address.city || "NA",
+        value: address.city || "",
         oldValue: OldProperty && OldProperty.address && OldProperty.address.city
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_HOUSE_NO", localizationLabelsData),
-        value: address.doorNo || "NA",
+        value: address.doorNo || "",
         oldValue: OldProperty && OldProperty.address && OldProperty.address.doorNo
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_COLONY_NAME", localizationLabelsData),
-        value: address.buildingName || "NA",
+        value: address.buildingName || "",
         oldValue: OldProperty && OldProperty.address && OldProperty.address.buildingName
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_STREET_NAME", localizationLabelsData),
-        value: address.street || "NA",
+        value: address.street || "",
         oldValue: OldProperty && OldProperty.address && OldProperty.address.street
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
-        value: localityCode ? localityCode : 'NA',
-        oldValue: oldLocality ? oldLocality :   "NA",
+        value: localityCode ? localityCode : '',
+        oldValue: oldLocality ? oldLocality :   "",
         // value: (getTranslatedLabel((`${stateId}_${cityId}_REVENUE_${localityCode}`), localizationLabelsData)) || "NA",
         // oldValue: (getTranslatedLabel((`${oldStateId}_${oldCityId}_REVENUE_${oldLocality}`), localizationLabelsData)) || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PINCODE", localizationLabelsData),
-        value: address.pincode || "NA",
+        value: address.pincode || "",
         oldValue: OldProperty && OldProperty.address && OldProperty.address.pincode
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_EXISTING_PID", localizationLabelsData),
-        value: properties.oldPropertyId || "NA",
+        value: properties.oldPropertyId || "",
         oldValue: OldProperty && OldProperty.oldPropertyId
       }
     ]

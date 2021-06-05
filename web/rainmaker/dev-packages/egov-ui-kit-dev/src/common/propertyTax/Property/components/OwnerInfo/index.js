@@ -60,7 +60,7 @@ export const getOwnershipInfoUserCategory = (owner, generalMDMSDataById) => {
     generalMDMSDataById["OwnerType"] &&
     generalMDMSDataById["OwnerType"][owner.ownerType] &&
     generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
-  "NA";
+  "";
 }
 
 export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldPropertydetails={}) => {
@@ -84,23 +84,23 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
           isInstitution
             ? {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_NAME_INSTI", localizationLabelsData),
-              value: (institution && institution.name) || "NA",
+              value: (institution && institution.name) || "",
               oldValue: oldPropertydetails && oldPropertydetails.institution && oldPropertydetails.institution.name
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_NAME", localizationLabelsData),
-              value: owner.name || "NA",
+              value: owner.name || "",
               oldValue: oldPropertydetails && oldPropertydetails.owners && oldPropertydetails.owners[index].name
             },
           isInstitution
             ? {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_DESIGNATION", localizationLabelsData),
-              value: institution.designation || "NA",
+              value: institution.designation || "",
               oldValue: oldPropertydetails && oldPropertydetails.institution && oldPropertydetails.institution.designation
             }
             : {
               key: getTranslatedLabel("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", localizationLabelsData),
-              value: owner.fatherOrHusbandName || "NA",
+              value: owner.fatherOrHusbandName || "",
               oldValue: oldPropertydetails && oldPropertydetails.owners && Array.isArray( oldPropertydetails.owners)&& oldPropertydetails.owners[index].fatherOrHusbandName
             },
           isInstitution
@@ -111,7 +111,7 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_GENDER", localizationLabelsData),
-              value: owner.gender || "NA",
+              value: owner.gender || "",
               oldValue: oldPropertydetails && oldPropertydetails.owners && Array.isArray( oldPropertydetails.owners) && oldPropertydetails.owners[index].gender,
               jsonPath:'gender'
             },
@@ -119,7 +119,7 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
             ? {
 
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_TEL_NO", localizationLabelsData),
-              value: owner.altContactNumber || "NA",
+              value: owner.altContactNumber || "",
               oldValue: oldPropertydetails && oldPropertydetails.owners  && Array.isArray( oldPropertydetails.owners)&& oldPropertydetails.owners[index].altContactNumber
             }
             : {
@@ -130,23 +130,23 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
           isInstitution
             ? {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_NAME_OF_AUTH", localizationLabelsData),
-              value: owner.name || "NA",
+              value: owner.name || "",
               oldValue: oldPropertydetails && oldPropertydetails.owners  && Array.isArray( oldPropertydetails.owners)&& oldPropertydetails.owners[index].name
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData),
-              value: owner.mobileNumber || "NA",
+              value: owner.mobileNumber || "",
               oldValue: oldPropertydetails && oldPropertydetails.owners  && Array.isArray( oldPropertydetails.owners)&& oldPropertydetails.owners[index].mobileNumber
             },
           {
             key: getTranslatedLabel("PT_OWNERSHIP_INFO_EMAIL_ID", localizationLabelsData),
-            value: owner.emailId ? owner.emailId || "NA" : "",
+            value: owner.emailId ? owner.emailId || "" : "",
             oldValue: oldPropertydetails && oldPropertydetails.owners  && Array.isArray( oldPropertydetails.owners)&& oldPropertydetails.owners[index].emailId
           },
           isInstitution
             ? {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData),
-              value: owner.mobileNumber || "NA",
+              value: owner.mobileNumber || "",
               oldValue: oldPropertydetails && oldPropertydetails.owners  && Array.isArray( oldPropertydetails.owners)&& oldPropertydetails.owners[index].mobileNumber
             }
             : {
@@ -157,12 +157,12 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
           isInstitution
             ? {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
-              value: owner.correspondenceAddress || "NA",
+              value: owner.correspondenceAddress || "",
               oldValue: oldPropertydetails && oldPropertydetails.owners  && Array.isArray( oldPropertydetails.owners)&& oldPropertydetails.owners[index].correspondenceAddress
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
-              value: owner.permanentAddress || "NA",
+              value: owner.permanentAddress || "",
               oldValue: oldPropertydetails && oldPropertydetails.owners  && Array.isArray( oldPropertydetails.owners)&& oldPropertydetails.owners[index].permanentAddress
             },
           checkDocument(owner) && (isInstitution
@@ -170,16 +170,16 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_TYPE", localizationLabelsData),
-              value: getTranslatedLabel("PT_" + (checkDocument(owner).documentType).toUpperCase(), localizationLabelsData) || "NA",
-              oldValue: oldPropertydetails && oldPropertydetails.owners && Array.isArray( oldPropertydetails.owners) && getTranslatedLabel("PT_" + (checkDocument(oldPropertydetails.owners[index]).documentType).toUpperCase(), localizationLabelsData) || "NA",
+              value: getTranslatedLabel("PT_" + (checkDocument(owner).documentType).toUpperCase(), localizationLabelsData) || "",
+              oldValue: oldPropertydetails && oldPropertydetails.owners && Array.isArray( oldPropertydetails.owners) && getTranslatedLabel("PT_" + (checkDocument(oldPropertydetails.owners[index]).documentType).toUpperCase(), localizationLabelsData) || "",
             }),
           checkDocument(owner) && (isInstitution
             ? {
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_ID", localizationLabelsData),
-              value: checkDocument(owner).documentUid || "NA",
-              oldValue: oldPropertydetails  && oldPropertydetails.owners && Array.isArray( oldPropertydetails.owners)&& checkDocument(oldPropertydetails.owners[index]).documentUid|| "NA",
+              value: checkDocument(owner).documentUid || "",
+              oldValue: oldPropertydetails  && oldPropertydetails.owners && Array.isArray( oldPropertydetails.owners)&& checkDocument(oldPropertydetails.owners[index]).documentUid|| "",
             }
           )
         ],

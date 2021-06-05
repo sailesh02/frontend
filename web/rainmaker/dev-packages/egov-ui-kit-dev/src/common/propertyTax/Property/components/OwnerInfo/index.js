@@ -378,7 +378,6 @@ class OwnerInfo extends Component {
     }
     
     let userInfo = JSON.parse(getUserInfo());
-    console.log(userInfo,ownerInfo)
     const roleCodes =
         userInfo && userInfo.roles
           ? userInfo.roles.map((role) => {

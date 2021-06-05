@@ -84,7 +84,7 @@ export const callBackForNext = async (state, dispatch) => {
   );
   let isFormValid = true;
   let hasFieldToaster = true;
-  let isTradeSubTypeValidForTempTL = true;
+  let isValidToGreatorThanStartDate = true;
   let isCommencementDateInPast = true;
   if (activeStep === 0) {
     const isTradeDetailsValid = validateFields(
@@ -159,22 +159,27 @@ export const callBackForNext = async (state, dispatch) => {
     // }
 
     let tlcommencementDate = get(queryObject[0], "commencementDate");
-
-
+    let tlValidTo = get(queryObject[0], "validTo");
+console.log(tlValidTo, "Nero ValidTo")
+tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
     var dt = new Date();
 
-let h = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
+    let h = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
 
-var currentTimeStamp = new Date(`${h} 00:00:00`).getTime();
+    var currentTimeStamp = new Date(`${h} 00:00:00`).getTime();
 
 
-var pastDateTimeStamp = new Date(`${tlcommencementDate} 00:00:00`).getTime();
+    var pastDateTimeStamp = new Date(`${tlcommencementDate} 00:00:00`).getTime();
 
 
 
     if(pastDateTimeStamp < currentTimeStamp){
       isCommencementDateInPast = false;
     }
+    if(pastDateTimeStamp > tlValidTo){
+      isValidToGreatorThanStartDate = false;
+    }
+
 
     if (
       !isTradeDetailsValid ||
@@ -182,7 +187,8 @@ var pastDateTimeStamp = new Date(`${tlcommencementDate} 00:00:00`).getTime();
       !isAccessoriesValid ||
       !isTradeUnitValid ||
       //!isTradeSubTypeValidForTempTL ||
-      !isCommencementDateInPast
+      !isCommencementDateInPast ||
+      !isValidToGreatorThanStartDate
     ) {
       isFormValid = false;
     }
@@ -405,6 +411,12 @@ var pastDateTimeStamp = new Date(`${tlcommencementDate} 00:00:00`).getTime();
               labelName:
                 "Past commensement date not allowed",
               labelKey: "ERR_COMMENSEMENT_PAST_DATE_NOT_ALLOWED_TL"
+            };
+          }else if(!isValidToGreatorThanStartDate){
+            errorMessage = {
+              labelName:
+                "Commensement date greator than validto not allowed",
+              labelKey: "ERR_COMMENSEMENT_DATE_GREATOR_THAN_VALIDTO_NOT_ALLOWED_TL"
             };
           }else{
           errorMessage = {

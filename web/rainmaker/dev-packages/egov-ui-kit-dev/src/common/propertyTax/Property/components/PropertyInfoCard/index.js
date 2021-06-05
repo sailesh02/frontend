@@ -38,14 +38,14 @@ class PropertyInfoCard extends Component {
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
                                 labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
-                                label={item.key ? item.key : "NA"}
+                                label={item.key ? item.key : ""}
                                 fontSize="12px"
                               />
                             </div>
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
                                 labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                                label={item.value ? item.value : "NA"}
+                                label={item.value ? item.value : ""}
                                 fontSize="16px"
                               />
                             </div>

@@ -615,6 +615,7 @@ export const mohalla = {
           return option.value === field.value;
         });
         dispatch(prepareFormData("Properties[0].address.locality.area", mohalla.area));
+        dispatch(prepareFormData("Properties[0].address.locality.name", mohalla.name));
       }
     },
   },

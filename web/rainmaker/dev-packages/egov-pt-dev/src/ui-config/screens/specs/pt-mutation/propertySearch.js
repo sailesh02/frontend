@@ -54,7 +54,7 @@ const getMDMSData = async (action, dispatch) => {
           )
         );
       }
-      const tenants=get(payload,'payload.MdmsRes.tenant.tenants',[]).sort((t1,t2)=>t1.code.localeCompare(t2.code))
+      let tenants=get(payload,'payload.MdmsRes.tenant.tenants',[]).sort((t1,t2)=>t1.code.localeCompare(t2.code))
       dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", tenants));
     })
     // const payload = await httpRequest(

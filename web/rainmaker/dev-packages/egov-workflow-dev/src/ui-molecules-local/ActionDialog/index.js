@@ -69,7 +69,7 @@ let pt_payment_config = [
     path: "holdingTax",
     errorMessage: "PT_ERR_HOLDING_TAX",
     showError: false,
-    required: false,
+    required: true,
     filter: ["PT.CREATE", "ASMT"]
   },
   {
@@ -84,7 +84,7 @@ let pt_payment_config = [
     path: "lightTax",
     errorMessage: "PT_ERR_LIGHT_TAX",
     showError: false,
-    required: false,
+    required: true,
     filter: ["PT.CREATE", "ASMT"]
   },
   {
@@ -99,7 +99,7 @@ let pt_payment_config = [
     path: "waterTax",
     errorMessage: "PT_ERR_WATER_TAX",
     showError: false,
-    required: false,
+    required: true,
     filter: ["PT.CREATE", "ASMT"]
   },
   {
@@ -114,7 +114,7 @@ let pt_payment_config = [
     path: "drainageTax",
     errorMessage: "PT_ERR_DRINAGE_TAX",
     showError: false,
-    required: false,
+    required: true,
     filter: ["PT.CREATE", "ASMT"]
   },
   {
@@ -129,7 +129,7 @@ let pt_payment_config = [
     path: "latrineTax",
     errorMessage: "PT_ERR_LATRINE_TAX",
     showError: false,
-    required: false,
+    required: true,
     filter: ["PT.CREATE", "ASMT"]
   },
   {
@@ -144,7 +144,7 @@ let pt_payment_config = [
     path: "parkingTax",
     errorMessage: "PT_ERR_PARKING_TAX",
     showError: false,
-    required: false,
+    required: true,
     filter: ["PT.CREATE", "ASMT"]
   },
   {
@@ -159,7 +159,7 @@ let pt_payment_config = [
     path: "solidWasteUserCharges",
     errorMessage: "PT_ERR_SOLID_WASTER_USER_CHARGES",
     showError: false,
-    required: false,
+    required: true,
     filter: ["PT.CREATE", "ASMT"]
   },
   {
@@ -174,7 +174,7 @@ let pt_payment_config = [
     path: "ownershipExemption",
     errorMessage: "PT_ERR_OWNERSHIP_EXEMPTION",
     showError: false,
-    required: false,
+    required: true,
     filter: ["PT.CREATE", "ASMT"],
     subtract: true
   },
@@ -190,7 +190,7 @@ let pt_payment_config = [
     path: "usageExemption",
     errorMessage: "PT_ERR_USAGE_EXEMPTION",
     showError: false,
-    required: false,
+    required: true,
     filter: ["PT.CREATE", "ASMT"],
     subtract: true
   },
@@ -206,7 +206,7 @@ let pt_payment_config = [
     path: "interest",
     errorMessage: "PT_ERR_INTEREST",
     showError: false,
-    required: false,
+    required: true,
     filter: ["PT.CREATE", "ASMT"]
   },
   {
@@ -221,7 +221,7 @@ let pt_payment_config = [
     path: "penalty",
     errorMessage: "PT_ERR_PENALTY",
     showError: false,
-    required: false,
+    required: true,
     filter: ["PT.CREATE", "ASMT"]
   },
   {
@@ -236,7 +236,7 @@ let pt_payment_config = [
     path: "mutationCharge",
     errorMessage: "PT_ERR_MUTATION_CHARGE",
     showError: false,
-    required: false,
+    required: true,
     filter: ["PT.MUTATION"]
   }
 ]
@@ -284,24 +284,27 @@ class ActionDialog extends React.Component {
   };
 
   assementForward = (buttonLabel, isDocRequired) => {
+    debugger
     let {dataPath, state, dialogData} = this.props;
     const {moduleName} = dialogData
     let data = get(state.screenConfiguration.preparedFinalObject, dataPath)
     pt_payment_config = pt_payment_config.map((payment) => {
-      if(!data[payment.path]) {
-        data[payment.path] = "0"
+      if(data.additionalDetails && !data.additionalDetails[payment.path]) {        
+        data.additionalDetails[payment.path] = "0"
       }
       return {
       ...payment,
-      isError: payment.filter.includes(moduleName) ? payment.required
-        ? !data[payment.path]
-        : !!data[payment.path]
-        ? isNaN(data[payment.path])
-        : false : false
+      isError : payment.filter.includes(moduleName) && payment.required && data.additionalDetails && data.additionalDetails[payment.path] &&
+      (data.additionalDetails[payment.path] == 0 || data.additionalDetails[payment.path] == '0' || isNaN(data.additionalDetails[payment.path])) ? true : false
+      // isError: payment.filter.includes(moduleName) ? payment.required
+      //   ? data.additionalDetails && data.additionalDetails[payment.path]
+      //   : data.additionalDetails && !!data.additionalDetails[payment.path]
+      //   ? isNaN(data.additionalDetails && data.additionalDetails[payment.path])
+      //   : true : false
       }
     });
     this.props.handleFieldChange(dataPath, data);
-    const isError = pt_payment_config.some(payment => !!payment.isError)
+    const isError =  pt_payment_config.some(payment => !!payment.isError)
     if(isError) {
       this.setState({
         paymentErr: true
@@ -382,7 +385,7 @@ class ActionDialog extends React.Component {
         fullScreen={fullscreen}
         open={open}
         onClose={onClose}
-        maxWidth={false}
+        maxWidth={showPaymentCheck ? 'sm' : false}
         style={{zIndex:2000}}
       >
         <DialogContent
@@ -451,9 +454,14 @@ class ActionDialog extends React.Component {
                   )}
                   {!!showPaymentCheck && 
                   (<React.Fragment>
+                    <LabelContainer
+                          labelName="PT_ENTER_DEMAND_DETAILS"
+                          labelKey="PT_ENTER_DEMAND_DETAILS"
+                    />
                   {pt_payment_config.map((payment, ind) => {
                     return payment.filter.includes(moduleName) ? (
-                    <Grid payment sm="12">
+                    <Grid item
+                    sm="12">
                     <TextFieldContainer
                     defaultValue={0}
                     InputLabelProps={{ shrink: true }}
@@ -478,7 +486,7 @@ class ActionDialog extends React.Component {
                       return prev
                     }, 0)
                     }
-                    InputLabelProps={{ shrink: true }}
+                    InputLabelProps={{}}
                     label= {{labelName: "Total Amount", labelKey: "PT_PAYMENT_TOTAL"}}
                     inputProps={{disabled: true}}
                     /> 

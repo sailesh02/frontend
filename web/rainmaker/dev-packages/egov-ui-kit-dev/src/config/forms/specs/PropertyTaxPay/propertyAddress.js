@@ -141,6 +141,7 @@ const formConfig = {
           dd.push({ label: getTranslatedLabel(label, localizationLabels), value: selected.code });
           return dd;
         }, []);
+        
         dispatch(setFieldProperty("propertyAddress", "city", "dropDownData", sortBy(dd, ["label"])));
       }
       const tenant = get(state, 'form.propertyAddress.fields.city.value', null);

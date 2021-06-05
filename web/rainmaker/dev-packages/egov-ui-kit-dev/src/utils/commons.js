@@ -668,6 +668,7 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
               .replace(/[._:-\s\/]/g, "_")}`;
             option = {
               label: item.name,
+              name:item.name,
               // label: getTranslatedLabel(mohallaCode, localizationLabels),
               value: item.code,
             };

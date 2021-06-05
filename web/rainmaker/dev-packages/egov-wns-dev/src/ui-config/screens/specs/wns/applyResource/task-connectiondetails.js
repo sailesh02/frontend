@@ -83,16 +83,16 @@ export const getConnectionDetails = () => {
         },  {
             labelKey: "WS_OLD_LABEL_NAME"
           },
-          { jsonPath: "WaterConnectionOld[0].proposedTaps" }),
-     taskPipeSizeProposed : getLabelWithValueForModifiedLabel(
-        {
-            labelName:"No of pipe size proposed",
-            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
-        },
-        { jsonPath: "WaterConnection[0].proposedPipeSize" },  {
-            labelKey: "WS_OLD_LABEL_NAME"
-          },
-          { jsonPath: "WaterConnectionOld[0].proposedPipeSize" })
+          { jsonPath: "WaterConnectionOld[0].proposedTaps" })
+    //  taskPipeSizeProposed : getLabelWithValueForModifiedLabel(
+    //     {
+    //         labelName:"No of pipe size proposed",
+    //         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
+    //     },
+    //     { jsonPath: "WaterConnection[0].proposedPipeSize" },  {
+    //         labelKey: "WS_OLD_LABEL_NAME"
+    //       },
+    //       { jsonPath: "WaterConnectionOld[0].proposedPipeSize" })
 
 }
  export const connectionDetailsSewerage={
@@ -126,7 +126,16 @@ export const getConnectionDetails = () => {
             labelKey: "WS_OLD_LABEL_NAME"
           },
           { jsonPath: "WaterConnectionOld[0].proposedToilets" }
-    )
+    ),
+    taskPipeSizeProposed : getLabelWithValueForModifiedLabel(
+        {
+            labelName:"No of pipe size proposed",
+            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
+        },
+        { jsonPath: "SewerageConnection[0].pipeSize" },  {
+            labelKey: "WS_OLD_LABEL_NAME"
+          },
+          { jsonPath: "SewerageConnection[0].pipeSize" })
 
 }
 

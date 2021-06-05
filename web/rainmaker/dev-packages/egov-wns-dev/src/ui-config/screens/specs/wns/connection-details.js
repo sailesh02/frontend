@@ -180,6 +180,9 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       if (sewerageConnection.noOfToilets === 0) {
         sewerageConnection.noOfToilets = "0";
       }
+      if (sewerageConnection.pipeSize === 0) {
+        sewerageConnection.pipeSize = "0";
+      }
       sewerageConnection.connectionExecutionDate = convertEpochToDate(
         sewerageConnection.connectionExecutionDate
       );
@@ -252,9 +255,9 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       if (waterConnection.noOfTaps === 0) {
         waterConnection.noOfTaps = "0";
       }
-      if (waterConnection.pipeSize === 0) {
-        waterConnection.pipeSize = "0";
-      }
+      // if (waterConnection.pipeSize === 0) {
+      //   waterConnection.pipeSize = "0";
+      // }
       if (waterConnection.property && waterConnection.property.propertyType !== undefined) {
         const propertyTpe =
           "[?(@.code  == " +

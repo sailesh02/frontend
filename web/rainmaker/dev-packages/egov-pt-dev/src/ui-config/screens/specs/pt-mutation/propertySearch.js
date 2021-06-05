@@ -55,12 +55,7 @@ const getMDMSData = async (action, dispatch) => {
         );
       }
       let tenants=get(payload,'payload.MdmsRes.tenant.tenants',[]).sort((t1,t2)=>t1.code.localeCompare(t2.code))
-      const updatedData = tenants && tenants.filter( tenant => {
-        if(tenant && !tenant.code.split('.')[1].endsWith('Mouza')){
-          return tenant
-        }
-      })
-      dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", updatedData));
+      dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", tenants));
     })
     // const payload = await httpRequest(
     //   "post",

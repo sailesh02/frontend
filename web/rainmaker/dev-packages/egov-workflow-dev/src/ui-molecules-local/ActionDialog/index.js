@@ -288,13 +288,13 @@ class ActionDialog extends React.Component {
     const {moduleName} = dialogData
     let data = get(state.screenConfiguration.preparedFinalObject, dataPath)
     pt_payment_config = pt_payment_config.map((payment) => {
-      if(!data[payment.path]) {
-        data[payment.path] = "0"
+      if(!data[payment.path]) {        
+        data.additionalDetails[payment.path] = "0"
       }
       return {
       ...payment,
       isError: payment.filter.includes(moduleName) ? payment.required
-        ? !data[payment.path]
+        ? data[payment.path]
         : !!data[payment.path]
         ? isNaN(data[payment.path])
         : false : false
@@ -382,7 +382,7 @@ class ActionDialog extends React.Component {
         fullScreen={fullscreen}
         open={open}
         onClose={onClose}
-        maxWidth={false}
+        maxWidth={showPaymentCheck ? 'sm' : false}
         style={{zIndex:2000}}
       >
         <DialogContent
@@ -451,9 +451,14 @@ class ActionDialog extends React.Component {
                   )}
                   {!!showPaymentCheck && 
                   (<React.Fragment>
+                    <LabelContainer
+                          labelName="PT_ENTER_DEMAND_DETAILS"
+                          labelKey="PT_ENTER_DEMAND_DETAILS"
+                    />
                   {pt_payment_config.map((payment, ind) => {
                     return payment.filter.includes(moduleName) ? (
-                    <Grid payment sm="12">
+                    <Grid item
+                    sm="12">
                     <TextFieldContainer
                     defaultValue={0}
                     InputLabelProps={{ shrink: true }}
@@ -478,7 +483,7 @@ class ActionDialog extends React.Component {
                       return prev
                     }, 0)
                     }
-                    InputLabelProps={{ shrink: true }}
+                    InputLabelProps={{}}
                     label= {{labelName: "Total Amount", labelKey: "PT_PAYMENT_TOTAL"}}
                     inputProps={{disabled: true}}
                     /> 

@@ -13,14 +13,14 @@ export const getAddressItems = (properties, OldProperty) => {
   let oldTenantInfo = [], oldStateId="", oldCityId="", oldLocality="";
   const { address = {}, tenantId = '' } = properties;
   const tenantInfo = tenantId.split('.') || [];
-  const stateId = tenantInfo && tenantInfo.length === 2 && tenantInfo[0] ? tenantInfo[0].toUpperCase() : 'NA';
-  const cityId = tenantInfo && tenantInfo.length === 2 && tenantInfo[1] ? tenantInfo[1].toUpperCase() : 'NA';
-  const localityCode = address.locality && address.locality.name ? address.locality.name : 'NA';
+  const stateId = tenantInfo && tenantInfo.length === 2 && tenantInfo[0] ? tenantInfo[0].toUpperCase() : '';
+  const cityId = tenantInfo && tenantInfo.length === 2 && tenantInfo[1] ? tenantInfo[1].toUpperCase() : '';
+  const localityCode = address.locality && address.locality.name ? address.locality.name : '';
   if(OldProperty){
    oldTenantInfo = OldProperty.tenantId.split(".");
    oldStateId = oldTenantInfo[0].toUpperCase();
    oldCityId = oldTenantInfo[1].toUpperCase();
-   oldLocality = OldProperty.address && OldProperty.address.locality && OldProperty.address.locality.name || 'NA';
+   oldLocality = OldProperty.address && OldProperty.address.locality && OldProperty.address.locality.name || '';
   }
 
   return (

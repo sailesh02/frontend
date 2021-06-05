@@ -143,7 +143,7 @@ const formConfig = {
       set(action, "form.fields.rainwaterHarvesting.value", get(state.common.prepareFormData,'Properties[0].additionalDetails.isRainwaterHarvesting',false));
       set(action, "form.fields.propertyEntryType.options",propertyOptions);
       set(action, "form.fields.propertyEntryType.value", get(state.common.prepareFormData,'Properties[0].creationReason',"CREATE"));
-      process.env.REACT_APP_NAME == "Citizen" ? set(action, "form.fields.propertyEntryType.visible", false) : set(action, "form.fields.propertyEntryType.visible", true)
+      process.env.REACT_APP_NAME == "Citizen" ? set(action, "form.fields.propertyEntryType.visible", false) : set(action, "form.fields.propertyEntryType.visible", false)
       return action;
     } catch (e) {
       console.log(e);

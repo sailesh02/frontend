@@ -784,11 +784,11 @@ export const taskPipeSizeProposed = getLabelWithValueForModifiedLabel(
   {
     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
   },
-  { jsonPath: "applyScreen.proposedPipeSize", callBack: handleNA },
+  { jsonPath: "applyScreen.pipeSize", callBack: handleNA },
   {
     labelKey: "WS_OLD_LABEL_NAME"
   },
-  { jsonPath: "applyScreenOld.proposedPipeSize", callBack: handleNA },
+  { jsonPath: "applyScreenOld.pipeSize", callBack: handleNA },
 )
 
 export const taskNoOfClosets = getLabelWithValueForModifiedLabel(

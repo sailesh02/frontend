@@ -200,7 +200,7 @@ export const additionDetails = getCommonCard({
         label: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE" },
         placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.pipeSize",
+        sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.pipeSize",
         jsonPath: "applyScreen.pipeSize",
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"

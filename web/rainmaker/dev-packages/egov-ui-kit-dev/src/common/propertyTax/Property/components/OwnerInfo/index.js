@@ -46,7 +46,7 @@ export const getOwnershipTypeInfo = (institution, generalMDMSDataById) => {
     generalMDMSDataById["SubOwnerShipCategory"] &&
     generalMDMSDataById["SubOwnerShipCategory"][institution.type] &&
     generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
-  "NA";
+  "";
 }
 
 export const getOwnershipTypeInfoCategory = (ownershipCategory, subOwnershipCategory) => {
@@ -243,26 +243,26 @@ class OwnerInfo extends Component {
       let owner = {};
       if (institution) {
         owner = {
-          "PT_OWNERSHIP_INFO_NAME_INSTI": institution.name || "NA",
-          "PT_OWNERSHIP_INFO_DESIGNATION": institution.designation || "NA",
-          "PT_OWNERSHIP_INFO_TYPE_INSTI": institution.type || "NA",
-          "PT_FORM3_OWNERSHIP_TYPE": getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory.split(".")[0]}`) || "NA",
-          "PT_OWNERSHIP_INFO_NAME_OF_AUTH": institution.nameOfAuthorizedPerson || "NA",
-          "PT_OWNERSHIP_INFO_TEL_NO": item.altContactNumber || "NA",
-          "PT_MUTATION_AUTHORISED_EMAIL": item.emailId || "NA",
-          "PT_OWNER_MOBILE_NO": item.mobileNumber || "NA",
-          "PT_OWNERSHIP_INFO_CORR_ADDR": item.correspondenceAddress || "NA"
+          "PT_OWNERSHIP_INFO_NAME_INSTI": institution.name || "",
+          "PT_OWNERSHIP_INFO_DESIGNATION": institution.designation || "",
+          "PT_OWNERSHIP_INFO_TYPE_INSTI": institution.type || "",
+          "PT_FORM3_OWNERSHIP_TYPE": getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory.split(".")[0]}`) || "",
+          "PT_OWNERSHIP_INFO_NAME_OF_AUTH": institution.nameOfAuthorizedPerson || "",
+          "PT_OWNERSHIP_INFO_TEL_NO": item.altContactNumber || "",
+          "PT_MUTATION_AUTHORISED_EMAIL": item.emailId || "",
+          "PT_OWNER_MOBILE_NO": item.mobileNumber || "",
+          "PT_OWNERSHIP_INFO_CORR_ADDR": item.correspondenceAddress || ""
         }
       } else {
         owner = {
-          "PT_OWNER_NAME": item.name || "NA",
-          "PT_GUARDIANS_NAME": item.fatherOrHusbandName || "NA",
-          "PT_GENDER": item.gender || "NA",
+          "PT_OWNER_NAME": item.name || "",
+          "PT_GUARDIANS_NAME": item.fatherOrHusbandName || "",
+          "PT_GENDER": item.gender || "",
           // "PT_OWNERSHIP_INFO_DOB": convertEpochToDate(item.dob) || "NA",
-          "PT_OWNER_MOBILE_NO": item.mobileNumber || "NA",
-          "PT_MUTATION_AUTHORISED_EMAIL": item.emailId || "NA",
-          "PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY": item.ownerType || "NA",
-          "PT_OWNERSHIP_INFO_CORR_ADDR": item.permanentAddress || "NA",
+          "PT_OWNER_MOBILE_NO": item.mobileNumber || "",
+          "PT_MUTATION_AUTHORISED_EMAIL": item.emailId || "",
+          "PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY": item.ownerType || "",
+          "PT_OWNERSHIP_INFO_CORR_ADDR": item.permanentAddress || "",
         };
         const document = checkDocument(item);
         if (document) {

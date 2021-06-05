@@ -385,7 +385,7 @@ class OwnerInfo extends Component {
             return role.code;
           })
           : [];
-      debugger
+      
     // to get owners mobile number      
     let ownerMobileNumber = ownerInfo && ownerInfo.length > 0 &&  ownerInfo[0].items && ownerInfo[0].items.filter( key => {
       if(key.key == "Mobile No:" ){
@@ -393,7 +393,7 @@ class OwnerInfo extends Component {
       }
     }) 
 
-    const isSameOwner = userInfo.mobileNumber ==  ownerMobileNumber.value  ? true : false   
+    const isSameOwner = userInfo.mobileNumber ==  (ownerMobileNumber && ownerMobileNumber[0].value)  ? true : false   
     const transferAllowed = (roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")) && isSameOwner
 
     return (

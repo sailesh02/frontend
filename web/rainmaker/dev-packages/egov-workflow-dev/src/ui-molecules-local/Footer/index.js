@@ -177,9 +177,6 @@ class Footer extends React.Component {
        reNewDurationInMiliSeconds =  1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
     }
 
-console.log(validFrom, "Nero validFrom fff")
-
-console.log(validFrom+reNewDurationInMiliSeconds, "Nero validTo fff")
     const wfCode = "DIRECTRENEWAL";
     set(licences[0], "action", "INITIATE");
     set(licences[0], "workflowCode", wfCode);

@@ -208,11 +208,11 @@ if(queryValue && tlType === "TEMPORARY"){
   }
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
-  if (isEditRenewal) {
-    const nextYear = generateNextFinancialYear(state);
-    dispatch(
-      prepareFinalObject("Licenses[0].financialYear", nextYear));
-  }
+  // if (isEditRenewal) {
+  //   const nextYear = generateNextFinancialYear(state);
+  //   dispatch(
+  //     prepareFinalObject("Licenses[0].financialYear", nextYear));
+  // }
 
   setDocsForEditFlow(state, dispatch);
 

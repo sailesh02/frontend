@@ -8,7 +8,6 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-kit/utils/api";
 
 export const createPropertyPayload = (properties, documentsUploadRedux) => {
-  debugger
   let oldUnits=properties&&properties[0]&&properties[0].units||[];
   properties[0] = {
     ...properties[0],

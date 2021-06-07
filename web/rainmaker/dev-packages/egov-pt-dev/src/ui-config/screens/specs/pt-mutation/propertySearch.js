@@ -55,9 +55,17 @@ const getMDMSData = async (action, dispatch) => {
         );
       }
       let tenants=get(payload,'payload.MdmsRes.tenant.tenants',[]).sort((t1,t2)=>t1.code.localeCompare(t2.code))
-      dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", tenants));
+      const updatedData = tenants && tenants.map( tenant => {
+        return {
+          ...tenant,
+          code: tenant.code && tenant.code.trim()}
+        })
+           
+      dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", updatedData));
+      // dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", tenants));
     })
     // const payload = await httpRequest(
+  
     //   "post",
     //   "/egov-mdms-service/v1/_search",
     //   "_search",

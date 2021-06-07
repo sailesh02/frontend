@@ -37,7 +37,6 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
       builtUpArea: unit.unitArea,
     };
     unit.tenantId = properties[0].tenantId;
-    debugger
     unit.usageCategory =
       unit.usageCategoryMajor +
       (unit.usageCategoryMinor ? "." + unit.usageCategoryMinor : "") +

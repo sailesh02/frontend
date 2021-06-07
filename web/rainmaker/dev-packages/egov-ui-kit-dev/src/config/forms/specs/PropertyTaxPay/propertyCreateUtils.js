@@ -8,6 +8,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-kit/utils/api";
 
 export const createPropertyPayload = (properties, documentsUploadRedux) => {
+  debugger
   let oldUnits=properties&&properties[0]&&properties[0].units||[];
   properties[0] = {
     ...properties[0],
@@ -36,11 +37,19 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
       builtUpArea: unit.unitArea,
     };
     unit.tenantId = properties[0].tenantId;
+    debugger
     unit.usageCategory =
       unit.usageCategoryMajor +
       (unit.usageCategoryMinor ? "." + unit.usageCategoryMinor : "") +
       (unit.usageCategorySubMinor ? "." + unit.usageCategorySubMinor : "") +
       (unit.usageCategoryDetail ? "." + unit.usageCategoryDetail : "");
+    
+    if(!unit.usageCategoryMajor){
+      unit.usageCategory =
+      unit.usageCategoryMinor +
+      (unit.usageCategorySubMinor ? "." + unit.usageCategorySubMinor : "") +
+      (unit.usageCategoryDetail ? "." + unit.usageCategoryDetail : "");
+    }
 
     // unit.usageCategory = unit.usageCategoryMajor+"."+unit.usageCategoryMinor+"."+unit.usageCategorySubMinor+"."+unit.usageCategoryDetail;
 

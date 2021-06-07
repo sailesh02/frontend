@@ -363,7 +363,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
                 endpoints.push("property-services/property/_search")
               }
             }
-          } else if (uniqueModule == "pt-services" || uniqueModule == "pgr-services") {
+          } else if (uniqueModule == "pt-services" || uniqueModule == "pgr-services" || uniqueModule == "fsm" || uniqueModule == "vehicle") {
 
           } else {
             requestBodies.push({
@@ -372,10 +372,13 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
               }
             })
             queries.push([])
+
             endpoints.push(`egov-searcher/locality/${uniqueModule}/_get`)
+
           }
 
         })
+        console.log(endpoints, queries, "Nero endpoints")
         const resp = await multiHttpRequest(endpoints, "search", queries, requestBodies)
         resp && resp.map(res => {
           if (res && res.Localities) {

@@ -137,11 +137,13 @@ const formConfig = {
           let selected = cities.find((city) => {
             return city.code === tenant.code;
           });
+
+          selected.code = selected.code && selected.code.trim()
           const label = `TENANT_TENANTS_${selected.code.toUpperCase().replace(/[.]/g, "_")}`;
           dd.push({ label: getTranslatedLabel(label, localizationLabels), value: selected.code });
           return dd;
         }, []);
-        
+
         dispatch(setFieldProperty("propertyAddress", "city", "dropDownData", sortBy(dd, ["label"])));
       }
       const tenant = get(state, 'form.propertyAddress.fields.city.value', null);

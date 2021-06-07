@@ -180,8 +180,6 @@ const generateDocument = ( item, modulePrifx ) => {
 };
 
 export const getRequiredDocuments = ( documents, moduleName, footerCallback ) => {
-  debugger
-
   let doc = documents.map(item => {
     return generateDocument( item, moduleName );
   });

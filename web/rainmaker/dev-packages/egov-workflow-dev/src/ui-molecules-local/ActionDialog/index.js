@@ -289,18 +289,13 @@ class ActionDialog extends React.Component {
     const {moduleName} = dialogData
     let data = get(state.screenConfiguration.preparedFinalObject, dataPath)
     pt_payment_config = pt_payment_config.map((payment) => {
-      if(data.additionalDetails && !data.additionalDetails[payment.path]) {        
+      if(data.additionalDetails && !data.additionalDetails[payment.path] && data.additionalDetails[payment.path] != "") {        
         data.additionalDetails[payment.path] = "0"
       }
+
       return {
       ...payment,
-      isError : payment.filter.includes(moduleName) && payment.required && data.additionalDetails && data.additionalDetails[payment.path] &&
-      (data.additionalDetails[payment.path] == 0 || data.additionalDetails[payment.path] == '0' || isNaN(data.additionalDetails[payment.path])) ? true : false
-      // isError: payment.filter.includes(moduleName) ? payment.required
-      //   ? data.additionalDetails && data.additionalDetails[payment.path]
-      //   : data.additionalDetails && !!data.additionalDetails[payment.path]
-      //   ? isNaN(data.additionalDetails && data.additionalDetails[payment.path])
-      //   : true : false
+      isError : payment.filter.includes(moduleName) && payment.required  && (isNaN(data.additionalDetails[payment.path]) || !data.additionalDetails[payment.path] || data.additionalDetails[payment.path] === "" ) ? true : false
       }
     });
     this.props.handleFieldChange(dataPath, data);
@@ -454,10 +449,19 @@ class ActionDialog extends React.Component {
                   )}
                   {!!showPaymentCheck && 
                   (<React.Fragment>
-                    <LabelContainer
+                    <div
+                      style={{
+                        color: "rgba(0, 0, 0, 0.60)",
+                        fontSize: '14px',
+                        fontWeight: '1000',
+                        lineHeight:'20px',
+                        marginTop: '8px'
+                      }}>
+                       <LabelContainer
                           labelName="PT_ENTER_DEMAND_DETAILS"
-                          labelKey="PT_ENTER_DEMAND_DETAILS"
-                    />
+                          labelKey="PT_ENTER_DEMAND_DETAILS"/>
+                    </div>
+                   
                   {pt_payment_config.map((payment, ind) => {
                     return payment.filter.includes(moduleName) ? (
                     <Grid item
@@ -479,7 +483,11 @@ class ActionDialog extends React.Component {
                     </Grid>
                   ) : null})}
                   <Grid item sm="12">
-                  <TextFieldContainer
+                  <div
+                      style={{
+                        fontWeight: '1000',
+                      }}>
+                      <TextFieldContainer
                     value={pt_payment_config.reduce((prev, curr) => {
                       const val = Number(get(this.props.state, `screenConfiguration.preparedFinalObject.${this.props.dataPath}.additionalDetails.${curr.path}`) || 0)
                       prev = curr.filter.includes(moduleName) ? prev + (curr.subtract ? -val : val): prev
@@ -490,6 +498,8 @@ class ActionDialog extends React.Component {
                     label= {{labelName: "Total Amount", labelKey: "PT_PAYMENT_TOTAL"}}
                     inputProps={{disabled: true}}
                     /> 
+                    </div>
+                  
                   </Grid>
                   </React.Fragment>)}
                   <Grid item sm="12">

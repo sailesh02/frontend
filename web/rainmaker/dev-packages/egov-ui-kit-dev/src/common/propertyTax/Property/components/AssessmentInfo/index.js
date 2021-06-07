@@ -51,7 +51,7 @@ export const getUsageTypeInfo = (propertyDetails) => {
 
 export const getPlotSizeInfo = (propertyDetails, editIcon) => {
   return propertyDetails.propertySubType === "SHAREDPROPERTY"
-    ? "" : propertyDetails.uom ? `${Math.round(!!editIcon ? propertyDetails.landArea : propertyDetails.landArea * 9)} ${propertyDetails.uom}` : `${Math.round(!!editIcon ? propertyDetails.landArea : propertyDetails.landArea * 9)} sq feet`;
+    ? "" : propertyDetails.uom ? `${Math.round(!!editIcon ? propertyDetails.landArea : propertyDetails.landArea * 9)} ${propertyDetails.uom}` : `${Math.round(!!editIcon ? propertyDetails.landArea : propertyDetails.landArea * 9)}`;
 }
 
 export const getRainWaterHarvestingInfo = (properties) => {

@@ -294,9 +294,10 @@ class ActionDialog extends React.Component {
 
       return {
       ...payment,
-      isError : payment.filter.includes(moduleName) && payment.required  && (isNaN(data.additionalDetails[payment.path]) || !data.additionalDetails[payment.path] || data.additionalDetails[payment.path] === "" ) ? true : false
+      isError : payment.filter.includes(moduleName) && payment.required  && (isNaN(data.additionalDetails[payment.path]) || !data.additionalDetails[payment.path] || data.additionalDetails[payment.path] === "" || Number(data.additionalDetails[payment.path]) < 0) ? true : false
       }
     });
+
     this.props.handleFieldChange(dataPath, data);
     const isError =  pt_payment_config.some(payment => !!payment.isError)
     if(isError) {
@@ -482,11 +483,16 @@ class ActionDialog extends React.Component {
                     </Grid>
                   ) : null})}
                   <Grid item sm="12">
-                  <div
+                    <div
                       style={{
-                        fontWeight: '1000',
+                        color: "rgba(0, 0, 0, 0.60)",
+                        fontWeight: '600',
                       }}>
-                      <TextFieldContainer
+                       <LabelContainer
+                          labelName="PT_PAYMENT_TOTAL"
+                          labelKey="PT_PAYMENT_TOTAL"/>
+                      </div>
+                    <TextFieldContainer
                     value={pt_payment_config.reduce((prev, curr) => {
                       const val = Number(get(this.props.state, `screenConfiguration.preparedFinalObject.${this.props.dataPath}.additionalDetails.${curr.path}`) || 0)
                       prev = curr.filter.includes(moduleName) ? prev + (curr.subtract ? -val : val): prev
@@ -494,10 +500,9 @@ class ActionDialog extends React.Component {
                     }, 0)
                     }
                     InputLabelProps={{}}
-                    label= {{labelName: "Total Amount", labelKey: "PT_PAYMENT_TOTAL"}}
+                    // label= {{labelName: "Total Amount", labelKey: "PT_PAYMENT_TOTAL"}}
                     inputProps={{disabled: true}}
                     /> 
-                    </div>
                   
                   </Grid>
                   </React.Fragment>)}

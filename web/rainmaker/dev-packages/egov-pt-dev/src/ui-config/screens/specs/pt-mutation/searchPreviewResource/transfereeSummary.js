@@ -142,7 +142,7 @@ export const transfereeInstitutionSummaryDetails={
       jsonPath: "Property.institutionTemp.type",       
       callBack: value => {
         if(!value){
-          return 'NA';
+          return '';
         }
         return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
       }

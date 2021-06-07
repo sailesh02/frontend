@@ -41,6 +41,13 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
       (unit.usageCategoryMinor ? "." + unit.usageCategoryMinor : "") +
       (unit.usageCategorySubMinor ? "." + unit.usageCategorySubMinor : "") +
       (unit.usageCategoryDetail ? "." + unit.usageCategoryDetail : "");
+    
+    if(!unit.usageCategoryMajor){
+      unit.usageCategory =
+      unit.usageCategoryMinor +
+      (unit.usageCategorySubMinor ? "." + unit.usageCategorySubMinor : "") +
+      (unit.usageCategoryDetail ? "." + unit.usageCategoryDetail : "");
+    }
 
     // unit.usageCategory = unit.usageCategoryMajor+"."+unit.usageCategoryMinor+"."+unit.usageCategorySubMinor+"."+unit.usageCategoryDetail;
 

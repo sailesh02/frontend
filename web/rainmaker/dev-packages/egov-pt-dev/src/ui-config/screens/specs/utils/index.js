@@ -874,7 +874,7 @@ export const getTextToLocalMapping = label => {
 };
 
 export const checkValueForNA = value => {
-  return value == null || value == undefined || value == '' ? "NA" : value;
+  return value == null || value == undefined || value == '' ? "" : value;
 };
 export const fetchBill = async queryObject => {
   try {

@@ -87,7 +87,6 @@ const getAssessmentDetails = async () => {
     }
 }
 export const createProperty = async (Properties, action, props, isModify, preparedFinalObject) => {
-    debugger
     const { documentsUploadRedux, newProperties, propertiesEdited ,propertyAdditionalDetails, location} = props;
     const { search } = location;
     const isEditInWorkflow = getQueryValue(search, "mode") == 'WORKFLOWEDIT';

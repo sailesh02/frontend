@@ -52,8 +52,11 @@ export const getUsageTypeInfo = (propertyDetails) => {
 }
 
 export const getPlotSizeInfo = (propertyDetails, editIcon) => {
+  debugger
   return propertyDetails.propertySubType === "SHAREDPROPERTY"
-    ? "" : propertyDetails.uom ? `${Math.round(!!editIcon ? propertyDetails.landArea : propertyDetails.landArea * 9)} ${propertyDetails.uom}` : `${Math.round(( !!editIcon && purpose != "update")? propertyDetails.landArea : propertyDetails.landArea * 9)}`;
+  ? "" : propertyDetails.uom ? `${Math.round(!!editIcon ? propertyDetails.landArea : propertyDetails.landArea * 9)} ${propertyDetails.uom}` : `${Math.round(( !!editIcon)? propertyDetails.landArea * 9 : propertyDetails.landArea * 9)}`;
+
+    // ? "" : propertyDetails.uom ? `${Math.round(!!editIcon ? propertyDetails.landArea : propertyDetails.landArea * 9)} ${propertyDetails.uom}` : `${Math.round(( !!editIcon)? propertyDetails.landArea : propertyDetails.landArea * 9)}`;
 }
 
 export const getRainWaterHarvestingInfo = (properties) => {
@@ -136,7 +139,7 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails, edi
       }, {
 
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
-        value: unit.unitArea ? !!editIcon ? unit.unitArea.toString() : Math.round(unit.unitArea * 9) + '' : "",
+        value: unit.unitArea ? !!editIcon ? Math.round(unit.unitArea).toString() : Math.round(unit.unitArea * 9) + '' : "",
         // value: unit.unitArea ? !!editIcon ? unit.unitArea : unit.unitArea * 9 + '' : "NA",
         oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && (`${Math.round(oldPropertydetails.units[index].unitArea * 9)}`) || "",
       }];

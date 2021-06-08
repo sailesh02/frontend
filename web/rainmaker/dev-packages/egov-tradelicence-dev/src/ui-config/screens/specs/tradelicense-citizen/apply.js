@@ -105,12 +105,51 @@ const screenConfig = {
         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
         applyFor
       );
+
+      dispatch(prepareFinalObject("Licenses[0].licenseType", applyFor));
+
       if(applyFor === "TEMPORARY"){
       set(
         action.screenConfig,
         "components.div.children.headerDiv.children.header.children.header.children.key.props.labelKey",
         "TL_APPLY_TEMP_TRADELICENSE"
       );
+
+      set(
+        action.screenConfig,
+          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate.visible",
+
+          true
+
+      );
+      set(
+        action.screenConfig,
+          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod.visible",
+
+          false
+
+      );
+      dispatch(prepareFinalObject("Licenses[0].tradeLicensePeriod", null));
+      dispatch(prepareFinalObject("Licenses[0].validTo", null));
+
+
+      }else{
+        set(
+          action.screenConfig,
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate.visible",
+
+            false
+
+        );
+        set(
+          action.screenConfig,
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod.visible",
+
+            true
+
+        );
+        dispatch(prepareFinalObject("Licenses[0].tradeLicensePeriod", null));
+        dispatch(prepareFinalObject("Licenses[0].validTo", null));
       }
     }
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));

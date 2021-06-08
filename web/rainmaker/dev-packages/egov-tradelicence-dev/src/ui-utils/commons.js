@@ -173,7 +173,7 @@ export const updatePFOforSearchResults = async (
   // const payload = await getSearchResults(queryObject)
   // getQueryArg(window.location.href, "action") === "edit" &&
   //   (await setDocsForEditFlow(state, dispatch));
-  console.log(queryValue, "Nero value")
+
   let tlType = get(payload.Licenses[0],'licenseType',"PERMANENT");
 
 if(queryValue && tlType === "TEMPORARY"){

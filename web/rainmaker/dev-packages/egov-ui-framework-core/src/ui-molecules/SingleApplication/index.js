@@ -60,7 +60,7 @@ class SingleApplication extends React.Component {
       this.setBusinessServiceDataToLocalStorage(businessServiceQueryObject);
       switch (item.status) {
         case "INITIATED":
-          
+
           if(item.applicationType=="RENEWAL"){
             setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&licenseNumber=${item.licenseNumber}&action=EDITRENEWAL&tenantId=${item.tenantId}`);
           }else{
@@ -175,6 +175,7 @@ class SingleApplication extends React.Component {
 
   render() {
     const { searchResults, classes, contents, moduleName, setRoute } = this.props;
+    console.log(searchResults, "Nero SearchResult")
     return (
       <div className="application-card">
         {searchResults && searchResults.length > 0 ? (
@@ -244,7 +245,7 @@ class SingleApplication extends React.Component {
                       // setRoute(url);
                     }}>
                       <Label
-                        labelKey={(item.status === "APPROVED" || item.status === "EXPIRED") && moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL" : "TL_VIEW_DETAILS"}
+                        labelKey={(item.status === "APPROVED" || item.status === "EXPIRED") && moduleName === "TL" && item.licenseType === "PERMANENT"? "TL_VIEW_DETAILS_RENEWAL" : "TL_VIEW_DETAILS"}
                         textTransform={"uppercase"}
                         style={{
                           color: "#fe7a51",

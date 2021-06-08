@@ -991,6 +991,7 @@ export const tradeDetails = getCommonCard({
           moduleName: "TRADELICENSE",
           masterName: "LICENSETYPE"
         },
+        visible: false,
         props: {
           disabled: true,
           //value: "PERMANENT",
@@ -1154,7 +1155,7 @@ export const tradeDetails = getCommonCard({
         },
         sourceJsonPath: "applyScreenMdmsData.TradeLicense.TlPeriod"
       }),
-      visible: false
+      visible: false,
     },
     tradeToDate: {
       ...getDateField({
@@ -1163,6 +1164,7 @@ export const tradeDetails = getCommonCard({
           labelName: "Trade License From Date",
           labelKey: "TL_TRADE_LICENCE_TO_DATE"
         },
+        visible: false,
         required: true,
 
         pattern: getPattern("Date"),

@@ -108,7 +108,14 @@ class AssessmentHistory extends Component {
                                             { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
                                             "error"
                                         );
-                                    } else {
+                                    }else if(Assessment.status != "ACTIVE") {
+                                        this.props.toggleSnackbarAndSetText(
+                                            true,
+                                            { labelName: "Re-assess application is already in workflow", labelKey: "ERROR_REASSESS_IN_WORKFLOW" },
+                                            "error"
+                                        );    
+                                    }
+                                    else {
                                         history &&
                                             history.push(getPropertyLink(propertyId, Assessment.tenantId, PROPERTY_FORM_PURPOSE.REASSESS, Assessment.financialYear, Assessment.assessmentNumber)
                                             );

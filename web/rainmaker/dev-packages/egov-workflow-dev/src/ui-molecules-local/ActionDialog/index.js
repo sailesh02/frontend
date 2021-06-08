@@ -286,16 +286,35 @@ class ActionDialog extends React.Component {
   assementForward = (buttonLabel, isDocRequired) => {
     let {dataPath, state, dialogData} = this.props;
     const {moduleName} = dialogData
+    let decimals = 0;
     let data = get(state.screenConfiguration.preparedFinalObject, dataPath)
     pt_payment_config = pt_payment_config.map((payment) => {
-      if(data.additionalDetails && !data.additionalDetails[payment.path] && data.additionalDetails[payment.path] != "") {        
-        data.additionalDetails[payment.path] = "0"
+      if(!data.additionalDetails || !data.additionalDetails[payment.path]) {
+        if(!data.additionalDetails){
+          data.additionalDetails = {}
+          data.additionalDetails[payment.path] = "0"
+        }else if(!data.additionalDetails[payment.path] && data.additionalDetails[payment.path] != ""){
+          data.additionalDetails[payment.path] = "0"
+        }else{
+
+        }
+      return {
+        ...payment,
+        isError : payment.filter.includes(moduleName) && payment.required  && (isNaN(data.additionalDetails[payment.path]) || !data.additionalDetails[payment.path] || data.additionalDetails[payment.path] === "" || Number(data.additionalDetails[payment.path]) < 0
+        || decimals > 2) ? true : false
+        }     
+      }else{
+        var text = data.additionalDetails[payment.path].toString();
+        var index = text.indexOf(".");
+        decimals = (text.length - index - 1);
+
+        return {
+          ...payment,
+          isError : payment.filter.includes(moduleName) && payment.required  && (isNaN(data.additionalDetails[payment.path]) || !data.additionalDetails[payment.path] || data.additionalDetails[payment.path] === "" || Number(data.additionalDetails[payment.path]) < 0
+          || decimals > 2) ? true : false
+          } 
       }
 
-      return {
-      ...payment,
-      isError : payment.filter.includes(moduleName) && payment.required  && (isNaN(data.additionalDetails[payment.path]) || !data.additionalDetails[payment.path] || data.additionalDetails[payment.path] === "" || Number(data.additionalDetails[payment.path]) < 0) ? true : false
-      }
     });
 
     this.props.handleFieldChange(dataPath, data);

@@ -522,8 +522,10 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances,
       prepareFinalObject,
       dataPath,
-      moduleName
+      moduleName,
+      preparedFinalObject
     } = this.props;
+    console.log(preparedFinalObject, "Nero THis Props")
     const workflowContract =
       ProcessInstances &&
       ProcessInstances.length > 0 &&
@@ -534,6 +536,15 @@ class WorkFlowContainer extends React.Component {
     }
     if ((moduleName === 'Noc') && window.location.href.includes("isFromBPA=true")) {
       showFooter = false
+    }
+    if(moduleName === "NewTL"){
+      let Lic = get(preparedFinalObject, "Licenses");
+      console.log(Lic, "Nero LIC")
+      if(Lic && Lic.length > 0){
+        if(Lic[0].licenseType === "TEMPORARY" && (Lic[0].status === "APPROVED" || Lic[0].status === "EXPIRED")){
+          showFooter = false
+        }
+      }
     }
 
     return (

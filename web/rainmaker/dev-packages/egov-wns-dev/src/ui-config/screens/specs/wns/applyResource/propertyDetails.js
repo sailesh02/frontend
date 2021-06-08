@@ -231,115 +231,261 @@ const propertyDetailsNoId = getCommonContainer({
     type: "array",
     jsonPath: "applyScreen.apartment",
   },
-  city: getSelectField({
-    label: {
-      labelName: "City",
-      labelKey: "CORE_COMMON_CITY"
-    },
-    placeholder: {
-      labelName: "Select City",
-      labelKey: "PT_COMMONS_SELECT_PLACEHOLDER"
-    },
-    data: [],
-    jsonPath: "applyScreen.tenantId",
-    sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-    localePrefix: { moduleName: "tenant", masterName: "tenants" },
-    gridDefination: {
-      xs: 12,
-      sm: 6
-    },
-    afterFieldChange:async (action, state, dispatch) => {
-      if(action.value){
-        const dataFetchConfig = {
-          url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-          action: "",
-          queryParams: [{
-            key: "tenantId",
-            value: action.value
-          }],
-          requestBody: {},
-          isDependent: true,
-          hierarchyType: "REVENUE"
+  city: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-pt",
+      componentPath: "AutosuggestContainer",
+      props: {
+        className: "autocomplete-dropdown",
+        suggestions: [],
+        label: {
+          labelName: "City",
+          labelKey: "CORE_COMMON_CITY"
+        },
+        placeholder: {
+          labelName: "Select City",
+          labelKey: "PT_COMMONS_SELECT_PLACEHOLDER"
+        },
+        data: [],
+        localePrefix: {
+          moduleName: "TENANT",
+          masterName: "TENANTS"
+        },
+        jsonPath: "applyScreen.tenantId",
+        sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+        labelsFromLocalisation: true,
+        required: true,
+        isClearable: true,
+        inputLabelProps: {
+          shrink: true
         }
-        let url = dataFetchConfig.url
-        let fieldKey = "mohalla"
-        try {
-          if (url) {
-            let localizationLabels = {};
-            if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-            const payloadSpec = await httpRequest(url, dataFetchConfig.action, dataFetchConfig.queryParams || [], dataFetchConfig.requestBody);
-            const dropdownData = true
-              ? // ? jp.query(payloadSpec, dataFetchConfig.dataPath)
-              payloadSpec.TenantBoundary[0].boundary
-              : dataFetchConfig.dataPath.reduce((dropdownData, path) => {
-                dropdownData = [...dropdownData, ...get(payloadSpec, path)];
-                return dropdownData;
-              }, []);
-              const ddData =
-              dropdownData &&
-              dropdownData.length > 0 &&
-              dropdownData.reduce((ddData, item) => {
-                let option = {};
-                if (fieldKey === "mohalla" && item.code) {
-                  option = {
-                    label: item.name,
-                    code: item.name,
-                    // label: getTranslatedLabel(mohallaCode, localizationLabels),
-                    value: item.name,
-                  };
-                } else {
-                  option = {
-                    label: item.name,
-                    value: item.code,
-                  };
-                }
-                item.area && (option.area = item.area);
-                ddData.push(option);
-                return ddData;
-              }, []);
-            // dispatch(setFieldProperty(formKey, fieldKey, "dropDownData", ddData));
-              dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", ddData));
+      },
+      data: [],
+      required: true,
+      jsonPath: "applyScreen.tenantId",
+      sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
+      afterFieldChange:async (action, state, dispatch) => {
+        if(action.value){
+          const dataFetchConfig = {
+            url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+            action: "",
+            queryParams: [{
+              key: "tenantId",
+              value: action.value
+            }],
+            requestBody: {},
+            isDependent: true,
+            hierarchyType: "REVENUE"
           }
-        } 
-        catch (error) {
-          const { message } = error;
-          console.log(error);
-          if (fieldKey === "mohalla") {
-            dispatch(
-              toggleSnackbarAndSetText(
-                true,
-                { labelName: "There is no admin boundary data available for this tenant", labelKey: "ERR_NO_ADMIN_BOUNDARY_FOR_TENANT" },
-                "error"
-              )
-            );
-          } else {
-            dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
-          }
-          return;
-        }      
+          let url = dataFetchConfig.url
+          let fieldKey = "mohalla"
+          try {
+            if (url) {
+              let localizationLabels = {};
+              if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+              const payloadSpec = await httpRequest(url, dataFetchConfig.action, dataFetchConfig.queryParams || [], dataFetchConfig.requestBody);
+              const dropdownData = true
+                ? // ? jp.query(payloadSpec, dataFetchConfig.dataPath)
+                payloadSpec.TenantBoundary[0].boundary
+                : dataFetchConfig.dataPath.reduce((dropdownData, path) => {
+                  dropdownData = [...dropdownData, ...get(payloadSpec, path)];
+                  return dropdownData;
+                }, []);
+                const ddData =
+                dropdownData &&
+                dropdownData.length > 0 &&
+                dropdownData.reduce((ddData, item) => {
+                  let option = {};
+                  if (fieldKey === "mohalla" && item.code) {
+                    option = {
+                      label: item.name,
+                      code: item.name,
+                      // label: getTranslatedLabel(mohallaCode, localizationLabels),
+                      value: item.name,
+                    };
+                  } else {
+                    option = {
+                      label: item.name,
+                      value: item.code,
+                    };
+                  }
+                  item.area && (option.area = item.area);
+                  ddData.push(option);
+                  return ddData;
+                }, []);
+              // dispatch(setFieldProperty(formKey, fieldKey, "dropDownData", ddData));
+                dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", ddData));
+            }
+          } 
+          catch (error) {
+            const { message } = error;
+            console.log(error);
+            if (fieldKey === "mohalla") {
+              dispatch(
+                toggleSnackbarAndSetText(
+                  true,
+                  { labelName: "There is no admin boundary data available for this tenant", labelKey: "ERR_NO_ADMIN_BOUNDARY_FOR_TENANT" },
+                  "error"
+                )
+              );
+            } else {
+              dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
+            }
+            return;
+          }      
+        }
       }
-    }
-  }),
-  mohalla: getSelectField({
-    label: {
-      labelName: "Mohalla",
-      labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
     },
-    placeholder: {
-      labelName: "Locality",
-      labelKey: "PT_PROPERTY_DETAILS_PLACEHOLDER"
+
+  // city: getSelectField({
+  //   label: {
+  //     labelName: "City",
+  //     labelKey: "CORE_COMMON_CITY"
+  //   },
+  //   placeholder: {
+  //     labelName: "Select City",
+  //     labelKey: "PT_COMMONS_SELECT_PLACEHOLDER"
+  //   },
+  //   data: [],
+  //   jsonPath: "applyScreen.tenantId",
+  //   sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+  //   localePrefix: { moduleName: "tenant", masterName: "tenants" },
+  //   gridDefination: {
+  //     xs: 12,
+  //     sm: 6
+  //   },
+  //   afterFieldChange:async (action, state, dispatch) => {
+  //     if(action.value){
+  //       const dataFetchConfig = {
+  //         url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+  //         action: "",
+  //         queryParams: [{
+  //           key: "tenantId",
+  //           value: action.value
+  //         }],
+  //         requestBody: {},
+  //         isDependent: true,
+  //         hierarchyType: "REVENUE"
+  //       }
+  //       let url = dataFetchConfig.url
+  //       let fieldKey = "mohalla"
+  //       try {
+  //         if (url) {
+  //           let localizationLabels = {};
+  //           if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+  //           const payloadSpec = await httpRequest(url, dataFetchConfig.action, dataFetchConfig.queryParams || [], dataFetchConfig.requestBody);
+  //           const dropdownData = true
+  //             ? // ? jp.query(payloadSpec, dataFetchConfig.dataPath)
+  //             payloadSpec.TenantBoundary[0].boundary
+  //             : dataFetchConfig.dataPath.reduce((dropdownData, path) => {
+  //               dropdownData = [...dropdownData, ...get(payloadSpec, path)];
+  //               return dropdownData;
+  //             }, []);
+  //             const ddData =
+  //             dropdownData &&
+  //             dropdownData.length > 0 &&
+  //             dropdownData.reduce((ddData, item) => {
+  //               let option = {};
+  //               if (fieldKey === "mohalla" && item.code) {
+  //                 option = {
+  //                   label: item.name,
+  //                   code: item.name,
+  //                   // label: getTranslatedLabel(mohallaCode, localizationLabels),
+  //                   value: item.name,
+  //                 };
+  //               } else {
+  //                 option = {
+  //                   label: item.name,
+  //                   value: item.code,
+  //                 };
+  //               }
+  //               item.area && (option.area = item.area);
+  //               ddData.push(option);
+  //               return ddData;
+  //             }, []);
+  //           // dispatch(setFieldProperty(formKey, fieldKey, "dropDownData", ddData));
+  //             dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", ddData));
+  //         }
+  //       } 
+  //       catch (error) {
+  //         const { message } = error;
+  //         console.log(error);
+  //         if (fieldKey === "mohalla") {
+  //           dispatch(
+  //             toggleSnackbarAndSetText(
+  //               true,
+  //               { labelName: "There is no admin boundary data available for this tenant", labelKey: "ERR_NO_ADMIN_BOUNDARY_FOR_TENANT" },
+  //               "error"
+  //             )
+  //           );
+  //         } else {
+  //           dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
+  //         }
+  //         return;
+  //       }      
+  //     }
+  //   }
+  // }),
+  mohalla: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-pt",
+    componentPath: "AutosuggestContainer",
+    props: {
+      className: "autocomplete-dropdown",
+      suggestions: [],
+      label: {
+        labelName: "Mohalla",
+        labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
+      },
+      placeholder: {
+        labelName: "Locality",
+        labelKey: "PT_PROPERTY_DETAILS_PLACEHOLDER"
+      },
+      data: [],
+      optionValue: "code",
+      optionLabel: "label",
+      jsonPath: "applyScreen.locality",
+      sourceJsonPath: "applyScreenMdmsData.mohalla",
+      labelsFromLocalisation: true,
+      required: true,
+      isClearable: true,
+      inputLabelProps: {
+        shrink: true
+      }
     },
     data: [],
-    optionValue: "code",
-    optionLabel: "label",
+    required: true,
     jsonPath: "applyScreen.locality",
     sourceJsonPath: "applyScreenMdmsData.mohalla",
     gridDefination: {
       xs: 12,
       sm: 6
     }
+  },
+  // mohalla: getSelectField({
+  //   label: {
+  //     labelName: "Mohalla",
+  //     labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
+  //   },
+  //   placeholder: {
+  //     labelName: "Locality",
+  //     labelKey: "PT_PROPERTY_DETAILS_PLACEHOLDER"
+  //   },
+  //   data: [],
+  //   optionValue: "code",
+  //   optionLabel: "label",
+  //   jsonPath: "applyScreen.locality",
+  //   sourceJsonPath: "applyScreenMdmsData.mohalla",
+  //   gridDefination: {
+  //     xs: 12,
+  //     sm: 6
+  //   }
   
-  }),
+  // }),
   connectionCategory: getSelectField({
     label: {
       labelName: "Connection Category",

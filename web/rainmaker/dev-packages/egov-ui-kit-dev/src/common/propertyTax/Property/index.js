@@ -335,6 +335,8 @@ class Property extends Component {
       documentsUploaded,
       loading
     } = this.props;
+
+    console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",new Date(1623153780253))
     const { closeYearRangeDialogue } = this;
     const { dialogueOpen, urlToAppend, showAssessmentHistory } = this.state;
     let urlArray = [];

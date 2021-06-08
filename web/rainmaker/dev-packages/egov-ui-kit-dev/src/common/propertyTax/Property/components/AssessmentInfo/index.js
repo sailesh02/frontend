@@ -52,7 +52,6 @@ export const getUsageTypeInfo = (propertyDetails) => {
 }
 
 export const getPlotSizeInfo = (propertyDetails, editIcon) => {
-  debugger
   return propertyDetails.propertySubType === "SHAREDPROPERTY"
   ? "" : propertyDetails.uom ? `${Math.round(!!editIcon ? propertyDetails.landArea : propertyDetails.landArea * 9)} ${propertyDetails.uom}` : `${Math.round(( !!editIcon)? propertyDetails.landArea * 9 : propertyDetails.landArea * 9)}`;
 

@@ -690,7 +690,7 @@ export const setDocsForEditFlow = async (state) => {
 
 export const setWSDocuments = async (payload, sourceJsonPath, businessService) => {
     const uploadedDocData = get(payload, sourceJsonPath);
-    if (uploadedDocData !== "NA" && uploadedDocData.length > 0) {
+    if (uploadedDocData && uploadedDocData !== "NA" && uploadedDocData.length > 0) {
         const fileStoreIds =
             uploadedDocData &&
             uploadedDocData

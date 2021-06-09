@@ -22,13 +22,13 @@ const extractFromString = (str, index) => {
   return null;
 };
 
-const getUsageCategory = (usageCategory) => {
+const getUsageCategory = (usageCategory,type) => {
   let categoryArray = usageCategory.split(".");
   let tempObj = {};
-  tempObj["usageCategoryMajor"] = categoryArray && categoryArray.length > 0 && categoryArray[0];
-  tempObj["usageCategoryMinor"] = categoryArray && categoryArray.length > 1 && categoryArray[1];
+  tempObj["usageCategoryMajor"] = type == "MIXED" ? null : categoryArray && categoryArray.length > 0 && categoryArray[0];
+  tempObj["usageCategoryMinor"] = type == "MIXED" ? categoryArray && categoryArray.length > 0 && categoryArray[0]: categoryArray && categoryArray.length > 1 && categoryArray[1];
   tempObj["usageCategorySubMinor"] = categoryArray && categoryArray.length > 2 && categoryArray[2];
-  tempObj["usageCategoryDetail"] = categoryArray && categoryArray.length > 3 && categoryArray[3];
+  tempObj["usageCategoryDetail"] = categoryArray && categoryArray.length > 3 ? categoryArray[3] : categoryArray.length > 2 ? categoryArray[2] : categoryArray[1];
   return tempObj;
 }
 
@@ -150,11 +150,11 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.status = newProperty.status;
   propertyDetails.usage = null;
   propertyDetails.noOfFloors = newProperty.noOfFloors;
-  propertyDetails.landArea = newProperty.landArea;
+  propertyDetails.landArea = Math.round(newProperty.landArea * 9);
   propertyDetails.buildUpArea = newProperty.superBuiltUpArea;
   propertyDetails.units = newProperty.units && newProperty.units.map(unit => {
     unit.floorNo = unit.floorNo || unit.floorNo === 0 ? unit.floorNo.toString() : unit.floorNo
-    return { ...unit, ...getUsageCategory(unit.usageCategory) }
+    return { ...unit, ...getUsageCategory(unit.usageCategory,newProperty.usageCategory) }
   });
   propertyDetails.units = propertyDetails.units&& Array.isArray(propertyDetails.units)&&propertyDetails.units.filter(unit=>unit.active);
   propertyDetails.documents = newProperty.documents;
@@ -189,7 +189,7 @@ export const convertToOldPTObject = (newObject) => {
     // unit.constructionDetail = {
     //   builtUpArea: unit.unitArea,
     // };
-    unit.unitArea = unit.constructionDetail.builtUpArea;
+    unit.unitArea = Math.round(unit.constructionDetail.builtUpArea);
     return { ...unit }
   })
   localStorageSet("previousFloorNo", newProperty.noOfFloors)

@@ -1417,6 +1417,7 @@ class FormWizard extends Component {
     } else {
     }
   };
+  
   closeDeclarationDialogue = () => {
     this.setState({ dialogueOpen: false });
   };

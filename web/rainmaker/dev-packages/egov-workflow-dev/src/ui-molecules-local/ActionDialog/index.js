@@ -295,6 +295,13 @@ class ActionDialog extends React.Component {
           data.additionalDetails[payment.path] = "0"
         }else if(!data.additionalDetails[payment.path] && data.additionalDetails[payment.path] != ""){
           data.additionalDetails[payment.path] = "0"
+        }
+        var text = data.additionalDetails[payment.path].toString();
+        var index = text.indexOf(".");
+        if(index == -1 ){
+          decimals = 0
+        }else{
+          decimals = (text.length - index - 1);
         }    
       }else{
         var text = data.additionalDetails[payment.path].toString();

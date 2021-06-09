@@ -32,6 +32,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
   }
   
   properties[0].units.map((unit) => {
+    debugger
     unit.constructionDetail = {
       builtUpArea: unit.unitArea,
     };

@@ -25,10 +25,14 @@ const extractFromString = (str, index) => {
 const getUsageCategory = (usageCategory,type) => {
   let categoryArray = usageCategory.split(".");
   let tempObj = {};
-  tempObj["usageCategoryMajor"] = type == "MIXED" ? null : categoryArray && categoryArray.length > 0 && categoryArray[0];
-  tempObj["usageCategoryMinor"] = type == "MIXED" ? categoryArray && categoryArray.length > 0 && categoryArray[0]: categoryArray && categoryArray.length > 1 && categoryArray[1];
+  tempObj["usageCategoryMajor"] = categoryArray && categoryArray.length > 0 && categoryArray[0];
+  tempObj["usageCategoryMinor"] = categoryArray && categoryArray.length > 1 && categoryArray[1];
   tempObj["usageCategorySubMinor"] = categoryArray && categoryArray.length > 2 && categoryArray[2];
-  tempObj["usageCategoryDetail"] = categoryArray && categoryArray.length > 3 ? categoryArray[3] : categoryArray.length > 2 ? categoryArray[2] : categoryArray[1];
+  tempObj["usageCategoryDetail"] = categoryArray && categoryArray.length > 3 && categoryArray[3];
+  // tempObj["usageCategoryMajor"] = type == "MIXED" ? null : categoryArray && categoryArray.length > 0 && categoryArray[0];
+  // tempObj["usageCategoryMinor"] = type == "MIXED" ? categoryArray && categoryArray.length > 0 && categoryArray[0]: categoryArray && categoryArray.length > 1 && categoryArray[1];
+  // tempObj["usageCategorySubMinor"] = categoryArray && categoryArray.length > 2 && categoryArray[2];
+  // tempObj["usageCategoryDetail"] = categoryArray && categoryArray.length > 3 ? categoryArray[3] : categoryArray.length > 2 ? categoryArray[2] : categoryArray[1];
   return tempObj;
 }
 

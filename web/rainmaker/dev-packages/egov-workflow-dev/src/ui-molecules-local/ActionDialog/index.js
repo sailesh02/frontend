@@ -284,6 +284,7 @@ class ActionDialog extends React.Component {
   };
 
   assementForward = (buttonLabel, isDocRequired) => {
+    debugger
     let {dataPath, state, dialogData} = this.props;
     const {moduleName} = dialogData
     let decimals = 0;
@@ -520,7 +521,8 @@ class ActionDialog extends React.Component {
                     value={pt_payment_config.reduce((prev, curr) => {
                       const val = Number(get(this.props.state, `screenConfiguration.preparedFinalObject.${this.props.dataPath}.additionalDetails.${curr.path}`) || 0)
                       prev = curr.filter.includes(moduleName) ? prev + (curr.subtract ? -val : val): prev
-                      return prev
+                      let total = Number(prev && prev.toFixed(2))
+                      return total
                     }, 0)
                     }
                     InputLabelProps={{}}

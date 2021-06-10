@@ -44,13 +44,13 @@ const formConfig = {
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         removeFormKey(formKey, field, dispatch, state);
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, []));
-        // let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
-        // if (!isEmpty(minorObject)) {
-        //   dispatch(prepareFormData("Properties[0].propertyDetails[0].usageCategoryMajor", minorObject.usageCategoryMajor));
-        // } else {
+        let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
+        if (!isEmpty(minorObject)) {
+          dispatch(prepareFormData("Properties[0].propertyDetails[0].usageCategoryMajor", minorObject.usageCategoryMajor));
+        } else {
           dispatch(prepareFormData("Properties[0].propertyDetails[0].usageCategoryMajor", field.value));
           dispatch(prepareFormData("Properties[0].propertyDetails[0].usageCategoryMinor", null));
-        // }
+        }
       },
       dropDownData: [],
     },
@@ -130,14 +130,14 @@ const formConfig = {
       let state = store.getState();
       // localStorageSet("previousFloorNo", -1);
       var masterOne = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
-      // var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
-      // const mergedMaster = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
-      // const typeOfUsageSorted = sortDropdown(mergedMaster, "label", true);
-      const dropdownValues = Object.values(masterOne).map((item) => ({label: item.name, value: item.code}))
-      // set(action, "form.fields.typeOfUsage.dropDownData", typeOfUsageSorted);
-      set(action, "form.fields.typeOfUsage.dropDownData", dropdownValues);
+      var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
+      const mergedMaster = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
+      const typeOfUsageSorted = sortDropdown(mergedMaster, "label", true);
+      // const dropdownValues = Object.values(masterOne).map((item) => ({label: item.name, value: item.code}))
+      set(action, "form.fields.typeOfUsage.dropDownData", typeOfUsageSorted);
+      // set(action, "form.fields.typeOfUsage.dropDownData", dropdownValues);
       masterOne = Object.values(get(state, "common.generalMDMSDataById.PropertyType")).filter(item=> item.propertyType !== "BUILTUP");
-      var masterTwo = get(state, "common.generalMDMSDataById.PropertySubType");
+      masterTwo = get(state, "common.generalMDMSDataById.PropertySubType");
       set(action, "form.fields.typeOfBuilding.dropDownData", mergeMaster(masterOne, masterTwo, "propertyType"));
       set(action, "form.fields.rainwaterHarvesting.options",options);
       set(action, "form.fields.rainwaterHarvesting.value", get(state.common.prepareFormData,'Properties[0].additionalDetails.isRainwaterHarvesting',false));

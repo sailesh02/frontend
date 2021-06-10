@@ -108,11 +108,11 @@ export const getTransformedDropdown = (MDMSdata, dataKeys) => {
       let keys = MDMSdata[dataKey] && Object.keys(MDMSdata[dataKey]);
       let tempObj = {};
       if (keys && keys.length > 0) {
-        // if (dataKey !== "UsageCategory") {
+        if (dataKey !== "UsageCategory") {
           MDMSdata[dataKey] = getSingleCodeObject(dataKey, tempObj, MDMSdata, keys);
-        // } else {
-        //   MDMSdata = { ...MDMSdata, ...getUsageCategory(dataKey, tempObj, MDMSdata, keys) };
-        // }
+        } else {
+          MDMSdata = { ...MDMSdata, ...getUsageCategory(dataKey, tempObj, MDMSdata, keys) };
+        }
       }
     }
   });
@@ -151,12 +151,12 @@ export const generalMDMSDataRequestObj = (tenantId) => {
             {
               name: "UsageCategory",
             },
-            {
-              name: "UsageCategoryMajor"
-            },
-            {
-              name: "UsageCategoryMinor"
-            }
+            // {
+            //   name: "UsageCategoryMajor"
+            // },
+            // {
+            //   name: "UsageCategoryMinor"
+            // }
           ],
         },
       ],
@@ -175,8 +175,8 @@ export const getGeneralMDMSDataDropdownName = () => {
     "PropertyType",
     "SubOwnerShipCategory",
     "UsageCategory",
-    "UsageCategoryMajor",
-    "UsageCategoryMinor"
+    // "UsageCategoryMajor",
+    // "UsageCategoryMinor"
   ];
   return keys;
 }

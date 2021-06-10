@@ -835,7 +835,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
         </div>
         <style>{
           `
-            .inbox-data-table-bodycell-4{display:none;}
+            .inbox-data-table-bodycell-4, .inbox-data-table-headcell-4{display:none;}
 
             `
         }

@@ -311,30 +311,31 @@ export const beforeInitForm = {
     set(action, "form.fields.subUsageType.hideField", false);
 
     const unitFormUpdate = (usageCategoryMinor, skipMajorUpdate = true) => {
-      var usageCategorySubMinorData = get(state, "common.generalMDMSDataById.UsageCategoryMinor")
-      usageCategorySubMinorData = Object.values(usageCategorySubMinorData).map(item => ({label: item.name, value: item.code, usageCategoryMajor: item.usageCategoryMajor}))
-      // var filteredSubUsageMinor = filter(
-      //   prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
-      //   (subUsageMinor) => {
-      //     return subUsageMinor.usageCategoryMinor === get(state, usageCategoryMinor);
-      //   }
-      // );
+      // var usageCategorySubMinorData = get(state, "common.generalMDMSDataById.UsageCategoryMinor")
+      // usageCategorySubMinorData = Object.values(usageCategorySubMinorData).map(item => ({label: item.name, value: item.code, usageCategoryMajor: item.usageCategoryMajor}))
       var filteredSubUsageMinor = filter(
-        usageCategorySubMinorData,
+        prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
         (subUsageMinor) => {
-          return subUsageMinor.usageCategoryMajor === get(state, usageCategoryMinor);
+          return subUsageMinor.usageCategoryMinor === get(state, usageCategoryMinor);
+        }
+      );
+      var filteredSubUsageMinor = filter(
+        prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
+        // usageCategorySubMinorData,
+        (subUsageMinor) => {
+          return subUsageMinor.usageCategoryMinor === get(state, usageCategoryMinor);
         }
       );
       if (filteredSubUsageMinor.length > 0) {
-        // var filteredUsageCategoryDetails = getPresentMasterObj(
-        //   prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
-        //   filteredSubUsageMinor,
-        //   "usageCategorySubMinor"
-        // );
-        // const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
-        // const subUsageData = sortDropdown(mergedMaster, "label", true);
-        // set(action, "form.fields.subUsageType.dropDownData", subUsageData);
-        set(action, "form.fields.subUsageType.dropDownData", filteredSubUsageMinor);
+        var filteredUsageCategoryDetails = getPresentMasterObj(
+          prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
+          filteredSubUsageMinor,
+          "usageCategorySubMinor"
+        );
+        const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
+        const subUsageData = sortDropdown(mergedMaster, "label", true);
+        set(action, "form.fields.subUsageType.dropDownData", subUsageData);
+        // set(action, "form.fields.subUsageType.dropDownData", filteredSubUsageMinor);
         if (get(action, "form.fields.subUsageType.jsonPath") && skipMajorUpdate) {
           dispatch(
             prepareFormData(
@@ -349,19 +350,19 @@ export const beforeInitForm = {
       }
     };
 
-    if (usageCategoryMajor && usageCategoryMajor !== "MIXED") {
-      unitFormUpdate("common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor");
+    if (usageCategoryMinor && usageCategoryMajor !== "MIXED") {
+      unitFormUpdate("common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMinor");
     } else {
       if (usageCategoryMajor === "MIXED") {
         var masterOne = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
-        // var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
-        // var usageTypes = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
-        var usageTypes = Object.values(masterOne).map(item => ({label: item.name, value: item.code}))
+        var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
+        var usageTypes = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
+        // var usageTypes = Object.values(masterOne).map(item => ({label: item.name, value: item.code}))
         var filterArrayWithoutMixed = filter(usageTypes, (item) => item.value !== "MIXED");
         set(action, "form.fields.usageType.disabled", false);
         const usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);
         set(action, "form.fields.usageType.dropDownData", usageTypeData);
-        unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMajor`, false);
+        unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`, false);
       } else {
         set(action, "form.fields.subUsageType.hideField", true);
       }
@@ -404,31 +405,31 @@ export const beforeInitFormForPlot = {
       var usageCategoryMajor = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor");
       set(action, "form.fields.subUsageType.hideField", false);
 
-      if (usageCategoryMajor && usageCategoryMajor !== "MIXED") {
-        // var filteredSubUsageMinor = filter(
-        //   prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
-        //   (subUsageMinor) => {
-        //     return subUsageMinor.usageCategoryMinor === get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMinor");
-        //   }
-        //   );
-      var usageCategorySubMinorData = get(state, "common.generalMDMSDataById.UsageCategoryMinor")
-      usageCategorySubMinorData = Object.values(usageCategorySubMinorData).map(item => ({label: item.name, value: item.code, usageCategoryMajor: item.usageCategoryMajor}))
-      var filteredSubUsageMinor = filter(
-        usageCategorySubMinorData,
-        (subUsageMinor) => {
-          return subUsageMinor.usageCategoryMajor === usageCategoryMajor;
-        }
-      );
+      if (usageCategoryMinor && usageCategoryMajor !== "MIXED") {
+        var filteredSubUsageMinor = filter(
+          prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
+          (subUsageMinor) => {
+            return subUsageMinor.usageCategoryMinor === get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMinor");
+          }
+          );
+      // var usageCategorySubMinorData = get(state, "common.generalMDMSDataById.UsageCategoryMinor")
+      // usageCategorySubMinorData = Object.values(usageCategorySubMinorData).map(item => ({label: item.name, value: item.code, usageCategoryMajor: item.usageCategoryMajor}))
+      // var filteredSubUsageMinor = filter(
+      //   usageCategorySubMinorData,
+      //   (subUsageMinor) => {
+      //     return subUsageMinor.usageCategoryMajor === usageCategoryMajor;
+      //   }
+      // );
         if (filteredSubUsageMinor.length > 0) {
-          // var filteredUsageCategoryDetails = getPresentMasterObj(
-          //   prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
-          //   filteredSubUsageMinor,
-          //   "usageCategorySubMinor"
-          // );
-          // const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
-          // const subUsageData = sortDropdown(mergedMaster, "label", true);
-          // set(action, "form.fields.subUsageType.dropDownData", subUsageData);
-          set(action, "form.fields.subUsageType.dropDownData", filteredSubUsageMinor);
+          var filteredUsageCategoryDetails = getPresentMasterObj(
+            prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
+            filteredSubUsageMinor,
+            "usageCategorySubMinor"
+          );
+          const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
+          const subUsageData = sortDropdown(mergedMaster, "label", true);
+          set(action, "form.fields.subUsageType.dropDownData", subUsageData);
+          // set(action, "form.fields.subUsageType.dropDownData", filteredSubUsageMinor);
           // set(
           //   action,
           //   "form.fields.subUsageType.value",
@@ -448,9 +449,9 @@ export const beforeInitFormForPlot = {
       } else {
         if (usageCategoryMajor === "MIXED") {
           var masterOne = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
-          // var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
-          // var usageTypes = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
-          var usageTypes = Object.values(masterOne).map(item => ({label: item.name, value: item.code}))
+          var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
+          var usageTypes = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
+          // var usageTypes = Object.values(masterOne).map(item => ({label: item.name, value: item.code}))
           var filterArrayWithoutMixed = filter(usageTypes, (item) => item.value !== "MIXED");
           set(action, "form.fields.usageType.disabled", false);
           const usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);

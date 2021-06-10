@@ -51,15 +51,15 @@ const formConfig = {
         //     }
         //   );
           if (filteredSubUsageMinor.length > 0) {
-            // var filteredUsageCategoryDetails = getPresentMasterObj(
-            //   prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
-            //   filteredSubUsageMinor,
-            //   "usageCategorySubMinor"
-            // );
+            var filteredUsageCategoryDetails = getPresentMasterObj(
+              prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
+              filteredSubUsageMinor,
+              "usageCategorySubMinor"
+            );
             setDependentFields(["subUsageType"], dispatch, formKey, false);
-            // const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
-            // const subUsageData = sortDropdown(mergedMaster, "label", true);
-            setDependentFields(["subUsageType"], dispatch, formKey, filteredSubUsageMinor, "dropDownData");
+            const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
+            const subUsageData = sortDropdown(mergedMaster, "label", true);
+            setDependentFields(["subUsageType"], dispatch, formKey, subUsageData, "dropDownData");
           // }
         } else {
           setDependentFields(["subUsageType"], dispatch, formKey, true);

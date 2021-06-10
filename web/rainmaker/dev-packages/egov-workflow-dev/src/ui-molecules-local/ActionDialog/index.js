@@ -284,7 +284,6 @@ class ActionDialog extends React.Component {
   };
 
   assementForward = (buttonLabel, isDocRequired) => {
-    debugger
     let {dataPath, state, dialogData} = this.props;
     const {moduleName} = dialogData
     let decimals = 0;

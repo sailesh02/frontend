@@ -132,6 +132,7 @@ export const commonRoadCuttingChargeInformation = () => {
     })
   })
 }
+
 export const additionDetails = getCommonCard({
   header: getCommonHeader({
     labelKey: "WS_COMMON_ADDN_DETAILS_HEADER"

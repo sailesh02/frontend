@@ -787,8 +787,16 @@ const screenConfig = {
         )
       );
     });
-    dispatch(prepareFinalObject("applyScreen.water", true));
-    dispatch(prepareFinalObject("applyScreen.sewerage", false));
+    let applicationNo = getQueryArg(window.location.href, "applicationNumber");
+
+    if(applicationNo && applicationNo.includes('SW')) {
+      dispatch(prepareFinalObject("applyScreen.water", false));
+      dispatch(prepareFinalObject("applyScreen.sewerage", true));
+    }else{
+      dispatch(prepareFinalObject("applyScreen.water", true));
+      dispatch(prepareFinalObject("applyScreen.sewerage", false));
+    }
+    
     const propertyId = getQueryArg(window.location.href, "propertyId");
 
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");

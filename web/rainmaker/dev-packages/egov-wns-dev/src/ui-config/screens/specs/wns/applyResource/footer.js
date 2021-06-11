@@ -1,7 +1,9 @@
 import {
   dispatchMultipleFieldChangeAction,
-  getLabel
+  getLabel,
+  getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, validateFields } from "egov-ui-framework/ui-utils/commons";
@@ -25,6 +27,7 @@ import {
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
 import commonConfig from "config/common.js";
+import {connectionDetailsWater,connectionDetailsSewerage} from './task-connectiondetails'
 
 const isMode = isModifyMode();
 const isModeAction = isModifyModeAction();
@@ -44,6 +47,13 @@ const setReviewPageRoute = (state, dispatch) => {
   }
   if (get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.locality", null) === null) {
     dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.address.locality.code")));
+  }
+
+  if(get(state,"screenConfiguration.preparedFinalObject.applyScreen[0].water",false)){
+    set("search-preview", "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainer", getCommonContainer(connectionDetailsWater));
+  }else{
+    set("search-preview", "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainer", getCommonContainer(connectionDetailsSewerage));
+
   }
   dispatch(setRoute(reviewUrl));
 };

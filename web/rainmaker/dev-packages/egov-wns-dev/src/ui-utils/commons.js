@@ -167,7 +167,7 @@ export const getSearchResults = async (queryObject, filter = false) => {
         let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
         result.WaterConnection[0].waterSource = waterSource;
         result.WaterConnection[0].waterSubSource = waterSubSource;
-        result.WaterConnection = await getPropertyObj(result.WaterConnection);
+        // result.WaterConnection = await getPropertyObj(result.WaterConnection);
         return result;
     } catch (error) { console.log(error) }
 };
@@ -191,7 +191,7 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch, filter 
             response.SewerageConnections = response.SewerageConnections.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
         }
         let result = findAndReplace(response, null, "NA");
-        result.SewerageConnections = await getPropertyObj(result.SewerageConnections);
+        // result.SewerageConnections = await getPropertyObj(result.SewerageConnections);
         dispatch(toggleSpinner());
         return result;
     } catch (error) {
@@ -265,7 +265,7 @@ export const getWSMyResults = async (queryObject, consumer, dispatch) => {
         );
 
         if (response.WaterConnection.length > 0) {
-            response.WaterConnection = await getPropertyObj(response.WaterConnection);
+            // response.WaterConnection = await getPropertyObj(response.WaterConnection);
             for (let i = 0; i < response.WaterConnection.length; i++) {
                 response.WaterConnection[i].service = _.capitalize(serviceConst.WATER)
                 let consumerCode = "", bService = ""
@@ -914,6 +914,7 @@ export const applyForWater = async (state, dispatch) => {
                 queryObjectForUpdate.additionalDetails = {};
             }
             queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality;
+            queryObjectForUpdate.pipeSize = 0
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             queryObjectForUpdate.property = null
             queryObjectForUpdate.noOfFlats = queryObjectForUpdate.noOfFlats && queryObjectForUpdate.noOfFlats != "" ? queryObjectForUpdate.noOfFlats : 0
@@ -936,6 +937,7 @@ export const applyForWater = async (state, dispatch) => {
                 set(queryObject, "waterSource", getWaterSource(queryObject.waterSource, queryObject.waterSubSource));
             }
             queryObject.property = null
+            queryObject.pipeSize = 0
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
@@ -1091,6 +1093,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             queryObjectForUpdateSewerage.additionalDetails.locality = queryObjectForUpdateSewerage.locality;
             queryObjectForUpdateSewerage.property = null
             queryObjectForUpdateWater.property = null
+            queryObjectForUpdateWater.pipeSize = 0
             queryObjectForUpdateSewerage.noOfFlats = queryObjectForUpdateSewerage.noOfFlats && queryObjectForUpdateSewerage.noOfFlats != "" ? queryObjectForUpdateSewerage.noOfFlats : 0
             queryObjectForUpdateWater.noOfFlats = queryObjectForUpdateWater.noOfFlats && queryObjectForUpdateWater.noOfFlats != "" ? queryObjectForUpdateWater.noOfFlats : 0
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdateWater });
@@ -1120,7 +1123,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             queryObject = findAndReplace(queryObject, "NA", null);
             queryObject.property = null;
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
-            response = await httpRequest("post", "/ws-services/wc/_create", "_create", [], { WaterConnection: queryObject });
+            response = await httpRequest("post", "/ws-services/wc/_create", "_create", [], { WaterConnection: {...queryObject,pipeSize : 0} });
             const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "_create", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
             dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
@@ -1561,7 +1564,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
                         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
                     ]
 
-                    payloadReceiptDetails.WaterConnection = await getPropertyObj(payloadReceiptDetails.WaterConnection);
+                    // payloadReceiptDetails.WaterConnection = await getPropertyObj(payloadReceiptDetails.WaterConnection);
                     if (payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting !== undefined && payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting !== null) {
                         if (payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting === true) {
                             payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting = 'SCORE_YES'
@@ -1586,7 +1589,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
                         { key: "key", value: "ws-consolidatedsewerageconnection" },
                         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
                     ]
-                    payloadReceiptDetails.SewerageConnections = await getPropertyObj(payloadReceiptDetails.SewerageConnections);
+                    // payloadReceiptDetails.SewerageConnections = await getPropertyObj(payloadReceiptDetails.SewerageConnections);
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { SewerageConnections: payloadReceiptDetails.SewerageConnections }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
                             downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
@@ -1611,7 +1614,7 @@ export const getSWMyResults = async (queryObject, consumer, dispatch) => {
             queryObject
         );
         if (response.SewerageConnections.length > 0) {
-            response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
+            // response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
             for (let i = 0; i < response.SewerageConnections.length; i++) {
                 response.SewerageConnections[i].service = _.capitalize(serviceConst.SEWERAGE)
                 let consumerCode = "", bService = ""
@@ -2200,7 +2203,7 @@ export const getOpenSearchResultsForWater = async (queryObject, requestBody, dis
         result.WaterConnection[0].waterSource = waterSource;
         result.WaterConnection[0].waterSubSource = waterSubSource;
         requestBody.forEach(value => {if(value.key == "locality") {locality = value.value;}else if(value.key == "tenantId"){tenantId = value.value}});
-        result.WaterConnection = await getPropertyObj(result.WaterConnection, locality, tenantId);
+        // result.WaterConnection = await getPropertyObj(result.WaterConnection, locality, tenantId);
         return result;
     } catch (error) { console.log(error) }
 
@@ -2223,7 +2226,7 @@ export const getOpenSearchResultsForSewerage = async (queryObject, requestBody, 
         let currentTime = new Date().getTime();
         let result = findAndReplace(response, null, "NA"), locality, tenantId;
         requestBody.forEach(value => {if(value.key == "locality") {locality = value.value;}else if(value.key == "tenantId"){tenantId = value.value}})
-        result.SewerageConnections = await getPropertyObj(result.SewerageConnections, locality, tenantId);
+        // result.SewerageConnections = await getPropertyObj(result.SewerageConnections, locality, tenantId);
         dispatch(toggleSpinner());
         return result;
     } catch (error) {

@@ -46,7 +46,7 @@ class CheckboxLabels extends React.Component {
     const { preparedFinalObject } = this.props;
     let checkedWater = (preparedFinalObject && preparedFinalObject.applyScreen.water) ? preparedFinalObject.applyScreen.water : false;
     let checkedSewerage = (preparedFinalObject && preparedFinalObject.applyScreen.sewerage) ? preparedFinalObject.applyScreen.sewerage : false;
-    this.setState({ checkedSewerage: checkedSewerage, checkedWater: checkedWater })
+    this.setState({ checkedSewerage: checkedSewerage, checkedWater: checkedWater },()=>{})
   }
 
   handleWater = name => event => {

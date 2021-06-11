@@ -23,7 +23,8 @@ class Header extends Component {
     right: false,
     left: false,
     ulbLogo: "",
-    sessionExpiredPopupOpen: false
+    sessionExpiredPopupOpen: false,
+    sessionExpiredPopupClosedClick: false
   };
 
   componentDidMount = () => {
@@ -79,6 +80,7 @@ class Header extends Component {
   _closeSessionExpiredDialog = () => {
     this.setState({
       sessionExpiredPopupOpen: false,
+      sessionExpiredPopupClosedClick: true
     });
   };
 
@@ -145,7 +147,7 @@ class Header extends Component {
   };
 
   render() {
-    const { toggleMenu, logoutPopupOpen, sortPopOpen } = this.state;
+    const { toggleMenu, logoutPopupOpen, sortPopOpen, sessionExpiredPopupClosedClick } = this.state;
     let { sessionExpiredPopupOpen } = this.state;
     const { _onUpdateMenuStatus, _handleItemClick, _logout, _closeLogoutDialog, _appBarProps, closeSortDialog, onSortClick } = this;
     const appBarProps = _appBarProps();
@@ -177,7 +179,8 @@ class Header extends Component {
     } = this.props;
 
 
-if(userInfoError){
+if(userInfoError && !sessionExpiredPopupClosedClick){
+  console.log("in user infor")
   sessionExpiredPopupOpen = true;
 }
     const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();

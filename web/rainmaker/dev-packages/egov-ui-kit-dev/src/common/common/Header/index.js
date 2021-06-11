@@ -5,6 +5,7 @@ import { Icon } from "components";
 import AppBar from "./components/AppBar";
 import LogoutDialog from "./components/LogoutDialog";
 import SortDialog from "./components/SortDialog";
+import SessionExpiredDialog from "./components/SessionExpiredDialog";
 import NavigationDrawer from "./components/NavigationDrawer";
 import { logout } from "egov-ui-kit/redux/auth/actions";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
@@ -22,13 +23,16 @@ class Header extends Component {
     right: false,
     left: false,
     ulbLogo: "",
+    sessionExpiredPopupOpen: false,
+    sessionExpiredPopupClosedClick: false
   };
 
   componentDidMount = () => {
-    const { updateActiveRoute } = this.props;
+    const { updateActiveRoute, userInfoError} = this.props;
     const menupath = localStorageGet("menuPath");
     const menuName = localStorageGet("menuName");
     updateActiveRoute(menupath, menuName);
+
   };
 
   componentWillReceiveProps = (nextProps) => {
@@ -65,9 +69,18 @@ class Header extends Component {
     this.props.logout();
   };
 
+
+
   _closeLogoutDialog = () => {
     this.setState({
       logoutPopupOpen: false,
+    });
+  };
+
+  _closeSessionExpiredDialog = () => {
+    this.setState({
+      sessionExpiredPopupOpen: false,
+      sessionExpiredPopupClosedClick: true
     });
   };
 
@@ -134,7 +147,8 @@ class Header extends Component {
   };
 
   render() {
-    const { toggleMenu, logoutPopupOpen, sortPopOpen } = this.state;
+    const { toggleMenu, logoutPopupOpen, sortPopOpen, sessionExpiredPopupClosedClick } = this.state;
+    let { sessionExpiredPopupOpen } = this.state;
     const { _onUpdateMenuStatus, _handleItemClick, _logout, _closeLogoutDialog, _appBarProps, closeSortDialog, onSortClick } = this;
     const appBarProps = _appBarProps();
     const {
@@ -160,8 +174,15 @@ class Header extends Component {
       notificationsCount,
       isUserSetting = true,
       msevaLogo,
-      headerStyle
+      headerStyle,
+      userInfoError
     } = this.props;
+
+
+if(userInfoError && !sessionExpiredPopupClosedClick){
+  console.log("in user infor")
+  sessionExpiredPopupOpen = true;
+}
     const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
     const currentCity = cities.filter((item) => item.code === tenantId);
     const ulbLogo =
@@ -218,6 +239,14 @@ class Header extends Component {
           body={"CORE_LOGOUTPOPUP_CONFIRM"}
         />
         <SortDialog sortPopOpen={sortPopOpen} closeSortDialog={closeSortDialog} />
+       {userInfoError && <SessionExpiredDialog
+          logoutPopupOpen={sessionExpiredPopupOpen}
+          closeLogoutDialog={this._closeSessionExpiredDialog}
+          logout={_logout}
+          oktext={"CORE_SESSIONEXPIREDPOPUP_OKAYLOGOUT"}
+          canceltext={"CORE_LOGOUTPOPUP_CANCEL"}
+          title={"CORE_SESSIONEXPIREDPOPUP_WARNING"}
+          body={"CORE_SESSIONEXPIREDPOPUP_EXPIRED"} /> }
       </div>
     );
   }
@@ -244,7 +273,18 @@ const mapStateToProps = (state, ownProps) => {
   const defaultTitle = ulbGrade && getUlbGradeLabel(ulbGrade);
   const screenKey = window.location.pathname.split("/").pop();
   const headerTitle = get(state.screenConfiguration.screenConfig, `${screenKey}.components.div.children.header.children.key.props.labelKey`);
-  return { cities, defaultTitle, name, headerTitle, notificationsCount };
+  let userInfoError = false;
+   if(get(state.auth, "userInfoError")){
+
+    userInfoError = get(state.auth, "userInfoError");
+    if(userInfoError.includes("InvalidAccessTokenException")){
+
+      userInfoError = true;
+    }
+   }
+
+  //const isUserAuthenticated = get(state.auth, "authenticated");
+  return { cities, defaultTitle, name, headerTitle, notificationsCount, userInfoError };
 };
 
 const mapDispatchToProps = (dispatch) => {

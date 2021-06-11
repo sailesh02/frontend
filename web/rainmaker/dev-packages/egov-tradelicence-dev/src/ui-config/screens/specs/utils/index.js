@@ -2318,11 +2318,26 @@ export const triggerUpdateByKey = (state, keyIndex, value, dispatch) => {
   }
 }
 export const updateMdmsDropDowns = async ( state, dispatch ) => {
-  const tradeSubTypes = get( state, "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits", []);
-  if (tradeSubTypes.length > 0) {
+  let appNo = getQueryArg(window.location.href, "applicationNumber");
+
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: getTenantId()
+    },
+    { key: "applicationNumber", value: appNo }
+  ];
+
+  let payload = await getSearchResults(queryObject);
+  let tradeDetails = get(payload.Licenses[0],'tradeLicenseDetail',"{}");
+
+  let tradeSubTypes = get(tradeDetails, "tradeUnits", [])
+  //const tradeSubTypes = get( state, "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits", []);
+
+  if (tradeSubTypes && tradeSubTypes.length > 0) {
     try {
       tradeSubTypes.forEach((tradeSubType, i) => {
-        console.log(tradeSubType, "Nero tradeSubType", i)
+
         // const tradeCat = tradeSubType.tradeType.split(".")[0];
         const tradeType = tradeSubType.tradeType.split(".")[0];
         let formObj = {

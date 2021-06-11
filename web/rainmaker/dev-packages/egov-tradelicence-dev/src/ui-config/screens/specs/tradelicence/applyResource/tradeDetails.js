@@ -1214,7 +1214,7 @@ export const tradeDetails = getCommonCard({
               "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items",
               null
             )
-            console.log(selectedTrades, "Nero selectedTrades")
+
             if (selectedTrades && selectedTrades.length > 0) {
               for (let i = 0; i < selectedTrades.length; i++) {
                 dispatch(

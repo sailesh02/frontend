@@ -437,6 +437,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         // }
         set(queryObject[0], "applicationType", "RENEWAL");
         set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));
+
+        const validFrom = 1000 * 60 * 60 * 24 + validTo;
+        set(queryObject[0], "validFrom", validFrom);
       }
 
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
@@ -509,6 +512,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           )
         );
         set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwners(get(queryObject[0], "tradeLicenseDetail.owners",[]),oldOwners));
+
+
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject
         })
@@ -579,6 +584,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
       if (!queryObject[0].applicationNumber)
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
+
       const response = await httpRequest(
         "post",
         "/tl-services/v1/_create",

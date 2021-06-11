@@ -539,7 +539,7 @@ class WorkFlowContainer extends React.Component {
     }
     if(moduleName === "NewTL"){
       let Lic = get(preparedFinalObject, "Licenses");
-      console.log(Lic, "Nero LIC")
+
       if(Lic && Lic.length > 0){
         if(Lic[0].licenseType === "TEMPORARY" && (Lic[0].status === "APPROVED" || Lic[0].status === "EXPIRED")){
           showFooter = false

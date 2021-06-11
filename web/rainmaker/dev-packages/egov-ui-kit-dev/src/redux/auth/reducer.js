@@ -21,6 +21,8 @@ const auth = (state = intialState, action) => {
   switch (type) {
     case actionTypes.USER_SEARCH_SUCCESS:
       return { ...state, userInfo: action.user };
+    case actionTypes.USER_SEARCH_ERROR:
+      return { ...state, userInfoError: action.error };
     case actionTypes.AUTHENTICATING:
       return { ...state, authenticated: false, authenticationFailed: true, authenticating: true };
     case actionTypes.AUTHENTICATED:

@@ -164,6 +164,16 @@ class AllComplaints extends Component {
           true,
           false
         );
+        fetchComplaints(
+          [
+            {
+              key: "status",
+              value: "escalatedlevel1pending,escalatedlevel2pending,escalatedlevel3pending,escalatedlevel4pending",
+            },
+          ],
+          true,
+          false
+        );
       } else if(role === "eo"){
         fetchComplaints(
           [
@@ -359,6 +369,7 @@ class AllComplaints extends Component {
   };
 
   onChange = (value) => {
+    console.log(value, "Nero Value")
     this.setState({ value });
   };
 
@@ -387,6 +398,7 @@ class AllComplaints extends Component {
       assignedTotalComplaints,
       unassignedTotalComplaints,
       employeeTotalComplaints,
+      allEsclatedComplaints
     } = this.props;
     const hintTextStyle = {
       letterSpacing: "0.7px",
@@ -539,6 +551,46 @@ class AllComplaints extends Component {
                       }
                       onComplaintClick={onComplaintClick}
                       complaints={assignedComplaints}
+                      complaintLocation={true}
+                      role={role}
+                      heightOffset="116px"
+                    />
+                  </div>
+                </Screen>
+              ),
+            },
+            {
+              label: (
+                <div className="inline-Localization-text">
+                  <Label
+                    // labelClassName="assigned-label-text"
+                    labelClassName={
+                      this.state.value === 2
+                        ? "selected-tab-label-text"
+                        : "unselected-tab-label-text"
+                    }
+                    //color={this.state.value === 1 ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.7)"}
+                    bold={true}
+                    label={`ES_ALL_COMPLAINTS_ESCLATED_TAB_LABEL`}
+                    labelStyle={tabStyle}
+                  />
+
+                </div>
+              ),
+              children: (
+                <Screen className="gro-screen" loading={loading}>
+                  <div className="tab3-content form-without-button-cont-generic">
+                    <CountDetails
+                      count={allEsclatedComplaints.length}
+                      total={allEsclatedComplaints.length}
+                      status="esclated"
+                    />
+                    <Complaints
+                      noComplaintMessage={
+                        "ES_MYCOMPLAINTS_NO_ASSIGNED_COMPLAINTS"
+                      }
+                      onComplaintClick={onComplaintClick}
+                      complaints={allEsclatedComplaints}
                       complaintLocation={true}
                       role={role}
                       heightOffset="116px"
@@ -922,10 +974,12 @@ const mapStateToProps = (state) => {
     categoriesById,
     displayStatus
   );
+
   let assignedComplaints = [],
     unassignedComplaints = [],
     employeeComplaints = [],
-    csrComplaints = [];
+    csrComplaints = [],
+    allEsclatedComplaints = [];
   let filteredEmployeeComplaints = transformedComplaints.filter(
     (complaint) =>
     complaint.complaintStatus === "ASSIGNED" ||
@@ -950,6 +1004,10 @@ const mapStateToProps = (state) => {
     (complaint) => complaint.complaintStatus === "UNASSIGNED"
   );
 
+  let filteredEsclatedComplaints = transformedComplaints.filter(
+    (complaint) => complaint.complaintStatus === "ESCALATED"
+  );
+
   if (role === "ao") {
     if (order === "Old to New") {
       assignedComplaints = orderby(
@@ -962,6 +1020,12 @@ const mapStateToProps = (state) => {
         ["latestCreationTime"],
         ["asc"]
       );
+      allEsclatedComplaints = orderby(
+        filteredEsclatedComplaints,
+        ["latestCreationTime"],
+        ["asc"]
+      );
+
     } else if (order === "SLA") {
       assignedComplaints = orderby(
         filteredAssignedComplaints,
@@ -973,6 +1037,11 @@ const mapStateToProps = (state) => {
         ["SLA"],
         ["asc"]
       );
+      allEsclatedComplaints = orderby(
+        filteredEsclatedComplaints,
+        ["SLA"],
+        ["asc"]
+      );
     } else {
       assignedComplaints = orderby(
         filteredAssignedComplaints,
@@ -981,6 +1050,11 @@ const mapStateToProps = (state) => {
       );
       unassignedComplaints = orderby(
         filteredUnassignedComplaints,
+        ["latestCreationTime"],
+        ["desc"]
+      );
+      allEsclatedComplaints = orderby(
+        filteredEsclatedComplaints,
         ["latestCreationTime"],
         ["desc"]
       );
@@ -1029,6 +1103,7 @@ const mapStateToProps = (state) => {
   );
   const numEmpComplaint = employeeComplaints.length;
   const numCSRComplaint = transformedComplaints.length;
+
   return {
     assignedComplaints,
     unassignedComplaints,
@@ -1043,6 +1118,7 @@ const mapStateToProps = (state) => {
     assignedTotalComplaints,
     unassignedTotalComplaints,
     employeeTotalComplaints,
+    allEsclatedComplaints
   };
 };
 

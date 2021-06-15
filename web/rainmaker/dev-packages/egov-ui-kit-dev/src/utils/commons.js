@@ -150,13 +150,7 @@ export const generalMDMSDataRequestObj = (tenantId) => {
             },
             {
               name: "UsageCategory",
-            },
-            // {
-            //   name: "UsageCategoryMajor"
-            // },
-            // {
-            //   name: "UsageCategoryMinor"
-            // }
+            }
           ],
         },
       ],
@@ -174,9 +168,7 @@ export const getGeneralMDMSDataDropdownName = () => {
     "PropertySubType",
     "PropertyType",
     "SubOwnerShipCategory",
-    "UsageCategory",
-    // "UsageCategoryMajor",
-    // "UsageCategoryMinor"
+    "UsageCategory"
   ];
   return keys;
 }
@@ -674,7 +666,6 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
             option = {
               label: item.name,
               name:item.name,
-              // label: getTranslatedLabel(mohallaCode, localizationLabels),
               value: item.code,
             };
           } else {

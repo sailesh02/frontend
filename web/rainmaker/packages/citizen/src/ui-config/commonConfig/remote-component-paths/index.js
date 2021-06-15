@@ -28,6 +28,42 @@ const remoteComponentPath = (moduleName, path) => {
         component = import("egov-common/ui-containers-local");
       }
       break;
+      case "egov-firenoc":
+      if (path === "ui-atoms-local") {
+        component = import("egov-firenoc/ui-atoms-local");
+      } else if (path === "ui-molecules-local") {
+        component = import("egov-firenoc/ui-molecules-local");
+      } else if (path === "ui-containers-local") {
+        component = import("egov-firenoc/ui-containers-local");
+      }
+      break;
+    case "egov-uc":
+      if (path === "ui-atoms-local") {
+        component = import("egov-uc/ui-atoms-local");
+      } else if (path === "ui-molecules-local") {
+        component = import("egov-uc/ui-molecules-local");
+      } else if (path === "ui-containers-local") {
+        component = import("egov-uc/ui-containers-local");
+      }
+      break;
+    case "egov-abg":
+      if (path === "ui-atoms-local") {
+        component = import("egov-abg/ui-atoms-local");
+      } else if (path === "ui-molecules-local") {
+        component = import("egov-abg/ui-molecules-local");
+      } else if (path === "ui-containers-local") {
+        component = import("egov-abg/ui-containers-local");
+      }
+      break;
+    case "egov-billamend":
+      if (path === "ui-atoms-local") {
+        component = import("egov-billamend/ui-atoms-local");
+      } else if (path === "ui-molecules-local") {
+        component = import("egov-billamend/ui-molecules-local");
+      } else if (path === "ui-containers-local") {
+        component = import("egov-billamend/ui-containers-local");
+      }
+      break;
     case "egov-bpa":
       if (path === "ui-atoms-local") {
         component = import("egov-bpa/ui-atoms-local");

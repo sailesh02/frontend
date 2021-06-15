@@ -311,8 +311,6 @@ export const beforeInitForm = {
     set(action, "form.fields.subUsageType.hideField", false);
 
     const unitFormUpdate = (usageCategoryMinor, skipMajorUpdate = true) => {
-      // var usageCategorySubMinorData = get(state, "common.generalMDMSDataById.UsageCategoryMinor")
-      // usageCategorySubMinorData = Object.values(usageCategorySubMinorData).map(item => ({label: item.name, value: item.code, usageCategoryMajor: item.usageCategoryMajor}))
       var filteredSubUsageMinor = filter(
         prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
         (subUsageMinor) => {
@@ -321,7 +319,6 @@ export const beforeInitForm = {
       );
       var filteredSubUsageMinor = filter(
         prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
-        // usageCategorySubMinorData,
         (subUsageMinor) => {
           return subUsageMinor.usageCategoryMinor === get(state, usageCategoryMinor);
         }
@@ -335,7 +332,6 @@ export const beforeInitForm = {
         const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
         const subUsageData = sortDropdown(mergedMaster, "label", true);
         set(action, "form.fields.subUsageType.dropDownData", subUsageData);
-        // set(action, "form.fields.subUsageType.dropDownData", filteredSubUsageMinor);
         if (get(action, "form.fields.subUsageType.jsonPath") && skipMajorUpdate) {
           dispatch(
             prepareFormData(
@@ -357,7 +353,6 @@ export const beforeInitForm = {
         var masterOne = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
         var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
         var usageTypes = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
-        // var usageTypes = Object.values(masterOne).map(item => ({label: item.name, value: item.code}))
         var filterArrayWithoutMixed = filter(usageTypes, (item) => item.value !== "MIXED");
         set(action, "form.fields.usageType.disabled", false);
         const usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);
@@ -412,14 +407,6 @@ export const beforeInitFormForPlot = {
             return subUsageMinor.usageCategoryMinor === get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMinor");
           }
           );
-      // var usageCategorySubMinorData = get(state, "common.generalMDMSDataById.UsageCategoryMinor")
-      // usageCategorySubMinorData = Object.values(usageCategorySubMinorData).map(item => ({label: item.name, value: item.code, usageCategoryMajor: item.usageCategoryMajor}))
-      // var filteredSubUsageMinor = filter(
-      //   usageCategorySubMinorData,
-      //   (subUsageMinor) => {
-      //     return subUsageMinor.usageCategoryMajor === usageCategoryMajor;
-      //   }
-      // );
         if (filteredSubUsageMinor.length > 0) {
           var filteredUsageCategoryDetails = getPresentMasterObj(
             prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
@@ -429,12 +416,6 @@ export const beforeInitFormForPlot = {
           const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
           const subUsageData = sortDropdown(mergedMaster, "label", true);
           set(action, "form.fields.subUsageType.dropDownData", subUsageData);
-          // set(action, "form.fields.subUsageType.dropDownData", filteredSubUsageMinor);
-          // set(
-          //   action,
-          //   "form.fields.subUsageType.value",
-          //   null)
-          // );
           if (get(action, "form.fields.subUsageType.jsonPath")) {
             dispatch(
               prepareFormData(
@@ -451,7 +432,6 @@ export const beforeInitFormForPlot = {
           var masterOne = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
           var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
           var usageTypes = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
-          // var usageTypes = Object.values(masterOne).map(item => ({label: item.name, value: item.code}))
           var filterArrayWithoutMixed = filter(usageTypes, (item) => item.value !== "MIXED");
           set(action, "form.fields.usageType.disabled", false);
           const usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);

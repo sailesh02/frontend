@@ -41,15 +41,6 @@ const formConfig = {
             return subUsageMinor.usageCategoryMajor === field.value;
           }
         );
-        // let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
-        // if (!isEmpty(minorObject)) {
-        //   dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryMinor")[0]}usageCategoryMajor`, minorObject.usageCategoryMajor));
-        //   var filteredSubUsageMinor = filter(
-        //     prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
-        //     (subUsageMinor) => {
-        //       return subUsageMinor.usageCategoryMinor === field.value;
-        //     }
-        //   );
           if (filteredSubUsageMinor.length > 0) {
             var filteredUsageCategoryDetails = getPresentMasterObj(
               prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
@@ -60,7 +51,6 @@ const formConfig = {
             const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
             const subUsageData = sortDropdown(mergedMaster, "label", true);
             setDependentFields(["subUsageType"], dispatch, formKey, subUsageData, "dropDownData");
-          // }
         } else {
           setDependentFields(["subUsageType"], dispatch, formKey, true);
           dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryMinor")[0]}usageCategoryMajor`, field.value));

@@ -22,17 +22,13 @@ const extractFromString = (str, index) => {
   return null;
 };
 
-const getUsageCategory = (usageCategory,type) => {
+const getUsageCategory = (usageCategory) => {
   let categoryArray = usageCategory.split(".");
   let tempObj = {};
   tempObj["usageCategoryMajor"] = categoryArray && categoryArray.length > 0 && categoryArray[0];
   tempObj["usageCategoryMinor"] = categoryArray && categoryArray.length > 1 && categoryArray[1];
   tempObj["usageCategorySubMinor"] = categoryArray && categoryArray.length > 2 && categoryArray[2];
   tempObj["usageCategoryDetail"] = categoryArray && categoryArray.length > 3 && categoryArray[3];
-  // tempObj["usageCategoryMajor"] = type == "MIXED" ? null : categoryArray && categoryArray.length > 0 && categoryArray[0];
-  // tempObj["usageCategoryMinor"] = type == "MIXED" ? categoryArray && categoryArray.length > 0 && categoryArray[0]: categoryArray && categoryArray.length > 1 && categoryArray[1];
-  // tempObj["usageCategorySubMinor"] = categoryArray && categoryArray.length > 2 && categoryArray[2];
-  // tempObj["usageCategoryDetail"] = categoryArray && categoryArray.length > 3 ? categoryArray[3] : categoryArray.length > 2 ? categoryArray[2] : categoryArray[1];
   return tempObj;
 }
 
@@ -158,7 +154,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.buildUpArea = newProperty.superBuiltUpArea;
   propertyDetails.units = newProperty.units && newProperty.units.map(unit => {
     unit.floorNo = unit.floorNo || unit.floorNo === 0 ? unit.floorNo.toString() : unit.floorNo
-    return { ...unit, ...getUsageCategory(unit.usageCategory,newProperty.usageCategory) }
+    return { ...unit, ...getUsageCategory(unit.usageCategory) }
   });
   propertyDetails.units = propertyDetails.units&& Array.isArray(propertyDetails.units)&&propertyDetails.units.filter(unit=>unit.active);
   propertyDetails.documents = newProperty.documents;

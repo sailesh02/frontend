@@ -40,7 +40,6 @@ const formConfig = {
         xs: 12,
         sm: 6
       },
-      
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         removeFormKey(formKey, field, dispatch, state);
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, []));
@@ -133,9 +132,7 @@ const formConfig = {
       var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
       const mergedMaster = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
       const typeOfUsageSorted = sortDropdown(mergedMaster, "label", true);
-      // const dropdownValues = Object.values(masterOne).map((item) => ({label: item.name, value: item.code}))
       set(action, "form.fields.typeOfUsage.dropDownData", typeOfUsageSorted);
-      // set(action, "form.fields.typeOfUsage.dropDownData", dropdownValues);
       masterOne = Object.values(get(state, "common.generalMDMSDataById.PropertyType")).filter(item=> item.propertyType !== "BUILTUP");
       masterTwo = get(state, "common.generalMDMSDataById.PropertySubType");
       set(action, "form.fields.typeOfBuilding.dropDownData", mergeMaster(masterOne, masterTwo, "propertyType"));

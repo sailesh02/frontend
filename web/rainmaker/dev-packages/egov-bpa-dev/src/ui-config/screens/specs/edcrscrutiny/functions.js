@@ -212,7 +212,6 @@ export const getSearchResultsfromEDCRWithApplcationNo = async (
           key: "",
           msgId: "gfcfc",
           correlationId: "wefiuweiuff897",
-
           authToken: "",
           userInfo: {
             id: userUUid,

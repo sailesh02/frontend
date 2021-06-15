@@ -33,7 +33,6 @@ const formConfig = {
       dropDownData: [],
       formName: "plotDetails",
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-
         let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
         if (!isEmpty(minorObject)) {
           dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryMinor")[0]}usageCategoryMajor`, minorObject.usageCategoryMajor));

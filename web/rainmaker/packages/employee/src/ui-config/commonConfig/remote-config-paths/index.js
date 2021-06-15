@@ -10,7 +10,7 @@ const remoteConfigPath = (path, screenKey) => {
       case "pt-assessment":
       config = require(`egov-pt/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
-      case "hrms":
+    case "hrms":
       config = require(`egov-hrms/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "uc":
@@ -23,7 +23,7 @@ const remoteConfigPath = (path, screenKey) => {
     case "oc-bpa":
       config = require(`egov-bpa/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
-      case "fire-noc":
+    case "fire-noc":
       config = require(`egov-firenoc/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "receipts":

@@ -150,7 +150,7 @@ export const generalMDMSDataRequestObj = (tenantId) => {
             },
             {
               name: "UsageCategory",
-            }
+            },
           ],
         },
       ],

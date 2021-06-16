@@ -43,7 +43,6 @@ const fieldConfig = {
   }
 };
 
-
 class ActionDialog extends React.Component {
   state = {
     employeeList: [],
@@ -95,7 +94,6 @@ class ActionDialog extends React.Component {
       onButtonClick,
       dialogData,
       dataPath
-
     } = this.props;
     const {
       buttonLabel,
@@ -112,9 +110,7 @@ class ActionDialog extends React.Component {
     }
     if (dataPath === "FireNOCs") {
       dataPath = `${dataPath}[0].fireNOCDetails.additionalDetail`
-    }else if (dataPath === "Assessment"||dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
-
-
+    } else if (dataPath === "Assessment"||dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
       dataPath = `${dataPath}.workflow`;
     } else {
       dataPath = `${dataPath}[0]`;

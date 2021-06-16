@@ -235,6 +235,7 @@ class WorkFlowContainer extends React.Component {
           )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
           return;
         }
+        
         if (moduleName == "PT.ASSESSMENT") {
           this.props.setRoute(`/pt-assessment/acknowledgement?${this.getPurposeString(
             label
@@ -355,11 +356,6 @@ class WorkFlowContainer extends React.Component {
       //}
     } else if (moduleName === "PT") {
       bservice = "PT"
-    } else if(moduleName === "PT.ASSESSMENT") {
-      const {dataPath, preparedFinalObject} = this.props
-      const propertyId = get(preparedFinalObject, dataPath).propertyId || ""
-      bservice = "PT"
-      businessId = propertyId
     }
     else if (moduleName === "PT.CREATE" || moduleName === "PT.LEGACY") {
       return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`

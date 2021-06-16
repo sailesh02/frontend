@@ -412,7 +412,7 @@ const mapStateToProps = (state, ownProps) => {
 
 
 
-  const properties = propertiesById[propertyId] || {};
+  let properties = propertiesById[propertyId] || {};
   const { documentsUploaded } = properties || [];
   return {
     ownProps,

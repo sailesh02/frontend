@@ -371,7 +371,6 @@ class Footer extends React.Component {
           handleFieldChange={handleFieldChange}
           onButtonClick={onDialogButtonClick}
           dataPath={dataPath}
-          state={this.props.state}
         />
       </div>
     );

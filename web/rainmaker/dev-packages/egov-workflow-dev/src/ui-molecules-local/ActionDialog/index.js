@@ -132,7 +132,6 @@ class ActionDialog extends React.Component {
       wfDocumentsPath = `${dataPath}.wfDocuments`
     }
 
-    
     return (
       <Dialog
         fullScreen={fullscreen}

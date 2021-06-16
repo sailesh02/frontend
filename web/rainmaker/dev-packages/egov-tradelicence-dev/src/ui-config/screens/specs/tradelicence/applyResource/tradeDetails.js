@@ -508,7 +508,9 @@ const tradeUnitCard = {
                   className: "applicant-details-error autocomplete-dropdown",
                   callBack: tradeTypeChange,
                   isRequired: false,
-                  requiredValue: true
+                  requiredValue: true,
+                  isDisabled: false
+
                 },
                 {
                   key: 'tradeSubType',
@@ -516,7 +518,8 @@ const tradeUnitCard = {
                   className: "applicant-details-error autocomplete-dropdown",
                   fieldType: "autosuggest",
                   isRequired: false,
-                  requiredValue: true
+                  requiredValue: true,
+                  isDisabled: false
                 }
               ],
               moduleName: "TradeLicense",

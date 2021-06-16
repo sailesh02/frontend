@@ -2320,10 +2320,12 @@ export const triggerUpdateByKey = (state, keyIndex, value, dispatch) => {
 export const updateMdmsDropDowns = async ( state, dispatch ) => {
   let appNo = getQueryArg(window.location.href, "applicationNumber");
 
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+
   let queryObject = [
     {
       key: "tenantId",
-      value: getTenantId()
+      value: tenantId? tenantId: getTenantId()
     },
     { key: "applicationNumber", value: appNo }
   ];

@@ -369,7 +369,7 @@ class AllComplaints extends Component {
   };
 
   onChange = (value) => {
-    console.log(value, "Nero Value")
+
     this.setState({ value });
   };
 
@@ -583,7 +583,7 @@ class AllComplaints extends Component {
                     <CountDetails
                       count={allEsclatedComplaints.length}
                       total={allEsclatedComplaints.length}
-                      status="esclated"
+                      status="escalated"
                     />
                     <Complaints
                       noComplaintMessage={

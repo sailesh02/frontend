@@ -43,209 +43,13 @@ const fieldConfig = {
       labelName: "Enter Comments",
       labelKey: "WF_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
     }
-  },
-  assessmentFee: {
-    label: {
-      labelName: "Assessment Fee",
-      labelKey: "WF_ASSESSMENT_FEE"
-    },
-    placeholder: {
-      labelName: "Enter Assessment Fee",
-      labelKey: "WF_ASSESSMENT_FEE_PLACEHOLDER"
-    }
   }
 };
 
-let pt_payment_config = [
-  {
-    label: {
-      labelName: "Holding Tax",
-      labelKey: "PT_HOLDING_TAX"
-    },
-    placeholder: {
-      labelName: "Enter Holding Tax",
-      labelKey: "PT_HOLDING_TAX_PLACEHOLDER"
-    },
-    path: "holdingTax",
-    errorMessage: "PT_ERR_HOLDING_TAX",
-    showError: false,
-    required: true,
-    filter: ["PT.CREATE", "ASMT"]
-  },
-  {
-    label: {
-      labelName: "Light Tax",
-      labelKey: "PT_LIGHT_TAX"
-    },
-    placeholder: {
-      labelName: "Enter Light Tax",
-      labelKey: "PT_LIGHT_TAX_PLACEHOLDER"
-    },
-    path: "lightTax",
-    errorMessage: "PT_ERR_LIGHT_TAX",
-    showError: false,
-    required: true,
-    filter: ["PT.CREATE", "ASMT"]
-  },
-  {
-    label: {
-      labelName: "Water Tax",
-      labelKey: "PT_WATER_TAX"
-    },
-    placeholder: {
-      labelName: "Enter Water Tax",
-      labelKey: "PT_WATER_TAX_PLACEHOLDER"
-    },
-    path: "waterTax",
-    errorMessage: "PT_ERR_WATER_TAX",
-    showError: false,
-    required: true,
-    filter: ["PT.CREATE", "ASMT"]
-  },
-  {
-    label: {
-      labelName: "Drainage Tax",
-      labelKey: "PT_DRAINAGE_TAX"
-    },
-    placeholder: {
-      labelName: "Enter Drainage Tax",
-      labelKey: "PT_DRAINAGE_TAX_PLACEHOLDER"
-    },
-    path: "drainageTax",
-    errorMessage: "PT_ERR_DRINAGE_TAX",
-    showError: false,
-    required: true,
-    filter: ["PT.CREATE", "ASMT"]
-  },
-  {
-    label: {
-      labelName: "Latrine Tax",
-      labelKey: "PT_LATRINE_TAX"
-    },
-    placeholder: {
-      labelName: "Enter Latrine Tax",
-      labelKey: "PT_LATRINE_TAX_PLACEHOLDER"
-    },
-    path: "latrineTax",
-    errorMessage: "PT_ERR_LATRINE_TAX",
-    showError: false,
-    required: true,
-    filter: ["PT.CREATE", "ASMT"]
-  },
-  {
-    label: {
-      labelName: "Parking Tax",
-      labelKey: "PT_PARKING_TAX"
-    },
-    placeholder: {
-      labelName: "Enter Parking Tax",
-      labelKey: "PT_PARKING_TAX_PLACEHOLDER"
-    },
-    path: "parkingTax",
-    errorMessage: "PT_ERR_PARKING_TAX",
-    showError: false,
-    required: true,
-    filter: ["PT.CREATE", "ASMT"]
-  },
-  {
-    label: {
-      labelName: "Solid Waste User Charges",
-      labelKey: "PT_SOLID_WASTER_USER_CHARGES"
-    },
-    placeholder: {
-      labelName: "Enter Solid Waste User Charges",
-      labelKey: "PT_SOLID_WASTER_USER_CHARGES_PLACEHOLDER"
-    },
-    path: "solidWasteUserCharges",
-    errorMessage: "PT_ERR_SOLID_WASTER_USER_CHARGES",
-    showError: false,
-    required: true,
-    filter: ["PT.CREATE", "ASMT"]
-  },
-  {
-    label: {
-      labelName: "Ownership Exemption",
-      labelKey: "PT_OWNERSHIP_EXEMPTION"
-    },
-    placeholder: {
-      labelName: "Enter Ownership Exemption",
-      labelKey: "PT_OWNERSHIP_EXEMPTION_PLACEHOLDER"
-    },
-    path: "ownershipExemption",
-    errorMessage: "PT_ERR_OWNERSHIP_EXEMPTION",
-    showError: false,
-    required: true,
-    filter: ["PT.CREATE", "ASMT"],
-    subtract: true
-  },
-  {
-    label: {
-      labelName: "Usage Exemption",
-      labelKey: "PT_USAGE_EXEMPTION"
-    },
-    placeholder: {
-      labelName: "Enter Usage Exemption",
-      labelKey: "PT_USAGE_EXEMPTION_PLACEHOLDER"
-    },
-    path: "usageExemption",
-    errorMessage: "PT_ERR_USAGE_EXEMPTION",
-    showError: false,
-    required: true,
-    filter: ["PT.CREATE", "ASMT"],
-    subtract: true
-  },
-  {
-    label: {
-      labelName: "Interest",
-      labelKey: "PT_INTEREST"
-    },
-    placeholder: {
-      labelName: "Enter Interest",
-      labelKey: "PT_INTEREST_PLACEHOLDER"
-    },
-    path: "interest",
-    errorMessage: "PT_ERR_INTEREST",
-    showError: false,
-    required: true,
-    filter: ["PT.CREATE", "ASMT"]
-  },
-  {
-    label: {
-      labelName: "Penalty",
-      labelKey: "PT_PENALTY"
-    },
-    placeholder: {
-      labelName: "Enter Penalty",
-      labelKey: "PT_PENALTY_PLACEHOLDER"
-    },
-    path: "penalty",
-    errorMessage: "PT_ERR_PENALTY",
-    showError: false,
-    required: true,
-    filter: ["PT.CREATE", "ASMT"]
-  },
-  {
-    label: {
-      labelName: "Mutation Charge",
-      labelKey: "PT_MUTATION_CHARGE"
-    },
-    placeholder: {
-      labelName: "Enter Mutation Charge",
-      labelKey: "PT_MUTATION_CHARGE_PLACEHOLDER"
-    },
-    path: "mutationCharge",
-    errorMessage: "PT_ERR_MUTATION_CHARGE",
-    showError: false,
-    required: true,
-    filter: ["PT.MUTATION"]
-  }
-]
 
 class ActionDialog extends React.Component {
   state = {
-    employeeList: [],
-    roles: "",
-    paymentErr: false
+    employeeList: []
   };
 
   // onEmployeeClick = e => {
@@ -283,56 +87,6 @@ class ActionDialog extends React.Component {
     }
   };
 
-  assementForward = (buttonLabel, isDocRequired) => {
-    let {dataPath, state, dialogData} = this.props;
-    const {moduleName} = dialogData
-    let decimals = 0;
-    let data = get(state.screenConfiguration.preparedFinalObject, dataPath)
-    pt_payment_config = pt_payment_config.map((payment) => {
-      if(!data.additionalDetails || !data.additionalDetails[payment.path]) {
-        if(!data.additionalDetails){
-          data.additionalDetails = {}
-          data.additionalDetails[payment.path] = "0"
-        }else if(!data.additionalDetails[payment.path] && data.additionalDetails[payment.path] != ""){
-          data.additionalDetails[payment.path] = "0"
-        }
-        var text = data.additionalDetails[payment.path].toString();
-        var index = text.indexOf(".");
-        if(index == -1 ){
-          decimals = 0
-        }else{
-          decimals = (text.length - index - 1);
-        }    
-      }else{
-        var text = data.additionalDetails[payment.path].toString();
-        var index = text.indexOf(".");
-        if(index == -1 ){
-          decimals = 0
-        }else{
-          decimals = (text.length - index - 1);
-        }
-
-      }
-
-      return {
-        ...payment,
-        isError : payment.filter.includes(moduleName) && payment.required  && (isNaN(data.additionalDetails[payment.path]) || !data.additionalDetails[payment.path] || data.additionalDetails[payment.path] === "" || Number(data.additionalDetails[payment.path]) < 0
-        || decimals > 2) ? true : false
-        } 
-
-    });
-
-    this.props.handleFieldChange(dataPath, data);
-    const isError =  pt_payment_config.some(payment => !!payment.isError)
-    if(isError) {
-      this.setState({
-        paymentErr: true
-      })
-      return
-    }
-    this.props.onButtonClick(buttonLabel, isDocRequired)
-  }
-
   render() {
         
     let {
@@ -342,8 +96,8 @@ class ActionDialog extends React.Component {
       handleFieldChange,
       onButtonClick,
       dialogData,
-      dataPath,
-      state
+      dataPath
+
     } = this.props;
     const {
       buttonLabel,
@@ -360,8 +114,9 @@ class ActionDialog extends React.Component {
     }
     if (dataPath === "FireNOCs") {
       dataPath = `${dataPath}[0].fireNOCDetails.additionalDetail`
-    }
-     else if (dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc" || dataPath === "Assessment") {
+    }else if (dataPath === "Assessment"||dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
+
+
       dataPath = `${dataPath}.workflow`;
     } else {
       dataPath = `${dataPath}[0]`;
@@ -383,28 +138,13 @@ class ActionDialog extends React.Component {
       wfDocumentsPath = `${dataPath}.wfDocuments`
     }
 
-    const rolearray =
-        getUserInfo() &&
-        JSON.parse(getUserInfo()).roles.filter(item => {
-          if (item.code == "PT_FIELD_INSPECTOR")
-            return true;
-        });
     
-    const approveRoleArray = getUserInfo() &&
-    JSON.parse(getUserInfo()).roles.filter(item => {
-      if (item.code == "PT_APPROVER")
-        return true;
-    });
-    
-    const rolecheck = rolearray.length > 0 ? true : false;
-    const showPaymentCheck = (this.props.dataPath === "Assessment" || this.props.dataPath === "Property") && !!rolecheck && buttonLabel === "FORWARD"
-    const employeeDropdownShow = (this.props.dataPath === "Assessment" || this.props.dataPath === "Property") && !!approveRoleArray.length && buttonLabel === "APPROVE"
     return (
       <Dialog
         fullScreen={fullscreen}
         open={open}
         onClose={onClose}
-        maxWidth={showPaymentCheck ? 'sm' : false}
+        maxWidth={false}
         style={{zIndex:2000}}
       >
         <DialogContent
@@ -443,7 +183,7 @@ class ActionDialog extends React.Component {
                   >
                     <CloseIcon />
                   </Grid>
-                  {showEmployeeList && showAssignee && !employeeDropdownShow &&  (
+                  {showEmployeeList && showAssignee && (
                     <Grid
                       item
                       sm="12"
@@ -471,66 +211,6 @@ class ActionDialog extends React.Component {
                       />
                     </Grid>
                   )}
-                  {!!showPaymentCheck && 
-                  (<React.Fragment>
-                    <div
-                      style={{
-                        color: "rgba(0, 0, 0, 0.60)",
-                        fontSize: '14px',
-                        fontWeight: '1000',
-                        lineHeight:'20px',
-                        marginTop: '8px'
-                      }}>
-                       <LabelContainer
-                          labelName="PT_ENTER_DEMAND_DETAILS"
-                          labelKey="PT_ENTER_DEMAND_DETAILS"/>
-                    </div>
-                   
-                  {pt_payment_config.map((payment, ind) => {
-                    return payment.filter.includes(moduleName) ? (
-                    <Grid item
-                    sm="12">
-                    <TextFieldContainer
-                    defaultValue={0}
-                    InputLabelProps={{ shrink: true }}
-                    label= {payment.label}
-                    onChange={e =>{
-                      handleFieldChange(`${this.props.dataPath}.additionalDetails.${payment.path}`, e.target.value)
-                      pt_payment_config[ind].isError = false
-                    }}
-                    required = {true}
-                    jsonPath={`${this.props.dataPath}.additionalDetails.${payment.path}`}
-                    placeholder={payment.placeholder}
-                    inputProps={{ maxLength: 120, type: "number" }}
-                    /> 
-                    {!!payment.isError && (<span style={{color: "red"}}>{getLocaleLabels(payment.errorMessage, payment.errorMessage)}</span>)}
-                    </Grid>
-                  ) : null})}
-                  <Grid item sm="12">
-                    <div
-                      style={{
-                        color: "rgba(0, 0, 0, 0.60)",
-                        fontWeight: '600',
-                      }}>
-                       <LabelContainer
-                          labelName="PT_PAYMENT_TOTAL"
-                          labelKey="PT_PAYMENT_TOTAL"/>
-                      </div>
-                    <TextFieldContainer
-                    value={pt_payment_config.reduce((prev, curr) => {
-                      const val = Number(get(this.props.state, `screenConfiguration.preparedFinalObject.${this.props.dataPath}.additionalDetails.${curr.path}`) || 0)
-                      prev = curr.filter.includes(moduleName) ? prev + (curr.subtract ? -val : val): prev
-                      let total = Number(prev && prev.toFixed(2))
-                      return total
-                    }, 0)
-                    }
-                    InputLabelProps={{}}
-                    // label= {{labelName: "Total Amount", labelKey: "PT_PAYMENT_TOTAL"}}
-                    inputProps={{disabled: true}}
-                    /> 
-                  
-                  </Grid>
-                  </React.Fragment>)}
                   <Grid item sm="12">
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
@@ -597,7 +277,7 @@ class ActionDialog extends React.Component {
                           height: "48px"
                         }}
                         className="bottom-button"
-                        onClick={!!showPaymentCheck ? () => this.assementForward(buttonLabel, isDocRequired) : () =>
+                        onClick={() =>
                           onButtonClick(buttonLabel, isDocRequired)
                         }
                       >

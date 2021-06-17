@@ -86,6 +86,8 @@ export const callBackForNext = async (state, dispatch) => {
   let hasFieldToaster = true;
   let isValidToGreatorThanStartDate = true;
   let isCommencementDateInPast = true;
+  let isTempTradeValid = true;
+  let onlyFiveTradesAllowed = true;
   if (activeStep === 0) {
     const isTradeDetailsValid = validateFields(
       "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children",
@@ -160,7 +162,7 @@ export const callBackForNext = async (state, dispatch) => {
 
     let tlcommencementDate = get(queryObject[0], "commencementDate");
     let tlValidTo = get(queryObject[0], "validTo");
-console.log(tlValidTo, "Nero ValidTo")
+
 tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
     var dt = new Date();
 
@@ -180,6 +182,24 @@ tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
       isValidToGreatorThanStartDate = false;
     }
 
+    let tradeLicenseDetail = get(queryObject[0], "tradeLicenseDetail");
+    let tradeUnitsArray = get(tradeLicenseDetail, "tradeUnits");
+
+
+    if(tradeUnitsArray && tradeUnitsArray.length > 0 && tradeUnitsArray[0].uomValue > 30){
+      isTempTradeValid = false;
+    }
+let tradeCount = 0;
+    for (var j = 0; j < tradeUnits.length; j++) {
+      if (tradeUnits[j].isDeleted !== false) {
+        tradeCount++;
+      }
+    }
+
+if(tradeCount && tradeCount > 5){
+  onlyFiveTradesAllowed = false;
+}
+
 
     if (
       !isTradeDetailsValid ||
@@ -188,7 +208,9 @@ tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
       !isTradeUnitValid ||
       //!isTradeSubTypeValidForTempTL ||
       !isCommencementDateInPast ||
-      !isValidToGreatorThanStartDate
+      !isValidToGreatorThanStartDate ||
+      !isTempTradeValid||
+      !onlyFiveTradesAllowed
     ) {
       isFormValid = false;
     }
@@ -418,7 +440,22 @@ tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
                 "Commensement date greator than validto not allowed",
               labelKey: "ERR_COMMENSEMENT_DATE_GREATOR_THAN_VALIDTO_NOT_ALLOWED_TL"
             };
-          }else{
+          }
+          else if(!isTempTradeValid){
+            errorMessage = {
+              labelName:
+                "Temporary trade more than 30 days not allowed",
+              labelKey: "ERR_TEMP_TRADE_RANGE_NOT_VALID_TL"
+            };
+          }else if(!onlyFiveTradesAllowed){
+            errorMessage = {
+              labelName:
+                "Only five trades allowed",
+              labelKey: "ERR_ONLY_FIVE_TRADES_ALLOWED_TL"
+            };
+          }
+
+           else{
           errorMessage = {
             labelName:
               "Please fill all mandatory fields for Trade Details, then do next !",

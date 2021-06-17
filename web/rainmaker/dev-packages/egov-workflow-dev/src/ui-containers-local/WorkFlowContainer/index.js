@@ -452,6 +452,11 @@ class WorkFlowContainer extends React.Component {
     });
 
     let editAction = {};
+
+    //hardcoded edit button for adding additional details
+    if(moduleName == "PT.CREATE" && applicationState == "DOCVERIFIED"){
+      state.isStateUpdatable = true
+    }
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
       editAction = {

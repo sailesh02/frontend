@@ -15,7 +15,10 @@ import CalculationDetails from "./components/CalculationDetails";
 import EditIcon from "./components/EditIcon";
 import PropertyTaxDetailsCard from "./components/PropertyTaxDetails";
 import "./index.css";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import AdditionalInformation from "egov-ui-kit/common/propertyTax/Property/components/AdditionalInformation";
 
+const mode = getQueryArg(window.location.href, "mode");
 const defaultIconStyle = {
   fill: "#767676",
   width: 18,
@@ -79,7 +82,7 @@ class ReviewForm extends Component {
   render() {
     let { addRebateBox, updateCalculation, onEditButtonClick } = this;
     let { showRebateBox } = this.state;
-    let { stepZero, stepTwo, stepOne, estimationDetails, importantDates, totalAmount } = this.props;
+    let { stepZero, stepTwo, stepOne,stepThree,estimationDetails, importantDates, totalAmount } = this.props;
     const { generalMDMSDataById = {}, location = {}, OldProperty } = this.props;
     const { search } = location;
     const purpose = getPurpose();

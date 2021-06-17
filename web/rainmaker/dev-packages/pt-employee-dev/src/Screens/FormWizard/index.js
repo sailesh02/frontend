@@ -27,7 +27,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchMDMDDocumentTypeSuccess } from "redux/store/actions";
 import store from "ui-redux/store";
-import { InstitutionAuthorityHOC, InstitutionHOC, OwnerInfoHOC, OwnerInformation, OwnershipTypeHOC, PropertyAddressHOC, UsageInformationHOC } from "./components/Forms";
+import { InstitutionAuthorityHOC, InstitutionHOC, OwnerInfoHOC, OwnerInformation, OwnershipTypeHOC, PropertyAddressHOC, UsageInformationHOC, AdditionalInfoHOC } from "./components/Forms";
 import FloorsDetails from "./components/Forms/FloorsDetails";
 import MultipleOwnerInfoHOC from "./components/Forms/MultipleOwnerInfo";
 import PlotDetails from "./components/Forms/PlotDetails";
@@ -37,6 +37,10 @@ import WizardComponent from "./components/WizardComponent";
 import "./index.css";
 import { getDocumentTypes } from "./utils/mdmsCalls";
 import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import AdditionalInformation from "egov-ui-kit/common/propertyTax/Property/components/AdditionalInformation";
+
+const mode = getQueryArg(window.location.href, "mode");
 class FormWizard extends Component {
   state = {
     dialogueOpen: false,
@@ -119,6 +123,7 @@ class FormWizard extends Component {
         "documentsUploadRedux",
         store.dispatch, 'PT'
       );
+      debugger
       this.props.prepareFinalObject("newProperties", searchPropertyResponse.newProperties);
       if (
         searchPropertyResponse.Properties[0].propertyDetails &&
@@ -145,13 +150,19 @@ class FormWizard extends Component {
         ]
       };
       const preparedForm = convertRawDataToFormConfig(propertyResponse); //convertRawDataToFormConfig(responseee)
-      currentDraft = {
+      currentDraft = mode == "WORKFLOWEDIT" ? {
         draftRecord: {
           ...preparedForm,
-          selectedTabIndex: 3,
+          selectedTabIndex: 4,
           prepareFormData: propertyResponse //prepareFormData2,
         }
-      };
+      } : {
+        draftRecord: {
+        ...preparedForm,
+        selectedTabIndex: 3,
+        prepareFormData: propertyResponse //prepareFormData2,
+      }
+    };
 
       this.setState({
         draftByIDResponse: currentDraft
@@ -163,9 +174,10 @@ class FormWizard extends Component {
         ownerFormKeys,
         OwnerInformation
       );
+      debugger
       const activeTab =
         get(currentDraft, "draftRecord.selectedTabIndex", 0) > 3
-          ? 3
+          ? 3 : get(currentDraft, "draftRecord.selectedTabIndex", 0) > 4 ? 4 
           : get(currentDraft, "draftRecord.selectedTabIndex", 0);
       const activeModule = get(
         currentDraft,
@@ -1790,10 +1802,147 @@ class FormWizard extends Component {
     generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, null, base64UlbLogoForPdf);
   }
 
+  //additional details section in workflow
+  renderStepperContentWorkflow = (selected, fromReviewPage) => {
+    const { getOwnerDetails, updateTotalAmount, toggleTerms } = this;
+    const {
+      estimation,
+      totalAmountToBePaid,
+      financialYearFromQuery,
+      termsAccepted,
+      termsError, propertyUUID,
+      assessedPropertyDetails,
+      purpose
+    } = this.state;
+    const { form, currentTenantId, search, propertiesEdited } = this.props;
+    let { search: searchQuery } = this.props.location;
+    let isAssesment = getQueryValue(searchQuery, "purpose") == 'assess';
+    let isReassesment = getQueryValue(searchQuery, "purpose") == 'reassess';
+    const isCompletePayment = getQueryValue(searchQuery, "isCompletePayment");
+    const disableOwner = !formWizardConstants[purpose].canEditOwner;
+    debugger
+    switch (selected) {
+      case 0:
+        return (
+          <div>
+            <PropertyAddressHOC disabled={fromReviewPage} />
+          </div>
+        );
+      case 1:
+        return (
+          <div>
+            <UsageInformationHOC disabled={fromReviewPage} />
+            {renderPlotAndFloorDetails(
+              fromReviewPage,
+              PlotDetails,
+              FloorsDetails,
+              this
+            )}
+          </div>
+        );
+      case 2:
+        const ownerType = getSelectedCombination(
+          this.props.form,
+          "ownershipType",
+          ["typeOfOwnership"]
+        );
+        return (
+          <div>
+            <OwnershipTypeHOC disabled={disableOwner} />
+            {getOwnerDetails(ownerType)}
+          </div>
+        );
+      case 3:
+        return (<Card textChildren={<DocumentsUpload></DocumentsUpload>} />);
+      case 4 : 
+          return (
+            <div>
+              <AdditionalInfoHOC disabled={fromReviewPage}></AdditionalInfoHOC>
+            </div>
+          )
+      case 5:
+        return (<div className="review-pay-tab">
+          <ReviewForm
+            onTabClick={this.onTabClick}
+            properties={this.props['prepareFormData']['Properties'][0]}
+            stepZero={this.renderStepperContentWorkflow(0, fromReviewPage)}
+            stepOne={this.renderStepperContentWorkflow(1, fromReviewPage)}
+            stepTwo={this.renderStepperContentWorkflow(2, fromReviewPage)}
+            stepThree={this.renderStepperContentWorkflow(3, fromReviewPage)}
+            // estimationDetails={estimation}
+            financialYr={financialYearFromQuery}
+            totalAmountToBePaid={totalAmountToBePaid}
+            updateTotalAmount={updateTotalAmount}
+            isAssesment={isAssesment}
+            currentTenantId={currentTenantId}
+            isCompletePayment={isCompletePayment}
+            location={this.props.location}
+            isPartialPaymentInValid={
+              get(this.state, "estimation[0].totalAmount", 1) < 100 ||
+              get(
+                form,
+                "basicInformation.fields.typeOfBuilding.value",
+                ""
+              ).toLowerCase() === "vacant"
+            }
+            toggleTerms={toggleTerms}
+            termsAccepted={termsAccepted}
+            termsError={termsError}
+            calculationScreenData={this.state.calculationScreenData}
+            // getEstimates={this.getEstimates}
+          />
+        </div>)
+      case 6:
+
+        return (
+          <div>
+            <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_ASSESSMENT_NO" messageHeader={this.getMessageHeader()} message={this.getMessage()} receiptNo={assessedPropertyDetails['Properties'][0]['propertyDetails'][0]['assessmentNumber']} />
+          </div>
+        );
+      case 7:
+
+        return (
+          <div>
+            {/* <h2>
+              Redirected to Payment site for Payment
+           </h2> */}
+
+            <PaymentForm
+              properties={this.props['prepareFormData']['Properties'][0]}
+              estimationDetails={estimation}
+              financialYr={financialYearFromQuery}
+              totalAmountToBePaid={totalAmountToBePaid}
+              updateTotalAmount={updateTotalAmount}
+              currentTenantId={currentTenantId}
+              isCompletePayment={isCompletePayment}
+              isPartialPaymentInValid={
+                get(this.state, "estimation[0].totalAmount", 1) < 100 ||
+                get(
+                  form,
+                  "basicInformation.fields.typeOfBuilding.value",
+                  ""
+                ).toLowerCase() === "vacant"
+              }
+              calculationScreenData={this.state.calculationScreenData}
+            />
+          </div>
+        );
+      case 8:
+        return (
+          <div>
+            <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_PMT_RCPT_NO" messageHeader='PT_PROPERTY_PAYMENT_SUCCESS' message='PT_PROPERTY_PAYMENT_NOTIFICATION' receiptNo='PT-107-017574' />
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   render() {
     const {
       renderStepperContent,
       onPayButtonClick,
+      renderStepperContentWorkflow,
       closeDeclarationDialogue
     } = this;
     const {
@@ -1820,7 +1969,7 @@ class FormWizard extends Component {
         </div>
         <WizardComponent
           downloadAcknowledgementForm={this.downloadAcknowledgementForm}
-          content={renderStepperContent(selected, fromReviewPage)}
+          content={mode == "WORKFLOWEDIT" ? renderStepperContentWorkflow(selected, fromReviewPage): renderStepperContent(selected, fromReviewPage)}
           onTabClick={this.onTabClick}
           selected={selected}
           header={getHeaderLabel(selected, "employee")}

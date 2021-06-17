@@ -7,57 +7,12 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import filter from "lodash/filter";
 import get from "lodash/get";
 import sortBy from "lodash/sortBy";
+import { prepareFinalObject } from "../../../../../../../packages/lib/egov-ui-framework/ui-redux/screen-configuration/actions";
+import set from "lodash/set";
 
 const formConfig = {
   name: "demandDetails",
   fields: {
-    // city: {
-    //   id: "city",
-    //   jsonPath: "PropertiesTemp[0].address.city",
-    //   required: true,
-    //   localePrefix: { moduleName: "tenant", masterName: "tenants" },
-    //   labelsFromLocalisation: true,
-    //   type: "AutocompleteDropdown",
-    //   floatingLabelText: "CORE_COMMON_CITY",
-    //   errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-    //   fullWidth: true,
-    //   hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
-    //   numcols: 6,
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 6
-    //   },
-    //   dataFetchConfig: {
-    //     dependants: [
-    //       {
-    //         fieldKey: "mohalla",
-    //       },
-    //     ],
-    //   },
-    //   updateDependentFields: ({ formKey, field, dispatch, state }) => {
-    //     dispatch(prepareFormData("Properties[0].tenantId", field.value));
-    //     dispatch(
-    //       prepareFormData(
-    //         "Properties[0].address.city",
-    //         filter(get(state, "common.cities"), (city) => {
-    //           return city.code === field.value;
-    //         })[0].name
-    //       )
-    //     );
-    //     dispatch(setFieldProperty("propertyAddress", "mohalla", "value", ""));
-    //     const moduleValue = field.value;
-    //     dispatch(fetchLocalizationLabel(getLocale(), moduleValue, moduleValue));
-    //     let requestBody = generalMDMSDataRequestObj(field.value);
-
-    //     dispatch(
-    //       fetchGeneralMDMSData(requestBody, "PropertyTax", getGeneralMDMSDataDropdownName())
-    //     );
-    //   },
-    // },
-    // dummy: {
-    //   numcols: 6,
-    //   type: "dummy",
-    // },
     holdingTax: {
       id: "holding-tax",
       jsonPath: "Properties[0].additionalDetails.holdingTax",
@@ -70,6 +25,15 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
       required: true,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        let amountArray = []
+        for (const [key, value] of Object.entries(additionalDetails)) {
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+        }
+        const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+      }
     },
     lightTax: {
       id: "ligth-tax",
@@ -83,6 +47,15 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
       required: true,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        let amountArray = []
+        for (const [key, value] of Object.entries(additionalDetails)) {
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+        }
+        const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+      }
     },
     waterTax: {
       id: "water-tax",
@@ -96,6 +69,15 @@ const formConfig = {
       maxLength: 64,
       pattern: /^([0-9][0-9]{0,49})(\.\d{1,2})?$/,
       required: true,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        let amountArray = []
+        for (const [key, value] of Object.entries(additionalDetails)) {
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+        }
+        const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+      }
     },
     drainageTax: {
       id: "drainage-tax",
@@ -109,6 +91,15 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
       required: true,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        let amountArray = []
+        for (const [key, value] of Object.entries(additionalDetails)) {
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+        }
+        const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+      }
     },
     latrineTax: {
       id: "latrine-tax",
@@ -122,6 +113,15 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
       required: true,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        let amountArray = []
+        for (const [key, value] of Object.entries(additionalDetails)) {
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+        }
+        const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+      }
     },
     parkingTax: {
       id: "parking-tax",
@@ -135,6 +135,15 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
       required: true,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        let amountArray = []
+        for (const [key, value] of Object.entries(additionalDetails)) {
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+        }
+        const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+      }
     },
     solidWasteUserCharges: {
       id: "solidwaste-charges",
@@ -148,6 +157,15 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
       required: true,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        let amountArray = []
+        for (const [key, value] of Object.entries(additionalDetails)) {
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+        }
+        const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+      }
     },
     ownershipExemption: {
       id: "ownership-exemption",
@@ -161,6 +179,15 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
       required: true,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        let amountArray = []
+        for (const [key, value] of Object.entries(additionalDetails)) {
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+        }
+        const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+      }
     },
     usageExemption: {
       id: "usage-exemption",
@@ -174,6 +201,15 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
       required: true,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        let amountArray = []
+        for (const [key, value] of Object.entries(additionalDetails)) {
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+        }
+        const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+      }
     },
     interest: {
       id: "interest",
@@ -187,6 +223,15 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
       required: true,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        let amountArray = []
+        for (const [key, value] of Object.entries(additionalDetails)) {
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+        }
+        const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+      }
     },
     penalty: {
       id: "penalty",
@@ -200,9 +245,18 @@ const formConfig = {
       maxLength: 64,
       pattern: /^([0-9][0-9]{0,49})(\.\d{1,2})?$/,
       required: true,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        let amountArray = []
+        for (const [key, value] of Object.entries(additionalDetails)) {
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+        }
+        const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)),0);
+      }
     },
     totalAmount: {
-      id: "penalty",
+      id: "totalAmount",
       jsonPath: "Properties[0].additionalDetails.totalAmount",
       type: "textfield",
       floatingLabelText: "PT_TOTAL_AMOUNT",
@@ -211,8 +265,7 @@ const formConfig = {
       errorMessage: "PT_TOTAL_AMOUNT_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
-      pattern: /^[1-9][0-9]{0,50}$/,
-      required: true,
+      pattern: /^[1-9][0-9]{0,50}$/
     }
    
   },

@@ -321,10 +321,10 @@ class ApplicationPreview extends Component {
     const applicationNumber = getQueryValue(search, "applicationNumber");
     const { generalMDMSDataById, properties, cities } = this.props;
     const additionalDetails = this.props.screenConfiguration && 
-    this.props.screenConfiguration.prepareFinalObject &&
-    this.props.screenConfiguration.prepareFinalObject.Properties && 
-    this.props.screenConfiguration.prepareFinalObject.Properties.length > 0 &&
-    this.props.screenConfiguration.prepareFinalObject.Properties[0].additionalDetails || properties.additionalDetails || {}
+    this.props.screenConfiguration.preparedFinalObject &&
+    this.props.screenConfiguration.preparedFinalObject.Properties && 
+    this.props.screenConfiguration.preparedFinalObject.Properties.length > 0 &&
+    this.props.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || properties.additionalDetails || {}
     const applicationType = this.getApplicationType();
     const applicationDownloadObject = {
       label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
@@ -392,7 +392,7 @@ class ApplicationPreview extends Component {
                   <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
                   {!!isApprover && !!additionalDetails && (
                     <AdditionalInformation 
-                    additionalInformation={properties.additionalDetails}
+                    additionalInformation={additionalDetails}
                     />
                   )}
                   <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></AssessmentInfo>

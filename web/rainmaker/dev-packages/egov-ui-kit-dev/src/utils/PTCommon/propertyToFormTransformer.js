@@ -82,7 +82,8 @@ export const getDemandDetails = (propertyRes) => {
     "ownershipExemption":'0',
     "usageExemption":'0',
     "interest":'0',
-    "penalty":'0'
+    "penalty":'0',
+    "totalAmount":'0'
 }
   // const oldPIDPath = get(propertyAddress, "fields.oldPID.jsonPath", "");
   // const mohallaPath = get(propertyAddress, "fields.mohalla.jsonPath", "");

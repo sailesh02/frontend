@@ -1043,6 +1043,15 @@ class FormWizard extends Component {
     if(isDemandDetailsValid){
       store.dispatch(prepareFinalObject("Property.additionalDetails",Properties[0].additionalDetails))
       this.props.history.push(`/property-tax/application-preview?applicationNumber=${acknowldgementNumber}&tenantId=${tenantId}&type=property&mode="WORKFLOWEDIT"`);
+    }else{
+        this.props.toggleSnackbarAndSetText(
+          true,
+          {
+            labelName: "Enter Demand Details!",
+            labelKey: "ERR_ENTER_DEMAND_DETAILS"
+          },
+          "error"
+        );      
     }
   };
 

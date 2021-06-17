@@ -1892,47 +1892,6 @@ class FormWizard extends Component {
             // getEstimates={this.getEstimates}
           />
         </div>)
-      case 6:
-
-        return (
-          <div>
-            <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_ASSESSMENT_NO" messageHeader={this.getMessageHeader()} message={this.getMessage()} receiptNo={assessedPropertyDetails['Properties'][0]['propertyDetails'][0]['assessmentNumber']} />
-          </div>
-        );
-      case 7:
-
-        return (
-          <div>
-            {/* <h2>
-              Redirected to Payment site for Payment
-           </h2> */}
-
-            <PaymentForm
-              properties={this.props['prepareFormData']['Properties'][0]}
-              estimationDetails={estimation}
-              financialYr={financialYearFromQuery}
-              totalAmountToBePaid={totalAmountToBePaid}
-              updateTotalAmount={updateTotalAmount}
-              currentTenantId={currentTenantId}
-              isCompletePayment={isCompletePayment}
-              isPartialPaymentInValid={
-                get(this.state, "estimation[0].totalAmount", 1) < 100 ||
-                get(
-                  form,
-                  "basicInformation.fields.typeOfBuilding.value",
-                  ""
-                ).toLowerCase() === "vacant"
-              }
-              calculationScreenData={this.state.calculationScreenData}
-            />
-          </div>
-        );
-      case 8:
-        return (
-          <div>
-            <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_PMT_RCPT_NO" messageHeader='PT_PROPERTY_PAYMENT_SUCCESS' message='PT_PROPERTY_PAYMENT_NOTIFICATION' receiptNo='PT-107-017574' />
-          </div>
-        );
       default:
         return null;
     }

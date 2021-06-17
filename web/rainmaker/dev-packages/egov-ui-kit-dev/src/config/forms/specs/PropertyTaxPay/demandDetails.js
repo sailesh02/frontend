@@ -9,7 +9,7 @@ import get from "lodash/get";
 import sortBy from "lodash/sortBy";
 
 const formConfig = {
-  name: "propertyAddress",
+  name: "demandDetails",
   fields: {
     // city: {
     //   id: "city",
@@ -58,116 +58,183 @@ const formConfig = {
     //   numcols: 6,
     //   type: "dummy",
     // },
-    houseNumber: {
-      id: "house-number",
-      jsonPath: "Properties[0].address.doorNo",
+    holdingTax: {
+      id: "holding-tax",
+      jsonPath: "Properties[0].additionalDetails.holdingTax",
       type: "textfield",
-      floatingLabelText: "PT_PROPERTY_DETAILS_DOOR_NUMBER",
-      hintText: "PT_PROPERTY_DETAILS_DOOR_NUMBER_PLACEHOLDER",
+      floatingLabelText: "PT_HOLDING_TAX",
+      hintText: "PT_HOLDING_TAX_PLACEHOLDER",
       numcols: 6,
-      errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
+      errorMessage: "PT_HOLDING_TAX_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
       required: true,
     },
-    colony: {
-      id: "property-colony",
-      jsonPath: "Properties[0].address.buildingName",
+    lightTax: {
+      id: "ligth-tax",
+      jsonPath: "Properties[0].additionalDetails.lightTax",
       type: "textfield",
-      floatingLabelText: "PT_PROPERTY_DETAILS_BUILDING_COLONY_NAME",
-      hintText: "PT_PROPERTY_DETAILS_BUILDING_COLONY_NAME_PLACEHOLDER",
+      floatingLabelText: "PT_LIGHT_TAX",
+      hintText: "PT_LIGHT_TAX_PLACEHOLDER",
       numcols: 6,
-      errorMessage: "PT_PROPERTY_DETAILS_COLONY_NAME_ERRORMSG",
-      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      maxLength: 64,
-    },
-    street: {
-      id: "property-street",
-      jsonPath: "Properties[0].address.street",
-      type: "textfield",
-      floatingLabelText: "PT_PROPERTY_DETAILS_STREET_NAME",
-      hintText: "PT_PROPERTY_DETAILS_STREET_NAME_PLACEHOLDER",
-      numcols: 6,
-      errorMessage: "PT_PROPERTY_DETAILS_STREET_ERRORMSG",
+      errorMessage: "PT_LIGHT_TAX_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
       required: true,
     },
-    ...mohalla,
-    pincode: {
-      id: "pincode",
-      type: "number",
-      jsonPath: "Properties[0].address.pincode",
-      floatingLabelText: "PT_PROPERTY_DETAILS_PINCODE",
-      hintText: "PT_PROPERTY_DETAILS_PINCODE_PLACEHOLDER",
+    waterTax: {
+      id: "water-tax",
+      jsonPath: "Properties[0].additionalDetails.waterTax",
+      type: "textfield",
+      floatingLabelText: "PT_WATER_TAX",
+      hintText: "PT_WATER_TAX_PLACEHOLDER",
       numcols: 6,
-      //errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
-      errorMessage: "PT_PINCODE_ERROR_MESSAGE",
+      errorMessage: "PT_WATER_TAX_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      pattern: "^([0-9]){6}$",
+      maxLength: 64,
       required: true,
     },
-    // oldPID: {
-    //   id: "oldpid",
-    //   type: "textfield",
-    //   className: "pt-old-pid-text-field",
-    //   // text: "PT_SEARCH_BUTTON",
-    //   // iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
-    //   jsonPath: "Properties[0].oldPropertyId",
-    //   floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
-    //   hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",
-    //   numcols: 6,
-    //   errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
-    //   errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-    //   toolTip: true,
-    //   pattern: /^[^\$\"'<>?\\\\~`!@$%^+={}*,.:;“”‘’]{1,64}$/i,
-    //   toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
-    //   maxLength: 64,
-    // },
+    drainageTax: {
+      id: "drainage-tax",
+      jsonPath: "Properties[0].additionalDetails.drainageTax",
+      type: "textfield",
+      floatingLabelText: "PT_DRAINAGE_TAX",
+      hintText: "PT_DRAINAGE_TAX_PLACEHOLDER",
+      numcols: 6,
+      errorMessage: "PT_DRAINAGE_TAX_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      required: true,
+    },
+    latrineTax: {
+      id: "latrine-tax",
+      jsonPath: "Properties[0].additionalDetails.latrineTax",
+      type: "textfield",
+      floatingLabelText: "PT_LATRINE_TAX",
+      hintText: "PT_LATRINE_TAX_PLACEHOLDER",
+      numcols: 6,
+      errorMessage: "PT_LATRINE_TAX_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      required: true,
+    },
+    parkingTax: {
+      id: "parking-tax",
+      jsonPath: "Properties[0].additionalDetails.parkingTax",
+      type: "textfield",
+      floatingLabelText: "PT_PARKING_TAX",
+      hintText: "PT_PARKING_TAX_PLACEHOLDER",
+      numcols: 6,
+      errorMessage: "PT_PARKING_TAX_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      required: true,
+    },
+    solidWasteUserCharges: {
+      id: "solidwaste-charges",
+      jsonPath: "Properties[0].additionalDetails.solidWasteUserCharges",
+      type: "textfield",
+      floatingLabelText: "PT_SOLID_WASTER_USER_CHARGES",
+      hintText: "PT_SOLID_WASTER_USER_CHARGES_PLACEHOLDER",
+      numcols: 6,
+      errorMessage: "PT_SOLID_WASTER_USER_CHARGES_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      required: true,
+    },
+    ownershipExemption: {
+      id: "ownership-exemption",
+      jsonPath: "Properties[0].additionalDetails.ownershipExemption",
+      type: "textfield",
+      floatingLabelText: "PT_OWNERSHIP_EXEMPTION",
+      hintText: "PT_OWNERSHIP_EXEMPTION_PLACEHOLDER",
+      numcols: 6,
+      errorMessage: "PT_OWNERSHIP_EXEMPTION_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      required: true,
+    },
+    usageExemption: {
+      id: "usage-exemption",
+      jsonPath: "Properties[0].additionalDetails.usageExemption",
+      type: "textfield",
+      floatingLabelText: "PT_USAGE_EXEMPTION",
+      hintText: "PT_USAGE_EXEMPTION_PLACEHOLDER",
+      numcols: 6,
+      errorMessage: "PT_USAGE_EXEMPTION_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      required: true,
+    },
+    interest: {
+      id: "interest",
+      jsonPath: "Properties[0].additionalDetails.interest",
+      type: "textfield",
+      floatingLabelText: "PT_INTEREST",
+      hintText: "PT_INTEREST_PLACEHOLDER",
+      numcols: 6,
+      errorMessage: "PT_INTEREST_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      required: true,
+    },
+    penalty: {
+      id: "penalty",
+      jsonPath: "Properties[0].additionalDetails.penalty",
+      type: "textfield",
+      floatingLabelText: "PT_PENALTY",
+      hintText: "PT_PENALTY_PLACEHOLDER",
+      numcols: 6,
+      errorMessage: "PT_PENALTY_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      required: true,
+    }
+   
   },
   afterInitForm: (action, store, dispatch) => {
-    try {
-      let state = store.getState();
-      const { localizationLabels } = state.app;
-      const { cities, citiesByModule } = state.common;
-      const PT = citiesByModule && citiesByModule.PT;
-      if (PT) {
-        const tenants = PT.tenants;
-        const dd = tenants.reduce((dd, tenant) => {
-          let selected = cities.find((city) => {
-            return city.code === tenant.code;
-          });
+    // try {
+    //   let state = store.getState();
+    //   const { localizationLabels } = state.app;
+    //   const { cities, citiesByModule } = state.common;
+    //   const PT = citiesByModule && citiesByModule.PT;
+    //   if (PT) {
+    //     const tenants = PT.tenants;
+    //     const dd = tenants.reduce((dd, tenant) => {
+    //       let selected = cities.find((city) => {
+    //         return city.code === tenant.code;
+    //       });
 
-          selected.code = selected.code && selected.code.trim()
-          const label = `TENANT_TENANTS_${selected.code.toUpperCase().replace(/[.]/g, "_")}`;
-          dd.push({ label: getTranslatedLabel(label, localizationLabels), value: selected.code });
-          return dd;
-        }, []);
+    //       selected.code = selected.code && selected.code.trim()
+    //       const label = `TENANT_TENANTS_${selected.code.toUpperCase().replace(/[.]/g, "_")}`;
+    //       dd.push({ label: getTranslatedLabel(label, localizationLabels), value: selected.code });
+    //       return dd;
+    //     }, []);
 
-        dispatch(setFieldProperty("propertyAddress", "city", "dropDownData", sortBy(dd, ["label"])));
-      }
-      const tenant = get(state, 'form.propertyAddress.fields.city.value', null);
-      const mohallaDropDownData = get(state, 'form.propertyAddress.fields.mohalla.dropDownData', []);
+    //     dispatch(setFieldProperty("propertyAddress", "city", "dropDownData", sortBy(dd, ["label"])));
+    //   }
+    //   const tenant = get(state, 'form.propertyAddress.fields.city.value', null);
+    //   const mohallaDropDownData = get(state, 'form.propertyAddress.fields.mohalla.dropDownData', []);
 
-      if (process.env.REACT_APP_NAME === "Citizen" && tenant && mohallaDropDownData.length == 0) {
-        const dataFetchConfig = {
-          url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-          action: "",
-          queryParams: [{
-            key: "tenantId",
-            value: tenant
-          }],
-          requestBody: {},
-          isDependent: true,
-          hierarchyType: "REVENUE"
-        }
-        fetchDropdownData(dispatch, dataFetchConfig, 'propertyAddress', 'mohalla', state, true);
-      }
-      return action;
-    } catch (e) {
-      console.log(e);
-      return action;
-    }
+    //   if (process.env.REACT_APP_NAME === "Citizen" && tenant && mohallaDropDownData.length == 0) {
+    //     const dataFetchConfig = {
+    //       url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+    //       action: "",
+    //       queryParams: [{
+    //         key: "tenantId",
+    //         value: tenant
+    //       }],
+    //       requestBody: {},
+    //       isDependent: true,
+    //       hierarchyType: "REVENUE"
+    //     }
+    //     fetchDropdownData(dispatch, dataFetchConfig, 'propertyAddress', 'mohalla', state, true);
+    //   }
+    //   return action;
+    // } catch (e) {
+    //   console.log(e);
+    //   return action;
+    // }
   },
   action: "",
   redirectionRoute: "",

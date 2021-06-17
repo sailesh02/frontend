@@ -350,7 +350,8 @@ class ApplicationPreview extends Component {
             return role.code;
           })
           : [];
-    const isApprover = roleCodes.includes("PT_APPROVER")
+          debugger
+    const isApprover = roleCodes.includes("PT_APPROVER") || roleCodes.includes("PT_FIELD_INSPECTOR")
     if (get(properties, "tenantId")) {
       let tenantid = get(properties, "tenantId");
       // logoUrl = get(properties, "tenantId") ? this.getLogoUrl(get(properties, "tenantId")) : "";

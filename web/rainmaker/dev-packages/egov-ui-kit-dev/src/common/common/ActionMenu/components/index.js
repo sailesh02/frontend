@@ -262,7 +262,6 @@ class ActionMenuComp extends Component {
     let { role, actionListArr, activeRoutePath, updateActiveRoute, toggleDrawer, menuDrawerOpen } = this.props;
     let { searchText, path, menuItems } = this.state;
     let { changeLevel, menuChange, fetchLocales } = this;
-    debugger
     let actionList = actionListArr;
     let menuTitle = path.split(".");
     let activeItmem = localStorageGet("menuName");

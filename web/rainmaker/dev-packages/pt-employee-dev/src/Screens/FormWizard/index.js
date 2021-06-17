@@ -148,7 +148,6 @@ class FormWizard extends Component {
           }
         ]
       };
-      debugger
       const preparedForm = convertRawDataToFormConfig(propertyResponse,mode); //convertRawDataToFormConfig(responseee)
       currentDraft = mode == "WORKFLOWEDIT" ? {
         draftRecord: {
@@ -174,7 +173,6 @@ class FormWizard extends Component {
         ownerFormKeys,
         OwnerInformation
       );
-      debugger
       const activeTab =
         get(currentDraft, "draftRecord.selectedTabIndex", 0) > 4
           ? 4 : get(currentDraft, "draftRecord.selectedTabIndex", 0) > 3 ? 3 
@@ -617,17 +615,22 @@ class FormWizard extends Component {
   };
 
   getButtonLabels(index) {
-    const { purpose } = this.state;
     let buttonLabel = "PT_COMMONS_NEXT";
-    if (index == 4) {
-      buttonLabel = formWizardConstants[purpose].buttonLabel;
-    } else if (index == 5) {
-      buttonLabel = 'PT_PROCEED_PAYMENT'
-    } else if (index == 6) {
-      buttonLabel = 'PT_MAKE_PAYMENT'
-    } else if (index == 7) {
-      buttonLabel = 'PT_DOWNLOAD_RECEIPT'
+    if(mode == "WORKFLOWEDIT"){
+      buttonLabel = "PT_ADD_DEMAND_DETAILS"
+    }else{
+      const { purpose } = this.state;
+      if (index == 4) {
+        buttonLabel = formWizardConstants[purpose].buttonLabel;
+      } else if (index == 5) {
+        buttonLabel = 'PT_PROCEED_PAYMENT'
+      } else if (index == 6) {
+        buttonLabel = 'PT_MAKE_PAYMENT'
+      } else if (index == 7) {
+        buttonLabel = 'PT_DOWNLOAD_RECEIPT'
+      }
     }
+   
     return buttonLabel;
   }
 
@@ -1020,6 +1023,26 @@ class FormWizard extends Component {
       case 7:
         pay();
         break;
+    }
+  };
+
+  updateDemandDetails = index => {
+    debugger
+    const { form,setRoute,screenConfiguration } = this.props;
+    const {preparedFinalObject} = screenConfiguration
+    const {Properties = []} =preparedFinalObject
+    let propertyId = '';
+    let tenantId = '';
+    let acknowldgementNumber = '';
+    for (let pty of Properties) {
+      propertyId = pty.propertyId;
+      tenantId = pty.tenantId;
+      acknowldgementNumber = pty.acknowldgementNumber
+    }
+    const isDemandDetailsValid = validateForm(form.demandDetails);
+    if(isDemandDetailsValid){
+      store.dispatch(prepareFinalObject("Property.additionalDetails",Properties[0].additionalDetails))
+      this.props.history.push(`/property-tax/application-preview?applicationNumber=${acknowldgementNumber}&tenantId=${tenantId}&type=property&mode="WORKFLOWEDIT"`);
     }
   };
 
@@ -1933,7 +1956,7 @@ class FormWizard extends Component {
           header={getHeaderLabel(selected, "employee")}
           footer={null}
           formValidIndexArray={formValidIndexArray}
-          updateIndex={this.updateIndex}
+          updateIndex={mode == "WORKFLOWEDIT" ? this.updateDemandDetails : this.updateIndex}
           backLabel="PT_COMMONS_GO_BACK"
           nextLabel={this.getButtonLabels(selected)}
           ownerInfoArr={ownerInfoArr}
@@ -1965,6 +1988,7 @@ const mapStateToProps = state => {
     prepareFormData: common.prepareFormData,
     common,
     app,
+    screenConfiguration,
     documentsUploadRedux,
     newProperties,
     propertiesEdited,

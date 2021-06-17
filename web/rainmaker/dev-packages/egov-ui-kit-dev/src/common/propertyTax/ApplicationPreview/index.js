@@ -24,7 +24,6 @@ import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
 import AdditionalInformation from '../Property/components/AdditionalInformation'
 import "./index.css";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-
 const innerDivStyle = {
   padding: "0",
   // borderBottom: "1px solid #e0e0e0",
@@ -153,9 +152,14 @@ class ApplicationPreview extends Component {
   fetchApplication = async () => {
     const applicationType = this.getApplicationType();
     try {
-      const payload = await httpRequest(applicationType.endpoint.GET.URL, applicationType.endpoint.GET.ACTION, applicationType.queryParams
+      let payload = await httpRequest(applicationType.endpoint.GET.URL, applicationType.endpoint.GET.ACTION, applicationType.queryParams
       );
-
+      const mode = getQueryArg(window.location.href, "mode");
+      if(applicationType.dataPath == "Property"){
+        const {preparedFinalObject = {}} = this.props.screenConfiguration
+        const {Properties = []} = preparedFinalObject
+        payload.Properties[0].additionalDetails = Properties[0].additionalDetails || {}
+      }
       const responseObject = payload[applicationType.responsePath] && payload[applicationType.responsePath].length > 0 && payload[applicationType.responsePath][0];
       if (!responseObject.workflow) {
 
@@ -316,6 +320,11 @@ class ApplicationPreview extends Component {
     const { search } = location;
     const applicationNumber = getQueryValue(search, "applicationNumber");
     const { generalMDMSDataById, properties, cities } = this.props;
+    const additionalDetails = this.props.screenConfiguration && 
+    this.props.screenConfiguration.prepareFinalObject &&
+    this.props.screenConfiguration.prepareFinalObject.Properties && 
+    this.props.screenConfiguration.prepareFinalObject.Properties.length > 0 &&
+    this.props.screenConfiguration.prepareFinalObject.Properties[0].additionalDetails || properties.additionalDetails || {}
     const applicationType = this.getApplicationType();
     const applicationDownloadObject = {
       label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
@@ -381,7 +390,7 @@ class ApplicationPreview extends Component {
                     }}>
                   </PdfHeader>
                   <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
-                  {!!isApprover && !!properties.additionalDetails && (
+                  {!!isApprover && !!additionalDetails && (
                     <AdditionalInformation 
                     additionalInformation={properties.additionalDetails}
                     />
@@ -417,7 +426,7 @@ const mapStateToProps = (state, ownProps) => {
   const { documentsUploaded } = properties || [];
   return {
     ownProps,
-    generalMDMSDataById, properties, documentsUploaded, propertyId, cities
+    generalMDMSDataById, properties, documentsUploaded, propertyId, cities,screenConfiguration
   };
 };
 

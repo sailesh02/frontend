@@ -169,7 +169,7 @@ class UserSettings extends Component {
             style={style.baseTenantStyle}
             labelStyle={style.label}
             dropDownData={tenantIdsList}
-            value={tenantIdOnlyState}
+            value={tenantSelected}
             underlineStyle={{ borderBottom: "none" }}
           />
         )}

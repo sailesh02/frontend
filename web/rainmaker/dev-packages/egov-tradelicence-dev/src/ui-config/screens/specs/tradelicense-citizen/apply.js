@@ -96,6 +96,7 @@ const screenConfig = {
     if (applicationNo) {
       updateSearchResults(action, state, dispatch, applicationNo, tenantId);
     } else {
+      console.log("Nero first Call")
       getData(action, state, dispatch, tenantId);
 
       const applyFor = window.localStorage.getItem('licenseType');

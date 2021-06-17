@@ -39,7 +39,7 @@ const SessionExpiredDialog = ({ logout, closeLogoutDialog, logoutPopupOpen, okte
         />
       }
       children={[
-        <Label buttonLabel={true} label={"USER_SESSION_EXPIRED"} color="#FE7A51" />
+        <Label buttonLabel={true} label={"USER_SESSION_EXPIRED"} color="#FE7A51" labelStyle={{ paddingLeft: "12px" }} />
       ]}
       handleClose={closeLogoutDialog}
       actions={actions}

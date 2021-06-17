@@ -1132,6 +1132,49 @@ export const tradeDetails = getCommonCard({
             )
           );
 
+
+          let queryObject = JSON.parse(
+            JSON.stringify(
+              get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
+            )
+          );
+          let tlcommencementDate = action.value;
+
+
+          let validTo = get(queryObject[0], "validTo", null);
+
+          if (validTo && tlcommencementDate) {
+
+            //var date1 = new Date(tlcommencementDate);
+            var date2 = new Date(validTo);
+            // To calculate the time difference of two dates
+
+            var Difference_In_Time = date2.getTime() - new Date(tlcommencementDate).getTime();
+
+            // To calculate the no. of days between two dates
+            var Difference_In_Days = Math.ceil((((Difference_In_Time / 1000) / 60) / 60) / 24);
+
+            let selectedTrades = get(
+              state.screenConfiguration.screenConfig.apply,
+              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items",
+              null
+            )
+
+            if (selectedTrades && selectedTrades.length > 0) {
+              for (let i = 0; i < selectedTrades.length; i++) {
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${i}].item${i}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+                    "props.value",
+                    Difference_In_Days
+                  )
+                );
+              }
+            }
+          }
+
+
         }
       },
     },
@@ -1356,6 +1399,9 @@ export const tradeDetails = getCommonCard({
 });
 
 const setFieldsOnAddItem = (state, multiItemContent) => {
+  console.log(state, "Nero status")
+
+  console.log(multiItemContent, "Nero multiItemContent")
   const preparedFinalObject = JSON.parse(
     JSON.stringify(state.screenConfiguration.preparedFinalObject)
   );

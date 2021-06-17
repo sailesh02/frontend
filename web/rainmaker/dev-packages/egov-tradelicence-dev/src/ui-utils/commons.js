@@ -187,6 +187,17 @@ export const updatePFOforSearchResults = async (
     );
   }
 
+  if (queryValue && tlType === "PERMANENT") {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod",
+        "visible",
+        true
+      )
+    );
+  }
+
   let tlStatus = get(payload.Licenses[0], 'status', "");
 
   if (tlStatus && tlStatus != "INITIATED") {

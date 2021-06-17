@@ -17,6 +17,7 @@ import PropertyTaxDetailsCard from "./components/PropertyTaxDetails";
 import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import AdditionalInformation from "egov-ui-kit/common/propertyTax/Property/components/AdditionalInformation";
+import AdditionalDetails from "./components/AdditionalDetails";
 
 const mode = getQueryArg(window.location.href, "mode");
 const defaultIconStyle = {

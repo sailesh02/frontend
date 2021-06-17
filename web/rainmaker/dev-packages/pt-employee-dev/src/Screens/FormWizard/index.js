@@ -123,7 +123,6 @@ class FormWizard extends Component {
         "documentsUploadRedux",
         store.dispatch, 'PT'
       );
-      debugger
       this.props.prepareFinalObject("newProperties", searchPropertyResponse.newProperties);
       if (
         searchPropertyResponse.Properties[0].propertyDetails &&
@@ -149,11 +148,12 @@ class FormWizard extends Component {
           }
         ]
       };
-      const preparedForm = convertRawDataToFormConfig(propertyResponse); //convertRawDataToFormConfig(responseee)
+      debugger
+      const preparedForm = convertRawDataToFormConfig(propertyResponse,mode); //convertRawDataToFormConfig(responseee)
       currentDraft = mode == "WORKFLOWEDIT" ? {
         draftRecord: {
           ...preparedForm,
-          selectedTabIndex: 4,
+          selectedTabIndex: 5,
           prepareFormData: propertyResponse //prepareFormData2,
         }
       } : {
@@ -176,8 +176,8 @@ class FormWizard extends Component {
       );
       debugger
       const activeTab =
-        get(currentDraft, "draftRecord.selectedTabIndex", 0) > 3
-          ? 3 : get(currentDraft, "draftRecord.selectedTabIndex", 0) > 4 ? 4 
+        get(currentDraft, "draftRecord.selectedTabIndex", 0) > 4
+          ? 4 : get(currentDraft, "draftRecord.selectedTabIndex", 0) > 3 ? 3 
           : get(currentDraft, "draftRecord.selectedTabIndex", 0);
       const activeModule = get(
         currentDraft,
@@ -1820,7 +1820,6 @@ class FormWizard extends Component {
     let isReassesment = getQueryValue(searchQuery, "purpose") == 'reassess';
     const isCompletePayment = getQueryValue(searchQuery, "isCompletePayment");
     const disableOwner = !formWizardConstants[purpose].canEditOwner;
-    debugger
     switch (selected) {
       case 0:
         return (

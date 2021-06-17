@@ -1027,7 +1027,6 @@ class FormWizard extends Component {
   };
 
   updateDemandDetails = index => {
-    debugger
     const { form,setRoute,screenConfiguration } = this.props;
     const {preparedFinalObject} = screenConfiguration
     const {Properties = []} =preparedFinalObject

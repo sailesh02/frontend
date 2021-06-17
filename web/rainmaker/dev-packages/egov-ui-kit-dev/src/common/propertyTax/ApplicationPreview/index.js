@@ -155,7 +155,7 @@ class ApplicationPreview extends Component {
       let payload = await httpRequest(applicationType.endpoint.GET.URL, applicationType.endpoint.GET.ACTION, applicationType.queryParams
       );
       const mode = getQueryArg(window.location.href, "mode");
-      if(applicationType.dataPath == "Property"){
+      if(mode == "WORKFLOWEDIT"){
         const {preparedFinalObject = {}} = this.props.screenConfiguration
         const {Properties = []} = preparedFinalObject
         payload.Properties[0].additionalDetails = Properties[0].additionalDetails || {}
@@ -324,7 +324,7 @@ class ApplicationPreview extends Component {
     this.props.screenConfiguration.preparedFinalObject &&
     this.props.screenConfiguration.preparedFinalObject.Properties && 
     this.props.screenConfiguration.preparedFinalObject.Properties.length > 0 &&
-    this.props.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || properties.additionalDetails || {}
+    this.props.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || properties && properties.additionalDetails || {}
     const applicationType = this.getApplicationType();
     const applicationDownloadObject = {
       label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
@@ -359,7 +359,6 @@ class ApplicationPreview extends Component {
             return role.code;
           })
           : [];
-          debugger
     const isApprover = roleCodes.includes("PT_APPROVER") || roleCodes.includes("PT_FIELD_INSPECTOR")
     if (get(properties, "tenantId")) {
       let tenantid = get(properties, "tenantId");

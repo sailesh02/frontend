@@ -9,6 +9,7 @@ import get from "lodash/get";
 import sortBy from "lodash/sortBy";
 import { prepareFinalObject } from "../../../../../../../packages/lib/egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const formConfig = {
   name: "demandDetails",
@@ -315,30 +316,34 @@ const formConfig = {
   },
   afterInitForm: (action, store, dispatch) => {
     try{
-      let state = store.getState();
-      const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties && state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
-        let amountArray = []
-        for (const [key, value] of Object.entries(additionalDetails)) {
-          if(key == "usageExemption" || key == "ownershipExemption"){
-            amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+      const mode = getQueryArg(window.location.href, "mode");
+      if(mode == "editDemandDetails"){
+        let state = store.getState();
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties && state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+          let amountArray = []
+          for (const [key, value] of Object.entries(additionalDetails)) {
+            if(key == "usageExemption" || key == "ownershipExemption"){
+              amountArray.push(Number(-value))
+            }else{
+              amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+            }
           }
-        }
-        const total = amountArray.reduce((a, b) => a + b, 0)
-      dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)),0);
-      if(additionalDetails){
-        dispatch(setFieldProperty("demandDetails", "holdingTax", "value", additionalDetails.holdingTax),0);
-        dispatch(setFieldProperty("demandDetails", "lightTax", "value", additionalDetails.lightTax),0)
-        dispatch(setFieldProperty("demandDetails", "waterTax", "value", additionalDetails.waterTax),0)
-        dispatch(setFieldProperty("demandDetails", "drainageTax", "value", additionalDetails.drainageTax),0)
-        dispatch(setFieldProperty("demandDetails", "latrineTax", "value", additionalDetails.latrineTax),0)
-        dispatch(setFieldProperty("demandDetails", "parkingTax", "value", additionalDetails.parkingTax),0)
-        dispatch(setFieldProperty("demandDetails", "solidWasteUserCharges", "value", additionalDetails.solidWasteUserCharges),0)
-        dispatch(setFieldProperty("demandDetails", "ownershipExemption", "value", additionalDetails.ownershipExemption),0)
-        dispatch(setFieldProperty("demandDetails", "usageExemption", "value", additionalDetails.usageExemption),0)
-        dispatch(setFieldProperty("demandDetails", "interest", "value", additionalDetails.interest),0)
-        dispatch(setFieldProperty("demandDetails", "penalty", "value", additionalDetails.penalty),0)   
+          const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)),0);
+        if(additionalDetails){
+          dispatch(setFieldProperty("demandDetails", "holdingTax", "value", additionalDetails.holdingTax),0);
+          dispatch(setFieldProperty("demandDetails", "lightTax", "value", additionalDetails.lightTax),0)
+          dispatch(setFieldProperty("demandDetails", "waterTax", "value", additionalDetails.waterTax),0)
+          dispatch(setFieldProperty("demandDetails", "drainageTax", "value", additionalDetails.drainageTax),0)
+          dispatch(setFieldProperty("demandDetails", "latrineTax", "value", additionalDetails.latrineTax),0)
+          dispatch(setFieldProperty("demandDetails", "parkingTax", "value", additionalDetails.parkingTax),0)
+          dispatch(setFieldProperty("demandDetails", "solidWasteUserCharges", "value", additionalDetails.solidWasteUserCharges),0)
+          dispatch(setFieldProperty("demandDetails", "ownershipExemption", "value", additionalDetails.ownershipExemption),0)
+          dispatch(setFieldProperty("demandDetails", "usageExemption", "value", additionalDetails.usageExemption),0)
+          dispatch(setFieldProperty("demandDetails", "interest", "value", additionalDetails.interest),0)
+          dispatch(setFieldProperty("demandDetails", "penalty", "value", additionalDetails.penalty),0)   
+      }
+      
       }
     }catch(err){
       console.log(err)

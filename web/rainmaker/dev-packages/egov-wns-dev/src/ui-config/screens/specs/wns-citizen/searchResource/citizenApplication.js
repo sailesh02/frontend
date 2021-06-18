@@ -61,37 +61,75 @@ export const citizenApplication = getCommonCard({
         labelKey: "WS_HOME_SEARCH_CONN_RESULTS_DESC"
     }),
     cityPropertyAndMobNumContainer: getCommonContainer({
-        city: getSelectField({
-            label: {
-                labelKey: "WS_PROP_DETAIL_CITY"
-            },
+        city: {
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-pt",
+            componentPath: "AutosuggestContainer",
             props: {
-                label: {
-                  labelKey: "WS_PROP_DETAIL_CITY"
-                },
-                placeholder: {
-                  labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
-                },
-                localePrefix: {
-                  moduleName: "TENANT",
-                  masterName: "TENANTS"
-                }
-            },
-            placeholder: {
+              className: "autocomplete-dropdown",
+              suggestions: [],
+              label: {
+                labelName: "City",
+                labelKey: "WS_PROP_DETAIL_CITY"
+              },
+              placeholder: {
+                labelName: "Select City",
                 labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
-            },
-            labelPrefix: {
+              },
+              data: [],
+              localePrefix: {
                 moduleName: "TENANT",
                 masterName: "TENANTS"
+              },
+              jsonPath: "searchScreen.tenantId",
+              sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+              labelsFromLocalisation: true,
+              required: true,
+              isClearable: true,
+              inputLabelProps: {
+                shrink: true
+              }
             },
-            sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-            jsonPath: "searchScreen.tenantId",//db sake
+            data: [],
             required: true,
+            jsonPath: "searchScreen.tenantId",
+            sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
             gridDefination: {
-                xs: 12,
-                sm: 4
-            },
-        }),
+              xs: 12,
+              sm: 4
+            }
+          },   
+        // city: getSelectField({
+        //     label: {
+        //         labelKey: "WS_PROP_DETAIL_CITY"
+        //     },
+        //     props: {
+        //         label: {
+        //           labelKey: "WS_PROP_DETAIL_CITY"
+        //         },
+        //         placeholder: {
+        //           labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
+        //         },
+        //         localePrefix: {
+        //           moduleName: "TENANT",
+        //           masterName: "TENANTS"
+        //         }
+        //     },
+        //     placeholder: {
+        //         labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
+        //     },
+        //     labelPrefix: {
+        //         moduleName: "TENANT",
+        //         masterName: "TENANTS"
+        //     },
+        //     sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+        //     jsonPath: "searchScreen.tenantId",//db sake
+        //     required: true,
+        //     gridDefination: {
+        //         xs: 12,
+        //         sm: 4
+        //     },
+        // }),
         propertyid: getTextField({
             label: {
                 labelKey: "WS_PROPERTY_ID_LABEL"

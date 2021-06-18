@@ -317,6 +317,12 @@ export const beforeInitForm = {
           return subUsageMinor.usageCategoryMinor === get(state, usageCategoryMinor);
         }
       );
+      var filteredSubUsageMinor = filter(
+        prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
+        (subUsageMinor) => {
+          return subUsageMinor.usageCategoryMinor === get(state, usageCategoryMinor);
+        }
+      );
       if (filteredSubUsageMinor.length > 0) {
         var filteredUsageCategoryDetails = getPresentMasterObj(
           prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
@@ -400,7 +406,7 @@ export const beforeInitFormForPlot = {
           (subUsageMinor) => {
             return subUsageMinor.usageCategoryMinor === get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMinor");
           }
-        );
+          );
         if (filteredSubUsageMinor.length > 0) {
           var filteredUsageCategoryDetails = getPresentMasterObj(
             prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
@@ -410,11 +416,6 @@ export const beforeInitFormForPlot = {
           const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
           const subUsageData = sortDropdown(mergedMaster, "label", true);
           set(action, "form.fields.subUsageType.dropDownData", subUsageData);
-          // set(
-          //   action,
-          //   "form.fields.subUsageType.value",
-          //   null)
-          // );
           if (get(action, "form.fields.subUsageType.jsonPath")) {
             dispatch(
               prepareFormData(
@@ -595,6 +596,7 @@ export const mohalla = {
           return option.value === field.value;
         });
         dispatch(prepareFormData("Properties[0].address.locality.area", mohalla.area));
+        dispatch(prepareFormData("Properties[0].address.locality.name", mohalla.name));
       }
     },
   },

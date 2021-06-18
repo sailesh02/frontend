@@ -68,6 +68,7 @@ const formConfig = {
       errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
+      required: true,
     },
     colony: {
       id: "property-colony",
@@ -90,6 +91,7 @@ const formConfig = {
       errorMessage: "PT_PROPERTY_DETAILS_STREET_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
+      required: true,
     },
     ...mohalla,
     pincode: {
@@ -103,13 +105,14 @@ const formConfig = {
       errorMessage: "PT_PINCODE_ERROR_MESSAGE",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       pattern: "^([0-9]){6}$",
+      required: true,
     },
     oldPID: {
       id: "oldpid",
-      type: "textFieldIcon",
+      type: "textfield",
       className: "pt-old-pid-text-field",
-      text: "PT_SEARCH_BUTTON",
-      iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
+      // text: "PT_SEARCH_BUTTON",
+      // iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
       jsonPath: "Properties[0].oldPropertyId",
       floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
       hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",
@@ -134,10 +137,13 @@ const formConfig = {
           let selected = cities.find((city) => {
             return city.code === tenant.code;
           });
+
+          selected.code = selected.code && selected.code.trim()
           const label = `TENANT_TENANTS_${selected.code.toUpperCase().replace(/[.]/g, "_")}`;
           dd.push({ label: getTranslatedLabel(label, localizationLabels), value: selected.code });
           return dd;
         }, []);
+
         dispatch(setFieldProperty("propertyAddress", "city", "dropDownData", sortBy(dd, ["label"])));
       }
       const tenant = get(state, 'form.propertyAddress.fields.city.value', null);

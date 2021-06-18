@@ -311,7 +311,7 @@ class DocumentList extends Component {
               label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
               placeholder={{ labelKey: card.dropdown.label }}
               data={card.dropdown.menu}
-              disabled={card.dropdown.disabled}
+              isDisabled={card.dropdown.disabled}
               optionValue="code"
               optionLabel="label"
               required={card.required}

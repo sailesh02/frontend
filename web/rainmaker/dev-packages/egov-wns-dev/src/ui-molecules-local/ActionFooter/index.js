@@ -124,10 +124,10 @@ class Footer extends React.Component {
       },
     };
     //if(applicationType === "MODIFY"){
-    downloadMenu && downloadMenu.push(editButton);
+    downloadMenu && process.env.REACT_APP_NAME !== "Citizen" && downloadMenu.push(editButton);
     if (
-      businessService.includes("ws-services-calculation") ||
-      businessService.includes("sw-services-calculation")
+      (businessService && businessService.includes("ws-services-calculation") ||
+      businessService && businessService.includes("sw-services-calculation")) && process.env.REACT_APP_NAME !== "Citizen"
     ) {
       if (bill.Demands && bill.Demands.length > 0 &&isAmendmentInWorkflow) {
         downloadMenu && downloadMenu.push(BillAmendment);
@@ -152,11 +152,11 @@ class Footer extends React.Component {
       menu: downloadMenu,
     };
 
-    return (
+    return ( 
       <div className="wf-wizard-footer" id="custom-atoms-footer">
         <Container>
           <Item xs={12} sm={12} className="wf-footer-container">
-            <MenuButton data={buttonItems} />
+            {downloadMenu && downloadMenu.length > 0 && <MenuButton data={buttonItems} />}
           </Item>
         </Container>
       </div>
@@ -203,7 +203,8 @@ const mapStateToProps = (state) => {
     connectionObj && connectionObj.length > 0
       ? connectionObj[0].applicationNo
       : "";
-  const businessService = connectDetailsData.BillingService.BusinessService.map(
+  const businessService = connectDetailsData && 
+  connectDetailsData.BillingService && connectDetailsData.BillingService.BusinessService && connectDetailsData.BillingService.BusinessService.map(
     (item) => {
       return item.businessService;
     }

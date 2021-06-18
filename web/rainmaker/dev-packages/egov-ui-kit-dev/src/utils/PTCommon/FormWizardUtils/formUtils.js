@@ -150,7 +150,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.status = newProperty.status;
   propertyDetails.usage = null;
   propertyDetails.noOfFloors = newProperty.noOfFloors;
-  propertyDetails.landArea = newProperty.landArea;
+  propertyDetails.landArea = Math.round(newProperty.landArea * 9);
   propertyDetails.buildUpArea = newProperty.superBuiltUpArea;
   propertyDetails.units = newProperty.units && newProperty.units.map(unit => {
     unit.floorNo = unit.floorNo || unit.floorNo === 0 ? unit.floorNo.toString() : unit.floorNo
@@ -189,7 +189,7 @@ export const convertToOldPTObject = (newObject) => {
     // unit.constructionDetail = {
     //   builtUpArea: unit.unitArea,
     // };
-    unit.unitArea = unit.constructionDetail.builtUpArea;
+    unit.unitArea = Math.round(unit.constructionDetail.builtUpArea);
     return { ...unit }
   })
   localStorageSet("previousFloorNo", newProperty.noOfFloors)
@@ -269,6 +269,16 @@ export const formWizardConstants = {
     buttonLabel: 'PT_CREATE_PROPERTY_BUTTON',
     isEditButton: true,
     canEditOwner: true,
+    isEstimateDetails: false
+  },
+  [PROPERTY_FORM_PURPOSE.LINK]: {
+    header: 'PT_LINK_PROPERTY',
+    parentButton: 'PT_LINK',
+    isSubHeader: true,
+    isFinancialYear: true,
+    buttonLabel: 'PT_LINK_PROPERTY_BUTTON',
+    isEditButton: false,
+    canEditOwner: false,
     isEstimateDetails: false
   }
 }

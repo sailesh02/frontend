@@ -10,7 +10,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
-import { toggleWater, toggleSewerage } from './toggleFeilds';
+import { toggleWater, toggleSewerage , toggleConnectionTypeDetails } from './toggleFeilds';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const styles = {
@@ -46,17 +46,24 @@ class CheckboxLabels extends React.Component {
     const { preparedFinalObject } = this.props;
     let checkedWater = (preparedFinalObject && preparedFinalObject.applyScreen.water) ? preparedFinalObject.applyScreen.water : false;
     let checkedSewerage = (preparedFinalObject && preparedFinalObject.applyScreen.sewerage) ? preparedFinalObject.applyScreen.sewerage : false;
-    this.setState({ checkedSewerage: checkedSewerage, checkedWater: checkedWater })
+    this.setState({ checkedSewerage: checkedSewerage, checkedWater: checkedWater },()=>{})
   }
 
   handleWater = name => event => {
     const { jsonPathWater, approveCheck, onFieldChange } = this.props;
     this.setState({ [name]: event.target.checked, interChange: true }, () => {
       if (this.state.checkedWater) {
+        toggleConnectionTypeDetails(onFieldChange, true)
         toggleWater(onFieldChange, true);
-        if (this.state.checkedSewerage) { toggleSewerage(onFieldChange, true); }
-        else { toggleSewerage(onFieldChange, false); }
-      } else { toggleWater(onFieldChange, false); }
+        if (this.state.checkedSewerage) {
+          // toggleConnectionTypeDetails(onFieldChange, true)
+          toggleSewerage(onFieldChange, true); }
+        else { toggleSewerage(onFieldChange, false);
+          toggleConnectionTypeDetails(onFieldChange, true)
+        }
+      } else { toggleWater(onFieldChange, false);
+        toggleConnectionTypeDetails(onFieldChange, false)
+      }
       approveCheck(jsonPathWater, this.state.checkedWater);
     });
   };
@@ -65,10 +72,18 @@ class CheckboxLabels extends React.Component {
     const { jsonPathSewerage, approveCheck, onFieldChange } = this.props;
     this.setState({ [name]: event.target.checked, interChange: true }, () => {
       if (this.state.checkedSewerage) {
+        toggleConnectionTypeDetails(onFieldChange, false)
         toggleSewerage(onFieldChange, true);
-        if (this.state.checkedWater) { toggleWater(onFieldChange, true); }
-        else { toggleWater(onFieldChange, false); }
-      } else { toggleSewerage(onFieldChange, false); }
+        if (this.state.checkedWater) { 
+          toggleConnectionTypeDetails(onFieldChange, true)
+          toggleWater(onFieldChange, true); }
+        else{ 
+          toggleWater(onFieldChange, false); 
+        }
+      } else { 
+        toggleConnectionTypeDetails(onFieldChange, true)
+        toggleSewerage(onFieldChange, false); 
+      }
       approveCheck(jsonPathSewerage, this.state.checkedSewerage);
     });
   }

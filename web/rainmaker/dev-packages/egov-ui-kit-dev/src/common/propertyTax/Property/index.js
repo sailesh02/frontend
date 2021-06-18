@@ -19,11 +19,13 @@ import isEqual from "lodash/isEqual";
 import orderby from "lodash/orderBy";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { httpRequest } from "../../../utils/api";
 import PTHeader from "../../common/PTHeader";
 import AssessmentList from "../AssessmentList";
 import YearDialogue from "../YearDialogue";
 import PropertyInformation from "./components/PropertyInformation";
 import "./index.css";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const innerDivStyle = {
   padding: "0",
@@ -113,6 +115,42 @@ class Property extends Component {
 
     route && getSingleAssesmentandStatus(route);
   };
+
+  linkProperty = async () => {
+    let userInfo = JSON.parse(getUserInfo());
+    let Property = this.props.selPropertyDetails
+    Property = {...Property, creationReason: "LINK", owners: [{...Property.owners[0], mobileNumber: userInfo.mobileNumber ? userInfo.mobileNumber : userInfo.userName}]}
+    try {
+      const propertyResponse = await httpRequest(
+        `property-services/property/_update`,
+        `_update`,
+        [],
+        {
+            Property
+        },
+        [],
+        {},
+        true
+    );
+    if(propertyResponse) {
+      fetchProperties([
+        { key: "propertyIds", value: decodeURIComponent(this.props.match.params.propertyId) },
+        { key: "tenantId", value: this.props.match.params.tenantId },
+      ]);
+      this.props.toggleSnackbarAndSetText(
+        true,
+        { labelName: "Property linked successfully", labelKey: "PT_LINKED_SUCCESS_MSG" },
+        "success"
+      );
+    }
+    } catch (error) {
+      this.props.toggleSnackbarAndSetText(
+        true,
+        { labelName: error, labelKey: error },
+        "error"
+      );
+    }
+  }
 
   onAssessPayClick = () => {
     const { latestPropertyDetails, propertyId, tenantId, selPropertyDetails } = this.props;
@@ -297,6 +335,8 @@ class Property extends Component {
       documentsUploaded,
       loading
     } = this.props;
+
+    console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",new Date(1623153780253))
     const { closeYearRangeDialogue } = this;
     const { dialogueOpen, urlToAppend, showAssessmentHistory } = this.state;
     let urlArray = [];
@@ -325,11 +365,12 @@ class Property extends Component {
             totalBillAmountDue={totalBillAmountDue}
             documentsUploaded={documentsUploaded}
             toggleSnackbarAndSetText={this.props.toggleSnackbarAndSetText}
+            showTransferOwner={!!selPropertyDetails && !!selPropertyDetails.owners && !!selPropertyDetails.owners.length && !!selPropertyDetails.owners[0].mobileNumber}
           />
         }
-        <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
+        {!!selPropertyDetails && !!selPropertyDetails.owners && !!selPropertyDetails.owners.length && (<div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
           <div className="button-container col-xs-4 property-info-access-btn" style={{ float: "right" }}>
-
+            {!!selPropertyDetails.owners[0].mobileNumber ? (<div>
             <Button
               label={
                 <Label buttonLabel={true}
@@ -341,14 +382,22 @@ class Property extends Component {
               buttonStyle={{ border: "1px solid #fe7a51" }}
               style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
             />
-            <Button
+            {/* <Button
               onClick={() => this.onAssessPayClick()}
               label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.ASSESS].parentButton} fontSize="16px" />}
               primary={true}
               style={{ lineHeight: "auto", minWidth: "45%" }}
+            /> */}
+            </div>) : (
+              <Button
+              onClick={() => this.linkProperty()}
+              label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.LINK].parentButton} fontSize="16px" />}
+              primary={true}
+              style={{ lineHeight: "auto", minWidth: "45%" }}
             />
+            )}
           </div>
-        </div>
+        </div>)}
         {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />}
       </Screen>
     );
@@ -549,6 +598,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                       institution.type &&
                       generalMDMSDataById &&
                       generalMDMSDataById["SubOwnerShipCategory"] &&
+                      generalMDMSDataById["SubOwnerShipCategory"][institution.type] &&
                       generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
                     "NA",
                 }
@@ -601,6 +651,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                       owner.ownerType &&
                       generalMDMSDataById &&
                       generalMDMSDataById["OwnerType"] &&
+                      generalMDMSDataById["OwnerType"][owner.ownerType] &&
                       generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
                     "NA",
                 },

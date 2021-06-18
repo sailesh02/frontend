@@ -72,19 +72,20 @@ export const searchApiCall = async (state, dispatch) => {
         payloadbillingPeriod = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
         
       } catch (err) { console.log(err) }
-      let getSearchResult = getSearchResults(queryObject)
-      let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      let getSearchResult = await getSearchResults(queryObject)
+      let getSearchResultForSewerage = await getSearchResultsForSewerage(queryObject, dispatch)
       let finalArray = [];
       let searchWaterConnectionResults, searcSewerageConnectionResults;
-      try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = []; console.log(error) }
-      try { searcSewerageConnectionResults = await getSearchResultForSewerage } catch (error) { finalArray = []; console.log(error) }
+      try { searchWaterConnectionResults =  getSearchResult } catch (error) { finalArray = []; console.log(error) }
+      try { searcSewerageConnectionResults =  getSearchResultForSewerage } catch (error) { finalArray = []; console.log(error) }
       const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = serviceConst.WATER; return e }) : []
       const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = serviceConst.SEWERAGE; return e }) : [];
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = combinedSearchResults[i];
-        if(element.property && element.property !== "NA" && element.connectionNo !== null && element.connectionNo!=='NA') {
-	  let queryObjectForWaterFetchBill;
+        if(element.connectionNo !== null && element.connectionNo!=='NA') {
+        // if(element.property && element.property !== "NA" && element.connectionNo !== null && element.connectionNo!=='NA') {
+	      let queryObjectForWaterFetchBill;
           if (element.service === serviceConst.WATER) {
             queryObjectForWaterFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
           } else {
@@ -123,9 +124,9 @@ export const searchApiCall = async (state, dispatch) => {
               dueDate: updatedDueDate,
               service: element.service,
               connectionNo: element.connectionNo,
-              name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
+              name: (element.connectionHolders && element.connectionHolders !== "NA" && element.connectionHolders.length > 0) ? element.connectionHolders[0].name:'',
               status: element.status,
-              address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
+              address: (element.connectionHolders && element.connectionHolders !== "NA" && element.connectionHolders.length > 0) ? element.connectionHolders[0].correspondenceAddress:'',
               tenantId: element.tenantId,
               connectionType: element.connectionType
             }
@@ -135,16 +136,16 @@ export const searchApiCall = async (state, dispatch) => {
             dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
-            name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
+            name: (element.connectionHolders && element.connectionHolders !== "NA" && element.connectionHolders.length > 0) ? element.connectionHolders[0].name:'',
             status: element.status,
-            address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
+            address: (element.connectionHolders && element.connectionHolders !== "NA" && element.connectionHolders.length > 0) ? element.connectionHolders[0].correspondenceAddress:'',
             tenantId: element.tenantId,
             connectionType: element.connectionType
           })
         }
       }
       showResults(finalArray, dispatch, tenantId)
-    } catch (err) { console.log(err) }
+    } catch (err) { console.log(error) }
   }
 }
 const showHideTable = (booleanHideOrShow, dispatch) => {

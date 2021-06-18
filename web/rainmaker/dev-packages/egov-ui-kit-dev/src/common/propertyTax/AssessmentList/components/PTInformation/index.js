@@ -80,7 +80,8 @@ class PTInformation extends React.Component {
       documentsUploaded,
       toggleSnackbarAndSetText,
       cities,
-      propertiesAudit
+      propertiesAudit,
+      showTransferOwner
     } = this.props;
     const { businessServiceInfoItem } = this.state;
     let logoUrl = "";
@@ -149,6 +150,7 @@ class PTInformation extends React.Component {
                   ownershipTransfer={true}
                   viewHistory={true}
                   propertiesAudit={propertiesAudit}
+                  showTransferOwner={showTransferOwner}
                 ></OwnerInfo>
                 <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                 <div id="property-assess-form">

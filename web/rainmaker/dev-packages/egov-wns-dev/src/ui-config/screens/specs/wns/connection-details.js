@@ -135,10 +135,10 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       let sewerageConnection = getActiveConnectionObj(
         payloadData.SewerageConnections
       );
-      let propTenantId = sewerageConnection.property.tenantId.split(".")[0];
+      let propTenantId = sewerageConnection.tenantId.split(".")[0];
       sewerageConnection.service = service;
 
-      if (sewerageConnection.property.propertyType !== undefined) {
+      if (sewerageConnection.property && sewerageConnection.property.propertyType !== undefined) {
         const propertyTpe =
           "[?(@.code  == " +
           JSON.stringify(sewerageConnection.property.propertyType) +
@@ -180,16 +180,19 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       if (sewerageConnection.noOfToilets === 0) {
         sewerageConnection.noOfToilets = "0";
       }
+      if (sewerageConnection.pipeSize === 0) {
+        sewerageConnection.pipeSize = "0";
+      }
       sewerageConnection.connectionExecutionDate = convertEpochToDate(
         sewerageConnection.connectionExecutionDate
       );
-      const lat = sewerageConnection.property.address.locality.latitude
-        ? sewerageConnection.property.address.locality.latitude
-        : "NA";
-      const long = sewerageConnection.property.address.locality.longitude
-        ? sewerageConnection.property.address.locality.longitude
-        : "NA";
-      sewerageConnection.property.address.locality.locationOnMap = `${lat} ${long}`;
+      // const lat = sewerageConnection.property.address.locality.latitude
+      //   ? sewerageConnection.property.address.locality.latitude
+      //   : "NA";
+      // const long = sewerageConnection.property.address.locality.longitude
+      //   ? sewerageConnection.property.address.locality.longitude
+      //   : "NA";
+      // sewerageConnection.property.address.locality.locationOnMap = `${lat} ${long}`;
 
       /*if (sewerageConnection.property.usageCategory !== undefined) {
         const propertyUsageType = "[?(@.code  == " + JSON.stringify(sewerageConnection.property.usageCategory) + ")]"
@@ -238,7 +241,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       );
       let waterConnection = getActiveConnectionObj(payloadData.WaterConnection);
       waterConnection.service = service;
-      let propTenantId = waterConnection.property.tenantId.split(".")[0];
+      let propTenantId = waterConnection.tenantId.split(".")[0];
       if (waterConnection.connectionExecutionDate !== undefined) {
         waterConnection.connectionExecutionDate = convertEpochToDate(
           waterConnection.connectionExecutionDate
@@ -252,10 +255,10 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       if (waterConnection.noOfTaps === 0) {
         waterConnection.noOfTaps = "0";
       }
-      if (waterConnection.pipeSize === 0) {
-        waterConnection.pipeSize = "0";
-      }
-      if (waterConnection.property.propertyType !== undefined) {
+      // if (waterConnection.pipeSize === 0) {
+      //   waterConnection.pipeSize = "0";
+      // }
+      if (waterConnection.property && waterConnection.property.propertyType !== undefined) {
         const propertyTpe =
           "[?(@.code  == " +
           JSON.stringify(waterConnection.property.propertyType) +
@@ -283,9 +286,9 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
             ? mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name
             : "NA"; //propertyType from Mdms
       }
-      const lat = waterConnection.property.address.locality.latitude;
-      const long = waterConnection.property.address.locality.longitude;
-      waterConnection.property.address.locality.locationOnMap = `${lat} ${long}`;
+      // const lat = waterConnection.property.address.locality.latitude;
+      // const long = waterConnection.property.address.locality.longitude;
+      // waterConnection.property.address.locality.locationOnMap = `${lat} ${long}`;
 
       /*if (waterConnection.property.usageCategory !== undefined) {
         const propertyUsageType = "[?(@.code  == " + JSON.stringify(waterConnection.property.usageCategory) + ")]"
@@ -324,10 +327,45 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   }
 };
 
-const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
+const beforeInitFn = async (action, state, dispatch, connectionNumber,service) => {
   //Search details for given application Number
   if (connectionNumber) {
     await searchResults(action, state, dispatch, connectionNumber);
+  }
+  if(service == 'WATER'){
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.connectionType",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.propertyDetails.children.cardContent.children.viewTwo.children.connectionType",
+        "visible",
+        true
+      )
+    );
+  }else{
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.propertyDetails.children.cardContent.children.viewTwo.children.connectionType",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.connectionType",
+        "visible",
+        false
+      )
+    );
   }
 };
 
@@ -353,15 +391,15 @@ const connectionHolders = connHolderDetailsSummary();
 
 const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
 
-const getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP')) ? connectionDetailsFooter : {};
+const getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP') || ifUserRoleExists('CITIZEN')) ? connectionDetailsFooter : {};
 
 
 export const connectionDetails = getCommonCard({
   serviceDetails,
   propertyDetails,
-  ownerDetails,
+  // ownerDetails,
   connectionHolders,
-  connectionHoldersSameAsOwner,
+  // connectionHoldersSameAsOwner,
 });
 const getMDMSData = async (action, state, dispatch) => {
   const tenantId = getTenantId();
@@ -427,10 +465,11 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
-    let connectionNo = getQueryArg(window.location.href, "connectionNumber");   
+    let connectionNo = getQueryArg(window.location.href, "connectionNumber"); 
+    let service = getQueryArg(window.location.href,"service")  
     getDataForBillAmendment(action, state, dispatch);
 
-    beforeInitFn(action, state, dispatch, connectionNo);
+    beforeInitFn(action, state, dispatch, connectionNo,service);
     getRequiredDocData(action, dispatch, [
       {
         moduleName: "BillAmendment",

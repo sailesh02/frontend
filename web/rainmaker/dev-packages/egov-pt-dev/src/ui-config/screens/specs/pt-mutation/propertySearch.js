@@ -8,6 +8,17 @@ import get from "lodash/get";
 import { resetFields } from "./mutation-methods";
 import propertySearchTabs from "./property-search-tabs";
 import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
+let userInfo = JSON.parse(getUserInfo());
+const roleCodes =
+    userInfo && userInfo.roles
+      ? userInfo.roles.map((role) => {
+        return role.code;
+      })
+      : [];
+const showAddProperty = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
+
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -43,10 +54,18 @@ const getMDMSData = async (action, dispatch) => {
           )
         );
       }
-      const tenants=get(payload,'payload.MdmsRes.tenant.tenants',[]).sort((t1,t2)=>t1.code.localeCompare(t2.code))
-      dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", tenants));
+      let tenants=get(payload,'payload.MdmsRes.tenant.tenants',[]).sort((t1,t2)=>t1.code.localeCompare(t2.code))
+      const updatedData = tenants && tenants.map( tenant => {
+        return {
+          ...tenant,
+          code: tenant.code && tenant.code.trim()}
+        })
+           
+      dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", updatedData));
+      // dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", tenants));
     })
     // const payload = await httpRequest(
+  
     //   "post",
     //   "/egov-mdms-service/v1/_search",
     //   "_search",
@@ -136,7 +155,7 @@ const screenConfig = {
                 sm: 6,
                 align: "right"
               },
-              visible: enableButton,
+              visible: showAddProperty,
               props: {
                 variant: "contained",
                 color: "primary",

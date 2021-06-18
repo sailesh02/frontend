@@ -395,8 +395,8 @@ export const reviewOwner = (isEditable = true) => {
     viewSix: connectionDetails,
     viewSeven: connectionChargeDetailsHeader,
     viewEight: connectionChargeDetails,
-    viewNine: roadCuttingChargesHeader,
-    viewTen: roadCuttingCharges,
+    // viewNine: roadCuttingChargesHeader,
+    // viewTen: roadCuttingCharges,
     viewEleven: activationDetailsHeader,
     viewTwelve: activationDetails
   })

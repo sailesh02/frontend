@@ -939,6 +939,8 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
         return 'PT.LEGACY';
       } else if (creationReason == 'UPDATE') {
         return 'PT.CREATE';
+      } else if (creationReason === 'ASSESSMENT') {
+        return 'PT.ASSESSMENT'
       }
       else {
         return 'NA';

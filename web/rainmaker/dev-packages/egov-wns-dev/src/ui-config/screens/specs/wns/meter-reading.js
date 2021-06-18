@@ -5,13 +5,14 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { meterReadingEditable } from "./meterReading/meterReadingEditable";
-import { getMdmsDataForMeterStatus } from "../../../../ui-utils/commons"
+import { getMdmsDataForMeterStatus,APPLICATIONSTATE } from "../../../../ui-utils/commons"
 import { getSearchResults, getMdmsDataForAutopopulated, isWorkflowExists } from "../../../../ui-utils/commons"
 import get from "lodash/get";
 import set from "lodash/set";
 import { convertEpochToDate } from "../utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { sortpayloadDataObj } from './connection-details'
+
 const addMeterReading = async (state, dispatch) => {
     dispatch(toggleSpinner());
     const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -26,7 +27,9 @@ const addMeterReading = async (state, dispatch) => {
             { key: "tenantId", value: tenantId }
         ];        
         
-        let isApplicationApproved = await isWorkflowExists(queryObj);
+        // let isApplicationApproved = await isWorkflowExists(queryObj);
+        let isApplicationApproved = payloadData.WaterConnection[0].applicationStatus === APPLICATIONSTATE.CONNECTIONACTIVATED &&
+        payloadData.WaterConnection[0].status === APPLICATIONSTATE.STATUS ? true : false
         if(!isApplicationApproved){
             dispatch(toggleSpinner());
             dispatch(

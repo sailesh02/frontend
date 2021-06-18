@@ -6,6 +6,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { serviceConst } from "../../../../../ui-utils/commons";
+import { handleConnectionDetails,handleService } from "../../utils"
 
 const service = getQueryArg(window.location.href, "service")
 const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -43,9 +44,9 @@ export const getConnectionDetails = () => {
             className: "common-div-css search-preview",
             scheama: getCommonGrayCard({
                 div4: connectionDetailsHeader,
-                // serviceCardContainer: renderService()
-                serviceCardContainerForWater: renderServiceForWater(),
-                serviceCardContainerForSW: renderServiceForSW(),
+                serviceCardContainer: renderService()
+                // serviceCardContainerForWater: renderServiceForWater(),
+                // serviceCardContainerForSW: renderServiceForSW(),
 
             }),
             items: [],
@@ -83,16 +84,16 @@ export const getConnectionDetails = () => {
         },  {
             labelKey: "WS_OLD_LABEL_NAME"
           },
-          { jsonPath: "WaterConnectionOld[0].proposedTaps" }),
-     taskPipeSizeProposed : getLabelWithValueForModifiedLabel(
-        {
-            labelName:"No of pipe size proposed",
-            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
-        },
-        { jsonPath: "WaterConnection[0].proposedPipeSize" },  {
-            labelKey: "WS_OLD_LABEL_NAME"
-          },
-          { jsonPath: "WaterConnectionOld[0].proposedPipeSize" })
+          { jsonPath: "WaterConnectionOld[0].proposedTaps" })
+    //  taskPipeSizeProposed : getLabelWithValueForModifiedLabel(
+    //     {
+    //         labelName:"No of pipe size proposed",
+    //         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
+    //     },
+    //     { jsonPath: "WaterConnection[0].proposedPipeSize" },  {
+    //         labelKey: "WS_OLD_LABEL_NAME"
+    //       },
+    //       { jsonPath: "WaterConnectionOld[0].proposedPipeSize" })
 
 }
  export const connectionDetailsSewerage={
@@ -126,15 +127,90 @@ export const getConnectionDetails = () => {
             labelKey: "WS_OLD_LABEL_NAME"
           },
           { jsonPath: "WaterConnectionOld[0].proposedToilets" }
-    )
+    ),
+    taskPipeSizeProposed : getLabelWithValueForModifiedLabel(
+        {
+            labelName:"No of pipe size proposed",
+            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
+        },
+        { jsonPath: "SewerageConnection[0].pipeSize" },  {
+            labelKey: "WS_OLD_LABEL_NAME"
+          },
+          { jsonPath: "SewerageConnection[0].pipeSize" })
 
 }
 
- const connectionDetails=(applicationNumber!==null&&applicationNumber!==undefined)?(applicationNumber.includes("WS"))?connectionDetailsWater:connectionDetailsSewerage:"";
+export const connectionDetailsBoth = {
+    taskApplicationType : getLabelWithValueForModifiedLabel(
+        {
+            labelName:"Apply For",
+            labelKey: "WS_APPLY_FOR"
+        },
+        {
+            jsonPath: "WaterConnection[0].service",
+            callBack: handleService,
+        },  {
+            labelKey: "WS_OLD_LABEL_NAME"
+          },
+          { jsonPath: "WaterConnectionOld[0].service",
+             callBack:handleService,
+         }),
+    taskNumberOfTapsPropsed : getLabelWithValueForModifiedLabel(
+      {
+          labelName:"No of Taps Proposed",
+          labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"
+      },
+      {
+          jsonPath: "WaterConnection[0].proposedTaps",
+          callBack: handleConnectionDetails,
+      },  {
+          labelKey: "WS_OLD_LABEL_NAME"
+      },
+      { jsonPath: "WaterConnectionOld[0].proposedTaps",
+        callBack: handleConnectionDetails, }),      
+    taskNoOfClosets : getLabelWithValueForModifiedLabel(
+        {
+            labelName:"No of closets proposed",
+            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
+        },
+        { jsonPath: "SewerageConnection[0].proposedWaterClosets",
+        callBack: handleConnectionDetails },  {
+            labelKey: "WS_OLD_LABEL_NAME"
+          },
+          { jsonPath: "SewerageConnectionOld[0].proposedWaterClosets",
+          callBack: handleConnectionDetails, }
+    ),
+     taskNoOfToilets : getLabelWithValueForModifiedLabel(
+        {
+            labelName:"No of toilets proposed",
+            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TOILETS_PROPOSED"
+        },
+        { jsonPath: "SewerageConnection[0].proposedToilets",
+        callBack: handleConnectionDetails, },  {
+            labelKey: "WS_OLD_LABEL_NAME"
+          },
+          { jsonPath: "SewerageConnectionOld[0].proposedToilets",
+          callBack: handleConnectionDetails, }
+    ),
+    taskPipeSizeProposed : getLabelWithValueForModifiedLabel(
+        {
+            labelName:"No of pipe size proposed",
+            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
+        },
+        { jsonPath: "SewerageConnection[0].pipeSize",
+        callBack: handleConnectionDetails, },  {
+            labelKey: "WS_OLD_LABEL_NAME"
+          },
+          { jsonPath: "SewerageConnectionOld[0].pipeSize",
+          callBack: handleConnectionDetails, }) 
+}
 
+// const connectionDetails=(applicationNumber!==null&&applicationNumber!==undefined)?(applicationNumber.includes("WS"))?connectionDetailsWater:connectionDetailsSewerage:"";
+const connectionDetails = connectionDetailsBoth
 export const connDetailsWater=connectionDetailsWater;
 
 export const connDetailsSewerage=connectionDetailsSewerage;
+
 export const renderService = () => {
     return getCommonContainer(connectionDetails)
 }

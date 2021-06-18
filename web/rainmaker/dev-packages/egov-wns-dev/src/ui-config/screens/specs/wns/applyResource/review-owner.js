@@ -100,8 +100,8 @@ export const getReviewOwner = (isEditable = true) => {
     // viewSix: connectionDetails,
     viewSeven: connectionChargeDetailsHeader,
     viewEight: connectionChargeDetails,
-    viewNine: roadCuttingChargesHeader,
-    viewTen: roadCuttingCharges,
+    // viewNine: roadCuttingChargesHeader,
+    // viewTen: roadCuttingCharges,
     viewEleven: activationDetailsHeader,
     viewTwelve: activationDetails
   })
@@ -355,22 +355,22 @@ export const connectionWater={
       callBack: handleNA
     }
   ),
-   reviewPipeSize : getLabelWithValueForModifiedLabel(
-    {
-      labelName: "Pipe Size (in inches)",
-      labelKey: "WS_SERV_DETAIL_PIPE_SIZE"
-    },
-    {
-      jsonPath: "WaterConnection[0].pipeSize",
-      callBack: handleNA
-    }, {
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    {
-      jsonPath: "WaterConnectionOld[0].pipeSize",
-      callBack: handleNA
-    }
-  )
+  //  reviewPipeSize : getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Pipe Size (in inches)",
+  //     labelKey: "WS_SERV_DETAIL_PIPE_SIZE"
+  //   },
+  //   {
+  //     jsonPath: "SewerageConnection[0].pipeSize",
+  //     callBack: handleNA
+  //   }, {
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "SewerageConnectionOld[0].pipeSize",
+  //     callBack: handleNA
+  //   }
+  // )
 
 
 }
@@ -418,6 +418,22 @@ export const connectionSewerage={
       labelKey: "WS_OLD_LABEL_NAME"
     }, {
       jsonPath: "WaterConnectionOld[0].noOfToilets",
+      callBack: handleNA
+    }
+  ),
+  reviewPipeSize : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Pipe Size (in inches)",
+      labelKey: "WS_SERV_DETAIL_PIPE_SIZE"
+    },
+    {
+      jsonPath: "SewerageConnection[0].pipeSize",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "SewerageConnectionOld[0].pipeSize",
       callBack: handleNA
     }
   )

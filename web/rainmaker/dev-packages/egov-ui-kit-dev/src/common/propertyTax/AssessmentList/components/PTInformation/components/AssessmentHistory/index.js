@@ -8,6 +8,7 @@ import { withRouter } from "react-router-dom";
 import { compose } from "recompose";
 import { getFormattedDate } from "../../../../../../../utils/PTCommon";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 export const getFullRow = (labelKey, labelValue, rowGrid = 12) => {
     let subRowGrid = 1;
@@ -79,6 +80,14 @@ class AssessmentHistory extends Component {
             alignItems: "right",
         };
         const { Assessments = [], history, propertyId } = this.props;
+        let userInfo = JSON.parse(getUserInfo());
+        const roleCodes =
+            userInfo && userInfo.roles
+            ? userInfo.roles.map((role) => {
+                return role.code;
+            })
+            : [];
+        const reassessAllowed = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
 
         const assessmentHistoryItems = this.getLatestAssessments(Assessments).map((Assessment) => {
             return (
@@ -87,7 +96,7 @@ class AssessmentHistory extends Component {
                     {getFullRow("PT_ASSESSMENT_NO", Assessment.assessmentNumber ? Assessment.assessmentNumber : "NA", 12)}
                     {getFullRow("PT_ASSESSMENT_YEAR", Assessment.financialYear ? Assessment.financialYear : "NA", 6)}
 
-                    <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
+                    {!!reassessAllowed && (<div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div className="assess-history" style={{ float: "right" }}>
                             <Button
                                 label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.REASSESS].parentButton} color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
@@ -99,7 +108,14 @@ class AssessmentHistory extends Component {
                                             { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
                                             "error"
                                         );
-                                    } else {
+                                    }else if(Assessment.status != "ACTIVE") {
+                                        this.props.toggleSnackbarAndSetText(
+                                            true,
+                                            { labelName: "Re-assess application is already in workflow", labelKey: "ERROR_REASSESS_IN_WORKFLOW" },
+                                            "error"
+                                        );    
+                                    }
+                                    else {
                                         history &&
                                             history.push(getPropertyLink(propertyId, Assessment.tenantId, PROPERTY_FORM_PURPOSE.REASSESS, Assessment.financialYear, Assessment.assessmentNumber)
                                             );
@@ -109,7 +125,7 @@ class AssessmentHistory extends Component {
                             ></Button>
                         </div>
 
-                    </div >
+                    </div >)}
 
                 </div>)
 

@@ -62,9 +62,10 @@ const propertyDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.address.locality.code",
+          "Property.address.locality.name",
         callBack: value => {
-          return value ? `${getTransformedLocale(tenantId)}_REVENUE_${value}` : "NA";
+          return value ? value : "NA";
+          // return value ? `${getTransformedLocale(tenantId)}_REVENUE_${value}` : "NA";
         }
       }
     ),

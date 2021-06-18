@@ -123,9 +123,10 @@ const renderSearchConnectionTable = async (state, dispatch) => {
               dueDate: updatedDueDate,
               service: element.service,
               connectionNo: element.connectionNo,
-              name: (element.property)?element.property.owners[0].name:'',
+              name: (element.connectionHolders) ? element.connectionHolders[0].name:'',
               status: element.status,
-              address: handleAddress(element),
+              address:element.connectionHolders ? element.connectionHolders[0].correspondenceAddress : '',
+              // address: handleAddress(element),
               connectionType: element.connectionType,
               tenantId:element.tenantId
             })
@@ -134,9 +135,9 @@ const renderSearchConnectionTable = async (state, dispatch) => {
             dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
-            name: (element.property)?element.property.owners[0].name:'',
+            name: (element.connectionHolders) ? element.connectionHolders[0].name:'',
             status: element.status,
-            address: handleAddress(element),
+            address:element.connectionHolders ? element.connectionHolders[0].correspondenceAddress : '',
             connectionType: element.connectionType,
             tenantId:element.tenantId
           })
@@ -269,9 +270,9 @@ const renderSearchApplicationTable = async (state, dispatch) => {
               connectionNo: element.connectionNo,
               applicationNo: element.applicationNo,
               applicationType: element.applicationType,
-              name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:"",
+              address:element.connectionHolders ? element.connectionHolders[0].name : '',
               applicationStatus: appStatus,
-              address: handleAddress(element),
+              address:element.connectionHolders ? element.connectionHolders[0].correspondenceAddress : '',
               service: element.service,
               connectionType: element.connectionType,
               tenantId: element.tenantId

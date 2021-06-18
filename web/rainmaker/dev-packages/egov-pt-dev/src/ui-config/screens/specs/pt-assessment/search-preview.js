@@ -7,17 +7,12 @@ import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/form
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getAssessmentSearchResults, getSearchResults } from "../../../../ui-utils/commons";
 import { downloadCertificateForm, downloadReceitForm, getpayments, prepareDocumentsView, searchBill, showHideMutationDetailsCard } from "../utils/index";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
-import { mutationSummary } from "./applyResourceMutation/mutationSummary";
-import { downloadPrintContainer } from "./functions";
-import { transfereeInstitutionSummary, transfereeSummary } from "./searchPreviewResource/transfereeSummary";
-import { transferorInstitutionSummary, transferorSummary } from "./searchPreviewResource/transferorSummary";
-import { documentsSummary } from "./summaryResource/documentsSummary";
-import { propertySummary } from "./summaryResource/propertySummary";
-import { registrationSummary } from './summaryResource/registrationSummary';
-import "./index.css";
+import { documentsSummary } from "../pt-mutation/summaryResource/documentsSummary";
+import { propertySummary } from "../pt-mutation/summaryResource/propertySummary";
+import { transferorSummaryDetails } from "../pt-mutation/searchPreviewResource/transferorSummary";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const demandSummary = getCommonGrayCard({
@@ -34,23 +29,154 @@ const demandSummary = getCommonGrayCard({
         },
         ...getCommonSubHeader({
           labelName: "Additional Details",
-          labelKey: "PT_MUTATION_ADDITIONAL_DETAILS"
+          labelKey: "PT_ASSESSMENT_ADDITIONAL_DETAILS"
         })
       }
     }
   },
   body: getCommonContainer({
-    mutationCharge: getLabelWithValue(
+    holdingTax: getLabelWithValue(
       {
-        labelName: "Mutation Charge",
-        labelKey: "PT_MUTATION_CHARGE"
+        labelName: "Holding Tax",
+        labelKey: "PT_HOLDING_TAX"
       },
       {
-        jsonPath: "Property.additionalDetails.mutationCharge"
+        jsonPath: "Assessment.additionalDetails.holdingTax"
+      }
+    ),
+    lightTax: getLabelWithValue(
+      {
+        labelName: "Light Tax",
+        labelKey: "PT_LIGHT_TAX"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.lightTax"
+      }
+    ),
+    waterTax: getLabelWithValue(
+      {
+        labelName: "Water Tax",
+        labelKey: "PT_WATER_TAX"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.waterTax"
+      }
+    ),
+    drainageTax: getLabelWithValue(
+      {
+        labelName: "Drainage Tax",
+        labelKey: "PT_DRAINAGE_TAX"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.drainageTax"
+      }
+    ),
+    latrineTax: getLabelWithValue(
+      {
+        labelName: "Latrine Tax",
+        labelKey: "PT_LATRINE_TAX"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.latrineTax"
+      }
+    ),
+    parkingTax: getLabelWithValue(
+      {
+        labelName: "Parking Tax",
+        labelKey: "PT_PARKING_TAX"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.parkingTax"
+      }
+    ),
+    solidWasteUserCharges: getLabelWithValue(
+      {
+        labelName: "Solid Waste User Charges",
+        labelKey: "PT_SOLID_WASTER_USER_CHARGES"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.solidWasteUserCharges"
+      }
+    ),
+    ownershipExemption: getLabelWithValue(
+      {
+        labelName: "Ownership Exemption",
+        labelKey: "PT_OWNERSHIP_EXEMPTION"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.ownershipExemption"
+      }
+    ),
+    usageExemption: getLabelWithValue(
+      {
+        labelName: "Usage Exemption",
+        labelKey: "PT_USAGE_EXEMPTION"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.usageExemption"
+      }
+    ),
+    interest: getLabelWithValue(
+      {
+        labelName: "Interest",
+        labelKey: "PT_INTEREST"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.interest"
+      }
+    ),
+    penalty: getLabelWithValue(
+      {
+        labelName: "Penalty",
+        labelKey: "PT_PENALTY"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.penalty"
       }
     )
   })
 })
+
+
+const ownerSummary = getCommonGrayCard({
+  header: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: { marginBottom: "10px" }
+    },
+    children: {
+      header: {
+        gridDefination: {
+          xs: 8
+        },
+        ...getCommonSubHeader({
+          labelName: "Owner Details",
+          labelKey: "PT_ASSESSMENT_OWNER_DETAILS"
+        })
+      }
+    }
+  },
+  cardOne: {
+    uiFramework: "custom-containers",
+    componentPath: "MultiItem",
+    props: {
+      className: "owner-summary",
+      scheama: getCommonGrayCard({
+        ownerContainer: getCommonContainer(transferorSummaryDetails)
+      }),
+      items: [],
+      hasAddItem: false,
+      isReviewPage: true,
+      sourceJsonPath: "Property.owners",
+      prefixSourceJsonPath:
+        "children.cardContent.children.ownerContainer.children",
+      afterPrefixJsonPath: "children.value.children.key"
+    },
+    type: "array"
+  }
+});
+
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -173,15 +299,15 @@ const setSearchResponse = async (
   applicationNumber,
   tenantId
 ) => {
-  const response = await getSearchResults([
+  const response = await getAssessmentSearchResults([
     {
       key: "tenantId",
       value: tenantId
     },
-    { key: "acknowledgementIds", value: applicationNumber }
+    { key: "assessmentNumbers", value: applicationNumber }
   ]);
-  const properties = get(response, "Properties", []);
-  const propertyId = get(response, "Properties[0].propertyId", []);
+  const assessments = get(response, "Assessments", [])
+  const propertyId = get(response, "Assessments[0].propertyId", []);
 
   const auditResponse = await getSearchResults([
     {
@@ -193,135 +319,20 @@ const setSearchResponse = async (
       value: true
     }
   ]);
-  let property = (properties && properties.length > 0 && properties[0]) || {};
+  let property = (auditResponse && auditResponse.Properties && auditResponse.Properties.length > 0 && auditResponse.Properties[0]) || {}
+  let assessment = (assessments && assessments.length > 0 && assessments[0]) || {};
 
-  if (!property.workflow) {
+  if (!assessment.workflow) {
     let workflow = {
-      id: null,
       tenantId: getQueryArg(window.location.href, "tenantId"),
-      businessService: "PT.MUTATION",
+      businessService: "ASMT",
       businessId: getQueryArg(window.location.href, "applicationNumber"),
       action: "",
       moduleName: "PT",
-      state: null,
-      comment: null,
-      documents: null,
-      assignes: null
     };
-    property.workflow = workflow;
-
+    assessment.workflow = workflow;
   }
-
-  if (property && property.owners && property.owners.length > 0) {
-
-    let ownersTemp = [];
-    let owners = [];
-    property.owners.map(owner => {
-      owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
-      owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
-      if (owner.status == "ACTIVE") {
-
-        ownersTemp.push(owner);
-      } else {
-        owners.push(owner);
-      }
-    });
-
-    property.ownersInit = owners;
-    property.ownersTemp = ownersTemp;
-  }
-  property.ownershipCategoryTemp = property.ownershipCategory;
-  property.ownershipCategoryInit = 'NA';
   // Set Institution/Applicant info card visibility
-  if (
-    get(
-      response,
-      "Properties[0].ownershipCategory",
-      ""
-    ).startsWith("INSTITUTION")
-  ) {
-    property.institutionTemp = property.institution;
-
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.transfereeSummary",
-        "visible",
-        false
-      )
-    );
-  } else {
-
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.transfereeInstitutionSummary",
-        "visible",
-        false
-      )
-    );
-  }
-
-
-  let transfereeOwners = get(
-    property,
-    "ownersTemp", []
-  );
-  let transferorOwners = get(
-    property,
-    "ownersInit", []
-  );
-  let transfereeOwnersDid = true;
-  let transferorOwnersDid = true;
-  transfereeOwners.map(owner => {
-    if (owner.ownerType != 'NONE') {
-      transfereeOwnersDid = false;
-    }
-  })
-  transferorOwners.map(owner => {
-    if (owner.ownerType != 'NONE') {
-      transferorOwnersDid = false;
-    }
-
-  })
-  if (transferorOwnersDid) {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType",
-        "props.style.display",
-        'none'
-      )
-    );
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID",
-        "props.style.display",
-        'none'
-      )
-    );
-
-  }
-  if (transfereeOwnersDid) {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId",
-        "props.style.display",
-        'none'
-      )
-    );
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType",
-        "props.style.display",
-        'none'
-      )
-    );
-
-  }
 
   if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
     const propertiesAudit = get(auditResponse, "Properties", []);
@@ -331,42 +342,20 @@ const setSearchResponse = async (
 
 
     property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
-    property.ownersInit = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE");
-
-    if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
-      property.institutionInit = previousActiveProperty.institution;
-
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.body.children.cardContent.children.transferorSummary",
-          "visible",
-          false
-        )
-      );
-    } else {
-
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.body.children.cardContent.children.transferorInstitutionSummary",
-          "visible",
-          false
-        )
-      );
-    }
+    property.ownersInit = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE"); 
   }
 
 
   // auditResponse
+  dispatch(prepareFinalObject("Assessment", assessment));
   dispatch(prepareFinalObject("Property", property));
   dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
   prepareDocumentsView(state, dispatch);
 
   await loadPdfGenerationData(applicationNumber, tenantId);
-  setDownloadMenu(state, dispatch, tenantId, applicationNumber);
+//   setDownloadMenu(state, dispatch, tenantId, applicationNumber);
 };
-export const setData = async (state, dispatch, applicationNumber, tenantId) => {
+const setData = async (state, dispatch, applicationNumber, tenantId) => {
   const response = await getSearchResults([
     {
       key: "tenantId",
@@ -442,43 +431,7 @@ const screenConfig = {
     ];
    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     // Hide edit buttons
-    setData(state, dispatch, applicationNumber, tenantId);
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.registrationSummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.transferorInstitutionSummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
-
+    // setData(state, dispatch, applicationNumber, tenantId);
     let userInfo = JSON.parse(getUserInfo());
     const roleCodes =
         userInfo && userInfo.roles
@@ -487,6 +440,21 @@ const screenConfig = {
           })
           : [];
     const isApprover = roleCodes.includes("PT_APPROVER")
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.ownerSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
 
     set(
       action,
@@ -494,25 +462,21 @@ const screenConfig = {
       !!isApprover
     )
 
+
+    // const printCont = downloadPrintContainer(
+    //   action,
+    //   state,
+    //   dispatch,
+    //   status,
+    //   applicationNumber,
+    //   tenantId
+    // );
+
     // set(
     //   action,
-    //   "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-    //   false
+    //   "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+    //   printCont
     // );
-    const printCont = downloadPrintContainer(
-      action,
-      state,
-      dispatch,
-      status,
-      applicationNumber,
-      tenantId
-    );
-
-    set(
-      action,
-      "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-      printCont
-    );
     getPropertyConfigurationMDMSData(action, state, dispatch);
     return action;
   },
@@ -555,25 +519,15 @@ const screenConfig = {
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
           props: {
-            dataPath: "Property",
-            moduleName: "PT.MUTATION",
-            updateUrl: "/property-services/property/_update"
+            dataPath: "Assessment",
+            moduleName: "PT.ASSESSMENT",
+            updateUrl: "/property-services/assessment/_update"
           }
         },
         body: getCommonCard({
-          pdfHeader: {
-            uiFramework: "custom-atoms-local",
-            moduleName: "egov-pt",
-            componentPath: "pdfHeader"
-          },
           propertySummary: propertySummary,
           demandSummary: demandSummary,
-          transferorSummary: transferorSummary,
-          transferorInstitutionSummary: transferorInstitutionSummary,
-          transfereeSummary: transfereeSummary,
-          transfereeInstitutionSummary: transfereeInstitutionSummary,
-          mutationSummary: mutationSummary,
-          registrationSummary: registrationSummary,
+          ownerSummary: ownerSummary,
           documentsSummary: documentsSummary
         })
       }

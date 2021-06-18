@@ -40,6 +40,15 @@ export const fetchData = async (action, state, dispatch) => {
                     myApplicationsCount ? [myApplicationsCount] : [0]
                 )
             );
+        }else{
+            dispatch(
+                handleField(
+                    "my-applications",
+                    "components.div.children.header.children.key",
+                    "props.dynamicArray",
+                     [0]
+                )
+            );
         }
     } catch (error) {
         console.log(error);

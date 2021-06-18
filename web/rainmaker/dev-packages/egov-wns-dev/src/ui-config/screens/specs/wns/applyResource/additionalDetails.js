@@ -132,6 +132,7 @@ export const commonRoadCuttingChargeInformation = () => {
     })
   })
 }
+
 export const additionDetails = getCommonCard({
   header: getCommonHeader({
     labelKey: "WS_COMMON_ADDN_DETAILS_HEADER"
@@ -153,14 +154,16 @@ export const additionDetails = getCommonCard({
           jsonPath: "applyScreen.connectionType"
         }),
         afterFieldChange: async (action, state, dispatch) => {
-          let connType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
-          console.log('connType');
-          console.log(connType);
-          if (connType === undefined || connType === "Non Metered" || connType === "Bulk-supply" || connType !== "Metered") {
-            showHideFeilds(dispatch, false);
-          }
-          else {
-            showHideFeilds(dispatch, true);
+          if(process.env.REACT_APP_NAME !== "Citizen") {
+            let connType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
+            console.log('connType');
+            console.log(connType);
+            if (connType === undefined || connType === "Non Metered" || connType === "Bulk-supply" || connType !== "Metered") {
+              showHideFeilds(dispatch, false);
+            }
+            else {
+              showHideFeilds(dispatch, true);
+            }
           }
         }
       },
@@ -173,6 +176,7 @@ export const additionDetails = getCommonCard({
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       }),
+      
       dynamicMdmsWaterSource : {
         uiFramework: "custom-containers",
         componentPath: "DynamicMdmsContainer",
@@ -197,7 +201,7 @@ export const additionDetails = getCommonCard({
         label: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE" },
         placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.pipeSize",
+        sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.pipeSize",
         jsonPath: "applyScreen.pipeSize",
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
@@ -221,103 +225,103 @@ export const additionDetails = getCommonCard({
       })
     }),
   }),
-  plumberDetailsContainer: getCommonGrayCard({
-    subHeader: getCommonTitle({
-      labelKey: "WS_COMMON_PLUMBER_DETAILS"
+    plumberDetailsContainer: getCommonGrayCard({
+      subHeader: getCommonTitle({
+        labelKey: "WS_COMMON_PLUMBER_DETAILS"
+      }),
+      plumberDetails: getCommonContainer({
+        getPlumberRadioButton,
+        plumberLicenceNo: getTextField({
+          label: {
+            labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL"
+          },
+          placeholder: {
+            labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_PLACEHOLDER"
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          },
+          required: false,
+          pattern: /^[0-9]*$/i,
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          jsonPath: "applyScreen.plumberInfo[0].licenseNo"
+        }),
+        plumberName: getTextField({
+          label: {
+            labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL"
+          },
+          placeholder: {
+            labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_PLACEHOLDER"
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          },
+          required: false,
+          pattern: getPattern("Name"),
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          jsonPath: "applyScreen.plumberInfo[0].name"
+        }),
+        plumberMobNo: getTextField({
+          label: {
+            labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL"
+          },
+          placeholder: {
+            labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL_PLACEHOLDER"
+          },
+          gridDefination: { xs: 12, sm: 6 },
+          iconObj: { label: "+91 |", position: "start" },
+          required: false,
+          pattern: getPattern("MobileNo"),
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          jsonPath: "applyScreen.plumberInfo[0].mobileNumber"
+        }),
+      })
     }),
-    plumberDetails: getCommonContainer({
-      getPlumberRadioButton,
-      plumberLicenceNo: getTextField({
-        label: {
-          labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_PLACEHOLDER"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        pattern: /^[0-9]*$/i,
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.plumberInfo[0].licenseNo"
-      }),
-      plumberName: getTextField({
-        label: {
-          labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_PLACEHOLDER"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        pattern: getPattern("Name"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.plumberInfo[0].name"
-      }),
-      plumberMobNo: getTextField({
-        label: {
-          labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL_PLACEHOLDER"
-        },
-        gridDefination: { xs: 12, sm: 6 },
-        iconObj: { label: "+91 |", position: "start" },
-        required: false,
-        pattern: getPattern("MobileNo"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.plumberInfo[0].mobileNumber"
-      }),
-    })
-  }),
-  roadCuttingChargeContainer: getCommonCard({
-    header: getCommonSubHeader(
-      {
-        labelName: "Road Cutting Charge",
-        labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
-      },
-      {
-        style: {
-          marginBottom: 18
-        }
-      }
-    ),
-    applicantTypeContainer: getCommonContainer({
-      roadCuttingChargeInfoCard : {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        props: {
-          style: {
-            // display: "none"
-            // width: 
-          }
-        },
-        children: {
-          multipleApplicantInfo: {
-            uiFramework: "custom-containers",
-            componentPath: "MultiItem",
-            props: {
-              scheama: commonRoadCuttingChargeInformation(),
-              items: [],
-              addItemLabel: {
-                labelName: "Add Road Type",
-                labelKey: "WS_ADD_ROAD_TYPE_LABEL"
-              },
-              isReviewPage: false,
-              sourceJsonPath: "applyScreen.roadCuttingInfo",
-              prefixSourceJsonPath: "children.cardContent.children.roadDetails.children"
-            },
-            type: "array"
-          }
-        }
-      },
-    }),
-  }),
+  // roadCuttingChargeContainer: getCommonCard({
+  //   header: getCommonSubHeader(
+  //     {
+  //       labelName: "Road Cutting Charge",
+  //       labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
+  //     },
+  //     {
+  //       style: {
+  //         marginBottom: 18
+  //       }
+  //     }
+  //   ),
+  //   applicantTypeContainer: getCommonContainer({
+  //     roadCuttingChargeInfoCard : {
+  //       uiFramework: "custom-atoms",
+  //       componentPath: "Div",
+  //       props: {
+  //         style: {
+  //           // display: "none"
+  //           // width: 
+  //         }
+  //       },
+  //       children: {
+  //         multipleApplicantInfo: {
+  //           uiFramework: "custom-containers",
+  //           componentPath: "MultiItem",
+  //           props: {
+  //             scheama: commonRoadCuttingChargeInformation(),
+  //             items: [],
+  //             addItemLabel: {
+  //               labelName: "Add Road Type",
+  //               labelKey: "WS_ADD_ROAD_TYPE_LABEL"
+  //             },
+  //             isReviewPage: false,
+  //             sourceJsonPath: "applyScreen.roadCuttingInfo",
+  //             prefixSourceJsonPath: "children.cardContent.children.roadDetails.children"
+  //           },
+  //           type: "array"
+  //         }
+  //       }
+  //     },
+  //   }),
+  // }),
   activationDetailsContainer: getCommonGrayCard({
     subHeader: getCommonTitle({
       labelKey: "WS_ACTIVATION_DETAILS"
@@ -336,7 +340,8 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("Date"),
         errorMessage: "ERR_INVALID_DATE",
-        jsonPath: "applyScreen.connectionExecutionDate"
+        jsonPath: "applyScreen.connectionExecutionDate",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
       }),
       meterID: getTextField({
         label: {
@@ -352,7 +357,8 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: /^[a-z0-9]+$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.meterId"
+        jsonPath: "applyScreen.meterId",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
       }),
       meterInstallationDate: getDateField({
         label: { labelName: "meterInstallationDate", labelKey: "WS_ADDN_DETAIL_METER_INSTALL_DATE" },
@@ -367,7 +373,8 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("Date"),
         errorMessage: "ERR_INVALID_DATE",
-        jsonPath: "applyScreen.meterInstallationDate"
+        jsonPath: "applyScreen.meterInstallationDate",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
       }),
       initialMeterReading: getTextField({
         label: {
@@ -383,7 +390,8 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.additionalDetails.initialMeterReading"
+        jsonPath: "applyScreen.additionalDetails.initialMeterReading",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
       })
     })
   }),
@@ -403,6 +411,7 @@ export const additionDetails = getCommonCard({
         errorMessage: "ERR_INVALID_DATE",
         jsonPath: "applyScreen.dateEffectiveFrom",
         props: {
+          disabled: process.env.REACT_APP_NAME === "Citizen",
           inputProps: {
             min: getTodaysDateInYMD()
           }

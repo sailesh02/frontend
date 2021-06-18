@@ -52,11 +52,12 @@ export const OwnerInfoCard = getCommonCard({
 
     pipeSize: getSelectField({
       label: { labelKey: "WS_CONN_DETAIL_PIPE_SIZE" },
-      sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.pipeSize",
+      sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.pipeSize",
       placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
-      required: true,
+      required: false,
+      visible:false,
       gridDefination: { xs: 12, sm: 6 },
-      jsonPath: "applyScreen.proposedPipeSize"
+      jsonPath: "applyScreen.pipeSize"
     }),
 
     numberOfWaterClosets: getTextField({

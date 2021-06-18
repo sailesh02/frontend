@@ -1,16 +1,7 @@
 import {
   getCommonCard,
-
-
   getCommonContainer, getCommonGrayCard, getCommonHeader,
-
-
-
-
   getCommonSubHeader, getCommonTitle,
-
-
-
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -22,7 +13,7 @@ import { findAndReplace, getDescriptionFromMDMS, getSearchResults, getSearchResu
 import {
   convertDateToEpoch, createEstimateData,
   getDialogButton, getFeesEstimateOverviewCard,
-  getTransformedStatus, showHideAdhocPopup
+  getTransformedStatus, showHideAdhocPopup,getTextToLocalMapping
 } from "../utils";
 import { downloadPrintContainer } from "../wns/acknowledgement";
 import { adhocPopup } from "./applyResource/adhocPopup";
@@ -31,6 +22,7 @@ import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewConnectionDetails } from "./applyResource/review-trade";
 import { snackbarWarningMessage } from "./applyResource/reviewConnectionDetails";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
+import {connectionDetailsWater,connectionDetailsSewerage} from './applyResource/task-connectiondetails'
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -124,6 +116,25 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     }
 
+    if(service === serviceConst.WATER){
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.connectionType",
+          "visible",
+          true
+        )
+      );
+    }else{
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.connectionType",
+          "visible",
+          false
+        )
+      );
+    }
     if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber, processInstanceAppStatus));
     } else {
@@ -131,6 +142,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       applyScreenObject.applicationNo.includes("WS") ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
+      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.additionalDetails.locality));
       if (applyScreenObject.service = serviceConst.SEWERAGE)
         dispatch(prepareFinalObject("SewerageConnection[0]", parsedObject));
       let estimate;
@@ -331,7 +343,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
 
     setActionItems(action, obj);
     if (get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.locality", null) === null) {
-      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.address.locality.code")));
+      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.locality")));
     }
   }
 
@@ -405,25 +417,25 @@ const estimate = getCommonGrayCard({
     "WS_PAYMENT_VIEW_BREAKUP",
     "search-preview"
   ),
-  addPenaltyRebateButton: {
-    componentPath: "Button",
-    props: {
-      color: "primary",
-      style: {}
-    },
-    children: {
-      previousButtonLabel: getLabel({
-        labelKey: "WS_PAYMENT_ADD_REBATE_PENALTY"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        showHideAdhocPopup(state, dispatch, "search-preview");
-      }
-    },
-    visible: false
-  },
+  // addPenaltyRebateButton: {
+  //   componentPath: "Button",
+  //   props: {
+  //     color: "primary",
+  //     style: {}
+  //   },
+  //   children: {
+  //     previousButtonLabel: getLabel({
+  //       labelKey: "WS_PAYMENT_ADD_REBATE_PENALTY"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: (state, dispatch) => {
+  //       showHideAdhocPopup(state, dispatch, "search-preview");
+  //     }
+  //   },
+  //   visible: false
+  // },
 });
 
 export const reviewConnectionDetails = getReviewConnectionDetails(false);
@@ -471,7 +483,7 @@ export const summaryScreen = getCommonCard({
   reviewConnectionDetails,
   reviewModificationsDetails,
   reviewDocumentDetails,
-  reviewOwnerDetails
+  // reviewOwnerDetails
 })
 
 const screenConfig = {
@@ -581,7 +593,7 @@ const screenConfig = {
             }
           }
         },
-        snackbarWarningMessage,
+        // snackbarWarningMessage,
         taskDetails,
       }
     },
@@ -615,7 +627,7 @@ const screenConfig = {
 const searchResults = async (action, state, dispatch, applicationNumber, processInstanceAppStatus) => {
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
   let viewBillTooltip = [], estimate, payload = [];
-  if (service === serviceConst.WATER) {
+  if (service === serviceConst.WATER || applicationNumber.includes('WS')) {
     payload = [];
     payload = await getSearchResults(queryObjForSearch);
     set(payload, 'WaterConnection[0].service', service);
@@ -625,8 +637,10 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       tenantId: tenantId,
       waterConnection: convPayload.WaterConnection[0]
     }]
-    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForSW.visible", false);
-    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", true);
+    // set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainer", getCommonContainer(connectionDetailsWater));
+
+    // set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForSW.visible", false);
+    // set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", true);
     set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", false);
     set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
     if (payload !== undefined && payload !== null) {
@@ -694,8 +708,8 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     payload = [];
     payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
     payload.SewerageConnections[0].service = service;
-    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForSW.visible", true);
-    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", false);
+    // set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainer", getCommonContainer(connectionDetailsSewerage));
+    // set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", false);
     set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", true);
     set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", false); 
     if (payload !== undefined && payload !== null) {

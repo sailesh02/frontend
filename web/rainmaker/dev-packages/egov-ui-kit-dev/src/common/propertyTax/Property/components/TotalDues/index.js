@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { TotalDuesButton } from "./components";
 import "./index.css";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const labelStyle = {
   color: "rgba(0, 0, 0, 0.6)",
@@ -46,6 +47,14 @@ class TotalDues extends React.Component {
     const envURL = "/egov-common/pay";
     const { payAction } = this;
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
+    let userInfo = JSON.parse(getUserInfo());
+    const roleCodes =
+        userInfo && userInfo.roles
+          ? userInfo.roles.map((role) => {
+            return role.code;
+          })
+          : [];
+    const showPay = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
     return (
       <div className="" id="pt-header-due-amount">
         <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "60px" }}>
@@ -77,7 +86,7 @@ class TotalDues extends React.Component {
               }}
             /> */}
           </div>
-        {(totalBillAmountDue > 0 || (totalBillAmountDue === 0 && isAdvanceAllowed)) && (
+        {(totalBillAmountDue > 0 || (totalBillAmountDue === 0 && isAdvanceAllowed)) && !!showPay && (
           <div id="pt-flex-child-button" className="col-xs-12 col-sm-3 flex-child-button">
             <div style={{ float: "right" }}>
               <TotalDuesButton

@@ -90,11 +90,11 @@ export const getReviewConnectionDetails = (isEditable = true) => {
       }
     },
     viewOne: getPropertyDetails,
-    viewTwo: propertyLocationDetails,
-    viewThree: ownerDetails,
+    // viewTwo: propertyLocationDetails,
+    // viewThree: ownerDetails,
     viewFour: getConnectionDetails(),
     viewFive:taskConnHolderDetailsSummary(),
-    viewSix:connHolderDetailsSameAsOwnerSummary()
+    // viewSix:connHolderDetailsSameAsOwnerSummary()
 
   });
 };
@@ -207,40 +207,40 @@ export const propertyDetails={
     },
     { jsonPath: "WaterConnectionOld[0].property.propertyId", callBack: handleNA },
   ),
-  reviewPropertyType: getLabelWithValueForModifiedLabel(
-    {
-      labelName: "Property Type",
-      labelKey: "WS_PROPERTY_TYPE_LABEL"
-    },
-    {
-      jsonPath: "WaterConnection[0].property.propertyType",
-      callBack: handleNA,
-      localePrefix: {
-        moduleName: "WS",
-        masterName: "PROPTYPE"
-      }
+  // reviewPropertyType: getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Property Type",
+  //     labelKey: "WS_PROPERTY_TYPE_LABEL"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnection[0].property.propertyType",
+  //     callBack: handleNA,
+  //     localePrefix: {
+  //       moduleName: "WS",
+  //       masterName: "PROPTYPE"
+  //     }
       
-    },
-    {
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    {
-      jsonPath: "WaterConnectionOld[0].property.propertyType",
-      callBack: handleNA,
-      localePrefix: {
-        moduleName: "WS",
-        masterName: "PROPTYPE"
-      }
+  //   },
+  //   {
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].property.propertyType",
+  //     callBack: handleNA,
+  //     localePrefix: {
+  //       moduleName: "WS",
+  //       masterName: "PROPTYPE"
+  //     }
       
-    },
-  ),
+  //   },
+  // ),
   reviewPropertyUsageType: getLabelWithValueForModifiedLabel(
     {
       labelName: "Property Usage Type",
       labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
     },
     {
-      jsonPath: "WaterConnection[0].property.usageCategory",
+      jsonPath: "WaterConnection[0].usageCategory",
       callBack: handleNA,
       localePrefix: {
         moduleName: "WS",
@@ -251,7 +251,7 @@ export const propertyDetails={
       labelKey: "WS_OLD_LABEL_NAME"
     },
     {
-      jsonPath: "WaterConnectionOld[0].property.usageCategory",
+      jsonPath: "WaterConnectionOld[0].usageCategory",
       callBack: handleNA,
       localePrefix: {
         moduleName: "WS",
@@ -260,73 +260,205 @@ export const propertyDetails={
       
     }
   ),
-
-  reviewPropertySubUsageType: getLabelWithValueForModifiedLabel(
+  city: getLabelWithValueForModifiedLabel(
     {
-      labelName: "Property Sub usage type",
-      labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
+      labelName: "City",
+      labelKey: "CORE_COMMON_CITY"
     },
-    { jsonPath: "WaterConnection[0].property.units[0].usageCategory",
-      callBack: handlePropertySubUsageType,
+    {
+      jsonPath: "WaterConnection[0].tenantId",
+      callBack: handleNA,
       localePrefix: {
-        moduleName: "WS",
-        masterName: "PROPSUBUSGTYPE"
+        moduleName: "tenant", masterName: "tenants"
       }
-    },{
-      labelKey: "WS_OLD_LABEL_NAME"
     },
     {
-      jsonPath: "WaterConnectionOld[0].property.units[0].usageCategory",
+      labelKey: "CORE_COMMON_CITY"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].tenantId",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "tenant", masterName: "tenants"
+      }
+    }
+
+  ),
+  mohalla: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "mohalla",
+      labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.locality",
+      callBack: handleNA,
+    },
+    {
+      labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.locality",
+      callBack: handleNA   
+    }
+
+  ),
+  connectionCategory: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Connection Category",
+      labelKey: "WS_PROPERTY_CONNECTION_CATEGORY_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].connectionCategory",
       callBack: handleNA,
       localePrefix: {
         moduleName: "WS",
-        masterName: "PROPSUBUSGTYPE"
-      }
-      
+        masterName: "PROPTYPE"
+      },
+    },
+    {
+      labelKey: "WS_PROPERTY_CONNECTION_CATEGORY_LABEL"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].connectionCategory",
+      callBack: handleNA ,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPTYPE"
+      },  
     }
+
   ),
-  reviewPlotSize: getLabelWithValueForModifiedLabel(
+  connectionType: getLabelWithValueForModifiedLabel(
     {
-      labelName: "Plot Size (in sq metres)",
-      labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
-    },
-    { jsonPath: "WaterConnection[0].property.landArea",
-    callBack: handleNA },{
-      labelKey: "WS_OLD_LABEL_NAME"
+      labelName: "Connection Type",
+      labelKey: "WS_PROPERTY_CONNECTION_TYPE_LABEL"
     },
     {
-      jsonPath: "WaterConnectionOld[0].property.landArea",
-      callBack: handleNA      
+      jsonPath: "WaterConnection[0].connectionType",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPTYPE"
+      },
+    },
+    {
+      labelKey: "WS_PROPERTY_CONNECTION_TYPE_LABEL"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].connectionType",
+      callBack: handleNA ,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROPTYPE"
+      },  
     }
+
   ),
-  reviewNumberOfFloors: getLabelWithValueForModifiedLabel(
+  noOfFlats: getLabelWithValueForModifiedLabel(
     {
-      labelName: "Number Of Floors",
-      labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
-    },
-    { jsonPath: "WaterConnection[0].property.noOfFloors",
-    callBack: handleNA },{
-      labelKey: "WS_OLD_LABEL_NAME"
+      labelName: "No of Flats",
+      labelKey: "WS_PROPERTY_NO_OF_FLATS_LABEL"
     },
     {
-      jsonPath: "WaterConnectionOld[0].property.noOfFloors",
-      callBack: handleNA      
+      jsonPath: "WaterConnection[0].noOfFlats",
+      // callBack: handleNA
+     
+    },
+    {
+      labelKey: "WS_PROPERTY_NO_OF_FLATS_LABEL"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].noOfFlats",
+      // callBack: handleNA 
     }
+
   ),
-  rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
+  apartment: getLabelWithValueForModifiedLabel(
     {
-      labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
-      labelName: "Rain Water Harvesting Facility"
-    },
-    { jsonPath: "WaterConnection[0].property.additionalDetails.isRainwaterHarvesting",
-    callBack: handleNA },{
-      labelKey: "WS_OLD_LABEL_NAME"
+      labelName: "Apartment",
+      labelKey: "WS_COMMON_APARTMENT"
     },
     {
-      jsonPath: "WaterConnectionOld[0].property.additionalDetails.isRainwaterHarvesting",
-      callBack: handleNA      
+      jsonPath: "WaterConnection[0].apartment",
+      callBack: handleNA
+     
+    },
+    {
+      labelKey: "WS_COMMON_APARTMENT"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].apartment",
+      callBack: handleNA 
     }
+
   )
+
+  // reviewPropertySubUsageType: getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Property Sub usage type",
+  //     labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
+  //   },
+  //   { jsonPath: "WaterConnection[0].property.units[0].usageCategory",
+  //     callBack: handlePropertySubUsageType,
+  //     localePrefix: {
+  //       moduleName: "WS",
+  //       masterName: "PROPSUBUSGTYPE"
+  //     }
+  //   },{
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].property.units[0].usageCategory",
+  //     callBack: handleNA,
+  //     localePrefix: {
+  //       moduleName: "WS",
+  //       masterName: "PROPSUBUSGTYPE"
+  //     }
+      
+  //   }
+  // ),
+  // reviewPlotSize: getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Plot Size (in sq metres)",
+  //     labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
+  //   },
+  //   { jsonPath: "WaterConnection[0].property.landArea",
+  //   callBack: handleNA },{
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].property.landArea",
+  //     callBack: handleNA      
+  //   }
+  // ),
+  // reviewNumberOfFloors: getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Number Of Floors",
+  //     labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
+  //   },
+  //   { jsonPath: "WaterConnection[0].property.noOfFloors",
+  //   callBack: handleNA },{
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].property.noOfFloors",
+  //     callBack: handleNA      
+  //   }
+  // ),
+  // rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
+  //     labelName: "Rain Water Harvesting Facility"
+  //   },
+  //   { jsonPath: "WaterConnection[0].property.additionalDetails.isRainwaterHarvesting",
+  //   callBack: handleNA },{
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].property.additionalDetails.isRainwaterHarvesting",
+  //     callBack: handleNA      
+  //   }
+  // )
 }
 
 const getPropertyDetails = {

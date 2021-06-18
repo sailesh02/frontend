@@ -332,7 +332,6 @@ class WorkFlowContainer extends React.Component {
     const tenant = getQueryArg(window.location.href, "tenantId");
     const { ProcessInstances, baseUrlTemp, bserviceTemp, preparedFinalObject } = this.props;
     const { PTApplication = {} } = preparedFinalObject;
-    debugger
     const { propertyId } = PTApplication;
     let applicationStatus;
     if (ProcessInstances && ProcessInstances.length > 0) {
@@ -369,7 +368,9 @@ class WorkFlowContainer extends React.Component {
       if(process.env.REACT_APP_NAME === "Employee"){
         let {Property} = preparedFinalObject
         let acknowldgementNumber = Property.acknowldgementNumber
-        return `pt-mutation/apply?applicationNumber=${acknowldgementNumber}&tenantId=${tenant}&demandDetails=true`
+        baseUrl = "pt-mutation";
+        bservice = "PT.MUTATION";
+        return `/pt-mutation/apply?applicationNumber=${acknowldgementNumber}&tenantId=${tenant}&demandDetails=true`
       }else{
         bservice = "PT.MUTATION";
         baseUrl = "pt-mutation";
@@ -444,6 +445,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   getActionIfEditable = (status, businessId, moduleName, applicationState) => {
+    let editDemands = false;
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
@@ -461,10 +463,9 @@ class WorkFlowContainer extends React.Component {
 
     let editAction = {};
 
-    //hardcoded edit button for adding additional details
-    debugger
+    //hardcoded edit demand button for adding demand details
     if((moduleName == "PT.CREATE" || moduleName == "PT.MUTATION") && applicationState == "DOCVERIFIED"){
-      state.isStateUpdatable = true
+      editDemands = true
     }
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
@@ -476,6 +477,18 @@ class WorkFlowContainer extends React.Component {
         buttonUrl: (this.props.editredirect) ? this.props.editredirect : this.getRedirectUrl("EDIT", businessId, moduleName,applicationState)
       };
     }
+
+    //hardcoded edit demand button for adding demand details
+    if(editDemands && actions.length > 0 && roleIndex > -1){
+      editAction = {
+        buttonLabel: "EDIT_DEMANDS",
+        moduleName: moduleName,
+        tenantId: state.tenantId,
+        isLast: true,
+        buttonUrl: this.getRedirectUrl("EDIT", businessId, moduleName,applicationState)
+      };
+    }
+
     return editAction;
   };
 

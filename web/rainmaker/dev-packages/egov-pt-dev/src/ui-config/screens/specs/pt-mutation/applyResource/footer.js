@@ -682,7 +682,6 @@ export const getActionDefinationForStepper = path => {
       value: false
     }
   ];
-  debugger
   for (var i = 0; i < actionDefination.length; i++) {
     actionDefination[i] = {
       ...actionDefination[i],

@@ -92,7 +92,6 @@ class Footer extends React.Component {
           : item.buttonUrl;
 
       /* Quick fix for edit mutation application */
-      debugger
       if (url.includes('pt-mutation/apply') && process.env.REACT_APP_NAME === "Citizen") {
         url = url + '&mode=MODIFY';
         window.location.href = url.replace("/pt-mutation/", '');

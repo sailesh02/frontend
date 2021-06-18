@@ -11,6 +11,7 @@ import { furnishNocResponse, getSearchResults, prepareDocumentsUploadData, setAp
 import { getCurrentFinancialYear, setCardVisibility, showHideMutationDetailsCard } from "../utils";
 import { footer } from "./applyResource/footer";
 import { mutationDetails } from "./applyResourceMutation/mutationDetails";
+import { demandDetails } from "./applyResourceMutation/mutationDetails";
 import { documentDetails } from "./applyResourceMutation/mutationDocuments";
 import { mutationSummary } from "./applyResourceMutation/mutationSummary";
 import { registrationDetails } from "./applyResourceMutation/registrationDetails";
@@ -28,9 +29,21 @@ export const stepsData = [
   { labelName: "Document Upload", labelKey: "PT_MUTATION_DOCUMENT_UPLOAD" },
   { labelName: "Summary", labelKey: "PT_MUTATION_SUMMARY" }
 ];
+
+// New stepper to enter demand details
+export const stepsDataForDemandDetails = [
+  { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
+  { labelName: "Document Upload", labelKey: "PT_MUTATION_DOCUMENT_UPLOAD" },
+  { labelName: "Demand Details", labelKey: "PT_DEMAND_DETAILS" },
+  { labelName: "Summary", labelKey: "PT_MUTATION_SUMMARY" }
+];
+
+const isDemandDetails = getQueryArg(window.location.href, "demandDetails");
+
+const stepperData = isDemandDetails ? stepsDataForDemandDetails : stepsData  
 export const stepper = getStepperObject(
-  { props: { activeStep: 0 } },
-  stepsData
+  { props: { activeStep: isDemandDetails ? 3 : 0 } },
+  stepperData
 );
 
 const applicationNumberContainer = () => {
@@ -94,7 +107,8 @@ export const formwizardFirstStep = {
     transfereeDetails,
     mutationDetails,
     registrationDetails
-  }
+  },
+  visible : isDemandDetails ? false : true
 };
 
 export const formwizardSecondStep = {
@@ -130,6 +144,19 @@ export const formwizardThirdStep = {
   },
 
   visible: false
+};
+
+export const formwizardDemandDetailsStep = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form3"
+  },
+  children: {
+    demandDetails,
+  },
+
+ visible : isDemandDetails ? true : false
 };
 
 const getPropertyData = async (action, state, dispatch) => {
@@ -530,7 +557,7 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
-    const isEdit = getQueryArg(window.location.href, "action") === "edit";
+    const isEdit = getQueryArg(window.location.href, "action") === "edit" || getQueryArg(window.location.href, "demandDetails");
     dispatch(
       prepareFinalObject(
         "Property",
@@ -727,6 +754,7 @@ const screenConfig = {
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,
+        formwizardDemandDetailsStep,
         footer
       }
     }

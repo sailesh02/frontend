@@ -332,6 +332,7 @@ class WorkFlowContainer extends React.Component {
     const tenant = getQueryArg(window.location.href, "tenantId");
     const { ProcessInstances, baseUrlTemp, bserviceTemp, preparedFinalObject } = this.props;
     const { PTApplication = {} } = preparedFinalObject;
+    debugger
     const { propertyId } = PTApplication;
     let applicationStatus;
     if (ProcessInstances && ProcessInstances.length > 0) {
@@ -365,8 +366,15 @@ class WorkFlowContainer extends React.Component {
     else if (moduleName === "PT.CREATE" || moduleName === "PT.LEGACY") {
       return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
     } else if (moduleName === "PT.MUTATION") {
-      bservice = "PT.MUTATION";
-      baseUrl = "pt-mutation";
+      if(process.env.REACT_APP_NAME === "Employee"){
+        let {Property} = preparedFinalObject
+        let acknowldgementNumber = Property.acknowldgementNumber
+        return `pt-mutation/apply?applicationNumber=${acknowldgementNumber}&tenantId=${tenant}&demandDetails=true`
+      }else{
+        bservice = "PT.MUTATION";
+        baseUrl = "pt-mutation";
+      }
+    
     } else if (!baseUrl && !bservice) {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
       bservice = "TL"
@@ -454,7 +462,8 @@ class WorkFlowContainer extends React.Component {
     let editAction = {};
 
     //hardcoded edit button for adding additional details
-    if(moduleName == "PT.CREATE" && applicationState == "DOCVERIFIED"){
+    debugger
+    if((moduleName == "PT.CREATE" || moduleName == "PT.MUTATION") && applicationState == "DOCVERIFIED"){
       state.isStateUpdatable = true
     }
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
@@ -464,7 +473,7 @@ class WorkFlowContainer extends React.Component {
         moduleName: moduleName,
         tenantId: state.tenantId,
         isLast: true,
-        buttonUrl: (this.props.editredirect) ? this.props.editredirect : this.getRedirectUrl("EDIT", businessId, moduleName)
+        buttonUrl: (this.props.editredirect) ? this.props.editredirect : this.getRedirectUrl("EDIT", businessId, moduleName,applicationState)
       };
     }
     return editAction;

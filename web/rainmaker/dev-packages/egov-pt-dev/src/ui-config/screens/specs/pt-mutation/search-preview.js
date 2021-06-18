@@ -360,6 +360,10 @@ const setSearchResponse = async (
 
   // auditResponse
   dispatch(prepareFinalObject("Property", property));
+  const isDemandDetails = getQueryArg(window.location.href, "demandDetails");
+  if(isDemandDetails){
+    dispatch(prepareFinalObject("Property.additionalDetails.mutationCharge",get(state.screenConfiguration.preparedFinalObject,"mutationCharge","0")))
+  }
   dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
   prepareDocumentsView(state, dispatch);
 

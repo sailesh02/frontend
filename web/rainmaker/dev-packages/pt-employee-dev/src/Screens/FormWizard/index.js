@@ -1041,7 +1041,7 @@ class FormWizard extends Component {
     const isDemandDetailsValid = validateForm(form.demandDetails);
     if(isDemandDetailsValid){
       store.dispatch(prepareFinalObject("Property.additionalDetails",Properties[0].additionalDetails))
-      this.props.history.push(`/property-tax/application-preview?applicationNumber=${acknowldgementNumber}&tenantId=${tenantId}&type=property&mode="WORKFLOWEDIT"`);
+      this.props.history.push(`/property-tax/application-preview?applicationNumber=${acknowldgementNumber}&tenantId=${tenantId}&type=property&mode=WORKFLOWEDIT`);
     }else{
         this.props.toggleSnackbarAndSetText(
           true,

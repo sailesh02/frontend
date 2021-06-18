@@ -73,7 +73,7 @@ const WizardComponent = ({
             }}
             className="stepper-container"
           >
-           {mode == "WORKFLOWEDIT" && ptWorkflowSteps.map(label => {
+           {mode == "WORKFLOWEDIT" || mode == "editDemandDetails" && ptWorkflowSteps.map(label => {
               return (
                 <Step key={label}>
                   <StepLabel>
@@ -83,7 +83,7 @@ const WizardComponent = ({
                 </Step>
               );
             })}
-            {mode != "WORKFLOWEDIT" && ptSteps.map(label => {
+            {mode != "WORKFLOWEDIT" || mode!= "editDemandDetails" && ptSteps.map(label => {
               return (
                 <Step key={label}>
                   <StepLabel>

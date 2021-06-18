@@ -376,7 +376,13 @@ class WorkFlowContainer extends React.Component {
         baseUrl = "pt-mutation";
       }
     
-    } else if (!baseUrl && !bservice) {
+    } 
+    else if(moduleName == "ASMT"){
+      const {dataPath, preparedFinalObject} = this.props
+      const propertyId = get(preparedFinalObject, dataPath).propertyId || ""
+      return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=editDemandDetails`
+    }
+    else if (!baseUrl && !bservice) {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
       bservice = "TL"
     }
@@ -464,7 +470,7 @@ class WorkFlowContainer extends React.Component {
     let editAction = {};
 
     //hardcoded edit demand button for adding demand details
-    if((moduleName == "PT.CREATE" || moduleName == "PT.MUTATION") && applicationState == "DOCVERIFIED"){
+    if((moduleName == "PT.CREATE" || moduleName == "PT.MUTATION" || moduleName == "ASMT") && (applicationState == "DOCVERIFIED" || applicationState == "PENDING_FIELD_INSPECTION")){
       editDemands = true
     }
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit

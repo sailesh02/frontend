@@ -11,11 +11,11 @@ import { prepareFinalObject } from "../../../../../../../packages/lib/egov-ui-fr
 import set from "lodash/set";
 
 const formConfig = {
-  name: "demandDetails",
+  name: "demandDetailsAsmt",
   fields: {
     holdingTax: {
       id: "holding-tax",
-      jsonPath: "Properties[0].additionalDetails.holdingTax",
+      jsonPath: "Assessment.additionalDetails.holdingTax",
       type: "textfield",
       floatingLabelText: "PT_HOLDING_TAX",
       hintText: "PT_HOLDING_TAX_PLACEHOLDER",
@@ -26,14 +26,10 @@ const formConfig = {
       maxLength: 64,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Assessment.additionalDetails || {}
         let amountArray = []
         for (const [key, value] of Object.entries(additionalDetails)) {
-          if(key == "usageExemption" || key == "ownershipExemption"){
-            amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
-          }
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
         dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
@@ -41,7 +37,7 @@ const formConfig = {
     },
     lightTax: {
       id: "ligth-tax",
-      jsonPath: "Properties[0].additionalDetails.lightTax",
+      jsonPath: "Assessment.additionalDetails.lightTax",
       type: "textfield",
       floatingLabelText: "PT_LIGHT_TAX",
       hintText: "PT_LIGHT_TAX_PLACEHOLDER",
@@ -52,14 +48,10 @@ const formConfig = {
       maxLength: 64,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Assessment.additionalDetails || {}
         let amountArray = []
         for (const [key, value] of Object.entries(additionalDetails)) {
-          if(key == "usageExemption" || key == "ownershipExemption"){
-            amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
-          }
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
         dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
@@ -67,7 +59,7 @@ const formConfig = {
     },
     waterTax: {
       id: "water-tax",
-      jsonPath: "Properties[0].additionalDetails.waterTax",
+      jsonPath: "Assessment.additionalDetails.waterTax",
       type: "textfield",
       floatingLabelText: "PT_WATER_TAX",
       hintText: "PT_WATER_TAX_PLACEHOLDER",
@@ -78,14 +70,10 @@ const formConfig = {
       pattern: /^([0-9][0-9]{0,49})(\.\d{1,2})?$/,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Assessment.additionalDetails || {}
         let amountArray = []
         for (const [key, value] of Object.entries(additionalDetails)) {
-          if(key == "usageExemption" || key == "ownershipExemption"){
-            amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
-          }
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
         dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
@@ -93,7 +81,7 @@ const formConfig = {
     },
     drainageTax: {
       id: "drainage-tax",
-      jsonPath: "Properties[0].additionalDetails.drainageTax",
+      jsonPath: "Assessment.additionalDetails.drainageTax",
       type: "textfield",
       floatingLabelText: "PT_DRAINAGE_TAX",
       hintText: "PT_DRAINAGE_TAX_PLACEHOLDER",
@@ -104,14 +92,10 @@ const formConfig = {
       maxLength: 64,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Assessment.additionalDetails || {}
         let amountArray = []
         for (const [key, value] of Object.entries(additionalDetails)) {
-          if(key == "usageExemption" || key == "ownershipExemption"){
-            amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
-          }
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
         dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
@@ -119,7 +103,7 @@ const formConfig = {
     },
     latrineTax: {
       id: "latrine-tax",
-      jsonPath: "Properties[0].additionalDetails.latrineTax",
+      jsonPath: "Assessment.additionalDetails.latrineTax",
       type: "textfield",
       floatingLabelText: "PT_LATRINE_TAX",
       hintText: "PT_LATRINE_TAX_PLACEHOLDER",
@@ -130,14 +114,10 @@ const formConfig = {
       maxLength: 64,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Assessment.additionalDetails || {}
         let amountArray = []
         for (const [key, value] of Object.entries(additionalDetails)) {
-          if(key == "usageExemption" || key == "ownershipExemption"){
-            amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
-          }
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
         dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
@@ -145,7 +125,7 @@ const formConfig = {
     },
     parkingTax: {
       id: "parking-tax",
-      jsonPath: "Properties[0].additionalDetails.parkingTax",
+      jsonPath: "Assessment.additionalDetails.parkingTax",
       type: "textfield",
       floatingLabelText: "PT_PARKING_TAX",
       hintText: "PT_PARKING_TAX_PLACEHOLDER",
@@ -156,14 +136,10 @@ const formConfig = {
       maxLength: 64,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Assessment.additionalDetails || {}
         let amountArray = []
         for (const [key, value] of Object.entries(additionalDetails)) {
-          if(key == "usageExemption" || key == "ownershipExemption"){
-            amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
-          }
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
         dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
@@ -171,7 +147,7 @@ const formConfig = {
     },
     solidWasteUserCharges: {
       id: "solidwaste-charges",
-      jsonPath: "Properties[0].additionalDetails.solidWasteUserCharges",
+      jsonPath: "Assessment.additionalDetails.solidWasteUserCharges",
       type: "textfield",
       floatingLabelText: "PT_SOLID_WASTER_USER_CHARGES",
       hintText: "PT_SOLID_WASTER_USER_CHARGES_PLACEHOLDER",
@@ -182,14 +158,10 @@ const formConfig = {
       maxLength: 64,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Assessment.additionalDetails || {}
         let amountArray = []
         for (const [key, value] of Object.entries(additionalDetails)) {
-          if(key == "usageExemption" || key == "ownershipExemption"){
-            amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
-          }
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
         dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
@@ -197,7 +169,7 @@ const formConfig = {
     },
     ownershipExemption: {
       id: "ownership-exemption",
-      jsonPath: "Properties[0].additionalDetails.ownershipExemption",
+      jsonPath: "Assessment.additionalDetails.ownershipExemption",
       type: "textfield",
       floatingLabelText: "PT_OWNERSHIP_EXEMPTION",
       hintText: "PT_OWNERSHIP_EXEMPTION_PLACEHOLDER",
@@ -208,14 +180,10 @@ const formConfig = {
       maxLength: 64,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Assessment.additionalDetails || {}
         let amountArray = []
         for (const [key, value] of Object.entries(additionalDetails)) {
-          if(key == "usageExemption" || key == "ownershipExemption"){
-            amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
-          }
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
         dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
@@ -223,7 +191,7 @@ const formConfig = {
     },
     usageExemption: {
       id: "usage-exemption",
-      jsonPath: "Properties[0].additionalDetails.usageExemption",
+      jsonPath: "Assessment.additionalDetails.usageExemption",
       type: "textfield",
       floatingLabelText: "PT_USAGE_EXEMPTION",
       hintText: "PT_USAGE_EXEMPTION_PLACEHOLDER",
@@ -234,14 +202,10 @@ const formConfig = {
       maxLength: 64,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Assessment.additionalDetails || {}
         let amountArray = []
         for (const [key, value] of Object.entries(additionalDetails)) {
-          if(key == "usageExemption" || key == "ownershipExemption"){
-            amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
-          }
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
         dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
@@ -249,7 +213,7 @@ const formConfig = {
     },
     interest: {
       id: "interest",
-      jsonPath: "Properties[0].additionalDetails.interest",
+      jsonPath: "Assessment.additionalDetails.interest",
       type: "textfield",
       floatingLabelText: "PT_INTEREST",
       hintText: "PT_INTEREST_PLACEHOLDER",
@@ -260,14 +224,10 @@ const formConfig = {
       maxLength: 64,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Assessment.additionalDetails || {}
         let amountArray = []
         for (const [key, value] of Object.entries(additionalDetails)) {
-          if(key == "usageExemption" || key == "ownershipExemption"){
-            amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
-          }
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
         dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
@@ -275,7 +235,7 @@ const formConfig = {
     },
     penalty: {
       id: "penalty",
-      jsonPath: "Properties[0].additionalDetails.penalty",
+      jsonPath: "Assessment.additionalDetails.penalty",
       type: "textfield",
       floatingLabelText: "PT_PENALTY",
       hintText: "PT_PENALTY_PLACEHOLDER",
@@ -286,14 +246,10 @@ const formConfig = {
       pattern: /^([0-9][0-9]{0,49})(\.\d{1,2})?$/,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Assessment.additionalDetails || {}
         let amountArray = []
         for (const [key, value] of Object.entries(additionalDetails)) {
-          if(key == "usageExemption" || key == "ownershipExemption"){
-            amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
-          }
+          amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
         dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)),0);
@@ -301,7 +257,7 @@ const formConfig = {
     },
     totalAmount: {
       id: "totalAmount",
-      jsonPath: "Properties[0].additionalDetails.totalAmount",
+      jsonPath: "Assessment.additionalDetails.totalAmount",
       type: "textfield",
       floatingLabelText: "PT_TOTAL_AMOUNT",
       hintText: "PT_TOTAL_AMOUNT_PLACEHOLDER",
@@ -314,77 +270,6 @@ const formConfig = {
    
   },
   afterInitForm: (action, store, dispatch) => {
-    try{
-      let state = store.getState();
-      const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties && state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
-        let amountArray = []
-        for (const [key, value] of Object.entries(additionalDetails)) {
-          if(key == "usageExemption" || key == "ownershipExemption"){
-            amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
-          }
-        }
-        const total = amountArray.reduce((a, b) => a + b, 0)
-      dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)),0);
-      if(additionalDetails){
-        dispatch(setFieldProperty("demandDetails", "holdingTax", "value", additionalDetails.holdingTax),0);
-        dispatch(setFieldProperty("demandDetails", "lightTax", "value", additionalDetails.lightTax),0)
-        dispatch(setFieldProperty("demandDetails", "waterTax", "value", additionalDetails.waterTax),0)
-        dispatch(setFieldProperty("demandDetails", "drainageTax", "value", additionalDetails.drainageTax),0)
-        dispatch(setFieldProperty("demandDetails", "latrineTax", "value", additionalDetails.latrineTax),0)
-        dispatch(setFieldProperty("demandDetails", "parkingTax", "value", additionalDetails.parkingTax),0)
-        dispatch(setFieldProperty("demandDetails", "solidWasteUserCharges", "value", additionalDetails.solidWasteUserCharges),0)
-        dispatch(setFieldProperty("demandDetails", "ownershipExemption", "value", additionalDetails.ownershipExemption),0)
-        dispatch(setFieldProperty("demandDetails", "usageExemption", "value", additionalDetails.usageExemption),0)
-        dispatch(setFieldProperty("demandDetails", "interest", "value", additionalDetails.interest),0)
-        dispatch(setFieldProperty("demandDetails", "penalty", "value", additionalDetails.penalty),0)   
-      }
-    }catch(err){
-      console.log(err)
-    }
-    // try {
-    //   let state = store.getState();
-    //   const { localizationLabels } = state.app;
-    //   const { cities, citiesByModule } = state.common;
-    //   const PT = citiesByModule && citiesByModule.PT;
-    //   if (PT) {
-    //     const tenants = PT.tenants;
-    //     const dd = tenants.reduce((dd, tenant) => {
-    //       let selected = cities.find((city) => {
-    //         return city.code === tenant.code;
-    //       });
-
-    //       selected.code = selected.code && selected.code.trim()
-    //       const label = `TENANT_TENANTS_${selected.code.toUpperCase().replace(/[.]/g, "_")}`;
-    //       dd.push({ label: getTranslatedLabel(label, localizationLabels), value: selected.code });
-    //       return dd;
-    //     }, []);
-
-    //     dispatch(setFieldProperty("propertyAddress", "city", "dropDownData", sortBy(dd, ["label"])));
-    //   }
-    //   const tenant = get(state, 'form.propertyAddress.fields.city.value', null);
-    //   const mohallaDropDownData = get(state, 'form.propertyAddress.fields.mohalla.dropDownData', []);
-
-    //   if (process.env.REACT_APP_NAME === "Citizen" && tenant && mohallaDropDownData.length == 0) {
-    //     const dataFetchConfig = {
-    //       url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-    //       action: "",
-    //       queryParams: [{
-    //         key: "tenantId",
-    //         value: tenant
-    //       }],
-    //       requestBody: {},
-    //       isDependent: true,
-    //       hierarchyType: "REVENUE"
-    //     }
-    //     fetchDropdownData(dispatch, dataFetchConfig, 'propertyAddress', 'mohalla', state, true);
-    //   }
-    //   return action;
-    // } catch (e) {
-    //   console.log(e);
-    //   return action;
-    // }
   },
   action: "",
   redirectionRoute: "",

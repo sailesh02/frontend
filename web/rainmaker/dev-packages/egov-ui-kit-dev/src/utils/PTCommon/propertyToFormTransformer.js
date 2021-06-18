@@ -15,7 +15,8 @@ const propertyAddress =
     ? require("egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyAddress").default
     : require("config/forms/specs/PropertyTaxPay/propertyAddress").default;
 
-const demandDetails = require("../../config/forms/specs/PropertyTaxPay/demandDetails").default;    
+const demandDetails = require("../../config/forms/specs/PropertyTaxPay/demandDetails").default; 
+const demandDetailsAsmt = require("../../config/forms/specs/PropertyTaxPay/demandDetailsAsmt").default  
 
 const addData = (config, currentForm) => {
   let res = { ...config };
@@ -70,31 +71,54 @@ export const getAllOwnerDetails = (property, isSingleOwner = false) => {
 
 export const getDemandDetails = (propertyRes) => {
   let { Properties } = propertyRes;
-  Properties[0].additionalDetails = 
-  {
-    "holdingTax":'0',
-    "lightTax":'0',
-    "waterTax":'0',
-    "drainageTax":'0',
-    "latrineTax":'0',
-    "parkingTax":'0',
-    "solidWasteUserCharges":'0',
-    "ownershipExemption":'0',
-    "usageExemption":'0',
-    "interest":'0',
-    "penalty":'0',
-    "totalAmount":'0'
-}
-  // const oldPIDPath = get(propertyAddress, "fields.oldPID.jsonPath", "");
-  // const mohallaPath = get(propertyAddress, "fields.mohalla.jsonPath", "");
+  if(!Properties[0].additionalDetails){
+    Properties[0].additionalDetails = 
+    {
+      "holdingTax":'0',
+      "lightTax":'0',
+      "waterTax":'0',
+      "drainageTax":'0',
+      "latrineTax":'0',
+      "parkingTax":'0',
+      "solidWasteUserCharges":'0',
+      "ownershipExemption":'0',
+      "usageExemption":'0',
+      "interest":'0',
+      "penalty":'0',
+      "totalAmount":'0'
+  }
+  }
+  
   let demandDetailsForm = {
     demandDetails: addData(cloneDeep(demandDetails), get(Properties[0], "additionalDetails", {})),
   };
-  // set(demandDetailsForm, "propertyAddress.fields.oldPID.value", get(propertyRes, oldPIDPath, ""));
-  // set(demandDetailsForm, "propertyAddress.fields.mohalla.value", get(propertyRes, mohallaPath, ""));
-  // set(demandDetailsForm, "propertyAddress.fields.city.value", get(Properties[0], "tenantId", ""));
 
   return demandDetailsForm;
+}
+
+export const getDemandDetailsAsmt = (assessment) => {
+  if(!assessment.additionalDetails){
+    assessment.additionalDetails = 
+    {
+      "holdingTax":'0',
+      "lightTax":'0',
+      "waterTax":'0',
+      "drainageTax":'0',
+      "latrineTax":'0',
+      "parkingTax":'0',
+      "solidWasteUserCharges":'0',
+      "ownershipExemption":'0',
+      "usageExemption":'0',
+      "interest":'0',
+      "penalty":'0',
+      "totalAmount":'0'
+  }
+  }
+  let demandDetailsAsmtForm = {
+    demandDetailsAsmt: addData(cloneDeep(demandDetailsAsmt), get(assessment, "additionalDetails", {})),
+  };
+
+  return demandDetailsAsmtForm;
 }
 export const getpropertyAddressDetails = (propertyRes) => {
   const { Properties } = propertyRes;
@@ -144,7 +168,7 @@ export const getAssesmentDetails = (propertyResponse) => {
   return transformPropertyDataToAssessInfo(propertyResponse);
 };
 
-export const convertRawDataToFormConfig = (propertyResponse,mode) => {
+export const convertRawDataToFormConfig = (propertyResponse,mode,assessment) => {
   const { Properties } = propertyResponse;
   let properties = Properties;
 
@@ -153,10 +177,14 @@ export const convertRawDataToFormConfig = (propertyResponse,mode) => {
   let institutionAuthority = {};
   let institutionDetails = {};
   let demandDetails = {}
+  let demandDetailsAsmt = {}
   let ownerShipForm = getOwnerShipDetails(properties[0]);
   let propertyAddress = getpropertyAddressDetails(propertyResponse);
   if(mode == "WORKFLOWEDIT"){
      demandDetails = getDemandDetails(propertyResponse)
+  }
+  if(mode == "editDemandDetails"){
+    demandDetailsAsmt = getDemandDetails(propertyResponse)
   }
   let assessmentForms = getAssesmentDetails(propertyResponse);
   const ownershipType = get(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", "");
@@ -187,7 +215,20 @@ export const convertRawDataToFormConfig = (propertyResponse,mode) => {
         // selectedTabIndex: 3,
       };
   
-  }else{
+  }else if(mode == "editDemandDetails"){
+    return {
+      // ...res,
+      ...propertyAddress,
+      ...assessmentForms,
+      ...ownerForms,
+      ...ownerShipForm,
+      ...institutionAuthority,
+      ...institutionDetails,
+      ...demandDetailsAsmt
+      // selectedTabIndex: 3,
+    };
+  }
+  else{
     return {
       // ...res,
       ...propertyAddress,

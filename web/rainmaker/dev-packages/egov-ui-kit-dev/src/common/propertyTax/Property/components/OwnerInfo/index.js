@@ -384,10 +384,10 @@ class OwnerInfo extends Component {
             return role.code;
           })
           : [];
-      
+      debugger
     // to get owners mobile number      
     let ownerMobileNumber = ownerInfo && ownerInfo.length > 0 &&  ownerInfo[0].items && ownerInfo[0].items.filter( key => {
-      if(key.key == "Mobile No:" ){
+      if(key.key == "Mobile No:" || key.key == "PT_OWNERSHIP_INFO_MOBILE_NO"){
         return key
       }
     }) 

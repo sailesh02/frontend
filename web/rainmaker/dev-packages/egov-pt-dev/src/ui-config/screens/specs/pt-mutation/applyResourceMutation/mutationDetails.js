@@ -155,6 +155,38 @@ import {
           })
         });
 
+  export const demandDetails = getCommonCard({
+    header: getCommonTitle(
+      {
+        labelName: "Demand Details",
+        labelKey: "PT_DEMAND_DETAILS"
+      },
+      {
+        style: {
+          marginBottom: 18
+        }
+      }
+    ),
+    demandDetailsContainer: getCommonContainer({ 
+      mutationCharge: getTextField({
+        label: {
+          labelName: "Mutation Charge",
+          labelKey: "PT_MUTATION_CHARGE"
+        },
+        props:{
+          className:"applicant-details-error",
+        },
+        placeholder: {
+          labelName: "Enter Mutation Charge",
+          labelKey: "PT_MUTATION_CHARGE_PLACEHOLDER"
+        },
+        pattern: getPattern("mutationCharge"),
+        jsonPath: "mutationCharge"
+      })
+
+    })
+  })      
+
         
 
               

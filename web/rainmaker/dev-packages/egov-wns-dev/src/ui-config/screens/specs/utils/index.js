@@ -260,15 +260,16 @@ export const handleService = params => {
     return params
   }else{
     let state = store.getState();
-    let water = get(state,"screenConfiguration.preparedFinalObject.applyScreen.water",false);
-    if(water){
-      return 'WATER'
-    }else{
-      return 'SEWERAGE'
-    }
+    // let water = get(state,"screenConfiguration.preparedFinalObject.applyScreen.water",false);
+    let water = get(state,"screenConfiguration.preparedFinalObject.WaterConnectionOld[0].service","");
+    // if(water){
+    //   return 'WATER'
+    // }else{
+    //   return 'SEWERAGE'
+    // }
+    return water;
   }
 }
-
 
 export const handleNA = params => {
   if (params !== undefined && params !== null && params !== "" && params!==0) {

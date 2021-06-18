@@ -617,7 +617,7 @@ class FormWizard extends Component {
 
   getButtonLabels(index) {
     let buttonLabel = "PT_COMMONS_NEXT";
-    if(mode == "WORKFLOWEDIT"){
+    if(mode == "WORKFLOWEDIT" || mode == "editDemandDetails"){
       buttonLabel = "PT_ADD_DEMAND_DETAILS"
     }else{
       const { purpose } = this.state;

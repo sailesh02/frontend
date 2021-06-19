@@ -734,7 +734,8 @@ export const formwizardFourthStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form4" },
-  children: { snackbarWarningMessage, summaryScreen },
+  // children: { snackbarWarningMessage, summaryScreen },
+  children: { summaryScreen },
   visible: false
 };
 

@@ -18,6 +18,14 @@ const service = getQueryArg(window.location.href, "service")
 const connectionType = getQueryArg(window.location.href, "connectionType")
   if (service === serviceConst.WATER) {
     if (connectionType === "Metered") {
+      // var roles = JSON.parse(getUserInfo()).roles;
+      // let btnFlag = false;
+      // for(var i=0; i<roles.length; i++){
+      //   if(roles[i].code === "SW-CEMP" || roles[i].code === "WS-CEMP"){
+      //     btnFlag = true;
+      //     break;
+      //   }
+      // }
       return getCommonContainer({
         serviceType: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_SERV_LABEL" }, { jsonPath: "WaterConnection[0].service" }),
         connectionCategory: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_CATEGORY" }, { jsonPath: "WaterConnection[0].connectionCategory" }),

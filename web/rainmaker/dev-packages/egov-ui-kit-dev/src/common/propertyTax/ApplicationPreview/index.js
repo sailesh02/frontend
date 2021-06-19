@@ -154,7 +154,6 @@ class ApplicationPreview extends Component {
     try {
       let payload = await httpRequest(applicationType.endpoint.GET.URL, applicationType.endpoint.GET.ACTION, applicationType.queryParams
       );
-      debugger
       const mode = getQueryArg(window.location.href, "mode");
       if(mode == "WORKFLOWEDIT"){
         const {preparedFinalObject = {}} = this.props.screenConfiguration

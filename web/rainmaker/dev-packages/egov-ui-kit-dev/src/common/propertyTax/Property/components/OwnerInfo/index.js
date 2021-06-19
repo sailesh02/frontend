@@ -24,6 +24,7 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const checkDocument = (owner) => {
   if (owner) {
@@ -75,7 +76,8 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
   if(oldPropertydetails&&oldPropertydetails.owners){
     oldPropertydetails.owners=oldPropertydetails&& oldPropertydetails.owners&&Array.isArray(oldPropertydetails.owners)&&oldPropertydetails.owners.sort((owner1,owner2)=>owner1.name.localeCompare(owner2.name));
   }
-  
+  const mode = getQueryArg(window.location.href, "mode");
+
   return (
     ownerDetails &&
     ownerDetails.map((owner, index) => {
@@ -125,7 +127,7 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
             : {
               key: getTranslatedLabel("PT_FORM3_OWNERSHIP_TYPE", localizationLabelsData),
               value: getOwnershipTypeInfoCategory(ownershipCategory, subOwnershipCategory),
-              oldValue: oldPropertydetails && getOwnershipTypeInfoCategory(oldPropertydetails.ownershipCategory, oldPropertydetails.subOwnershipCategory)
+              oldValue: oldPropertydetails && mode!= "WORKFLOWEDIT" && getOwnershipTypeInfoCategory(oldPropertydetails.ownershipCategory, oldPropertydetails.subOwnershipCategory)
             },
           isInstitution
             ? {
@@ -384,7 +386,6 @@ class OwnerInfo extends Component {
             return role.code;
           })
           : [];
-      debugger
     // to get owners mobile number      
     let ownerMobileNumber = ownerInfo && ownerInfo.length > 0 &&  ownerInfo[0].items && ownerInfo[0].items.filter( key => {
       if(key.key == "Mobile No:" || key.key == "PT_OWNERSHIP_INFO_MOBILE_NO"){

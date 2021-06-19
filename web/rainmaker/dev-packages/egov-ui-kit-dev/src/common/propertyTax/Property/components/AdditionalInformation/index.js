@@ -5,7 +5,6 @@ import "./index.css";
 
 export default class AdditionalInformation extends Component {
   render() {
-    debugger
     const { additionalInformation } = this.props;
     const labelKeys = ["holdingTax", "lightTax", "waterTax", "drainageTax", "latrineTax", "parkingTax", "solidWasteUserCharges", "ownershipExemption", "usageExemption", "interest", "penalty"]
     return (

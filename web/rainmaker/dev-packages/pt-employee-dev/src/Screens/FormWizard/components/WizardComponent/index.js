@@ -61,6 +61,7 @@ const WizardComponent = ({
   ((selected == 5 || selected == 7)
     ? ((selected == 5) ? (backLabel = 'PT_APPLICATION_BUTTON_DOWN_CONF') : (backLabel = 'PT_ASSESS_PAY_FOR_NEW_YEAR'))
     : (backLabel))
+  let steps =  ( mode == "WORKFLOWEDIT" || mode == "editDemandDetails") ? ptWorkflowSteps : ptSteps
   return (
     <div className={`wizard-cont active-step-${selected}`}>
       {selected < 5 && <div>
@@ -73,17 +74,7 @@ const WizardComponent = ({
             }}
             className="stepper-container"
           >
-           {mode == "WORKFLOWEDIT" || mode == "editDemandDetails" && ptWorkflowSteps.map(label => {
-              return (
-                <Step key={label}>
-                  <StepLabel>
-
-                    <Label label={label} labelStyle={{ wordBreak: "inherit" }} />
-                  </StepLabel>
-                </Step>
-              );
-            })}
-            {mode != "WORKFLOWEDIT" || mode!= "editDemandDetails" && ptSteps.map(label => {
+           {steps.map(label => {
               return (
                 <Step key={label}>
                   <StepLabel>

@@ -102,8 +102,6 @@ class WorkFlowContainer extends React.Component {
       case "RESUBMIT_APPLICATION":
         return "purpose=forward&status=success";
       case "SEND_BACK_TO_CITIZEN":
-      case "SENT_BACK_TO_CITIZEN":
-      case "SENT_BACK":
         return "purpose=sendback&status=success";
       case "VERIFY_AND_FORWARD":
         return "purpose=forward&status=success";
@@ -356,13 +354,33 @@ class WorkFlowContainer extends React.Component {
       //}
     } else if (moduleName === "PT") {
       bservice = "PT"
+    }else if(moduleName === "PT.ASSESSMENT") {
+      const {dataPath, preparedFinalObject} = this.props
+      const propertyId = get(preparedFinalObject, dataPath).propertyId || ""
+      bservice = "PT"
+      businessId = propertyId
     }
     else if (moduleName === "PT.CREATE" || moduleName === "PT.LEGACY") {
       return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
     } else if (moduleName === "PT.MUTATION") {
-      bservice = "PT.MUTATION";
-      baseUrl = "pt-mutation";
-    } else if (!baseUrl && !bservice) {
+      if(process.env.REACT_APP_NAME === "Employee"){
+        let {Property} = preparedFinalObject
+        let acknowldgementNumber = Property.acknowldgementNumber
+        baseUrl = "pt-mutation";
+        bservice = "PT.MUTATION";
+        return `/pt-mutation/apply?applicationNumber=${acknowldgementNumber}&tenantId=${tenant}&demandDetails=true`
+      }else{
+        bservice = "PT.MUTATION";
+        baseUrl = "pt-mutation";
+      }
+    
+    } 
+    else if(moduleName == "ASMT"){
+      const {dataPath, preparedFinalObject} = this.props
+      const propertyId = get(preparedFinalObject, dataPath).propertyId || ""
+      return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=editDemandDetails`
+    }
+    else if (!baseUrl && !bservice) {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
       bservice = "TL"
     }
@@ -431,6 +449,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   getActionIfEditable = (status, businessId, moduleName, applicationState) => {
+    let editDemands = false;
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
@@ -447,6 +466,11 @@ class WorkFlowContainer extends React.Component {
     });
 
     let editAction = {};
+
+    //hardcoded edit demand button for adding demand details
+    if((moduleName == "PT.CREATE" || moduleName == "PT.MUTATION" || moduleName == "ASMT") && (applicationState == "DOCVERIFIED" || applicationState == "PENDING_FIELD_INSPECTION")){
+      editDemands = true
+    }
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
       editAction = {
@@ -454,9 +478,21 @@ class WorkFlowContainer extends React.Component {
         moduleName: moduleName,
         tenantId: state.tenantId,
         isLast: true,
-        buttonUrl: (this.props.editredirect) ? this.props.editredirect : this.getRedirectUrl("EDIT", businessId, moduleName)
+        buttonUrl: (this.props.editredirect) ? this.props.editredirect : this.getRedirectUrl("EDIT", businessId, moduleName,applicationState)
       };
     }
+
+    //hardcoded edit demand button for adding demand details
+    if(editDemands && actions.length > 0 && roleIndex > -1){
+      editAction = {
+        buttonLabel: "EDIT_DEMANDS",
+        moduleName: moduleName,
+        tenantId: state.tenantId,
+        isLast: true,
+        buttonUrl: this.getRedirectUrl("EDIT", businessId, moduleName,applicationState)
+      };
+    }
+
     return editAction;
   };
 
@@ -490,7 +526,7 @@ class WorkFlowContainer extends React.Component {
         isLast: item.action === "PAY" ? true : false,
         buttonUrl: getRedirectUrl(item.action, businessId, businessService),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: (businessService === "NewWS1" || businessService === "ModifyWSConnection" || businessService === "ModifySWConnection" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_CONNECTION" && item.action !== "APPROVE_FOR_CONNECTION" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN" && item.action !== "SENT_BACK_TO_CITIZEN",
+        showEmployeeList: (businessService === "NewWS1" || businessService === "ModifyWSConnection" || businessService === "ModifySWConnection" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_CONNECTION" && item.action !== "APPROVE_FOR_CONNECTION" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
         roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
         isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
       };

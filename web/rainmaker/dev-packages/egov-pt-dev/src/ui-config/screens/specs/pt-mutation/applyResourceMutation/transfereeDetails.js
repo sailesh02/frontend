@@ -164,7 +164,7 @@ const commonApplicantInformation = () => {
         jsonPath:
           "Property.ownersTemp[0].relationship",
         data: [
-          { code: "FATHER" }, { code: "HUSBAND" }, {code: "MOTHER"}, {code: "BROTHER"}, {code: "SISTER"}, {code: "GRANDFATHER"}, {code: "GRANDMOTHER"}, {code: "FATHERINLAW"}, {code: "MOTHERINLAW"}, {code: "OTHER"}
+          { code: "FATHER" }, { code: "HUSBAND" }, {code: "MOTHER"}
         ],
         localePrefix: {
           moduleName: "common-masters",

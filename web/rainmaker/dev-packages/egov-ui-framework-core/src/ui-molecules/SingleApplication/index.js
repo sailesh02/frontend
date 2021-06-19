@@ -124,8 +124,7 @@ class SingleApplication extends React.Component {
             setRoute("/property-tax/application-preview?propertyId=" + item.propertyId + "&applicationNumber=" + item.acknowldgementNumber + "&tenantId=" + item.tenantId + "&type=property");
           }else if (businessService == 'PT.LEGACY') {
             setRoute("/property-tax/application-preview?propertyId=" + item.propertyId + "&applicationNumber=" + item.acknowldgementNumber + "&tenantId=" + item.tenantId + "&type=legacy");
-          }
-          else {
+          } else {
             console.log('Navigation Error');
           }
         } else {

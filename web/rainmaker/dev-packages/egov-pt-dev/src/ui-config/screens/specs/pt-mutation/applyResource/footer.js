@@ -10,6 +10,7 @@ import { prepareDocumentsUploadData } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter, validateFields } from "../../utils";
 import { onChangeTypeOfOwnership } from "../applyResourceMutation/transfereeDetails";
 import "./index.css";
+const isDemandDetails = getQueryArg(window.location.href, "demandDetails");
 
 
 const setReviewPageRoute = (state, dispatch) => {
@@ -496,6 +497,16 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep === 2) {
 
   }
+
+  if(activeStep == 3){
+    let applicationNumber =  getQueryArg(window.location.href, "applicationNumber")
+    let tenantId =  getQueryArg(window.location.href, "tenantId")
+    store.dispatch(
+      setRoute(
+        `/pt-mutation/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&demandDetails=true`
+      )
+    );
+  }
   if (activeStep !== 2) {
     if (isFormValid) {
 
@@ -553,6 +564,7 @@ export const changeStep = (
   mode = "next",
   defaultActiveStep = -1
 ) => {
+  let isDemandDetails = getQueryArg(window.location.href, "demandDetails");
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.div.children.stepper.props.activeStep",
@@ -661,6 +673,11 @@ export const getActionDefinationForStepper = path => {
     },
     {
       path: "components.div.children.formwizardFourthStep",
+      property: "visible",
+      value: false
+    },
+    {
+      path: "components.div.children.formwizardDemandDetailsStep",
       property: "visible",
       value: false
     }

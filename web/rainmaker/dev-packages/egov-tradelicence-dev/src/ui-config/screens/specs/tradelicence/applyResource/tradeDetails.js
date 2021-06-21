@@ -1063,6 +1063,22 @@ export const tradeDetails = getCommonCard({
       pattern: getPattern("TradeName"),
       jsonPath: "Licenses[0].tradeName"
     }),
+    oldLicenseNo: getTextField({
+      label: {
+        labelName: "Old License No",
+        labelKey: "TL_OLD_LICENSE_NO"
+      },
+      props: {
+        className: "applicant-details-error",
+        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
+      },
+      placeholder: {
+        labelName: "Enter Old License No",
+        labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
+      },
+
+      jsonPath: "Licenses[0].oldLicenseNumber"
+    }),
     // tradeFromDate: {
     //   ...getDateField({
     //     label: {
@@ -1327,22 +1343,22 @@ export const tradeDetails = getCommonCard({
     //   }
     // },
 
-    tradeGSTNo: getTextField({
-      label: {
-        labelName: "Trade GST No.",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
-      },
-      props: {
-        className: "applicant-details-error",
-        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
-      },
-      placeholder: {
-        labelName: "Enter Trade GST No.",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_PLACEHOLDER"
-      },
-      pattern: getPattern("GSTNo"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
-    }),
+    // tradeGSTNo: getTextField({
+    //   label: {
+    //     labelName: "Trade GST No.",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
+    //   },
+    //   props: {
+    //     className: "applicant-details-error",
+    //     disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
+    //   },
+    //   placeholder: {
+    //     labelName: "Enter Trade GST No.",
+    //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_PLACEHOLDER"
+    //   },
+    //   pattern: getPattern("GSTNo"),
+    //   jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
+    // }),
     // tradeOperationalArea: getTextField({
     //   label: {
     //     labelName: "Operatonal Area (Sq Ft)",
@@ -1375,6 +1391,7 @@ export const tradeDetails = getCommonCard({
     //   pattern: getPattern("NoOfEmp"),
     //   jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
     // })
+
     tradePurpose: getTextField({
       label: {
         labelName: "Trade Purpose",

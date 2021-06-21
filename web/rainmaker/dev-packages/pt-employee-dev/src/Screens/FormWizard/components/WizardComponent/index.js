@@ -6,6 +6,8 @@ import { Button } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import "./index.css";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+const mode = getQueryArg(window.location.href, "mode");
 
 
 
@@ -30,6 +32,15 @@ const ptSteps = [
   "PT_COMMON_SUMMARY",
 ];
 
+const ptWorkflowSteps = [
+  "PT_PROPERTY_ADDRESS_SUB_HEADER",
+  "PT_ASSESMENT_INFO_SUB_HEADER",
+  "PT_OWNERSHIP_INFO_SUB_HEADER",
+  "PT_DOCUMENT_INFO",
+  "PT_ADDITIONAL_DETAILS_INFO",
+  "PT_COMMON_SUMMARY"
+]
+
 const WizardComponent = ({
   downloadAcknowledgementForm,
   content,
@@ -50,6 +61,7 @@ const WizardComponent = ({
   ((selected == 5 || selected == 7)
     ? ((selected == 5) ? (backLabel = 'PT_APPLICATION_BUTTON_DOWN_CONF') : (backLabel = 'PT_ASSESS_PAY_FOR_NEW_YEAR'))
     : (backLabel))
+  let steps =  ( mode == "WORKFLOWEDIT" || mode == "editDemandDetails") ? ptWorkflowSteps : ptSteps
   return (
     <div className={`wizard-cont active-step-${selected}`}>
       {selected < 5 && <div>
@@ -62,11 +74,12 @@ const WizardComponent = ({
             }}
             className="stepper-container"
           >
-            {ptSteps.map((label) => {
+           {steps.map(label => {
               return (
                 <Step key={label}>
                   <StepLabel>
-                    <Label label={label} />
+
+                    <Label label={label} labelStyle={{ wordBreak: "inherit" }} />
                   </StepLabel>
                 </Step>
               );

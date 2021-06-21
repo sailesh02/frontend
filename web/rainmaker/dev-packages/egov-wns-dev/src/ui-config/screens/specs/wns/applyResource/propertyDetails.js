@@ -212,25 +212,6 @@ const propertyDetails = getCommonContainer({
 })
 
 const propertyDetailsNoId = getCommonContainer({
-  apartment: {
-    uiFramework: "custom-containers-local",
-    moduleName: "egov-wns",
-    componentPath: "CheckboxContainerConnHolder",
-    gridDefination: { xs: 12, sm: 12, md: 12 },
-    visible:false,
-    props: {
-      label: {
-        name: "Apartment",
-        key: "WS_COMMON_APARTMENT",
-      },
-      jsonPath: "applyScreen.apartment",
-      required: false,
-      isChecked: false,
-      isApartment:true
-    },
-    type: "array",
-    jsonPath: "applyScreen.apartment",
-  },
   city: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-pt",
@@ -751,7 +732,26 @@ const propertyDetailsNoId = getCommonContainer({
       xs: 12,
       sm: 6
     },
-  })
+  }),
+  apartment: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-wns",
+    componentPath: "CheckboxContainerConnHolder",
+    gridDefination: { xs: 12, sm: 12, md: 12 },
+    visible:false,
+    props: {
+      label: {
+        name: "Apartment",
+        key: "WS_COMMON_APARTMENT",
+      },
+      jsonPath: "applyScreen.apartment",
+      required: false,
+      isChecked: false,
+      isApartment:true
+    },
+    type: "array",
+    jsonPath: "applyScreen.apartment",
+  }
  
 
 });

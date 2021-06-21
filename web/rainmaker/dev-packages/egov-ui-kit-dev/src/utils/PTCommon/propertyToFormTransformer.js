@@ -15,6 +15,8 @@ const propertyAddress =
     ? require("egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyAddress").default
     : require("config/forms/specs/PropertyTaxPay/propertyAddress").default;
 
+const demandDetails = require("../../config/forms/specs/PropertyTaxPay/demandDetails").default; 
+
 const addData = (config, currentForm) => {
   let res = { ...config };
   Object.keys(config.fields).forEach((field) => {
@@ -66,6 +68,33 @@ export const getAllOwnerDetails = (property, isSingleOwner = false) => {
   return ownerForms;
 };
 
+export const getDemandDetails = (propertyRes) => {
+  let { Properties } = propertyRes;
+  if(!Properties[0].additionalDetails || (Properties[0].additionalDetails && Properties[0].additionalDetails.hasOwnProperty("isRainwaterHarvesting"))){
+    Properties[0].additionalDetails = 
+    {
+      "holdingTax":'0',
+      "lightTax":'0',
+      "waterTax":'0',
+      "drainageTax":'0',
+      "latrineTax":'0',
+      "parkingTax":'0',
+      "solidWasteUserCharges":'0',
+      "ownershipExemption":'0',
+      "usageExemption":'0',
+      "interest":'0',
+      "penalty":'0',
+      "totalAmount":'0'
+  }
+  }
+  
+  let demandDetailsForm = {
+    demandDetails: addData(cloneDeep(demandDetails), get(Properties[0], "additionalDetails", {})),
+  };
+
+  return demandDetailsForm;
+}
+
 export const getpropertyAddressDetails = (propertyRes) => {
   const { Properties } = propertyRes;
   const oldPIDPath = get(propertyAddress, "fields.oldPID.jsonPath", "");
@@ -114,7 +143,7 @@ export const getAssesmentDetails = (propertyResponse) => {
   return transformPropertyDataToAssessInfo(propertyResponse);
 };
 
-export const convertRawDataToFormConfig = (propertyResponse) => {
+export const convertRawDataToFormConfig = (propertyResponse,mode,assessment) => {
   const { Properties } = propertyResponse;
   let properties = Properties;
 
@@ -122,8 +151,16 @@ export const convertRawDataToFormConfig = (propertyResponse) => {
   let ownerForms = {};
   let institutionAuthority = {};
   let institutionDetails = {};
+  let demandDetails = {}
+  let demandDetailsAsmt = {}
   let ownerShipForm = getOwnerShipDetails(properties[0]);
   let propertyAddress = getpropertyAddressDetails(propertyResponse);
+  if(mode == "WORKFLOWEDIT"){
+     demandDetails = getDemandDetails(propertyResponse)
+  }
+  if(mode == "editDemandDetails"){
+    demandDetailsAsmt = getDemandDetails(propertyResponse)
+  }
   let assessmentForms = getAssesmentDetails(propertyResponse);
   const ownershipType = get(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", "");
   const typeOfOwnershipPath = get(ownerShipForm, "ownershipType.fields.ownershipCategory.jsonPath", "");
@@ -140,14 +177,43 @@ export const convertRawDataToFormConfig = (propertyResponse) => {
     set(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", "SINGLEOWNER");
   }
 
-  return {
-    // ...res,
-    ...propertyAddress,
-    ...assessmentForms,
-    ...ownerForms,
-    ...ownerShipForm,
-    ...institutionAuthority,
-    ...institutionDetails,
-    // selectedTabIndex: 3,
-  };
+  if(mode == "WORKFLOWEDIT"){
+      return {
+        // ...res,
+        ...propertyAddress,
+        ...assessmentForms,
+        ...ownerForms,
+        ...ownerShipForm,
+        ...institutionAuthority,
+        ...institutionDetails,
+        ...demandDetails
+        // selectedTabIndex: 3,
+      };
+  
+  }else if(mode == "editDemandDetails"){
+    return {
+      // ...res,
+      ...propertyAddress,
+      ...assessmentForms,
+      ...ownerForms,
+      ...ownerShipForm,
+      ...institutionAuthority,
+      ...institutionDetails,
+      ...demandDetailsAsmt
+      // selectedTabIndex: 3,
+    };
+  }
+  else{
+    return {
+      // ...res,
+      ...propertyAddress,
+      ...assessmentForms,
+      ...ownerForms,
+      ...ownerShipForm,
+      ...institutionAuthority,
+      ...institutionDetails,
+      // selectedTabIndex: 3,
+    };
+  }
+  
 };

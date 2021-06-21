@@ -197,6 +197,8 @@ const InstitutionAuthority = ({ form, formKey, handleFieldChange, cardTitle, for
 
 const UsageInformationHOC = formHoc({ formKey: "basicInformation", path: "PropertyTaxPay", isCoreConfiguration: true })(GenericForm);
 const PropertyAddressHOC = formHoc({ formKey: "propertyAddress", path: "PropertyTaxPay" })(GenericForm);
+const AdditionalInfoHOC = formHoc({ formKey: "demandDetails", path: "PropertyTaxPay", isCoreConfiguration: true })(GenericForm);
+const DemandDetailsASMTHOC = formHoc({formKey:"demandDetailsAsmt", path: "PropertyTaxPay", isCoreConfiguration: true })(GenericForm);
 //const PlotInformationHOC = formHoc({ formKey: "plotInformation", path: "PropertyTaxPay",isCoreConfiguration:true})(GenericForm);
 const OwnershipTypeHOC = formHoc({ formKey: "ownershipType", path: "PropertyTaxPay", isCoreConfiguration: true })(GenericForm);
 const OwnerInfoHOC = formHoc({ formKey: "ownerInfo", path: "PropertyTaxPay", isCoreConfiguration: true })(OwnerInformation);
@@ -223,4 +225,7 @@ export {
   OwnerInformation,
   InstitutionHOC,
   InstitutionAuthorityHOC,
+  AdditionalInfoHOC, // demand details for new property
+  DemandDetailsASMTHOC // demand details for assessment
+
 };

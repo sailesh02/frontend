@@ -336,22 +336,31 @@ const setSearchResponse = async (
 
   if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
     const propertiesAudit = get(auditResponse, "Properties", []);
-
     const propertyIndex=property.status ==  'ACTIVE' ? 1:0;
     const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
 
 
-    property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
-    property.ownersInit = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE"); 
+    property.ownershipCategoryInit = previousActiveProperty && previousActiveProperty.ownershipCategory;
+    property.ownersInit = previousActiveProperty && previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE"); 
   }
 
 
   // auditResponse
+  const mode = getQueryArg(window.location.href, "mode");
   dispatch(prepareFinalObject("Assessment", assessment));
+ 
+  if(mode == "editDemandDetails"){
+    const {screenConfiguration} = state
+    const {preparedFinalObject} = screenConfiguration
+    const {Properties} = preparedFinalObject
+    dispatch(prepareFinalObject("Assessment.additionalDetails", Properties && Properties[0] && Properties[0].additionalDetails));
+  }
   dispatch(prepareFinalObject("Property", property));
   dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
   prepareDocumentsView(state, dispatch);
-
+  if(assessment.additionalDetails){
+    dispatch(prepareFinalObject("Properties[0].additionalDetails", assessment.additionalDetails));
+  }
   await loadPdfGenerationData(applicationNumber, tenantId);
 //   setDownloadMenu(state, dispatch, tenantId, applicationNumber);
 };
@@ -439,7 +448,7 @@ const screenConfig = {
             return role.code;
           })
           : [];
-    const isApprover = roleCodes.includes("PT_APPROVER")
+    const isApprover = roleCodes.includes("PT_APPROVER") || roleCodes.includes("PT_FIELD_INSPECTOR")
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",

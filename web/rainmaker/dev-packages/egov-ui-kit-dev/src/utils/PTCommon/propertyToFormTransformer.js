@@ -16,7 +16,6 @@ const propertyAddress =
     : require("config/forms/specs/PropertyTaxPay/propertyAddress").default;
 
 const demandDetails = require("../../config/forms/specs/PropertyTaxPay/demandDetails").default; 
-const demandDetailsAsmt = require("../../config/forms/specs/PropertyTaxPay/demandDetailsAsmt").default  
 
 const addData = (config, currentForm) => {
   let res = { ...config };
@@ -96,30 +95,6 @@ export const getDemandDetails = (propertyRes) => {
   return demandDetailsForm;
 }
 
-export const getDemandDetailsAsmt = (assessment) => {
-  if(!assessment.additionalDetails){
-    assessment.additionalDetails = 
-    {
-      "holdingTax":'0',
-      "lightTax":'0',
-      "waterTax":'0',
-      "drainageTax":'0',
-      "latrineTax":'0',
-      "parkingTax":'0',
-      "solidWasteUserCharges":'0',
-      "ownershipExemption":'0',
-      "usageExemption":'0',
-      "interest":'0',
-      "penalty":'0',
-      "totalAmount":'0'
-  }
-  }
-  let demandDetailsAsmtForm = {
-    demandDetailsAsmt: addData(cloneDeep(demandDetailsAsmt), get(assessment, "additionalDetails", {})),
-  };
-
-  return demandDetailsAsmtForm;
-}
 export const getpropertyAddressDetails = (propertyRes) => {
   const { Properties } = propertyRes;
   const oldPIDPath = get(propertyAddress, "fields.oldPID.jsonPath", "");

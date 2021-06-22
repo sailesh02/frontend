@@ -1063,6 +1063,7 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
   }
 }
 
+
 export const downloadProvisionalCertificateForm = async (Licenses, mode = 'download') => {
   let tenantId = get(Licenses[0], "tenantId");
   let applicationNumber = get(Licenses[0], "applicationNumber")
@@ -1087,6 +1088,56 @@ export const downloadProvisionalCertificateForm = async (Licenses, mode = 'downl
   const LicensesPayload = await getSearchResults(queryObject);
   const updatedLicenses = get(LicensesPayload, "Licenses");
   const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
+  if (oldFileStoreId) {
+    downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+  }
+  else {
+    try {
+      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        .then(res => {
+          res.filestoreIds[0]
+          if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+            res.filestoreIds.map(fileStoreId => {
+              downloadReceiptFromFilestoreID(fileStoreId, mode)
+            })
+          } else {
+            console.log("Error In Acknowledgement form Download");
+          }
+        });
+    } catch (exception) {
+      alert('Some Error Occured while downloading Acknowledgement form!');
+    }
+  }
+}
+
+export const downloadProvisionalCertificateFormPaymentSuccess = async (Licenses, mode = 'download') => {
+  //let tenantId = get(Licenses[0], "tenantId");
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  //let applicationNumber = get(Licenses[0], "applicationNumber")
+  let applicationNumber = getQueryArg(window.location.href, "consumerCode");
+  //const applicationType = Licenses && Licenses.length > 0 ? get(Licenses[0], "applicationType") : "NEW";
+  const queryStr = [
+    { key: "key", value: "tplcertificate" },
+    { key: "tenantId", value: "od" }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    {
+      key: "applicationNumber",
+      value: applicationNumber
+    }
+  ];
+  const LicensesPayload = await getSearchResults(queryObject);
+
+  const updatedLicenses = get(LicensesPayload, "Licenses");
+  const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
+   Licenses = updatedLicenses;
   if (oldFileStoreId) {
     downloadReceiptFromFilestoreID(oldFileStoreId, mode)
   }

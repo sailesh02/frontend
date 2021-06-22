@@ -183,6 +183,16 @@ export const tradeReviewDetails = {
     },
     { jsonPath: "Licenses[0].tradeName" }
   ),
+  oldLicenseNo: getLabelWithValue(
+    {
+      labelName: "Old License No",
+      labelKey: "TL_OLD_LICENSE_NO"
+    },
+    {
+      jsonPath: "Licenses[0].oldLicenseNumber",
+      callBack: checkValueForNA
+    }
+  ),
   // reviewFromDate: getLabelWithValue(
   //   { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
   //   {
@@ -239,26 +249,26 @@ export const tradeReviewDetails = {
   //   }
   // ),
 
-  reviewGSTNo: getLabelWithValue(
-    {
-      labelName: "GST No.",
-      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
-    },
-    {
-      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo",
-      callBack: checkValueForNA
-    }
-  ),
-  reviewOperationalArea: getLabelWithValue(
-    {
-      labelName: "Operational Area",
-      labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
-    },
-    {
-      jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea",
-      callBack: checkValueForNA
-    }
-  ),
+  // reviewGSTNo: getLabelWithValue(
+  //   {
+  //     labelName: "GST No.",
+  //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
+  //   },
+  //   {
+  //     jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo",
+  //     callBack: checkValueForNA
+  //   }
+  // ),
+  // reviewOperationalArea: getLabelWithValue(
+  //   {
+  //     labelName: "Operational Area",
+  //     labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
+  //   },
+  //   {
+  //     jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea",
+  //     callBack: checkValueForNA
+  //   }
+  // ),
   // reviewNoOfEmployee: getLabelWithValue(
   //   {
   //     labelName: "No of Employees",
@@ -269,6 +279,7 @@ export const tradeReviewDetails = {
   //     callBack: checkValueForNA
   //   }
   // )
+
   tradePurpose: getLabelWithValue(
     {
       labelName: "Trade Purpose",

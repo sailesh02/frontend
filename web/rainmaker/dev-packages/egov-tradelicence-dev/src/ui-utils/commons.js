@@ -418,6 +418,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       "validTo",
       convertDateToEpoch(queryObject[0].validTo, "dayend")
     );
+    console.log(queryObject[0].commencementDate, "Nero commencement date first")
+    let commencementDateToAddYears = queryObject[0] && queryObject[0].commencementDate;
     if (queryObject[0] && queryObject[0].commencementDate) {
       queryObject[0].commencementDate = convertDateToEpoch(
         queryObject[0].commencementDate,
@@ -459,6 +461,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     let tlType = get(queryObject[0], "licenseType");
     let TlPeriod = get(queryObject[0], "TlPeriod");
     let tlcommencementDate = get(queryObject[0], "commencementDate");
+
     let tlPeriodDisplay = "";
     if (tlType && tlType === "TEMPORARY" && validTo && tlcommencementDate) {
       //var date1 = new Date(tlcommencementDate);
@@ -479,8 +482,14 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       set(queryObject[0], "tradeLicenseDetail.additionalDetail.licensePeriod", TlPeriod);
       tlPeriodDisplay = `${TlPeriod} Years`;
       set(queryObject[0], "validFrom", tlcommencementDate);
-      let selectedYearInMiliSeconds = 1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
-      set(queryObject[0], "validTo", tlcommencementDate + selectedYearInMiliSeconds);
+     // let selectedYearInMiliSeconds = 1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
+
+     var dt = new Date(commencementDateToAddYears);
+     let dt1 = new Date(dt.setFullYear(dt.getFullYear() + Number(TlPeriod)));
+
+
+     // set(queryObject[0], "validTo", tlcommencementDate + selectedYearInMiliSeconds);
+     set(queryObject[0], "validTo", dt1.getTime());
     }
     dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", tlPeriodDisplay));
 

@@ -196,6 +196,16 @@ export const updatePFOforSearchResults = async (
         true
       )
     );
+
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
+        "visible",
+        true
+      )
+    );
+
   }
 
   let tlStatus = get(payload.Licenses[0], 'status', "");

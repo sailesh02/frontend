@@ -96,7 +96,7 @@ const screenConfig = {
     if (applicationNo) {
       updateSearchResults(action, state, dispatch, applicationNo, tenantId);
     } else {
-      console.log("Nero first Call")
+
       getData(action, state, dispatch, tenantId);
 
       const applyFor = window.localStorage.getItem('licenseType');
@@ -140,6 +140,13 @@ const screenConfig = {
             "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate.visible",
 
             false
+
+        );
+        set(
+          action.screenConfig,
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo.visible",
+
+            true
 
         );
         set(

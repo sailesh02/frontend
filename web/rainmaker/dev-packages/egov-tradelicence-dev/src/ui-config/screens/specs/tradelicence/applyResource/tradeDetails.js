@@ -1076,7 +1076,7 @@ export const tradeDetails = getCommonCard({
         labelName: "Enter Old License No",
         labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
       },
-
+      visible: false,
       jsonPath: "Licenses[0].oldLicenseNumber"
     }),
     // tradeFromDate: {

@@ -56,28 +56,35 @@ const downloadprintMenu = (
   };
 
 
-  let tlPLDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
-    link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadProvisionalCertificateFormPaymentSuccess(Licenses);
-    },
-    leftIcon: "book"
-  };
 
-  let tlPLPrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
-    link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadProvisionalCertificateFormPaymentSuccess(Licenses, 'print');
-    },
-    leftIcon: "book"
-  };
   let downloadMenu = [];
   let printMenu = [];
+  const businessService = getQueryArg(window.location, "businessService");
+  if(businessService && businessService === "TL"){
+    let tlPLDownloadObject = {
+      label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
+      link: () => {
+        const { Licenses } = state.screenConfiguration.preparedFinalObject;
+        downloadProvisionalCertificateFormPaymentSuccess(Licenses);
+      },
+      leftIcon: "book"
+    };
+
+    let tlPLPrintObject = {
+      label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
+      link: () => {
+        const { Licenses } = state.screenConfiguration.preparedFinalObject;
+        downloadProvisionalCertificateFormPaymentSuccess(Licenses, 'print');
+      },
+      leftIcon: "book"
+    };
+
   downloadMenu = [receiptDownloadObject, tlPLDownloadObject];
   printMenu = [receiptPrintObject, tlPLPrintObject];
-
+  }else{
+  downloadMenu = [receiptDownloadObject];
+  printMenu = [receiptPrintObject];
+  }
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
@@ -136,7 +143,7 @@ const getAcknowledgementCard = (
   consumerCode,
   tenant
 ) => {
-  console.log("Nero Kumar nj")
+
   const roleExists = ifUserRoleExists("CITIZEN");
   let header = getHeader(state);
   const businessService = getQueryArg(window.location.href, "businessService");

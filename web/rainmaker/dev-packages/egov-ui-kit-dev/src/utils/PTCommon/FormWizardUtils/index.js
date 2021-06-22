@@ -233,6 +233,7 @@ export const getTargetPropertiesDetails = (propertyDetails, self) => {
   }
   selectedPropertyDetails[lastIndex].units =
     selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && convertUnitsToSqFt(selectedPropertyDetails[lastIndex].units);
+    selectedPropertyDetails[lastIndex].landArea = selectedPropertyDetails[lastIndex].landArea && Math.round(selectedPropertyDetails[lastIndex].landArea) || 0
   return [selectedPropertyDetails[lastIndex]];
 };
 

@@ -354,17 +354,17 @@ export const tradeLocationDetails = {
     },
     { jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode", callBack: checkValueForNA }
   ),
-  reviewElectricityNo: getLabelWithValue(
-    {
-      labelName: "Electricity Connection No.",
-      labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_LABEL"
-    },
-    {
-      jsonPath:
-        "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo",
-      callBack: checkValueForNA
-    }
-  )
+  // reviewElectricityNo: getLabelWithValue(
+  //   {
+  //     labelName: "Electricity Connection No.",
+  //     labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_LABEL"
+  //   },
+  //   {
+  //     jsonPath:
+  //       "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo",
+  //     callBack: checkValueForNA
+  //   }
+  // )
 }
 export const getReviewTrade = (isEditable = true) => {
   return getCommonGrayCard({

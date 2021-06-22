@@ -37,7 +37,7 @@ const formConfig = {
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
-        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)));
       }
     },
     lightTax: {
@@ -63,7 +63,7 @@ const formConfig = {
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
-        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)));
       }
     },
     waterTax: {
@@ -89,7 +89,7 @@ const formConfig = {
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
-        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)));
       }
     },
     drainageTax: {
@@ -115,7 +115,7 @@ const formConfig = {
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
-        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)));
       }
     },
     latrineTax: {
@@ -141,7 +141,7 @@ const formConfig = {
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
-        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)));
       }
     },
     parkingTax: {
@@ -167,7 +167,7 @@ const formConfig = {
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
-        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)));
       }
     },
     solidWasteUserCharges: {
@@ -193,7 +193,7 @@ const formConfig = {
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
-        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)));
       }
     },
     ownershipExemption: {
@@ -219,7 +219,7 @@ const formConfig = {
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
-        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)));
       }
     },
     usageExemption: {
@@ -245,7 +245,7 @@ const formConfig = {
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
-        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)));
       }
     },
     interest: {
@@ -271,7 +271,7 @@ const formConfig = {
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
-        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total));
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)));
       }
     },
     penalty: {
@@ -310,7 +310,7 @@ const formConfig = {
       errorMessage: "PT_TOTAL_AMOUNT_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
-      pattern: /^[1-9][0-9]{0,50}$/
+      pattern: /^[1-9]\d*(?:\.\d+)?$/
     }
    
   },
@@ -320,6 +320,7 @@ const formConfig = {
       if(mode == "editDemandDetails"){
         let state = store.getState();
         const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties && state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        if(additionalDetails){
           let amountArray = []
           for (const [key, value] of Object.entries(additionalDetails)) {
             if(key == "usageExemption" || key == "ownershipExemption"){
@@ -329,67 +330,24 @@ const formConfig = {
             }
           }
           const total = amountArray.reduce((a, b) => a + b, 0)
-        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)),0);
-        if(additionalDetails){
-          dispatch(setFieldProperty("demandDetails", "holdingTax", "value", additionalDetails.holdingTax),0);
-          dispatch(setFieldProperty("demandDetails", "lightTax", "value", additionalDetails.lightTax),0)
-          dispatch(setFieldProperty("demandDetails", "waterTax", "value", additionalDetails.waterTax),0)
-          dispatch(setFieldProperty("demandDetails", "drainageTax", "value", additionalDetails.drainageTax),0)
-          dispatch(setFieldProperty("demandDetails", "latrineTax", "value", additionalDetails.latrineTax),0)
-          dispatch(setFieldProperty("demandDetails", "parkingTax", "value", additionalDetails.parkingTax),0)
-          dispatch(setFieldProperty("demandDetails", "solidWasteUserCharges", "value", additionalDetails.solidWasteUserCharges),0)
-          dispatch(setFieldProperty("demandDetails", "ownershipExemption", "value", additionalDetails.ownershipExemption),0)
-          dispatch(setFieldProperty("demandDetails", "usageExemption", "value", additionalDetails.usageExemption),0)
-          dispatch(setFieldProperty("demandDetails", "interest", "value", additionalDetails.interest),0)
-          dispatch(setFieldProperty("demandDetails", "penalty", "value", additionalDetails.penalty),0)   
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)),"0");
+          dispatch(setFieldProperty("demandDetails", "holdingTax", "value", additionalDetails.holdingTax),"0");
+          dispatch(setFieldProperty("demandDetails", "lightTax", "value", additionalDetails.lightTax),"0")
+          dispatch(setFieldProperty("demandDetails", "waterTax", "value", additionalDetails.waterTax),"0")
+          dispatch(setFieldProperty("demandDetails", "drainageTax", "value", additionalDetails.drainageTax),"0")
+          dispatch(setFieldProperty("demandDetails", "latrineTax", "value", additionalDetails.latrineTax),"0")
+          dispatch(setFieldProperty("demandDetails", "parkingTax", "value", additionalDetails.parkingTax),"0")
+          dispatch(setFieldProperty("demandDetails", "solidWasteUserCharges", "value", additionalDetails.solidWasteUserCharges),"0")
+          dispatch(setFieldProperty("demandDetails", "ownershipExemption", "value", additionalDetails.ownershipExemption),"0")
+          dispatch(setFieldProperty("demandDetails", "usageExemption", "value", additionalDetails.usageExemption),"0")
+          dispatch(setFieldProperty("demandDetails", "interest", "value", additionalDetails.interest),"0")
+          dispatch(setFieldProperty("demandDetails", "penalty", "value", additionalDetails.penalty),"0")   
       }
       
       }
     }catch(err){
       console.log(err)
     }
-    // try {
-    //   let state = store.getState();
-    //   const { localizationLabels } = state.app;
-    //   const { cities, citiesByModule } = state.common;
-    //   const PT = citiesByModule && citiesByModule.PT;
-    //   if (PT) {
-    //     const tenants = PT.tenants;
-    //     const dd = tenants.reduce((dd, tenant) => {
-    //       let selected = cities.find((city) => {
-    //         return city.code === tenant.code;
-    //       });
-
-    //       selected.code = selected.code && selected.code.trim()
-    //       const label = `TENANT_TENANTS_${selected.code.toUpperCase().replace(/[.]/g, "_")}`;
-    //       dd.push({ label: getTranslatedLabel(label, localizationLabels), value: selected.code });
-    //       return dd;
-    //     }, []);
-
-    //     dispatch(setFieldProperty("propertyAddress", "city", "dropDownData", sortBy(dd, ["label"])));
-    //   }
-    //   const tenant = get(state, 'form.propertyAddress.fields.city.value', null);
-    //   const mohallaDropDownData = get(state, 'form.propertyAddress.fields.mohalla.dropDownData', []);
-
-    //   if (process.env.REACT_APP_NAME === "Citizen" && tenant && mohallaDropDownData.length == 0) {
-    //     const dataFetchConfig = {
-    //       url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-    //       action: "",
-    //       queryParams: [{
-    //         key: "tenantId",
-    //         value: tenant
-    //       }],
-    //       requestBody: {},
-    //       isDependent: true,
-    //       hierarchyType: "REVENUE"
-    //     }
-    //     fetchDropdownData(dispatch, dataFetchConfig, 'propertyAddress', 'mohalla', state, true);
-    //   }
-    //   return action;
-    // } catch (e) {
-    //   console.log(e);
-    //   return action;
-    // }
   },
   action: "",
   redirectionRoute: "",

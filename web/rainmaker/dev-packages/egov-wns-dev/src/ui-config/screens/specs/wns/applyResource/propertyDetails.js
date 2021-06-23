@@ -599,6 +599,7 @@ const propertyDetailsNoId = getCommonContainer({
     },
     jsonPath: "applyScreen.connectionType",
     visible: true,
+    required: true,
     localePrefix: {
       moduleName: "WS",
       masterName: "PROPTYPE"
@@ -683,7 +684,7 @@ const propertyDetailsNoId = getCommonContainer({
     },
     data: [],
     jsonPath: "applyScreen.usageCategory",
-    // required: true,
+    required: true,
     localePrefix: {
       moduleName: "WS",
       masterName: "PROPTYPE"
@@ -725,9 +726,11 @@ const propertyDetailsNoId = getCommonContainer({
       labelName: "Enter No of Flats.",
       labelKey: "WS_PROPERTY_NO_OF_FLATS_PLACEHOLDER"
     },
-    value:0,
+    // value:0,
     visible:false,
+    required: true,
     jsonPath: "applyScreen.noOfFlats",
+    pattern: /^[1-9]*$/i,
     gridDefination: {
       xs: 12,
       sm: 6
@@ -739,13 +742,14 @@ const propertyDetailsNoId = getCommonContainer({
     componentPath: "CheckboxContainerConnHolder",
     gridDefination: { xs: 12, sm: 12, md: 12 },
     visible:false,
+    required: true,
     props: {
       label: {
         name: "Apartment",
         key: "WS_COMMON_APARTMENT",
       },
       jsonPath: "applyScreen.apartment",
-      required: false,
+      required: true,
       isChecked: false,
       isApartment:true
     },

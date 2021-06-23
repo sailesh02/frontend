@@ -764,10 +764,13 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
     case 'TradeLicense':
       if (closePopUp) {
         return (state, dispatch) => {
+          let applyTlfor = window.localStorage.getItem('licenseType');
+          console.log(applyTlfor, "Nero Hello 1")
+          console.log(state, "Nero Stateff")
           dispatch(prepareFinalObject("Licenses", []));
           dispatch(prepareFinalObject("LicensesTemp", []));
           dispatch(prepareFinalObject("DynamicMdms", {}));
-          const applyUrl = `/tradelicence/apply?tenantId=${tenant}`;
+          const applyUrl = `/tradelicence/apply?tenantId=${tenant}&licenseType=${applyTlfor}`;
           dispatch(
             handleField("search", "components.adhocDialog", "props.open", false)
           );

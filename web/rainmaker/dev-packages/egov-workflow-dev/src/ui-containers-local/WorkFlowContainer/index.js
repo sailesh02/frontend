@@ -363,7 +363,7 @@ class WorkFlowContainer extends React.Component {
     else if (moduleName === "PT.CREATE" || moduleName === "PT.LEGACY") {
       return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
     } else if (moduleName === "PT.MUTATION") {
-      if(process.env.REACT_APP_NAME === "Employee"){
+      if(process.env.REACT_APP_NAME === "Employee" && action == "EDIT_DEMAND"){
         let {Property} = preparedFinalObject
         let acknowldgementNumber = Property.acknowldgementNumber
         baseUrl = "pt-mutation";
@@ -489,7 +489,7 @@ class WorkFlowContainer extends React.Component {
         moduleName: moduleName,
         tenantId: state.tenantId,
         isLast: true,
-        buttonUrl: this.getRedirectUrl("EDIT", businessId, moduleName,applicationState)
+        buttonUrl: this.getRedirectUrl("EDIT_DEMAND", businessId, moduleName,applicationState)
       };
     }
 

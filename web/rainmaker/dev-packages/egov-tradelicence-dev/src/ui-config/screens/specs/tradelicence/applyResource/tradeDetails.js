@@ -1154,6 +1154,8 @@ export const tradeDetails = getCommonCard({
               get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
             )
           );
+          let applyForTL = get(queryObject[0], "licenseType", null);
+          if(applyForTL === "TEMPORARY"){
           let tlcommencementDate = action.value;
 
 
@@ -1189,7 +1191,7 @@ export const tradeDetails = getCommonCard({
               }
             }
           }
-
+        }
 
         }
       },

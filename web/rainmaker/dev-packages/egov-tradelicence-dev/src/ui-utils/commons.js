@@ -494,7 +494,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       set(queryObject[0], "validFrom", tlcommencementDate);
      // let selectedYearInMiliSeconds = 1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
 
-     var dt = new Date(commencementDateToAddYears);
+     var dt = new Date(queryObject[0] && queryObject[0].commencementDate);
      let dt1 = new Date(dt.setFullYear(dt.getFullYear() + Number(TlPeriod)));
 
 

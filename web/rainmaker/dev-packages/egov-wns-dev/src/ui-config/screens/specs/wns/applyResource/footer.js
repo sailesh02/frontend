@@ -497,6 +497,18 @@ const callBackForNext = async (state, dispatch) => {
         // if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
         //   setReviewPageRoute(state, dispatch);
         // }
+        if (process.env.REACT_APP_NAME === "Employee" && (getQueryArg(window.location.href, "modeaction") === "edit" &&
+        getQueryArg(window.location.href,"mode") == "MODIFY" && getQueryArg(window.location.href,"action") == "edit")) {
+          let appendUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+          let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
+          let tenantId = getQueryArg(window.location.href, "tenantId")
+          let reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited="true"`;
+          if (isModifyMode() && isModifyModeAction()) {
+            reviewUrl += "&mode=MODIFY"
+          }
+          dispatch(setRoute(reviewUrl));
+          }
       }
       else {
         isFormValid = true;

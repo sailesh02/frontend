@@ -499,7 +499,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
 
      // set(queryObject[0], "validTo", tlcommencementDate + selectedYearInMiliSeconds);
-     set(queryObject[0], "validTo", dt1.getTime());
+     //set(queryObject[0], "validTo", dt1.getTime());
     }
     dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", tlPeriodDisplay));
 

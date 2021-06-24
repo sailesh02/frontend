@@ -2081,7 +2081,8 @@ class FormWizard extends Component {
         </div>
         <WizardComponent
           downloadAcknowledgementForm={this.downloadAcknowledgementForm}
-          content={(mode == "WORKFLOWEDIT" || mode == "editDemandDetails") ? renderStepperContentWorkflow(selected, fromReviewPage): renderStepperContent(selected, fromReviewPage)}          onTabClick={this.onTabClick}
+          content={(mode == "WORKFLOWEDIT" || mode == "editDemandDetails") ? renderStepperContentWorkflow(selected, fromReviewPage): renderStepperContent(selected, fromReviewPage)}          
+          onTabClick={this.onTabClick}
           selected={selected}
           header={getHeaderLabel(selected, "employee")}
           footer={null}

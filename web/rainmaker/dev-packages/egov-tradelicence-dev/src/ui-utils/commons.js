@@ -209,8 +209,8 @@ export const updatePFOforSearchResults = async (
   }
 
   let tlStatus = get(payload.Licenses[0], 'status', "");
-
-  if (tlStatus && tlStatus != "INITIATED") {
+  let userAction = getQueryArg(window.location.href, "action");
+  if (tlStatus && (tlStatus != "INITIATED") && userAction != "EDITRENEWAL") {
 
     // let selectedTrades = get(
     //   state.screenConfiguration.screenConfig.apply,
@@ -218,9 +218,9 @@ export const updatePFOforSearchResults = async (
     //   null
     // )
 
-    let tradeDetails = get(payload.Licenses[0],'tradeLicenseDetail',"{}");
+    let tradeDetails = get(payload.Licenses[0], 'tradeLicenseDetail', "{}");
 
-  let selectedTrades = get(tradeDetails, "tradeUnits", [])
+    let selectedTrades = get(tradeDetails, "tradeUnits", [])
 
     if (selectedTrades && selectedTrades.length > 0) {
       for (let i = 0; i < selectedTrades.length; i++) {
@@ -252,6 +252,33 @@ export const updatePFOforSearchResults = async (
         );
       }
     }
+
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+        "props.disabled",
+        true
+      )
+    );
+
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod",
+        "props.disabled",
+        true
+      )
+    );
+
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeCommencementDate",
+        "props.disabled",
+        true
+      )
+    );
 
   }
   if (payload && payload.Licenses) {
@@ -492,18 +519,19 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       set(queryObject[0], "tradeLicenseDetail.additionalDetail.licensePeriod", TlPeriod);
       tlPeriodDisplay = `${TlPeriod} Years`;
       set(queryObject[0], "validFrom", tlcommencementDate);
-     // let selectedYearInMiliSeconds = 1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
+      // let selectedYearInMiliSeconds = 1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
 
-     var dt = new Date(queryObject[0] && queryObject[0].commencementDate);
-     let dt1 = new Date(dt.setFullYear(dt.getFullYear() + Number(TlPeriod)));
+      var dt = new Date(queryObject[0] && queryObject[0].commencementDate);
+      let dt1 = new Date(dt.setFullYear(dt.getFullYear() + Number(TlPeriod)));
 
 
-     // set(queryObject[0], "validTo", tlcommencementDate + selectedYearInMiliSeconds);
-     //set(queryObject[0], "validTo", dt1.getTime());
+      // set(queryObject[0], "validTo", tlcommencementDate + selectedYearInMiliSeconds);
+      //set(queryObject[0], "validTo", dt1.getTime());
     }
     dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", tlPeriodDisplay));
 
     if (queryObject[0].applicationNumber) {
+      let TlStatus = get(queryObject[0], "status");
       //call update
       const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
       if (isEditRenewal) {
@@ -513,9 +541,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         // }
         set(queryObject[0], "applicationType", "RENEWAL");
         set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));
+        if (TlStatus === "EXPIRED" || TlStatus === "APPROVED") {
 
-        const validFrom = 1000 * 60 * 60 * 24 + validTo;
-        set(queryObject[0], "validFrom", validFrom);
+
+          const validFrom = 1000 * 60 * 60 * 24 + validTo;
+          set(queryObject[0], "validFrom", validFrom);
+        }
       }
 
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");

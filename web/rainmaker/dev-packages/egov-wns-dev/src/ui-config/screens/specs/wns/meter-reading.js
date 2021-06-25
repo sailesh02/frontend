@@ -44,13 +44,9 @@ const addMeterReading = async (state, dispatch) => {
 
         let arraySize = payloadData.WaterConnection.length;
         let isApplicationApproved;
-        if(arraySize === 1){
-            isApplicationApproved = payloadData.WaterConnection[0].applicationStatus === APPLICATIONSTATE.CONNECTIONACTIVATED &&
+
+        isApplicationApproved = payloadData.WaterConnection[0].applicationStatus === APPLICATIONSTATE.CONNECTIONACTIVATED &&
                 payloadData.WaterConnection[0].status === APPLICATIONSTATE.STATUS ? true : false
-        }else if(arraySize > 1){
-            isApplicationApproved = payloadData.WaterConnection[0].applicationStatus === APPLICATIONSTATE.APPROVED &&
-                payloadData.WaterConnection[0].status === APPLICATIONSTATE.STATUS ? true : false
-        }
 
         if(!isApplicationApproved){
             dispatch(toggleSpinner());

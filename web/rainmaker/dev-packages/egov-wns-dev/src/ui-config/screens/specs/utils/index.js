@@ -272,8 +272,8 @@ export const handleService = params => {
 }
 
 export const handleNA = params => {
-  if (params !== undefined && params !== null && params !== "" && params!==0) {
-    return params;
+  if (params !== undefined && params !== null && params !== "" ) {
+    return ""+params+"";
   } else { return "NA"; }
 }
 

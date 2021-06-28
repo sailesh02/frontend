@@ -95,8 +95,8 @@ export const getReviewOwner = (isEditable = true) => {
     // viewOne: propertyDetails,
     // viewTwo: propertyLocationDetails
     viewFive: connectionDetailsHeader,
-    viewSixWS: renderServiceForWater(),
-    viewSixVS: renderServiceForSW(),
+    viewSixWS: renderService(),
+    // viewSixVS: renderService(),
     // viewSix: connectionDetails,
     viewSeven: connectionChargeDetailsHeader,
     viewEight: connectionChargeDetails,

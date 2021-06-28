@@ -261,6 +261,18 @@ const callBackForNext = async (state, dispatch) => {
                 if (validateFeildsForWater(applyScreenObject)) {
                   isFormValid = true;
                   hasFieldToaster = false;
+                  if(applyScreenObject.usageCategory === "" || applyScreenObject.usageCategory === null ||
+                    applyScreenObject.usageCategory === undefined){
+                      isFormValid = false;
+                      hasFieldToaster = true;
+                    }
+                  if(applyScreenObject.usageCategory === "DOMESTIC"){
+                    if(applyScreenObject.noOfFlats === "" || applyScreenObject.noOfFlats === null ||
+                     applyScreenObject.noOfFlats === undefined){
+                        isFormValid = false;
+                        hasFieldToaster = true;
+                    }
+                  }
                 } else {
                   isFormValid = false;
                   dispatch(
@@ -277,6 +289,18 @@ const callBackForNext = async (state, dispatch) => {
                 if (validateFeildsForSewerage(applyScreenObject)) {
                   isFormValid = true;
                   hasFieldToaster = false;
+                  if(applyScreenObject.usageCategory === "" || applyScreenObject.usageCategory === null ||
+                    applyScreenObject.usageCategory === undefined){
+                      isFormValid = false;
+                      hasFieldToaster = true;
+                    }
+                  if(applyScreenObject.usageCategory === "DOMESTIC"){
+                    if(applyScreenObject.noOfFlats === "" || applyScreenObject.noOfFlats === null ||
+                     applyScreenObject.noOfFlats === undefined){
+                        isFormValid = false;
+                        hasFieldToaster = true;
+                    }
+                  }
                 } else {
                   isFormValid = false;
                   dispatch(
@@ -390,9 +414,66 @@ const callBackForNext = async (state, dispatch) => {
 
   /* validations for Additional /Docuemnts details screen */
   if (activeStep === 1) {
+    
+    debugger;
+    let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
+    let applicationCheck = get(state.screenConfiguration.preparedFinalObject, "applyScreen.service");
+    let connectionType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionType");
+    let noOfTaps = get(state.screenConfiguration.preparedFinalObject, "applyScreen.noOfTaps");
+    let waterSource = get(state.screenConfiguration.preparedFinalObject, "applyScreen.waterSource");
+    let waterSubSource = get(state.screenConfiguration.preparedFinalObject, "applyScreen.waterSubSource");
+    let meterId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.meterId");
+    let meterInstallationDate = get(state.screenConfiguration.preparedFinalObject, "applyScreen.meterInstallationDate");
+    let initialMeterReading = get(state.screenConfiguration.preparedFinalObject, "applyScreen.additionalDetails.initialMeterReading");
+    let dateEffectiveFrom = get(state.screenConfiguration.preparedFinalObject, "applyScreen.dateEffectiveFrom");
+    
+    if(isModifyMode()){
+      if(applyScreenObject && applicationCheck === "Water"){
+        if(connectionType === "" || connectionType === undefined || connectionType === null ){
+          isFormValid = false;
+          hasFieldToaster = true;
+        }else if(connectionType === "Metered"){
+          if(noOfTaps === "" || noOfTaps === undefined || noOfTaps === null ||
+          waterSource === "" || waterSource === undefined || waterSource === null ||
+          waterSubSource === "" || waterSubSource === undefined || waterSubSource === null ||
+          meterId === "" || meterId === undefined || meterId === null ||
+          meterInstallationDate === "" || meterInstallationDate === undefined || meterInstallationDate === null ||
+          initialMeterReading === "" || initialMeterReading === undefined || initialMeterReading === null ||
+          dateEffectiveFrom === "" || dateEffectiveFrom === undefined || dateEffectiveFrom === null
+           ){
+            isFormValid = false;
+            hasFieldToaster = true;
+           }
+        }else if(connectionType === "Non Metered"){
+          if(noOfTaps === "" || noOfTaps === undefined || noOfTaps === null ||
+          waterSource === "" || waterSource === undefined || waterSource === null ||
+          waterSubSource === "" || waterSubSource === undefined || waterSubSource === null ||
+          dateEffectiveFrom === "" || dateEffectiveFrom === undefined || dateEffectiveFrom === null
+           ){
+            isFormValid = false;
+            hasFieldToaster = true;
+           }
+        }
+  
+        if(connectionType === "" || connectionType === undefined || connectionType === null){
+          isFormValid = false;
+          hasFieldToaster = true;
+        }
+      }
+      // for Sewerage
+      if(applyScreenObject && applicationCheck === "Sewerage"){
+        if(applyScreenObject.noOfToilets === "" || applyScreenObject.noOfToilets === undefined || applyScreenObject.noOfToilets === null || 
+        applyScreenObject.noOfWaterClosets === "" || applyScreenObject.noOfWaterClosets === undefined || applyScreenObject.noOfWaterClosets === null
+        ){
+          isFormValid = false;
+          hasFieldToaster = true;
+        }
+      }
+    }
+
     if (isModifyMode()) {
-      isFormValid = true;
-      hasFieldToaster = false;
+      // isFormValid = true;
+      // hasFieldToaster = false;
     } else {
       if (moveToReview(state, dispatch)) {
         await pushTheDocsUploadedToRedux(state, dispatch);
@@ -402,8 +483,8 @@ const callBackForNext = async (state, dispatch) => {
         }
       }
       else {
-        isFormValid = false;
-        hasFieldToaster = true;
+        // isFormValid = false;
+        // hasFieldToaster = true;
       }
     }
   }
@@ -416,12 +497,83 @@ const callBackForNext = async (state, dispatch) => {
         // if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
         //   setReviewPageRoute(state, dispatch);
         // }
+        if (process.env.REACT_APP_NAME === "Employee" && (getQueryArg(window.location.href, "modeaction") === "edit" &&
+        getQueryArg(window.location.href,"mode") == "MODIFY" && getQueryArg(window.location.href,"action") == "edit")) {
+          let appendUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+          let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
+          let tenantId = getQueryArg(window.location.href, "tenantId")
+          let reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited="true"`;
+          if (isModifyMode() && isModifyModeAction()) {
+            reviewUrl += "&mode=MODIFY"
+          }
+          dispatch(setRoute(reviewUrl));
+          }
       }
       else {
         isFormValid = true;
         hasFieldToaster = false;
       }
     } else {
+      debugger;
+      let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
+      let applicationCheck = get(state.screenConfiguration.preparedFinalObject, "applyScreen.service");
+      let connectionType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionType");
+      let noOfTaps = get(state.screenConfiguration.preparedFinalObject, "applyScreen.noOfTaps");
+      let waterSource = get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].waterSource");
+      let waterSubSource = get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].waterSubSource");
+      let meterId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.meterId");
+      let meterInstallationDate = get(state.screenConfiguration.preparedFinalObject, "applyScreen.meterInstallationDate");
+      let initialMeterReading = get(state.screenConfiguration.preparedFinalObject, "applyScreen.additionalDetails.initialMeterReading");
+      let dateEffectiveFrom = get(state.screenConfiguration.preparedFinalObject, "applyScreen.dateEffectiveFrom");
+      
+      let check = isModifyMode() || process.env.REACT_APP_NAME !== "Citizen";
+
+      if(check){
+        // for water
+        if(applyScreenObject && applicationCheck === "Water"){
+          if(connectionType === "" || connectionType === undefined || connectionType === null ){
+            isFormValid = false;
+            hasFieldToaster = true;
+          }else if(connectionType === "Metered"){
+            if(noOfTaps === "" || noOfTaps === undefined || noOfTaps === null ||
+            waterSource === "" || waterSource === undefined || waterSource === null ||
+            waterSubSource === "" || waterSubSource === undefined || waterSubSource === null ||
+            meterId === "" || meterId === undefined || meterId === null ||
+            meterInstallationDate === "" || meterInstallationDate === undefined || meterInstallationDate === null ||
+            initialMeterReading === "" || initialMeterReading === undefined || initialMeterReading === null 
+            // ||
+            // dateEffectiveFrom === "" || dateEffectiveFrom === undefined || dateEffectiveFrom === null
+            ){
+              isFormValid = false;
+              hasFieldToaster = true;
+            }
+          }else if(connectionType === "Non Metered"){
+            if(noOfTaps === "" || noOfTaps === undefined || noOfTaps === null ||
+            waterSource === "" || waterSource === undefined || waterSource === null ||
+            waterSubSource === "" || waterSubSource === undefined || waterSubSource === null
+            ){
+              isFormValid = false;
+              hasFieldToaster = true;
+            }
+          }
+    
+          if(connectionType === "" || connectionType === undefined || connectionType === null){
+            isFormValid = false;
+            hasFieldToaster = true;
+          }
+        }
+        // for Sewerage
+        if(applyScreenObject && applicationCheck === "Sewerage"){
+          if(applyScreenObject.noOfToilets === "" || applyScreenObject.noOfToilets === undefined || applyScreenObject.noOfToilets === null || 
+          applyScreenObject.noOfWaterClosets === "" || applyScreenObject.noOfWaterClosets === undefined || applyScreenObject.noOfWaterClosets === null
+          ){
+            isFormValid = false;
+            hasFieldToaster = true;
+          }
+        }
+      }
+      
       let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
       if(roadCuttingInfo && roadCuttingInfo.length > 0) {
         for (let i = 0; i < roadCuttingInfo.length; i++) {
@@ -437,10 +589,12 @@ const callBackForNext = async (state, dispatch) => {
         dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
       }
 
-      if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
+      if(isFormValid){
+        if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
         setReviewPageRoute(state, dispatch);
+        }
       }
-      isFormValid = true;
+      // isFormValid = true;
     }
     let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
     let applyScreenObj = findAndReplace(applyScreenObject, 0, null);

@@ -261,7 +261,6 @@ export const fetchData = async (
 };
 
 const onRowClick = rowData => {
-
   const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
   const origin = process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
   if (rowData[7] === "BPAREG") {
@@ -280,7 +279,16 @@ const onRowClick = rowData => {
       default:
         window.location.assign(`${origin}${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}&type=${rowData[8]}&bservice=${rowData[7]}`);
     }
-  } else {
+  } else if ((rowData[7] === "BPA_OC1") || (rowData[7] === "BPA_OC2") || (rowData[7] === "BPA_OC3") || (rowData[7] === "BPA_OC4")) {
+    switch (rowData[9]) {
+      case "INITIATED":
+        window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);
+        break;
+      default:
+        window.location.assign(`${origin}${environment}/oc-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}&type=${rowData[8]}&bservice=${rowData[7]}`);
+    }
+  }
+  else {
     switch (rowData[9]) {
       case "INITIATED":
         window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);

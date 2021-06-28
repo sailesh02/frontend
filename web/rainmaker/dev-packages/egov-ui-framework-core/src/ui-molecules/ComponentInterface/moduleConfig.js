@@ -17,7 +17,12 @@ export const getModuleName = (pathName, BPAtradeType) => {
     // }
     return moduleServiceName;
   } else if (pathName && pathName.includes("oc-bpa")) {
-    return "BPA_OC";
+    const service = getQueryArg(
+      window.location.href,
+      "bservice"
+    ) || "BPA_OC";
+    return service
+    // return "BPA_OC";
   } else if (
     (pathName && pathName.includes("tradelicence")) ||
     (pathName && pathName.includes("tradelicense"))

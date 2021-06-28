@@ -393,7 +393,6 @@ const screenConfig = {
       }
       const today = getTodaysDateInYYYMMDD();
       dispatch(prepareFinalObject("BPAs.appdate", today));
-      debugger
       const bServiceTemp = get(
         state.screenConfiguration.preparedFinalObject,
         "scrutinyDetails.planDetail.planInformation.businessService"

@@ -88,7 +88,7 @@ class SingleApplication extends React.Component {
           default:
             setRoute(`/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         }
-      } else if(item.serviceType === "BPA_OC") {
+      } else if(item.serviceType === "BPA_OC" || item.serviceType === "BPA_OC1" || item.serviceType === "BPA_OC2" || item.serviceType === "BPA_OC3" || item.serviceType === "BPA_OC4") {
         switch (item.appStatus) {
           case "INITIATED":
             if(roles && roles.length == 1 && roles[0].code == "CITIZEN") {

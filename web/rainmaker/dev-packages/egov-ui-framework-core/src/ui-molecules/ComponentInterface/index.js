@@ -229,7 +229,7 @@ const mapStateToProps = state => {
     jsonPath = "FireNOCs[0].fireNOCDetails.status";
   } else if (moduleName === "NewTL") {
     jsonPath = "Licenses[0].status";
-  } else if ((moduleName === "BPA") || (moduleName === "BPA_LOW") || (moduleName === "BPA_OC") || (moduleName === "BPA1") || (moduleName === "BPA2") || (moduleName === "BPA3") || (moduleName === "BPA4")) {
+  } else if ((moduleName === "BPA") || (moduleName === "BPA_LOW") || (moduleName === "BPA_OC") || (moduleName === "BPA_OC1") || (moduleName === "BPA_OC2") || (moduleName === "BPA_OC3") || (moduleName === "BPA_OC4")|| (moduleName === "BPA1") || (moduleName === "BPA2") || (moduleName === "BPA3") || (moduleName === "BPA4")) {
     jsonPath = "BPA.status";
   } else {
     jsonPath = "Licenses[0].status";

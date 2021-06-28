@@ -189,7 +189,10 @@ if(tlType && tlType === "TEMPORARY"){
     if (tradeUnitsArray && tradeUnitsArray.length > 0 && tradeUnitsArray[0].uomValue > 30) {
       isTempTradeValid = false;
     }
-    let tradeCount = 0;
+
+  }
+  if(tlType){
+  let tradeCount = 0;
     for (var j = 0; j < tradeUnits.length; j++) {
       if (tradeUnits[j].isDeleted !== false) {
         tradeCount++;
@@ -200,7 +203,6 @@ if(tlType && tlType === "TEMPORARY"){
       onlyFiveTradesAllowed = false;
     }
   }
-
 
     if (
       !isTradeDetailsValid ||

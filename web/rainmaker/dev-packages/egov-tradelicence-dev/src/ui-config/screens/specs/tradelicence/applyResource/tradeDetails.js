@@ -471,10 +471,12 @@ const structureSubTypeChange = (reqObj) => {
 }
 
 const tradeUnitCard = {
-  uiFramework: "custom-containers",
+  uiFramework: "custom-containers-local",
   componentPath: "MultiItem",
-  props: {
+  moduleName: "egov-tradelicence",
 
+  props: {
+    hasAddItem: true,
     scheama: getCommonGrayCard({
       header: getCommonSubHeader(
         {

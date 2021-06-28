@@ -52,6 +52,13 @@ const ResubmitActionContainer = Loadable({
   loading: () => <Loading />
 });
 
+const MultiItem = Loadable({
+  loader: () => import("./MultiItem"),
+  loading: () => <Loading />
+});
+
+
+
 
 export {
   CustomTabContainer,
@@ -64,5 +71,6 @@ export {
   PaymentRedirectPage,
   ViewBreakupContainer,
   DialogContainer,
-  ResubmitActionContainer
+  ResubmitActionContainer,
+  MultiItem
 };

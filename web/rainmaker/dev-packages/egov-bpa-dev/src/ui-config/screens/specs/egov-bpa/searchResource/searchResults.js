@@ -186,7 +186,7 @@ const onRowClick = rowData => {
   const state = rowData[3];
   const applicationNumber = rowData[0];
   const tenantId = rowData[4];
-  if(rowData[5] == "BPA_OC") {
+  if(rowData[5] == "BPA_OC" || rowData[5] == "BPA_OC1" || rowData[5] == "BPA_OC2" || rowData[5] == "BPA_OC3" || rowData[5] == "BPA_OC4") {
     const environment = process.env.NODE_ENV === "production" ? "employee" : "";
     const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
     switch (state) {

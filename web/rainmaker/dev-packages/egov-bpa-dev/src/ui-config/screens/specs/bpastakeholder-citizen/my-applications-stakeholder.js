@@ -178,7 +178,7 @@ export const fetchData = async (
       let type;
       if (businessService == "BPA_LOW") {
         type = "LOW"
-      } else if ((businessService == "BPA") || (businessService == "BPA_OC")) {
+      } else if ((businessService == "BPA") || (businessService == "BPA_OC" ||  businessService === 'BPA_OC1' || businessService === 'BPA_OC2' || businessService === 'BPA_OC3' || businessService === 'BPA_OC4')) {
         type = "HIGH"
       } else {
         type = "HIGH"
@@ -192,7 +192,7 @@ export const fetchData = async (
       let bService = get(element, "businessService");
       let appType = getBpaTextToLocalMapping("WF_BPA_BUILDING_PLAN_SCRUTINY");
       let serType = getBpaTextToLocalMapping(`WF_BPA_NEW_CONSTRUCTION`);
-      if (bService === "BPA_OC") {
+      if (bService === "BPA_OC" || bService === 'BPA_OC1' || bService === 'BPA_OC2' || bService === 'BPA_OC3' || bService === 'BPA_OC4') {
         appType = getBpaTextToLocalMapping("WF_BPA_BUILDING_OC_PLAN_SCRUTINY");
       }
       searchConvertedArray.push({

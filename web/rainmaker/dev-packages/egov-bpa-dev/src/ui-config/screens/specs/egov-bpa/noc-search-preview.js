@@ -136,7 +136,7 @@ const applicationOverview = getCommonContainer({
             let bpaAppurl = appendUrl +'/egov-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
             window.open(bpaAppurl, '_blank');
 
-          }else if(nocData && nocData.source === "BPA_OC") {
+          }else if(nocData && nocData.source === "BPA_OC" || nocData.source === 'BPA_OC1' || nocData.source === 'BPA_OC2' || nocData.source === 'BPA_OC3' || nocData.source === 'BPA_OC4') {
             let bpaAppurl = appendUrl +'/oc-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
             window.open(bpaAppurl, '_blank');
           }

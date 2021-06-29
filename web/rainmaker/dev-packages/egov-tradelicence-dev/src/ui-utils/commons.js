@@ -498,6 +498,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     let tlType = get(queryObject[0], "licenseType");
     let TlPeriod = get(queryObject[0], "TlPeriod");
     let tlcommencementDate = get(queryObject[0], "commencementDate");
+    let TlStatus = get(queryObject[0], "status");
 
     let tlPeriodDisplay = "";
     if (tlType && tlType === "TEMPORARY" && validTo && tlcommencementDate) {
@@ -518,7 +519,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     } else {
       set(queryObject[0], "tradeLicenseDetail.additionalDetail.licensePeriod", TlPeriod);
       tlPeriodDisplay = `${TlPeriod} Years`;
-      set(queryObject[0], "validFrom", tlcommencementDate);
+if(TlStatus === "INITIATED" && getQueryArg(window.location.href, "action") === "EDITRENEWAL"){
+
+}else{
+  set(queryObject[0], "validFrom", tlcommencementDate);
+}
       // let selectedYearInMiliSeconds = 1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
 
       var dt = new Date(queryObject[0] && queryObject[0].commencementDate);
@@ -531,7 +536,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", tlPeriodDisplay));
 
     if (queryObject[0].applicationNumber) {
-      let TlStatus = get(queryObject[0], "status");
+
       //call update
       const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
       if (isEditRenewal) {

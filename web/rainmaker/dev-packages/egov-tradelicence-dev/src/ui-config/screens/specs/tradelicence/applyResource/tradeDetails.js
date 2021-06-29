@@ -19,7 +19,8 @@ import {
   fillOldLicenseData,
   getTradeTypeDropdownData,
   updateMdmsDropDowns,
-  updateStructureTypes
+  updateStructureTypes,
+  convertDateToEpoch
 } from "../../utils";
 import {
   prepareFinalObject as pFO,
@@ -1162,7 +1163,14 @@ export const tradeDetails = getCommonCard({
 
 
           let validTo = get(queryObject[0], "validTo", null);
-
+          tlcommencementDate = convertDateToEpoch(
+            tlcommencementDate,
+            "daystart"
+          );
+          validTo = convertDateToEpoch(
+            validTo,
+            "dayend"
+          );
           if (validTo && tlcommencementDate) {
 
             //var date1 = new Date(tlcommencementDate);
@@ -1263,7 +1271,14 @@ export const tradeDetails = getCommonCard({
           let tlType = get(queryObject[0], "licenseType");
 
           let tlcommencementDate = get(queryObject[0], "commencementDate");
-
+          tlcommencementDate = convertDateToEpoch(
+            tlcommencementDate,
+            "daystart"
+          );
+          validTo = convertDateToEpoch(
+            validTo,
+            "dayend"
+          );
           if (validTo && tlcommencementDate) {
 
             //var date1 = new Date(tlcommencementDate);

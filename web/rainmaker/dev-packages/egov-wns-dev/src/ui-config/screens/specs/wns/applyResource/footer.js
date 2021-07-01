@@ -191,7 +191,53 @@ const callBackForNext = async (state, dispatch) => {
       //   return false;
       // }
 
-    } else {
+      if(applyScreenObject.water){
+        if(applyScreenObject.proposedTaps === undefined || applyScreenObject.proposedTaps === null || applyScreenObject.proposedTaps === "" ||
+        applyScreenObject.tenantId === "" || applyScreenObject.tenantId === null || applyScreenObject.tenantId === undefined ||
+        applyScreenObject.locality === "" || applyScreenObject.locality === null || applyScreenObject.locality === undefined ||
+        applyScreenObject.connectionCategory === "" || applyScreenObject.connectionCategory === null || applyScreenObject.connectionCategory === undefined ||
+        applyScreenObject.connectionType === "" || applyScreenObject.connectionType === null || applyScreenObject.connectionType === undefined ||
+        applyScreenObject.usageCategory === "" || applyScreenObject.usageCategory === null || applyScreenObject.usageCategory === undefined ||
+        applyScreenObject.connectionHolders[0].mobileNumber === "" || applyScreenObject.connectionHolders[0].mobileNumber === null || applyScreenObject.connectionHolders[0].mobileNumber === undefined ||
+        applyScreenObject.connectionHolders[0].name === "" || applyScreenObject.connectionHolders[0].name === null || applyScreenObject.connectionHolders[0].name === undefined || 
+        applyScreenObject.connectionHolders[0].gender === "" || applyScreenObject.connectionHolders[0].gender === null || applyScreenObject.connectionHolders[0].gender === undefined ||
+        applyScreenObject.connectionHolders[0].fatherOrHusbandName === "" || applyScreenObject.connectionHolders[0].fatherOrHusbandName === null || applyScreenObject.connectionHolders[0].fatherOrHusbandName === undefined ||
+        applyScreenObject.connectionHolders[0].relationship === "" || applyScreenObject.connectionHolders[0].relationship === null || applyScreenObject.connectionHolders[0].relationship === undefined ||
+        applyScreenObject.connectionHolders[0].correspondenceAddress === "" || applyScreenObject.connectionHolders[0].correspondenceAddress === null || applyScreenObject.connectionHolders[0].correspondenceAddress === undefined ||
+        applyScreenObject.connectionHolders[0].ownerType === "" || applyScreenObject.connectionHolders[0].ownerType === null || applyScreenObject.connectionHolders[0].ownerType === undefined
+          ){
+            isFormValid = false;
+            hasFieldToaster = true;
+            dispatch(
+              toggleSnackbar(
+                true, {
+                labelKey: "WS_FILL_REQUIRED_FIELDS",
+                labelName: "Please fill Required details"
+              },
+                "warning"
+              )
+            )
+        }
+        
+      }
+      if(applyScreenObject.apartment){
+        if(!(applyScreenObject.apartment && applyScreenObject.noOfFlats > 0)){
+          isFormValid = false;
+          hasFieldToaster = true;
+          dispatch(
+            toggleSnackbar(
+              true, {
+              labelKey: "WS_FILL_REQUIRED_FIELDS",
+              labelName: "Please fill Required details"
+            },
+              "warning"
+            )
+          )
+        }
+      }
+
+    } 
+    else {
       const water = get(
         state.screenConfiguration.preparedFinalObject,
         "applyScreen.water"
@@ -266,9 +312,9 @@ const callBackForNext = async (state, dispatch) => {
                       isFormValid = false;
                       hasFieldToaster = true;
                     }
-                  if(applyScreenObject.usageCategory === "DOMESTIC"){
+                  if(applyScreenObject.apartment === true){
                     if(applyScreenObject.noOfFlats === "" || applyScreenObject.noOfFlats === null ||
-                     applyScreenObject.noOfFlats === undefined){
+                     applyScreenObject.noOfFlats === undefined || applyScreenObject.noOfFlats <= 0){
                         isFormValid = false;
                         hasFieldToaster = true;
                     }
@@ -294,9 +340,9 @@ const callBackForNext = async (state, dispatch) => {
                       isFormValid = false;
                       hasFieldToaster = true;
                     }
-                  if(applyScreenObject.usageCategory === "DOMESTIC"){
+                  if(applyScreenObject.apartment === true){
                     if(applyScreenObject.noOfFlats === "" || applyScreenObject.noOfFlats === null ||
-                     applyScreenObject.noOfFlats === undefined){
+                     applyScreenObject.noOfFlats === undefined || applyScreenObject.noOfFlats <= 0){
                         isFormValid = false;
                         hasFieldToaster = true;
                     }
@@ -415,7 +461,6 @@ const callBackForNext = async (state, dispatch) => {
   /* validations for Additional /Docuemnts details screen */
   if (activeStep === 1) {
     
-    debugger;
     let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
     let applicationCheck = get(state.screenConfiguration.preparedFinalObject, "applyScreen.service");
     let connectionType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionType");
@@ -463,7 +508,8 @@ const callBackForNext = async (state, dispatch) => {
       // for Sewerage
       if(applyScreenObject && applicationCheck === "Sewerage"){
         if(applyScreenObject.noOfToilets === "" || applyScreenObject.noOfToilets === undefined || applyScreenObject.noOfToilets === null || 
-        applyScreenObject.noOfWaterClosets === "" || applyScreenObject.noOfWaterClosets === undefined || applyScreenObject.noOfWaterClosets === null
+        applyScreenObject.noOfWaterClosets === "" || applyScreenObject.noOfWaterClosets === undefined || applyScreenObject.noOfWaterClosets === null ||
+        applyScreenObject.connectionExecutionDate === "" || applyScreenObject.connectionExecutionDate === undefined || applyScreenObject.connectionExecutionDate === null
         ){
           isFormValid = false;
           hasFieldToaster = true;
@@ -515,7 +561,6 @@ const callBackForNext = async (state, dispatch) => {
         hasFieldToaster = false;
       }
     } else {
-      debugger;
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       let applicationCheck = get(state.screenConfiguration.preparedFinalObject, "applyScreen.service");
       let connectionType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionType");
@@ -541,7 +586,8 @@ const callBackForNext = async (state, dispatch) => {
             waterSubSource === "" || waterSubSource === undefined || waterSubSource === null ||
             meterId === "" || meterId === undefined || meterId === null ||
             meterInstallationDate === "" || meterInstallationDate === undefined || meterInstallationDate === null ||
-            initialMeterReading === "" || initialMeterReading === undefined || initialMeterReading === null 
+            applyScreenObject.connectionExecutionDate === "" || applyScreenObject.connectionExecutionDate === undefined || applyScreenObject.connectionExecutionDate === null ||
+            initialMeterReading === "" || initialMeterReading === undefined || initialMeterReading === null || initialMeterReading <= 0 
             // ||
             // dateEffectiveFrom === "" || dateEffectiveFrom === undefined || dateEffectiveFrom === null
             ){
@@ -551,6 +597,7 @@ const callBackForNext = async (state, dispatch) => {
           }else if(connectionType === "Non Metered"){
             if(noOfTaps === "" || noOfTaps === undefined || noOfTaps === null ||
             waterSource === "" || waterSource === undefined || waterSource === null ||
+            applyScreenObject.connectionExecutionDate === "" || applyScreenObject.connectionExecutionDate === undefined || applyScreenObject.connectionExecutionDate === null ||
             waterSubSource === "" || waterSubSource === undefined || waterSubSource === null
             ){
               isFormValid = false;
@@ -566,7 +613,8 @@ const callBackForNext = async (state, dispatch) => {
         // for Sewerage
         if(applyScreenObject && applicationCheck === "Sewerage"){
           if(applyScreenObject.noOfToilets === "" || applyScreenObject.noOfToilets === undefined || applyScreenObject.noOfToilets === null || 
-          applyScreenObject.noOfWaterClosets === "" || applyScreenObject.noOfWaterClosets === undefined || applyScreenObject.noOfWaterClosets === null
+          applyScreenObject.noOfWaterClosets === "" || applyScreenObject.noOfWaterClosets === undefined || applyScreenObject.noOfWaterClosets === null ||
+          applyScreenObject.connectionExecutionDate === "" || applyScreenObject.connectionExecutionDate === undefined || applyScreenObject.connectionExecutionDate === null
           ){
             isFormValid = false;
             hasFieldToaster = true;

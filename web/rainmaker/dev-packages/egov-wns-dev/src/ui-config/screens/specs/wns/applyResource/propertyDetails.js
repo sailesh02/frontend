@@ -730,7 +730,7 @@ const propertyDetailsNoId = getCommonContainer({
     visible:false,
     required: true,
     jsonPath: "applyScreen.noOfFlats",
-    pattern: /^[1-9]*$/i,
+    pattern: /^[0-9]*$/i,
     gridDefination: {
       xs: 12,
       sm: 6

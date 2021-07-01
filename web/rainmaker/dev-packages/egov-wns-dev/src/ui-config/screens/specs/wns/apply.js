@@ -789,6 +789,9 @@ const screenConfig = {
       );
     });
     let applicationNo = getQueryArg(window.location.href, "applicationNumber");
+    
+
+    dispatch(prepareFinalObject("applyScreen.apartment", false));
 
     if(applicationNo && applicationNo.includes('SW')) {
       dispatch(prepareFinalObject("applyScreen.water", false));
@@ -885,6 +888,7 @@ let mode = getQueryArg(window.location.href, "mode");
     set(action, "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberWater.props.mode",isModifyMode() && !isModifyModeAction());
     set(action, "screenConfig.components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.clickHereLink.props.url", modifyLink)
     set(action, "screenConfig.components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.clickHereLink.props.isMode", isMode)
+    dispatch(prepareFinalObject("applyScreen.noOfFlats", ""));
     return action;
   },
 

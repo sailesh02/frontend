@@ -111,7 +111,11 @@ class ActionDialog extends React.Component {
         );
         if (response && response.BPA && response.BPA.length > 0) {
           let appPath = "egov-bpa";
-          if(get(response, "BPA[0].businessService") === "BPA_OC") {
+          if(get(response, "BPA[0].businessService") === "BPA_OC" ||
+          get(response, "BPA[0].businessService") === "BPA_OC1" ||
+          get(response, "BPA[0].businessService") === "BPA_OC2" ||
+          get(response, "BPA[0].businessService") === "BPA_OC3" ||
+          get(response, "BPA[0].businessService") === "BPA_OC4") {
             appPath = "oc-bpa"
           }
           const acknowledgementUrl =

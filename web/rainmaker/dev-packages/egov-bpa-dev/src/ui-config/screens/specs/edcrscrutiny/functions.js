@@ -9,7 +9,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo, getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { edcrHttpRequest } from "../../../../ui-utils/api";
@@ -178,7 +178,7 @@ const getSearchResultsfromEDCR = async (action, state, dispatch) => {
           key: "",
           msgId: "gfcfc",
           correlationId: "wefiuweiuff897",
-          authToken: "",
+          authToken: getAccessToken(),
           userInfo: {
             id: userUUid,
             tenantId: userTenant
@@ -212,7 +212,7 @@ export const getSearchResultsfromEDCRWithApplcationNo = async (
           key: "",
           msgId: "gfcfc",
           correlationId: "wefiuweiuff897",
-          authToken: "",
+          authToken: getAccessToken(),
           userInfo: {
             id: userUUid,
             tenantId: userTenant
@@ -259,7 +259,7 @@ const scrutinizePlan = async (state, dispatch) => {
         ts: "",
         action: "",
         did: "",
-        authToken: "",
+        authToken: getAccessToken(),
         key: "",
         msgId: "",
         correlationId: "",

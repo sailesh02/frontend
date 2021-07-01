@@ -178,7 +178,7 @@ export const fetchData = async (
       let type;
       if (businessService == "BPA_LOW") {
         type = "LOW"
-      } else if ((businessService == "BPA") || (businessService == "BPA_OC")) {
+      } else if ((businessService == "BPA") || (businessService == "BPA_OC" ||  businessService === 'BPA_OC1' || businessService === 'BPA_OC2' || businessService === 'BPA_OC3' || businessService === 'BPA_OC4')) {
         type = "HIGH"
       } else {
         type = "HIGH"
@@ -192,7 +192,7 @@ export const fetchData = async (
       let bService = get(element, "businessService");
       let appType = getBpaTextToLocalMapping("WF_BPA_BUILDING_PLAN_SCRUTINY");
       let serType = getBpaTextToLocalMapping(`WF_BPA_NEW_CONSTRUCTION`);
-      if (bService === "BPA_OC") {
+      if (bService === "BPA_OC" || bService === 'BPA_OC1' || bService === 'BPA_OC2' || bService === 'BPA_OC3' || bService === 'BPA_OC4') {
         appType = getBpaTextToLocalMapping("WF_BPA_BUILDING_OC_PLAN_SCRUTINY");
       }
       searchConvertedArray.push({
@@ -261,7 +261,6 @@ export const fetchData = async (
 };
 
 const onRowClick = rowData => {
-
   const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
   const origin = process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
   if (rowData[7] === "BPAREG") {
@@ -280,7 +279,16 @@ const onRowClick = rowData => {
       default:
         window.location.assign(`${origin}${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}&type=${rowData[8]}&bservice=${rowData[7]}`);
     }
-  } else {
+  } else if ((rowData[7] === "BPA_OC1") || (rowData[7] === "BPA_OC2") || (rowData[7] === "BPA_OC3") || (rowData[7] === "BPA_OC4")) {
+    switch (rowData[9]) {
+      case "INITIATED":
+        window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);
+        break;
+      default:
+        window.location.assign(`${origin}${environment}/oc-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}&type=${rowData[8]}&bservice=${rowData[7]}`);
+    }
+  }
+  else {
     switch (rowData[9]) {
       case "INITIATED":
         window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);

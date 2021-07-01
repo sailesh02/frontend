@@ -4,7 +4,6 @@ import {
     getCommonContainer,
     getLabelWithValueForModifiedLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import get from "lodash/get";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { serviceConst } from "../../../../../ui-utils/commons";
 import { handleConnectionDetails,handleService } from "../../utils"
@@ -38,7 +37,6 @@ export const connectionDetailsHeader = getHeader({
 
 
 export const getConnectionDetails = () => {
-    
     return ({
         uiFramework: "custom-containers",
         componentPath: "MultiItem",
@@ -46,9 +44,9 @@ export const getConnectionDetails = () => {
             className: "common-div-css search-preview",
             scheama: getCommonGrayCard({
                 div4: connectionDetailsHeader,
-                // serviceCardContainer: renderService()
-                serviceCardContainerForWater: renderServiceForWater(),
-                serviceCardContainerForSW: renderServiceForSW(),
+                serviceCardContainer: renderService()
+                // serviceCardContainerForWater: renderServiceForWater(),
+                // serviceCardContainerForSW: renderServiceForSW(),
 
             }),
             items: [],
@@ -61,7 +59,6 @@ export const getConnectionDetails = () => {
         },
         type: "array"
     });
-
 }
 
  export const connectionDetailsWater={

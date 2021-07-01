@@ -789,9 +789,6 @@ const screenConfig = {
       );
     });
     let applicationNo = getQueryArg(window.location.href, "applicationNumber");
-    
-
-    dispatch(prepareFinalObject("applyScreen.apartment", false));
 
     if(applicationNo && applicationNo.includes('SW')) {
       dispatch(prepareFinalObject("applyScreen.water", false));

@@ -36,7 +36,6 @@ class CheckboxLabels extends React.Component {
     const { classes, content, label, isChecked, approveCheck, onFieldChange, jsonPath } = this.props;
     if(isChecked === false){
       toggleConnHolderDetails(onFieldChange, true);
-      toggleFlatDetails(onFieldChange, false);
       approveCheck(jsonPath, isChecked)
     }else{
       toggleConnHolderDetails(onFieldChange, false);

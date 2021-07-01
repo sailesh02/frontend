@@ -60,7 +60,7 @@ export const viewBillFooter = getCommonApplyFooter("BOTTOM",{
     },
     children: {
       payButtonLabel: getLabel({
-        labelKey: process.env.REACT_APP_NAME === "Employee" ? "WS_COMMON_COLLECT_LABEL" : "WS_COMMON_PAY"
+        labelKey: "WS_COMMON_PAY"
       })
     },
     onClickDefination: {

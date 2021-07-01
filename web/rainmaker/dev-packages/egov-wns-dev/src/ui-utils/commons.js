@@ -2153,7 +2153,7 @@ export const isWorkflowExists = async (queryObj) => {
         let isApplicationApproved = false;
         if (payload && payload.ProcessInstances && payload.ProcessInstances.length > 0) {
             for (let pInstance of payload.ProcessInstances) {
-                if(pInstance.action == "ACTIVATE_CONNECTION" || pInstance.action == "APPROVE_CONNECTION"){
+                if(pInstance.action == "ACTIVATE_CONNECTION"){
                     isApplicationApproved = pInstance.state.isTerminateState;
                     // if (!isApplicationApproved) {
                     //     break;

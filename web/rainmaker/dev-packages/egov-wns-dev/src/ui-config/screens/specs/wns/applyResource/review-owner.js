@@ -95,8 +95,8 @@ export const getReviewOwner = (isEditable = true) => {
     // viewOne: propertyDetails,
     // viewTwo: propertyLocationDetails
     viewFive: connectionDetailsHeader,
-    // viewSixWS: renderServiceForWater(),
-    viewSixVS: renderService(),
+    viewSixWS: renderServiceForWater(),
+    viewSixVS: renderServiceForSW(),
     // viewSix: connectionDetails,
     viewSeven: connectionChargeDetailsHeader,
     viewEight: connectionChargeDetails,
@@ -446,9 +446,9 @@ export const additionDetailsSewerage=connectionSewerage;
 export const renderService = () => {
   let isService = getQueryArg(window.location.href, "service");
   if (isService === serviceConst.WATER) {
-    return renderServiceForWater();
+    return getCommonContainer(connectionWater);
   } else if (isService === serviceConst.SEWERAGE) {
-    return renderServiceForSW();
+    return getCommonContainer(connectionSewerage)
   }
 }
 

@@ -12,17 +12,6 @@ import set from "lodash/set";
 import { convertEpochToDate } from "../utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { sortpayloadDataObj } from './connection-details'
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-
-let userInfo = JSON.parse(getUserInfo());
-const roleCodes =
-    userInfo && userInfo.roles
-      ? userInfo.roles.map((role) => {
-        return role.code;
-      })
-: [];
-
-const isCEMPEmployee = roleCodes && (roleCodes.includes("SW_CEMP") || roleCodes.includes("WS_CEMP")) && process.env.REACT_APP_NAME === "Employee"
 
 const addMeterReading = async (state, dispatch) => {
     dispatch(toggleSpinner());
@@ -44,9 +33,13 @@ const addMeterReading = async (state, dispatch) => {
 
         let arraySize = payloadData.WaterConnection.length;
         let isApplicationApproved;
-
-        isApplicationApproved = payloadData.WaterConnection[0].applicationStatus === APPLICATIONSTATE.CONNECTIONACTIVATED &&
+        if(arraySize === 1){
+            isApplicationApproved = payloadData.WaterConnection[0].applicationStatus === APPLICATIONSTATE.CONNECTIONACTIVATED &&
                 payloadData.WaterConnection[0].status === APPLICATIONSTATE.STATUS ? true : false
+        }else if(arraySize > 1){
+            isApplicationApproved = payloadData.WaterConnection[0].applicationStatus === APPLICATIONSTATE.APPROVED &&
+                payloadData.WaterConnection[0].status === APPLICATIONSTATE.STATUS ? true : false
+        }
 
         if(!isApplicationApproved){
             dispatch(toggleSpinner());
@@ -192,9 +185,6 @@ const screenConfig = {
         set(
             action,
             "screenConfig.components.div.children.header.children.applicationNumber.props.number", getQueryArg(window.location.href, "connectionNos"))
-        set(
-            action,
-            "screenConfig.components.div.children.newApplicationButton.visible", isCEMPEmployee)
         return action;
     },
     components: {
@@ -214,7 +204,7 @@ const screenConfig = {
                         sm: 12,
                         align: "right"
                     },
-                    visible: false,
+                    visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
                     props: {
                         variant: "contained",
                         color: "primary",

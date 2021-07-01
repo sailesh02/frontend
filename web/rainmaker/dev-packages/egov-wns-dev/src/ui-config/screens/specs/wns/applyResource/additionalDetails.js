@@ -147,7 +147,7 @@ export const additionDetails = getCommonCard({
         ...getSelectField({
           label: { labelKey: "WS_SERV_DETAIL_CONN_TYPE" },
           placeholder: { labelKey: "WS_ADDN_DETAILS_CONN_TYPE_PLACEHOLDER" },
-          required: true,
+          required: false,
           sourceJsonPath: "applyScreenMdmsData.ws-services-masters.connectionType",
           gridDefination: { xs: 12, sm: 6 },
           errorMessage: "ERR_INVALID_BILLING_PERIOD",
@@ -172,7 +172,6 @@ export const additionDetails = getCommonCard({
         label: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" },
         placeholder: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        required: true,
         jsonPath: "applyScreen.noOfTaps",
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
@@ -212,7 +211,6 @@ export const additionDetails = getCommonCard({
         label: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" },
         placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        required: true,
         jsonPath: "applyScreen.noOfWaterClosets",
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
@@ -221,7 +219,6 @@ export const additionDetails = getCommonCard({
         label: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS" },
         placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        required: true,
         jsonPath: "applyScreen.noOfToilets",
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
@@ -340,7 +337,7 @@ export const additionDetails = getCommonCard({
           xs: 12,
           sm: 6
         },
-        required: true,
+        required: false,
         pattern: getPattern("Date"),
         errorMessage: "ERR_INVALID_DATE",
         jsonPath: "applyScreen.connectionExecutionDate",
@@ -357,7 +354,7 @@ export const additionDetails = getCommonCard({
           xs: 12,
           sm: 6
         },
-        required: true,
+        required: false,
         pattern: /^[a-z0-9]+$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.meterId",
@@ -373,7 +370,7 @@ export const additionDetails = getCommonCard({
           xs: 12,
           sm: 6
         },
-        required: true,
+        required: false,
         pattern: getPattern("Date"),
         errorMessage: "ERR_INVALID_DATE",
         jsonPath: "applyScreen.meterInstallationDate",
@@ -390,9 +387,8 @@ export const additionDetails = getCommonCard({
           xs: 12,
           sm: 6
         },
-        required: true,
-        // pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
-        pattern: /^[0-9]*$/i,
+        required: false,
+        pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.additionalDetails.initialMeterReading",
         props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
@@ -410,7 +406,7 @@ export const additionDetails = getCommonCard({
           xs: 12,
           sm: 6
         },
-        required: true,
+        required: false,
         pattern: getPattern("Date"),
         errorMessage: "ERR_INVALID_DATE",
         jsonPath: "applyScreen.dateEffectiveFrom",

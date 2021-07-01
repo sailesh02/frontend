@@ -194,7 +194,8 @@ const onRowClick = rowData => {
         window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
         break;
       default:
-        window.location.assign(`${origin}${environment}/oc-bpa/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
+        window.location.assign(`${origin}${environment}/oc-bpa/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&bservice=${rowData[5]}`
+        );
         break;
     }
   } else {

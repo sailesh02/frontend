@@ -190,7 +190,7 @@ const callBackForNext = async (state, dispatch) => {
       //   dispatch(prepareFinalObject("applyScreen", applyScreenObj));
       //   return false;
       // }
-      
+
     } else {
       const water = get(
         state.screenConfiguration.preparedFinalObject,
@@ -436,11 +436,12 @@ const callBackForNext = async (state, dispatch) => {
         });
         dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
       }
+
       if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
         setReviewPageRoute(state, dispatch);
       }
       isFormValid = true;
-    } 
+    }
     let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
     let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
     dispatch(handleField("apply", "components.div.children.formwizardFourthStep.children.snackbarWarningMessage", "props.propertyId", get(applyScreenObj, "property.propertyId", '')));

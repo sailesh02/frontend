@@ -98,7 +98,7 @@ class SingleApplication extends React.Component {
             }
             break;
           default:
-            setRoute(`/oc-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}`);
+            setRoute(`/oc-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}&bservice=${item.serviceType}`);
         }
       } else {
         switch (item.appStatus) {

@@ -20,7 +20,7 @@ export const getModuleName = (pathName, BPAtradeType) => {
     const service = getQueryArg(
       window.location.href,
       "bservice"
-    ) || "BPA_OC";
+    ) || "BPA_OC1";
     return service
     // return "BPA_OC";
   } else if (

@@ -434,34 +434,6 @@ export const validateConnHolderDetails = (holderData) => {
     }
 }
 
-// export const validateAdditionalDetailsStepprtTwo = (additionalDetail) => {
-//     debugger
-//     if (additionalDetail == null || additionalDetail == undefined) {
-//         return true
-//     } else if (additionalDetail) {
-//         let holderOwners = additionalDetail;
-//         let valid = [];
-//         for (let i = 0; i < Object.keys(holderOwners).length; i++) {
-//             if (
-//                 holderOwners[i].hasOwnProperty("connectionType") && holderOwners[i]['connectionType'] !== undefined && holderOwners[i]["connectionType"] !== "" &&
-//                 holderOwners[i].hasOwnProperty("noOfTaps") && holderOwners[i]['noOfTaps'] !== undefined && holderOwners[i]["noOfTaps"] !== "" &&
-//                 holderOwners[i].hasOwnProperty("meterId") && holderOwners[i]['meterId'] !== undefined && holderOwners[i]["meterId"] !== "" &&
-//                 holderOwners[i].hasOwnProperty("additionalDetails") && holderOwners[i]["additionalDetails"]['initialMeterReading'] !== undefined && holderOwners[i]["additionalDetails"]['initialMeterReading'] !== "" &&
-//                 holderOwners[i].hasOwnProperty("meterInstallationDate") &&
-//                 holderOwners[i]["meterInstallationDate"] !== undefined &&
-//                 holderOwners[i]["meterInstallationDate"] !== "" &&
-//                 // holderOwners[i].hasOwnProperty("ownerType") &&
-//                 // holderOwners[i]["ownerType"] !== undefined &&
-//                 // holderOwners[i]["ownerType"] !== "" &&
-//                 holderOwners[i].hasOwnProperty("dateEffectiveFrom") &&
-//                 holderOwners[i]["dateEffectiveFrom"] !== undefined &&
-//                 holderOwners[i]["dateEffectiveFrom"] !== ""
-//             ) { valid.push(1) } else { valid.push(0) }
-//         }
-//         if (valid.includes(0)) { return false; } else { return true; }
-//     }
-// }
-
 export const validateFeildsForWater = (applyScreenObject) => {
     let rValue = true;
     // if (applyScreenObject.hasOwnProperty("property") &&

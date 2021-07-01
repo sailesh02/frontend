@@ -382,7 +382,7 @@ const screenConfig = {
       "applicationNumber"
     );
     getMdmsData(action, state, dispatch);
-    let bService ="BPA_OC";
+    let bService ="BPA_OC1";
     if (applicationNumber) {
       setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
     } else {

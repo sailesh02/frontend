@@ -16,9 +16,6 @@ const remoteConfigPath = (path, screenKey) => {
       break;
     case "egov-bpa":
     case "oc-bpa":
-    case "bpastakeholder-citizen":
-    case "bpastakeholder":
-    case "edcrscrutiny":
       config = require(`egov-bpa/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "egov-common":

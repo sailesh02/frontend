@@ -827,7 +827,7 @@ export const beforeSubmitHook = async () => {
   let state = store.getState();
   let bpaDetails = get(state, "screenConfiguration.preparedFinalObject.BPA", {});
   let isNocTrue = get(state, "screenConfiguration.preparedFinalObject.BPA.isNocTrue", false);
-  if (!!isNocTrue) {
+  if (!isNocTrue) {
     const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
     let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
     if (Noc.length > 0) {
@@ -873,7 +873,7 @@ const screenConfig = {
       state.auth.userInfo,
       "type"
     )
-    // if (isUserEmployee != "EMPLOYEE") {
+    if (isUserEmployee != "EMPLOYEE") {
       const bService = getQueryArg(
         window.location.href,
         "bservice"
@@ -889,7 +889,7 @@ const screenConfig = {
       ];
 
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    // }
+    }
     //}
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);

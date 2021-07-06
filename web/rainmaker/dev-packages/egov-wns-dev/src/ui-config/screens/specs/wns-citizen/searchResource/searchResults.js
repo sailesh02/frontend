@@ -6,6 +6,8 @@ import { getDomainLink } from "../../../../../ui-utils/commons";
 import "./index.css";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import store from "ui-redux/store";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../../ui-utils/api";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -54,6 +56,26 @@ export const searchResults = {
             else {
               return ("NA")
             }
+          }
+        }
+      },
+      {
+        name: "Link Mobile",
+        labelKey: "WS_COMMON_LINK_MOBILE_NO_LABEL",
+        options: {
+          filter: false,
+          customBodyRender: (value, data) => {
+            return (
+              <div className="linkStyle" onClick={() => linkMobile(data,data.rowData[0],data.rowData[1])} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+                <LabelContainer
+                  labelKey="WS_COMMON_LINK_MOBILE"
+                  style={{
+                    color: "#fe7a51",
+                    fontSize: 14,
+                  }}
+                />
+              </div>
+            )
           }
         }
       },
@@ -107,4 +129,54 @@ const getViewBillDetails = data => {
   store.dispatch(
     setRoute(`/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`)
   )
+}
+
+const linkMobile = (data,serviceType,connectionNumber) => {
+  const state = store.getState();
+  let userInfo = JSON.parse(getUserInfo());
+  if(serviceType == "WATER"){
+    const {connections} = state.screenConfiguration.preparedFinalObject || []
+    let payload = WaterConnection
+    if(payload && payload[0].connectionHolders && payload[0].connectionHolders[0].mobileNumber){
+      toggleSnackbarAndSetText(
+        true,
+        { labelName: "Mobile Number is already linked", labelKey: "MOBILE_ALREADY_LINKED_ERROR_MSG" },
+        "error"
+      );    
+    }else{
+      payload = [{...WaterConnection[0],connectionHolders:[{
+        ...WaterConnection[0].connectionHolders[0],mobileNumber:userInfo.mobileNumber ? userInfo.mobileNumber : ''
+      }]}]
+      const waterConnectionResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: payload });
+      if(waterConnectionResponse){
+      toggleSnackbarAndSetText(
+          true,
+          { labelName: "Mobile Number linked successfully", labelKey: "MOBILE_LINKED_SUCCESS_MSG" },
+          "success"
+        );
+      }
+    }
+  }else{
+    const {Sewe} = state.screenConfiguration.preparedFinalObject || []
+    let payload = WaterConnection
+    if(payload && payload[0].connectionHolders && payload[0].connectionHolders[0].mobileNumber){
+      toggleSnackbarAndSetText(
+        true,
+        { labelName: "Mobile Number is already linked", labelKey: "MOBILE_ALREADY_LINKED_ERROR_MSG" },
+        "error"
+      );    
+    }else{
+      payload = [{...WaterConnection[0],connectionHolders:[{
+        ...WaterConnection[0].connectionHolders[0],mobileNumber:userInfo.mobileNumber ? userInfo.mobileNumber : ''
+      }]}]
+      const waterConnectionResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: payload });
+      if(waterConnectionResponse){
+      toggleSnackbarAndSetText(
+          true,
+          { labelName: "Mobile Number linked successfully", labelKey: "MOBILE_LINKED_SUCCESS_MSG" },
+          "success"
+        );
+      }
+    }
+  }
 }

@@ -172,6 +172,8 @@ const showResults = (connections, dispatch, tenantId) => {
     ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType
   }))
 
+  dispatch(prepareFinalObject("AllConnections",connections))
+
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchResults", "props.rows", connections.length));
   showHideTable(true, dispatch);

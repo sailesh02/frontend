@@ -351,7 +351,7 @@ class Property extends Component {
     const { closeYearRangeDialogue } = this;
     const { closeEditMobileDialog } = this;
     const { dialogueOpen, urlToAppend, showAssessmentHistory,editMobileOpen } = this.state;
-    const editVisible = selPropertyDetails && selPropertyDetails.owners.map( (owner) => {
+    const editVisible = selPropertyDetails && selPropertyDetails.owners && selPropertyDetails.owners.map( (owner) => {
         if(owner.mobileNumber){
           return true
         }else{
@@ -432,7 +432,7 @@ class Property extends Component {
                   label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
                   color="#fe7a51" />
               }
-              onClick={() => this.linkProperty()}
+              onClick={() => this.onEditPropertyClick()}
               labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
               buttonStyle={{ border: "1px solid #fe7a51" }}
               style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
@@ -442,6 +442,7 @@ class Property extends Component {
         </div>)}
         {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />}
         {editMobileOpen && <EditMobileNumberDialog open={editMobileOpen} history={history} owners={selPropertyDetails.owners} payload = {selPropertyDetails} closeDialogue={closeEditMobileDialog}
+        propertyId ={this.props.match.params.propertyId} tenantId = {this.props.match.params.tenantId}
         toggleSnackbarAndSetText = {this.props.toggleSnackbarAndSetText}></EditMobileNumberDialog> }
       </Screen>
     );

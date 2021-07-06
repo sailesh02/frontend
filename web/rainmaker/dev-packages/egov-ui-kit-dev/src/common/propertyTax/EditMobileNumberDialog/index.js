@@ -8,20 +8,25 @@ import Select from '@material-ui/core/Select';
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../utils/api";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
-
+import MenuItem from '@material-ui/core/MenuItem';
+import SelectField from "material-ui/SelectField";
+import formHoc from "egov-ui-kit/hocs/form";
+import InputLabel from '@material-ui/core/InputLabel';
 class EditMobileNumberDialog extends Component {
   state = {
-    ownerName : ''
+    ownerName : 'ttttrr'
   }
 
   updateMobileNumber = async() => {
     let userInfo = JSON.parse(getUserInfo());
     let Property = this.props.payload
-    const owners = Property.owner.map( owner => {
-        if(owner.ownerName == this.state.ownerName){
-            owner.mobileNumber = userInfo.mobileNumber ? userInfo.mobileNumber : null
-            return owner
-        }
+    const owners = Property.owners.map( owner => {
+      if(owner.name == this.state.ownerName){
+        owner.mobileNumber = userInfo.mobileNumber ? userInfo.mobileNumber : null
+        return owner
+      }else{
+        return owner
+      }
     })
     Property = {...Property, creationReason: "LINK", owners: owners}
     try {
@@ -38,14 +43,15 @@ class EditMobileNumberDialog extends Component {
     );
     if(propertyResponse) {
       fetchProperties([
-        { key: "propertyIds", value: decodeURIComponent(this.props.match.params.propertyId) },
-        { key: "tenantId", value: this.props.match.params.tenantId },
+        { key: "propertyIds", value: decodeURIComponent(this.props.propertyId) },
+        { key: "tenantId", value: this.props.tenantId },
       ]);
       this.props.toggleSnackbarAndSetText(
         true,
         { labelName: "Property linked successfully", labelKey: "PT_LINKED_SUCCESS_MSG" },
         "success"
       );
+      this.props.closeDialogue()
     }
     } catch (error) {
       this.props.toggleSnackbarAndSetText(
@@ -56,17 +62,29 @@ class EditMobileNumberDialog extends Component {
     }
   }
 
-  handleSelectedOwner = () => {
+  handleSelectedOwner = (event,value) => {
       this.setState({
         ownerName : event.target.value
       })
   }
+
+  prepareFilterDropdown(data) {
+    return (
+        data.map((item, index) => {
+          return (<MenuItem key={index} value={item}>{item}</MenuItem>)  
+        })
+    )
+}
 
   componentDidMount = () => {
   };
 
   render() {
     let { open, closeDialogue, owners, history, payload } = this.props;
+    console.log("owners",owners)
+    const ownersName = owners && owners.map( owner => {
+      return owner.name
+    })
     return owners ? (
       <Dialog
         open={open}
@@ -75,27 +93,36 @@ class EditMobileNumberDialog extends Component {
             <div className="dialogue-question">
               <Label label="PT_SELECT_USER" fontSize="20px" color="black" />
             </div>
-            <div className="year-range-botton-cont">
-            <FormControl>
-                <Select style={{marginLeft: `10px`,
-                    height: `32px`,
-                    borderRadius: '0px',
-                    marginTop: '2%',border:'none',color: '#4CAF50',textAlign: 'center'}} name='ownerName' value= {this.state.ownerName} placeholder="Select Owner"
+            <div className="mobile-range-botton-cont">
+            {/* <FormControl style={{width:'100%'}}>
+                <SelectField name='ownerName' value= {this.state.ownerName} placeholder="Select Owner"
                     onChange = {this.handleSelectedOwner} >
-                    {owners && owners.map( owner => {
-                        return <MenuItem key={owner.name} value={owner.name}>{owner.name}</MenuItem>
+                    {owners && owners.map(owner => {
+                      <MenuItem key={owner.name} value={owner.name} primaryText={owner.name}></MenuItem>
                     })}
-                </Select>  
-            </FormControl>
+                </SelectField> 
+            </FormControl> */}
+            <FormControl style={{width:'100%'}}>
+        <Select
+          value={this.state.ownerName}
+          onChange={this.handleSelectedOwner}
+        >
+          {this.prepareFilterDropdown(ownersName)}
+        </Select>
+        </FormControl>
+            {/* <MobileNumberHOC
+                handleSelectedOwner={this.handleSelectedOwner}
+                selectedName={this.state.ownerName}
+              /> */}
             </div>
-            <div className='year-dialogue-button'>
+            <div className='mobile-dialogue-button'>
               <Button
                 label={<Label label="PT_CANCEL" buttonLabel={true} color="black" />}
                 onClick={() => { closeDialogue() }}
                 labelColor="#fe7a51"
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }}></Button>
               <Button
-                label={<Label label="PT_OK" buttonLabel={true} color="black" />}
+                label={<Label label="PT_LINK" buttonLabel={true} color="black" />}
                 labelColor="#fe7a51"
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={this.updateMobileNumber}></Button>
             </div>
@@ -105,7 +132,7 @@ class EditMobileNumberDialog extends Component {
         isClose={false}
         onRequestClose={closeDialogue}
         contentClassName="year-dialog-content"
-        className="year-dialog"
+        className="mobile-dialog"
       />
     ) : null;
   }

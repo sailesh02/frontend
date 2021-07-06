@@ -14,20 +14,28 @@ import formHoc from "egov-ui-kit/hocs/form";
 import InputLabel from '@material-ui/core/InputLabel';
 class EditMobileNumberDialog extends Component {
   state = {
-    ownerName : 'ttttrr'
+    ownerName : ''
   }
 
   updateMobileNumber = async() => {
     let userInfo = JSON.parse(getUserInfo());
     let Property = this.props.payload
-    const owners = Property.owners.map( owner => {
+
+    let owners = Property.owners.map( owner => {
       if(owner.name == this.state.ownerName){
         owner.mobileNumber = userInfo.mobileNumber ? userInfo.mobileNumber : null
         return owner
-      }else{
+       }else{
         return owner
       }
     })
+
+    owners = owners.filter( owner => {
+      if(owner.name == this.state.ownerName){
+        return owner
+      }
+    })
+
     Property = {...Property, creationReason: "LINK", owners: owners}
     try {
       const propertyResponse = await httpRequest(

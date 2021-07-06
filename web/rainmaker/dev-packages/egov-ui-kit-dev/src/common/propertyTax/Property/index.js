@@ -122,39 +122,6 @@ class Property extends Component {
     this.setState({
       editMobileOpen : true
     })
-    // let userInfo = JSON.parse(getUserInfo());
-    // let Property = this.props.selPropertyDetails
-    // Property = {...Property, creationReason: "LINK", owners: [{...Property.owners[0], mobileNumber: userInfo.mobileNumber ? userInfo.mobileNumber : userInfo.userName}]}
-    // try {
-    //   const propertyResponse = await httpRequest(
-    //     `property-services/property/_update`,
-    //     `_update`,
-    //     [],
-    //     {
-    //         Property
-    //     },
-    //     [],
-    //     {},
-    //     true
-    // );
-    // if(propertyResponse) {
-    //   fetchProperties([
-    //     { key: "propertyIds", value: decodeURIComponent(this.props.match.params.propertyId) },
-    //     { key: "tenantId", value: this.props.match.params.tenantId },
-    //   ]);
-    //   this.props.toggleSnackbarAndSetText(
-    //     true,
-    //     { labelName: "Property linked successfully", labelKey: "PT_LINKED_SUCCESS_MSG" },
-    //     "success"
-    //   );
-    // }
-    // } catch (error) {
-    //   this.props.toggleSnackbarAndSetText(
-    //     true,
-    //     { labelName: error, labelKey: error },
-    //     "error"
-    //   );
-    // }
   }
 
   onAssessPayClick = () => {

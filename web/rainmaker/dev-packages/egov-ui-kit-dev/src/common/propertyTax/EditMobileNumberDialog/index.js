@@ -89,49 +89,39 @@ class EditMobileNumberDialog extends Component {
       <Dialog
         open={open}
         children={[
-          <div key={1}>
+          <div style={{height:'162px'}} key={1}>
             <div className="dialogue-question">
               <Label label="PT_SELECT_USER" fontSize="20px" color="black" />
             </div>
             <div className="mobile-range-botton-cont">
-            {/* <FormControl style={{width:'100%'}}>
-                <SelectField name='ownerName' value= {this.state.ownerName} placeholder="Select Owner"
-                    onChange = {this.handleSelectedOwner} >
-                    {owners && owners.map(owner => {
-                      <MenuItem key={owner.name} value={owner.name} primaryText={owner.name}></MenuItem>
-                    })}
-                </SelectField> 
-            </FormControl> */}
-            <FormControl style={{width:'100%'}}>
-        <Select
-          value={this.state.ownerName}
-          onChange={this.handleSelectedOwner}
-        >
-          {this.prepareFilterDropdown(ownersName)}
-        </Select>
-        </FormControl>
-            {/* <MobileNumberHOC
-                handleSelectedOwner={this.handleSelectedOwner}
-                selectedName={this.state.ownerName}
-              /> */}
+              <FormControl style={{width:'100%'}}>
+                <Select
+                  value={this.state.ownerName}
+                  onChange={this.handleSelectedOwner}
+                >
+                  {this.prepareFilterDropdown(ownersName)}
+                </Select>
+              </FormControl>
             </div>
             <div className='mobile-dialogue-button'>
               <Button
-                label={<Label label="PT_CANCEL" buttonLabel={true} color="black" />}
+                label={<Label label="PT_CANCEL" buttonLabel={true} color="#fe7a51" />}
                 onClick={() => { closeDialogue() }}
                 labelColor="#fe7a51"
-                buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }}></Button>
+                buttonStyle={{ border: "1px solid #fe7a51" }}
+                style={{ minWidth: "auto",height:'fit-content'}}></Button>
               <Button
-                label={<Label label="PT_LINK" buttonLabel={true} color="black" />}
+                label={<Label label="PT_LINK" buttonLabel={true} color="#fe7a51" />}
                 labelColor="#fe7a51"
-                buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={this.updateMobileNumber}></Button>
+                style={{ minWidth: "auto",height:'fit-content',marginLeft:'2px'}}
+                buttonStyle={{ border: "1px solid #fe7a51" }} onClick={this.updateMobileNumber}></Button>
             </div>
           </div>,
         ]}
         bodyStyle={{ backgroundColor: "#ffffff" }}
         isClose={false}
         onRequestClose={closeDialogue}
-        contentClassName="year-dialog-content"
+        contentClassName="mobile-dialog-content"
         className="mobile-dialog"
       />
     ) : null;

@@ -389,35 +389,7 @@ class Property extends Component {
         }
         {!!selPropertyDetails && !!selPropertyDetails.owners && !!selPropertyDetails.owners.length && (<div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
           <div className="button-container col-xs-4 property-info-access-btn" style={{ float: "right" }}>
-            {/* {editVisible && editVisible.includes(false) ? (<div>
-            <Button
-              label={
-                <Label buttonLabetruel={true}
-                  label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
-                  color="#fe7a51" />
-              }
-              onClick={() => this.onEditPropertyClick()}
-              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-              buttonStyle={{ border: "1px solid #fe7a51" }}
-              style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
-            />
-            <Button
-              onClick={() => this.onAssessPayClick()}
-              label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.ASSESS].parentButton} fontSize="16px" />}
-              primary={true}
-              style={{ lineHeight: "auto", minWidth: "45%" }}
-            />
-            </div>) : (
-              <Button
-              onClick={() => this.linkProperty()}
-              label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.LINK].parentButton} fontSize="16px" />}
-              primary={true}
-              style={{ lineHeight: "auto", minWidth: "45%" }}
-            />
-            )}
-          </div>
-        </div>)} */}
-        {editVisible && editVisible.includes(false) ? 
+          {editVisible && editVisible.includes(false) ? 
           (
             <Button
             onClick={() => this.linkProperty()}

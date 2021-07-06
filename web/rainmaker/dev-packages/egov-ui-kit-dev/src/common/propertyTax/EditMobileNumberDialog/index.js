@@ -81,7 +81,6 @@ class EditMobileNumberDialog extends Component {
 
   render() {
     let { open, closeDialogue, owners, history, payload } = this.props;
-    console.log("owners",owners)
     const ownersName = owners && owners.map( owner => {
       return owner.name
     })
@@ -129,11 +128,8 @@ class EditMobileNumberDialog extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { common, form } = state;
-  const { generalMDMSDataById } = common;
-  const FinancialYear = generalMDMSDataById && generalMDMSDataById.FinancialYear;
-  const getYearList = FinancialYear && Object.keys(FinancialYear);
-  return { getYearList, form };
+  const { form } = state;
+  return { form };
 };
 
 const mapDispatchToProps = (dispatch) => {

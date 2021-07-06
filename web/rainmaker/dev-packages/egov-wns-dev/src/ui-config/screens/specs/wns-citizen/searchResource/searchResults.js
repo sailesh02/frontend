@@ -135,8 +135,12 @@ const linkMobile = (data,serviceType,connectionNumber) => {
   const state = store.getState();
   let userInfo = JSON.parse(getUserInfo());
   if(serviceType == "WATER"){
-    const {connections} = state.screenConfiguration.preparedFinalObject || []
-    let payload = WaterConnection
+    let {AllConnections} = state.screenConfiguration.preparedFinalObject || []
+    let payload = AllConnections && AllConnections.filter( connection => {
+      if(connection.connectionNumber == connectionNumber){
+        return connection
+      }
+    })
     if(payload && payload[0].connectionHolders && payload[0].connectionHolders[0].mobileNumber){
       toggleSnackbarAndSetText(
         true,
@@ -144,8 +148,8 @@ const linkMobile = (data,serviceType,connectionNumber) => {
         "error"
       );    
     }else{
-      payload = [{...WaterConnection[0],connectionHolders:[{
-        ...WaterConnection[0].connectionHolders[0],mobileNumber:userInfo.mobileNumber ? userInfo.mobileNumber : ''
+      payload = [{...payload[0],connectionHolders:[{
+        ...payload[0].connectionHolders[0],mobileNumber:userInfo.mobileNumber ? userInfo.mobileNumber : ''
       }]}]
       const waterConnectionResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: payload });
       if(waterConnectionResponse){
@@ -157,8 +161,12 @@ const linkMobile = (data,serviceType,connectionNumber) => {
       }
     }
   }else{
-    const {Sewe} = state.screenConfiguration.preparedFinalObject || []
-    let payload = WaterConnection
+    let {AllConnections} = state.screenConfiguration.preparedFinalObject || []
+    let payload = AllConnections && AllConnections.filter( connection => {
+      if(connection.connectionNumber == connectionNumber){
+        return connection
+      }
+    })
     if(payload && payload[0].connectionHolders && payload[0].connectionHolders[0].mobileNumber){
       toggleSnackbarAndSetText(
         true,
@@ -166,11 +174,11 @@ const linkMobile = (data,serviceType,connectionNumber) => {
         "error"
       );    
     }else{
-      payload = [{...WaterConnection[0],connectionHolders:[{
-        ...WaterConnection[0].connectionHolders[0],mobileNumber:userInfo.mobileNumber ? userInfo.mobileNumber : ''
+      payload = [{...payload[0],connectionHolders:[{
+        ...payload[0].connectionHolders[0],mobileNumber:userInfo.mobileNumber ? userInfo.mobileNumber : ''
       }]}]
-      const waterConnectionResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: payload });
-      if(waterConnectionResponse){
+      const sewerageResponse = await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payload });
+      if(sewerageResponse){
       toggleSnackbarAndSetText(
           true,
           { labelName: "Mobile Number linked successfully", labelKey: "MOBILE_LINKED_SUCCESS_MSG" },

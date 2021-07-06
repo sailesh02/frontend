@@ -81,6 +81,10 @@ export const searchApiCall = async (state, dispatch) => {
       const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = serviceConst.WATER; return e }) : []
       const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = serviceConst.SEWERAGE; return e }) : [];
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
+      let requiredConnection = combinedSearchResults && combinedSearchResults.filter( con => {
+        return con.connectionNo && con.connectionNo != 'NA'
+      })
+      dispatch(prepareFinalObject("AllConnections",requiredConnection))
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = combinedSearchResults[i];
         if(element.connectionNo !== null && element.connectionNo!=='NA') {
@@ -172,7 +176,6 @@ const showResults = (connections, dispatch, tenantId) => {
     ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType
   }))
 
-  dispatch(prepareFinalObject("AllConnections",connections))
 
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchResults", "props.rows", connections.length));

@@ -10,6 +10,15 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 
+
+const findAndReplace = (obj, oldValue, newValue) => {
+  Object.keys(obj).forEach(key => {
+      if ((obj[key] instanceof Object) || (obj[key] instanceof Array)) findAndReplace(obj[key], oldValue, newValue)
+      obj[key] = obj[key] === oldValue ? newValue : obj[key]
+  })
+  return obj
+}
+
 export const searchResults = {
   uiFramework: "custom-molecules",
   moduleName: "egov-wns",
@@ -164,6 +173,8 @@ const linkMobile = async(data,serviceType,connectionNumber) => {
             ...payload[0].connectionHolders[0],mobileNumber:userInfo.mobileNumber ? userInfo.mobileNumber : ''
           }]}]
           payload[0].applicationType = "LINK_MOBILE_NUMBER"
+          payload[0] = findAndReplace(payload[0], "NA", null);
+
           const waterConnectionResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: payload[0] });
           if(waterConnectionResponse){
             store.dispatch(toggleSnackbarAndSetText(
@@ -174,6 +185,7 @@ const linkMobile = async(data,serviceType,connectionNumber) => {
             }
        
         } catch (error) {
+          console.log(error)
           store.dispatch(toggleSnackbarAndSetText(
             true,
             { labelName: error, labelKey: error },
@@ -193,6 +205,7 @@ const linkMobile = async(data,serviceType,connectionNumber) => {
             ...payload[0].connectionHolders[0],mobileNumber:userInfo.mobileNumber ? userInfo.mobileNumber : ''
           }]}]
           payload[0].applicationType = "LINK_MOBILE_NUMBER"
+          payload[0] = findAndReplace(payload[0], "NA", null);
           const sewerageResponse = await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payload[0]});
           if(sewerageResponse){
             store.dispatch(toggleSnackbarAndSetText(

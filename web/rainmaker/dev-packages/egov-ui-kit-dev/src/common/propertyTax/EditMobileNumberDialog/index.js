@@ -134,7 +134,7 @@ class EditMobileNumberDialog extends Component {
                 >
                   <Typography component="h2" variant="subheading">
                     <LabelContainer labelName="Link Property"
-                    labelKey="LINK_PROPERTY" />
+                    labelKey="PT_LINK" />
                   </Typography>
                 </Grid>
                 <Grid
@@ -151,18 +151,26 @@ class EditMobileNumberDialog extends Component {
                 >
                   <CloseIcon />
                 </Grid>
-                
-                  <Grid
+                <Grid
                     item
                     sm="12"
                     style={{
                       marginTop: 16
                     }}
                   >
-                    <LabelContainer
+                  <LabelContainer
                           labelName="Select Owner"
                           labelKey="PT_OWNER_NAME"
                     />
+                  </Grid>
+                  <Grid
+                    item
+                    sm="12"
+                    style={{
+                      marginTop: 4
+                    }}
+                  >
+                  
                     <TextFieldContainer
                       select={true}
                       style={{ marginRight: "15px" }}
@@ -179,7 +187,6 @@ class EditMobileNumberDialog extends Component {
                       jsonPath="ownername"
                     />
                   </Grid>
-               
                 <Grid item sm="12">
                   <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                     <Button
@@ -194,10 +201,9 @@ class EditMobileNumberDialog extends Component {
                       }
                     >
                       <LabelContainer
-                        labelName={"PT_LINK"}
+                        labelName={"PT_LINK_BUTTON"}
                         labelKey=
-                          {"PT_LINK"}
-                        
+                          {"PT_LINK_BUTTON"}     
                       />
                     </Button>
                   </Grid>

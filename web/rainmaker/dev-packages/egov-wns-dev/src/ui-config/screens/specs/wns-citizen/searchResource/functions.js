@@ -8,7 +8,7 @@ import { httpRequest } from "../../../../../ui-utils";
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
-    { key: "offset", value: "0" }
+    // { key: "offset", value: "0" }
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
@@ -72,6 +72,7 @@ export const searchApiCall = async (state, dispatch) => {
         payloadbillingPeriod = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
         
       } catch (err) { console.log(err) }
+      queryObject.push({ key: "searchType", value: "CONNECTION" });
       let getSearchResult = await getSearchResults(queryObject)
       let getSearchResultForSewerage = await getSearchResultsForSewerage(queryObject, dispatch)
       let finalArray = [];

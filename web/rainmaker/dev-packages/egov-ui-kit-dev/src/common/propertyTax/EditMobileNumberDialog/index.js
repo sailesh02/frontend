@@ -155,7 +155,8 @@ class EditMobileNumberDialog extends Component {
                     item
                     sm="12"
                     style={{
-                      marginTop: 16
+                      marginTop: 16,
+                      fontSize:13
                     }}
                   >
                   <LabelContainer

@@ -237,9 +237,9 @@ const getLabelName = (connectionNumber) => {
       return connection
     }
   })
-
   if(currentConnection && currentConnection.length > 0 && currentConnection[0].connectionHolders && 
-    (!currentConnection[0].connectionHolders[0].mobileNumber || currentConnection[0].connectionHolders[0].mobileNumber == "")){
+    (!currentConnection[0].connectionHolders[0].mobileNumber || currentConnection[0].connectionHolders[0].mobileNumber == "" ||
+    currentConnection[0].connectionHolders[0].mobileNumber == "NA")){
       label =  "WS_COMMON_LINK_MOBILE_NO_LABEL"
     }
   return label  

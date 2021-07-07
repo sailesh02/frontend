@@ -168,8 +168,8 @@ class EditMobileNumberDialog extends Component {
                       style={{ marginRight: "15px" }}
                       label={"Select Owner"}
                       placeholder={{
-                        labelName: "Please Owner",
-                        labelKey: "Select Owner"
+                        labelName: "Please Select Owner",
+                        labelKey: "Please Select Owner"
                       }}
                       data={dropDownData}
                       optionValue="value"

@@ -159,13 +159,6 @@ const linkMobile = async(data,serviceType,connectionNumber) => {
           return connection
         }
       })
-      if(payload && payload[0].connectionHolders && payload[0].connectionHolders[0].mobileNumber){
-        toggleSnackbarAndSetText(
-          true,
-          { labelName: "Mobile Number is already linked", labelKey: "MOBILE_ALREADY_LINKED_ERROR_MSG" },
-          "error"
-        );    
-      }else{
         try {
           payload = [{...payload[0],connectionHolders:[{
             ...payload[0].connectionHolders[0],mobileNumber:userInfo.mobileNumber ? userInfo.mobileNumber : ''
@@ -173,21 +166,21 @@ const linkMobile = async(data,serviceType,connectionNumber) => {
           payload[0].applicationType = "LINK_MOBILE_NUMBER"
           const waterConnectionResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: payload[0] });
           if(waterConnectionResponse){
-            toggleSnackbarAndSetText(
+            store.dispatch(toggleSnackbarAndSetText(
                 true,
                 { labelName: "Mobile Number linked successfully", labelKey: "MOBILE_LINKED_SUCCESS_MSG" },
                 "success"
-              );
+              ));
             }
        
         } catch (error) {
-          toggleSnackbarAndSetText(
+          store.dispatch(toggleSnackbarAndSetText(
             true,
             { labelName: error, labelKey: error },
             "error"
-          );
+          ));
         }
-      }
+    
     }else{
       let {AllConnections} = state.screenConfiguration.preparedFinalObject || []
       let payload = AllConnections && AllConnections.filter( connection => {
@@ -195,13 +188,6 @@ const linkMobile = async(data,serviceType,connectionNumber) => {
           return connection
         }
       })
-      if(payload && payload[0].connectionHolders && payload[0].connectionHolders[0].mobileNumber){
-        toggleSnackbarAndSetText(
-          true,
-          { labelName: "Mobile Number is already linked", labelKey: "MOBILE_ALREADY_LINKED_ERROR_MSG" },
-          "error"
-        );    
-      }else{
         try {
           payload = [{...payload[0],connectionHolders:[{
             ...payload[0].connectionHolders[0],mobileNumber:userInfo.mobileNumber ? userInfo.mobileNumber : ''
@@ -209,21 +195,19 @@ const linkMobile = async(data,serviceType,connectionNumber) => {
           payload[0].applicationType = "LINK_MOBILE_NUMBER"
           const sewerageResponse = await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payload[0]});
           if(sewerageResponse){
-            toggleSnackbarAndSetText(
+            store.dispatch(toggleSnackbarAndSetText(
                 true,
                 { labelName: "Mobile Number linked successfully", labelKey: "MOBILE_LINKED_SUCCESS_MSG" },
                 "success"
-              );
+              ));
             }
         } catch (error) {
-          toggleSnackbarAndSetText(
+          store.dispatch(toggleSnackbarAndSetText(
             true,
             { labelName: error, labelKey: error },
             "error"
-          );
+          ));
         }
-      
-      }
     }
   }
 }

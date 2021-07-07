@@ -1,7 +1,17 @@
-import { Button, Dialog } from "components";
+import { Dialog, DialogContent } from "@material-ui/core";
 import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Grid, Typography, Button } from "@material-ui/core";
+import { Container } from "egov-ui-framework/ui-atoms";
+import store from "ui-redux/store";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  LabelContainer,
+  TextFieldContainer
+} from "egov-ui-framework/ui-containers";
+import CloseIcon from "@material-ui/icons/Close";
+
 import "./index.css";
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -74,6 +84,7 @@ class EditMobileNumberDialog extends Component {
       this.setState({
         ownerName : event.target.value
       })
+    store.dispatch(prepareFinalObject("ownername",event.target.value))
   }
 
   prepareFilterDropdown(data) {
@@ -89,48 +100,157 @@ class EditMobileNumberDialog extends Component {
 
   render() {
     let { open, closeDialogue, owners, history, payload } = this.props;
-    const ownersName = owners && owners.map( owner => {
-      return owner.name
+    const dropDownData = owners && owners.map( owner => {
+      return {
+        "value":owner.name,
+        "label":owner.name
+      }
     })
+   
     return owners ? (
       <Dialog
-        open={open}
-        children={[
-          <div style={{height:'162px'}} key={1}>
-            <div className="dialogue-question">
-              <Label label="PT_SELECT_USER" fontSize="20px" color="black" />
-            </div>
-            <div className="mobile-range-botton-cont">
-              <FormControl style={{width:'100%'}}>
-                <Select
-                  value={this.state.ownerName}
-                  onChange={this.handleSelectedOwner}
+      fullScreen={false}
+      open={open}
+      onClose={closeDialogue}
+      maxWidth={false}
+    >
+      <DialogContent
+        children={
+          <Container
+            children={
+              <Grid
+                container="true"
+                spacing={12}
+                marginTop={16}
+                className="action-container"
+              >
+                <Grid
+                  style={{
+                    alignItems: "center",
+                    display: "flex"
+                  }}
+                  item
+                  sm={10}
                 >
-                  {this.prepareFilterDropdown(ownersName)}
-                </Select>
-              </FormControl>
-            </div>
-            <div className='mobile-dialogue-button'>
-              <Button
-                label={<Label label="PT_CANCEL" buttonLabel={true} color="#fe7a51" />}
-                onClick={() => { closeDialogue() }}
-                labelColor="#fe7a51"
-                buttonStyle={{ border: "1px solid #fe7a51" }}
-                style={{ minWidth: "auto",height:'fit-content'}}></Button>
-              <Button
-                label={<Label label="PT_LINK" buttonLabel={true} color="#fe7a51" />}
-                labelColor="#fe7a51"
-                style={{ minWidth: "auto",height:'fit-content',marginLeft:'2px'}}
-                buttonStyle={{ border: "1px solid #fe7a51" }} onClick={this.updateMobileNumber}></Button>
-            </div>
-          </div>,
-        ]}
-        bodyStyle={{ backgroundColor: "#ffffff" }}
-        isClose={false}
-        onRequestClose={closeDialogue}
-        contentClassName="mobile-dialog-content"
-        className="mobile-dialog"
+                  <Typography component="h2" variant="subheading">
+                    <LabelContainer labelName="Link Property"
+                    labelKey="LINK_PROPERTY" />
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  sm={2}
+                  style={{
+                    textAlign: "right",
+                    cursor: "pointer",
+                    position: "absolute",
+                    right: "16px",
+                    top: "16px"
+                  }}
+                  onClick={closeDialogue}
+                >
+                  <CloseIcon />
+                </Grid>
+                
+                  <Grid
+                    item
+                    sm="12"
+                    style={{
+                      marginTop: 16
+                    }}
+                  >
+                    <LabelContainer
+                          labelName="Select Owner"
+                          labelKey="PT_SELECT_OWNER"
+                    />
+                    <TextFieldContainer
+                      select={true}
+                      style={{ marginRight: "15px" }}
+                      label={"Select Owner"}
+                      placeholder={{
+                        labelName: "Please Owner",
+                        labelKey: "Select Owner"
+                      }}
+                      data={dropDownData}
+                      optionValue="value"
+                      optionLabel="label"
+                      hasLocalization={false}
+                      onChange={this.handleSelectedOwner}
+                      jsonPath="ownername"
+                    />
+                  </Grid>
+               
+                <Grid item sm="12">
+                  <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
+                    <Button
+                      variant={"contained"}
+                      color={"primary"}
+                      style={{
+                        minWidth: "200px",
+                        height: "48px"
+                      }}
+                      className="bottom-button"
+                      onClick={this.updateMobileNumber
+                      }
+                    >
+                      <LabelContainer
+                        labelName={"PT_LINK"}
+                        labelKey=
+                          {"PT_LINK"}
+                        
+                      />
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+            }
+          />
+        }
       />
+    </Dialog>
+      // <Dialog
+      //   open={open}
+      //   fullScreen={false}
+      //   open={open}
+      //   onClose={closeDialogue}
+      //   maxWidth={false}
+      //   children={[
+      //     <div style={{height:'162px'}} key={1}>
+      //       <div className="dialogue-question">
+      //         <Label label="PT_SELECT_USER" fontSize="20px" color="black" />
+      //       </div>
+      //       <div className="mobile-range-botton-cont">
+      //         <FormControl style={{width:'100%'}}>
+      //           <Select
+      //             value={this.state.ownerName}
+      //             onChange={this.handleSelectedOwner}
+      //             placeholder="Select owner"
+      //           >
+      //             {this.prepareFilterDropdown(ownersName)}
+      //           </Select>
+      //         </FormControl>
+      //       </div>
+      //       <div className='mobile-dialogue-button'>
+      //         <Button
+      //           label={<Label label="PT_CANCEL" buttonLabel={true} color="#fe7a51" />}
+      //           onClick={() => { closeDialogue() }}
+      //           labelColor="#fe7a51"
+      //           buttonStyle={{ border: "1px solid #fe7a51" }}
+      //           style={{ minWidth: "auto",height:'fit-content'}}></Button>
+      //         <Button
+      //           label={<Label label="PT_LINK" buttonLabel={true} color="#fe7a51" />}
+      //           labelColor="#fe7a51"
+      //           style={{ minWidth: "auto",height:'fit-content',marginLeft:'2px'}}
+      //           buttonStyle={{ border: "1px solid #fe7a51" }} onClick={this.updateMobileNumber}></Button>
+      //       </div>
+      //     </div>,
+      //   ]}
+      //   bodyStyle={{ backgroundColor: "#ffffff" }}
+      //   isClose={false}
+      //   onRequestClose={closeDialogue}
+      //   // contentClassName="mobile-dialog-content"
+      //   className="mobile-dialog"
+      // />
     ) : null;
   }
 }

@@ -562,6 +562,44 @@ const getAcknowledgementCard = (
         tenant
       )
     };
+  }else if(purpose === "disconnect" && status === "success" && applicationNumberWater && applicationNumberSewerage){
+      // loadReceiptGenerationData(applicationNumber, tenant);
+      return {
+        commonHeader: commonHeader(state,
+          dispatch,
+          applicationNumber,
+          tenant),
+        applicationSuccessCard: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          children: {
+            card: acknowledgementCard({
+              icon: "done",
+              backgroundColor: "#39CB74",
+              header: {
+                labelName: "Connection is disconnected successfully",
+                labelKey: "WS_CONNECTION_DISCONNECTED_SUCCESS_MESSAGE_HEAD"
+              },
+              body: {
+                labelName:
+                  "A notification regarding connection has been sent to registered Mobile No.",
+                labelKey: "WS_APPROVAL_CHECKLIST_MESSAGE_SUB"
+              },
+              tailText: {
+                labelName: "Application Number.",
+                labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+              },
+              number: applicationNumberWater || applicationNumberSewerage
+            })
+          }
+        },
+        applicationSuccessFooter: applicationSuccessFooter(
+          state,
+          dispatch,
+          applicationNumberWater || applicationNumberSewerage,
+          tenant
+        )
+      };
   }
 };
 

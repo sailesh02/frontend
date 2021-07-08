@@ -36,7 +36,7 @@ import { getServiceDetails } from "./connectionDetailsResource/service-details";
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 const service = getQueryArg(window.location.href, "service");
-
+let applicationStatus = '';
 const getApplicationNumber = (dispatch, connectionsObj) => {
   let appNos = "";
   if (connectionsObj.length > 1) {
@@ -123,11 +123,20 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       dispatch,
       true
     );
+   
     if (
       payloadData !== null &&
       payloadData !== undefined &&
       payloadData.SewerageConnections.length > 0
     ) {
+
+      //hide disconnect button if connection is disconnected
+      debugger
+      // applicationStatus = payloadData && payloadData.SewerageConnections && payloadData.SewerageConnections[0].applicationStatus || ''
+      // if(applicationStatus != "CONNECTION_DISCONNECTED" && ifUserRoleExists('CITIZEN') ){
+      //   getDisconnectFooter = connectionDisconnect
+      //   getConnectionDetailsFooterAction = {}
+      // }
       payloadData.SewerageConnections = sortpayloadDataObj(
         payloadData.SewerageConnections
       );
@@ -236,6 +245,11 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       payloadData !== undefined &&
       payloadData.WaterConnection.length > 0
     ) {
+      // applicationStatus = payloadData && payloadData.WaterConnection && payloadData.WaterConnection[0].applicationStatus || ''
+      // if(applicationStatus != "CONNECTION_DISCONNECTED" && ifUserRoleExists('CITIZEN') ){
+      //   getDisconnectFooter = connectionDisconnect
+      //   getConnectionDetailsFooterAction = {}
+      // }
       payloadData.WaterConnection = sortpayloadDataObj(
         payloadData.WaterConnection
       );
@@ -325,6 +339,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       getApplicationNumber(dispatch, payloadData.WaterConnection);
     }
   }
+  
 };
 
 const beforeInitFn = async (action, state, dispatch, connectionNumber,service) => {
@@ -390,8 +405,9 @@ const ownerDetails = getOwnerDetails(false);
 const connectionHolders = connHolderDetailsSummary();
 
 const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
-
-const getConnectionDetailsFooterAction = ifUserRoleExists('WS_CEMP') ? connectionDetailsFooter :  ifUserRoleExists('CITIZEN') ? connectionDisconnect : {};
+debugger
+let getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP') || ifUserRoleExists('CITIZEN')) ? connectionDetailsFooter : {};
+// let getDisconnectFooter = {}
 console.log(getConnectionDetailsFooterAction)
 
 
@@ -539,6 +555,7 @@ const screenConfig = {
         },
         connectionDetails,
         getConnectionDetailsFooterAction,
+        // getDisconnectFooter
       },
     },
     adhocDialog: {

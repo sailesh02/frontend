@@ -244,7 +244,6 @@ class Footer extends React.Component {
              { key: "applicationNumber", value: applicationNo }
            ];
           if (applicationNo.includes("SW")) {
-            debugger
              payloadSewerage = await getSearchResultsSW(queryObject)
              payloadSewerage.SewerageConnections[0].water = false;
              payloadSewerage.SewerageConnections[0].sewerage = true;
@@ -262,18 +261,18 @@ class Footer extends React.Component {
            set(payloadSewerageCreate, "processInstance.action", "INITIATE");
            set(payloadSewerageCreate, "connectionType", "Non Metered");
            set(payloadSewerageCreate, "tenantId", tenantId);
-           
+           payloadSewerageCreate.applicationType = "DISCONNECT_SEWERAGE_CONNECTION",
            payloadSewerageCreate = findAndReplace(payloadSewerageCreate, "NA", null);
            payloadSewerageCreate.property = null;
            payloadSewerageCreate.noOfFlats = payloadSewerageCreate.payloadSewerageCreate && payloadSewerageCreate.noOfFlats != "" ? queryObject.noOfFlats : 0
-           let response = await httpRequest("post", "/sw-services/swc/_createe", "", [], { SewerageConnection: payloadSewerageCreate });
+           let response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: payloadSewerageCreate });
            response.SewerageConnections[0].sewerage = true;
            response.SewerageConnections[0].service = "Sewerage";
            response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality
            let payloadSewerageUpdate = parserFunction(response.SewerageConnections[0]);
            set(payloadSewerageUpdate, "processInstance.action", "SUBMIT_APPLICATION");
            set(payloadSewerageUpdate, "connectionType", "Non Metered");
-           payloadSewerageUpdate.applicationType = "DISCONNECT_WATER_CONNECTION"
+           payloadSewerageUpdate.applicationType = "DISCONNECT_SEWERAGE_CONNECTION"
  
            if (typeof payloadSewerageUpdate.additionalDetails !== 'object') {
              payloadSewerageUpdate.additionalDetails = {};
@@ -283,7 +282,7 @@ class Footer extends React.Component {
            payloadSewerageUpdate = findAndReplace(payloadSewerageUpdate, "NA", null);
            payloadSewerageUpdate.property = null
            payloadSewerageUpdate.noOfFlats = payloadSewerageUpdate.noOfFlats && payloadSewerageUpdate.noOfFlats != "" ? payloadSewerageUpdate.noOfFlats : 0
-           await httpRequest("post", "/sw-services/swc/_updatee", "", [], { SewerageConnection: payloadSewerageUpdate });
+           await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payloadSewerageUpdate });
            dispatch(
              setRoute(
                `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNo}&applicationNumberSewerage=${applicationNo}&tenantId=${tenantId}`
@@ -309,7 +308,7 @@ class Footer extends React.Component {
              set(payload, "waterSource", getWaterSource(payload.waterSource, payload.waterSubSource));
              payload.pipeSize = 0
              payload.noOfFlats = payload.noOfFlats && payload.noOfFlats != "" ? payload.noOfFlats : 0
-             let response = await httpRequest("post", "/ws-services/wc/_createe", "", [], { WaterConnection: payload });
+             let response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: payload });
              response.WaterConnection[0].water = true;
              let waterSource = response.WaterConnection[0].waterSource.split(".");
              response.WaterConnection[0].waterSource = waterSource[0];
@@ -329,7 +328,7 @@ class Footer extends React.Component {
              waterUpdatePayload.pipeSize = 0
              waterUpdatePayload = findAndReplace(waterUpdatePayload, "NA", null);
              waterUpdatePayload.noOfFlats = waterUpdatePayload.noOfFlats && waterUpdatePayload.noOfFlats != "" ? waterUpdatePayload.noOfFlats : 0
-             await httpRequest("post", "/ws-services/wc/_updatee", "", [], { WaterConnection: waterUpdatePayload });
+             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: waterUpdatePayload });
              let purpose = "disconnect";
              let status = "success";
              dispatch(

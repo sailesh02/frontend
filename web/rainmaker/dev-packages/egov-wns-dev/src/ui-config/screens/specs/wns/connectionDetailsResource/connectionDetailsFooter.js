@@ -14,3 +14,16 @@ export const connectionDetailsFooter = getCommonApplyFooter("BOTTOM",{
     }
   }
 });
+
+// footer to disconnect the connection
+export const connectionDisconnect = getCommonApplyFooter("BOTTOM",{
+  takeAction: {
+    uiFramework: "custom-molecules-local",
+    moduleName: "egov-wns",
+    componentPath: "ConnectionActionsFooter",
+    props: {      
+    	connectionNumber:getQueryArg(window.location.href, "connectionNumber"),
+    	tenantId: getQueryArg(window.location.href, "tenantId")  
+    }
+  }
+});

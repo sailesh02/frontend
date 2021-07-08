@@ -24,7 +24,7 @@ import {
 } from "../../../../ui-utils/commons";
 import { getDemand, ifUserRoleExists } from "../utils";
 import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
-import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
+import { connectionDetailsFooter,connectionDisconnect } from "./connectionDetailsResource/connectionDetailsFooter";
 import {
   connHolderDetailsSameAsOwnerSummary,
   connHolderDetailsSummary,
@@ -391,7 +391,8 @@ const connectionHolders = connHolderDetailsSummary();
 
 const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
 
-const getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP') || ifUserRoleExists('CITIZEN')) ? connectionDetailsFooter : {};
+const getConnectionDetailsFooterAction = ifUserRoleExists('WS_CEMP') ? connectionDetailsFooter :  ifUserRoleExists('CITIZEN') ? connectionDisconnect : {};
+console.log(getConnectionDetailsFooterAction)
 
 
 export const connectionDetails = getCommonCard({

@@ -15,6 +15,7 @@ import { httpRequest } from "../../ui-utils/api";
 import { getSearchResultsSW, getSearchResults, getWaterSource } from "../../ui-utils/commons"
 import set from "lodash/set";
 import { convertDateToEpoch } from "../../ui-config/screens/specs/utils";
+import ConfirmationDialog from "../ConfirmationDialog";
 
 // import { getRequiredDocData, showHideAdhocPopup } from "egov-billamend/ui-config/screens/specs/utils"
 
@@ -73,7 +74,177 @@ try {
 class Footer extends React.Component {
   state = {
     open: false,
+    openDialog:false,
+    dialogHeader:'',
+    dialogButton:'',
   };
+
+ closeDialogue = () => {
+    this.setState({
+      openDialog:false
+    })
+  }
+
+  onClickFunction = async() => {
+    const {
+      connectionNumber,
+      tenantId,
+      toggleSnackbar,
+      applicationNo,
+      applicationNos,
+    } = this.props;
+    let fetchBillQueryObj = []
+          let due
+          if(applicationNo.includes('SW')){
+            fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "SW" }]
+          }else{
+            fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "WS" }]
+          }
+          let billResults = await fetchBill(fetchBillQueryObj)
+          billResults && billResults.Bill &&Array.isArray(billResults.Bill)&&billResults.Bill.length>0 && billResults.Bill.map(bill => {
+              due = bill.totalAmount
+          })
+          let errLabel =
+            applicationNo && applicationNo.includes("WS")
+              ? "WS_DUE_AMOUNT_SHOULD_BE_ZERO"
+              : "SW_DUE_AMOUNT_SHOULD_BE_ZERO";
+          if (due && parseInt(due) > 0) {
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Due Amount should be zero!",
+                labelKey: errLabel,
+              },
+              "error"
+            );
+  
+            return false;
+          }
+  
+          // check for the WF Exists
+          const queryObj = [
+            { key: "businessIds", value: applicationNos },
+            { key: "tenantId", value: tenantId },
+          ];
+  
+          let isApplicationApproved = await isWorkflowExists(queryObj);
+          if (!isApplicationApproved) {
+            toggleSnackbar(
+              true,
+              {
+                labelName: "WorkFlow already Initiated",
+                labelKey: "WS_WORKFLOW_ALREADY_INITIATED",
+              },
+              "error"
+            );
+            return false;
+          }
+      
+           // to disconnect the connection
+            let payloadSewerage,payloadWater
+            let queryObject = [
+               { key: "tenantId", value: tenantId },
+               { key: "applicationNumber", value: applicationNo }
+             ];
+            if (applicationNo.includes("SW")) {
+               payloadSewerage = await getSearchResultsSW(queryObject)
+               payloadSewerage.SewerageConnections[0].water = false;
+               payloadSewerage.SewerageConnections[0].sewerage = true;
+               payloadSewerage.SewerageConnections[0].service = "Sewerage";
+               let sewerageConnections = payloadSewerage ? payloadSewerage.SewerageConnections : []
+               delete sewerageConnections[0].id; sewerageConnections[0].documents = [];
+               sewerageConnections[0].locality = sewerageConnections[0].additionalDetails.locality
+   
+               let payloadSewerageCreate = parserFunction(sewerageConnections[0]);
+   
+               if (typeof payloadSewerageCreate.additionalDetails !== 'object') {
+                 payloadSewerageCreate.additionalDetails = {};
+             }
+             payloadSewerageCreate.additionalDetails.locality = payloadSewerageCreate.locality
+             set(payloadSewerageCreate, "processInstance.action", "INITIATE");
+             set(payloadSewerageCreate, "connectionType", "Non Metered");
+             set(payloadSewerageCreate, "tenantId", tenantId);
+             payloadSewerageCreate.applicationType = "DISCONNECT_SEWERAGE_CONNECTION",
+             payloadSewerageCreate = findAndReplace(payloadSewerageCreate, "NA", null);
+             payloadSewerageCreate.property = null;
+             payloadSewerageCreate.noOfFlats = payloadSewerageCreate.payloadSewerageCreate && payloadSewerageCreate.noOfFlats != "" ? queryObject.noOfFlats : 0
+             let response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: payloadSewerageCreate });
+             response.SewerageConnections[0].sewerage = true;
+             response.SewerageConnections[0].service = "Sewerage";
+             response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality
+             let payloadSewerageUpdate = parserFunction(response.SewerageConnections[0]);
+             set(payloadSewerageUpdate, "processInstance.action", "SUBMIT_APPLICATION");
+             set(payloadSewerageUpdate, "connectionType", "Non Metered");
+             payloadSewerageUpdate.applicationType = "DISCONNECT_SEWERAGE_CONNECTION"
+   
+             if (typeof payloadSewerageUpdate.additionalDetails !== 'object') {
+               payloadSewerageUpdate.additionalDetails = {};
+             }
+             set(payloadSewerageUpdate, "tenantId", tenantId);
+             payloadSewerageUpdate.additionalDetails.locality = payloadSewerageUpdate.locality;
+             payloadSewerageUpdate = findAndReplace(payloadSewerageUpdate, "NA", null);
+             payloadSewerageUpdate.property = null
+             payloadSewerageUpdate.noOfFlats = payloadSewerageUpdate.noOfFlats && payloadSewerageUpdate.noOfFlats != "" ? payloadSewerageUpdate.noOfFlats : 0
+             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payloadSewerageUpdate });
+             store.dispatch(
+               setRoute(
+                 `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNo}&applicationNumberSewerage=${applicationNo}&tenantId=${tenantId}`
+               )
+             );
+            }else{
+               payloadWater = await getSearchResults(queryObject)
+               payloadWater.WaterConnection[0].water = true;
+               payloadWater.WaterConnection[0].sewerage = false;
+               payloadWater.WaterConnection[0].service = "Water";
+               payloadWater.WaterConnection[0].locality = payloadWater.WaterConnection[0].additionalDetails.locality
+               let waterConnections = payloadWater ? payloadWater.WaterConnection : []
+               delete waterConnections[0].id; waterConnections[0].documents = [];
+               let payload = parserFunction(waterConnections[0]);
+               if (typeof payload.additionalDetails !== 'object') {
+                   payload.additionalDetails = {};
+               }
+               set(payload, "tenantId", tenantId);
+               payload.additionalDetails.locality = payload.locality;
+               payload = findAndReplace(payload, "NA", null);
+               set(payload, "processInstance.action", "INITIATE")
+               payload.applicationType = "DISCONNECT_WATER_CONNECTION",
+               set(payload, "waterSource", getWaterSource(payload.waterSource, payload.waterSubSource));
+               payload.pipeSize = 0
+               payload.noOfFlats = payload.noOfFlats && payload.noOfFlats != "" ? payload.noOfFlats : 0
+               let response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: payload });
+               response.WaterConnection[0].water = true;
+               let waterSource = response.WaterConnection[0].waterSource.split(".");
+               response.WaterConnection[0].waterSource = waterSource[0];
+               response.WaterConnection[0].service = "Water";
+               response.WaterConnection[0].waterSubSource = waterSource[1];
+               response.WaterConnection[0].applicationType = "DISCONNECT_WATER_CONNECTION"
+               response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality
+   
+               let waterUpdatePayload = parserFunction(response.WaterConnection[0]);
+               set(waterUpdatePayload, "processInstance.action", "SUBMIT_APPLICATION");
+               set(waterUpdatePayload, "waterSource", getWaterSource(waterUpdatePayload.waterSource, waterUpdatePayload.waterSubSource));
+               if (typeof waterUpdatePayload.additionalDetails !== 'object') {
+                 waterUpdatePayload.additionalDetails = {};
+               }
+               set(waterUpdatePayload, "tenantId", tenantId);
+               waterUpdatePayload.additionalDetails.locality = waterUpdatePayload.locality;
+               waterUpdatePayload.pipeSize = 0
+               waterUpdatePayload = findAndReplace(waterUpdatePayload, "NA", null);
+               waterUpdatePayload.noOfFlats = waterUpdatePayload.noOfFlats && waterUpdatePayload.noOfFlats != "" ? waterUpdatePayload.noOfFlats : 0
+               await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: waterUpdatePayload });
+              this.closeDialogue()
+ 
+              let purpose = "disconnect";
+               let status = "success";
+               store.dispatch(
+                 setRoute(
+                   `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNo}&applicationNumberSewerage=${applicationNo}&tenantId=${tenantId}`
+                 )
+               );
+            }
+  
+  }
+
   render() {
     let downloadMenu = [];
     const {
@@ -182,163 +353,15 @@ class Footer extends React.Component {
         // store.dispatch(setRoute(`/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`));
       },
     };
-
     const disconnectButton = {
       label: "Disconnect",
       labelKey: "WS_DISCONNECT_CONNECTION",
       link: async () => {
-        // checking for the due amount
-        let fetchBillQueryObj = []
-        let due
-        if(applicationNo.includes('SW')){
-          fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "SW" }]
-        }else{
-          fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "WS" }]
-        }
-        let billResults = await fetchBill(fetchBillQueryObj)
-        billResults && billResults.Bill &&Array.isArray(billResults.Bill)&&billResults.Bill.length>0 && billResults.Bill.map(bill => {
-            due = bill.totalAmount
-        })
-        console.log("dueeeeeeee",due,billResults)
-        let errLabel =
-          applicationNo && applicationNo.includes("WS")
-            ? "WS_DUE_AMOUNT_SHOULD_BE_ZERO"
-            : "SW_DUE_AMOUNT_SHOULD_BE_ZERO";
-        if (due && parseInt(due) > 0) {
-          toggleSnackbar(
-            true,
-            {
-              labelName: "Due Amount should be zero!",
-              labelKey: errLabel,
-            },
-            "error"
-          );
-
-          return false;
-        }
-
-        // check for the WF Exists
-        const queryObj = [
-          { key: "businessIds", value: applicationNos },
-          { key: "tenantId", value: tenantId },
-        ];
-
-        let isApplicationApproved = await isWorkflowExists(queryObj);
-        if (!isApplicationApproved) {
-          toggleSnackbar(
-            true,
-            {
-              labelName: "WorkFlow already Initiated",
-              labelKey: "WS_WORKFLOW_ALREADY_INITIATED",
-            },
-            "error"
-          );
-          return false;
-        }
-    
-         // to disconnect the connection
-         if (window.confirm("Are you sure you want to disconnect ?")) {
-          let payloadSewerage,payloadWater
-          let queryObject = [
-             { key: "tenantId", value: tenantId },
-             { key: "applicationNumber", value: applicationNo }
-           ];
-          if (applicationNo.includes("SW")) {
-             payloadSewerage = await getSearchResultsSW(queryObject)
-             payloadSewerage.SewerageConnections[0].water = false;
-             payloadSewerage.SewerageConnections[0].sewerage = true;
-             payloadSewerage.SewerageConnections[0].service = "Sewerage";
-             let sewerageConnections = payloadSewerage ? payloadSewerage.SewerageConnections : []
-             delete sewerageConnections[0].id; sewerageConnections[0].documents = [];
-             sewerageConnections[0].locality = sewerageConnections[0].additionalDetails.locality
- 
-             let payloadSewerageCreate = parserFunction(sewerageConnections[0]);
- 
-             if (typeof payloadSewerageCreate.additionalDetails !== 'object') {
-               payloadSewerageCreate.additionalDetails = {};
-           }
-           payloadSewerageCreate.additionalDetails.locality = payloadSewerageCreate.locality
-           set(payloadSewerageCreate, "processInstance.action", "INITIATE");
-           set(payloadSewerageCreate, "connectionType", "Non Metered");
-           set(payloadSewerageCreate, "tenantId", tenantId);
-           payloadSewerageCreate.applicationType = "DISCONNECT_SEWERAGE_CONNECTION",
-           payloadSewerageCreate = findAndReplace(payloadSewerageCreate, "NA", null);
-           payloadSewerageCreate.property = null;
-           payloadSewerageCreate.noOfFlats = payloadSewerageCreate.payloadSewerageCreate && payloadSewerageCreate.noOfFlats != "" ? queryObject.noOfFlats : 0
-           let response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: payloadSewerageCreate });
-           response.SewerageConnections[0].sewerage = true;
-           response.SewerageConnections[0].service = "Sewerage";
-           response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality
-           let payloadSewerageUpdate = parserFunction(response.SewerageConnections[0]);
-           set(payloadSewerageUpdate, "processInstance.action", "SUBMIT_APPLICATION");
-           set(payloadSewerageUpdate, "connectionType", "Non Metered");
-           payloadSewerageUpdate.applicationType = "DISCONNECT_SEWERAGE_CONNECTION"
- 
-           if (typeof payloadSewerageUpdate.additionalDetails !== 'object') {
-             payloadSewerageUpdate.additionalDetails = {};
-           }
-           set(payloadSewerageUpdate, "tenantId", tenantId);
-           payloadSewerageUpdate.additionalDetails.locality = payloadSewerageUpdate.locality;
-           payloadSewerageUpdate = findAndReplace(payloadSewerageUpdate, "NA", null);
-           payloadSewerageUpdate.property = null
-           payloadSewerageUpdate.noOfFlats = payloadSewerageUpdate.noOfFlats && payloadSewerageUpdate.noOfFlats != "" ? payloadSewerageUpdate.noOfFlats : 0
-           await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payloadSewerageUpdate });
-           dispatch(
-             setRoute(
-               `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNo}&applicationNumberSewerage=${applicationNo}&tenantId=${tenantId}`
-             )
-           );
-          }else{
-             payloadWater = await getSearchResults(queryObject)
-             payloadWater.WaterConnection[0].water = true;
-             payloadWater.WaterConnection[0].sewerage = false;
-             payloadWater.WaterConnection[0].service = "Water";
-             payloadWater.WaterConnection[0].locality = payloadWater.WaterConnection[0].additionalDetails.locality
-             let waterConnections = payloadWater ? payloadWater.WaterConnection : []
-             delete waterConnections[0].id; waterConnections[0].documents = [];
-             let payload = parserFunction(waterConnections[0]);
-             if (typeof payload.additionalDetails !== 'object') {
-                 payload.additionalDetails = {};
-             }
-             set(payload, "tenantId", tenantId);
-             payload.additionalDetails.locality = payload.locality;
-             payload = findAndReplace(payload, "NA", null);
-             set(payload, "processInstance.action", "INITIATE")
-             payload.applicationType = "DISCONNECT_WATER_CONNECTION",
-             set(payload, "waterSource", getWaterSource(payload.waterSource, payload.waterSubSource));
-             payload.pipeSize = 0
-             payload.noOfFlats = payload.noOfFlats && payload.noOfFlats != "" ? payload.noOfFlats : 0
-             let response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: payload });
-             response.WaterConnection[0].water = true;
-             let waterSource = response.WaterConnection[0].waterSource.split(".");
-             response.WaterConnection[0].waterSource = waterSource[0];
-             response.WaterConnection[0].service = "Water";
-             response.WaterConnection[0].waterSubSource = waterSource[1];
-             response.WaterConnection[0].applicationType = "DISCONNECT_WATER_CONNECTION"
-             response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality
- 
-             let waterUpdatePayload = parserFunction(response.WaterConnection[0]);
-             set(waterUpdatePayload, "processInstance.action", "SUBMIT_APPLICATION");
-             set(waterUpdatePayload, "waterSource", getWaterSource(waterUpdatePayload.waterSource, waterUpdatePayload.waterSubSource));
-             if (typeof waterUpdatePayload.additionalDetails !== 'object') {
-               waterUpdatePayload.additionalDetails = {};
-             }
-             set(waterUpdatePayload, "tenantId", tenantId);
-             waterUpdatePayload.additionalDetails.locality = waterUpdatePayload.locality;
-             waterUpdatePayload.pipeSize = 0
-             waterUpdatePayload = findAndReplace(waterUpdatePayload, "NA", null);
-             waterUpdatePayload.noOfFlats = waterUpdatePayload.noOfFlats && waterUpdatePayload.noOfFlats != "" ? waterUpdatePayload.noOfFlats : 0
-             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: waterUpdatePayload });
-             let purpose = "disconnect";
-             let status = "success";
-             dispatch(
-               setRoute(
-                 `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNo}&applicationNumberSewerage=${applicationNo}&tenantId=${tenantId}`
-               )
-             );
-          }
-         }
-        
+        this.setState({
+          openDialog:true,
+          dialogButton:"WS_DISCONNECT_CONNECTION",
+          dialogHeader:"Are you sure you want to disconnect ?"
+        })  
       },
     };
     //if(applicationType === "MODIFY"){
@@ -378,6 +401,8 @@ class Footer extends React.Component {
             {downloadMenu && downloadMenu.length > 0 && <MenuButton data={buttonItems} />}
           </Item>
         </Container>
+        {this.state.openDialog && <ConfirmationDialog open={this.state.openDialog} closeDialogue = {this.closeDialogue} 
+        dialogHeader={this.state.dialogHeader} onClickFunction={this.onClickFunction} dialogButton={this.state.dialogButton}></ConfirmationDialog>}
       </div>
     );
   }

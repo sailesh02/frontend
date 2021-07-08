@@ -144,8 +144,6 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
     return waterConnection;
 }
 
-
-
 export const getSearchResultsSW = async (queryObject, filter = false) => {
     try {
         const response = await httpRequest(

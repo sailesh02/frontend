@@ -47,7 +47,8 @@ const headerrow = getCommonContainer({
 const commonHeader = (state,
   dispatch,
   applicationNumber,
-  tenant) => {
+  tenant,
+  ) => {
   return getCommonContainer({
     headerDiv: {
       uiFramework: "custom-atoms",
@@ -81,6 +82,41 @@ const commonHeader = (state,
             ),
           }
 
+        }
+      }
+    },
+  })
+}
+
+const connectionHeader = (state,
+  dispatch,
+  applicationNumber,
+  tenant,
+  ) => {
+  return getCommonContainer({
+    headerDiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      children: {
+        header1: {
+          gridDefination: {
+            xs: 12,
+            sm: 8
+          },
+          ...headerrow
+        },
+        helpSection: {
+          uiFramework: "custom-atoms",
+          componentPath: "Container",
+          props: {
+            color: "primary",
+            style: { justifyContent: "flex-end" } //, dsplay: "block"
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 4,
+            align: "right"
+          },
         }
       }
     },
@@ -565,10 +601,11 @@ const getAcknowledgementCard = (
   }else if(purpose === "disconnect" && status === "success" && applicationNumberWater && applicationNumberSewerage){
       // loadReceiptGenerationData(applicationNumber, tenant);
       return {
-        commonHeader: commonHeader(state,
+        commonHeader: connectionHeader(state,
           dispatch,
           applicationNumber,
-          tenant),
+          tenant,
+          ),
         applicationSuccessCard: {
           uiFramework: "custom-atoms",
           componentPath: "Div",

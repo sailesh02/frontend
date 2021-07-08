@@ -105,6 +105,11 @@ const ConnectionActionsFooter = Loadable({
   loading: () => <Loading />
 });
 
+const ConfirmationDialog = Loadable({
+  loader: () => import("./ConfirmationDialog"),
+  loading: () => <Loading />
+})
+
 export {
   TestMolecules,
   Tooltip,
@@ -126,5 +131,6 @@ export {
   FeesEstimateOverviewCard,
   OwnerHeader,
   ActionFooter,
-  ConnectionActionsFooter
+  ConnectionActionsFooter,
+  ConfirmationDialog
 };

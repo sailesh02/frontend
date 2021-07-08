@@ -130,13 +130,6 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       payloadData.SewerageConnections.length > 0
     ) {
 
-      //hide disconnect button if connection is disconnected
-      debugger
-      // applicationStatus = payloadData && payloadData.SewerageConnections && payloadData.SewerageConnections[0].applicationStatus || ''
-      // if(applicationStatus != "CONNECTION_DISCONNECTED" && ifUserRoleExists('CITIZEN') ){
-      //   getDisconnectFooter = connectionDisconnect
-      //   getConnectionDetailsFooterAction = {}
-      // }
       payloadData.SewerageConnections = sortpayloadDataObj(
         payloadData.SewerageConnections
       );
@@ -405,7 +398,6 @@ const ownerDetails = getOwnerDetails(false);
 const connectionHolders = connHolderDetailsSummary();
 
 const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
-debugger
 let getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP') || ifUserRoleExists('CITIZEN')) ? connectionDetailsFooter : {};
 // let getDisconnectFooter = {}
 console.log(getConnectionDetailsFooterAction)

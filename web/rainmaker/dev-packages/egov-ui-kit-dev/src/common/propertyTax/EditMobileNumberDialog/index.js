@@ -161,7 +161,7 @@ class EditMobileNumberDialog extends Component {
                   >
                   <LabelContainer
                           labelName="Select Owner"
-                          labelKey="PT_OWNER_NAME"
+                          labelKey="PT_LINK_OWNER_NAME"
                     />
                   </Grid>
                   <Grid

@@ -122,16 +122,14 @@ class EditMobileNumberDialog extends Component {
                 container="true"
                 spacing={12}
                 marginTop={16}
-                className="action-container"
-              >
+                className="action-container">
                 <Grid
                   style={{
                     alignItems: "center",
                     display: "flex"
                   }}
                   item
-                  sm={10}
-                >
+                  sm={10}>
                   <Typography component="h2" variant="subheading">
                     <LabelContainer labelName="Link Property"
                     labelKey="PT_LINK" />
@@ -157,21 +155,18 @@ class EditMobileNumberDialog extends Component {
                     style={{
                       marginTop: 16,
                       fontSize:13
-                    }}
-                  >
+                    }}>
                   <LabelContainer
-                          labelName="Select Owner"
-                          labelKey="PT_LINK_OWNER_NAME"
-                    />
+                    labelName="Select Owner"
+                    labelKey="PT_LINK_OWNER_NAME"
+                  />
                   </Grid>
                   <Grid
                     item
                     sm="12"
                     style={{
                       marginTop: 4
-                    }}
-                  >
-                  
+                    }}>
                     <TextFieldContainer
                       select={true}
                       style={{ marginRight: "15px" }}
@@ -215,49 +210,6 @@ class EditMobileNumberDialog extends Component {
         }
       />
     </Dialog>
-      // <Dialog
-      //   open={open}
-      //   fullScreen={false}
-      //   open={open}
-      //   onClose={closeDialogue}
-      //   maxWidth={false}
-      //   children={[
-      //     <div style={{height:'162px'}} key={1}>
-      //       <div className="dialogue-question">
-      //         <Label label="PT_SELECT_USER" fontSize="20px" color="black" />
-      //       </div>
-      //       <div className="mobile-range-botton-cont">
-      //         <FormControl style={{width:'100%'}}>
-      //           <Select
-      //             value={this.state.ownerName}
-      //             onChange={this.handleSelectedOwner}
-      //             placeholder="Select owner"
-      //           >
-      //             {this.prepareFilterDropdown(ownersName)}
-      //           </Select>
-      //         </FormControl>
-      //       </div>
-      //       <div className='mobile-dialogue-button'>
-      //         <Button
-      //           label={<Label label="PT_CANCEL" buttonLabel={true} color="#fe7a51" />}
-      //           onClick={() => { closeDialogue() }}
-      //           labelColor="#fe7a51"
-      //           buttonStyle={{ border: "1px solid #fe7a51" }}
-      //           style={{ minWidth: "auto",height:'fit-content'}}></Button>
-      //         <Button
-      //           label={<Label label="PT_LINK" buttonLabel={true} color="#fe7a51" />}
-      //           labelColor="#fe7a51"
-      //           style={{ minWidth: "auto",height:'fit-content',marginLeft:'2px'}}
-      //           buttonStyle={{ border: "1px solid #fe7a51" }} onClick={this.updateMobileNumber}></Button>
-      //       </div>
-      //     </div>,
-      //   ]}
-      //   bodyStyle={{ backgroundColor: "#ffffff" }}
-      //   isClose={false}
-      //   onRequestClose={closeDialogue}
-      //   // contentClassName="mobile-dialog-content"
-      //   className="mobile-dialog"
-      // />
     ) : null;
   }
 }

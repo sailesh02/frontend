@@ -21,7 +21,7 @@ export const getWFConfig = (module, businessService) => {
         DEFAULT: "/fire-noc/search-preview",
       };
     case "BPA-SERVICES":
-      if (businessService === "BPA_OC") {
+      if (businessService === "BPA_OC" || businessService === "BPA_OC1" || businessService === "BPA_OC2" || businessService === "BPA_OC3" || businessService === "BPA_OC4") {
         return {
           INITIATED: "/oc-bpa/search-preview",
           DEFAULT: "/oc-bpa/search-preview",

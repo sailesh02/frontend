@@ -67,7 +67,7 @@ export const applicationSuccessFooter = (
      billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
   } else if(businessService === "BPA"){
     billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
-  } else if(businessService === "BPA_OC"){
+  } else if(businessService === "BPA_OC" || businessService === 'BPA_OC1' || businessService === 'BPA_OC2' || businessService === 'BPA_OC3' || businessService === 'BPA_OC4'){
     billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_OC_APP_FEE":"BPA.NC_OC_SAN_FEE");
   }else{
     billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");

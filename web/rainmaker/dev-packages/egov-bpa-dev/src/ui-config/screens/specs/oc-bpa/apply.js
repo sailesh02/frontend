@@ -382,7 +382,7 @@ const screenConfig = {
       "applicationNumber"
     );
     getMdmsData(action, state, dispatch);
-
+    let bService ="BPA_OC1";
     if (applicationNumber) {
       setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
     } else {
@@ -393,11 +393,18 @@ const screenConfig = {
       }
       const today = getTodaysDateInYYYMMDD();
       dispatch(prepareFinalObject("BPAs.appdate", today));
+      const bServiceTemp = get(
+        state.screenConfiguration.preparedFinalObject,
+        "scrutinyDetails.planDetail.planInformation.businessService"
+      )
+      if(bServiceTemp){
+        bService = bServiceTemp;
+      }
     }
 
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "BPA_OC" }
+      { key: "businessServices", value: bService }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);

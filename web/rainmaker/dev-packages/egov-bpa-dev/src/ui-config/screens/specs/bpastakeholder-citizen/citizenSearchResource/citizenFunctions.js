@@ -149,7 +149,7 @@ export const fetchData = async (
           let appType = "BUILDING_PLAN_SCRUTINY";
           let serType = "NEW_CONSTRUCTION";
           let type;
-          if (bService === "BPA_OC") {
+          if (bService === "BPA_OC" || bService === 'BPA_OC1' || bService === 'BPA_OC2' || bService === 'BPA_OC3' || bService === 'BPA_OC4') {
             appType = "BUILDING_OC_PLAN_SCRUTINY"
           }
           if (bService === "BPA_LOW") {

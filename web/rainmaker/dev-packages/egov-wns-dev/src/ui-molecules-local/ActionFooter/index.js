@@ -18,6 +18,8 @@ import { convertDateToEpoch } from "../../ui-config/screens/specs/utils";
 import ConfirmationDialog from "../ConfirmationDialog";
 import { toggleSpinner,hideSpinner } from "../../../../../packages/lib/egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { ifUserRoleExists } from "../../ui-config/screens/specs/utils";
+
 
 // import { getRequiredDocData, showHideAdhocPopup } from "egov-billamend/ui-config/screens/specs/utils"
 
@@ -404,7 +406,6 @@ class Footer extends React.Component {
         // store.dispatch(setRoute(`/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`));
       },
     };
-
     //temporary disconnect connection functionality
     const disconnectButton = {
       label: "Disconnect",
@@ -417,7 +418,6 @@ class Footer extends React.Component {
         })  
       },
     };
-
     // close connection functionality
     const closeConnection = {
       label: "Close Connection",
@@ -432,8 +432,8 @@ class Footer extends React.Component {
     }
     //if(applicationType === "MODIFY"){
     downloadMenu && process.env.REACT_APP_NAME !== "Citizen" && applicationStatus!='CONNECTION_DISCONNECTED' && applicationStatus!='CONNECTION_CLOSED' && downloadMenu.push(editButton);
-    downloadMenu && process.env.REACT_APP_NAME == "Citizen" && applicationStatus!='CONNECTION_DISCONNECTED' && applicationStatus!='CONNECTION_CLOSED' && downloadMenu.push(disconnectButton);
-    downloadMenu && process.env.REACT_APP_NAME == "Citizen" && applicationStatus!='CONNECTION_DISCONNECTED' && applicationStatus!='CONNECTION_CLOSED' && downloadMenu.push(closeConnection);
+    downloadMenu && process.env.REACT_APP_NAME == "Citizen" && ifUserRoleExists('WS_CEMP') && applicationStatus!='CONNECTION_DISCONNECTED' && applicationStatus!='CONNECTION_CLOSED' && downloadMenu.push(disconnectButton);
+    downloadMenu && process.env.REACT_APP_NAME == "Citizen" && ifUserRoleExists('WS_CEMP') && applicationStatus!='CONNECTION_DISCONNECTED' && applicationStatus!='CONNECTION_CLOSED' && downloadMenu.push(closeConnection);
 
     if (
       (businessService && businessService.includes("ws-services-calculation") ||

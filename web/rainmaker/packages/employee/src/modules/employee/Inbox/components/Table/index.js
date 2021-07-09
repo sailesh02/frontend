@@ -231,10 +231,10 @@ class InboxData extends React.Component {
     else if (row[0].subtext === "ASMT") {
       queryParams += '&type=assessment';
     }
-    else if (row[0].subtext === "NewWS1") {
+    else if (row[0].subtext === "NewWS1" || row[0].subtext === "WSDisconnection" || row[0].subtext === "WSCloseConnection") {
       queryParams += '&history=true&service=WATER';
     }
-    else if (row[0].subtext === "NewSW1") {
+    else if (row[0].subtext === "NewSW1" || row[0].subtext === "SWDisconnection" || row[0].subtext === "SWCloseConnection") {
       queryParams += '&history=true&service=SEWERAGE';
     }
     else if (row[0].subtext === "ModifyWSConnection") {

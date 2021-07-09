@@ -27,7 +27,7 @@ import {connectionDetailsWater,connectionDetailsSewerage} from './applyResource/
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
-let serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
+let serviceModuleName = (service === serviceConst.WATER) ? "NewWS1" : "NewSW1";
 let serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
 let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
 let editredirect = `apply?${redirectQueryString}&action=edit`;

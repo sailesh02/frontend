@@ -71,7 +71,8 @@ const getBusinessService=async(businessService, dispatch)=>{
     "_search",
     queryObject
   );
-  if (payload.BusinessServices[0].businessService === "NewWS1" || payload.BusinessServices[0].businessService === "NewSW1") {
+  if (payload.BusinessServices[0].businessService === "NewWS1" || payload.BusinessServices[0].businessService === "NewSW1" 
+   || payload.BusinessServices[0].businessService === "SWCloseConnection" || payload.BusinessServices[0].businessService === "SWDisconnection" || payload.BusinessServices[0].businessService === "WSCloseConnection" || payload.BusinessServices[0].businessService === "WSDisconnection") {
 
     const applicationStatus=commonGetAppStatus(payload);
         dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatusNew", applicationStatus));

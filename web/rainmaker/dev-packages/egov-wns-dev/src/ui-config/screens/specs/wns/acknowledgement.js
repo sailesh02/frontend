@@ -598,7 +598,7 @@ const getAcknowledgementCard = (
         tenant
       )
     };
-  }else if(purpose === "disconnect" && status === "success" && applicationNumberWater && applicationNumberSewerage){
+  }else if(purpose === "disconnect" && status === "success" && (applicationNumberWater || applicationNumberSewerage || applicationNumber)){
       // loadReceiptGenerationData(applicationNumber, tenant);
       return {
         commonHeader: connectionHeader(state,
@@ -626,18 +626,19 @@ const getAcknowledgementCard = (
                 labelName: "Application Number.",
                 labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
               },
-              number: applicationNumberWater || applicationNumberSewerage
+              number: applicationNumberWater || applicationNumberSewerage || applicationNumber
             })
           }
         },
         applicationSuccessFooter: applicationSuccessFooter(
           state,
           dispatch,
-          applicationNumberWater || applicationNumberSewerage,
+          applicationNumberWater || applicationNumberSewerage || applicationNumber,
           tenant
         )
       };
-  }else if(purpose === "closeConnection"  && status === "success" && applicationNumberWater && applicationNumberSewerage){
+  }else if(purpose === "disconnect" && status === "success" && (applicationNumberWater || applicationNumberSewerage || applicationNumber)){
+  }else if(purpose === "closeConnection"  && status === "success" && (applicationNumberWater || applicationNumberSewerage || applicationNumber)){
     return {
       commonHeader: connectionHeader(state,
         dispatch,
@@ -664,14 +665,14 @@ const getAcknowledgementCard = (
               labelName: "Application Number.",
               labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
             },
-            number: applicationNumberWater || applicationNumberSewerage
+            number: applicationNumberWater || applicationNumberSewerage || applicationNumber
           })
         }
       },
       applicationSuccessFooter: applicationSuccessFooter(
         state,
         dispatch,
-        applicationNumberWater || applicationNumberSewerage,
+        applicationNumberWater || applicationNumberSewerage || applicationNumber,
         tenant
       )
     };
@@ -914,6 +915,7 @@ const screenConfig = {
         } else if (applicationNumber && applicationNumber.includes("SW")) {
           consumerNo = get(state,"screenConfiguration.preparedFinalObject.SewerageConnection[0].connectionNo");
         }
+        
         if (applicationNumberSewerage && applicationNumberWater) {
           const cardOne = getAcknowledgementCard(state, dispatch, purpose, status, applicationNumber, applicationNumberWater, applicationNumberSewerage, secondNumber, tenant);
           set(action, "screenConfig.components.div.children", cardOne);

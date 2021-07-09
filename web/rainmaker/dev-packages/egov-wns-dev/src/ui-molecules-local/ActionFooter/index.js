@@ -433,7 +433,7 @@ class Footer extends React.Component {
     //if(applicationType === "MODIFY"){
     downloadMenu && process.env.REACT_APP_NAME !== "Citizen" && applicationStatus!='CONNECTION_DISCONNECTED' && applicationStatus!='CONNECTION_CLOSED' && downloadMenu.push(editButton);
     downloadMenu && process.env.REACT_APP_NAME == "Citizen" && ifUserRoleExists('WS_CEMP') && applicationStatus!='CONNECTION_DISCONNECTED' && applicationStatus!='CONNECTION_CLOSED' && downloadMenu.push(disconnectButton);
-    downloadMenu && process.env.REACT_APP_NAME == "Citizen" && ifUserRoleExists('WS_CEMP') && applicationStatus!='CONNECTION_DISCONNECTED' && applicationStatus!='CONNECTION_CLOSED' && downloadMenu.push(closeConnection);
+    downloadMenu && process.env.REACT_APP_NAME == "Citizen" && ifUserRoleExists('WS_CEMP') && applicationStatus!='CONNECTION_CLOSED' && downloadMenu.push(closeConnection);
 
     if (
       (businessService && businessService.includes("ws-services-calculation") ||

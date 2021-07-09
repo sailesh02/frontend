@@ -32,7 +32,7 @@ let serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/
 let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
 let editredirect = `apply?${redirectQueryString}&action=edit`;
 let headerLabel = "WS_TASK_DETAILS"
-
+let applicationStatus = ''
 const resetData = () => {
   applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   service = getQueryArg(window.location.href, "service");
@@ -277,6 +277,14 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           true
         )
       );
+      
+      if(applicationStatus == "CONNECTION_CLOSED" || applicationStatus == "CONNECTION_DISCONNECTED"){
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.estimate.visible",
+          false
+        );
+      }
     }
     const printCont = downloadPrintContainer(
       action,
@@ -631,6 +639,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     payload = [];
     payload = await getSearchResults(queryObjForSearch);
     set(payload, 'WaterConnection[0].service', service);
+    applicationStatus = payload && payload[0].WaterConnection[0].applicationStatus || ''
     const convPayload = findAndReplace(payload, "NA", null)
     let queryObjectForEst = [{
       applicationNo: applicationNumber,
@@ -707,6 +716,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
   } else if (service === serviceConst.SEWERAGE) {
     payload = [];
     payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
+    applicationStatus = payload && payload[0].SewerageConnections[0].applicationStatus || ''
     payload.SewerageConnections[0].service = service;
     // set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainer", getCommonContainer(connectionDetailsSewerage));
     // set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", false);

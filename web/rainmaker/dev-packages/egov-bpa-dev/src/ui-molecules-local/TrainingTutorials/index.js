@@ -17,10 +17,10 @@ const styles = theme => ({
   }
 });
 
-class HowItWorks extends React.Component {
+class TrainingTutorials extends React.Component {
 
   clickHandler = () => {
-    store.dispatch(setRoute("howItWorks"))
+    store.dispatch(setRoute("trainingtutorials"))
   }
   render() {
     const { classes } = this.props;
@@ -32,8 +32,8 @@ class HowItWorks extends React.Component {
             <ListItemText
               primary={
                 <LabelContainer
-                  labelKey="COMMON_HOW_IT_WORKS"
-                  labelName="How it works?"
+                  labelKey="Training & Tutorials"
+                  labelName="Training & Tutorials"
                   style={{
                     fontSize: 14,
                     color: "rgba(0, 0, 0, 0.8700000047683716)"
@@ -53,4 +53,4 @@ class HowItWorks extends React.Component {
   }
 }
 
-export default withStyles(styles)(HowItWorks);
+export default withStyles(styles)(TrainingTutorials);

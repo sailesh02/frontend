@@ -637,6 +637,44 @@ const getAcknowledgementCard = (
           tenant
         )
       };
+  }else if(purpose === "purpose"  && status === "success" && applicationNumberWater && applicationNumberSewerage){
+    return {
+      commonHeader: connectionHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant,
+        ),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Connection is closed successfully",
+              labelKey: "WS_CONNECTION_CLOSE_SUCCESS_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding connection has been sent to registered Mobile No.",
+              labelKey: "WS_APPROVAL_CHECKLIST_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application Number.",
+              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+            },
+            number: applicationNumberWater || applicationNumberSewerage
+          })
+        }
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumberWater || applicationNumberSewerage,
+        tenant
+      )
+    };
   }
 };
 

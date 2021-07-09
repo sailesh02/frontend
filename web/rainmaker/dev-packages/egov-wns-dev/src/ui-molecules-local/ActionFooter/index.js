@@ -311,6 +311,7 @@ class Footer extends React.Component {
       bill,
       isAmendmentInWorkflow
     } = this.props;
+
     const editButton = {
       label: "Edit",
       labelKey: "WS_MODIFY_CONNECTION_BUTTON",
@@ -431,9 +432,40 @@ class Footer extends React.Component {
       },
     }
     //if(applicationType === "MODIFY"){
-    downloadMenu && process.env.REACT_APP_NAME !== "Citizen" && (applicationStatus != 'CONNECTION_DISCONNECTED' && applicationStatus != 'CONNECTION_CLOSED') && downloadMenu.push(editButton);
-    downloadMenu && (process.env.REACT_APP_NAME == "Citizen" || ifUserRoleExists('WS_CEMP')) && (applicationStatus != 'CONNECTION_DISCONNECTED' || applicationStatus !='CONNECTION_CLOSED') && downloadMenu.push(disconnectButton);
-    downloadMenu && (process.env.REACT_APP_NAME == "Citizen" || ifUserRoleExists('WS_CEMP')) && applicationStatus != 'CONNECTION_CLOSED' && downloadMenu.push(closeConnection);
+    if(process.env.REACT_APP_NAME == "Citizen"){
+      switch(applicationStatus){
+        case 'CONNECTION_ACTIVATED':
+          downloadMenu.push(disconnectButton)
+          downloadMenu.push(closeConnection)
+          break;
+        case 'CONNECTION_DISCONNECTED':
+          downloadMenu.push(closeConnection)
+          break;
+        case 'CONNECTION_CLOSED':
+          downloadMenu = [] 
+        default:
+          downloadMenu = []  
+      }
+    }
+    if(ifUserRoleExists('WS_CEMP')){
+      switch(applicationStatus){
+        case 'CONNECTION_ACTIVATED':
+          downloadMenu.push(disconnectButton)
+          downloadMenu.push(closeConnection)
+          downloadMenu.push(editButton)
+          break;
+        case 'CONNECTION_DISCONNECTED':
+          downloadMenu.push(closeConnection)
+          break;
+        case 'CONNECTION_CLOSED':
+          downloadMenu = [] 
+        default:
+          downloadMenu = []  
+      }
+    } 
+    // downloadMenu && process.env.REACT_APP_NAME !== "Citizen" && (applicationStatus != 'CONNECTION_DISCONNECTED' && applicationStatus != 'CONNECTION_CLOSED') && downloadMenu.push(editButton);
+    // downloadMenu && (process.env.REACT_APP_NAME == "Citizen" || ifUserRoleExists('WS_CEMP')) && (applicationStatus != 'CONNECTION_DISCONNECTED' || applicationStatus !='CONNECTION_CLOSED') && downloadMenu.push(disconnectButton);
+    // downloadMenu && (process.env.REACT_APP_NAME == "Citizen" || ifUserRoleExists('WS_CEMP')) && applicationStatus != 'CONNECTION_CLOSED' && downloadMenu.push(closeConnection);
 
     if (
       (businessService && businessService.includes("ws-services-calculation") ||

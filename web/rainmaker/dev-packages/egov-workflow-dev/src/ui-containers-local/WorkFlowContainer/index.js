@@ -110,11 +110,17 @@ class WorkFlowContainer extends React.Component {
       case "SEND_BACK_FOR_FIELD_INSPECTION":
         return "purpose=sendback&status=success";
       case "APPROVE_FOR_CONNECTION":
+      case "APPROVE_FOR_DISCONNECTION":
+      case "APPROVE_TO_CLOSE_CONNECTION":    
         return "purpose=approve&status=success";
       case "APPROVE_CONNECTION":
         return "purpose=approve&status=success";
       case "ACTIVATE_CONNECTION":
         return "purpose=activate&status=success";
+      case "DISCONNECT_CONNECTION":
+        return "purpose=disconnect&status=success"; 
+      case "CLOSE_CONNECTION":
+        return "purpose=closeConnection&status=success";  
       case "REVOCATE":
         return "purpose=application&status=revocated"
       case "VOID":

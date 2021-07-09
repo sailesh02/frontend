@@ -637,7 +637,7 @@ const getAcknowledgementCard = (
           tenant
         )
       };
-  }else if(purpose === "purpose"  && status === "success" && applicationNumberWater && applicationNumberSewerage){
+  }else if(purpose === "closeConnection"  && status === "success" && applicationNumberWater && applicationNumberSewerage){
     return {
       commonHeader: connectionHeader(state,
         dispatch,

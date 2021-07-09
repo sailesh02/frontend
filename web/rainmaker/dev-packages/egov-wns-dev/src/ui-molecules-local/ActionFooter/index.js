@@ -151,7 +151,7 @@ class Footer extends React.Component {
                { key: "applicationNumber", value: applicationNo }
              ];
             if (applicationNo.includes("SW")) {
-              try{
+              // try{
                 store.dispatch(toggleSpinner())
                 payloadSewerage = await getSearchResultsSW(queryObject)
                 payloadSewerage.SewerageConnections[0].water = false;
@@ -176,7 +176,6 @@ class Footer extends React.Component {
               payloadSewerageCreate.noOfFlats = payloadSewerageCreate.payloadSewerageCreate && payloadSewerageCreate.noOfFlats != "" ? queryObject.noOfFlats : 0
               let response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: payloadSewerageCreate });
               store.dispatch(hideSpinner())
-              await getSearchResultsSW(queryObject)
               response.SewerageConnections[0].sewerage = true;
               response.SewerageConnections[0].service = "Sewerage";
               response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality
@@ -193,7 +192,7 @@ class Footer extends React.Component {
               payloadSewerageUpdate.property = null
               payloadSewerageUpdate.noOfFlats = payloadSewerageUpdate.noOfFlats && payloadSewerageUpdate.noOfFlats != "" ? payloadSewerageUpdate.noOfFlats : 0
               store.dispatch(toggleSpinner())
-              try{
+              setTimeout(async()=>{
                 await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payloadSewerageUpdate });
                 this.closeDialogue()
                 let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : "closeConnection";
@@ -203,27 +202,10 @@ class Footer extends React.Component {
                     `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNo}&applicationNumberSewerage=${applicationNo}&tenantId=${tenantId}`
                   )
                 );
-                store.dispatch(hideSpinner())
-              }catch(err){
-                store.dispatch(toggleSnackbarAndSetText(
-                  true,
-                  { labelName: err, labelKey: err },
-                  "error"
-                ));
-              }
-              
-              }
-              catch(err){
-                store.dispatch(toggleSnackbarAndSetText(
-                  true,
-                  { labelName: err, labelKey: err },
-                  "error"
-                ));
-                store.dispatch(hideSpinner())
-              }
+                store.dispatch(hideSpinner())  
+              },5000)
                
             }else{
-               try{
                 store.dispatch(toggleSpinner())
                 payloadWater = await getSearchResults(queryObject)
                 payloadWater.WaterConnection[0].water = true;
@@ -246,7 +228,6 @@ class Footer extends React.Component {
                 payload.noOfFlats = payload.noOfFlats && payload.noOfFlats != "" ? payload.noOfFlats : 0
                 let response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: payload });
                 store.dispatch(hideSpinner())
-                await getSearchResults(queryObject)
                 response.WaterConnection[0].water = true;
                 let waterSource = response.WaterConnection[0].waterSource.split(".");
                 response.WaterConnection[0].waterSource = waterSource[0];
@@ -266,7 +247,7 @@ class Footer extends React.Component {
                 waterUpdatePayload = findAndReplace(waterUpdatePayload, "NA", null);
                 waterUpdatePayload.noOfFlats = waterUpdatePayload.noOfFlats && waterUpdatePayload.noOfFlats != "" ? waterUpdatePayload.noOfFlats : 0
                 store.dispatch(toggleSpinner())
-                try{
+                setTimeout(async()=>{
                   await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: waterUpdatePayload });
                   this.closeDialogue()
                   let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : "closeConnection";
@@ -276,24 +257,9 @@ class Footer extends React.Component {
                       `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNo}&applicationNumberSewerage=${applicationNo}&tenantId=${tenantId}`
                     )
                   );
-                }catch(err){
-                  store.dispatch(toggleSnackbarAndSetText(
-                    true,
-                    { labelName: err, labelKey: err },
-                    "error"
-                  ));
-                }
-                
-               }
-               catch(error){
-                store.dispatch(toggleSnackbarAndSetText(
-                  true,
-                  { labelName: error, labelKey: error },
-                  "error"
-                ));
-                store.dispatch(hideSpinner())
-               }
-               
+                  store.dispatch(hideSpinner())
+                },5000)
+                 
             }
   
   }

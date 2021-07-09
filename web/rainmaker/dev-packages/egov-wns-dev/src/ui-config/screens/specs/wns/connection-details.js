@@ -100,7 +100,8 @@ const getActiveConnectionObj = (connectionsObj) => {
     if (
       (connectionsObj[i] &&
         connectionsObj[i].applicationStatus === "CONNECTION_ACTIVATED") ||
-      connectionsObj[i].applicationStatus === "APPROVED"
+      connectionsObj[i].applicationStatus === "APPROVED" || connectionsObj[i].applicationStatus === "CONNECTION_CLOSED"
+      || connectionsObj[i].applicationStatus === "CONNECTION_DISCONNECTED" 
     ) {
       getActiveConnectionObj = connectionsObj[i];
       break;

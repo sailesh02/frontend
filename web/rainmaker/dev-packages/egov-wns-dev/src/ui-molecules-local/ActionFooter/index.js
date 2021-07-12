@@ -233,7 +233,7 @@ class Footer extends React.Component {
                 response.WaterConnection[0].waterSource = waterSource[0];
                 response.WaterConnection[0].service = "Water";
                 response.WaterConnection[0].waterSubSource = waterSource[1];
-                response.WaterConnection[0] = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_WATER_CONNECTION" : "CLOSE_WATER_CONNECTION"
+                response.WaterConnection[0].applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_WATER_CONNECTION" : "CLOSE_WATER_CONNECTION"
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality
                 let waterUpdatePayload = parserFunction(response.WaterConnection[0]);
                 set(waterUpdatePayload, "processInstance.action", "SUBMIT_APPLICATION");

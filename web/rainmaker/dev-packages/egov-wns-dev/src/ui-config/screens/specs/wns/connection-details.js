@@ -95,19 +95,19 @@ export const sortpayloadDataObj = (connectionObj) => {
 };
 
 const getActiveConnectionObj = (connectionsObj) => {
-  let getActiveConnectionObj = "";
-  for (var i = 0; i < connectionsObj.length; i++) {
-    if (
-      (connectionsObj[i] &&
-        connectionsObj[i].applicationStatus === "CONNECTION_ACTIVATED") ||
-      connectionsObj[i].applicationStatus === "APPROVED" || connectionsObj[i].applicationStatus === "CONNECTION_CLOSED"
-      || connectionsObj[i].applicationStatus === "CONNECTION_DISCONNECTED" 
-    ) {
-      getActiveConnectionObj = connectionsObj[i];
-      break;
-    }
-  }
-  return getActiveConnectionObj;
+  // let getActiveConnectionObj = "";
+  // for (var i = 0; i < connectionsObj.length; i++) {
+  //   if (
+  //     (connectionsObj[i] &&
+  //       connectionsObj[i].applicationStatus === "CONNECTION_ACTIVATED") ||
+  //     connectionsObj[i].applicationStatus === "APPROVED" || connectionsObj[i].applicationStatus === "CONNECTION_CLOSED"
+  //     || connectionsObj[i].applicationStatus === "CONNECTION_DISCONNECTED" 
+  //   ) {
+  //     getActiveConnectionObj = connectionsObj[i];
+  //     break;
+  //   }
+  // }
+  return connectionsObj[0];
 };
 
 const searchResults = async (action, state, dispatch, connectionNumber) => {
@@ -117,6 +117,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   let queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "connectionNumber", value: connectionNumber },
+    { key: "searchType",value:"CONNECTION"}
   ];
   if (service === serviceConst.SEWERAGE) {
     let payloadData = await getSearchResultsForSewerage(

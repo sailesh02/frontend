@@ -132,7 +132,7 @@ class Footer extends React.Component {
                { key: "applicationNumber", value: applicationNo }
              ];
             if (applicationNo.includes("SW")) {
-              // try{
+              try{
                 store.dispatch(toggleSpinner())
                 payloadSewerage = await getSearchResultsSW(queryObject)
                 payloadSewerage.SewerageConnections[0].water = false;
@@ -186,8 +186,20 @@ class Footer extends React.Component {
                 );
                 store.dispatch(hideSpinner())  
               },5000)
-               
+              }
+              catch(err){
+                store.dispatch(hideSpinner())
+                toggleSnackbar(
+                  true,
+                  {
+                    labelName: err.message,
+                    labelKey: err.message,
+                  },
+                  "error"
+                );
+              } 
             }else{
+              try{
                 store.dispatch(toggleSpinner())
                 payloadWater = await getSearchResults(queryObject)
                 payloadWater.WaterConnection[0].water = true;
@@ -242,6 +254,19 @@ class Footer extends React.Component {
                   );
                   store.dispatch(hideSpinner())
                 },5000)
+              }
+              catch(err){
+                store.dispatch(hideSpinner())
+                toggleSnackbar(
+                  true,
+                  {
+                    labelName: err.message,
+                    labelKey: err.message,
+                  },
+                  "error"
+                );
+              }
+                
                  
             }
   

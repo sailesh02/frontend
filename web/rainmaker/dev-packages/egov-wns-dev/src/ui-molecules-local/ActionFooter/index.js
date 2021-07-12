@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import store from "ui-redux/store";
 import { showHideAdhocPopup } from "../../ui-config/screens/specs/utils";
 import {
-  isWorkflowExists
+  isWorkflowExists, checkifInWorkflow
 } from "../../ui-utils/commons";
 import { httpRequest } from "../../ui-utils/api";
 import { getSearchResultsSW, getSearchResults, getWaterSource } from "../../ui-utils/commons"
@@ -125,25 +125,6 @@ class Footer extends React.Component {
             return false;
           }
   
-          // check for the WF Exists
-          const queryObj = [
-            { key: "businessIds", value: applicationNos },
-            { key: "tenantId", value: tenantId },
-          ];
-  
-          let isApplicationApproved = await isWorkflowExists(queryObj);
-          if (!isApplicationApproved) {
-            toggleSnackbar(
-              true,
-              {
-                labelName: "WorkFlow already Initiated",
-                labelKey: "WS_WORKFLOW_ALREADY_INITIATED",
-              },
-              "error"
-            );
-            return false;
-          }
-      
            // to disconnect the connection
             let payloadSewerage,payloadWater
             let queryObject = [

@@ -114,6 +114,10 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   /**
    * This methods holds the api calls and the responses of fetch bill and search connection for both water and sewerage service
    */
+
+  let service = getQueryArg(window.location.href,"service")  
+  let tenantId = getQueryArg(window.location.href,"tenantId")  
+
   let queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "connectionNumber", value: connectionNumber },
@@ -125,7 +129,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       dispatch,
       true
     );
-   
+
     if (
       payloadData !== null &&
       payloadData !== undefined &&

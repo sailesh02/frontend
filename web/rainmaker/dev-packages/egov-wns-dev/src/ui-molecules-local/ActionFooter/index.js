@@ -174,8 +174,9 @@ class Footer extends React.Component {
               payloadSewerageUpdate.noOfFlats = payloadSewerageUpdate.noOfFlats && payloadSewerageUpdate.noOfFlats != "" ? payloadSewerageUpdate.noOfFlats : 0
               store.dispatch(toggleSpinner())
               setTimeout(async()=>{
-                await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payloadSewerageUpdate });
+                let updateWaterResponse = await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payloadSewerageUpdate });
                 this.closeDialogue()
+                let applicationNo = updateWaterResponse && updateWaterResponse.SewerageConnections[0].applicationNo
                 let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : "closeConnection";
                 let status = "success";
                 store.dispatch(
@@ -229,13 +230,14 @@ class Footer extends React.Component {
                 waterUpdatePayload.noOfFlats = waterUpdatePayload.noOfFlats && waterUpdatePayload.noOfFlats != "" ? waterUpdatePayload.noOfFlats : 0
                 store.dispatch(toggleSpinner())
                 setTimeout(async()=>{
-                  await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: waterUpdatePayload });
+                  let updateResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: waterUpdatePayload });
                   this.closeDialogue()
+                  let appNo = updateResponse && updateResponse.WaterConnection[0].applicationNo
                   let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : "closeConnection";
                   let status = "success";
                   store.dispatch(
                     setRoute(
-                      `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNo}&applicationNumberSewerage=${applicationNo}&tenantId=${tenantId}`
+                      `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${appNo}&applicationNumberSewerage=${appNo}&tenantId=${tenantId}`
                     )
                   );
                   store.dispatch(hideSpinner())
@@ -379,6 +381,8 @@ class Footer extends React.Component {
       },
     }
     //if(applicationType === "MODIFY"){
+
+    //to check button visibility based on application status
     if(process.env.REACT_APP_NAME == "Citizen"){
       switch(applicationStatus){
         case 'CONNECTION_ACTIVATED':

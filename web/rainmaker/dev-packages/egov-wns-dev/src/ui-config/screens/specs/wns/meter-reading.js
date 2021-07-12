@@ -43,6 +43,7 @@ const addMeterReading = async (state, dispatch) => {
 
         if(payloadData.WaterConnection && (payloadData.WaterConnection[0].applicationStatus == "CONNECTION_DISCONNECTED" 
         || payloadData.WaterConnection[0].applicationStatus == "CONNECTION_CLOSED")){
+            dispatch(toggleSpinner());
             dispatch(
                 toggleSnackbar(
                     true,

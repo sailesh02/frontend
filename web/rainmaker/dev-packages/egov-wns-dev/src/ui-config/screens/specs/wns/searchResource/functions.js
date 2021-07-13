@@ -128,7 +128,8 @@ const renderSearchConnectionTable = async (state, dispatch) => {
               address:element.connectionHolders ? element.connectionHolders[0].correspondenceAddress : '',
               // address: handleAddress(element),
               connectionType: element.connectionType,
-              tenantId:element.tenantId
+              tenantId:element.tenantId,
+              applicationStatus:element.applicationStatus
             })
           }) : finalArray.push({
             due: 'NA',
@@ -139,7 +140,8 @@ const renderSearchConnectionTable = async (state, dispatch) => {
             status: element.status,
             address:element.connectionHolders ? element.connectionHolders[0].correspondenceAddress : '',
             connectionType: element.connectionType,
-            tenantId:element.tenantId
+            tenantId:element.tenantId,
+            applicationStatus:element.applicationStatus
           })
         }
 
@@ -322,7 +324,8 @@ const showConnectionResults = (connections, dispatch) => {
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
     ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
     ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
-    ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType
+    ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType,
+    ["WS_COMMON_TABLE_COL_APPLICATION_STATUS"]:item.applicationStatus
   }));
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchResults", "props.rows",

@@ -83,28 +83,6 @@ export const searchResults = {
           }
         }
       },
-      // {
-      //   name: "Link Mobile",
-      //   labelKey: "WS_COMMON_LINK_MOBILE_NO_LABEL",
-      //   options: {
-      //     filter: false,
-      //     customBodyRender: (value, data) => {
-      //       const labelName = getLabelName(data.rowData[1]) ? getLabelName(data.rowData[1]) : "CS_COMMON_PAY"
-      //       return (
-      //         <div className="linkStyle" onClick={() => labelName == "WS_COMMON_LINK_MOBILE_NO_LABEL" ? linkMobile(data,data.rowData[0],data.rowData[1]) : 
-      //         getViewBillDetails(data)} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
-      //           <LabelContainer
-      //             labelKey={labelName}
-      //             style={{
-      //               color: "#fe7a51",
-      //               fontSize: 14,
-      //             }}
-      //           />
-      //         </div>
-      //       )
-      //     }
-      //   }
-      // },
       {
         name: "Tenant Id",
         labelKey: "WS_COMMON_TABLE_COL_TENANTID_LABEL",
@@ -115,6 +93,13 @@ export const searchResults = {
       {
         name: "Connection Type",
         labelKey: "WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "applicationStatus",
+        labelKey: "WS_COMMON_TABLE_COL_APPLICATION_STATUS",
         options: {
           display: false
         }

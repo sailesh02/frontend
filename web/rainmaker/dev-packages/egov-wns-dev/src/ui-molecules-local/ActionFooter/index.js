@@ -176,12 +176,12 @@ class Footer extends React.Component {
               setTimeout(async()=>{
                 let updateWaterResponse = await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payloadSewerageUpdate });
                 this.closeDialogue()
-                let applicationNo = updateWaterResponse && updateWaterResponse.SewerageConnections[0].applicationNo
+                let applNo = updateWaterResponse && updateWaterResponse.SewerageConnections && updateWaterResponse.SewerageConnections[0].applicationNo
                 let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : "closeConnection";
                 let status = "success";
                 store.dispatch(
                   setRoute(
-                    `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNo}&applicationNumberSewerage=${applicationNo}&tenantId=${tenantId}`
+                    `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applNo || applicationNo}&applicationNumberSewerage=${applNo || applicationNo}&tenantId=${tenantId}`
                   )
                 );
                 store.dispatch(hideSpinner())  
@@ -244,12 +244,12 @@ class Footer extends React.Component {
                 setTimeout(async()=>{
                   let updateResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: waterUpdatePayload });
                   this.closeDialogue()
-                  let appNo = updateResponse && updateResponse.WaterConnection[0].applicationNo
+                  let appNo = updateResponse && updateResponse.WaterConnection && updateResponse.WaterConnection[0].applicationNo
                   let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : "closeConnection";
                   let status = "success";
                   store.dispatch(
                     setRoute(
-                      `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${appNo}&applicationNumberSewerage=${appNo}&tenantId=${tenantId}`
+                      `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${appNo || applicationNo}&applicationNumberSewerage=${appNo || applicationNo}&tenantId=${tenantId}`
                     )
                   );
                   store.dispatch(hideSpinner())

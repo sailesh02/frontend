@@ -134,7 +134,8 @@ export const searchApiCall = async (state, dispatch) => {
               status: element.status,
               address: (element.connectionHolders && element.connectionHolders !== "NA" && element.connectionHolders.length > 0) ? element.connectionHolders[0].correspondenceAddress:'',
               tenantId: element.tenantId,
-              connectionType: element.connectionType
+              connectionType: element.connectionType,
+              applicationStatus:element.applicationStatus
             }
             finalArray.push(obj)
           }) : finalArray.push({
@@ -146,7 +147,8 @@ export const searchApiCall = async (state, dispatch) => {
             status: element.status,
             address: (element.connectionHolders && element.connectionHolders !== "NA" && element.connectionHolders.length > 0) ? element.connectionHolders[0].correspondenceAddress:'',
             tenantId: element.tenantId,
-            connectionType: element.connectionType
+            connectionType: element.connectionType,
+            applicationStatus:element.applicationStatus
           })
         }
       }
@@ -175,7 +177,8 @@ const showResults = (connections, dispatch, tenantId) => {
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
     ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
     ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
-    ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType
+    ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType,
+    ["WS_COMMON_TABLE_COL_APPLICATION_STATUS"]:item.applicationStatus
   }))
 
 

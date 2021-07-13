@@ -136,9 +136,10 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                         <Grid item md={8} xs={6}>
-                          {(item.property && item.property.owners && item.property.owners !== "NA") ?
+                          {(item.connectionHolders && item.connectionHolders !== "NA") ?
                             (<div><LabelContainer
-                              labelName={item.property.owners.map(owner => owner.name).join(",")}
+                              labelName = {item.connectionHolders && item.connectionHolders[0].name}
+                              // labelName={item.property.owners.map(owner => owner.name).join(",")}
                               fontSize={14}
                               style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                             /></div>) :
@@ -183,6 +184,23 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                       </Grid>
+                       <Grid container style={{ marginBottom: 12 }}>
+                        <Grid item md={4} xs={6}>
+                          <LabelContainer
+                            labelKey="WS_MYCONNECTIONS_APPLICATION_STATUS"
+                            fontSize={14}
+                            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                          />
+                        </Grid>
+                        <Grid item md={8} xs={6}>
+                          <LabelContainer
+                            labelName={item.applicationStatus}
+                            fontSize={14}
+                            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                          />
+                        </Grid>
+                      </Grid>
+                      
                       <div>
                         {item.due === "NA" ?
                           (<div></div>)

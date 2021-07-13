@@ -80,6 +80,13 @@ export const searchResults = {
         options: {
           display: false
         }
+      },
+      {
+        name: "applicationStatus",
+        labelKey: "WS_COMMON_TABLE_COL_APPLICATION_STATUS",
+        options: {
+          display: false
+        }
       }
     ],
     title: {labelKey:"WS_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName:"Search Results for Water & Sewerage Connections"},

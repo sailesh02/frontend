@@ -477,6 +477,10 @@ class WorkFlowContainer extends React.Component {
     if((moduleName == "PT.CREATE" || moduleName == "PT.MUTATION" || moduleName == "ASMT") && (applicationState == "DOCVERIFIED" || applicationState == "PENDING_FIELD_INSPECTION")){
       editDemands = true
     }
+
+    if(moduleName === "SWCloseConnection" || moduleName === "SWDisconnection" || moduleName === "WSCloseConnection" || moduleName === "WSDisconnection"){
+      state.isStateUpdatable = false
+    }
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
       editAction = {

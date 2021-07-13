@@ -44,6 +44,18 @@ const headerrow = getCommonContainer({
   }),
 });
 
+const headerForCloseConnection = getCommonContainer({
+  header: getCommonHeader({
+    labelKey: "WS_APPLICATION_NEW_CLOSE_CONNECTION_HEADER",
+  }),
+});
+
+const headerFordisconnect = getCommonContainer({
+  header: getCommonHeader({
+    labelKey: "WS_APPLICATION_NEW_DISCONNECTION_HEADER",
+  }),
+});
+
 const commonHeader = (state,
   dispatch,
   applicationNumber,
@@ -92,7 +104,9 @@ const connectionHeader = (state,
   dispatch,
   applicationNumber,
   tenant,
+  purpose
   ) => {
+  const headerRow = purpose == 'disconnect' ? headerFordisconnect : purpose == "closeConnection" ? headerForCloseConnection : headerrow 
   return getCommonContainer({
     headerDiv: {
       uiFramework: "custom-atoms",
@@ -103,7 +117,7 @@ const connectionHeader = (state,
             xs: 12,
             sm: 8
           },
-          ...headerrow
+          ...headerRow
         },
         helpSection: {
           uiFramework: "custom-atoms",
@@ -605,6 +619,7 @@ const getAcknowledgementCard = (
           dispatch,
           applicationNumber,
           tenant,
+          purpose
           ),
         applicationSuccessCard: {
           uiFramework: "custom-atoms",
@@ -637,13 +652,14 @@ const getAcknowledgementCard = (
           tenant
         )
       };
-  }else if(purpose === "disconnect" && status === "success" && (applicationNumberWater || applicationNumberSewerage || applicationNumber)){
-  }else if(purpose === "closeConnection"  && status === "success" && (applicationNumberWater || applicationNumberSewerage || applicationNumber)){
+  }
+  else if(purpose === "closeConnection"  && status === "success" && (applicationNumberWater || applicationNumberSewerage || applicationNumber)){
     return {
       commonHeader: connectionHeader(state,
         dispatch,
         applicationNumber,
         tenant,
+        purpose
         ),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",

@@ -157,6 +157,8 @@ class Footer extends React.Component {
               payloadSewerageCreate.noOfFlats = payloadSewerageCreate.payloadSewerageCreate && payloadSewerageCreate.noOfFlats != "" ? queryObject.noOfFlats : 0
               let response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: payloadSewerageCreate });
               store.dispatch(hideSpinner())
+              let applNo = response && response.SewerageConnections && response.SewerageConnections[0].applicationNo
+
               response.SewerageConnections[0].sewerage = true;
               response.SewerageConnections[0].service = "Sewerage";
               response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality
@@ -176,7 +178,6 @@ class Footer extends React.Component {
               setTimeout(async()=>{
                 let updateWaterResponse = await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payloadSewerageUpdate });
                 this.closeDialogue()
-                let applNo = updateWaterResponse && updateWaterResponse.SewerageConnections && updateWaterResponse.SewerageConnections[0].applicationNo
                 let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : "closeConnection";
                 let status = "success";
                 store.dispatch(
@@ -222,6 +223,7 @@ class Footer extends React.Component {
                 payload.noOfFlats = payload.noOfFlats && payload.noOfFlats != "" ? payload.noOfFlats : 0
                 let response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: payload });
                 store.dispatch(hideSpinner())
+                let appNo = response && response.WaterConnection && response.WaterConnection[0].applicationNo
                 response.WaterConnection[0].water = true;
                 let waterSource = response.WaterConnection[0].waterSource.split(".");
                 response.WaterConnection[0].waterSource = waterSource[0];
@@ -244,7 +246,6 @@ class Footer extends React.Component {
                 setTimeout(async()=>{
                   let updateResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: waterUpdatePayload });
                   this.closeDialogue()
-                  let appNo = updateResponse && updateResponse.WaterConnection && updateResponse.WaterConnection[0].applicationNo
                   let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : "closeConnection";
                   let status = "success";
                   store.dispatch(

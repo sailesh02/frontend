@@ -127,7 +127,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
     let payloadData = await getSearchResultsForSewerage(
       queryObject,
       dispatch,
-      true
+      false
     );
 
     if (

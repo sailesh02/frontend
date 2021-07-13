@@ -40,7 +40,13 @@ export const searchResults = {
       },
       { name: "Consumer No",  labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL" },
       { name : "Owner Name",  labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
-      { name : "Status", labelKey: "WS_COMMON_TABLE_COL_STATUS_LABEL" },
+      { 
+        name : "Status", 
+        labelKey: "WS_COMMON_TABLE_COL_STATUS_LABEL", 
+        options: {
+          display: false
+        } 
+      },
       { name: "Due", labelKey: "WS_COMMON_TABLE_COL_DUE_LABEL" },
       { name: "Address", labelKey: "WS_COMMON_TABLE_COL_ADDRESS"},
       { name: "Due Date", labelKey: "WS_COMMON_TABLE_COL_DUE_DATE_LABEL"},
@@ -99,10 +105,8 @@ export const searchResults = {
       },
       {
         name: "applicationStatus",
-        labelKey: "WS_COMMON_TABLE_COL_APPLICATION_STATUS",
-        options: {
-          display: false
-        }
+        labelKey: "WS_COMMON_TABLE_COL_APPLICATION_STATUS"
+       
       }
     ],
     title: {

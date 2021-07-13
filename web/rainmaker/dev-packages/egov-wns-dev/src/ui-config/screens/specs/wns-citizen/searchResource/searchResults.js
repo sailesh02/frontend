@@ -105,7 +105,7 @@ export const searchResults = {
       },
       {
         name: "applicationStatus",
-        labelKey: "WS_COMMON_TABLE_COL_APPLICATION_STATUS" 
+        labelKey: "WS_COMMON_TABLE_COL_APPLICATION_CURRENT_STATE" 
       }
     ],
     title: {

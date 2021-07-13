@@ -20,7 +20,6 @@ import { toggleSpinner,hideSpinner } from "../../../../../packages/lib/egov-ui-f
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { ifUserRoleExists } from "../../ui-config/screens/specs/utils";
 
-
 // import { getRequiredDocData, showHideAdhocPopup } from "egov-billamend/ui-config/screens/specs/utils"
 
 const parserFunction = (data) => {
@@ -75,6 +74,14 @@ try {
 }
 }
 
+const getTodaysDateInYMD = () => {
+  let date = new Date();
+  let month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  date = `${date.getFullYear()}-${month}-${day}`;
+  return date;
+};
+
 class Footer extends React.Component {
   state = {
     open: false,
@@ -100,10 +107,22 @@ class Footer extends React.Component {
 
     if(ifUserRoleExists('WS_CEMP')){
       if(!date){
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Please select date",
+            labelKey: "Please select date",
+          },
+          "error"
+        );
         return
       }
+      
       let today = new Date()
-      if (new Date(date).getTime() < today.getTime()) {
+      if(date === getTodaysDateInYMD()){ 
+         // do nothing  
+      }
+      else if(new Date(date).getTime() < today.getTime()) {
         toggleSnackbar(
           true,
           {

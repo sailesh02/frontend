@@ -3,7 +3,7 @@ import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUt
 import get from "lodash/get";
 import { fetchBill, findAndReplace, getSearchResults, getSearchResultsForSewerage, getWorkFlowData, serviceConst } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
-import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
+import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection, getTextToLocalMapping } from "../../utils/index";
 import { httpRequest } from "../../../../../ui-utils";
 export const searchApiCall = async (state, dispatch) => {
   showHideApplicationTable(false, dispatch);
@@ -325,7 +325,7 @@ const showConnectionResults = (connections, dispatch) => {
     ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
     ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
     ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType,
-    ["WS_COMMON_TABLE_COL_APPLICATION_STATUS"]:item.applicationStatus
+    ["WS_COMMON_TABLE_COL_APPLICATION_STATUS"]: item.applicationStatus ? getTextToLocalMapping(item.applicationStatus) : 'NA'
   }));
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchResults", "props.rows",

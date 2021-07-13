@@ -178,9 +178,8 @@ const showResults = (connections, dispatch, tenantId) => {
     ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
     ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
     ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType,
-    ["WS_COMMON_TABLE_COL_APPLICATION_STATUS"]:item.applicationStatus
+    ["WS_COMMON_TABLE_COL_APPLICATION_STATUS"]: item.applicationStatus ? getTextToLocalMapping(item.applicationStatus) : 'NA'
   }))
-
 
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchResults", "props.rows", connections.length));

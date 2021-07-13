@@ -11,6 +11,7 @@ import "./index.css"
 import { getDomainLink } from "../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import store from "ui-redux/store";
+import { getTextToLocalMapping } from "../../ui-config/screens/specs/utils/index"
 
 const styles = {
   card: {
@@ -157,9 +158,9 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                         <Grid item md={8} xs={6}>
-                          {(item.property && item.property.address && item.property.address.street) ?
+                          {(item.connectionHolders && item.connectionHolders !== "NA") ?
                             (<Label
-                              labelName={item.property.address.street}
+                              labelName = {item.connectionHolders && item.connectionHolders[0].permanentAddress}
                               fontSize={14}
                               style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                             />) :
@@ -194,7 +195,7 @@ class MyConnections extends React.Component {
                         </Grid>
                         <Grid item md={8} xs={6}>
                           <LabelContainer
-                            labelName={item.applicationStatus}
+                            labelName={getTextToLocalMapping(item.applicationStatus)}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />

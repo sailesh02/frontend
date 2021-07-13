@@ -89,7 +89,7 @@ class Footer extends React.Component {
     })
   }
 
-  onClickFunction = async() => {
+  onClickFunction = async(date) => {
     const {
       connectionNumber,
       tenantId,
@@ -97,6 +97,24 @@ class Footer extends React.Component {
       applicationNo,
       applicationNos,
     } = this.props;
+
+    if(ifUserRoleExists('WS_CEMP')){
+      if(!date){
+        return
+      }
+      let today = new Date()
+      if (new Date(date).getTime() <= today.getTime()) {
+        toggleSnackbar(
+          true,
+          {
+            labelName: "The Date must be greater than or Equal to today's date",
+            labelKey: "The Date must be greater than or Equal to today's date",
+          },
+          "error"
+        );
+        return;
+      }
+    }
     let fetchBillQueryObj = []
           let due
           if(applicationNo.includes('SW')){
@@ -162,6 +180,9 @@ class Footer extends React.Component {
               response.SewerageConnections[0].sewerage = true;
               response.SewerageConnections[0].service = "Sewerage";
               response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality
+              if(ifUserRoleExists('WS_CEMP')){
+                response.SewerageConnections[0].dateEffectiveFrom = date
+              }
               let payloadSewerageUpdate = parserFunction(response.SewerageConnections[0]);
               set(payloadSewerageUpdate, "processInstance.action", "SUBMIT_APPLICATION");
               set(payloadSewerageUpdate, "connectionType", "Non Metered");
@@ -231,6 +252,9 @@ class Footer extends React.Component {
                 response.WaterConnection[0].waterSubSource = waterSource[1];
                 response.WaterConnection[0].applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_WATER_CONNECTION" : "CLOSE_WATER_CONNECTION"
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality
+                if(ifUserRoleExists('WS_CEMP')){
+                  response.WaterConnection[0].dateEffectiveFrom = date
+                }
                 let waterUpdatePayload = parserFunction(response.WaterConnection[0]);
                 set(waterUpdatePayload, "processInstance.action", "SUBMIT_APPLICATION");
                 set(waterUpdatePayload, "waterSource", getWaterSource(waterUpdatePayload.waterSource, waterUpdatePayload.waterSubSource));

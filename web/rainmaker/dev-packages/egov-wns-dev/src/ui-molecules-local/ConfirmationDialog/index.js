@@ -4,21 +4,34 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Grid, Typography, Button } from "@material-ui/core";
 import { Container } from "egov-ui-framework/ui-atoms";
+import { getTodaysDateInYMD } from 'egov-ui-framework/ui-utils/commons';
 import store from "ui-redux/store";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   LabelContainer,
   TextFieldContainer
 } from "egov-ui-framework/ui-containers";
+import { ifUserRoleExists } from "../../ui-config/screens/specs/utils";
+
+// import { MuiPickersUtilsProvider,
+//   KeyboardDatePicker,} from "@material-ui/pickers";
 import CloseIcon from "@material-ui/icons/Close";
 
 class ConfirmationDialog extends Component {
   state = {
-    ownerName : ''
+    ownerName : '',
+    selectedDate : new Date()
   }
 
   componentDidMount = () => {
   };
+
+  handleDateChange = (e) => {
+    this.setState({
+      selectedDate : e.target.value
+    })
+    store.dispatch(prepareFinalObject('effectiveDate',e.target.value))
+  }
 
   render() {
     let { open, closeDialogue, onClickFunction, dialogHeader,dialogButton } = this.props
@@ -50,6 +63,23 @@ class ConfirmationDialog extends Component {
                     labelKey={dialogHeader} />
                   </Typography>
                 </Grid>
+                {ifUserRoleExists('WS_CEMP') &&
+                <Grid container="true"
+                spacing={12} marginTop={18}>
+                <Grid item sm={10}>
+                    <LabelContainer labelName={"WS_MODIFICATIONS_EFFECTIVE_FROM"}
+                    labelKey={"WS_MODIFICATIONS_EFFECTIVE_FROM"} />
+                </Grid>   
+                <Grid item sm={10}>
+                <TextFieldContainer
+                    type="date"
+                    required={true}
+                    inputProps = {{min: getTodaysDateInYMD()}}
+                    onChange={this.handleDateChange}
+                    jsonPath={`effectiveDate`}
+                       />    
+                </Grid>
+                </Grid>}
                 <Grid
                   item
                   sm={2}
@@ -77,8 +107,9 @@ class ConfirmationDialog extends Component {
                         height: "48px"
                       }}
                       className="bottom-button"
-                      onClick={onClickFunction}
-                    >
+                      onClick={() => {
+                        onClickFunction(this.state.selectedDate)}}
+                      >
                       <LabelContainer
                         labelName={dialogButton}
                         labelKey=

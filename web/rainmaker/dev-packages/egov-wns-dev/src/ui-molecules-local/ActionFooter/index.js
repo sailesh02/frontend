@@ -103,7 +103,7 @@ class Footer extends React.Component {
         return
       }
       let today = new Date()
-      if (new Date(date).getTime() <= today.getTime()) {
+      if (new Date(date).getTime() < today.getTime()) {
         toggleSnackbar(
           true,
           {

@@ -64,9 +64,10 @@ class ConfirmationDialog extends Component {
                   </Typography>
                 </Grid>
                 {ifUserRoleExists('WS_CEMP') &&
-                <Grid container="true"
-                spacing={12} marginTop={18}>
-                <Grid item sm={10}>
+                <Grid item sm={12} marginTop={18}>
+                <Grid style={{marginTop:'10px'}}
+                spacing={12}>
+                <Grid item sm={10} marginTop={18}>
                     <LabelContainer labelName={"WS_MODIFICATIONS_EFFECTIVE_FROM"}
                     labelKey={"WS_MODIFICATIONS_EFFECTIVE_FROM"} />
                 </Grid>   
@@ -79,6 +80,8 @@ class ConfirmationDialog extends Component {
                     jsonPath={`effectiveDate`}
                        />    
                 </Grid>
+                </Grid>  
+                
                 </Grid>}
                 <Grid
                   item

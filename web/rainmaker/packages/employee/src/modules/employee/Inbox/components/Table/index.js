@@ -231,13 +231,13 @@ class InboxData extends React.Component {
     else if (row[0].subtext === "ASMT") {
       queryParams += '&type=assessment';
     }
-    else if (row[0].subtext === "NewWS1") {
+    else if (row[0].subtext === "NewWS1" || row[0].subtext === "WSOwnershipChange") {
       queryParams += '&history=true&service=WATER';
     }
     else if (row[0].subtext === "WSDisconnection" || row[0].subtext === "WSCloseConnection" || row[0].subtext === "WSReconnection") {
       queryParams += '&history=true&service=WATER&disconnectOrClose=true';
     }
-    else if (row[0].subtext === "NewSW1") {
+    else if (row[0].subtext === "NewSW1" || row[0].subtext === "SWOwnershipChange") {
       queryParams += '&history=true&service=SEWERAGE';
     }
     else if (row[0].subtext === "SWDisconnection" || row[0].subtext === "SWCloseConnection" || row[0].subtext === "SWReconnection") {

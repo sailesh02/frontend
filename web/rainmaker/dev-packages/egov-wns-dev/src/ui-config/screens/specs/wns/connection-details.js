@@ -244,11 +244,6 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       payloadData !== undefined &&
       payloadData.WaterConnection.length > 0
     ) {
-      // applicationStatus = payloadData && payloadData.WaterConnection && payloadData.WaterConnection[0].applicationStatus || ''
-      // if(applicationStatus != "CONNECTION_DISCONNECTED" && ifUserRoleExists('CITIZEN') ){
-      //   getDisconnectFooter = connectionDisconnect
-      //   getConnectionDetailsFooterAction = {}
-      // }
       payloadData.WaterConnection = sortpayloadDataObj(
         payloadData.WaterConnection
       );

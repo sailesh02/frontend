@@ -189,7 +189,7 @@ class Footer extends React.Component {
               set(payloadSewerageCreate, "connectionType", "Non Metered");
               set(payloadSewerageCreate, "tenantId", tenantId);
               payloadSewerageCreate.applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? 
-              "DISCONNECT_SEWERAGE_CONNECTION" : dialogButton == "WS_RECONNECTION" ? "SEWERAGE_RECONNECTION" : "CLOSE_SEWERAGE_CONNECTION",
+              "DISCONNECT_SEWERAGE_CONNECTION" : this.state.dialogButton == "WS_RECONNECTION" ? "SEWERAGE_RECONNECTION" : "CLOSE_SEWERAGE_CONNECTION",
               payloadSewerageCreate = findAndReplace(payloadSewerageCreate, "NA", null);
               payloadSewerageCreate.property = null;
               payloadSewerageCreate.noOfFlats = payloadSewerageCreate.payloadSewerageCreate && payloadSewerageCreate.noOfFlats != "" ? queryObject.noOfFlats : 0

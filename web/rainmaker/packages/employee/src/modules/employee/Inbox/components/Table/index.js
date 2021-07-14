@@ -234,7 +234,7 @@ class InboxData extends React.Component {
     else if (row[0].subtext === "NewWS1") {
       queryParams += '&history=true&service=WATER';
     }
-    else if (row[0].subtext === "WSDisconnection" || row[0].subtext === "WSCloseConnection" || row[0].subtext === "SWReconnection") {
+    else if (row[0].subtext === "WSDisconnection" || row[0].subtext === "WSCloseConnection" || row[0].subtext === "WSReconnection") {
       queryParams += '&history=true&service=WATER&disconnectOrClose=true';
     }
     else if (row[0].subtext === "NewSW1") {

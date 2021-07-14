@@ -367,7 +367,7 @@ class Property extends Component {
           ) : (<div>
             <Button
               label={
-                <Label buttonLabetruel={true}
+                <Label buttonLabel={true}
                   label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
                   color="#fe7a51" />
               }

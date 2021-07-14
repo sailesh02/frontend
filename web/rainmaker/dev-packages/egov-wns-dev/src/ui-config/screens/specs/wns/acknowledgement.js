@@ -44,10 +44,23 @@ const headerrow = getCommonContainer({
   }),
 });
 
+const headerForCloseConnection = getCommonContainer({
+  header: getCommonHeader({
+    labelKey: "WS_APPLICATION_NEW_CLOSE_CONNECTION_HEADER",
+  }),
+});
+
+const headerFordisconnect = getCommonContainer({
+  header: getCommonHeader({
+    labelKey: "WS_APPLICATION_NEW_DISCONNECTION_HEADER",
+  }),
+});
+
 const commonHeader = (state,
   dispatch,
   applicationNumber,
-  tenant) => {
+  tenant,
+  ) => {
   return getCommonContainer({
     headerDiv: {
       uiFramework: "custom-atoms",
@@ -81,6 +94,43 @@ const commonHeader = (state,
             ),
           }
 
+        }
+      }
+    },
+  })
+}
+
+const connectionHeader = (state,
+  dispatch,
+  applicationNumber,
+  tenant,
+  purpose
+  ) => {
+  const headerRow = purpose == 'disconnect' ? headerFordisconnect : purpose == "closeConnection" ? headerForCloseConnection : headerrow 
+  return getCommonContainer({
+    headerDiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      children: {
+        header1: {
+          gridDefination: {
+            xs: 12,
+            sm: 8
+          },
+          ...headerRow
+        },
+        helpSection: {
+          uiFramework: "custom-atoms",
+          componentPath: "Container",
+          props: {
+            color: "primary",
+            style: { justifyContent: "flex-end" } //, dsplay: "block"
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 4,
+            align: "right"
+          },
         }
       }
     },
@@ -562,6 +612,86 @@ const getAcknowledgementCard = (
         tenant
       )
     };
+  }else if(purpose === "disconnect" && status === "success" && (applicationNumberWater || applicationNumberSewerage || applicationNumber)){
+      // loadReceiptGenerationData(applicationNumber, tenant);
+      return {
+        commonHeader: connectionHeader(state,
+          dispatch,
+          applicationNumber,
+          tenant,
+          purpose
+          ),
+        applicationSuccessCard: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          children: {
+            card: acknowledgementCard({
+              icon: "done",
+              backgroundColor: "#39CB74",
+              header: {
+                labelName: "Connection is disconnected successfully",
+                labelKey: "WS_CONNECTION_DISCONNECTED_SUCCESS_MESSAGE_HEAD"
+              },
+              body: {
+                labelName:
+                  "A notification regarding connection has been sent to registered Mobile No.",
+                labelKey: "WS_APPROVAL_CHECKLIST_MESSAGE_SUB"
+              },
+              tailText: {
+                labelName: "Application Number.",
+                labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+              },
+              number: applicationNumberWater || applicationNumberSewerage || applicationNumber
+            })
+          }
+        },
+        applicationSuccessFooter: applicationSuccessFooter(
+          state,
+          dispatch,
+          applicationNumberWater || applicationNumberSewerage || applicationNumber,
+          tenant
+        )
+      };
+  }
+  else if(purpose === "closeConnection"  && status === "success" && (applicationNumberWater || applicationNumberSewerage || applicationNumber)){
+    return {
+      commonHeader: connectionHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant,
+        purpose
+        ),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Connection is closed successfully",
+              labelKey: "WS_CONNECTION_CLOSE_SUCCESS_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding connection has been sent to registered Mobile No.",
+              labelKey: "WS_APPROVAL_CHECKLIST_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application Number.",
+              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+            },
+            number: applicationNumberWater || applicationNumberSewerage || applicationNumber
+          })
+        }
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumberWater || applicationNumberSewerage || applicationNumber,
+        tenant
+      )
+    };
   }
 };
 
@@ -801,6 +931,7 @@ const screenConfig = {
         } else if (applicationNumber && applicationNumber.includes("SW")) {
           consumerNo = get(state,"screenConfiguration.preparedFinalObject.SewerageConnection[0].connectionNo");
         }
+        
         if (applicationNumberSewerage && applicationNumberWater) {
           const cardOne = getAcknowledgementCard(state, dispatch, purpose, status, applicationNumber, applicationNumberWater, applicationNumberSewerage, secondNumber, tenant);
           set(action, "screenConfig.components.div.children", cardOne);

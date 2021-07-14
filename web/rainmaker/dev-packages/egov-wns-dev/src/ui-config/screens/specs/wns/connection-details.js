@@ -24,7 +24,7 @@ import {
 } from "../../../../ui-utils/commons";
 import { getDemand, ifUserRoleExists } from "../utils";
 import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
-import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
+import { connectionDetailsFooter,connectionDisconnect } from "./connectionDetailsResource/connectionDetailsFooter";
 import {
   connHolderDetailsSameAsOwnerSummary,
   connHolderDetailsSummary,
@@ -36,7 +36,7 @@ import { getServiceDetails } from "./connectionDetailsResource/service-details";
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 const service = getQueryArg(window.location.href, "service");
-
+let applicationStatus = '';
 const getApplicationNumber = (dispatch, connectionsObj) => {
   let appNos = "";
   if (connectionsObj.length > 1) {
@@ -95,39 +95,47 @@ export const sortpayloadDataObj = (connectionObj) => {
 };
 
 const getActiveConnectionObj = (connectionsObj) => {
-  let getActiveConnectionObj = "";
-  for (var i = 0; i < connectionsObj.length; i++) {
-    if (
-      (connectionsObj[i] &&
-        connectionsObj[i].applicationStatus === "CONNECTION_ACTIVATED") ||
-      connectionsObj[i].applicationStatus === "APPROVED"
-    ) {
-      getActiveConnectionObj = connectionsObj[i];
-      break;
-    }
-  }
-  return getActiveConnectionObj;
+  // let getActiveConnectionObj = "";
+  // for (var i = 0; i < connectionsObj.length; i++) {
+  //   if (
+  //     (connectionsObj[i] &&
+  //       connectionsObj[i].applicationStatus === "CONNECTION_ACTIVATED") ||
+  //     connectionsObj[i].applicationStatus === "APPROVED" || connectionsObj[i].applicationStatus === "CONNECTION_CLOSED"
+  //     || connectionsObj[i].applicationStatus === "CONNECTION_DISCONNECTED" 
+  //   ) {
+  //     getActiveConnectionObj = connectionsObj[i];
+  //     break;
+  //   }
+  // }
+  return connectionsObj[0];
 };
 
 const searchResults = async (action, state, dispatch, connectionNumber) => {
   /**
    * This methods holds the api calls and the responses of fetch bill and search connection for both water and sewerage service
    */
+
+  let service = getQueryArg(window.location.href,"service")  
+  let tenantId = getQueryArg(window.location.href,"tenantId")  
+
   let queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "connectionNumber", value: connectionNumber },
+    { key: "searchType",value:"CONNECTION"}
   ];
   if (service === serviceConst.SEWERAGE) {
     let payloadData = await getSearchResultsForSewerage(
       queryObject,
       dispatch,
-      true
+      false
     );
+
     if (
       payloadData !== null &&
       payloadData !== undefined &&
       payloadData.SewerageConnections.length > 0
     ) {
+
       payloadData.SewerageConnections = sortpayloadDataObj(
         payloadData.SewerageConnections
       );
@@ -325,6 +333,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       getApplicationNumber(dispatch, payloadData.WaterConnection);
     }
   }
+  
 };
 
 const beforeInitFn = async (action, state, dispatch, connectionNumber,service) => {
@@ -390,8 +399,9 @@ const ownerDetails = getOwnerDetails(false);
 const connectionHolders = connHolderDetailsSummary();
 
 const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
-
-const getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP') || ifUserRoleExists('CITIZEN')) ? connectionDetailsFooter : {};
+let getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP') || ifUserRoleExists('CITIZEN')) ? connectionDetailsFooter : {};
+// let getDisconnectFooter = {}
+console.log(getConnectionDetailsFooterAction)
 
 
 export const connectionDetails = getCommonCard({
@@ -538,6 +548,7 @@ const screenConfig = {
         },
         connectionDetails,
         getConnectionDetailsFooterAction,
+        // getDisconnectFooter
       },
     },
     adhocDialog: {

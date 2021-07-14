@@ -27,11 +27,12 @@ import {connectionDetailsWater,connectionDetailsSewerage} from './applyResource/
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
-let serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
+let serviceModuleName = (service === serviceConst.WATER) ? "NewWS1" : "NewSW1";
 let serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
 let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
 let editredirect = `apply?${redirectQueryString}&action=edit`;
 let headerLabel = "WS_TASK_DETAILS"
+let disconnectOrClose = getQueryArg(window.location.href, "disconnectOrClose");
 
 const resetData = () => {
   applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -230,6 +231,13 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     }
 
+    if(disconnectOrClose){
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.estimate.visible",
+        false
+      ); 
+    }
     if (isModifyMode()) {
       set(
         action.screenConfig,

@@ -5,10 +5,11 @@ import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { httpRequest } from "../../../../../ui-utils";
+
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
-    { key: "offset", value: "0" }
+    // { key: "offset", value: "0" }
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
@@ -72,6 +73,7 @@ export const searchApiCall = async (state, dispatch) => {
         payloadbillingPeriod = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
         
       } catch (err) { console.log(err) }
+      queryObject.push({ key: "searchType", value: "CONNECTION" });
       let getSearchResult = await getSearchResults(queryObject)
       let getSearchResultForSewerage = await getSearchResultsForSewerage(queryObject, dispatch)
       let finalArray = [];
@@ -81,6 +83,10 @@ export const searchApiCall = async (state, dispatch) => {
       const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = serviceConst.WATER; return e }) : []
       const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = serviceConst.SEWERAGE; return e }) : [];
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
+      let requiredConnection = combinedSearchResults && combinedSearchResults.filter( con => {
+        return con.connectionNo && con.connectionNo != 'NA'
+      })
+      dispatch(prepareFinalObject("AllConnections",requiredConnection))
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = combinedSearchResults[i];
         if(element.connectionNo !== null && element.connectionNo!=='NA') {
@@ -128,7 +134,8 @@ export const searchApiCall = async (state, dispatch) => {
               status: element.status,
               address: (element.connectionHolders && element.connectionHolders !== "NA" && element.connectionHolders.length > 0) ? element.connectionHolders[0].correspondenceAddress:'',
               tenantId: element.tenantId,
-              connectionType: element.connectionType
+              connectionType: element.connectionType,
+              applicationStatus:element.applicationStatus
             }
             finalArray.push(obj)
           }) : finalArray.push({
@@ -140,7 +147,8 @@ export const searchApiCall = async (state, dispatch) => {
             status: element.status,
             address: (element.connectionHolders && element.connectionHolders !== "NA" && element.connectionHolders.length > 0) ? element.connectionHolders[0].correspondenceAddress:'',
             tenantId: element.tenantId,
-            connectionType: element.connectionType
+            connectionType: element.connectionType,
+            applicationStatus:element.applicationStatus
           })
         }
       }
@@ -169,7 +177,8 @@ const showResults = (connections, dispatch, tenantId) => {
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
     ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
     ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
-    ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType
+    ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType,
+    ["WS_COMMON_TABLE_COL_APPLICATION_CURRENT_STATE"]: item.applicationStatus ? getTextToLocalMapping(item.applicationStatus) : 'NA'
   }))
 
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));

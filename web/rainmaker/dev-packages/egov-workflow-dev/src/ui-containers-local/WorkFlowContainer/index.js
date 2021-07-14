@@ -110,11 +110,17 @@ class WorkFlowContainer extends React.Component {
       case "SEND_BACK_FOR_FIELD_INSPECTION":
         return "purpose=sendback&status=success";
       case "APPROVE_FOR_CONNECTION":
+      case "APPROVE_FOR_DISCONNECTION":
+      case "APPROVE_TO_CLOSE_CONNECTION":    
         return "purpose=approve&status=success";
       case "APPROVE_CONNECTION":
         return "purpose=approve&status=success";
       case "ACTIVATE_CONNECTION":
         return "purpose=activate&status=success";
+      case "DISCONNECT_CONNECTION":
+        return "purpose=disconnect&status=success"; 
+      case "CLOSE_CONNECTION":
+        return "purpose=closeConnection&status=success";  
       case "REVOCATE":
         return "purpose=application&status=revocated"
       case "VOID":
@@ -471,6 +477,10 @@ class WorkFlowContainer extends React.Component {
     if((moduleName == "PT.CREATE" || moduleName == "PT.MUTATION" || moduleName == "ASMT") && (applicationState == "DOCVERIFIED" || applicationState == "PENDING_FIELD_INSPECTION")){
       editDemands = true
     }
+
+    if(moduleName === "SWCloseConnection" || moduleName === "SWDisconnection" || moduleName === "WSCloseConnection" || moduleName === "WSDisconnection"){
+      state.isStateUpdatable = false
+    }
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
       editAction = {
@@ -526,7 +536,8 @@ class WorkFlowContainer extends React.Component {
         isLast: item.action === "PAY" ? true : false,
         buttonUrl: getRedirectUrl(item.action, businessId, businessService),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: (businessService === "NewWS1" || businessService === "ModifyWSConnection" || businessService === "ModifySWConnection" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_CONNECTION" && item.action !== "APPROVE_FOR_CONNECTION" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
+        showEmployeeList: (businessService === "NewWS1" || businessService === "ModifyWSConnection" || businessService === "ModifySWConnection" || businessService === "NewSW1" || moduleName === "SWCloseConnection" || 
+        moduleName === "SWDisconnection" || moduleName === "WSCloseConnection" || moduleName === "WSDisconnection") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_CONNECTION" && item.action !== "APPROVE_FOR_CONNECTION" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
         roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
         isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
       };

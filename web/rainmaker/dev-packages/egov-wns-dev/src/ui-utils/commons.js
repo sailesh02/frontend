@@ -144,6 +144,29 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
     return waterConnection;
 }
 
+export const getSearchResultsSW = async (queryObject, filter = false) => {
+    try {
+        const response = await httpRequest(
+            "post",
+            "/sw-services/swc/_search",
+            "_search",
+            queryObject
+        );
+        if (response.SewerageConnections && response.SewerageConnections.length == 0) {
+            return response;
+        }
+        let currentTime = new Date().getTime();
+        if (filter) {
+            response.SewerageConnections = response.SewerageConnections.filter(app => currentTime > app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
+            response.SewerageConnections = response.SewerageConnections.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
+        }
+        let result = findAndReplace(response, null, "NA");
+        // result.SewerageConnections = await getPropertyObj(result.SewerageConnections);
+        return result;
+    } catch (error) {
+        console.log(error)
+    }
+};
 
 export const getSearchResults = async (queryObject, filter = false) => {
     try {
@@ -224,7 +247,6 @@ export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
 };
 
 export const fetchBill = async (queryObject, dispatch) => {
-    dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
             "post",
@@ -232,10 +254,8 @@ export const fetchBill = async (queryObject, dispatch) => {
             "_fetchBill",
             queryObject
         );
-        dispatch(toggleSpinner());
         return findAndReplace(response, null, "NA");
     } catch (error) {
-        dispatch(toggleSpinner());
         console.log(error)
     }
 };

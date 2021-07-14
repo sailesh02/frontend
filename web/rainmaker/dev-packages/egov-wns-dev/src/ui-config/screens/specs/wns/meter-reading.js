@@ -17,7 +17,7 @@ const addMeterReading = async (state, dispatch) => {
     dispatch(toggleSpinner());
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const connectionNos = getQueryArg(window.location.href, "connectionNos");
-    let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNos }];
+    let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNos },{ key: "searchType",value:"CONNECTION"}];
     let payloadData = await getSearchResults(queryObject);
     if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
         payloadData.WaterConnection = sortpayloadDataObj(payloadData.WaterConnection);
@@ -41,7 +41,22 @@ const addMeterReading = async (state, dispatch) => {
                 payloadData.WaterConnection[0].status === APPLICATIONSTATE.STATUS ? true : false
         }
 
-        if(!isApplicationApproved){
+        if(payloadData.WaterConnection && (payloadData.WaterConnection[0].applicationStatus == "CONNECTION_DISCONNECTED" 
+        || payloadData.WaterConnection[0].applicationStatus == "CONNECTION_CLOSED")){
+            dispatch(toggleSpinner());
+            dispatch(
+                toggleSnackbar(
+                    true,
+                    {
+                        labelName: "Meter Reading cannot be added as the connection is either disconnected or closed",
+                        labelKey: "Meter Reading cannot be added as the connection is either disconnected or closed"
+                    },
+                    "error"
+                )
+            );
+            return;
+        }
+        else if(!isApplicationApproved){
             dispatch(toggleSpinner());
             dispatch(
                 toggleSnackbar(

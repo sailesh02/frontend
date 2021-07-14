@@ -308,15 +308,15 @@ export const connHolderDetailsSummary = () => {
         header: {
           gridDefination: {
             xs: 12,
-            sm: 10
+            sm: 12
           },
           ...getCommonContainer({
             header:getCommonSubHeader({
               labelKey: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
               labelName: "Connection Holder Details",
               gridDefination: {
-                xs: 6,
-                sm: 6,
+                xs: 2,
+                sm: 2,
                 align: "left"
               },
             }),
@@ -324,8 +324,8 @@ export const connHolderDetailsSummary = () => {
               searchButton: {
                 componentPath: "Button",
                 gridDefination: {
-                  xs: 6,
-                  sm: 6,
+                  xs: 12,
+                  sm: 12,
                   align: "right"
                 },
                 props: {
@@ -336,7 +336,8 @@ export const connHolderDetailsSummary = () => {
                     backgroundColor: "rgb(254, 122, 81)",
                     borderRadius: "2px",
                     width: "220px",
-                    height: "48px"
+                    height: "48px",
+                    marginTop:'-27px'
                   }
                 },
                 children: {

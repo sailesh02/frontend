@@ -188,7 +188,8 @@ class Footer extends React.Component {
               set(payloadSewerageCreate, "processInstance.action", "INITIATE");
               set(payloadSewerageCreate, "connectionType", "Non Metered");
               set(payloadSewerageCreate, "tenantId", tenantId);
-              payloadSewerageCreate.applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_SEWERAGE_CONNECTION" : "CLOSE_SEWERAGE_CONNECTION",
+              payloadSewerageCreate.applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? 
+              "DISCONNECT_SEWERAGE_CONNECTION" : dialogButton == "WS_RECONNECTION" ? "SEWERAGE_RECONNECTION" : "CLOSE_SEWERAGE_CONNECTION",
               payloadSewerageCreate = findAndReplace(payloadSewerageCreate, "NA", null);
               payloadSewerageCreate.property = null;
               payloadSewerageCreate.noOfFlats = payloadSewerageCreate.payloadSewerageCreate && payloadSewerageCreate.noOfFlats != "" ? queryObject.noOfFlats : 0
@@ -205,7 +206,8 @@ class Footer extends React.Component {
               let payloadSewerageUpdate = parserFunction(response.SewerageConnections[0]);
               set(payloadSewerageUpdate, "processInstance.action", "SUBMIT_APPLICATION");
               set(payloadSewerageUpdate, "connectionType", "Non Metered");
-              payloadSewerageUpdate.applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_SEWERAGE_CONNECTION" : "CLOSE_SEWERAGE_CONNECTION"
+              payloadSewerageUpdate.applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_SEWERAGE_CONNECTION" : 
+              this.state.dialogButton == "WS_RECONNECTION" ? "SEWERAGE_RECONNECTION" : "CLOSE_SEWERAGE_CONNECTION"
               if (typeof payloadSewerageUpdate.additionalDetails !== 'object') {
                 payloadSewerageUpdate.additionalDetails = {};
               }
@@ -218,7 +220,7 @@ class Footer extends React.Component {
               setTimeout(async()=>{
                 let updateWaterResponse = await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payloadSewerageUpdate });
                 this.closeDialogue()
-                let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : "closeConnection";
+                let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : this.state.dialogButton == "WS_RECONNECTION" ? "reconnection" : "closeConnection";
                 let status = "success";
                 store.dispatch(
                   setRoute(
@@ -257,7 +259,8 @@ class Footer extends React.Component {
                 payload.additionalDetails.locality = payload.locality;
                 payload = findAndReplace(payload, "NA", null);
                 set(payload, "processInstance.action", "INITIATE")
-                payload.applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_WATER_CONNECTION" : "CLOSE_WATER_CONNECTION"
+                payload.applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? 
+                "DISCONNECT_WATER_CONNECTION" : this.state.dialogButton == "WS_RECONNECTION" ? "WATER_RECONNECTION" :"CLOSE_WATER_CONNECTION"
                 set(payload, "waterSource", getWaterSource(payload.waterSource, payload.waterSubSource));
                 payload.pipeSize = 0
                 payload.noOfFlats = payload.noOfFlats && payload.noOfFlats != "" ? payload.noOfFlats : 0
@@ -289,7 +292,7 @@ class Footer extends React.Component {
                 setTimeout(async()=>{
                   let updateResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: waterUpdatePayload });
                   this.closeDialogue()
-                  let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : "closeConnection";
+                  let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : this.state.dialogButton == "WS_RECONNECTION" ? "reconnection" : "closeConnection";
                   let status = "success";
                   store.dispatch(
                     setRoute(

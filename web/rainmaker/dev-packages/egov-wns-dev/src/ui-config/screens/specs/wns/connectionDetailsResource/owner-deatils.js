@@ -295,9 +295,41 @@ export const connHolderDetailsSummary = () => {
             xs: 12,
             sm: 10
           },
-          ...getCommonSubHeader({
-            labelKey: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
-            labelName: "Connection Holder Details"
+          ...getCommonContainer({
+            header:getCommonSubHeader({
+              labelKey: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
+              labelName: "Connection Holder Details"
+            }),
+            buttonContainer: getCommonContainer({
+              searchButton: {
+                componentPath: "Button",
+                gridDefination: {
+                  xs: 6,
+                  sm: 6,
+                  align: "right"
+                },
+                props: {
+                  variant: "contained",
+                  style: {
+                    color: "white",
+                    margin: "8px",
+                    backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+                    borderRadius: "2px",
+                    width: "220px",
+                    height: "48px"
+                  }
+                },
+                children: {
+                  buttonLabel: getLabel({
+                    labelKey: "WS_SEARCH_CONNECTION_SEARCH_BUTTON"
+                  })
+                },
+                onClickDefination: {
+                  action: "condition",
+                  // callBack: searchApiCall
+                }
+              },
+            })
           })
         }
       }

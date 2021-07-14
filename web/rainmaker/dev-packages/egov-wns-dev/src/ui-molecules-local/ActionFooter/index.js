@@ -449,6 +449,19 @@ class Footer extends React.Component {
         })  
       },
     }
+
+    //reconnection functionality
+    const reconnection = {
+      label: "Reconnection",
+      labelKey: "WS_RECONNECTION",
+      link: async () => {
+        this.setState({
+          openDialog:true,
+          dialogButton:"WS_RECONNECTION",
+          dialogHeader:"Are you sure?"
+        })  
+      },
+    }
     //if(applicationType === "MODIFY"){
 
     //to check button visibility based on application status
@@ -460,6 +473,7 @@ class Footer extends React.Component {
           break;
         case 'CONNECTION_DISCONNECTED':
           downloadMenu.push(closeConnection)
+          downloadMenu.push(reconnection)
           break;
         case 'CONNECTION_CLOSED':
           downloadMenu = [] 
@@ -476,6 +490,7 @@ class Footer extends React.Component {
           break;
         case 'CONNECTION_DISCONNECTED':
           downloadMenu.push(closeConnection)
+          downloadMenu.push(reconnection)
           break;
         case 'CONNECTION_CLOSED':
           downloadMenu = [] 

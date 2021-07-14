@@ -135,6 +135,7 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+  let mode = getQueryArg(window.location.href, "mode");
   window.scrollTo(0, 0);
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   let isFormValid = true;
@@ -154,7 +155,7 @@ const callBackForNext = async (state, dispatch) => {
 
     validateFields("components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children", state, dispatch)
 
-    if (getQueryArg(window.location.href, "action") === "edit" && !isModifyMode()) {
+    if (getQueryArg(window.location.href, "action") === "edit" && !isModifyMode() && !mode == "ownershipTransfer") {
       let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
       const uploadedDocData = application.documents;
       const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
@@ -318,7 +319,7 @@ const callBackForNext = async (state, dispatch) => {
                   );
                   if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
                   else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
-                } else if ((sewerChecked && sewerData.length === 0) || (isModifyMode() && sewerData.length === 1 && !modifyAppCreated)) {
+                } else if ((sewerChecked && sewerData.length === 0) || (isModifyMode() && sewerData.length === 1 && !modifyAppCreated) || (mode == "ownershipTransfer")) {
                   dispatch(
                     prepareFinalObject(
                       "applyScreen.service",
@@ -326,7 +327,7 @@ const callBackForNext = async (state, dispatch) => {
                     )
                   );
                   await applyForSewerage(state, dispatch);
-                } else if ((waterChecked && waterData.length === 0) || (isModifyMode() && waterData.length === 1 && !modifyAppCreated)) {
+                } else if ((waterChecked && waterData.length === 0) || (isModifyMode() && waterData.length === 1 && !modifyAppCreated) || (mode == "ownershipTransfer")) {
                   dispatch(
                     prepareFinalObject(
                       "applyScreen.service",
@@ -397,7 +398,7 @@ const callBackForNext = async (state, dispatch) => {
       if (moveToReview(state, dispatch)) {
         await pushTheDocsUploadedToRedux(state, dispatch);
         isFormValid = true; hasFieldToaster = false;
-        if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
+        if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit" && mode != "ownershipTransfer") {
           setReviewPageRoute(state, dispatch);
         }
       }
@@ -437,7 +438,7 @@ const callBackForNext = async (state, dispatch) => {
         dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
       }
 
-      if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
+      if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()) ) && mode != "ownershipTransfer") {
         setReviewPageRoute(state, dispatch);
       }
       isFormValid = true;
@@ -455,7 +456,7 @@ const callBackForNext = async (state, dispatch) => {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
-    if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+    if(roadCuttingInfo && roadCuttingInfo.length > 0 && mode != "ownershipTransfer") {
       let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.isEmpty !== true);
       dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
     }
@@ -498,8 +499,9 @@ const callBackForNext = async (state, dispatch) => {
 };
 
 const moveToSuccess = (combinedArray, dispatch) => {
-  const tenantId = get(combinedArray[0].property, "tenantId") || get(combinedArray[0], "tenantId");
-  const purpose = "apply";
+  const ownershipTransfer = getQueryArg(window.location.href, "mode");
+  const tenantId = get(combinedArray[0], "tenantId");
+  const purpose = ownershipTransfer == "ownershipTransfer" ? "ownershipTransfer" : "apply";
   const status = "success";
   const applicationNoWater = get(combinedArray[0], "applicationNo");
   const applicationNoSewerage = get(combinedArray[1], "applicationNo");

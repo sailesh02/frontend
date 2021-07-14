@@ -907,6 +907,7 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
 }
 
 export const applyForWater = async (state, dispatch) => {
+    let mode = getQueryArg(window.location.href, "mode");
     let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = waterId ? "UPDATE" : "CREATE";
@@ -939,6 +940,9 @@ export const applyForWater = async (state, dispatch) => {
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             queryObjectForUpdate.property = null
             queryObjectForUpdate.noOfFlats = queryObjectForUpdate.noOfFlats && queryObjectForUpdate.noOfFlats != "" ? queryObjectForUpdate.noOfFlats : 0
+            if(mode === "ownershipTransfer"){
+                queryObjectForUpdate.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+            }
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResults(searchQueryObject);
@@ -959,6 +963,9 @@ export const applyForWater = async (state, dispatch) => {
             }
             queryObject.property = null
             queryObject.pipeSize = 0
+            if(mode === "ownershipTransfer"){
+                queryObject.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+            }
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
@@ -990,6 +997,7 @@ export const applyForWater = async (state, dispatch) => {
 }
 
 export const applyForSewerage = async (state, dispatch) => {
+    let mode = getQueryArg(window.location.href, "mode");
     let queryObject = parserFunction(state);
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let method = sewerId ? "UPDATE" : "CREATE";
@@ -1016,6 +1024,9 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality;
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             queryObjectForUpdate.property = null
+            if(mode === "ownershipTransfer"){
+                queryObjectForUpdate.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+            }
             queryObjectForUpdate.noOfFlats = queryObjectForUpdate.noOfFlats && queryObjectForUpdate.noOfFlats != "" ? queryObjectForUpdate.noOfFlats : 0
             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
@@ -1034,6 +1045,9 @@ export const applyForSewerage = async (state, dispatch) => {
             set(queryObject, "connectionType", "Non Metered");
             queryObject = findAndReplace(queryObject, "NA", null);
             queryObject.property = null;
+            if(mode === "ownershipTransfer"){
+                queryObject.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+            }
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
             response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));

@@ -45,7 +45,7 @@ const nonMeteredTemporory = [{code:"DOMESTIC"}]
 const temporary = [{code: "DOMESTIC"}, {code:"TWSFC"}]
 const permanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"TWSFC"},
 , {code:"BPL"},{code:"ROADSIDEEATERS"}, {code:"SPMA"} ]
-
+let mode = getQueryArg(window.location.href, "mode");
 let isMode = isModifyMode();
 export const stepperData = () => {
   if (isModifyMode()) {
@@ -60,8 +60,12 @@ export const stepperData = () => {
 export const stepper = getStepperObject({ props: { activeStep: 0, classes: { root: "wns-stepper" } } }, stepperData());
 
 export const getHeaderLabel = () => {
+  let mode = getQueryArg(window.location.href, "mode");
   if (isModifyMode()) {
     return process.env.REACT_APP_NAME === "Citizen" ? "WS_MODIFY_NEW_CONNECTION_HEADER" : "WS_MODIFY_CONNECTION_HEADER"
+  }
+  if(mode == "ownershipTransfer"){
+    return "WS_OWNERSHIP_TRANSFER_CONNECTION_HEADER"
   }
   return process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "WS_APPLICATION_NEW_CONNECTION_HEADER"
 }
@@ -507,6 +511,10 @@ export const getData = async (action, state, dispatch) => {
       // For Modify connection details
       if (isModifyMode() && !isModifyModeAction()) {
         // this delete for initiate modify connection 
+        delete combinedArray[0].id; combinedArray[0].documents = [];
+      }
+
+      if(mode == "ownershipTransfer"){
         delete combinedArray[0].id; combinedArray[0].documents = [];
       }
       if (isModifyMode() && isModifyModeAction()) {

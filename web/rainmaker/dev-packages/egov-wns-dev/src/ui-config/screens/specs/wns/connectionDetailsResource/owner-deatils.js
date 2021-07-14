@@ -8,6 +8,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "../viewBillResource/footer";
 import { handleNA } from '../../utils';
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const getHeader = label => {
   return {
@@ -281,6 +283,19 @@ export const connectionHolderDetails={
   )
 };
 
+export const onClickOwnerShipTransfer = async (state, dispatch) => {
+  let applicationNo = state.screenConfiguration.preparedFinalObject.WaterConnection[0].applicationNo
+  let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+  const service = getQueryArg(window.location.href, "service");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+
+  dispatch(
+    setRoute(
+      `/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=ownershipTransfer`
+    )
+  );
+}
+
 export const connHolderDetailsSummary = () => {
   return getCommonGrayCard({
     headerDiv: {
@@ -298,7 +313,12 @@ export const connHolderDetailsSummary = () => {
           ...getCommonContainer({
             header:getCommonSubHeader({
               labelKey: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
-              labelName: "Connection Holder Details"
+              labelName: "Connection Holder Details",
+              gridDefination: {
+                xs: 6,
+                sm: 6,
+                align: "left"
+              },
             }),
             buttonContainer: getCommonContainer({
               searchButton: {
@@ -313,7 +333,7 @@ export const connHolderDetailsSummary = () => {
                   style: {
                     color: "white",
                     margin: "8px",
-                    backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+                    backgroundColor: "rgb(254, 122, 81)",
                     borderRadius: "2px",
                     width: "220px",
                     height: "48px"
@@ -321,12 +341,12 @@ export const connHolderDetailsSummary = () => {
                 },
                 children: {
                   buttonLabel: getLabel({
-                    labelKey: "WS_SEARCH_CONNECTION_SEARCH_BUTTON"
+                    labelKey: "WS_OWNERSHIP_TRANSFER"
                   })
                 },
                 onClickDefination: {
                   action: "condition",
-                  // callBack: searchApiCall
+                  callBack: onClickOwnerShipTransfer
                 }
               },
             })

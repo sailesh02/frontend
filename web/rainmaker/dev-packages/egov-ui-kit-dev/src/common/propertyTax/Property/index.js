@@ -23,6 +23,7 @@ import { httpRequest } from "../../../utils/api";
 import PTHeader from "../../common/PTHeader";
 import AssessmentList from "../AssessmentList";
 import YearDialogue from "../YearDialogue";
+import EditMobileNumberDialog from "../EditMobileNumberDialog";
 import PropertyInformation from "./components/PropertyInformation";
 import "./index.css";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -61,6 +62,7 @@ class Property extends Component {
       pathName: null,
       dialogueOpen: false,
       urlToAppend: "",
+      editMobileOpen:false,
       showAssessmentHistory: false,
     };
   }
@@ -117,39 +119,9 @@ class Property extends Component {
   };
 
   linkProperty = async () => {
-    let userInfo = JSON.parse(getUserInfo());
-    let Property = this.props.selPropertyDetails
-    Property = {...Property, creationReason: "LINK", owners: [{...Property.owners[0], mobileNumber: userInfo.mobileNumber ? userInfo.mobileNumber : userInfo.userName}]}
-    try {
-      const propertyResponse = await httpRequest(
-        `property-services/property/_update`,
-        `_update`,
-        [],
-        {
-            Property
-        },
-        [],
-        {},
-        true
-    );
-    if(propertyResponse) {
-      fetchProperties([
-        { key: "propertyIds", value: decodeURIComponent(this.props.match.params.propertyId) },
-        { key: "tenantId", value: this.props.match.params.tenantId },
-      ]);
-      this.props.toggleSnackbarAndSetText(
-        true,
-        { labelName: "Property linked successfully", labelKey: "PT_LINKED_SUCCESS_MSG" },
-        "success"
-      );
-    }
-    } catch (error) {
-      this.props.toggleSnackbarAndSetText(
-        true,
-        { labelName: error, labelKey: error },
-        "error"
-      );
-    }
+    this.setState({
+      editMobileOpen : true
+    })
   }
 
   onAssessPayClick = () => {
@@ -313,6 +285,12 @@ class Property extends Component {
   closeYearRangeDialogue = () => {
     this.setState({ dialogueOpen: false });
   };
+
+  closeEditMobileDialog = () => {
+    this.setState({
+      editMobileOpen:false
+    })
+  }
   download() {
     const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
     generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, `pt-acknowledgement-${selPropertyDetails.propertyId}.pdf`);
@@ -338,7 +316,15 @@ class Property extends Component {
 
     console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",new Date(1623153780253))
     const { closeYearRangeDialogue } = this;
-    const { dialogueOpen, urlToAppend, showAssessmentHistory } = this.state;
+    const { closeEditMobileDialog } = this;
+    const { dialogueOpen, urlToAppend, showAssessmentHistory,editMobileOpen } = this.state;
+    const editVisible = selPropertyDetails && selPropertyDetails.owners && selPropertyDetails.owners.map( (owner) => {
+        if(owner.mobileNumber){
+          return true
+        }else{
+          return false
+        }
+    })
     let urlArray = [];
     let assessmentHistory = [];
     const { pathname } = location;
@@ -370,7 +356,15 @@ class Property extends Component {
         }
         {!!selPropertyDetails && !!selPropertyDetails.owners && !!selPropertyDetails.owners.length && (<div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
           <div className="button-container col-xs-4 property-info-access-btn" style={{ float: "right" }}>
-            {!!selPropertyDetails.owners[0].mobileNumber ? (<div>
+          {editVisible && editVisible.includes(false) ? 
+          (
+            <Button
+            onClick={() => this.linkProperty()}
+            label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.LINK].parentButton} fontSize="16px" />}
+            primary={true}
+            style={{ lineHeight: "auto", minWidth: "45%" }}
+          />
+          ) : (<div>
             <Button
               label={
                 <Label buttonLabel={true}
@@ -382,23 +376,13 @@ class Property extends Component {
               buttonStyle={{ border: "1px solid #fe7a51" }}
               style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
             />
-            {/* <Button
-              onClick={() => this.onAssessPayClick()}
-              label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.ASSESS].parentButton} fontSize="16px" />}
-              primary={true}
-              style={{ lineHeight: "auto", minWidth: "45%" }}
-            /> */}
-            </div>) : (
-              <Button
-              onClick={() => this.linkProperty()}
-              label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.LINK].parentButton} fontSize="16px" />}
-              primary={true}
-              style={{ lineHeight: "auto", minWidth: "45%" }}
-            />
-            )}
+            </div>) }
           </div>
         </div>)}
         {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />}
+        {editMobileOpen && <EditMobileNumberDialog open={editMobileOpen} history={history} owners={selPropertyDetails.owners} payload = {selPropertyDetails} closeDialogue={closeEditMobileDialog}
+        propertyId ={this.props.match.params.propertyId} tenantId = {this.props.match.params.tenantId}
+        toggleSnackbarAndSetText = {this.props.toggleSnackbarAndSetText}></EditMobileNumberDialog> }
       </Screen>
     );
   }

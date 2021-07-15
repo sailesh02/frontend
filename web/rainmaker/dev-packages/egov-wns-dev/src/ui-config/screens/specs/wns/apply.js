@@ -531,7 +531,18 @@ export const getData = async (action, state, dispatch) => {
       dispatch(prepareFinalObject("applyScreenOld", findAndReplace(oldcombinedArray, "null", "NA")));
       dispatch(prepareFinalObject("applyScreenOld.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
       dispatch(prepareFinalObject("applyScreenOld.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
-
+      let applicationType = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
+      state.screenConfiguration.preparedFinalObject.applyScreen && state.screenConfiguration.preparedFinalObject.applyScreen.applicationType || null
+      
+      //change heading if application is of type ownership transfer
+      if(applicationType === "CONNECTION_OWNERSHIP_CHANGE"){
+        dispatch(handleField(
+          "apply",
+          "components.div.children.headerDiv.children.header.children.headerDiv.children.header.children.key.props",
+          "labelKey",
+          "WS_OWNERSHIP_TRANSFER_CONNECTION_HEADER"
+        ))
+      }
       if (combinedArray[0].connectionHolders && combinedArray[0].connectionHolders !== "NA") {
         combinedArray[0].connectionHolders[0].sameAsPropertyAddress = false;
         dispatch(prepareFinalObject("connectionHolders", combinedArray[0].connectionHolders));

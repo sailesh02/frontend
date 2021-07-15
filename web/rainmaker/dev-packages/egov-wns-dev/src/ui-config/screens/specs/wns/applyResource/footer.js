@@ -33,7 +33,7 @@ const isMode = isModifyMode();
 const isModeAction = isModifyModeAction();
 const setReviewPageRoute = (state, dispatch) => {
   let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
-  if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+  if(roadCuttingInfo && roadCuttingInfo != 'NA' && roadCuttingInfo.length > 0) {
     let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.isEmpty !== true);
     dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
   }
@@ -424,7 +424,7 @@ const callBackForNext = async (state, dispatch) => {
       }
     } else {
       let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
-      if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+      if(roadCuttingInfo && roadCuttingInfo != 'NA' && roadCuttingInfo.length > 0) {
         for (let i = 0; i < roadCuttingInfo.length; i++) {
           if (roadCuttingInfo[i] == undefined) {
             roadCuttingInfo[i] = {};
@@ -432,7 +432,7 @@ const callBackForNext = async (state, dispatch) => {
           }
         }
         let filteredInfo = [];
-        roadCuttingInfo.map(info => {
+        roadCuttingInfo && roadCuttingInfo.map(info => {
           if(info.isDeleted !=false) filteredInfo.push(info);
         });
         dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
@@ -456,7 +456,7 @@ const callBackForNext = async (state, dispatch) => {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
-    if(roadCuttingInfo && roadCuttingInfo.length > 0 && mode != "ownershipTransfer") {
+    if(roadCuttingInfo && roadCuttingInfo !='NA' && roadCuttingInfo.length > 0 && mode != "ownershipTransfer") {
       let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.isEmpty !== true);
       dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
     }

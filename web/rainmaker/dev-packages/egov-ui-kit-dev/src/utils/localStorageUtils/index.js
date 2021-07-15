@@ -36,7 +36,6 @@ export const setUserInfo = (userInfo) => {
   localStorageSet("user-info", userInfo, null);
 };
 export const setAccessToken = (token) => {
-  debugger
   localStorageSet("token", token, null);
 };
 export const setRefreshToken = (refreshToken) => {

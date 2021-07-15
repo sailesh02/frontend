@@ -319,7 +319,7 @@ const callBackForNext = async (state, dispatch) => {
                   );
                   if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
                   else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
-                } else if ((sewerChecked && sewerData.length === 0) || (isModifyMode() && sewerData.length === 1 && !modifyAppCreated) && (mode == "ownershipTransfer")) {
+                } else if ((sewerChecked && sewerData.length === 0) || (isModifyMode() && sewerData.length === 1 && !modifyAppCreated) || (sewerData && sewerData.length === 1 && mode == "ownershipTransfer")) {
                   dispatch(
                     prepareFinalObject(
                       "applyScreen.service",
@@ -327,7 +327,7 @@ const callBackForNext = async (state, dispatch) => {
                     )
                   );
                   await applyForSewerage(state, dispatch);
-                } else if ((waterChecked && waterData.length === 0) || (isModifyMode() && waterData.length === 1 && !modifyAppCreated) || (mode == "ownershipTransfer")) {
+                } else if ((waterChecked && waterData.length === 0) || (isModifyMode() && waterData.length === 1 && !modifyAppCreated) || (waterData && waterData.length === 1 && mode == "ownershipTransfer")) {
                   dispatch(
                     prepareFinalObject(
                       "applyScreen.service",

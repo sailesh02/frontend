@@ -907,6 +907,7 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
 }
 
 export const applyForWater = async (state, dispatch) => {
+    debugger
     let mode = getQueryArg(window.location.href, "mode");
     let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
@@ -981,6 +982,9 @@ export const applyForWater = async (state, dispatch) => {
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
+            }
+            if(mode == "ownershipTransfer"){
+                dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
             }
             if (!isModifyMode()) {
                 setApplicationNumberBox(state, dispatch);

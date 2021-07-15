@@ -10,6 +10,7 @@ import { changeStep } from "../viewBillResource/footer";
 import { handleNA } from '../../utils';
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import set from "lodash/set";
 
 const getHeader = label => {
   return {
@@ -288,7 +289,11 @@ export const onClickOwnerShipTransfer = async (state, dispatch) => {
   let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
   const service = getQueryArg(window.location.href, "service");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-
+  set(
+    "apply",
+    "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.visible",
+    false
+  );
   dispatch(
     setRoute(
       `/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=ownershipTransfer`

@@ -319,7 +319,7 @@ const callBackForNext = async (state, dispatch) => {
                   );
                   if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
                   else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
-                } else if ((sewerChecked && sewerData.length === 0) || (isModifyMode() && sewerData.length === 1 && !modifyAppCreated) || (mode == "ownershipTransfer")) {
+                } else if ((sewerChecked && sewerData.length === 0) || (isModifyMode() && sewerData.length === 1 && !modifyAppCreated) && (mode == "ownershipTransfer")) {
                   dispatch(
                     prepareFinalObject(
                       "applyScreen.service",

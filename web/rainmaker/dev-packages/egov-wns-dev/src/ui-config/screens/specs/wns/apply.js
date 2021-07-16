@@ -269,6 +269,33 @@ const showHideFieldModifyConnection = (action) => {
   }
 }
 
+// to disable fields while applying for ownership transfer from citizen or employee
+const disableFieldsForOwnerShipTransfer = (action) => {
+  let fieldsChanges = [
+    ["components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.wnsPtySearchButton.props"],
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps.props"],
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props"],
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize.props"],
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets.props"],
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets.props"],
+    ["components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.propertyID.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.city.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.apartment.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionCategory.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.mohalla.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.noOfFlats.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props"]
+  ]
+  for (var i = 0; i < fieldsChanges.length; i++) {
+    set(
+      action.screenConfig,
+      fieldsChanges[i][0] + ".disabled",
+      true
+    );
+  }
+}
+
 export const getData = async (action, state, dispatch) => {
   let applicationNo = getQueryArg(window.location.href, "applicationNumber");
   const connectionNo = getQueryArg(window.location.href, "connectionNumber");
@@ -686,118 +713,7 @@ export const getData = async (action, state, dispatch) => {
       }
 
       if(isOwnerShipTransfer()){
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.wnsPtySearchButton.props",
-            "disabled",
-            true
-          )
-        )
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps.props",
-            "disabled",
-            true
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props",
-            "disabled",
-            true
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize.props",
-            "disabled",
-            true
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets.props",
-            "disabled",
-            true
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets.props",
-            "disabled",
-            true
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.propertyID.props",
-            "disabled",
-            true
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.city.props",
-            "disabled",
-            true
-          )
-        )
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.apartment.props",
-            "disabled",
-            true
-          )
-        )
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionCategory.props",
-            "disabled",
-            true
-          )
-        )
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType.props",
-            "disabled",
-            true
-          )
-        )
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.mohalla.props",
-            "disabled",
-            true
-          )
-        )
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.noOfFlats.props",
-            "disabled",
-            true
-          )
-        )
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-            "disabled",
-            true
-          )
-        )
+        disableFieldsForOwnerShipTransfer(action)
       }
    
       let docs = get(state, "screenConfiguration.preparedFinalObject");

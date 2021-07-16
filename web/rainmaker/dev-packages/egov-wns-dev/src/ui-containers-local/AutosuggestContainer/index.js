@@ -25,6 +25,7 @@ class AutoSuggestor extends Component {
       placeholder,
       suggestions,
       className,
+      disabled,
       localizationLabels,
       ...rest
     } = this.props;
@@ -45,6 +46,7 @@ class AutoSuggestor extends Component {
           onSelect={this.onSelect}
           suggestions={suggestions}
           value={value}
+          disabled = {disabled}
           className={className}
           label={translatedLabel}
           placeholder={translatedPlaceholder}

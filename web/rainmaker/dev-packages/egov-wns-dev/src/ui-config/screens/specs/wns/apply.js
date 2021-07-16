@@ -742,7 +742,6 @@ export const getData = async (action, state, dispatch) => {
             true
           )
         );
-      
         dispatch(
           handleField(
             "apply",

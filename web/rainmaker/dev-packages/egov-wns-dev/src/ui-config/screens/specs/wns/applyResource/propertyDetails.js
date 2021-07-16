@@ -214,7 +214,7 @@ const propertyDetails = getCommonContainer({
 const propertyDetailsNoId = getCommonContainer({
   city: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-pt",
+      moduleName: "egov-wns",
       componentPath: "AutosuggestContainer",
       props: {
         className: "autocomplete-dropdown",
@@ -236,6 +236,7 @@ const propertyDetailsNoId = getCommonContainer({
         sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         required: true,
+        disabled:false,
         isClearable: true,
         inputLabelProps: {
           shrink: true
@@ -413,7 +414,7 @@ const propertyDetailsNoId = getCommonContainer({
   // }),
   mohalla: {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-pt",
+    moduleName: "egov-wns",
     componentPath: "AutosuggestContainer",
     props: {
       className: "autocomplete-dropdown",
@@ -433,6 +434,7 @@ const propertyDetailsNoId = getCommonContainer({
       sourceJsonPath: "applyScreenMdmsData.mohalla",
       labelsFromLocalisation: true,
       required: true,
+      disabled:false,
       isClearable: true,
       inputLabelProps: {
         shrink: true

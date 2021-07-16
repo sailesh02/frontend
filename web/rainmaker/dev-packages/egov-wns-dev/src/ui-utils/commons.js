@@ -2116,6 +2116,11 @@ export const isModifyMode = () => {
     return (isMode && isMode.toUpperCase() === 'MODIFY');
 }
 
+export const isOwnerShipTransfer = () => {
+    let isMode = getQueryArg(window.location.href, "mode");
+    return (isMode && isMode === 'ownershipTransfer');
+}
+
 export const isModifyModeAction = () => {
     let isMode = getQueryArg(window.location.href, "modeaction");
     return (isMode && isMode.toUpperCase() === 'EDIT');

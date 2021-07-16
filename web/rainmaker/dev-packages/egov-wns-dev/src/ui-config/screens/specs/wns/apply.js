@@ -20,6 +20,7 @@ import {
   handleApplicationNumberDisplay,
   isActiveProperty,
   isModifyMode,
+  isOwnerShipTransfer,
   isModifyModeAction, prefillDocuments, prepareDocumentsUploadData,
   showHideFieldsFirstStep
 } from "../../../../ui-utils/commons";
@@ -51,7 +52,7 @@ export const stepperData = () => {
   if (isModifyMode()) {
     return [{ labelKey: "WS_COMMON_PROPERTY_DETAILS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
   }
-  else if (process.env.REACT_APP_NAME === "Citizen") {
+  else if (process.env.REACT_APP_NAME === "Citizen" || (isOwnerShipTransfer() && process.env.REACT_APP_NAME !== 'Citizen')) {
     return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
   } else {
     return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_SUMMARY" }];
@@ -113,7 +114,7 @@ const summaryScreenEMP = getCommonCard({
   reviewDocumentDetails,
   reviewOwnerDetails
 })
-let summaryScreen = process.env.REACT_APP_NAME === "Citizen" ? summaryScreenCitizen : summaryScreenEMP;
+let summaryScreen = (process.env.REACT_APP_NAME === "Citizen" || (process.env.REACT_APP_NAME !== 'Citizen' && isOwnerShipTransfer)()) ? summaryScreenCitizen : summaryScreenEMP;
 export const documentDetails = getCommonCard({
   header: getCommonTitle(
     { labelName: "Required Documents", labelKey: "WS_DOCUMENT_DETAILS_HEADER" },
@@ -684,121 +685,121 @@ export const getData = async (action, state, dispatch) => {
         showHideFieldModifyConnection(action);
       }
 
-      // if(mode === "ownershipTransfer"){
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.wnsPtySearchButton.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   )
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   );
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   );
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   );
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   );
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   );
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.propertyID.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   );
+      if(isOwnerShipTransfer()){
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.wnsPtySearchButton.props",
+            "disabled",
+            true
+          )
+        )
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps.props",
+            "disabled",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props",
+            "disabled",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize.props",
+            "disabled",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets.props",
+            "disabled",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets.props",
+            "disabled",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.propertyID.props",
+            "disabled",
+            true
+          )
+        );
       
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.city.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   )
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.apartment.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   )
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionCategory.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   )
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   )
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.mohalla.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   )
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.noOfFlats.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   )
-      //   dispatch(
-      //     handleField(
-      //       "apply",
-      //       "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-      //       "disabled",
-      //       true
-      //     )
-      //   )
-      // }
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.city.props",
+            "disabled",
+            true
+          )
+        )
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.apartment.props",
+            "disabled",
+            true
+          )
+        )
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionCategory.props",
+            "disabled",
+            true
+          )
+        )
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType.props",
+            "disabled",
+            true
+          )
+        )
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.mohalla.props",
+            "disabled",
+            true
+          )
+        )
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.noOfFlats.props",
+            "disabled",
+            true
+          )
+        )
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+            "disabled",
+            true
+          )
+        )
+      }
    
       let docs = get(state, "screenConfiguration.preparedFinalObject");
       await prefillDocuments(docs, "displayDocs", dispatch);

@@ -18,6 +18,7 @@ import {
   findAndReplace,
   isActiveProperty,
   isModifyMode,
+  isOwnerShipTransfer,
   isModifyModeAction, prepareDocumentsUploadData,
   pushTheDocsUploadedToRedux,
   serviceConst,
@@ -398,7 +399,7 @@ const callBackForNext = async (state, dispatch) => {
       if (moveToReview(state, dispatch)) {
         await pushTheDocsUploadedToRedux(state, dispatch);
         isFormValid = true; hasFieldToaster = false;
-        if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit" && mode != "ownershipTransfer") {
+        if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit" && !isOwnerShipTransfer()) {
           setReviewPageRoute(state, dispatch);
         }
       }
@@ -665,11 +666,12 @@ export const changeStep = (
       //since docs section is non mandatory now
       const isDocsUploaded = true;
       if (isDocsUploaded) {
-        activeStep = process.env.REACT_APP_NAME === "Citizen" && !isModifyMode() ? 3 : 2;
+        activeStep = ((process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) || (process.env.REACT_APP_NAME !== "Citizen" && isOwnerShipTransfer())) ? 3 : 2;
       } else if (isModifyMode()) {
         activeStep = 2;
       }
-    } else if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 3 && !isModifyMode()) {
+    } else if ((process.env.REACT_APP_NAME === "Citizen" && activeStep === 3 && !isModifyMode()) ||
+      process.env.REACT_APP_NAME !== "Citizen" && isOwnerShipTransfer()) {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 2;
     } else {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
@@ -716,13 +718,14 @@ export const changeStep = (
     }
   ];
   dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
-  if (process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) { renderStepsCitizen(activeStep, dispatch); }
+  if ((process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) || (process.env.REACT_APP_NAME !== "Citizen" && isOwnerShipTransfer())) { renderStepsCitizen(activeStep, dispatch); }
   else { renderSteps(activeStep, dispatch,state); }
 }
 
 export const isNextButton = (activeStep) => {
   if(isModifyMode() && activeStep < 3) { return true; }
-  if (process.env.REACT_APP_NAME === "Citizen" && activeStep < 2) { return true; }
+  if ((process.env.REACT_APP_NAME === "Citizen" && activeStep < 2) || 
+  process.env.REACT_APP_NAME !== 'Citizen' && activeStep < 2 && isOwnerShipTransfer()) { return true; }
   else if (process.env.REACT_APP_NAME !== "Citizen" && activeStep < 3) { return true; }
   else return false
 }
@@ -813,7 +816,7 @@ export const renderStepsCitizen = (activeStep, dispatch) => {
 
 export const getActionDefinationForStepper = path => {
   let actionDefination = [];
-  if (process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) {
+  if ((process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) || (process.env.REACT_APP_NAME !== 'Citizen' && isOwnerShipTransfer())) {
     actionDefination = [
       {
         path: "components.div.children.formwizardFirstStep",

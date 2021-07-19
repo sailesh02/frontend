@@ -214,7 +214,7 @@ const propertyDetails = getCommonContainer({
 const propertyDetailsNoId = getCommonContainer({
   city: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-pt",
+      moduleName: "egov-wns",
       componentPath: "AutosuggestContainer",
       props: {
         className: "autocomplete-dropdown",
@@ -414,7 +414,7 @@ const propertyDetailsNoId = getCommonContainer({
   // }),
   mohalla: {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-pt",
+    moduleName: "egov-wns",
     componentPath: "AutosuggestContainer",
     props: {
       className: "autocomplete-dropdown",

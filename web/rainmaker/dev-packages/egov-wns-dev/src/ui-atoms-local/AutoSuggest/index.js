@@ -16,7 +16,6 @@ const getSuggestions = suggestions => {
     suggestions.map(suggestion => ({
       value: suggestion.code,
       label: suggestion.name,
-      isDisabled: true
     })).sort(sortDropdownLabels)
   );
 };

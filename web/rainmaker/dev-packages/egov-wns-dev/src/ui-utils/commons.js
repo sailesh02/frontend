@@ -2120,6 +2120,11 @@ export const isModifyMode = () => {
     return (isMode && isMode.toUpperCase() === 'MODIFY');
 }
 
+export const isDisconnectOrClose = () => {
+    let disconnectOrClose = getQueryArg(window.location.href, "disconnectOrClose");
+    return (disconnectOrClose && disconnectOrClose == 'disconnectOrClose');
+}
+
 export const isOwnerShipTransfer = () => {
     let isMode = getQueryArg(window.location.href, "mode");
     return (isMode && isMode === 'ownershipTransfer');

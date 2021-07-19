@@ -542,7 +542,7 @@ export const getData = async (action, state, dispatch) => {
         delete combinedArray[0].id; combinedArray[0].documents = [];
       }
 
-      if(mode == "ownershipTransfer"){
+      if(isOwnerShipTransfer()){
         delete combinedArray[0].id; combinedArray[0].documents = [];
       }
       if (isModifyMode() && isModifyModeAction()) {

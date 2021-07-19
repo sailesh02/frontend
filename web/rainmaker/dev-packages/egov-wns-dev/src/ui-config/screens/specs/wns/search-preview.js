@@ -9,7 +9,7 @@ import { getQueryArg, setBusinessServiceDataToLocalStorage, setDocuments } from 
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import get from "lodash/get";
 import set from "lodash/set";
-import { findAndReplace, getDescriptionFromMDMS, getSearchResults, getSearchResultsForSewerage, getWaterSource, getWorkFlowData, isModifyMode, serviceConst, swEstimateCalculation, waterEstimateCalculation } from "../../../../ui-utils/commons";
+import { findAndReplace, getDescriptionFromMDMS, getSearchResults, getSearchResultsForSewerage, getWaterSource, getWorkFlowData, isModifyMode, isDisconnectOrClose, serviceConst, swEstimateCalculation, waterEstimateCalculation } from "../../../../ui-utils/commons";
 import {
   convertDateToEpoch, createEstimateData,
   getDialogButton, getFeesEstimateOverviewCard,
@@ -32,7 +32,6 @@ let serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/
 let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
 let editredirect = `apply?${redirectQueryString}&action=edit`;
 let headerLabel = "WS_TASK_DETAILS"
-let disconnectOrClose = getQueryArg(window.location.href, "disconnectOrClose");
 
 const resetData = () => {
   applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -231,13 +230,14 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     }
 
-    if(disconnectOrClose){
+    if(isDisconnectOrClose()){
       set(
         action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.estimate.visible",
         false
       ); 
     }
+    
     if (isModifyMode()) {
       set(
         action.screenConfig,

@@ -2122,7 +2122,7 @@ export const isModifyMode = () => {
 
 export const isDisconnectOrClose = () => {
     let disconnectOrClose = getQueryArg(window.location.href, "disconnectOrClose");
-    return (disconnectOrClose && disconnectOrClose == 'disconnectOrClose');
+    return (disconnectOrClose && disconnectOrClose == 'true');
 }
 
 export const isOwnerShipTransfer = () => {

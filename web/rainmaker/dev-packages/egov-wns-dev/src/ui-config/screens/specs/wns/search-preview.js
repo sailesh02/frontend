@@ -82,6 +82,14 @@ const headerrow = getCommonContainer({
 });
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
+  
+  if(isDisconnectOrClose() || process.env.REACT_APP_NAME === "Citizen"){
+    set(
+      action.screenConfig,
+      "components.div.children.taskDetails.children.cardContent.children.estimate.visible",
+      false
+    ); 
+  }
   // dispatch(handleField("apply",
   // "components",
   // "div", {}));
@@ -230,14 +238,6 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     }
 
-    if(isDisconnectOrClose()){
-      set(
-        action.screenConfig,
-        "components.div.children.taskDetails.children.cardContent.children.estimate.visible",
-        false
-      ); 
-    }
-    
     if (isModifyMode()) {
       set(
         action.screenConfig,

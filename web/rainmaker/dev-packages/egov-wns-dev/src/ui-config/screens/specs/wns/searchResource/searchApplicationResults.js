@@ -116,12 +116,18 @@ export const searchApplicationResults = {
 };
 
 const getApplicationDetails = data => {
+  //application types for close,disconnect,reconnect and ownership change applications
+  const applicationTypes = ['SEWERAGE RECONNECTION','DISCONNECT SEWERAGE CONNECTION','CLOSE SEWERAGE CONNECTION',
+  'DISCONNECT WATER CONNECTION','WATER RECONNECTION','CLOSE WATER CONNECTION','CONNECTION OWNERSHIP CHANGE']
   let connectionNo = `${data.rowData[0]}`;
   if(connectionNo && connectionNo !== 'NA' && data.rowData[2].includes('MODIFY')) {
     store.dispatch(
       setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}&mode=MODIFY`)
     )
-  } else {
+  }else if(data && applicationTypes.includes(data.rowData[2])) {
+    setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}&disconnectOrClose=true`)
+  }
+  else {
     store.dispatch(
       setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}`)
     )

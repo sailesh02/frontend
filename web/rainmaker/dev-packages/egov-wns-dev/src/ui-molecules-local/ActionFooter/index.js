@@ -218,16 +218,20 @@ class Footer extends React.Component {
               payloadSewerageUpdate.noOfFlats = payloadSewerageUpdate.noOfFlats && payloadSewerageUpdate.noOfFlats != "" ? payloadSewerageUpdate.noOfFlats : 0
               store.dispatch(toggleSpinner())
               setTimeout(async()=>{
-                let updateWaterResponse = await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payloadSewerageUpdate });
-                this.closeDialogue()
-                let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : this.state.dialogButton == "WS_RECONNECTION" ? "reconnection" : "closeConnection";
-                let status = "success";
-                store.dispatch(
-                  setRoute(
-                    `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applNo || applicationNo}&applicationNumberSewerage=${applNo || applicationNo}&tenantId=${tenantId}`
-                  )
-                );
-                store.dispatch(hideSpinner())  
+                try{
+                  let updateWaterResponse = await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: payloadSewerageUpdate });
+                  this.closeDialogue()
+                  let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : this.state.dialogButton == "WS_RECONNECTION" ? "reconnection" : "closeConnection";
+                  let status = "success";
+                  store.dispatch(
+                    setRoute(
+                      `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applNo || applicationNo}&applicationNumberSewerage=${applNo || applicationNo}&tenantId=${tenantId}`
+                    )
+                  );
+                  store.dispatch(hideSpinner())
+                }catch(err){
+                  store.dispatch(hideSpinner())  
+                }  
               },5000)
               }
               catch(err){
@@ -272,7 +276,8 @@ class Footer extends React.Component {
                 response.WaterConnection[0].waterSource = waterSource[0];
                 response.WaterConnection[0].service = "Water";
                 response.WaterConnection[0].waterSubSource = waterSource[1];
-                response.WaterConnection[0].applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_WATER_CONNECTION" : "CLOSE_WATER_CONNECTION"
+                response.WaterConnection[0].applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_WATER_CONNECTION" : 
+                this.state.dialogButton == "WS_RECONNECTION"? "WATER_RECONNECTION" : "CLOSE_WATER_CONNECTION"
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality
                 if(ifUserRoleExists('WS_CEMP')){
                   response.WaterConnection[0].dateEffectiveFrom = date
@@ -290,16 +295,21 @@ class Footer extends React.Component {
                 waterUpdatePayload.noOfFlats = waterUpdatePayload.noOfFlats && waterUpdatePayload.noOfFlats != "" ? waterUpdatePayload.noOfFlats : 0
                 store.dispatch(toggleSpinner())
                 setTimeout(async()=>{
-                  let updateResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: waterUpdatePayload });
-                  this.closeDialogue()
-                  let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : this.state.dialogButton == "WS_RECONNECTION" ? "reconnection" : "closeConnection";
-                  let status = "success";
-                  store.dispatch(
-                    setRoute(
-                      `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${appNo || applicationNo}&applicationNumberSewerage=${appNo || applicationNo}&tenantId=${tenantId}`
-                    )
-                  );
-                  store.dispatch(hideSpinner())
+                  try{
+                    let updateResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: waterUpdatePayload });
+                    this.closeDialogue()
+                    let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : this.state.dialogButton == "WS_RECONNECTION" ? "reconnection" : "closeConnection";
+                    let status = "success";
+                    store.dispatch(
+                      setRoute(
+                        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${appNo || applicationNo}&applicationNumberSewerage=${appNo || applicationNo}&tenantId=${tenantId}`
+                      )
+                    );
+                    store.dispatch(hideSpinner())
+                  }catch(err){
+                    store.dispatch(hideSpinner())
+                  }
+                
                 },5000)
               }
               catch(err){

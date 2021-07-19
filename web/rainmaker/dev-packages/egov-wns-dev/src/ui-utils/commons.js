@@ -907,7 +907,6 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
 }
 
 export const applyForWater = async (state, dispatch) => {
-    debugger
     let mode = getQueryArg(window.location.href, "mode");
     let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
@@ -984,6 +983,7 @@ export const applyForWater = async (state, dispatch) => {
                 dispatch(prepareFinalObject("modifyAppCreated", true));
             }
             if(mode == "ownershipTransfer"){
+                response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
             }
             if (!isModifyMode()) {
@@ -1057,6 +1057,10 @@ export const applyForSewerage = async (state, dispatch) => {
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
+            if(mode == "ownershipTransfer"){
+                response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality;
+                dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
+            }
             if (isModifyMode()) {
                 // response.SewerageConnections = await getPropertyObj(response.SewerageConnections,"", "", true);
                 response.SewerageConnections[0].sewerage = true;

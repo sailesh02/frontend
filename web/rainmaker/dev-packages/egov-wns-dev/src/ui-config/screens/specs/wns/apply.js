@@ -269,7 +269,7 @@ const showHideFieldModifyConnection = (action) => {
   }
 }
 
-// to disable fields while applying for ownership transfer from citizen or employee
+// to disablef fields while applying for ownership transfer from citizen or employee
 const disableFieldsForOwnerShipTransfer = (action) => {
   let fieldsChanges = [
     ["components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.wnsPtySearchButton.props"],

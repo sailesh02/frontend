@@ -325,7 +325,7 @@ export const connHolderDetailsSummary = () => {
                 align: "left"
               },
             }),
-            buttonContainer: getCommonContainer({
+            // buttonContainer: getCommonContainer({
               searchButton: {
                 componentPath: "Button",
                 gridDefination: {
@@ -333,6 +333,7 @@ export const connHolderDetailsSummary = () => {
                   sm: 12,
                   align: "right"
                 },
+                visible:false,
                 props: {
                   variant: "contained",
                   style: {
@@ -343,7 +344,8 @@ export const connHolderDetailsSummary = () => {
                     width: "220px",
                     height: "48px",
                     marginTop:'-27px'
-                  }
+                  },
+                  
                 },
                 children: {
                   buttonLabel: getLabel({
@@ -356,7 +358,7 @@ export const connHolderDetailsSummary = () => {
                 }
               },
             })
-          })
+          // })
         }
       }
     },

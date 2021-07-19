@@ -333,7 +333,25 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       getApplicationNumber(dispatch, payloadData.WaterConnection);
     }
   }
-  
+
+  let connectionObj = get(
+    state.screenConfiguration.preparedFinalObject,
+    "WaterConnection",
+    []
+  );
+
+  const applicationStatus = connectionObj && connectionObj.length > 0
+  ? connectionObj[0].applicationStatus
+  : "";
+
+  if(applicationStatus == "CONNECTION_ACTIVATED"){
+    dispatch(handleField(
+      "connection-details",
+      "components.div.children.connectionDetails.children.cardContent.children.connectionHolders.children.cardContent.children.headerDiv.children.header.children.searchButton",
+      "visible",
+      true
+    ))
+  }  
 };
 
 const beforeInitFn = async (action, state, dispatch, connectionNumber,service) => {

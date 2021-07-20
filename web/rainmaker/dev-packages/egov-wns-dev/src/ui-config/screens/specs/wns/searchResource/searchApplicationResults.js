@@ -125,7 +125,9 @@ const getApplicationDetails = data => {
       setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}&mode=MODIFY`)
     )
   }else if(data && applicationTypes.includes(data.rowData[2])) {
-    setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}&disconnectOrClose=true`)
+    store.dispatch(
+      setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}&disconnectOrClose=true`)
+    )
   }
   else {
     store.dispatch(

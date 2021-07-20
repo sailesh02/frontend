@@ -156,7 +156,7 @@ const callBackForNext = async (state, dispatch) => {
 
     validateFields("components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children", state, dispatch)
 
-    if (getQueryArg(window.location.href, "action") === "edit" && !isModifyMode() && !mode == "ownershipTransfer") {
+    if (getQueryArg(window.location.href, "action") === "edit" && !isModifyMode() && !isOwnerShipTransfer()) {
       let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
       const uploadedDocData = application.documents;
       const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
@@ -319,8 +319,9 @@ const callBackForNext = async (state, dispatch) => {
                     )
                   );
                   if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
-                  else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
-                } else if ((sewerChecked && sewerData.length === 0) || (isModifyMode() && sewerData.length === 1 && !modifyAppCreated) || (sewerData && sewerData.length === 1 && mode == "ownershipTransfer")) {
+                  else if (waterData && waterData.length > 0 && sewerData.length === 0) { 
+                    await applyForSewerage(state, dispatch); }
+                } else if ((sewerChecked && sewerData.length === 0) || (isModifyMode() && sewerData.length === 1 && !modifyAppCreated) || (sewerData && sewerData.length === 1 && isOwnerShipTransfer())) {
                   dispatch(
                     prepareFinalObject(
                       "applyScreen.service",
@@ -328,7 +329,7 @@ const callBackForNext = async (state, dispatch) => {
                     )
                   );
                   await applyForSewerage(state, dispatch);
-                } else if ((waterChecked && waterData.length === 0) || (isModifyMode() && waterData.length === 1 && !modifyAppCreated) || (waterData && waterData.length === 1 && mode == "ownershipTransfer")) {
+                } else if ((waterChecked && waterData.length === 0) || (isModifyMode() && waterData.length === 1 && !modifyAppCreated) || (waterData && waterData.length === 1 && isOwnerShipTransfer())) {
                   dispatch(
                     prepareFinalObject(
                       "applyScreen.service",
@@ -439,7 +440,7 @@ const callBackForNext = async (state, dispatch) => {
         dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
       }
 
-      if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()) ) && mode != "ownershipTransfer") {
+      if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()) ) && !isOwnerShipTransfer()) {
         setReviewPageRoute(state, dispatch);
       }
       isFormValid = true;
@@ -457,7 +458,7 @@ const callBackForNext = async (state, dispatch) => {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
-    if(roadCuttingInfo && roadCuttingInfo !='NA' && roadCuttingInfo.length > 0 && mode != "ownershipTransfer") {
+    if(roadCuttingInfo && roadCuttingInfo !='NA' && roadCuttingInfo.length > 0 && !isOwnerShipTransfer()) {
       let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.isEmpty !== true);
       dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
     }

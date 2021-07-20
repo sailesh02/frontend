@@ -983,6 +983,11 @@ export const applyForWater = async (state, dispatch) => {
                 dispatch(prepareFinalObject("modifyAppCreated", true));
             }
             if(mode == "ownershipTransfer"){
+                response.WaterConnection[0].water = true;
+                let waterSource = response.WaterConnection[0].waterSource.split(".");
+                response.WaterConnection[0].waterSource = waterSource[0];
+                response.WaterConnection[0].service = "Water";
+                response.WaterConnection[0].waterSubSource = waterSource[1];
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
             }
@@ -1028,7 +1033,7 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality;
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             queryObjectForUpdate.property = null
-            if(mode === "ownershipTransfer"){
+            if(isOwnerShipTransfer()){
                 queryObjectForUpdate.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
             }
             queryObjectForUpdate.noOfFlats = queryObjectForUpdate.noOfFlats && queryObjectForUpdate.noOfFlats != "" ? queryObjectForUpdate.noOfFlats : 0
@@ -1049,7 +1054,7 @@ export const applyForSewerage = async (state, dispatch) => {
             set(queryObject, "connectionType", "Non Metered");
             queryObject = findAndReplace(queryObject, "NA", null);
             queryObject.property = null;
-            if(mode === "ownershipTransfer"){
+            if(isOwnerShipTransfer()){
                 queryObject.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
             }
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
@@ -1057,7 +1062,10 @@ export const applyForSewerage = async (state, dispatch) => {
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
-            if(mode == "ownershipTransfer"){
+            debugger
+            if(isOwnerShipTransfer()){
+                response.SewerageConnections[0].sewerage = true;
+                response.SewerageConnections[0].service = "Sewerage";
                 response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
             }

@@ -943,6 +943,9 @@ export const applyForWater = async (state, dispatch) => {
             if(mode === "ownershipTransfer"){
                 queryObjectForUpdate.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
             }
+            if(isModifyMode()){
+                queryObjectForUpdate.applicationType = "MODIFY_WATER_CONNECTION"
+            }
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResults(searchQueryObject);
@@ -965,6 +968,9 @@ export const applyForWater = async (state, dispatch) => {
             queryObject.pipeSize = 0
             if(mode === "ownershipTransfer"){
                 queryObject.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+            }
+            if(isModifyMode()){
+                queryObject.applicationType = "MODIFY_WATER_CONNECTION"
             }
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
@@ -1036,6 +1042,9 @@ export const applyForSewerage = async (state, dispatch) => {
             if(isOwnerShipTransfer()){
                 queryObjectForUpdate.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
             }
+            if(isModifyMode()){
+                queryObjectForUpdate.applicationType = "MODIFY_SEWERAGE_CONNECTION"
+            }
             queryObjectForUpdate.noOfFlats = queryObjectForUpdate.noOfFlats && queryObjectForUpdate.noOfFlats != "" ? queryObjectForUpdate.noOfFlats : 0
             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
@@ -1057,12 +1066,15 @@ export const applyForSewerage = async (state, dispatch) => {
             if(isOwnerShipTransfer()){
                 queryObject.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
             }
+            if(isModifyMode()){
+                queryObject.applicationType = "MODIFY_SEWERAGE_CONNECTION"
+            }
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
             response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
-            debugger
+            
             if(isOwnerShipTransfer()){
                 response.SewerageConnections[0].sewerage = true;
                 response.SewerageConnections[0].service = "Sewerage";

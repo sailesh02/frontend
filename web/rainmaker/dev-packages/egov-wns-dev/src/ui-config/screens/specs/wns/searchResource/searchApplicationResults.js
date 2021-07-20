@@ -120,7 +120,7 @@ const getApplicationDetails = data => {
   const applicationTypes = ['SEWERAGE RECONNECTION','DISCONNECT SEWERAGE CONNECTION','CLOSE SEWERAGE CONNECTION',
   'DISCONNECT WATER CONNECTION','WATER RECONNECTION','CLOSE WATER CONNECTION','CONNECTION OWNERSHIP CHANGE']
   let connectionNo = `${data.rowData[0]}`;
-  if(connectionNo && connectionNo !== 'NA' && data.rowData[2].includes('MODIFY')) {
+  if(connectionNo && connectionNo !== 'NA' && (data.rowData[2].includes('MODIFY') || data.rowData[2].includes('MODIFY WATER CONNECTION') || data.rowData[2].includes('MODIFY SEWERAGE CONNECTION'))) {
     store.dispatch(
       setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}&mode=MODIFY`)
     )

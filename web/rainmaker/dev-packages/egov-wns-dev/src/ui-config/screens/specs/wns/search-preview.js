@@ -112,7 +112,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   }
 
   let Response = await getWorkFlowData(queryObj);
-  let processInstanceAppStatus = Response.ProcessInstances[0].state.applicationStatus;
+  let processInstanceAppStatus = Response && Response.ProcessInstances && Response.ProcessInstances.length > 0 && Response.ProcessInstances[0].state.applicationStatus;
   //Search details for given application Number
   if (applicationNumber) {
 

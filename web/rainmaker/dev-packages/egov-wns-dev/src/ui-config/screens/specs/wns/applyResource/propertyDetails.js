@@ -724,11 +724,10 @@ const propertyDetailsNoId = getCommonContainer({
       labelKey: "WS_WARD_LABEL"
     },
     placeholder: {
-      labelName: "Enter Ward Name.",
+      labelName: "Enter Ward Name",
       labelKey: "WS_WARD_PLACEHOLDER"
     },
     visible:true,
-    required: true,
     jsonPath: "applyScreen.ward",
     gridDefination: {
       xs: 12,

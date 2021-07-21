@@ -302,6 +302,24 @@ export const propertyDetails={
     }
 
   ),
+  ward: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "ward",
+      labelKey: "WS_WARD_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.ward",
+      callBack: handleNA,
+    },
+    {
+      labelKey: "WS_WARD_LABEL"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.ward",
+      callBack: handleNA   
+    }
+
+  ),
   connectionCategory: getLabelWithValueForModifiedLabel(
     {
       labelName: "Connection Category",

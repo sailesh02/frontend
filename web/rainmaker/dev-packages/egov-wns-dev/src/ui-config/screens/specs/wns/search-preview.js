@@ -151,6 +151,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.additionalDetails.locality));
+      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.ward", applyScreenObject.additionalDetails.ward ? applyScreenObject.additionalDetails.ward : ''));
       if (applyScreenObject.service = serviceConst.SEWERAGE)
         dispatch(prepareFinalObject("SewerageConnection[0]", parsedObject));
       let estimate;

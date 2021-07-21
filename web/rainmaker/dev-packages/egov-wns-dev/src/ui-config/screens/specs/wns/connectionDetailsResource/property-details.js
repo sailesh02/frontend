@@ -116,6 +116,17 @@ const propertyDetails= getCommonContainer({
     }
 
   ),
+  ward: getLabelWithValue(
+    {
+      labelName: "Ward",
+      labelKey: "WS_WARD_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.ward",
+      callBack: handleNA,
+    }
+
+  ),
   connectionCategory: getLabelWithValue(
     {
       labelName: "Connection Category",

@@ -530,6 +530,7 @@ export const getData = async (action, state, dispatch) => {
       // }
       let combinedArray = waterConnections.concat(sewerageConnections);
       combinedArray[0].locality = combinedArray[0].additionalDetails.locality
+      combinedArray[0].ward = combinedArray[0].additionalDetails.ward ? combinedArray[0].additionalDetails.ward : ''
       // if (!window.location.href.includes("propertyId")) {
       //   if (!isActiveProperty(combinedArray[0].property)) {
       //     dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${combinedArray[0].property.status}`, labelName: `Property Status is ${combinedArray[0].property.status}` }, "warning"));
@@ -553,12 +554,14 @@ export const getData = async (action, state, dispatch) => {
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
       dispatch(prepareFinalObject("applyScreen.usageCategory",combinedArray ? combinedArray[0].usageCategory : ''))
       dispatch(prepareFinalObject("applyScreen.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
+      dispatch(prepareFinalObject("applyScreen.ward",combinedArray ? combinedArray[0].additionalDetails.ward : ''))
+
 
       // For oldvalue display
       let oldcombinedArray = cloneDeep(combinedArray[0]);
       dispatch(prepareFinalObject("applyScreenOld", findAndReplace(oldcombinedArray, "null", "NA")));
       dispatch(prepareFinalObject("applyScreenOld.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
-      dispatch(prepareFinalObject("applyScreenOld.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
+      dispatch(prepareFinalObject("applyScreenOld.ward",combinedArray ? combinedArray[0].additionalDetails.ward : ''))
       let applicationType = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
       state.screenConfiguration.preparedFinalObject.applyScreen && state.screenConfiguration.preparedFinalObject.applyScreen.applicationType || null
       

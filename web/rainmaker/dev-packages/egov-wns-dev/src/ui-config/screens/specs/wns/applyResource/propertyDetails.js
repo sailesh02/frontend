@@ -718,6 +718,23 @@ const propertyDetailsNoId = getCommonContainer({
       sm: 6
     }
   }),
+  ward: getTextField({
+    label: {
+      labelName: "Ward",
+      labelKey: "WS_WARD_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Ward Name.",
+      labelKey: "WS_WARD_PLACEHOLDER"
+    },
+    visible:true,
+    required: true,
+    jsonPath: "applyScreen.ward",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
+  }),
   noOfFlats: getTextField({
     label: {
       labelName: "No of Flats",

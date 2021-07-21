@@ -178,13 +178,16 @@ class Footer extends React.Component {
                 let sewerageConnections = payloadSewerage ? payloadSewerage.SewerageConnections : []
                 delete sewerageConnections[0].id; sewerageConnections[0].documents = [];
                 sewerageConnections[0].locality = sewerageConnections[0].additionalDetails.locality
-    
+                sewerageConnections[0].ward = sewerageConnections[0].additionalDetails.ward ? sewerageConnections[0].additionalDetails.ward : ''
+
                 let payloadSewerageCreate = parserFunction(sewerageConnections[0]);
     
                 if (typeof payloadSewerageCreate.additionalDetails !== 'object') {
                   payloadSewerageCreate.additionalDetails = {};
               }
               payloadSewerageCreate.additionalDetails.locality = payloadSewerageCreate.locality
+              payloadSewerageCreate.additionalDetails.ward = payloadSewerageCreate.ward ? payloadSewerageCreate.ward : ''
+
               set(payloadSewerageCreate, "processInstance.action", "INITIATE");
               set(payloadSewerageCreate, "connectionType", "Non Metered");
               set(payloadSewerageCreate, "tenantId", tenantId);
@@ -200,6 +203,8 @@ class Footer extends React.Component {
               response.SewerageConnections[0].sewerage = true;
               response.SewerageConnections[0].service = "Sewerage";
               response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality
+              response.SewerageConnections[0].ward = response.SewerageConnections[0].additionalDetails.ward ? response.SewerageConnections[0].additionalDetails.ward : ''
+
               if(ifUserRoleExists('WS_CEMP')){
                 response.SewerageConnections[0].dateEffectiveFrom = date
               }
@@ -213,6 +218,8 @@ class Footer extends React.Component {
               }
               set(payloadSewerageUpdate, "tenantId", tenantId);
               payloadSewerageUpdate.additionalDetails.locality = payloadSewerageUpdate.locality;
+              payloadSewerageUpdate.additionalDetails.ward = payloadSewerageUpdate.ward ? payloadSewerageUpdate.ward : '';
+
               payloadSewerageUpdate = findAndReplace(payloadSewerageUpdate, "NA", null);
               payloadSewerageUpdate.property = null
               payloadSewerageUpdate.noOfFlats = payloadSewerageUpdate.noOfFlats && payloadSewerageUpdate.noOfFlats != "" ? payloadSewerageUpdate.noOfFlats : 0
@@ -253,6 +260,7 @@ class Footer extends React.Component {
                 payloadWater.WaterConnection[0].sewerage = false;
                 payloadWater.WaterConnection[0].service = "Water";
                 payloadWater.WaterConnection[0].locality = payloadWater.WaterConnection[0].additionalDetails.locality
+                payloadWater.WaterConnection[0].ward = payloadWater.WaterConnection[0].additionalDetails.ward ? payloadWater.WaterConnection[0].additionalDetails.ward : ''
                 let waterConnections = payloadWater ? payloadWater.WaterConnection : []
                 delete waterConnections[0].id; waterConnections[0].documents = [];
                 let payload = parserFunction(waterConnections[0]);
@@ -261,6 +269,7 @@ class Footer extends React.Component {
                 }
                 set(payload, "tenantId", tenantId);
                 payload.additionalDetails.locality = payload.locality;
+                payload.additionalDetails.ward = payload.ward ? payload.ward : '';
                 payload = findAndReplace(payload, "NA", null);
                 set(payload, "processInstance.action", "INITIATE")
                 payload.applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? 
@@ -279,6 +288,7 @@ class Footer extends React.Component {
                 response.WaterConnection[0].applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_WATER_CONNECTION" : 
                 this.state.dialogButton == "WS_RECONNECTION"? "WATER_RECONNECTION" : "CLOSE_WATER_CONNECTION"
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality
+                response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : ''
                 if(ifUserRoleExists('WS_CEMP')){
                   response.WaterConnection[0].dateEffectiveFrom = date
                 }
@@ -290,6 +300,7 @@ class Footer extends React.Component {
                 }
                 set(waterUpdatePayload, "tenantId", tenantId);
                 waterUpdatePayload.additionalDetails.locality = waterUpdatePayload.locality;
+                waterUpdatePayload.additionalDetails.ward = waterUpdatePayload.ward ? waterUpdatePayload.ward : '';
                 waterUpdatePayload.pipeSize = 0
                 waterUpdatePayload = findAndReplace(waterUpdatePayload, "NA", null);
                 waterUpdatePayload.noOfFlats = waterUpdatePayload.noOfFlats && waterUpdatePayload.noOfFlats != "" ? waterUpdatePayload.noOfFlats : 0

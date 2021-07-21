@@ -936,6 +936,8 @@ export const applyForWater = async (state, dispatch) => {
                 queryObjectForUpdate.additionalDetails = {};
             }
             queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality;
+            queryObjectForUpdate.additionalDetails.ward = queryObjectForUpdate.ward ? queryObjectForUpdate.ward : '';
+
             queryObjectForUpdate.pipeSize = 0
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             queryObjectForUpdate.property = null
@@ -959,6 +961,8 @@ export const applyForWater = async (state, dispatch) => {
                 queryObject.additionalDetails = {};
             }
             queryObject.additionalDetails.locality = queryObject.locality;
+            queryObject.additionalDetails.ward = queryObject.ward ? queryObject.ward : '';
+
             set(queryObject, "processInstance.action", "INITIATE")
             queryObject = findAndReplace(queryObject, "NA", null);
             if (isModifyMode()) {
@@ -984,6 +988,7 @@ export const applyForWater = async (state, dispatch) => {
                 response.WaterConnection[0].waterSource = waterSource[0];
                 response.WaterConnection[0].service = "Water";
                 response.WaterConnection[0].waterSubSource = waterSource[1];
+                response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
@@ -994,6 +999,7 @@ export const applyForWater = async (state, dispatch) => {
                 response.WaterConnection[0].waterSource = waterSource[0];
                 response.WaterConnection[0].service = "Water";
                 response.WaterConnection[0].waterSubSource = waterSource[1];
+                response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
             }
@@ -1037,6 +1043,7 @@ export const applyForSewerage = async (state, dispatch) => {
                 response.SewerageConnection[0].additionalDetails = {};
             }
             queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality;
+            queryObjectForUpdate.additionalDetails.ward = queryObjectForUpdate.ward ? queryObjectForUpdate.ward : '';
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             queryObjectForUpdate.property = null
             if(isOwnerShipTransfer()){
@@ -1059,6 +1066,7 @@ export const applyForSewerage = async (state, dispatch) => {
                 response.SewerageConnection[0].additionalDetails = {};
             }
             queryObject.additionalDetails.locality = queryObject.locality;
+            queryObject.additionalDetails.ward = queryObject.ward ? queryObject.ward : '';
             set(queryObject, "processInstance.action", "INITIATE");
             set(queryObject, "connectionType", "Non Metered");
             queryObject = findAndReplace(queryObject, "NA", null);
@@ -1078,10 +1086,12 @@ export const applyForSewerage = async (state, dispatch) => {
             if(isOwnerShipTransfer()){
                 response.SewerageConnections[0].sewerage = true;
                 response.SewerageConnections[0].service = "Sewerage";
+                response.SewerageConnections[0].ward = response.SewerageConnections[0].additionalDetails.ward ? response.SewerageConnections[0].additionalDetails.ward : '';
                 response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
             }
             if (isModifyMode()) {
+                response.SewerageConnections[0].ward = response.SewerageConnections[0].additionalDetails.ward ? response.SewerageConnections[0].additionalDetails.ward : '';
                 response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality;
                 // response.SewerageConnections = await getPropertyObj(response.SewerageConnections,"", "", true);
                 response.SewerageConnections[0].sewerage = true;
@@ -1151,9 +1161,12 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
                 queryObjectForUpdateWater.additionalDetails = {};
             }
             queryObjectForUpdateWater.additionalDetails.locality = queryObjectForUpdateWater.locality;
+            queryObjectForUpdateWater.additionalDetails.ward = queryObjectForUpdateWater.ward ? queryObjectForUpdateWater.ward : '';
+
             if (typeof queryObjectForUpdateSewerage.additionalDetails !== 'object') {
                 queryObjectForUpdateSewerage.additionalDetails = {};
             }
+            queryObjectForUpdateSewerage.additionalDetails.ward = queryObjectForUpdateSewerage.ward ? queryObjectForUpdateSewerage.ward : '';
             queryObjectForUpdateSewerage.additionalDetails.locality = queryObjectForUpdateSewerage.locality;
             queryObjectForUpdateSewerage.property = null
             queryObjectForUpdateWater.property = null
@@ -1183,6 +1196,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
                 queryObject.additionalDetails = {};
             }
             queryObject.additionalDetails.locality = queryObject.locality;
+            queryObject.additionalDetails.ward = queryObject.ward ? queryObject.ward : '';
             set(queryObject, "processInstance.action", "INITIATE");
             queryObject = findAndReplace(queryObject, "NA", null);
             queryObject.property = null;

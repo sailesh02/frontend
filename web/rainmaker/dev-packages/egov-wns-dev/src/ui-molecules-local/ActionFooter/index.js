@@ -372,18 +372,6 @@ class Footer extends React.Component {
           { key: "tenantId", value: tenantId },
         ];
 
-        let isApplicationApproved = await isWorkflowExists(queryObj);
-        if (!isApplicationApproved) {
-          toggleSnackbar(
-            true,
-            {
-              labelName: "WorkFlow already Initiated",
-              labelKey: "WS_WORKFLOW_ALREADY_INITIATED",
-            },
-            "error"
-          );
-          return false;
-        }
         store.dispatch(
           setRoute(
             `/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`

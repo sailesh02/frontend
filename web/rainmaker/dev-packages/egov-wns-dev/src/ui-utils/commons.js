@@ -1082,6 +1082,7 @@ export const applyForSewerage = async (state, dispatch) => {
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
             }
             if (isModifyMode()) {
+                response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality;
                 // response.SewerageConnections = await getPropertyObj(response.SewerageConnections,"", "", true);
                 response.SewerageConnections[0].sewerage = true;
                 response.SewerageConnections[0].service = "Sewerage";

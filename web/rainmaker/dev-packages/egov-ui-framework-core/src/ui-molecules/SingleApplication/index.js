@@ -175,7 +175,7 @@ class SingleApplication extends React.Component {
 
   render() {
     const { searchResults, classes, contents, moduleName, setRoute } = this.props;
-    console.log(searchResults, "Nero SearchResult")
+
     return (
       <div className="application-card">
         {searchResults && searchResults.length > 0 ? (

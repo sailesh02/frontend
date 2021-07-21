@@ -114,7 +114,7 @@ export const getCommonCard = (children, cardProps = {}, cardContentProps = {}) =
   return {
     componentPath: "Card",
     props: {
-      ...cardProps  
+      ...cardProps
     },
     children: {
       cardContent: {
@@ -565,7 +565,7 @@ export const getPattern = type => {
     case "Date":
       return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/i;
     case "UOMValue":
-      return /^([1-9]\d{0,3}|1\d{4}|2[0-4]\d{3}|25000)$/i;
+      return /^([1-9]\d{0,4}|1\d{4}|2[0-4]\d{3}|25000)$/i;
     case "OperationalArea":
       return /^(0)*[1-9][0-9]{0,6}$/i;
     case "NoOfEmp":
@@ -585,7 +585,7 @@ export const getPattern = type => {
     case "ElectricityConnNo":
       return /^[0-9]{15}$/i;
     case "DocumentNo":
-      return /^[0-9]{1,15}$/i; 
+      return /^[0-9]{1,15}$/i;
     case "eventName":
       return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,65}$/i;
     case "eventDescription":

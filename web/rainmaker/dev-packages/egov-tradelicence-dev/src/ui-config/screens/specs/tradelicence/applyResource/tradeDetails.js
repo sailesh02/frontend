@@ -472,9 +472,9 @@ const structureSubTypeChange = (reqObj) => {
 }
 
 const tradeUnitCard = {
-  uiFramework: "custom-containers-local",
+  uiFramework: "custom-containers",
   componentPath: "MultiItem",
-  moduleName: "egov-tradelicence",
+  //moduleName: "egov-tradelicence",
 
   props: {
     hasAddItem: true,
@@ -1056,7 +1056,7 @@ export const tradeDetails = getCommonCard({
       },
       props: {
         className: "applicant-details-error",
-        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
+       // disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
       },
       placeholder: {
         labelName: "Example Diljit Da Dhaba",
@@ -1080,6 +1080,8 @@ export const tradeDetails = getCommonCard({
         labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
       },
       visible: false,
+      required: true,
+      //visible: getQueryArg(window.location.href, "legacyLicenseRenewal") === "true" ? true : false,
       jsonPath: "Licenses[0].oldLicenseNumber"
     }),
     // tradeFromDate: {
@@ -1362,22 +1364,22 @@ export const tradeDetails = getCommonCard({
     //   }
     // },
 
-    // tradeGSTNo: getTextField({
-    //   label: {
-    //     labelName: "Trade GST No.",
-    //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
-    //   },
-    //   props: {
-    //     className: "applicant-details-error",
-    //     disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
-    //   },
-    //   placeholder: {
-    //     labelName: "Enter Trade GST No.",
-    //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_PLACEHOLDER"
-    //   },
-    //   pattern: getPattern("GSTNo"),
-    //   jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
-    // }),
+    tradeGSTNo: getTextField({
+      label: {
+        labelName: "Trade GST No.",
+        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
+      },
+      props: {
+        className: "applicant-details-error",
+        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
+      },
+      placeholder: {
+        labelName: "Enter Trade GST No.",
+        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_PLACEHOLDER"
+      },
+      pattern: getPattern("GSTNo"),
+      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
+    }),
     // tradeOperationalArea: getTextField({
     //   label: {
     //     labelName: "Operatonal Area (Sq Ft)",
@@ -1435,9 +1437,7 @@ export const tradeDetails = getCommonCard({
 });
 
 const setFieldsOnAddItem = (state, multiItemContent) => {
-  console.log(state, "Nero status")
 
-  console.log(multiItemContent, "Nero multiItemContent")
   const preparedFinalObject = JSON.parse(
     JSON.stringify(state.screenConfiguration.preparedFinalObject)
   );

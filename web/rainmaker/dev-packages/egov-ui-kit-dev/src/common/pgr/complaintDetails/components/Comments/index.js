@@ -19,8 +19,7 @@ const WriteCommentHOC = formHoc({ formKey: "comment", isCoreConfiguration: true,
 class Comments extends Component {
   render() {
     const { selectedComplaint, userImage, userId, userName, role, isAssignedToEmployee, transformedCommentList, complainant } = this.props;
-    console.log(isAssignedToEmployee, "Nero isAssignedToEmployee");
-    console.log(role, "Nero role in comments")
+
     const items =
       transformedCommentList &&
       transformedCommentList.map((comment, index) => {

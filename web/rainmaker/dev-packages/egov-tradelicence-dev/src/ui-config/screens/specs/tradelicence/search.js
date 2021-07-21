@@ -57,7 +57,7 @@ const getMdmsData = async (dispatch) => {
     );
 
 
-    let EmpApplyAppsFor = [{code: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},{code: "TL_HOME_SEARCH_RESULTS_NEW_TEMP_APP_BUTTON", active: true}]
+    let EmpApplyAppsFor = [{code: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},{code: "TL_HOME_SEARCH_RESULTS_NEW_TEMP_APP_BUTTON", active: true}, {code: "TL_HOME_SEARCH_RESULTS_LEGACY_TL_RENEW_APP_BUTTON", active: true}]
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.searchScreen.EmpApplyAppsFor",
@@ -163,10 +163,17 @@ const tradeLicenseSearchAndResult = {
                   dispatch(prepareFinalObject("Licenses", [{ licenseType: licenceType }]));
                   dispatch(prepareFinalObject("LicensesTemp", []));
                   window.localStorage.setItem('licenseType', licenceType);
+                  if(action.value === "TL_HOME_SEARCH_RESULTS_LEGACY_TL_RENEW_APP_BUTTON"){
+                    window.localStorage.setItem('legacyLicenseRenewal', true);
+                  }else{
+                    window.localStorage.setItem('legacyLicenseRenewal', false);
+                  }
+
               },
               roleDefination: {
                 rolePath: "user-info.roles",
-                path: "tradelicence/search?action=showRequiredDocuments"
+                path: "tradelicence/search"
+                //path: "tradelicence/search?action=showRequiredDocuments"
               }
             },
             // newApplicationButton: {

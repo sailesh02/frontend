@@ -621,7 +621,7 @@ class ComplaintTimeLine extends Component {
     assigneeStatusCount = 0;
     reassignRequestedCount = 0;
     let { status, history, role, timeLine, feedback, rating, filedBy, filedUserMobileNumber, timelineSLAStatus, reopenValidChecker, slaEndTime, applicationNo } = this.props;
-    console.log(timeLine, "Nero Time Line")
+
     const daysCount = dateDiffInDays(new Date(Date.now()), new Date(slaEndTime));
 
 

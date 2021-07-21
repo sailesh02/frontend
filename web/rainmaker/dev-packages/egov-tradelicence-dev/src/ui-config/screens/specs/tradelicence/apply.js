@@ -282,6 +282,7 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    const applicationNo = getQueryArg(window.location.href, "applicationNumber");
     // let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
     dispatch(unMountScreen("search"));
     dispatch(unMountScreen("search-preview"));
@@ -330,6 +331,8 @@ const screenConfig = {
       );
 
       const applyFor = window.localStorage.getItem('licenseType');
+      let legacyLicenseRenewal = window.localStorage.getItem('legacyLicenseRenewal');
+      if(applyFor !== null){
       set(
         action.screenConfig,
         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
@@ -337,6 +340,7 @@ const screenConfig = {
       );
 
       dispatch(prepareFinalObject("Licenses[0].licenseType", applyFor));
+      }
       if(applyFor === "TEMPORARY"){
         set(
           action.screenConfig,
@@ -370,13 +374,13 @@ const screenConfig = {
               false
 
           );
-          set(
-            action.screenConfig,
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo.visible",
+          // set(
+          //   action.screenConfig,
+          //     "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo.visible",
 
-              true
+          //     true
 
-          );
+          // );
           set(
             action.screenConfig,
               "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod.visible",
@@ -384,8 +388,21 @@ const screenConfig = {
               true
 
           );
+
+          if (!applicationNo) {
           dispatch(prepareFinalObject("Licenses[0].tradeLicensePeriod", null));
           dispatch(prepareFinalObject("Licenses[0].validTo", null));
+          if(legacyLicenseRenewal === "true"){
+            set(
+              action.screenConfig,
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo.visible",
+
+                true
+
+            );
+
+          }
+          }
         }
 
     });

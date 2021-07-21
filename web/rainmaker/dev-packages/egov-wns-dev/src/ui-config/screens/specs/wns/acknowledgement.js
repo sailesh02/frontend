@@ -31,6 +31,7 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 let headerLabel = "WS_APPLICATION_NEW_CONNECTION_HEADER";
 const applicationNo = getQueryArg(window.location.href, "applicationNumber");
 if(isModifyMode()){
+  let applicationNo = getQueryArg(window.location.href, "applicationNumber");
   if(applicationNo.includes("WS")){
   headerLabel = "WS_APPLICATION_MODIFY_CONNECTION_HEADER";
   }else{

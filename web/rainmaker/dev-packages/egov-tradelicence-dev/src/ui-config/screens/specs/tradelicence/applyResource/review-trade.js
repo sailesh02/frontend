@@ -249,16 +249,16 @@ export const tradeReviewDetails = {
   //   }
   // ),
 
-  // reviewGSTNo: getLabelWithValue(
-  //   {
-  //     labelName: "GST No.",
-  //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
-  //   },
-  //   {
-  //     jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo",
-  //     callBack: checkValueForNA
-  //   }
-  // ),
+  reviewGSTNo: getLabelWithValue(
+    {
+      labelName: "GST No.",
+      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
+    },
+    {
+      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo",
+      callBack: checkValueForNA
+    }
+  ),
   // reviewOperationalArea: getLabelWithValue(
   //   {
   //     labelName: "Operational Area",

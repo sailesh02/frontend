@@ -6,7 +6,7 @@ import "./index.css";
 export default class AdditionalInformation extends Component {
   render() {
     const { additionalInformation } = this.props;
-    const labelKeys = ["holdingTax", "lightTax", "waterTax", "drainageTax", "latrineTax", "parkingTax", "solidWasteUserCharges", "ownershipExemption", "usageExemption", "interest", "penalty"]
+    const labelKeys = ["holdingTax", "lightTax", "waterTax", "drainageTax", "latrineTax", "parkingTax", "solidWasteUserCharges", "ownershipExemption", "usageExemption", "interest", "penalty","serviceTax","otherDues"]
     return (
       <div>
         <Card

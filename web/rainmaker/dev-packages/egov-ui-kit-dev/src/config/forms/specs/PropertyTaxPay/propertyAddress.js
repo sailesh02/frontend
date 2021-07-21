@@ -94,6 +94,17 @@ const formConfig = {
       required: true,
     },
     ...mohalla,
+    ward: {
+      id: "property-ward",
+      jsonPath: "Properties[0].address.ward",
+      type: "textfield",
+      floatingLabelText: "PT_PROPERTY_DETAILS_WARD_NAME",
+      hintText: "PT_PROPERTY_DETAILS_WARD_NAME_PLACEHOLDER",
+      numcols: 6,
+      // errorMessage: "PT_PROPERTY_DETAILS_WARD_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+    },
     pincode: {
       id: "pincode",
       type: "number",

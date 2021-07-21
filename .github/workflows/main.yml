@@ -2,7 +2,7 @@ name: A workflow to build egov frontend
 on: 
  push:
     branches:
-      - feature/modify-connection-issues
+      - feature/add-new-fields
 jobs:
   build:
     name: Build citizen

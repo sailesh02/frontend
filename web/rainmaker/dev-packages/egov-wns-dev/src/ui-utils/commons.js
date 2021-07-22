@@ -9,6 +9,7 @@ import set from "lodash/set";
 import store from "redux/store";
 import { convertDateToEpoch, getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
+
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE"
@@ -511,6 +512,34 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
         applyScreenObject["proposedToilets"] !== "" &&
         applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)
     ) { return true; } else { return false }
+}
+
+// if modify mode
+
+export const convertEpochToDateInYMD = dateEpoch => {
+    const dateFromApi = new Date(dateEpoch);
+    let month = dateFromApi.getMonth() + 1;
+    let day = dateFromApi.getDate();
+    let year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return `${year}-${month}-${day}`;
+  };
+
+export const validationsForExecutionData = (applyScreenObject) => {
+    let rValue = true;
+    if (rValue &&
+    applyScreenObject.hasOwnProperty("connectionExecutionDate") && applyScreenObject.hasOwnProperty("dateEffectiveFrom") && applyScreenObject.hasOwnProperty("dateEffectiveFrom") != 0 && applyScreenObject.hasOwnProperty("connectionExecutionDate") != 0){
+    const dateEffectiveFrom = convertEpochToDateInYMD(applyScreenObject["dateEffectiveFrom"]) 
+    const connectionExecutionDate = convertEpochToDateInYMD(applyScreenObject["connectionExecutionDate"]) 
+    if(dateEffectiveFrom == connectionExecutionDate){
+        return true
+    }
+    else if((new Date(dateEffectiveFrom).getTime()) < (new Date(connectionExecutionDate).getTime())){
+        return false
+    }
+    else{return true}   
+    }else{return true}
 }
 
 export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {

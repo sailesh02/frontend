@@ -23,7 +23,7 @@ import {
   pushTheDocsUploadedToRedux,
   serviceConst,
   showHideFieldsFirstStep, validateConnHolderDetails, validateFeildsForBothWaterAndSewerage,
-  validateFeildsForSewerage, validateFeildsForWater, isEditAction
+  validateFeildsForSewerage, validateFeildsForWater, isEditAction, validationsForExecutionData
 } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
@@ -394,8 +394,21 @@ const callBackForNext = async (state, dispatch) => {
   /* validations for Additional /Docuemnts details screen */
   if (activeStep === 1) {
     if (isModifyMode()) {
-      isFormValid = true;
-      hasFieldToaster = false;
+      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+      if(validationsForExecutionData(applyScreenObject)){
+        isFormValid = true;
+        hasFieldToaster = false;
+      }else{
+        isFormValid = false;
+        hasFieldToaster = true;
+        let errorMessage = {
+          labelName:
+            "Date Effective From cannot be less than execution date!",
+          labelKey: "ERR_DATE_EFFECTIVE_FROM_CANNOT_LESS_THAN_EXECUTION_DATE_TOAST"
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        return
+      }
     } else {
       if (moveToReview(state, dispatch)) {
         await pushTheDocsUploadedToRedux(state, dispatch);

@@ -540,7 +540,7 @@ export const validationsForExecutionData = (applyScreenObject) => {
         return false
     }
     else{return true}   
-    }else{return true}
+    }else{return false}
 }
 
 export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {

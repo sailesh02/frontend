@@ -935,7 +935,7 @@ export const applyForWater = async (state, dispatch) => {
             if (typeof queryObjectForUpdate.additionalDetails !== 'object') {
                 queryObjectForUpdate.additionalDetails = {};
             }
-            queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality;
+            queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality && queryObjectForUpdate.locality.split('_').length == 4 ? queryObjectForUpdate.locality.split('_')[3] : queryObjectForUpdate.locality;
             queryObjectForUpdate.additionalDetails.ward = queryObjectForUpdate.ward ? queryObjectForUpdate.ward : '';
 
             queryObjectForUpdate.pipeSize = 0
@@ -960,7 +960,7 @@ export const applyForWater = async (state, dispatch) => {
             if (typeof queryObject.additionalDetails !== 'object') {
                 queryObject.additionalDetails = {};
             }
-            queryObject.additionalDetails.locality = queryObject.locality;
+            queryObject.additionalDetails.locality = queryObject.locality && queryObject.locality.split('_').length == 4 ? queryObject.locality.split('_')[3] : queryObject.locality;
             queryObject.additionalDetails.ward = queryObject.ward ? queryObject.ward : '';
 
             set(queryObject, "processInstance.action", "INITIATE")
@@ -1042,7 +1042,8 @@ export const applyForSewerage = async (state, dispatch) => {
             if (typeof queryObjectForUpdate.additionalDetails !== 'object') {
                 response.SewerageConnection[0].additionalDetails = {};
             }
-            queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality;
+            queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality && queryObjectForUpdate.locality.split('_').length == 4 ? queryObjectForUpdate.locality.split('_')[3] : queryObjectForUpdate.locality;
+
             queryObjectForUpdate.additionalDetails.ward = queryObjectForUpdate.ward ? queryObjectForUpdate.ward : '';
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             queryObjectForUpdate.property = null
@@ -1065,7 +1066,9 @@ export const applyForSewerage = async (state, dispatch) => {
             if (typeof queryObject.additionalDetails !== 'object') {
                 response.SewerageConnection[0].additionalDetails = {};
             }
-            queryObject.additionalDetails.locality = queryObject.locality;
+            
+            queryObject.additionalDetails.locality = queryObject.locality && queryObject.locality.split('_').length == 4 ? queryObject.locality.split('_')[3] : queryObject.locality;
+
             queryObject.additionalDetails.ward = queryObject.ward ? queryObject.ward : '';
             set(queryObject, "processInstance.action", "INITIATE");
             set(queryObject, "connectionType", "Non Metered");

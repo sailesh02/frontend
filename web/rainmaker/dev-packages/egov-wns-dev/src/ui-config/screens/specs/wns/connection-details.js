@@ -22,7 +22,7 @@ import {
   getSearchResultsForSewerage,
   serviceConst
 } from "../../../../ui-utils/commons";
-import { getDemand, ifUserRoleExists } from "../utils";
+import { getDemand, ifUserRoleExists, getTranslatedLabel} from "../utils";
 import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
 import { connectionDetailsFooter,connectionDisconnect } from "./connectionDetailsResource/connectionDetailsFooter";
 import {
@@ -235,6 +235,12 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       dispatch(prepareFinalObject("isAmendmentInWorkflow", amendments&&Array.isArray(amendments)&&amendments.length==0?true:false));
 
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
+      let localizationLabels = {}
+      if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${sewerageConnection.additionalDetails.locality
+        .toUpperCase()
+        .replace(/[._:-\s\/]/g, "_")}`;
+      dispatch(prepareFinalObject("WaterConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
       getApplicationNumber(dispatch, payloadData.SewerageConnections);
     }
   } else if (service === serviceConst.WATER) {
@@ -330,6 +336,12 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       dispatch(prepareFinalObject("isAmendmentInWorkflow", amendments&&Array.isArray(amendments)&&amendments.length==0?true:false));
       showHideConnectionHolder(dispatch, waterConnection.connectionHolders);
       dispatch(prepareFinalObject("WaterConnection[0]", waterConnection));
+      let localizationLabels = {}
+      if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${waterConnection.additionalDetails.locality
+        .toUpperCase()
+        .replace(/[._:-\s\/]/g, "_")}`;
+      dispatch(prepareFinalObject("WaterConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
       getApplicationNumber(dispatch, payloadData.WaterConnection);
     }
   }

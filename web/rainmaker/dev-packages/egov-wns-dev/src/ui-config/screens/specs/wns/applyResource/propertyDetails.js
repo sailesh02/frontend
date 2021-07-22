@@ -283,19 +283,22 @@ const propertyDetailsNoId = getCommonContainer({
                 dropdownData.reduce((ddData, item) => {
                   let option = {};
                   if (fieldKey === "mohalla" && item.code) {
+                    const mohallaCode = `${dataFetchConfig.queryParams[0].value.toUpperCase().replace(/[.]/g, "_")}_${dataFetchConfig.hierarchyType}_${item.code
+                      .toUpperCase()
+                      .replace(/[._:-\s\/]/g, "_")}`;
                     option = {
-                      label: item.name,
-                      code: item.name,
-                      // label: getTranslatedLabel(mohallaCode, localizationLabels),
-                      value: item.name,
+                      label: getTranslatedLabel(mohallaCode, localizationLabels),
+                      value: item.code,
+                      code: getTranslatedLabel(mohallaCode, localizationLabels),
                     };
+                    
                   } else {
                     option = {
                       label: item.name,
                       value: item.code,
                     };
                   }
-                  item.area && (option.area = item.area);
+                  // item.area && (option.area = item.area);
                   ddData.push(option);
                   return ddData;
                 }, []);

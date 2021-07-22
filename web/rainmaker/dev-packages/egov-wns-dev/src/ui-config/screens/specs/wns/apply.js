@@ -338,11 +338,19 @@ export const getData = async (action, state, dispatch) => {
             dropdownData.reduce((ddData, item) => {
               let option = {};
               if (fieldKey === "mohalla" && item.code) {
+                const mohallaCode = `${dataFetchConfig.queryParams[0].value.toUpperCase().replace(/[.]/g, "_")}_${dataFetchConfig.hierarchyType}_${item.code
+                  .toUpperCase()
+                  .replace(/[._:-\s\/]/g, "_")}`;
                 option = {
-                  label: item.name,
-                  value: item.name,
-                  code:item.name
+                  label: getTranslatedLabel(mohallaCode, localizationLabels),
+                  value: item.code,
+                  code: getTranslatedLabel(mohallaCode, localizationLabels),
                 };
+                // option = {
+                //   label: item.name,
+                //   value: item.name,
+                //   code:item.name
+                // };
               } else {
                 option = {
                   label: item.name,
@@ -554,14 +562,19 @@ export const getData = async (action, state, dispatch) => {
 
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
       dispatch(prepareFinalObject("applyScreen.usageCategory",combinedArray ? combinedArray[0].usageCategory : ''))
-      dispatch(prepareFinalObject("applyScreen.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
+      let localizationLabels = {};
+      if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${combinedArray[0].additionalDetails.locality
+        .toUpperCase()
+        .replace(/[._:-\s\/]/g, "_")}`;
+      dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
       dispatch(prepareFinalObject("applyScreen.ward",combinedArray ? combinedArray[0].additionalDetails.ward : ''))
 
 
       // For oldvalue display
       let oldcombinedArray = cloneDeep(combinedArray[0]);
       dispatch(prepareFinalObject("applyScreenOld", findAndReplace(oldcombinedArray, "null", "NA")));
-      dispatch(prepareFinalObject("applyScreenOld.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
+      dispatch(prepareFinalObject("applyScreenOld.locality",getTranslatedLabel(locality, localizationLabels)))
       dispatch(prepareFinalObject("applyScreenOld.ward",combinedArray ? combinedArray[0].additionalDetails.ward : ''))
       let applicationType = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
       state.screenConfiguration.preparedFinalObject.applyScreen && state.screenConfiguration.preparedFinalObject.applyScreen.applicationType || null

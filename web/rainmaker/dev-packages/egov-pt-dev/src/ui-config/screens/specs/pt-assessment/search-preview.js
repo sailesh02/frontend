@@ -137,7 +137,7 @@ const demandSummary = getCommonGrayCard({
     serviceTax: getLabelWithValue(
       {
         labelName: "Service Tax",
-        labelKey: "PT_SERVICE_TAX"
+        labelKey: "PT_PROPERTY_SERVICETAX"
       },
       {
         jsonPath: "Assessment.additionalDetails.serviceTax"
@@ -145,8 +145,8 @@ const demandSummary = getCommonGrayCard({
     ),
     otherDues: getLabelWithValue(
       {
-        labelName: "Additional Dues",
-        labelKey: "PT_ADDITIONAL_DUES"
+        labelName: "Other Dues",
+        labelKey: "PT_PROPERTY_OTHERDUES"
       },
       {
         jsonPath: "Assessment.additionalDetails.otherDues"

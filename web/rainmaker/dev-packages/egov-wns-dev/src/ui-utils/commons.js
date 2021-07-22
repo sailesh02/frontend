@@ -527,7 +527,6 @@ export const convertEpochToDateInYMD = dateEpoch => {
   };
 
 export const validationsForExecutionData = (applyScreenObject) => {
-    debugger
     let rValue = true;
     if (rValue &&
     applyScreenObject.hasOwnProperty("connectionExecutionDate") && applyScreenObject.hasOwnProperty("dateEffectiveFrom") && applyScreenObject["dateEffectiveFrom"] != 0 && applyScreenObject.hasOwnProperty["connectionExecutionDate"] != 0){

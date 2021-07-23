@@ -57,6 +57,11 @@ const CheckboxContainerConnHolder = Loadable({
    loader: () => import("./CheckboxContainerConnHolder"),
     loading: () => <Loading />
   });
+ 
+const AutosuggestContainer = Loadable({
+    loader: () => import("./AutosuggestContainer"),
+    loading: () => <Loading />
+});  
 
 export {
   CustomTabContainer,
@@ -70,5 +75,6 @@ export {
   RadioGroupContainer,
   EstimateOverviewCardContainer,
   ModificationDocumentListContainer,
-  CheckboxContainerConnHolder
+  CheckboxContainerConnHolder,
+  AutosuggestContainer
 };

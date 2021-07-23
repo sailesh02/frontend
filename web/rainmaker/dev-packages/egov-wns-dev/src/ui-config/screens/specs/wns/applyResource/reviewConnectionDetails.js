@@ -379,6 +379,24 @@ const getPropertyDetails = {
             }
 
           ),
+          ward: getLabelWithValueForModifiedLabel(
+            {
+              labelName: "mohalla",
+              labelKey: "WS_WARD_LABEL"
+            },
+            {
+              jsonPath: "applyScreen.ward",
+              callBack: handleLocality,
+            },
+            {
+              labelKey: "WS_WARD_LABEL"
+            },
+            {
+              jsonPath: "applyScreenOld.ward",
+              callBack: handleNA   
+            }
+
+          ),
           connectionCategory: getLabelWithValueForModifiedLabel(
             {
               labelName: "Connection Category",

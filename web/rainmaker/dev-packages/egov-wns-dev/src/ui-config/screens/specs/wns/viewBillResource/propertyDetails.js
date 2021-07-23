@@ -64,7 +64,7 @@ export const getProperty = () => {
                     labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
                 },
                 {
-                    jsonPath: "WaterConnection[0].additionalDetails.locality"
+                    jsonPath: "WaterConnection[0].locality"
                 }
             ),
             // propertyPincode: getLabelWithValue(

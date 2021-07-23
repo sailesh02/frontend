@@ -214,7 +214,7 @@ const propertyDetails = getCommonContainer({
 const propertyDetailsNoId = getCommonContainer({
   city: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-pt",
+      moduleName: "egov-wns",
       componentPath: "AutosuggestContainer",
       props: {
         className: "autocomplete-dropdown",
@@ -236,6 +236,7 @@ const propertyDetailsNoId = getCommonContainer({
         sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         required: true,
+        disabled:false,
         isClearable: true,
         inputLabelProps: {
           shrink: true
@@ -282,19 +283,22 @@ const propertyDetailsNoId = getCommonContainer({
                 dropdownData.reduce((ddData, item) => {
                   let option = {};
                   if (fieldKey === "mohalla" && item.code) {
+                    const mohallaCode = `${dataFetchConfig.queryParams[0].value.toUpperCase().replace(/[.]/g, "_")}_${dataFetchConfig.hierarchyType}_${item.code
+                      .toUpperCase()
+                      .replace(/[._:-\s\/]/g, "_")}`;
                     option = {
-                      label: item.name,
-                      code: item.name,
-                      // label: getTranslatedLabel(mohallaCode, localizationLabels),
-                      value: item.name,
+                      label: getTranslatedLabel(mohallaCode, localizationLabels),
+                      value: item.code,
+                      code: getTranslatedLabel(mohallaCode, localizationLabels),
                     };
+                    
                   } else {
                     option = {
                       label: item.name,
                       value: item.code,
                     };
                   }
-                  item.area && (option.area = item.area);
+                  // item.area && (option.area = item.area);
                   ddData.push(option);
                   return ddData;
                 }, []);
@@ -413,7 +417,7 @@ const propertyDetailsNoId = getCommonContainer({
   // }),
   mohalla: {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-pt",
+    moduleName: "egov-wns",
     componentPath: "AutosuggestContainer",
     props: {
       className: "autocomplete-dropdown",
@@ -433,6 +437,7 @@ const propertyDetailsNoId = getCommonContainer({
       sourceJsonPath: "applyScreenMdmsData.mohalla",
       labelsFromLocalisation: true,
       required: true,
+      disabled:false,
       isClearable: true,
       inputLabelProps: {
         shrink: true
@@ -715,6 +720,22 @@ const propertyDetailsNoId = getCommonContainer({
       xs: 12,
       sm: 6
     }
+  }),
+  ward: getTextField({
+    label: {
+      labelName: "Ward",
+      labelKey: "WS_WARD_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Ward Name",
+      labelKey: "WS_WARD_PLACEHOLDER"
+    },
+    visible:true,
+    jsonPath: "applyScreen.ward",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
   }),
   noOfFlats: getTextField({
     label: {

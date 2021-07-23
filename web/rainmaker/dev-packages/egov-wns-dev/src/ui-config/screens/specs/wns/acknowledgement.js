@@ -31,6 +31,7 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 let headerLabel = "WS_APPLICATION_NEW_CONNECTION_HEADER";
 const applicationNo = getQueryArg(window.location.href, "applicationNumber");
 if(isModifyMode()){
+  let applicationNo = getQueryArg(window.location.href, "applicationNumber");
   if(applicationNo.includes("WS")){
   headerLabel = "WS_APPLICATION_MODIFY_CONNECTION_HEADER";
   }else{
@@ -55,6 +56,18 @@ const headerFordisconnect = getCommonContainer({
     labelKey: "WS_APPLICATION_NEW_DISCONNECTION_HEADER",
   }),
 });
+
+const headerForReconnection = getCommonContainer({
+  header : getCommonHeader({
+    labelKey : "WS_APPLICATION_NEW_RECONNECTION_HEADER"
+  })
+})
+
+const headerForOwnershipTransfer = getCommonContainer({
+  header:getCommonHeader({
+    labelKey:"WS_APPLICATION_OWNERSHIPSHIP_TRANSFER_HEADER"
+  })
+})
 
 const commonHeader = (state,
   dispatch,
@@ -106,7 +119,7 @@ const connectionHeader = (state,
   tenant,
   purpose
   ) => {
-  const headerRow = purpose == 'disconnect' ? headerFordisconnect : purpose == "closeConnection" ? headerForCloseConnection : headerrow 
+  const headerRow = purpose == 'disconnect' ? headerFordisconnect : purpose == "closeConnection" ? headerForCloseConnection : purpose == "reconnection" ? headerForReconnection : purpose == "ownershipTransfer" ? headerForOwnershipTransfer : headerrow 
   return getCommonContainer({
     headerDiv: {
       uiFramework: "custom-atoms",
@@ -671,6 +684,84 @@ const getAcknowledgementCard = (
             header: {
               labelName: "Connection is closed successfully",
               labelKey: "WS_CONNECTION_CLOSE_SUCCESS_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding connection has been sent to registered Mobile No.",
+              labelKey: "WS_APPROVAL_CHECKLIST_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application Number.",
+              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+            },
+            number: applicationNumberWater || applicationNumberSewerage || applicationNumber
+          })
+        }
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumberWater || applicationNumberSewerage || applicationNumber,
+        tenant
+      )
+    };
+  }else if(purpose === "reconnection"  && status === "success" && (applicationNumberWater || applicationNumberSewerage || applicationNumber)){
+    return {
+      commonHeader: connectionHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant,
+        purpose
+        ),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Connection is reconnectedsuccessfully",
+              labelKey: "WS_CONNECTION_RECONNECT_SUCCESS_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding connection has been sent to registered Mobile No.",
+              labelKey: "WS_APPROVAL_CHECKLIST_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application Number.",
+              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+            },
+            number: applicationNumberWater || applicationNumberSewerage || applicationNumber
+          })
+        }
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumberWater || applicationNumberSewerage || applicationNumber,
+        tenant
+      )
+    };
+  }else if(purpose === "ownershipTransfer"  && status === "success" && (applicationNumberWater || applicationNumberSewerage || applicationNumber)){
+    return {
+      commonHeader: connectionHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant,
+        purpose
+        ),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application for Ownership Transfer Submitted Successfully",
+              labelKey: "WS_OWNERSHIP_TRANSFER_SUCCESS_MESSAGE_HEAD"
             },
             body: {
               labelName:

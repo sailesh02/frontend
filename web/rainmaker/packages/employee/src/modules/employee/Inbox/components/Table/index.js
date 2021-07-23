@@ -234,17 +234,20 @@ class InboxData extends React.Component {
     else if (row[0].subtext === "NewWS1") {
       queryParams += '&history=true&service=WATER';
     }
-    else if (row[0].subtext === "WSDisconnection" || row[0].subtext === "WSCloseConnection") {
+    else if (row[0].subtext === "WSDisconnection" || row[0].subtext === "WSCloseConnection" || row[0].subtext === "WSReconnection" || row[0].subtext === "WSOwnershipChange") {
       queryParams += '&history=true&service=WATER&disconnectOrClose=true';
     }
     else if (row[0].subtext === "NewSW1") {
       queryParams += '&history=true&service=SEWERAGE';
     }
-    else if (row[0].subtext === "SWDisconnection" || row[0].subtext === "SWCloseConnection") {
+    else if (row[0].subtext === "SWDisconnection" || row[0].subtext === "SWCloseConnection" || row[0].subtext === "SWReconnection" || row[0].subtext === "SWOwnershipChange") {
       queryParams += '&history=true&service=SEWERAGE&disconnectOrClose=true';
     }
     else if (row[0].subtext === "ModifyWSConnection") {
       queryParams += '&history=true&service=WATER&mode=MODIFY';
+    }
+    else if(row[0].subtext === "ModifySWConnection"){
+      queryParams += '&history=true&service=SEWERAGE&mode=MODIFY';
     }
     this.props.setRoute(`${contextPath}?${queryParams}`);
   };

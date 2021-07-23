@@ -290,14 +290,32 @@ export const propertyDetails={
       labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
     },
     {
-      jsonPath: "WaterConnection[0].additionalDetails.locality",
+      jsonPath: "WaterConnection[0].locality",
       callBack: handleNA,
     },
     {
       labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
     },
     {
-      jsonPath: "WaterConnectionOld[0].additionalDetails.locality",
+      jsonPath: "WaterConnectionOld[0].locality",
+      callBack: handleNA   
+    }
+
+  ),
+  ward: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "ward",
+      labelKey: "WS_WARD_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.ward",
+      callBack: handleNA,
+    },
+    {
+      labelKey: "WS_WARD_LABEL"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.ward",
       callBack: handleNA   
     }
 

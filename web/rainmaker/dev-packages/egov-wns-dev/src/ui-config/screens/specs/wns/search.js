@@ -72,7 +72,13 @@ const getBusinessService=async(businessService, dispatch)=>{
     queryObject
   );
   if (payload.BusinessServices[0].businessService === "NewWS1" || payload.BusinessServices[0].businessService === "NewSW1" 
-   || payload.BusinessServices[0].businessService === "SWCloseConnection" || payload.BusinessServices[0].businessService === "SWDisconnection" || payload.BusinessServices[0].businessService === "WSCloseConnection" || payload.BusinessServices[0].businessService === "WSDisconnection") {
+   || payload.BusinessServices[0].businessService === "SWCloseConnection" || payload.BusinessServices[0].businessService === "SWDisconnection" 
+   || payload.BusinessServices[0].businessService === "WSCloseConnection" 
+   || payload.BusinessServices[0].businessService === "WSDisconnection" 
+   || payload.BusinessServices[0].businessService === "WSReconnection"
+   || payload.BusinessServices[0].businessService === "SWReconnection"
+   || payload.BusinessServices[0].businessService === "WSOwnershipChange"
+   || payload.BusinessServices[0].businessService === "SWOwnershipChange") {
 
     const applicationStatus=commonGetAppStatus(payload);
         dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatusNew", applicationStatus));

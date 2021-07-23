@@ -20,6 +20,7 @@ import {
   handleApplicationNumberDisplay,
   isActiveProperty,
   isModifyMode,
+  isOwnerShipTransfer,
   isModifyModeAction, prefillDocuments, prepareDocumentsUploadData,
   showHideFieldsFirstStep
 } from "../../../../ui-utils/commons";
@@ -45,13 +46,13 @@ const nonMeteredTemporory = [{code:"DOMESTIC"}]
 const temporary = [{code: "DOMESTIC"}, {code:"TWSFC"}]
 const permanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"TWSFC"},
 , {code:"BPL"},{code:"ROADSIDEEATERS"}, {code:"SPMA"} ]
-
+let mode = getQueryArg(window.location.href, "mode");
 let isMode = isModifyMode();
 export const stepperData = () => {
   if (isModifyMode()) {
     return [{ labelKey: "WS_COMMON_PROPERTY_DETAILS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
   }
-  else if (process.env.REACT_APP_NAME === "Citizen") {
+  else if (process.env.REACT_APP_NAME === "Citizen" || (isOwnerShipTransfer() && process.env.REACT_APP_NAME !== 'Citizen')) {
     return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
   } else {
     return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_SUMMARY" }];
@@ -60,8 +61,12 @@ export const stepperData = () => {
 export const stepper = getStepperObject({ props: { activeStep: 0, classes: { root: "wns-stepper" } } }, stepperData());
 
 export const getHeaderLabel = () => {
+  let mode = getQueryArg(window.location.href, "mode");
   if (isModifyMode()) {
     return process.env.REACT_APP_NAME === "Citizen" ? "WS_MODIFY_NEW_CONNECTION_HEADER" : "WS_MODIFY_CONNECTION_HEADER"
+  }
+  if(mode == "ownershipTransfer"){
+    return "WS_OWNERSHIP_TRANSFER_CONNECTION_HEADER"
   }
   return process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "WS_APPLICATION_NEW_CONNECTION_HEADER"
 }
@@ -109,7 +114,7 @@ const summaryScreenEMP = getCommonCard({
   reviewDocumentDetails,
   reviewOwnerDetails
 })
-let summaryScreen = process.env.REACT_APP_NAME === "Citizen" ? summaryScreenCitizen : summaryScreenEMP;
+let summaryScreen = (process.env.REACT_APP_NAME === "Citizen" || (process.env.REACT_APP_NAME !== 'Citizen' && isOwnerShipTransfer)()) ? summaryScreenCitizen : summaryScreenEMP;
 export const documentDetails = getCommonCard({
   header: getCommonTitle(
     { labelName: "Required Documents", labelKey: "WS_DOCUMENT_DETAILS_HEADER" },
@@ -264,6 +269,34 @@ const showHideFieldModifyConnection = (action) => {
   }
 }
 
+// to disablef fields while applying for ownership transfer from citizen or employee
+const disableFieldsForOwnerShipTransfer = (action) => {
+  let fieldsChanges = [
+    ["components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.wnsPtySearchButton.props"],
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps.props"],
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props"],
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize.props"],
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets.props"],
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets.props"],
+    ["components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.propertyID.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.city.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.apartment.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionCategory.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.mohalla.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.noOfFlats.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props"],
+    ["components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.ward.props"]
+  ]
+  for (var i = 0; i < fieldsChanges.length; i++) {
+    set(
+      action.screenConfig,
+      fieldsChanges[i][0] + ".disabled",
+      true
+    );
+  }
+}
+
 export const getData = async (action, state, dispatch) => {
   let applicationNo = getQueryArg(window.location.href, "applicationNumber");
   const connectionNo = getQueryArg(window.location.href, "connectionNumber");
@@ -305,11 +338,19 @@ export const getData = async (action, state, dispatch) => {
             dropdownData.reduce((ddData, item) => {
               let option = {};
               if (fieldKey === "mohalla" && item.code) {
+                const mohallaCode = `${dataFetchConfig.queryParams[0].value.toUpperCase().replace(/[.]/g, "_")}_${dataFetchConfig.hierarchyType}_${item.code
+                  .toUpperCase()
+                  .replace(/[._:-\s\/]/g, "_")}`;
                 option = {
-                  label: item.name,
-                  value: item.name,
-                  code:item.name
+                  label: getTranslatedLabel(mohallaCode, localizationLabels),
+                  value: item.code,
+                  code: getTranslatedLabel(mohallaCode, localizationLabels),
                 };
+                // option = {
+                //   label: item.name,
+                //   value: item.name,
+                //   code:item.name
+                // };
               } else {
                 option = {
                   label: item.name,
@@ -498,6 +539,7 @@ export const getData = async (action, state, dispatch) => {
       // }
       let combinedArray = waterConnections.concat(sewerageConnections);
       combinedArray[0].locality = combinedArray[0].additionalDetails.locality
+      combinedArray[0].ward = combinedArray[0].additionalDetails.ward ? combinedArray[0].additionalDetails.ward : ''
       // if (!window.location.href.includes("propertyId")) {
       //   if (!isActiveProperty(combinedArray[0].property)) {
       //     dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${combinedArray[0].property.status}`, labelName: `Property Status is ${combinedArray[0].property.status}` }, "warning"));
@@ -509,6 +551,10 @@ export const getData = async (action, state, dispatch) => {
         // this delete for initiate modify connection 
         delete combinedArray[0].id; combinedArray[0].documents = [];
       }
+
+      if(isOwnerShipTransfer()){
+        delete combinedArray[0].id; combinedArray[0].documents = [];
+      }
       if (isModifyMode() && isModifyModeAction()) {
         // ModifyEdit should not call create.
         dispatch(prepareFinalObject("modifyAppCreated", true));
@@ -516,14 +562,32 @@ export const getData = async (action, state, dispatch) => {
 
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
       dispatch(prepareFinalObject("applyScreen.usageCategory",combinedArray ? combinedArray[0].usageCategory : ''))
-      dispatch(prepareFinalObject("applyScreen.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
+      let localizationLabels = {};
+      if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${combinedArray[0].additionalDetails.locality
+        .toUpperCase()
+        .replace(/[._:-\s\/]/g, "_")}`;
+      dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("applyScreen.ward",combinedArray ? combinedArray[0].additionalDetails.ward : ''))
+
 
       // For oldvalue display
       let oldcombinedArray = cloneDeep(combinedArray[0]);
       dispatch(prepareFinalObject("applyScreenOld", findAndReplace(oldcombinedArray, "null", "NA")));
-      dispatch(prepareFinalObject("applyScreenOld.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
-      dispatch(prepareFinalObject("applyScreenOld.locality",combinedArray ? combinedArray[0].additionalDetails.locality : ''))
-
+      dispatch(prepareFinalObject("applyScreenOld.locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("applyScreenOld.ward",combinedArray ? combinedArray[0].additionalDetails.ward : ''))
+      let applicationType = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
+      state.screenConfiguration.preparedFinalObject.applyScreen && state.screenConfiguration.preparedFinalObject.applyScreen.applicationType || null
+      
+      //change heading if application is of type ownership transfer
+      if(applicationType === "CONNECTION_OWNERSHIP_CHANGE"){
+        dispatch(handleField(
+          "apply",
+          "components.div.children.headerDiv.children.header.children.headerDiv.children.header.children.key.props",
+          "labelKey",
+          "WS_OWNERSHIP_TRANSFER_CONNECTION_HEADER"
+        ))
+      }
       if (combinedArray[0].connectionHolders && combinedArray[0].connectionHolders !== "NA") {
         combinedArray[0].connectionHolders[0].sameAsPropertyAddress = false;
         dispatch(prepareFinalObject("connectionHolders", combinedArray[0].connectionHolders));
@@ -664,6 +728,11 @@ export const getData = async (action, state, dispatch) => {
       if (isModifyMode()) {
         showHideFieldModifyConnection(action);
       }
+
+      if(isOwnerShipTransfer()){
+        disableFieldsForOwnerShipTransfer(action)
+      }
+   
       let docs = get(state, "screenConfiguration.preparedFinalObject");
       await prefillDocuments(docs, "displayDocs", dispatch);
     }

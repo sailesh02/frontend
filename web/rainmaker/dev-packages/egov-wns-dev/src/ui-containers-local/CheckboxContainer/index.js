@@ -89,7 +89,7 @@ class CheckboxLabels extends React.Component {
   }
 
   render() {
-    const { classes, required, preparedFinalObject } = this.props;
+    const { classes, required, preparedFinalObject,disabled} = this.props;
     let checkedWater, checkedSewerage;
     if (this.state.interChange) {
       checkedWater = this.state.checkedWater;
@@ -110,6 +110,7 @@ class CheckboxLabels extends React.Component {
               classes={{ label: "checkbox-button-label" }}
               control={
                 <Checkbox
+                  disabled = {disabled}
                   checked={checkedWater}
                   onChange={this.handleWater("checkedWater")}
                   classes={{ root: classes.radioRoot, checked: classes.checked }}
@@ -121,6 +122,7 @@ class CheckboxLabels extends React.Component {
               classes={{ label: "checkbox-button-label" }}
               control={
                 <Checkbox
+                  disabled = {disabled}
                   checked={checkedSewerage}
                   onChange={this.handleSewerage("checkedSewerage")}
                   classes={{ root: classes.radioRoot, checked: classes.checked }}
@@ -137,7 +139,7 @@ class CheckboxLabels extends React.Component {
 
 const mapStateToProps = (state, ownprops) => {
   const { screenConfiguration } = state;
-  const { jsonPathWater, jsonPathSewerage } = ownprops;
+  const { jsonPathWater, jsonPathSewerage,disabled } = ownprops;
   const { preparedFinalObject } = screenConfiguration;
   return { preparedFinalObject, jsonPathWater, jsonPathSewerage };
 };

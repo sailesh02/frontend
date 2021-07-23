@@ -25,7 +25,7 @@ class Applications extends React.Component {
     // store.dispatch(setRoute(`/wns/search-preview?applicationNumber=${data.applicationNo}&history=${true}&tenantId=${data.property.tenantId}&service=${data.service}`))
     let connectionNo = data.connectionNo || 'NA';
     let applicationType = data.applicationType;
-    if (connectionNo && connectionNo !== 'NA' && applicationType.includes('MODIFY')) {
+    if (connectionNo && connectionNo !== 'NA' && (applicationType.includes('MODIFY') || applicationType.includes('MODIFY WATER CONNECTION') || applicationType.includes('MODIFY SEWERAGE CONNECTION'))) {
       store.dispatch(
         setRoute(`/wns/search-preview?applicationNumber=${data.applicationNo}&tenantId=${data.tenantId}&history=true&service=${data.service}&mode=MODIFY`)
       )

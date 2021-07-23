@@ -15,7 +15,7 @@ const getSuggestions = suggestions => {
     suggestions.length > 0 &&
     suggestions.map(suggestion => ({
       value: suggestion.code,
-      label: suggestion.name
+      label: suggestion.name,
     })).sort(sortDropdownLabels)
   );
 };
@@ -196,6 +196,7 @@ class IntegrationReactSelect extends React.Component {
       fullwidth = true,
       required = true,
       value,
+      disabled,
       className,
       inputLabelProps = {
         shrink: true
@@ -225,6 +226,7 @@ class IntegrationReactSelect extends React.Component {
           menuProps={{
             className: className
           }}
+          isDisabled = {disabled}
           options={getSuggestions(suggestions) || []}
           components={components}
           value={value ? value : this.state.single}

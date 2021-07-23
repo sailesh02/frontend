@@ -46,7 +46,7 @@ export const getAddressItems = (properties, OldProperty) => {
         oldValue: OldProperty && OldProperty.address && OldProperty.address.street
       },
       {
-        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_WARD_NAME", localizationLabelsData),
+        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_WARD", localizationLabelsData),
         value: address.ward || "",
         oldValue: OldProperty && OldProperty.address && OldProperty.address.ward
       },

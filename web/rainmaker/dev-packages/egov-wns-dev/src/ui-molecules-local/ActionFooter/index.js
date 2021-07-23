@@ -147,8 +147,8 @@ class Footer extends React.Component {
           })
           let errLabel =
             applicationNo && applicationNo.includes("WS")
-              ? "WS_DUE_AMOUNT_SHOULD_BE_ZERO"
-              : "SW_DUE_AMOUNT_SHOULD_BE_ZERO";
+              ? "WS_PENDING_FEES_ERROR"
+              : "WS_PENDING_FEES_ERROR";
           if (due && parseInt(due) > 0) {
             toggleSnackbar(
               true,

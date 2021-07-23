@@ -11,6 +11,8 @@ import { handleNA } from '../../utils';
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { fetchBill } from "../../../../../ui-utils/commons"
 
 const getHeader = label => {
   return {
@@ -289,11 +291,40 @@ export const onClickOwnerShipTransfer = async (state, dispatch) => {
   let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
   const service = getQueryArg(window.location.href, "service");
   const tenantId = getQueryArg(window.location.href, "tenantId");
+ 
+    let due
+    let fetchBillQueryObj = []
+    if(applicationNo.includes('SW')){
+      fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "SW" }]
+    }else{
+      fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "WS" }]
+    }
+    let billResults = await fetchBill(fetchBillQueryObj)
+    billResults && billResults.Bill &&Array.isArray(billResults.Bill)&&billResults.Bill.length>0 && billResults.Bill.map(bill => {
+      due = bill.totalAmount
+    })
+    let errLabel =
+      applicationNo && applicationNo.includes("WS")
+        ? "WS_PENDING_FEES_ERROR"
+        : "WS_PENDING_FEES_ERROR";
+    if (due && parseInt(due) > 0) {
+      dispatch(toggleSnackbarAndSetText(
+        true,
+        {
+          labelName: "Due Amount should be zero!",
+          labelKey: errLabel,
+        },
+        "error"
+      ));
+      return false;
+    }  
+
   set(
     "apply",
     "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.visible",
     false
   );
+
   dispatch(
     setRoute(
       `/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=ownershipTransfer`

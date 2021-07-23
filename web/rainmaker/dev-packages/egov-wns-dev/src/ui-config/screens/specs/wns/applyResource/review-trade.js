@@ -297,7 +297,7 @@ export const propertyDetails={
       labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
     },
     {
-      jsonPath: "WaterConnectionOld[0].additionalDetails.locality",
+      jsonPath: "WaterConnectionOld[0].locality",
       callBack: handleNA   
     }
 

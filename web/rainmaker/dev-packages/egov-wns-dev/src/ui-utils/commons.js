@@ -1020,6 +1020,12 @@ export const applyForWater = async (state, dispatch) => {
                 response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
+                let localizationLabels = {}
+                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+                let locality = `${response.WaterConnection[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.WaterConnection[0].additionalDetails.locality
+                  .toUpperCase()
+                  .replace(/[._:-\s\/]/g, "_")}`;
+                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
                 dispatch(prepareFinalObject("modifyAppCreated", true));
             }
             if(mode == "ownershipTransfer"){
@@ -1031,6 +1037,12 @@ export const applyForWater = async (state, dispatch) => {
                 response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
+                let localizationLabels = {}
+                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+                let locality = `${response.WaterConnection[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.WaterConnection[0].additionalDetails.locality
+                  .toUpperCase()
+                  .replace(/[._:-\s\/]/g, "_")}`;
+                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
             }
             if (!isModifyMode()) {
                 setApplicationNumberBox(state, dispatch);
@@ -1121,6 +1133,12 @@ export const applyForSewerage = async (state, dispatch) => {
                 response.SewerageConnections[0].ward = response.SewerageConnections[0].additionalDetails.ward ? response.SewerageConnections[0].additionalDetails.ward : '';
                 response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
+                let localizationLabels = {}
+                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+                let locality = `${response.SewerageConnections[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.SewerageConnections[0].additionalDetails.locality
+                  .toUpperCase()
+                  .replace(/[._:-\s\/]/g, "_")}`;
+                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
             }
             if (isModifyMode()) {
                 response.SewerageConnections[0].ward = response.SewerageConnections[0].additionalDetails.ward ? response.SewerageConnections[0].additionalDetails.ward : '';
@@ -1130,6 +1148,12 @@ export const applyForSewerage = async (state, dispatch) => {
                 response.SewerageConnections[0].service = "Sewerage";
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
+                let localizationLabels = {}
+                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+                let locality = `${response.SewerageConnections[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.SewerageConnections[0].additionalDetails.locality
+                  .toUpperCase()
+                  .replace(/[._:-\s\/]/g, "_")}`;
+                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
             }
             if (!isModifyMode()) {
                 setApplicationNumberBox(state, dispatch);

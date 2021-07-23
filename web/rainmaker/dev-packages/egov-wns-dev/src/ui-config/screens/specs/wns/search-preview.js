@@ -150,16 +150,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       applyScreenObject.applicationNo.includes("WS") ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
-      let localizationLabels = {}
-      if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${applyScreenObject.additionalDetails.locality
-        .toUpperCase()
-        .replace(/[._:-\s\/]/g, "_")}`;
-      dispatch(prepareFinalObject("WaterConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
-      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.additionalDetails.locality));
-      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.ward", applyScreenObject.additionalDetails.ward ? applyScreenObject.additionalDetails.ward : ''));
+      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.locality && applyScreenObject.locality.split('_').length == 4 ? applyScreenObject.locality.split('_')[3] : applyScreenObject.locality));
+      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
       if (applyScreenObject.service = serviceConst.SEWERAGE)
-        dispatch(prepareFinalObject("SewerageConnection[0]", parsedObject));
+      dispatch(prepareFinalObject("SewerageConnection[0]", parsedObject));
+      dispatch(prepareFinalObject("SewerageConnection[0].additionalDetails.locality", applyScreenObject.locality && applyScreenObject.locality.split('_').length == 4 ? applyScreenObject.locality.split('_')[3] : applyScreenObject.locality));
+      dispatch(prepareFinalObject("SewerageConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
       let estimate;
       if (processInstanceAppStatus === "CONNECTION_ACTIVATED") {
         let connectionNumber = parsedObject.connectionNo;

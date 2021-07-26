@@ -84,6 +84,8 @@ export const getDemandDetails = (propertyRes) => {
       "usageExemption":'0',
       "interest":'0',
       "penalty":'0',
+      "serviceTax":'0',
+      "otherDues":'0',
       "totalAmount":'0'
   }
   }

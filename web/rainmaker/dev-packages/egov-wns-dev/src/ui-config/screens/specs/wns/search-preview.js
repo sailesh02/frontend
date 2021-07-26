@@ -9,11 +9,11 @@ import { getQueryArg, setBusinessServiceDataToLocalStorage, setDocuments } from 
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import get from "lodash/get";
 import set from "lodash/set";
-import { findAndReplace, getDescriptionFromMDMS, getSearchResults, getSearchResultsForSewerage, getWaterSource, getWorkFlowData, isModifyMode, serviceConst, swEstimateCalculation, waterEstimateCalculation } from "../../../../ui-utils/commons";
+import { findAndReplace, getDescriptionFromMDMS, getSearchResults, getSearchResultsForSewerage, getWaterSource, getWorkFlowData, isModifyMode, isDisconnectOrClose, serviceConst, swEstimateCalculation, waterEstimateCalculation } from "../../../../ui-utils/commons";
 import {
   convertDateToEpoch, createEstimateData,
   getDialogButton, getFeesEstimateOverviewCard,
-  getTransformedStatus, showHideAdhocPopup,getTextToLocalMapping
+  getTransformedStatus, showHideAdhocPopup,getTextToLocalMapping, getTranslatedLabel
 } from "../utils";
 import { downloadPrintContainer } from "../wns/acknowledgement";
 import { adhocPopup } from "./applyResource/adhocPopup";
@@ -27,7 +27,7 @@ import {connectionDetailsWater,connectionDetailsSewerage} from './applyResource/
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
-let serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
+let serviceModuleName = (service === serviceConst.WATER) ? "NewWS1" : "NewSW1";
 let serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
 let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
 let editredirect = `apply?${redirectQueryString}&action=edit`;
@@ -82,6 +82,13 @@ const headerrow = getCommonContainer({
 });
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
+  if(isDisconnectOrClose() || process.env.REACT_APP_NAME === "Citizen"){
+    set(
+      action.screenConfig,
+      "components.div.children.taskDetails.children.cardContent.children.estimate.visible",
+      false
+    ); 
+  }
   // dispatch(handleField("apply",
   // "components",
   // "div", {}));
@@ -104,7 +111,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   }
 
   let Response = await getWorkFlowData(queryObj);
-  let processInstanceAppStatus = Response.ProcessInstances[0].state.applicationStatus;
+  let processInstanceAppStatus = Response && Response.ProcessInstances && Response.ProcessInstances.length > 0 && Response.ProcessInstances[0].state.applicationStatus;
   //Search details for given application Number
   if (applicationNumber) {
 
@@ -138,13 +145,17 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber, processInstanceAppStatus));
     } else {
+      let tenantId = getQueryArg(window.location.href, "tenantId")
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       applyScreenObject.applicationNo.includes("WS") ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
-      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.additionalDetails.locality));
+      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.locality && applyScreenObject.locality.split('_').length == 4 ? applyScreenObject.locality.split('_')[3] : applyScreenObject.locality));
+      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
       if (applyScreenObject.service = serviceConst.SEWERAGE)
-        dispatch(prepareFinalObject("SewerageConnection[0]", parsedObject));
+      dispatch(prepareFinalObject("SewerageConnection[0]", parsedObject));
+      dispatch(prepareFinalObject("SewerageConnection[0].additionalDetails.locality", applyScreenObject.locality && applyScreenObject.locality.split('_').length == 4 ? applyScreenObject.locality.split('_')[3] : applyScreenObject.locality));
+      dispatch(prepareFinalObject("SewerageConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
       let estimate;
       if (processInstanceAppStatus === "CONNECTION_ACTIVATED") {
         let connectionNumber = parsedObject.connectionNo;
@@ -645,6 +656,12 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
+      let localizationLabels = {}
+      if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${payload.WaterConnection[0].additionalDetails.locality
+        .toUpperCase()
+        .replace(/[._:-\s\/]/g, "_")}`;
+      dispatch(prepareFinalObject("WaterConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
       if (get(payload, "WaterConnection[0].property.status", "") !== "ACTIVE") {
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.props.propertyId", get(payload, "WaterConnection[0].property.propertyId", ""));
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.visible", true);
@@ -699,8 +716,16 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       oldApplicationPayload.WaterConnection[0].waterSubSource=waterSource.includes("null") ? "NA" : waterSource.split(".")[1];
       if (oldApplicationPayload.WaterConnection.length > 0) {
         dispatch(prepareFinalObject("WaterConnectionOld", oldApplicationPayload.WaterConnection))
+        let localizationLabels = {}
+        if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${oldApplicationPayload.WaterConnection[0].additionalDetails.locality
+        .toUpperCase()
+        .replace(/[._:-\s\/]/g, "_")}`;
+      dispatch(prepareFinalObject("WaterConnectionOld[0].locality",getTranslatedLabel(locality, localizationLabels)))
       }
     }
+
+
 
 
 
@@ -714,7 +739,14 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", false); 
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("SewerageConnection[0]", payload.SewerageConnections[0]));
+      let localizationLabels = {}
+      if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${payload.SewerageConnections[0].additionalDetails.locality
+        .toUpperCase()
+        .replace(/[._:-\s\/]/g, "_")}`;
+      dispatch(prepareFinalObject("SewerageConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
       dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
+      dispatch(prepareFinalObject("WaterConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
       if (!payload.SewerageConnections[0].connectionHolders || payload.SewerageConnections[0].connectionHolders === 'NA') {
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible", true);

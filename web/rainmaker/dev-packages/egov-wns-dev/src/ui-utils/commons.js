@@ -9,6 +9,7 @@ import set from "lodash/set";
 import store from "redux/store";
 import { convertDateToEpoch, getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
+
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE"
@@ -144,6 +145,29 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
     return waterConnection;
 }
 
+export const getSearchResultsSW = async (queryObject, filter = false) => {
+    try {
+        const response = await httpRequest(
+            "post",
+            "/sw-services/swc/_search",
+            "_search",
+            queryObject
+        );
+        if (response.SewerageConnections && response.SewerageConnections.length == 0) {
+            return response;
+        }
+        let currentTime = new Date().getTime();
+        if (filter) {
+            response.SewerageConnections = response.SewerageConnections.filter(app => currentTime > app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
+            response.SewerageConnections = response.SewerageConnections.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
+        }
+        let result = findAndReplace(response, null, "NA");
+        // result.SewerageConnections = await getPropertyObj(result.SewerageConnections);
+        return result;
+    } catch (error) {
+        console.log(error)
+    }
+};
 
 export const getSearchResults = async (queryObject, filter = false) => {
     try {
@@ -224,7 +248,6 @@ export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
 };
 
 export const fetchBill = async (queryObject, dispatch) => {
-    dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
             "post",
@@ -232,10 +255,8 @@ export const fetchBill = async (queryObject, dispatch) => {
             "_fetchBill",
             queryObject
         );
-        dispatch(toggleSpinner());
         return findAndReplace(response, null, "NA");
     } catch (error) {
-        dispatch(toggleSpinner());
         console.log(error)
     }
 };
@@ -491,6 +512,34 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
         applyScreenObject["proposedToilets"] !== "" &&
         applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)
     ) { return true; } else { return false }
+}
+
+// if modify mode
+
+export const convertEpochToDateInYMD = dateEpoch => {
+    const dateFromApi = new Date(dateEpoch);
+    let month = dateFromApi.getMonth() + 1;
+    let day = dateFromApi.getDate();
+    let year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return `${year}-${month}-${day}`;
+  };
+
+export const validationsForExecutionData = (applyScreenObject) => {
+    let rValue = true;
+    if (rValue &&
+    applyScreenObject.hasOwnProperty("connectionExecutionDate") && applyScreenObject.hasOwnProperty("dateEffectiveFrom") && applyScreenObject["dateEffectiveFrom"] != 0 && applyScreenObject.hasOwnProperty["connectionExecutionDate"] != 0){
+    const dateEffectiveFrom = convertEpochToDateInYMD(applyScreenObject["dateEffectiveFrom"]) 
+    const connectionExecutionDate = convertEpochToDateInYMD(applyScreenObject["connectionExecutionDate"]) 
+    if(dateEffectiveFrom == connectionExecutionDate){
+        return true
+    }
+    else if((new Date(dateEffectiveFrom).getTime()) < (new Date(connectionExecutionDate).getTime())){
+        return false
+    }
+    else{return true}   
+    }else{return false}
 }
 
 export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {
@@ -887,6 +936,7 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
 }
 
 export const applyForWater = async (state, dispatch) => {
+    let mode = getQueryArg(window.location.href, "mode");
     let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = waterId ? "UPDATE" : "CREATE";
@@ -914,11 +964,19 @@ export const applyForWater = async (state, dispatch) => {
             if (typeof queryObjectForUpdate.additionalDetails !== 'object') {
                 queryObjectForUpdate.additionalDetails = {};
             }
-            queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality;
+            queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality && queryObjectForUpdate.locality.split('_').length == 4 ? queryObjectForUpdate.locality.split('_')[3] : queryObjectForUpdate.locality;
+            queryObjectForUpdate.additionalDetails.ward = queryObjectForUpdate.ward ? queryObjectForUpdate.ward : '';
+
             queryObjectForUpdate.pipeSize = 0
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             queryObjectForUpdate.property = null
             queryObjectForUpdate.noOfFlats = queryObjectForUpdate.noOfFlats && queryObjectForUpdate.noOfFlats != "" ? queryObjectForUpdate.noOfFlats : 0
+            if(mode === "ownershipTransfer"){
+                queryObjectForUpdate.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+            }
+            if(isModifyMode()){
+                queryObjectForUpdate.applicationType = "MODIFY_WATER_CONNECTION"
+            }
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResults(searchQueryObject);
@@ -931,7 +989,9 @@ export const applyForWater = async (state, dispatch) => {
             if (typeof queryObject.additionalDetails !== 'object') {
                 queryObject.additionalDetails = {};
             }
-            queryObject.additionalDetails.locality = queryObject.locality;
+            queryObject.additionalDetails.locality = queryObject.locality && queryObject.locality.split('_').length == 4 ? queryObject.locality.split('_')[3] : queryObject.locality;
+            queryObject.additionalDetails.ward = queryObject.ward ? queryObject.ward : '';
+
             set(queryObject, "processInstance.action", "INITIATE")
             queryObject = findAndReplace(queryObject, "NA", null);
             if (isModifyMode()) {
@@ -939,6 +999,12 @@ export const applyForWater = async (state, dispatch) => {
             }
             queryObject.property = null
             queryObject.pipeSize = 0
+            if(mode === "ownershipTransfer"){
+                queryObject.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+            }
+            if(isModifyMode()){
+                queryObject.applicationType = "MODIFY_WATER_CONNECTION"
+            }
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
@@ -951,9 +1017,32 @@ export const applyForWater = async (state, dispatch) => {
                 response.WaterConnection[0].waterSource = waterSource[0];
                 response.WaterConnection[0].service = "Water";
                 response.WaterConnection[0].waterSubSource = waterSource[1];
+                response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
+                let localizationLabels = {}
+                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+                let locality = `${response.WaterConnection[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.WaterConnection[0].additionalDetails.locality
+                  .toUpperCase()
+                  .replace(/[._:-\s\/]/g, "_")}`;
+                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
                 dispatch(prepareFinalObject("modifyAppCreated", true));
+            }
+            if(mode == "ownershipTransfer"){
+                response.WaterConnection[0].water = true;
+                let waterSource = response.WaterConnection[0].waterSource.split(".");
+                response.WaterConnection[0].waterSource = waterSource[0];
+                response.WaterConnection[0].service = "Water";
+                response.WaterConnection[0].waterSubSource = waterSource[1];
+                response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
+                response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
+                dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
+                let localizationLabels = {}
+                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+                let locality = `${response.WaterConnection[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.WaterConnection[0].additionalDetails.locality
+                  .toUpperCase()
+                  .replace(/[._:-\s\/]/g, "_")}`;
+                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
             }
             if (!isModifyMode()) {
                 setApplicationNumberBox(state, dispatch);
@@ -970,6 +1059,7 @@ export const applyForWater = async (state, dispatch) => {
 }
 
 export const applyForSewerage = async (state, dispatch) => {
+    let mode = getQueryArg(window.location.href, "mode");
     let queryObject = parserFunction(state);
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let method = sewerId ? "UPDATE" : "CREATE";
@@ -993,9 +1083,17 @@ export const applyForSewerage = async (state, dispatch) => {
             if (typeof queryObjectForUpdate.additionalDetails !== 'object') {
                 response.SewerageConnection[0].additionalDetails = {};
             }
-            queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality;
+            queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality && queryObjectForUpdate.locality.split('_').length == 4 ? queryObjectForUpdate.locality.split('_')[3] : queryObjectForUpdate.locality;
+
+            queryObjectForUpdate.additionalDetails.ward = queryObjectForUpdate.ward ? queryObjectForUpdate.ward : '';
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             queryObjectForUpdate.property = null
+            if(isOwnerShipTransfer()){
+                queryObjectForUpdate.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+            }
+            if(isModifyMode()){
+                queryObjectForUpdate.applicationType = "MODIFY_SEWERAGE_CONNECTION"
+            }
             queryObjectForUpdate.noOfFlats = queryObjectForUpdate.noOfFlats && queryObjectForUpdate.noOfFlats != "" ? queryObjectForUpdate.noOfFlats : 0
             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
@@ -1009,22 +1107,53 @@ export const applyForSewerage = async (state, dispatch) => {
             if (typeof queryObject.additionalDetails !== 'object') {
                 response.SewerageConnection[0].additionalDetails = {};
             }
-            queryObject.additionalDetails.locality = queryObject.locality;
+            
+            queryObject.additionalDetails.locality = queryObject.locality && queryObject.locality.split('_').length == 4 ? queryObject.locality.split('_')[3] : queryObject.locality;
+
+            queryObject.additionalDetails.ward = queryObject.ward ? queryObject.ward : '';
             set(queryObject, "processInstance.action", "INITIATE");
             set(queryObject, "connectionType", "Non Metered");
             queryObject = findAndReplace(queryObject, "NA", null);
             queryObject.property = null;
+            if(isOwnerShipTransfer()){
+                queryObject.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+            }
+            if(isModifyMode()){
+                queryObject.applicationType = "MODIFY_SEWERAGE_CONNECTION"
+            }
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
             response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
+            
+            if(isOwnerShipTransfer()){
+                response.SewerageConnections[0].sewerage = true;
+                response.SewerageConnections[0].service = "Sewerage";
+                response.SewerageConnections[0].ward = response.SewerageConnections[0].additionalDetails.ward ? response.SewerageConnections[0].additionalDetails.ward : '';
+                response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality;
+                dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
+                let localizationLabels = {}
+                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+                let locality = `${response.SewerageConnections[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.SewerageConnections[0].additionalDetails.locality
+                  .toUpperCase()
+                  .replace(/[._:-\s\/]/g, "_")}`;
+                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
+            }
             if (isModifyMode()) {
+                response.SewerageConnections[0].ward = response.SewerageConnections[0].additionalDetails.ward ? response.SewerageConnections[0].additionalDetails.ward : '';
+                response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality;
                 // response.SewerageConnections = await getPropertyObj(response.SewerageConnections,"", "", true);
                 response.SewerageConnections[0].sewerage = true;
                 response.SewerageConnections[0].service = "Sewerage";
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
+                let localizationLabels = {}
+                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+                let locality = `${response.SewerageConnections[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.SewerageConnections[0].additionalDetails.locality
+                  .toUpperCase()
+                  .replace(/[._:-\s\/]/g, "_")}`;
+                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
             }
             if (!isModifyMode()) {
                 setApplicationNumberBox(state, dispatch);
@@ -1088,9 +1217,12 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
                 queryObjectForUpdateWater.additionalDetails = {};
             }
             queryObjectForUpdateWater.additionalDetails.locality = queryObjectForUpdateWater.locality;
+            queryObjectForUpdateWater.additionalDetails.ward = queryObjectForUpdateWater.ward ? queryObjectForUpdateWater.ward : '';
+
             if (typeof queryObjectForUpdateSewerage.additionalDetails !== 'object') {
                 queryObjectForUpdateSewerage.additionalDetails = {};
             }
+            queryObjectForUpdateSewerage.additionalDetails.ward = queryObjectForUpdateSewerage.ward ? queryObjectForUpdateSewerage.ward : '';
             queryObjectForUpdateSewerage.additionalDetails.locality = queryObjectForUpdateSewerage.locality;
             queryObjectForUpdateSewerage.property = null
             queryObjectForUpdateWater.property = null
@@ -1120,6 +1252,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
                 queryObject.additionalDetails = {};
             }
             queryObject.additionalDetails.locality = queryObject.locality;
+            queryObject.additionalDetails.ward = queryObject.ward ? queryObject.ward : '';
             set(queryObject, "processInstance.action", "INITIATE");
             queryObject = findAndReplace(queryObject, "NA", null);
             queryObject.property = null;
@@ -2076,6 +2209,16 @@ export const isEditAction = () => {
 export const isModifyMode = () => {
     let isMode = getQueryArg(window.location.href, "mode");
     return (isMode && isMode.toUpperCase() === 'MODIFY');
+}
+
+export const isDisconnectOrClose = () => {
+    let disconnectOrClose = getQueryArg(window.location.href, "disconnectOrClose");
+    return (disconnectOrClose && disconnectOrClose == 'true');
+}
+
+export const isOwnerShipTransfer = () => {
+    let isMode = getQueryArg(window.location.href, "mode");
+    return (isMode && isMode === 'ownershipTransfer');
 }
 
 export const isModifyModeAction = () => {

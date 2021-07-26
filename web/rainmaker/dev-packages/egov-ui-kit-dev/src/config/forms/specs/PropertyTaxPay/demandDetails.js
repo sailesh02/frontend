@@ -300,6 +300,58 @@ const formConfig = {
         dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)),0);
       }
     },
+    serviceTax: {
+      id: "serviceTax",
+      jsonPath: "Properties[0].additionalDetails.serviceTax",
+      type: "textfield",
+      floatingLabelText: "PT_PROPERTY_SERVICETAX",
+      hintText: "PT_PROPERTY_SERVICETAX_PLACEHOLDER",
+      numcols: 6,
+      errorMessage: "PT_PROPERTY_SERVICETAX_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      pattern: /^([0-9][0-9]{0,49})(\.\d{1,2})?$/,
+      required: true,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        let amountArray = []
+        for (const [key, value] of Object.entries(additionalDetails)) {
+          if(key == "usageExemption" || key == "ownershipExemption"){
+            amountArray.push(Number(-value))
+          }else{
+            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }
+        }
+        const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)),0);
+      }
+    },
+    otherDues: {
+      id: "otherDues",
+      jsonPath: "Properties[0].additionalDetails.otherDues",
+      type: "textfield",
+      floatingLabelText: "PT_PROPERTY_OTHERDUES",
+      hintText: "PT_PROPERTY_OTHERDUES_PLACEHOLDER",
+      numcols: 6,
+      errorMessage: "PT_PROPERTY_OTHERDUES_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      pattern: /^([0-9][0-9]{0,49})(\.\d{1,2})?$/,
+      required: true,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
+        let amountArray = []
+        for (const [key, value] of Object.entries(additionalDetails)) {
+          if(key == "usageExemption" || key == "ownershipExemption"){
+            amountArray.push(Number(-value))
+          }else{
+            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }
+        }
+        const total = amountArray.reduce((a, b) => a + b, 0)
+        dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)),0);
+      }
+    },
     totalAmount: {
       id: "totalAmount",
       jsonPath: "Properties[0].additionalDetails.totalAmount",
@@ -342,6 +394,8 @@ const formConfig = {
           dispatch(setFieldProperty("demandDetails", "usageExemption", "value", additionalDetails.usageExemption),"0")
           dispatch(setFieldProperty("demandDetails", "interest", "value", additionalDetails.interest),"0")
           dispatch(setFieldProperty("demandDetails", "penalty", "value", additionalDetails.penalty),"0")   
+          dispatch(setFieldProperty("demandDetails", "serviceTax", "value", additionalDetails.serviceTax),"0") 
+          dispatch(setFieldProperty("demandDetails", "otherDues", "value", additionalDetails.otherDues),"0")    
       }
       
       }

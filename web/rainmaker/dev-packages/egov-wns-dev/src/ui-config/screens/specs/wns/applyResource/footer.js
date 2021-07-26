@@ -18,11 +18,12 @@ import {
   findAndReplace,
   isActiveProperty,
   isModifyMode,
+  isOwnerShipTransfer,
   isModifyModeAction, prepareDocumentsUploadData,
   pushTheDocsUploadedToRedux,
   serviceConst,
   showHideFieldsFirstStep, validateConnHolderDetails, validateFeildsForBothWaterAndSewerage,
-  validateFeildsForSewerage, validateFeildsForWater, isEditAction
+  validateFeildsForSewerage, validateFeildsForWater, isEditAction, validationsForExecutionData
 } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
@@ -33,7 +34,7 @@ const isMode = isModifyMode();
 const isModeAction = isModifyModeAction();
 const setReviewPageRoute = (state, dispatch) => {
   let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
-  if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+  if(roadCuttingInfo && roadCuttingInfo != 'NA' && roadCuttingInfo.length > 0) {
     let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.isEmpty !== true);
     dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
   }
@@ -135,6 +136,7 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+  let mode = getQueryArg(window.location.href, "mode");
   window.scrollTo(0, 0);
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   let isFormValid = true;
@@ -154,7 +156,7 @@ const callBackForNext = async (state, dispatch) => {
 
     validateFields("components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children", state, dispatch)
 
-    if (getQueryArg(window.location.href, "action") === "edit" && !isModifyMode()) {
+    if (getQueryArg(window.location.href, "action") === "edit" && !isModifyMode() && !isOwnerShipTransfer()) {
       let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
       const uploadedDocData = application.documents;
       const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
@@ -317,8 +319,9 @@ const callBackForNext = async (state, dispatch) => {
                     )
                   );
                   if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
-                  else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
-                } else if ((sewerChecked && sewerData.length === 0) || (isModifyMode() && sewerData.length === 1 && !modifyAppCreated)) {
+                  else if (waterData && waterData.length > 0 && sewerData.length === 0) { 
+                    await applyForSewerage(state, dispatch); }
+                } else if ((sewerChecked && sewerData.length === 0) || (isModifyMode() && sewerData.length === 1 && !modifyAppCreated) || (sewerData && sewerData.length === 1 && isOwnerShipTransfer())) {
                   dispatch(
                     prepareFinalObject(
                       "applyScreen.service",
@@ -326,7 +329,7 @@ const callBackForNext = async (state, dispatch) => {
                     )
                   );
                   await applyForSewerage(state, dispatch);
-                } else if ((waterChecked && waterData.length === 0) || (isModifyMode() && waterData.length === 1 && !modifyAppCreated)) {
+                } else if ((waterChecked && waterData.length === 0) || (isModifyMode() && waterData.length === 1 && !modifyAppCreated) || (waterData && waterData.length === 1 && isOwnerShipTransfer())) {
                   dispatch(
                     prepareFinalObject(
                       "applyScreen.service",
@@ -391,13 +394,26 @@ const callBackForNext = async (state, dispatch) => {
   /* validations for Additional /Docuemnts details screen */
   if (activeStep === 1) {
     if (isModifyMode()) {
-      isFormValid = true;
-      hasFieldToaster = false;
+      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+      if(validationsForExecutionData(applyScreenObject)){
+        isFormValid = true;
+        hasFieldToaster = false;
+      }else{
+        isFormValid = false;
+        hasFieldToaster = true;
+        let errorMessage = {
+          labelName:
+            "Date Effective From cannot be less than execution date!",
+          labelKey: "ERR_DATE_EFFECTIVE_FROM_CANNOT_LESS_THAN_EXECUTION_DATE_TOAST"
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        return
+      }
     } else {
       if (moveToReview(state, dispatch)) {
         await pushTheDocsUploadedToRedux(state, dispatch);
         isFormValid = true; hasFieldToaster = false;
-        if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
+        if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit" && !isOwnerShipTransfer()) {
           setReviewPageRoute(state, dispatch);
         }
       }
@@ -423,7 +439,7 @@ const callBackForNext = async (state, dispatch) => {
       }
     } else {
       let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
-      if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+      if(roadCuttingInfo && roadCuttingInfo != 'NA' && roadCuttingInfo.length > 0) {
         for (let i = 0; i < roadCuttingInfo.length; i++) {
           if (roadCuttingInfo[i] == undefined) {
             roadCuttingInfo[i] = {};
@@ -431,13 +447,13 @@ const callBackForNext = async (state, dispatch) => {
           }
         }
         let filteredInfo = [];
-        roadCuttingInfo.map(info => {
+        roadCuttingInfo && roadCuttingInfo.map(info => {
           if(info.isDeleted !=false) filteredInfo.push(info);
         });
         dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
       }
 
-      if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
+      if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()) ) && !isOwnerShipTransfer()) {
         setReviewPageRoute(state, dispatch);
       }
       isFormValid = true;
@@ -455,7 +471,7 @@ const callBackForNext = async (state, dispatch) => {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
-    if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+    if(roadCuttingInfo && roadCuttingInfo !='NA' && roadCuttingInfo.length > 0 && !isOwnerShipTransfer()) {
       let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.isEmpty !== true);
       dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
     }
@@ -498,8 +514,9 @@ const callBackForNext = async (state, dispatch) => {
 };
 
 const moveToSuccess = (combinedArray, dispatch) => {
-  const tenantId = get(combinedArray[0].property, "tenantId") || get(combinedArray[0], "tenantId");
-  const purpose = "apply";
+  const ownershipTransfer = getQueryArg(window.location.href, "mode");
+  const tenantId = get(combinedArray[0], "tenantId");
+  const purpose = ownershipTransfer == "ownershipTransfer" ? "ownershipTransfer" : "apply";
   const status = "success";
   const applicationNoWater = get(combinedArray[0], "applicationNo");
   const applicationNoSewerage = get(combinedArray[1], "applicationNo");
@@ -663,11 +680,12 @@ export const changeStep = (
       //since docs section is non mandatory now
       const isDocsUploaded = true;
       if (isDocsUploaded) {
-        activeStep = process.env.REACT_APP_NAME === "Citizen" && !isModifyMode() ? 3 : 2;
+        activeStep = ((process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) || (process.env.REACT_APP_NAME !== "Citizen" && isOwnerShipTransfer())) ? 3 : 2;
       } else if (isModifyMode()) {
         activeStep = 2;
       }
-    } else if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 3 && !isModifyMode()) {
+    } else if ((process.env.REACT_APP_NAME === "Citizen" && activeStep === 3 && !isModifyMode()) ||
+      process.env.REACT_APP_NAME !== "Citizen" && isOwnerShipTransfer()) {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 2;
     } else {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
@@ -714,13 +732,14 @@ export const changeStep = (
     }
   ];
   dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
-  if (process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) { renderStepsCitizen(activeStep, dispatch); }
+  if ((process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) || (process.env.REACT_APP_NAME !== "Citizen" && isOwnerShipTransfer())) { renderStepsCitizen(activeStep, dispatch); }
   else { renderSteps(activeStep, dispatch,state); }
 }
 
 export const isNextButton = (activeStep) => {
   if(isModifyMode() && activeStep < 3) { return true; }
-  if (process.env.REACT_APP_NAME === "Citizen" && activeStep < 2) { return true; }
+  if ((process.env.REACT_APP_NAME === "Citizen" && activeStep < 2) || 
+  process.env.REACT_APP_NAME !== 'Citizen' && activeStep < 2 && isOwnerShipTransfer()) { return true; }
   else if (process.env.REACT_APP_NAME !== "Citizen" && activeStep < 3) { return true; }
   else return false
 }
@@ -811,7 +830,7 @@ export const renderStepsCitizen = (activeStep, dispatch) => {
 
 export const getActionDefinationForStepper = path => {
   let actionDefination = [];
-  if (process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) {
+  if ((process.env.REACT_APP_NAME === "Citizen" && !isModifyMode()) || (process.env.REACT_APP_NAME !== 'Citizen' && isOwnerShipTransfer())) {
     actionDefination = [
       {
         path: "components.div.children.formwizardFirstStep",

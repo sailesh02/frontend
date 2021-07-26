@@ -38,7 +38,13 @@ export const searchResults = {
         }
       },
       {name : "Owner Name",labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
-      {name : "Status",labelKey: "WS_COMMON_TABLE_COL_STATUS_LABEL" },
+      {
+        name : "Status",
+        labelKey: "WS_COMMON_TABLE_COL_STATUS_LABEL",
+        options: {
+        display: false
+        }
+      },
       {name : "Due",labelKey: "WS_COMMON_TABLE_COL_DUE_LABEL" },
       {name : "Address",labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
       {name : "Due Date",labelKey: "WS_COMMON_TABLE_COL_DUE_DATE_LABEL" },
@@ -80,6 +86,10 @@ export const searchResults = {
         options: {
           display: false
         }
+      },
+      {
+        name: "applicationStatus",
+        labelKey: "WS_COMMON_TABLE_COL_APPLICATION_CURRENT_STATE"
       }
     ],
     title: {labelKey:"WS_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName:"Search Results for Water & Sewerage Connections"},

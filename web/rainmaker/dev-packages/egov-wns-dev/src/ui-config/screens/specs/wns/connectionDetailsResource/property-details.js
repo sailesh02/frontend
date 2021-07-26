@@ -111,7 +111,18 @@ const propertyDetails= getCommonContainer({
       labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
     },
     {
-      jsonPath: "WaterConnection[0].additionalDetails.locality",
+      jsonPath: "WaterConnection[0].locality",
+      callBack: handleNA,
+    }
+
+  ),
+  ward: getLabelWithValue(
+    {
+      labelName: "Ward",
+      labelKey: "WS_WARD_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.ward",
       callBack: handleNA,
     }
 

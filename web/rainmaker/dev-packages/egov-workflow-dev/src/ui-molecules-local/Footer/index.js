@@ -63,7 +63,10 @@ class Footer extends React.Component {
     const { handleFieldChange, setRoute, dataPath } = this.props;
     let employeeList = [];
     if (item.buttonLabel === "ACTIVATE_CONNECTION") {
-      if (item.moduleName === "NewWS1" || item.moduleName === "NewSW1") {
+      if (item.moduleName === "NewWS1" || item.moduleName === "NewSW1" || item.moduleName === "SWCloseConnection" || 
+      item.moduleName === "SWDisconnection" || item.moduleName === "WSCloseConnection" || item.moduleName === "WSDisconnection" ||
+      item.moduleName === "WSReconnection" || item.moduleName === "SWReconnection" || item.moduleName === "SWOwnershipChange" || item.moduleName === "WSOwnershipChange"
+    ) {
         item.showEmployeeList = false;
       }
     }

@@ -8,6 +8,11 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "../viewBillResource/footer";
 import { handleNA } from '../../utils';
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import set from "lodash/set";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { fetchBill } from "../../../../../ui-utils/commons"
 
 const getHeader = label => {
   return {
@@ -281,6 +286,52 @@ export const connectionHolderDetails={
   )
 };
 
+export const onClickOwnerShipTransfer = async (state, dispatch) => {
+  let applicationNo = state.screenConfiguration.preparedFinalObject.WaterConnection[0].applicationNo
+  let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+  const service = getQueryArg(window.location.href, "service");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+ 
+    let due
+    let fetchBillQueryObj = []
+    if(applicationNo.includes('SW')){
+      fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "SW" }]
+    }else{
+      fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "WS" }]
+    }
+    let billResults = await fetchBill(fetchBillQueryObj)
+    billResults && billResults.Bill &&Array.isArray(billResults.Bill)&&billResults.Bill.length>0 && billResults.Bill.map(bill => {
+      due = bill.totalAmount
+    })
+    let errLabel =
+      applicationNo && applicationNo.includes("WS")
+        ? "WS_PENDING_FEES_ERROR"
+        : "WS_PENDING_FEES_ERROR";
+    if (due && parseInt(due) > 0) {
+      dispatch(toggleSnackbarAndSetText(
+        true,
+        {
+          labelName: "Due Amount should be zero!",
+          labelKey: errLabel,
+        },
+        "error"
+      ));
+      return false;
+    }  
+
+  set(
+    "apply",
+    "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.visible",
+    false
+  );
+
+  dispatch(
+    setRoute(
+      `/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=ownershipTransfer`
+    )
+  );
+}
+
 export const connHolderDetailsSummary = () => {
   return getCommonGrayCard({
     headerDiv: {
@@ -293,12 +344,52 @@ export const connHolderDetailsSummary = () => {
         header: {
           gridDefination: {
             xs: 12,
-            sm: 10
+            sm: 12
           },
-          ...getCommonSubHeader({
-            labelKey: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
-            labelName: "Connection Holder Details"
-          })
+          ...getCommonContainer({
+            header:getCommonSubHeader({
+              labelKey: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
+              labelName: "Connection Holder Details",
+              gridDefination: {
+                xs: 2,
+                sm: 2,
+                align: "left"
+              },
+            }),
+            // buttonContainer: getCommonContainer({
+              searchButton: {
+                componentPath: "Button",
+                gridDefination: {
+                  xs: 12,
+                  sm: 12,
+                  align: "right"
+                },
+                visible:false,
+                props: {
+                  variant: "contained",
+                  style: {
+                    color: "white",
+                    margin: "8px",
+                    backgroundColor: "rgb(254, 122, 81)",
+                    borderRadius: "2px",
+                    width: "220px",
+                    height: "48px",
+                    marginTop:'-27px'
+                  },
+                  
+                },
+                children: {
+                  buttonLabel: getLabel({
+                    labelKey: "WS_OWNERSHIP_TRANSFER"
+                  })
+                },
+                onClickDefination: {
+                  action: "condition",
+                  callBack: onClickOwnerShipTransfer
+                }
+              },
+            })
+          // })
         }
       }
     },

@@ -32,6 +32,7 @@ const cardItems = [
       jsonPath: "components.cityPickerDialog",
       licenseType: "PERMANENT",
       moduleName: "TL",
+      legacyLicenseRenewal: false
     }
   },
   {
@@ -45,6 +46,22 @@ const cardItems = [
       jsonPath: "components.cityPickerDialog",
       licenseType: "TEMPORARY",
       moduleName: "TL",
+      legacyLicenseRenewal: false
+    }
+  },
+  {
+    label: {
+      labelKey: "TL_RENEW_LEGACY_LICENSE",
+      labelName: "Renew Legacy License"
+    },
+    icon: <TradeLicenseIcon />,
+
+    route: {
+      screenKey: "home",
+      jsonPath: "components.cityPickerDialog",
+      licenseType: "PERMANENT",
+      moduleName: "TL",
+      legacyLicenseRenewal: true
     }
   },
   {

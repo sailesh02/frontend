@@ -126,6 +126,19 @@ const MultiDownloadCard = Loadable({
   loader: () => import("./NocData"),
   loading: () => <Loading />
  });
+
+ const BPAHowItWorks = Loadable({
+  loader: () => import("./PBAHowItWorks"),
+  loading: () => <Loading />
+});
+const TrainingTutorials = Loadable({
+  loader: () => import("./TrainingTutorials"),
+  loading: () => <Loading />
+});
+const PBATrainingTutorials = Loadable({
+  loader: () => import("./PBATrainingTutorials"),
+  loading: () => <Loading />
+});
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -152,5 +165,8 @@ export {
   ComparisionLink,
   NocDetailCard,
   NocDocDetailCard,
-  NocData
+  NocData,
+  BPAHowItWorks,
+  TrainingTutorials,
+  PBATrainingTutorials
 };

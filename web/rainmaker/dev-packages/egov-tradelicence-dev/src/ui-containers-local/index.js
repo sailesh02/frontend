@@ -52,10 +52,6 @@ const ResubmitActionContainer = Loadable({
   loading: () => <Loading />
 });
 
-const MultiItem = Loadable({
-  loader: () => import("./MultiItem"),
-  loading: () => <Loading />
-});
 
 
 
@@ -71,6 +67,5 @@ export {
   PaymentRedirectPage,
   ViewBreakupContainer,
   DialogContainer,
-  ResubmitActionContainer,
-  MultiItem
+  ResubmitActionContainer
 };

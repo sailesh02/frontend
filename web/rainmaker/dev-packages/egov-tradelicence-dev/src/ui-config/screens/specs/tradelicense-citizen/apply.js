@@ -95,11 +95,14 @@ const screenConfig = {
         );
     if (applicationNo) {
       updateSearchResults(action, state, dispatch, applicationNo, tenantId);
+
+      dispatch(prepareFinalObject("DynamicMdms.TradeLicense.tradeUnits.MdmsJson", null));
     } else {
 
       getData(action, state, dispatch, tenantId);
 
       const applyFor = window.localStorage.getItem('licenseType');
+      let legacyLicenseRenewal = window.localStorage.getItem('legacyLicenseRenewal');
 
       set(
         action.screenConfig,
@@ -142,13 +145,7 @@ const screenConfig = {
             false
 
         );
-        set(
-          action.screenConfig,
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo.visible",
 
-            true
-
-        );
         set(
           action.screenConfig,
             "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod.visible",
@@ -156,8 +153,27 @@ const screenConfig = {
             true
 
         );
+
+        if(legacyLicenseRenewal === "true"){
+
+          set(
+            action.screenConfig,
+              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo.visible",
+
+              true
+
+          );
+          // set(
+          //   action.screenConfig,
+          //     "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo.required",
+
+          //     true
+
+          // );
+        }
         dispatch(prepareFinalObject("Licenses[0].tradeLicensePeriod", null));
         dispatch(prepareFinalObject("Licenses[0].validTo", null));
+
       }
     }
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));

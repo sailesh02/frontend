@@ -175,6 +175,7 @@ export const updatePFOforSearchResults = async (
   //   (await setDocsForEditFlow(state, dispatch));
 
   let tlType = get(payload.Licenses[0], 'licenseType', "PERMANENT");
+  let oldLicenseNumber = get(payload.Licenses[0], 'oldLicenseNumber', null);
 
   if (queryValue && tlType === "TEMPORARY") {
     dispatch(
@@ -196,7 +197,7 @@ export const updatePFOforSearchResults = async (
         true
       )
     );
-
+if(oldLicenseNumber !== null){
     dispatch(
       handleField(
         "apply",
@@ -205,7 +206,7 @@ export const updatePFOforSearchResults = async (
         true
       )
     );
-
+    }
   }
 
   let tlStatus = get(payload.Licenses[0], 'status', "");
@@ -280,6 +281,16 @@ export const updatePFOforSearchResults = async (
       )
     );
 
+  }
+  if(userAction == "EDITRENEWAL"){
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeName",
+        "props.disabled",
+        true
+      )
+    );
   }
   if (payload && payload.Licenses) {
 
@@ -455,7 +466,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       "validTo",
       convertDateToEpoch(queryObject[0].validTo, "dayend")
     );
-    console.log(queryObject[0].commencementDate, "Nero commencement date first")
+
     let commencementDateToAddYears = queryObject[0] && queryObject[0].commencementDate;
     if (queryObject[0] && queryObject[0].commencementDate) {
       queryObject[0].commencementDate = convertDateToEpoch(

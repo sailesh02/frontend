@@ -72,6 +72,9 @@ export const tradeDocumentDetails = getCommonCard({
 });
 
 export const getMdmsData = async (action, state, dispatch) => {
+
+  let TenantIdAppliedFor = getQueryArg(window.location.href, "tenantId");
+  console.log(TenantIdAppliedFor, "Nero Tenant s")
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -107,6 +110,24 @@ export const getMdmsData = async (action, state, dispatch) => {
       ]
     }
   };
+  let mdmsWardBody = {
+    MdmsCriteria: {
+      tenantId: TenantIdAppliedFor,
+      moduleDetails: [
+
+        {
+          moduleName: "Ward",
+          masterDetails: [
+            {
+              name: "Ward"
+            }
+          ]
+        },
+
+      ]
+    }
+  };
+
   try {
     let payload = null;
     payload = await httpRequest(
@@ -127,7 +148,25 @@ export const getMdmsData = async (action, state, dispatch) => {
     payload.MdmsRes.TradeLicense.TlPeriod = [{code: "1", active: true},{code: "2", active: true}, {code: "3", active: true}, {code: "4", active: true}, {code: "5", active: true}]
    // payload.MdmsRes.TradeLicense.UOMDropBoxValues = []
 
+
+   let payload2 = null;
+    payload2 = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsWardBody
+    );
+
+    let wardData = get(
+      payload2,
+      "MdmsRes.Ward",
+      []
+    )
+    payload.MdmsRes.TradeLicense.Ward = wardData;
+    console.log(payload, "Nero payload")
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    //dispatch(prepareFinalObject("applyScreenMdmsData", payload2.MdmsRes));
     let financialYearData = get(
       payload,
       "MdmsRes.egf-master.FinancialYear",

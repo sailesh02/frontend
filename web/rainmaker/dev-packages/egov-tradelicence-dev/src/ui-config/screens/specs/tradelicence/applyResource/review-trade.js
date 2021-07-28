@@ -354,6 +354,13 @@ export const tradeLocationDetails = {
     },
     { jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode", callBack: checkValueForNA }
   ),
+  tradeLocWard: getLabelWithValue(
+    {
+      labelName: "Ward",
+      labelKey: "TL_NEW_TRADE_DETAILS_WARD_LABEL"
+    },
+    { jsonPath: "Licenses[0].tradeLicenseDetail.address.ward", callBack: checkValueForNA }
+  ),
   // reviewElectricityNo: getLabelWithValue(
   //   {
   //     labelName: "Electricity Connection No.",

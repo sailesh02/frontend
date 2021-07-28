@@ -12,6 +12,7 @@ import { transformComplaintForComponent } from "egov-ui-kit/utils/commons";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { connect } from "react-redux";
 import orderby from "lodash/orderBy";
+import get from "lodash/get";
 import {
   toggleSnackbarAndSetText,
   fetchUiCommonConfig,
@@ -79,7 +80,73 @@ class AllComplaints extends Component {
               : "assigned,reassignrequested",
         },
       ];*/
-      let complaintCountRequest = [
+      let servicesQueryData = [];
+      let servicesQueryparams = '';
+      if (role === "eo1pgreo1") {
+        let pgrMdmsReq = {
+          MdmsCriteria: {
+            tenantId: "od",
+            moduleDetails: [
+
+              {
+                moduleName: "RAINMAKER-PGR",
+                masterDetails: [
+                  {
+                    name: "ServiceDefs",
+                    filter: "[?(@.menuPath IN ['BuildingPermission'])]"
+                  }
+                ]
+              },
+
+            ]
+          }
+        };
+
+
+        let payload = null;
+        payload = await httpRequest(
+          "egov-mdms-service/v1/_search",
+          "_search",
+          [{ key: "tenantId", value: "od" }],
+          pgrMdmsReq
+        );
+
+        let servicesData = get(
+          payload,
+          "MdmsRes.RAINMAKER-PGR.ServiceDefs",
+          []
+        )
+
+        if(servicesData && servicesData.length > 0){
+          for(let i = 0; i<servicesData.length;i++){
+            servicesQueryData.push(servicesData[i].serviceCode);
+          }
+        }
+
+        servicesQueryparams = servicesQueryData.join();
+
+
+      }
+
+
+      let complaintCountRequest;
+      let payloadCount;
+      if(role === "eo1pgreo1"){
+        complaintCountRequest = [
+          { key: "tenantId", value: getTenantId() },
+          {
+            key: "status",
+            value: "escalatedlevel1pending"
+          },
+          { key: "serviceCodes", value: servicesQueryparams },
+        ];
+         payloadCount = await httpRequest(
+          "rainmaker-pgr/v1/requests/_count",
+          "_search",
+          complaintCountRequest
+        );
+      }else{
+       complaintCountRequest = [
         { key: "tenantId", value: getTenantId() },
         {
           key: "status",
@@ -97,13 +164,16 @@ class AllComplaints extends Component {
               :role ==="eo4"
               ? "escalatedlevel4pending"
               : "assigned,reassignrequested"
+
         }
       ];
-      let payloadCount = await httpRequest(
+       payloadCount = await httpRequest(
         "rainmaker-pgr/v1/requests/_count",
         "_search",
         complaintCountRequest
       );
+      }
+
       if (role === "csr") {
         payloadCount
           ? payloadCount.count
@@ -191,6 +261,21 @@ class AllComplaints extends Component {
             {
               key: "status",
               value:"escalatedlevel1pending"
+            }
+          ],
+          true,
+          true
+        );
+      }else if(role === "eo1pgreo1"){
+        fetchComplaints(
+          [
+            {
+              key: "status",
+              value:"escalatedlevel1pending"
+            },
+            {
+              key: "serviceCodes",
+              value: servicesQueryparams
             }
           ],
           true,
@@ -955,6 +1040,9 @@ const mapStateToProps = (state) => {
         :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER1") &&
         roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER2")
         ? "eo"
+        :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER1") &&
+        roleFromUserInfo(userInfo.roles, "PGR_BP_ESCALATION_OFFICER1")
+        ? "eo1pgreo1"
         :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER1")
         ? 'eo1'
         :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER2")

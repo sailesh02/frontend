@@ -170,6 +170,11 @@ const screenConfig = {
           //     true
 
           // );
+          set(
+            action.screenConfig,
+            "components.div.children.headerDiv.children.header.children.header.children.key.props.labelKey",
+            "TL_APPLY_RENEW_LEGACY_TRADELICENSE"
+          );
         }
         dispatch(prepareFinalObject("Licenses[0].tradeLicensePeriod", null));
         dispatch(prepareFinalObject("Licenses[0].validTo", null));

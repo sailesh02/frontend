@@ -74,7 +74,7 @@ export const tradeDocumentDetails = getCommonCard({
 export const getMdmsData = async (action, state, dispatch) => {
 
   let TenantIdAppliedFor = getQueryArg(window.location.href, "tenantId");
-  console.log(TenantIdAppliedFor, "Nero Tenant s")
+
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -164,7 +164,7 @@ export const getMdmsData = async (action, state, dispatch) => {
       []
     )
     payload.MdmsRes.TradeLicense.Ward = wardData;
-    console.log(payload, "Nero payload")
+
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
     //dispatch(prepareFinalObject("applyScreenMdmsData", payload2.MdmsRes));
     let financialYearData = get(

@@ -380,6 +380,35 @@ export const getData = async (action, state, dispatch) => {
         }
         return;
       } 
+      if(tenantId){
+        let mdmsBody = {
+          MdmsCriteria: {
+            tenantId: action.value,
+            moduleDetails: [
+              {
+                "moduleName": "Ward",
+                "masterDetails": [
+                  {
+                    "name": "Ward"
+                  }
+                ]
+              }
+            ]
+          }
+        };
+        const response = await httpRequest("/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+        const wardData = 
+        response && response.MdmsRes['Ward']['Ward'] && response.MdmsRes['Ward']['Ward'].map(ward => {
+          return {
+            ...ward,
+            name:ward.code,
+            value:ward.code,
+            label:ward.code,
+            code:ward.code
+          }
+        })
+        dispatch(prepareFinalObject("applyScreenMdmsData.ward",wardData))
+      } 
     }
     //Edit/Update Flow ----
     let queryObject = [

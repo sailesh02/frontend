@@ -1,5 +1,5 @@
 import commonConfig from "config/common.js";
-import { colony, dummy, houseNumber, mohalla, pincode, street } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
+import { colony, dummy, houseNumber, mohalla, ward, pincode, street } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
 import { fetchGeneralMDMSData, prepareFormData } from "egov-ui-kit/redux/common/actions";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { CITY } from "egov-ui-kit/utils/endPoints";
@@ -44,9 +44,12 @@ const formConfig = {
         dataPath: ["MdmsRes.tenant.tenants"],
         dependants: [
           {
-            fieldKey: "mohalla"
+            fieldKey: "mohalla",
+          },
+          {
+            fieldKey: "ward",
           }
-        ]
+        ],
       },
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         dispatch(prepareFormData("Properties[0].tenantId", field.value));
@@ -119,6 +122,7 @@ const formConfig = {
     ...colony,
     ...street,
     ...mohalla,
+    ...ward,
     ...pincode,
     oldPID: {
       id: "oldpid",

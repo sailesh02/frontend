@@ -1,4 +1,4 @@
-import { mohalla } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
+import { mohalla,ward } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { fetchGeneralMDMSData, prepareFormData } from "egov-ui-kit/redux/common/actions";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
@@ -32,6 +32,9 @@ const formConfig = {
           {
             fieldKey: "mohalla",
           },
+          {
+            fieldKey: "ward",
+          }
         ],
       },
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
@@ -95,39 +98,7 @@ const formConfig = {
       required: true,
     },
     ...mohalla,
-    ward: {
-      id: "ward",
-      jsonPath: "Properties[0].address.ward",
-      type: "AutocompleteDropdown",
-      floatingLabelText: "PT_PROPERTY_DETAILS_WARD",
-      hintText: "PT_PROPERTY_DETAILS_WARD_PLACEHOLDER",
-      fullWidth: true,
-      numcols: 6,
-      gridDefination: {
-        xs: 12,
-        sm: 6
-      },
-      errorMessage: "PT_PROPERTY_DETAILS_WARD_ERRORMSG",
-      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      required: true,
-      formName: "propertyAddress",
-      updateDependentFields: ({ formKey, field, dispatch }) => {
-        if (field.value && field.value.length > 0) {
-          dispatch(setFieldProperty(formKey, field, "value", field.value));
-        }
-      },
-    },
-    // ward: {
-    //   id: "property-ward",
-    //   jsonPath: "Properties[0].address.ward",
-    //   type: "textfield",
-    //   floatingLabelText: "PT_PROPERTY_DETAILS_WARD",
-    //   hintText: "PT_PROPERTY_DETAILS_WARD_PLACEHOLDER",
-    //   numcols: 6,
-    //   // errorMessage: "PT_PROPERTY_DETAILS_WARD_ERRORMSG",
-    //   errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-    //   maxLength: 64,
-    // },
+    ...ward,
     pincode: {
       id: "pincode",
       type: "number",
@@ -197,7 +168,7 @@ const formConfig = {
         }
         fetchDropdownData(dispatch, dataFetchConfig, 'propertyAddress', 'mohalla', state, true);
       }
-      if(tenant && wardDropDownData.length == 0){
+      if(process.env.REACT_APP_NAME === "Citizen" && tenant && wardDropDownData.length == 0){
         const queryObject = [
          {
           key: "tenantId",

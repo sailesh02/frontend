@@ -424,7 +424,10 @@ export const validateFeildsForBothWaterAndSewerage = (applyScreenObject) => {
         applyScreenObject.hasOwnProperty("proposedToilets") &&
         applyScreenObject["proposedToilets"] !== undefined &&
         applyScreenObject["proposedToilets"] !== "" &&
-        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)
+        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i) &&
+        applyScreenObject.hasOwnProperty("ward") && 
+        applyScreenObject["ward"] !== undefined &&
+        applyScreenObject["ward"] !== ""
     ) { return true; } else { return false; }
 }
 
@@ -478,7 +481,10 @@ export const validateFeildsForWater = (applyScreenObject) => {
         applyScreenObject.hasOwnProperty("proposedTaps") &&
         applyScreenObject["proposedTaps"] !== undefined &&
         applyScreenObject["proposedTaps"] !== "" &&
-        applyScreenObject["proposedTaps"].toString().match(/^[0-9]*$/i) 
+        applyScreenObject["proposedTaps"].toString().match(/^[0-9]*$/i) &&
+        applyScreenObject.hasOwnProperty("ward") && 
+        applyScreenObject["ward"] !== undefined &&
+        applyScreenObject["ward"] !== ""
         // &&
         // applyScreenObject.hasOwnProperty("proposedPipeSize") &&
         // applyScreenObject["proposedPipeSize"] !== undefined &&
@@ -510,7 +516,10 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
         applyScreenObject.hasOwnProperty("proposedToilets") &&
         applyScreenObject["proposedToilets"] !== undefined &&
         applyScreenObject["proposedToilets"] !== "" &&
-        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)
+        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i) &&
+        applyScreenObject.hasOwnProperty("ward") && 
+        applyScreenObject["ward"] !== undefined &&
+        applyScreenObject["ward"] !== ""
     ) { return true; } else { return false }
 }
 

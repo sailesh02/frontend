@@ -1,4 +1,4 @@
-import { pincode, mohalla, street, colony, houseNumber, dummy } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
+import { pincode, mohalla, street, colony, ward, houseNumber, dummy } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { CITY } from "egov-ui-kit/utils/endPoints";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
@@ -49,6 +49,9 @@ const formConfig = {
           {
             fieldKey: "mohalla",
           },
+          {
+            fieldKey: "ward",
+          }
         ],
       },
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
@@ -68,6 +71,7 @@ const formConfig = {
     ...colony,
     ...street,
     ...mohalla,
+    ...ward,
     ...pincode,
     oldPID: {
       id: "oldpid",

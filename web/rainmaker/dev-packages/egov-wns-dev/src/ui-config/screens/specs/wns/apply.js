@@ -379,7 +379,37 @@ export const getData = async (action, state, dispatch) => {
           dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
         }
         return;
-      } 
+      }  
+    }
+    if(tenantId && (actionType && (actionType.toUpperCase() === "EDIT"))){
+      let mdmsBody = {
+        MdmsCriteria: {
+          tenantId: tenantId,
+          moduleDetails: [
+            {
+              "moduleName": "Ward",
+              "masterDetails": [
+                {
+                  "name": "Ward"
+                }
+              ]
+            }
+          ]
+        }
+      };
+      
+      const response = await httpRequest("post", "/egov-mdms-service/v1/_search","", [], mdmsBody);
+      const wardData = 
+      response && response.MdmsRes['Ward']['Ward'] && response.MdmsRes['Ward']['Ward'].map(ward => {
+        return {
+          ...ward,
+          name:ward.code,
+          value:ward.code,
+          label:ward.code,
+          code:ward.code
+        }
+      })
+      dispatch(prepareFinalObject("applyScreenMdmsData.ward",wardData))
     }
     //Edit/Update Flow ----
     let queryObject = [

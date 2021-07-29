@@ -1,5 +1,5 @@
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import { fetchDropdownData } from "egov-ui-kit/utils/commons";
+import { fetchDropdownData, fetchWardDropdown } from "egov-ui-kit/utils/commons";
 import * as actionTypes from "../actionTypes";
 
 const formValidation = (store) => (next) => (action) => {
@@ -36,7 +36,10 @@ const formValidation = (store) => (next) => (action) => {
               // ].dataFetchConfig.dataPath = `$.TenantBoundary.*.boundary[?(@.label=="City"&&@.code=="${value}")]..children[?(@.label=="Locality")]`;
               fields[item.fieldKey].dataFetchConfig.queryParams = [{ key: "tenantId", value: value }];
               fetchDropdownData(dispatch, fields[item.fieldKey].dataFetchConfig, formKey, item.fieldKey, state, true);
-            } else {
+            }else if(fields[item.fieldKey].ward){
+              fetchWardDropdown(dispatch, [{ key: "tenantId", value: value }], formKey, item.fieldKey, state);
+            }
+             else {
               fetchDropdownData(dispatch, fields[item.fieldKey].dataFetchConfig, formKey, item.fieldKey);
             }
           }

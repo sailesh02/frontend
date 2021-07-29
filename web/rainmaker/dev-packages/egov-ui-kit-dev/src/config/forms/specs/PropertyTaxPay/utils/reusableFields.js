@@ -602,6 +602,33 @@ export const mohalla = {
   },
 };
 
+export const ward = {
+  ward: {
+    id: "ward",
+    jsonPath: "Properties[0].address.ward",
+    type: "AutocompleteDropdown",
+    floatingLabelText: "PT_PROPERTY_DETAILS_WARD",
+    hintText: "PT_PROPERTY_DETAILS_WARD_PLACEHOLDER",
+    fullWidth: true,
+    ward:true,
+    numcols: 6,
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
+    dataFetchConfig:{},
+    errorMessage: "PT_PROPERTY_DETAILS_WARD_ERRORMSG",
+    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    required: true,
+    formName: "propertyAddress",
+    updateDependentFields: ({ formKey, field, dispatch }) => {
+      if (field.value && field.value.length > 0) {
+        dispatch(setFieldProperty(formKey, field, "value", field.value));
+      }
+    },
+  },
+}
+
 export const pincode = {
   pincode: {
     id: "pincode",

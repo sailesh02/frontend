@@ -1,8 +1,8 @@
-import { mohalla } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
+import { mohalla,ward } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { fetchGeneralMDMSData, prepareFormData } from "egov-ui-kit/redux/common/actions";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
-import { fetchDropdownData, generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName, getTranslatedLabel } from "egov-ui-kit/utils/commons";
+import { fetchDropdownData, generalMDMSDataRequestObj, fetchWardDropdown, getGeneralMDMSDataDropdownName, getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import filter from "lodash/filter";
 import get from "lodash/get";
@@ -32,6 +32,9 @@ const formConfig = {
           {
             fieldKey: "mohalla",
           },
+          {
+            fieldKey: "ward",
+          }
         ],
       },
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
@@ -45,6 +48,7 @@ const formConfig = {
           )
         );
         dispatch(setFieldProperty("propertyAddress", "mohalla", "value", ""));
+        dispatch(setFieldProperty("propertyAddress", "ward", "value", ""));
         const moduleValue = field.value;
         dispatch(fetchLocalizationLabel(getLocale(), moduleValue, moduleValue));
         let requestBody = generalMDMSDataRequestObj(field.value);
@@ -94,17 +98,7 @@ const formConfig = {
       required: true,
     },
     ...mohalla,
-    ward: {
-      id: "property-ward",
-      jsonPath: "Properties[0].address.ward",
-      type: "textfield",
-      floatingLabelText: "PT_PROPERTY_DETAILS_WARD",
-      hintText: "PT_PROPERTY_DETAILS_WARD_PLACEHOLDER",
-      numcols: 6,
-      // errorMessage: "PT_PROPERTY_DETAILS_WARD_ERRORMSG",
-      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      maxLength: 64,
-    },
+    ...ward,
     pincode: {
       id: "pincode",
       type: "number",
@@ -159,7 +153,7 @@ const formConfig = {
       }
       const tenant = get(state, 'form.propertyAddress.fields.city.value', null);
       const mohallaDropDownData = get(state, 'form.propertyAddress.fields.mohalla.dropDownData', []);
-
+      const wardDropDownData = get(state, 'form.propertyAddress.fields.ward.dropDownData', []);
       if (process.env.REACT_APP_NAME === "Citizen" && tenant && mohallaDropDownData.length == 0) {
         const dataFetchConfig = {
           url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
@@ -173,6 +167,15 @@ const formConfig = {
           hierarchyType: "REVENUE"
         }
         fetchDropdownData(dispatch, dataFetchConfig, 'propertyAddress', 'mohalla', state, true);
+      }
+      if(process.env.REACT_APP_NAME === "Citizen" && tenant && wardDropDownData.length == 0){
+        const queryObject = [
+         {
+          key: "tenantId",
+          value: tenant
+         } 
+        ]
+        fetchWardDropdown(dispatch,queryObject,'propertyAddress','ward',state)
       }
       return action;
     } catch (e) {

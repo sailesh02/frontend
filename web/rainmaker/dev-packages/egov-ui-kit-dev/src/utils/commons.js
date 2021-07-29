@@ -706,6 +706,45 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
   }
 };
 
+export const fetchWardDropdown = async (dispatch, queryObj, formKey, fieldKey, state) => {
+  try {
+    if (queryObj[0].value) {
+      let mdmsBody = {
+        MdmsCriteria: {
+          tenantId: queryObj[0].value,
+          moduleDetails: [
+            {
+              "moduleName": "Ward",
+              "masterDetails": [
+                {
+                  "name": "Ward"
+                }
+              ]
+            }
+          ]
+        }
+      };
+      const response = await httpRequest("/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+      const wardData = 
+      response && response.MdmsRes['Ward']['Ward'] && response.MdmsRes['Ward']['Ward'].map(ward => {
+        return {
+          ...ward,
+          name:ward.code,
+          value:ward.code,
+          label:ward.code,
+          code:ward.code
+        }
+      })
+      dispatch(setFieldProperty(formKey, fieldKey, "dropDownData", wardData));
+    }
+  } catch (error) {
+    const { message } = error;
+    console.log(error);
+      dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
+    return;
+  }
+};
+
 export const trimObj = (obj) => {
   if (!Array.isArray(obj) && typeof obj != "object") return obj;
   for (var key in obj) {

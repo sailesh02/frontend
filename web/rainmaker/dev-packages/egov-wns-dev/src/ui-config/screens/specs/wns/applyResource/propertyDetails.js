@@ -502,6 +502,43 @@ const propertyDetailsNoId = getCommonContainer({
   //   }
   
   // }),
+  ward: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-wns",
+    componentPath: "AutosuggestContainer",
+    props: {
+      className: "autocomplete-dropdown",
+      suggestions: [],
+      label: {
+        labelName: "Ward",
+        labelKey: "WS_WARD_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Ward",
+        labelKey: "WS_WARD_PLACEHOLDER"
+      },
+      data: [],
+      optionValue: "code",
+      optionLabel: "label",
+      jsonPath: "applyScreen.ward",
+      sourceJsonPath: "applyScreenMdmsData.ward",
+      labelsFromLocalisation: true,
+      required: true,
+      disabled:false,
+      isClearable: true,
+      inputLabelProps: {
+        shrink: true
+      }
+    },
+    data: [],
+    required: true,
+    jsonPath: "applyScreen.ward",
+    sourceJsonPath: "applyScreenMdmsData.mohalla",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    }
+  },
   connectionCategory: getSelectField({
     label: {
       labelName: "Connection Category",
@@ -751,59 +788,6 @@ const propertyDetailsNoId = getCommonContainer({
       sm: 6
     }
   }),
-  ward: {
-    uiFramework: "custom-containers-local",
-    moduleName: "egov-wns",
-    componentPath: "AutosuggestContainer",
-    props: {
-      className: "autocomplete-dropdown",
-      suggestions: [],
-      label: {
-        labelName: "Ward",
-        labelKey: "WS_WARD_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Ward",
-        labelKey: "WS_WARD_PLACEHOLDER"
-      },
-      data: [],
-      optionValue: "code",
-      optionLabel: "label",
-      jsonPath: "applyScreen.ward",
-      sourceJsonPath: "applyScreenMdmsData.ward",
-      labelsFromLocalisation: true,
-      required: true,
-      disabled:false,
-      isClearable: true,
-      inputLabelProps: {
-        shrink: true
-      }
-    },
-    data: [],
-    required: true,
-    jsonPath: "applyScreen.ward",
-    sourceJsonPath: "applyScreenMdmsData.mohalla",
-    gridDefination: {
-      xs: 12,
-      sm: 6
-    }
-  },
-  // ward: getTextField({
-  //   label: {
-  //     labelName: "Ward",
-  //     labelKey: "WS_WARD_LABEL"
-  //   },
-  //   placeholder: {
-  //     labelName: "Enter Ward Name",
-  //     labelKey: "WS_WARD_PLACEHOLDER"
-  //   },
-  //   visible:true,
-  //   jsonPath: "applyScreen.ward",
-  //   gridDefination: {
-  //     xs: 12,
-  //     sm: 6
-  //   },
-  // }),
   noOfFlats: getTextField({
     label: {
       labelName: "No of Flats",

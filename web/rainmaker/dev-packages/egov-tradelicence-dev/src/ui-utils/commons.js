@@ -490,14 +490,17 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
     disableField('apply', "components.div.children.footer.children.payButton", dispatch);
 
-    if (process.env.REACT_APP_NAME === "Citizen") {
+    if (process.env.REACT_APP_NAME === "Citizen"&& queryObject[0].workflowCode === "NewTL") {
       // let currentFinancialYr = getCurrentFinancialYear();
       // //Changing the format of FY
       // let fY1 = currentFinancialYr.split("-")[1];
       // fY1 = fY1.substring(2, 4);
       // currentFinancialYr = currentFinancialYr.split("-")[0] + "-" + fY1;
       // set(queryObject[0], "financialYear", currentFinancialYr);
+
+
       setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
+
     }
 
     set(queryObject[0], "tenantId", tenantId);
@@ -629,6 +632,7 @@ if(TlStatus === "INITIATED" && getQueryArg(window.location.href, "action") === "
 
       let updateResponse = [];
       if (!isEditFlow) {
+
         // let oldOwners = JSON.parse(
         //   JSON.stringify(
         //     get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].tradeLicenseDetail.owners", [])
@@ -655,6 +659,7 @@ if(TlStatus === "INITIATED" && getQueryArg(window.location.href, "action") === "
           { key: "tenantId", value: tenantId },
           { key: "businessServices", value: workflowCode ? workflowCode : "NewTL" }
         ];
+
         setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
       } else {
         updatedApplicationNo = queryObject[0].applicationNumber;

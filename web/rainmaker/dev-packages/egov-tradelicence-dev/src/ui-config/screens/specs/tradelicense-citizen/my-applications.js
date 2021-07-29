@@ -59,6 +59,7 @@ const screenConfig = {
               }
             ],
             moduleName: "TL",
+            screenName: "myApplications",
             homeURL: "/tradelicense-citizen/home"
           }
         }

@@ -152,6 +152,9 @@ class SingleApplication extends React.Component {
     return validity;
   }
   generateLabelKey = (content, item) => {
+    const { moduleName, screenName } = this.props;
+
+
     let LabelKey = "";
     if (content.prefix && content.suffix) {
       LabelKey = `${content.prefix}${get(item, content.jsonPath, "").replace(
@@ -159,10 +162,17 @@ class SingleApplication extends React.Component {
         "_"
       )}${content.suffix}`;
     } else if (content.prefix) {
+      if(moduleName === "TL" && screenName === "myApplications"){
+        LabelKey = `WF_${item && item.workflowCode.toUpperCase()}_${get(item, content.jsonPath, "").replace(
+          /[._:-\s\/]/g,
+          "_"
+        )}`;
+      }else{
       LabelKey = `${content.prefix}${get(item, content.jsonPath, "").replace(
         /[._:-\s\/]/g,
         "_"
       )}`;
+    }
     } else if (content.suffix) {
       LabelKey = `${get(item, content.jsonPath, "").replace(/[._:-\s\/]/g, "_")}${
         content.suffix

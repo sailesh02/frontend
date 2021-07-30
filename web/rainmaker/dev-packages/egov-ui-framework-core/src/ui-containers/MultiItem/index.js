@@ -292,7 +292,11 @@ const mapStateToProps = state => {
   if (tlStatus && (tlStatus != "INITIATED") && userAction != "EDITRENEWAL") {
     hasAddItem = false
   }
-  if (userAction === "EDITRENEWAL") {
+  // if (userAction === "EDITRENEWAL" && (tlStatus == "APPROVED" || tlStatus == "EXPIRED" || tlStatus == "INITIATED")) {
+  //   hasAddItem = false
+  // }
+
+  if (tlStatus && !(tlStatus == "INITIATED" || tlStatus == "APPROVED" || tlStatus == "EXPIRED") && userAction === "EDITRENEWAL") {
     hasAddItem = false
   }
 

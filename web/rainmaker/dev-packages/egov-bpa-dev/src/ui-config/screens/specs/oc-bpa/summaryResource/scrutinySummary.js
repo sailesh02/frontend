@@ -12,6 +12,10 @@ import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { changeStep } from "../applyResource/footer";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import {
+    handleScreenConfigurationFieldChange as handleField,
+    prepareFinalObject
+  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 const getHeader = label => {
     return {
         uiFramework: "custom-molecules-local",
@@ -450,3 +454,75 @@ export const scrutinySummary = getCommonGrayCard({
         )
     })
 });
+
+const onClick = async (state, dispatch) => {
+dispatch(
+   handleField("search-preview", "components.commentsPopup", "props.open", true)
+);
+}  
+
+export const commentsContainer = getCommonGrayCard({
+    header: {
+        uiFramework: "custom-atoms",
+        componentPath: "Container",
+        props: {
+            style: { marginBottom: "10px" }
+        },
+        children: {
+            header: {
+                gridDefination: {
+                    xs: 8
+                },
+                ...getCommonSubHeader({
+                    labelName: "BPA_APPROVAL_REJECTION_NOTE",
+                    labelKey: "BPA_APPROVAL_REJECTION_NOTE"
+                })
+            },
+            editSection: {
+                componentPath: "Button",
+                props: {
+                    color: "primary",
+                    style: {
+                        marginTop: "-10px",
+                        marginRight: "-18px"
+                    }
+                },
+                gridDefination: {
+                    xs: 4,
+                    align: "right"
+                },
+                children: {
+                    editIcon: {
+                        uiFramework: "custom-atoms",
+                        componentPath: "Icon",
+                        props: {
+                            iconName: "edit"
+                        }
+                    },
+                    buttonLabel: getLabel({
+                        labelName: "Edit",
+                        labelKey: "BPA_SUMMARY_EDIT"
+                    })
+                },
+                onClickDefination: {
+                    action: "condition",
+                    callBack: (state, dispatch) => {
+                        onClick(state, dispatch);
+                    }
+                }
+            }
+        }
+    },
+    comments: getCommonContainer({
+        commentsField: getLabelWithValue(
+            {
+                labelName: "BPA_COMMENTS",
+                labelKey: "BPA_COMMENTS"
+            },
+            {
+                jsonPath: "BPA.errorMEssageComment",
+                callBack: checkValueForNA
+            }
+        )
+    }),
+    });

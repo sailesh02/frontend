@@ -46,8 +46,9 @@ import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary
 import { fieldSummary } from "./summaryResource/fieldSummary";
 import { permitConditions } from "./summaryResource/permitConditions";
 import { permitListSummary } from "./summaryResource/permitListSummary";
-import { scrutinySummary } from "./summaryResource/scrutinySummary";
+import { scrutinySummary, commentsContainer} from "./summaryResource/scrutinySummary";
 import { nocDetailsSearch } from "../egov-bpa/noc";
+// import { commentsContainer } from "./summaryResource/commentsContainer";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
@@ -61,6 +62,20 @@ export const ifUserRoleExists = role => {
   } else return false;
 };
 
+console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",JSON.parse(getUserInfo()))
+
+// to add comments at BPA approver step
+export const isEditButtonVisible = () => {
+  let users = JSON.parse(getUserInfo());
+  const roleCodes =
+  users && users.roles
+    ? users.users.map((role) => {
+      return role.code;
+    })
+    : [];
+  const isRoleExist = roleCodes.includes("PT_APPROVER") || roleCodes.includes("PT_FIELD_INSPECTOR")
+  return isRoleExist
+}
 const titlebar = {
   uiFramework: "custom-atoms",
   componentPath: "Div",
@@ -788,11 +803,13 @@ const screenConfig = {
             }
           }
         },
+    
         body: getCommonCard({
           estimateSummary: estimateSummary,
           fieldinspectionSummary: fieldinspectionSummary,
           fieldSummary: fieldSummary,
           scrutinySummary: scrutinySummary,
+          commentsContainer : commentsContainer,
           documentAndNocSummary: documentAndNocSummary,
           nocDetailsApply: nocDetailsSearch,
           permitConditions: permitConditions,
@@ -801,7 +818,16 @@ const screenConfig = {
         }),
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
-    }
+    },
+    commentsPopup :{
+      uiFramework: "custom-containers-local",
+      componentPath: "TextAreaContainer",
+      moduleName: "egov-bpa",
+      visible: true,
+      props: {
+        open:true
+      }
+    },
   }
 };
 

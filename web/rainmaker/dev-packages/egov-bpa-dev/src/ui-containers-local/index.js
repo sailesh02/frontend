@@ -122,6 +122,11 @@ const DownloadFileContainerForFI = Loadable({
   loading: () => <Loading />
 });
 
+const TextAreaContainer = Loadable({
+  loader: () => import("./TextAreaContainer"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -145,5 +150,6 @@ export {
   FieldInspectionContainer,
   BpaConditionsContainer,
   DownloadFileContainerForFI,
-  PreviewContainer
+  PreviewContainer,
+  TextAreaContainer
 };

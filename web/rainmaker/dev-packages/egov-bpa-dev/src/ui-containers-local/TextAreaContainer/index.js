@@ -116,6 +116,18 @@ class TextAreaDialog extends Component {
                 >
                   <CloseIcon />
                 </Grid>
+                <Grid
+                    item
+                    sm="12"
+                    style={{
+                      marginTop: 16,
+                      fontSize:13
+                    }}>
+                  <LabelContainer
+                    labelName="BPA_COMMENTS"
+                    labelKey="BPA_COMMENTS"
+                  />
+                  </Grid>
                   <Grid
                     item
                     sm="12"
@@ -128,19 +140,6 @@ class TextAreaDialog extends Component {
                       onChange = {this.setComments}
                       label={fieldConfig.comments.label.labelKey}
                       />
-                    {/* <TextFieldContainer
-                        InputLabelProps={{ shrink: true }}
-                        label={fieldConfig.comments.label}
-                        required
-
-                        // error={error}
-                        // helperText={errorMessage}
-                        // onChange={e =>
-                        //     handleFieldChange(`BPA.errorMEssageComment`, e.target.value)
-                        // }
-                        jsonPath={'BPA.errorMEssageComment'}
-                        placeholder={fieldConfig.comments.placeholder}
-                   /> */}
                   </Grid>
                 <Grid item sm="12"
                  style={{
@@ -159,18 +158,6 @@ class TextAreaDialog extends Component {
                           {"BPA_DONE"}     
                       />
                     </Button>
-                    {/* <Button
-                      variant={"contained"}
-                      color={"primary"}
-                      className="bottom-button"
-                      onClick={this.resetMessage}
-                    >
-                      <LabelContainer
-                        labelName={"BPA_RESET"}
-                        labelKey=
-                          {"BPA_RESET"}     
-                      />
-                    </Button> */}
                   </Grid>
                 </Grid>
               </Grid>

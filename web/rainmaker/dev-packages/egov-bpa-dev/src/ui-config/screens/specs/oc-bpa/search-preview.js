@@ -48,7 +48,6 @@ import { permitConditions } from "./summaryResource/permitConditions";
 import { permitListSummary } from "./summaryResource/permitListSummary";
 import { scrutinySummary, commentsContainer} from "./summaryResource/scrutinySummary";
 import { nocDetailsSearch } from "../egov-bpa/noc";
-// import { commentsContainer } from "./summaryResource/commentsContainer";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
@@ -65,17 +64,18 @@ export const ifUserRoleExists = role => {
 console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",JSON.parse(getUserInfo()))
 
 // to add comments at BPA approver step
-export const isEditButtonVisible = () => {
+const isEditButtonVisible = () => {
   let users = JSON.parse(getUserInfo());
   const roleCodes =
   users && users.roles
-    ? users.users.map((role) => {
+    && users.roles.map((role) => {
       return role.code;
     })
-    : [];
-  const isRoleExist = roleCodes.includes("PT_APPROVER") || roleCodes.includes("PT_FIELD_INSPECTOR")
+  const isRoleExist = roleCodes.includes("BPA1_APPROVER") || roleCodes.includes("BPA2_APPROVER") || roleCodes.includes("BPA3_APPROVER") ||
+  roleCodes.includes("BPA4_APPROVER")
   return isRoleExist
 }
+
 const titlebar = {
   uiFramework: "custom-atoms",
   componentPath: "Div",
@@ -674,7 +674,6 @@ const screenConfig = {
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
-
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.scrutinySummary.children.cardContent.children.header.children.editSection.visible",
@@ -710,6 +709,20 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.declarations.children.headers.visible",
       false
     );
+
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.commentsContainer.visible",
+      false
+    );
+
+    if(isEditButtonVisible()){
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.commentsContainer.visible",
+        true,   
+      )
+    }
 
     return action;
   },
@@ -825,7 +838,7 @@ const screenConfig = {
       moduleName: "egov-bpa",
       visible: true,
       props: {
-        open:true
+        open:false
       }
     },
   }

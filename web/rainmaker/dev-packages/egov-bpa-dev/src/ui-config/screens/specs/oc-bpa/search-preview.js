@@ -70,7 +70,7 @@ const isEditButtonVisible = () => {
       return role.code;
     })
   const isRoleExist = roleCodes.includes("BPA1_APPROVER") || roleCodes.includes("BPA2_APPROVER") || roleCodes.includes("BPA3_APPROVER") ||
-  roleCodes.includes("BPA4_APPROVER") || roleCodes.includes("BPA_VERIFIER")
+  roleCodes.includes("BPA4_APPROVER")
   return isRoleExist
 }
 

@@ -61,8 +61,6 @@ export const ifUserRoleExists = role => {
   } else return false;
 };
 
-console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",JSON.parse(getUserInfo()))
-
 // to add comments at BPA approver step
 const isEditButtonVisible = () => {
   let users = JSON.parse(getUserInfo());
@@ -72,7 +70,7 @@ const isEditButtonVisible = () => {
       return role.code;
     })
   const isRoleExist = roleCodes.includes("BPA1_APPROVER") || roleCodes.includes("BPA2_APPROVER") || roleCodes.includes("BPA3_APPROVER") ||
-  roleCodes.includes("BPA4_APPROVER")
+  roleCodes.includes("BPA4_APPROVER") || roleCodes.includes("BPA_VERIFIER")
   return isRoleExist
 }
 

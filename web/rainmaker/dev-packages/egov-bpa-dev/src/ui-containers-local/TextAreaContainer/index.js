@@ -29,7 +29,7 @@ const fieldConfig = {
   comments: {
       label: {
         labelName: "Approval/Rejection Note",
-        labelKey: "BPA_APPROVAL_REJECTION_NOTE_LABEL"
+        labelKey: "BPA_APPROVAL_REJECTION_NOTE_HEADER"
       },
       placeholder: {
         labelName: "Approval/Rejection Note Placeholder",
@@ -44,7 +44,7 @@ class TextAreaDialog extends Component {
   }
 
   saveDetails = () => {
-    store.dispatch(prepareFinalObject("BPA.errorMEssageComment", this.state.comments));
+    store.dispatch(prepareFinalObject("BPA.additionalDetails.approverNote", this.state.comments));
     store.dispatch(
       handleField("search-preview", "components.commentsPopup", "props.open", false)
    );
@@ -99,7 +99,7 @@ class TextAreaDialog extends Component {
                   sm={10}>
                   <Typography component="h2" variant="subheading">
                     <LabelContainer labelName="Approval/Rejection Note"
-                    labelKey="BPA_APPROVAL_REJECTION_NOTE" />
+                    labelKey="BPA_APPROVAL_REJECTION_NOTE_HEADER" />
                   </Typography>
                 </Grid>
                 <Grid
@@ -124,13 +124,13 @@ class TextAreaDialog extends Component {
                       fontSize:13
                     }}>
                   <LabelContainer
-                    labelName="BPA_COMMENTS"
-                    labelKey="BPA_COMMENTS"
+                    labelName="BPA_APPROVAL_REJECTION_NOTE"
+                    labelKey="BPA_APPROVAL_REJECTION_NOTE"
                   />
                   </Grid>
                   <Grid
                     item
-                    sm="12"
+                    sm={12}
                     style={{
                       marginTop: 12
                     }}>
@@ -141,27 +141,40 @@ class TextAreaDialog extends Component {
                       label={fieldConfig.comments.label.labelKey}
                       />
                   </Grid>
-                <Grid item sm="12"
+                <Grid item sm={12}
                  style={{
-                  marginTop: 4
+                  marginTop: 8,
+                  textAlign: "right"
                 }}>
-                  <Grid item sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
+                  <Button
+                    variant={"contained"}
+                    color={"primary"}
+                    onClick={this.resetMessage}
+                    style={{
+                      marginRight:'4px'
+                    }}
+                    >
+                    <LabelContainer
+                      labelName={"BPA_RESET_BUTTON"}
+                      labelKey=
+                      {"BPA_RESET_BUTTON"}     
+                    />
+                    </Button>
                     <Button
                       variant={"contained"}
                       color={"primary"}
-                      className="bottom-button"
                       onClick={this.saveDetails}
                     >
                       <LabelContainer
-                        labelName={"BPA_DONE"}
+                        labelName={"BPA_DONE_BUTTON"}
                         labelKey=
-                          {"BPA_DONE"}     
+                          {"BPA_DONE_BUTTON"}     
                       />
                     </Button>
-                  </Grid>
                 </Grid>
               </Grid>
             }
+            
           />
         }
       />

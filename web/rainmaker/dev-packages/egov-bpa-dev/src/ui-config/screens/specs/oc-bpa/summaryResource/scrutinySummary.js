@@ -474,8 +474,8 @@ export const commentsContainer = getCommonGrayCard({
                     xs: 8
                 },
                 ...getCommonSubHeader({
-                    labelName: "BPA_APPROVAL_REJECTION_NOTE",
-                    labelKey: "BPA_APPROVAL_REJECTION_NOTE"
+                    labelName: "BPA_APPROVAL_REJECTION_NOTE_HEADER",
+                    labelKey: "BPA_APPROVAL_REJECTION_NOTE_HEADER"
                 })
             },
             editSection: {
@@ -516,11 +516,11 @@ export const commentsContainer = getCommonGrayCard({
     comments: getCommonContainer({
         commentsField: getLabelWithValue(
             {
-                labelName: "BPA_COMMENTS",
-                labelKey: "BPA_COMMENTS"
+                labelName: "BPA_APPROVAL_REJECTION_NOTE",
+                labelKey: "BPA_APPROVAL_REJECTION_NOTE"
             },
             {
-                jsonPath: "BPA.errorMEssageComment",
+                jsonPath: "BPA.additionalDetails.approverNote",
                 callBack: checkValueForNA
             }
         )

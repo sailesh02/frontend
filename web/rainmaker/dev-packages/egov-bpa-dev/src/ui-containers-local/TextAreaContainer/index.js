@@ -5,22 +5,13 @@ import { connect } from "react-redux";
 import { Grid, Typography, Button } from "@material-ui/core";
 import { Container } from "egov-ui-framework/ui-atoms";
 import store from "ui-redux/store";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 import {
-  LabelContainer,
-  TextFieldContainer
+  LabelContainer
 } from "egov-ui-framework/ui-containers";
 import CloseIcon from "@material-ui/icons/Close";
-
 import "./index.css";
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
-import MenuItem from '@material-ui/core/MenuItem';
-import SelectField from "material-ui/SelectField";
-import formHoc from "egov-ui-kit/hocs/form";
-import InputLabel from '@material-ui/core/InputLabel';
 import {
     handleScreenConfigurationFieldChange as handleField
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -66,9 +57,23 @@ class TextAreaDialog extends Component {
   }
 
   setComments = (e) => {
-    this.setState({
-      comments:e.target.value
-    })
+    let stringArray = e.target.value.split(' ')
+    if(stringArray.length <= 201){
+      this.setState({
+        comments:e.target.value
+      })
+    }else{
+      store.dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "ERR_FILL_TWOHUNDRED_WORDS",
+            labelKey: "ERR_FILL_TWOHUNDRED_WORDS"
+          },
+          "warning"
+        )
+      );
+    }
   }
 
   render() {
@@ -190,7 +195,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty)),
   };
 };
 

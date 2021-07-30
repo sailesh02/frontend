@@ -21,6 +21,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SelectField from "material-ui/SelectField";
 import formHoc from "egov-ui-kit/hocs/form";
 import InputLabel from '@material-ui/core/InputLabel';
+import {
+    handleScreenConfigurationFieldChange as handleField
+  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const fieldConfig = {
   comments: {
@@ -40,37 +43,42 @@ class TextAreaDialog extends Component {
     comments : ''
   }
 
-  saveDetails = async() => {
-    dispatch(prepareFinalObject("BPA.errorMEssageComment", this.state.comments));
-    dispatch(
+  saveDetails = () => {
+    store.dispatch(prepareFinalObject("BPA.errorMEssageComment", this.state.comments));
+    store.dispatch(
       handleField("search-preview", "components.commentsPopup", "props.open", false)
    );
+  }
+
+  resetMessage = () => {
+    this.setState({
+      comments:""
+    })
   }
 
   componentDidMount = () => {
   };
 
   closeDialog = () => {
-    dispatch(
+    store.dispatch(
       handleField("search-preview", "components.commentsPopup", "props.open", false)
    );
   }
 
   setComments = (e) => {
-    debugger
     this.setState({
       comments:e.target.value
     })
   }
 
   render() {
-    let { open, closeDialogue, owners, history, payload } = this.props;
+    let { open } = this.props;
    
     return (
       <Dialog
       fullScreen={false}
       open={open}
-      onClose={closeDialogue}
+      onClose={this.closeDialog}
       maxWidth={false}
     >
       <DialogContent
@@ -104,7 +112,7 @@ class TextAreaDialog extends Component {
                     right: "16px",
                     top: "16px"
                   }}
-                  onClick={closeDialogue}
+                  onClick={this.closeDialog}
                 >
                   <CloseIcon />
                 </Grid>
@@ -136,25 +144,33 @@ class TextAreaDialog extends Component {
                   </Grid>
                 <Grid item sm="12"
                  style={{
-                  marginTop: 0
+                  marginTop: 4
                 }}>
-                  <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
+                  <Grid item sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                     <Button
                       variant={"contained"}
                       color={"primary"}
-                      style={{
-                        minWidth: "200px",
-                        height: "48px"
-                      }}
                       className="bottom-button"
                       onClick={this.saveDetails}
                     >
                       <LabelContainer
-                        labelName={"BPA_SAVE"}
+                        labelName={"BPA_DONE"}
                         labelKey=
-                          {"BPA_SAVE"}     
+                          {"BPA_DONE"}     
                       />
                     </Button>
+                    {/* <Button
+                      variant={"contained"}
+                      color={"primary"}
+                      className="bottom-button"
+                      onClick={this.resetMessage}
+                    >
+                      <LabelContainer
+                        labelName={"BPA_RESET"}
+                        labelKey=
+                          {"BPA_RESET"}     
+                      />
+                    </Button> */}
                   </Grid>
                 </Grid>
               </Grid>

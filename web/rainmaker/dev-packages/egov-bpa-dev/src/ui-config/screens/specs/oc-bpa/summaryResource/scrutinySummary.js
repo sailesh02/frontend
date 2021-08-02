@@ -6,7 +6,9 @@ import {
     getLabel,
     getLabelWithValue,
     convertEpochToDate,
-    getCommonCard
+    getCommonCard,
+    getCommonCaption,
+    getCommonValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
@@ -461,6 +463,29 @@ dispatch(
 );
 }  
 
+// added different function for rejection/approval note to handle grid
+export const getLabelWithValueForRejectNote = (label, value, props = {}) => {
+    return {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      gridDefination: {
+        xs: 12,
+        sm: 12
+      },
+      props: {
+        style: {
+          marginBottom: "16px",
+        //   wordBreak : "break-word"
+        },
+        ...props
+      },
+      children: {
+        label: getCommonCaption(label),
+        value: getCommonValue(value)
+      }
+    };
+  };
+
 export const commentsContainer = getCommonGrayCard({
     header: {
         uiFramework: "custom-atoms",
@@ -514,7 +539,7 @@ export const commentsContainer = getCommonGrayCard({
         }
     },
     comments: getCommonContainer({
-        commentsField: getLabelWithValue(
+        commentsField: getLabelWithValueForRejectNote(
             {
                 labelName: "BPA_APPROVAL_REJECTION_NOTE",
                 labelKey: "BPA_APPROVAL_REJECTION_NOTE"

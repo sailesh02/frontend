@@ -309,6 +309,7 @@ class Footer extends React.Component {
         state.screenConfiguration.preparedFinalObject,
         `renewalPeriod`
       );
+
       if (rolecheck && (status === "APPROVED" || status === "EXPIRED") &&
         duration <= renewalPeriod) {
         const editButton = {
@@ -335,14 +336,14 @@ class Footer extends React.Component {
         if (responseLength > 1) {
           if (applicationType !== "NEW") {
             downloadMenu && downloadMenu.push(editButton);
-            downloadMenu && downloadMenu.push(submitButton);
+           // downloadMenu && downloadMenu.push(submitButton);
           }
 
         }
         else if (responseLength === 1) {
 
           downloadMenu && downloadMenu.push(editButton);
-          downloadMenu && downloadMenu.push(submitButton);
+         // downloadMenu && downloadMenu.push(submitButton);
         }
 
 
@@ -350,6 +351,7 @@ class Footer extends React.Component {
 
       }
     }
+
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
       rightIcon: "arrow_drop_down",

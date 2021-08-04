@@ -321,6 +321,36 @@ const propertyDetailsNoId = getCommonContainer({
               dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
             }
             return;
+          }
+
+          if(action.value){
+            let mdmsBody = {
+              MdmsCriteria: {
+                tenantId: action.value,
+                moduleDetails: [
+                  {
+                    "moduleName": "Ward",
+                    "masterDetails": [
+                      {
+                        "name": "Ward"
+                      }
+                    ]
+                  }
+                ]
+              }
+            };
+            const response = await httpRequest("/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+            const wardData = 
+            response && response.MdmsRes['Ward']['Ward'] && response.MdmsRes['Ward']['Ward'].map(ward => {
+              return {
+                ...ward,
+                name:ward.code,
+                value:ward.code,
+                label:ward.code,
+                code:ward.code
+              }
+            })
+            dispatch(prepareFinalObject("applyScreenMdmsData.ward",wardData))
           }      
         }
       }
@@ -472,6 +502,43 @@ const propertyDetailsNoId = getCommonContainer({
   //   }
   
   // }),
+  ward: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-wns",
+    componentPath: "AutosuggestContainer",
+    props: {
+      className: "autocomplete-dropdown",
+      suggestions: [],
+      label: {
+        labelName: "Ward",
+        labelKey: "WS_WARD_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Ward",
+        labelKey: "WS_WARD_PLACEHOLDER"
+      },
+      data: [],
+      optionValue: "code",
+      optionLabel: "label",
+      jsonPath: "applyScreen.ward",
+      sourceJsonPath: "applyScreenMdmsData.ward",
+      labelsFromLocalisation: true,
+      required: true,
+      disabled:false,
+      isClearable: true,
+      inputLabelProps: {
+        shrink: true
+      }
+    },
+    data: [],
+    required: true,
+    jsonPath: "applyScreen.ward",
+    sourceJsonPath: "applyScreenMdmsData.mohalla",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    }
+  },
   connectionCategory: getSelectField({
     label: {
       labelName: "Connection Category",
@@ -720,22 +787,6 @@ const propertyDetailsNoId = getCommonContainer({
       xs: 12,
       sm: 6
     }
-  }),
-  ward: getTextField({
-    label: {
-      labelName: "Ward",
-      labelKey: "WS_WARD_LABEL"
-    },
-    placeholder: {
-      labelName: "Enter Ward Name",
-      labelKey: "WS_WARD_PLACEHOLDER"
-    },
-    visible:true,
-    jsonPath: "applyScreen.ward",
-    gridDefination: {
-      xs: 12,
-      sm: 6
-    },
   }),
   noOfFlats: getTextField({
     label: {

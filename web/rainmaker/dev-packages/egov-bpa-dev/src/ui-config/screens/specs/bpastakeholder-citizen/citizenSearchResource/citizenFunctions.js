@@ -134,7 +134,8 @@ export const fetchData = async (
               ),
               tenantId: get(element, "tenantId", null),
               modifiedTime: modifiedTime,
-              sortNumber: 0
+              sortNumber: 0,
+              rawService: get(element, "businessService")
             });
           }
         });

@@ -70,6 +70,14 @@ const setTempTLUOMValue = (reqObj) => {
   let tlType = get(queryObject[0], "licenseType");
 
   let tlcommencementDate = get(queryObject[0], "commencementDate");
+  tlcommencementDate = convertDateToEpoch(
+    tlcommencementDate,
+    "daystart"
+  );
+  validTo = convertDateToEpoch(
+    validTo,
+    "dayend"
+  );
 
   if (validTo && tlcommencementDate) {
 

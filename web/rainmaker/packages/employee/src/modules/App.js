@@ -74,13 +74,17 @@ class App extends Component {
 
     const isPrivacyPolicy = location && location.pathname && location.pathname.includes("privacy-policy");
     if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !isPrivacyPolicy) {
-      //nextProps.hasLocalisation && this.props.history.replace("/user/login");
+      nextProps.hasLocalisation && this.props.history.replace("/language-selection");
       //setDefaultLocale("en_IN");
-      if (nextProps.hasLocalisation) {
-        if (getDefaultLocale() == "null")
-          this.props.history.replace("/language-selection");
-      }
+      //Reverted code to original like Product Digit
+      //Reverted Feature: If Language is set in cookie/localstorage No need to show language selection page again
+      // if (nextProps.hasLocalisation) {
+      //   if (getDefaultLocale() == "null")
+      //     this.props.history.replace("/language-selection");
+      // }
+      //Revered Code
     }
+
     //  if(getDefaultLocale()== null){
 
     //    this.props.history.replace("/language-selection");

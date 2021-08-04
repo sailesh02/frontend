@@ -48,6 +48,7 @@ class SingleApplication extends React.Component {
 
   onCardClick = async (item) => {
     const { moduleName, toggleSnackbar, setRoute } = this.props;
+
     if (moduleName === "TL") {
       const wfCode = get(item, "workflowCode");
       const businessServiceQueryObject = [
@@ -80,9 +81,18 @@ class SingleApplication extends React.Component {
     } else if (moduleName === "BPAREG") {
       const userInfo = JSON.parse(getUserInfo());
       const roles = get(userInfo, "roles");
-      if (item.serviceType === "BPAREG") {
+      if (item.serviceType === "BPAREG" && item.rawService === "BPAREG") {
+        switch (item.status) {
+          case "Initiated":
+            setRoute(`/bpastakeholder-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+            break;
+          default:
+            setRoute(`/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+        }
+      }else if (item.serviceType === "BPAREG") {
         switch (item.status) {
           case "INITIATED":
+          case "Initiated":
             setRoute(`/bpastakeholder-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
             break;
           default:

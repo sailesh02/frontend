@@ -461,13 +461,14 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       convertDateToEpoch(queryObject[0].validFrom, "dayend")
     );
     set(queryObject[0], "wfDocuments", documents);
+    let validToForTempTL = queryObject[0] && queryObject[0].validTo;
     set(
       queryObject[0],
       "validTo",
       convertDateToEpoch(queryObject[0].validTo, "dayend")
     );
 
-    let commencementDateToAddYears = queryObject[0] && queryObject[0].commencementDate;
+    let commencementDateForTempTL = queryObject[0] && queryObject[0].commencementDate;
     if (queryObject[0] && queryObject[0].commencementDate) {
       queryObject[0].commencementDate = convertDateToEpoch(
         queryObject[0].commencementDate,
@@ -515,21 +516,31 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     let TlStatus = get(queryObject[0], "status");
 
     let tlPeriodDisplay = "";
+
     if (tlType && tlType === "TEMPORARY" && validTo && tlcommencementDate) {
+
+      tlcommencementDate = convertDateToEpoch(
+        commencementDateForTempTL,
+        "daystart"
+      );
+      validTo = convertDateToEpoch(
+        validToForTempTL,
+        "dayend"
+      );
       //var date1 = new Date(tlcommencementDate);
       var date2 = new Date(validTo);
       // To calculate the time difference of two dates
-      var Difference_In_Time = date2.getTime() - tlcommencementDate;
+      var Difference_In_Time = date2.getTime() - new Date(tlcommencementDate).getTime();
 
       // To calculate the no. of days between two dates
       var Difference_In_Days = Math.ceil((((Difference_In_Time / 1000) / 60) / 60) / 24);
+
       set(queryObject[0], "tradeLicenseDetail.additionalDetail.licensePeriod", Difference_In_Days);
       tlPeriodDisplay = `${Difference_In_Days} Days`;
-      queryObject[0].validTo = convertDateToEpoch(
-        validTo,
-        "dayend"
-      );
+      queryObject[0].validTo = validTo
       set(queryObject[0], "validFrom", tlcommencementDate);
+      set(queryObject[0], "commencementDate", tlcommencementDate);
+
     } else {
       set(queryObject[0], "tradeLicenseDetail.additionalDetail.licensePeriod", TlPeriod);
       tlPeriodDisplay = `${TlPeriod} Years`;
@@ -546,6 +557,7 @@ if(TlStatus === "INITIATED" && getQueryArg(window.location.href, "action") === "
 
       // set(queryObject[0], "validTo", tlcommencementDate + selectedYearInMiliSeconds);
       //set(queryObject[0], "validTo", dt1.getTime());
+
     }
     dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", tlPeriodDisplay));
 

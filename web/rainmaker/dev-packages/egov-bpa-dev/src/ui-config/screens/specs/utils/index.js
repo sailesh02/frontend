@@ -5501,7 +5501,7 @@ export const getLicenseDetails = async (state, dispatch) => {
     }
   } catch (error) {
     console.log(error);
-    return {};
+    return [];
   }
 };
 

@@ -1,5 +1,5 @@
 import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, toggleSpinner,hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { getBpaSearchResults, getSearchResults } from "../../../../ui-utils/commons";
@@ -167,6 +167,7 @@ export const fetchData = async (
   const response = await getSearchResults();
 
   if (bpaResponse && bpaResponse.BPA && bpaResponse.BPA.length > 0) {
+    dispatch(toggleSpinner());
     const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.BPA);
     bpaResponse.BPA.forEach(element => {
       let status = getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMappingForBPA[element.applicationNo], "state", null));
@@ -250,6 +251,7 @@ export const fetchData = async (
       "props.data",
       sortConvertedArray
     ));
+  dispatch(hideSpinner());
   dispatch(
     handleField(
       "my-applications-stakeholder",

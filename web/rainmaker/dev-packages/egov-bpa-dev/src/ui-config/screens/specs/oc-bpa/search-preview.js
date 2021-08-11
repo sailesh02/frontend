@@ -46,7 +46,7 @@ import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary
 import { fieldSummary } from "./summaryResource/fieldSummary";
 import { permitConditions } from "./summaryResource/permitConditions";
 import { permitListSummary } from "./summaryResource/permitListSummary";
-import { scrutinySummary } from "./summaryResource/scrutinySummary";
+import { scrutinySummary, commentsContainer} from "./summaryResource/scrutinySummary";
 import { nocDetailsSearch } from "../egov-bpa/noc";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
@@ -60,6 +60,19 @@ export const ifUserRoleExists = role => {
     return true;
   } else return false;
 };
+
+// to add comments at BPA approver step
+const isEditButtonVisible = () => {
+  let users = JSON.parse(getUserInfo());
+  const roleCodes =
+  users && users.roles
+    && users.roles.map((role) => {
+      return role.code;
+    })
+  const isRoleExist = roleCodes.includes("BPA1_APPROVER") || roleCodes.includes("BPA2_APPROVER") || roleCodes.includes("BPA3_APPROVER") ||
+  roleCodes.includes("BPA4_APPROVER")
+  return isRoleExist
+}
 
 const titlebar = {
   uiFramework: "custom-atoms",
@@ -659,7 +672,6 @@ const screenConfig = {
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
-
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.scrutinySummary.children.cardContent.children.header.children.editSection.visible",
@@ -695,6 +707,20 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.declarations.children.headers.visible",
       false
     );
+
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.commentsContainer.visible",
+      false
+    );
+
+    if(isEditButtonVisible()){
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.commentsContainer.visible",
+        true,   
+      )
+    }
 
     return action;
   },
@@ -788,11 +814,13 @@ const screenConfig = {
             }
           }
         },
+    
         body: getCommonCard({
           estimateSummary: estimateSummary,
           fieldinspectionSummary: fieldinspectionSummary,
           fieldSummary: fieldSummary,
           scrutinySummary: scrutinySummary,
+          commentsContainer : commentsContainer,
           documentAndNocSummary: documentAndNocSummary,
           nocDetailsApply: nocDetailsSearch,
           permitConditions: permitConditions,
@@ -801,7 +829,16 @@ const screenConfig = {
         }),
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
-    }
+    },
+    commentsPopup :{
+      uiFramework: "custom-containers-local",
+      componentPath: "TextAreaContainer",
+      moduleName: "egov-bpa",
+      visible: true,
+      props: {
+        open:false
+      }
+    },
   }
 };
 

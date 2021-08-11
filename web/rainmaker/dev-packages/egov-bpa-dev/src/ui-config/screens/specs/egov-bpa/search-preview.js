@@ -850,7 +850,9 @@ export const beforeSubmitHook = async () => {
           }
         }
       }
-    }
+    } else {
+      return bpaDetails;
+    } 
   } else {
     return bpaDetails;
   }

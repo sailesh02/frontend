@@ -708,19 +708,19 @@ const screenConfig = {
       false
     );
 
-    // set(
-    //   action,
-    //   "screenConfig.components.div.children.body.children.cardContent.children.commentsContainer.visible",
-    //   false
-    // );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.commentsContainer.visible",
+      false
+    );
 
-    // if(isEditButtonVisible()){
-    //   set(
-    //     action,
-    //     "screenConfig.components.div.children.body.children.cardContent.children.commentsContainer.visible",
-    //     true,   
-    //   )
-    // }
+    if(isEditButtonVisible()){
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.commentsContainer.visible",
+        true,   
+      )
+    }
 
     return action;
   },
@@ -820,7 +820,7 @@ const screenConfig = {
           fieldinspectionSummary: fieldinspectionSummary,
           fieldSummary: fieldSummary,
           scrutinySummary: scrutinySummary,
-          // commentsContainer : commentsContainer,
+          commentsContainer : commentsContainer,
           documentAndNocSummary: documentAndNocSummary,
           nocDetailsApply: nocDetailsSearch,
           permitConditions: permitConditions,

@@ -126,10 +126,7 @@ const MultiDownloadCard = Loadable({
   loader: () => import("./NocData"),
   loading: () => <Loading />
  });
- const ApproverNoteTable = Loadable({
-  loader: () => import("./ApproverNoteTable"),
-  loading: () => <Loading />
- });
+ 
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -157,5 +154,4 @@ export {
   NocDetailCard,
   NocDocDetailCard,
   NocData,
-  ApproverNoteTable
 };

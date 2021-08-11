@@ -541,8 +541,9 @@ export const commentsContainerMultiLine = getCommonGrayCard({
     comments: {
         uiFramework: "custom-molecules-local",
         moduleName: "egov-bpa",
-        componentPath: "ApproverNoteTable",
+        componentPath: "Table",
         props: {
+            isApprover : true,
             className: "mymuitable",
             jsonPath: "approverNoteArray",
             style: { marginBottom: 20 },

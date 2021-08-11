@@ -152,5 +152,5 @@ export {
   ComparisionLink,
   NocDetailCard,
   NocDocDetailCard,
-  NocData,
+  NocData
 };

@@ -6,9 +6,9 @@ import { Grid, Typography, Button } from "@material-ui/core";
 import { Container } from "egov-ui-framework/ui-atoms";
 import store from "ui-redux/store";
 import { prepareFinalObject,toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
 import {
-  LabelContainer
+  LabelContainer,
+  TextFieldContainer
 } from "egov-ui-framework/ui-containers";
 import CloseIcon from "@material-ui/icons/Close";
 import "./index.css";
@@ -139,11 +139,20 @@ class TextAreaDialog extends Component {
                     style={{
                       marginTop: 12
                     }}>
-                      <textarea refs="comments" className="form-control comments" rows="5" 
-                      placeholder={fieldConfig.comments.placeholder.labelKey}
-                      value= {this.state.comments}
-                      onChange = {this.setComments}
-                      label={fieldConfig.comments.label.labelKey}
+                      <TextFieldContainer
+                        value= {this.state.comments}
+                        rows =  "4"
+                        multiline = {true}
+                        placeholder = {{
+                          labelName: "Approval/Rejection Note Placeholder",
+                          labelKey: "BPA_APPROVAL_REJECTION_NOTE_PLACEHOLDER"
+                        }}
+                        onChange = {this.setComments}
+                        title = { {
+                          value: "",
+                          key: "BPA_APPROVER_NOTE_LIMIT"
+                        }}
+                        infoIcon = "info_circle"
                       />
                   </Grid>
                 <Grid item sm={12}

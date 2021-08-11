@@ -35,6 +35,51 @@ class TextAreaDialog extends Component {
   }
 
   saveDetails = () => {
+    // to split message based on enter key pressed
+    let getArray = this.state.comments.split('\n')
+    let sentences = getArray && getArray.length > 0 && getArray.map( ele => {
+      return {
+        "Approval/Rejection Note" : ele
+      }
+    })
+
+    if(sentences && sentences.length > 1){
+      store.dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.commentsContainer",
+          "visible",
+          false
+        )
+      );
+      store.dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.commentsContainerMultiLine",
+          "visible",
+          true
+        )
+      );
+  
+    }else{
+      store.dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.commentsContainer",
+          "visible",
+          true
+        )
+      );
+      store.dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.commentsContainerMultiLine",
+          "visible",
+          false
+        )
+      );
+    }
+    store.dispatch(prepareFinalObject("approverNoteArray", sentences));
     store.dispatch(prepareFinalObject("BPA.additionalDetails.approverNote", this.state.comments));
     store.dispatch(
       handleField("search-preview", "components.commentsPopup", "props.open", false)

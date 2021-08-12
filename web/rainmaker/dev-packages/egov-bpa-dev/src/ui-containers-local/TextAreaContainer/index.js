@@ -6,9 +6,9 @@ import { Grid, Typography, Button } from "@material-ui/core";
 import { Container } from "egov-ui-framework/ui-atoms";
 import store from "ui-redux/store";
 import { prepareFinalObject,toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
 import {
-  LabelContainer
+  LabelContainer,
+  TextFieldContainer
 } from "egov-ui-framework/ui-containers";
 import CloseIcon from "@material-ui/icons/Close";
 import "./index.css";
@@ -35,6 +35,51 @@ class TextAreaDialog extends Component {
   }
 
   saveDetails = () => {
+    // to split message based on enter key pressed
+    let getArray = this.state.comments.split('\n')
+    let sentences = getArray && getArray.length > 0 && getArray.map( ele => {
+      return {
+        "Approval/Rejection Note" : ele
+      }
+    })
+
+    if(sentences && sentences.length > 0){
+      store.dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.commentsContainer",
+          "visible",
+          false
+        )
+      );
+      store.dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.commentsContainerMultiLine",
+          "visible",
+          true
+        )
+      );
+  
+    }else{
+      store.dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.commentsContainer",
+          "visible",
+          true
+        )
+      );
+      store.dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.commentsContainerMultiLine",
+          "visible",
+          false
+        )
+      );
+    }
+    store.dispatch(prepareFinalObject("approverNoteArray", sentences));
     store.dispatch(prepareFinalObject("BPA.additionalDetails.approverNote", this.state.comments));
     store.dispatch(
       handleField("search-preview", "components.commentsPopup", "props.open", false)
@@ -139,11 +184,20 @@ class TextAreaDialog extends Component {
                     style={{
                       marginTop: 12
                     }}>
-                      <textarea refs="comments" className="form-control comments" rows="5" 
-                      placeholder={fieldConfig.comments.placeholder.labelKey}
-                      value= {this.state.comments}
-                      onChange = {this.setComments}
-                      label={fieldConfig.comments.label.labelKey}
+                      <TextFieldContainer
+                        value= {this.state.comments}
+                        rows =  "4"
+                        multiline = {true}
+                        placeholder = {{
+                          labelName: "Approval/Rejection Note Placeholder",
+                          labelKey: "BPA_APPROVAL_REJECTION_NOTE_PLACEHOLDER"
+                        }}
+                        onChange = {this.setComments}
+                        title = { {
+                          value: "",
+                          key: "BPA_APPROVER_NOTE_LIMIT"
+                        }}
+                        infoIcon = "info_circle"
                       />
                   </Grid>
                 <Grid item sm={12}

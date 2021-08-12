@@ -486,6 +486,91 @@ export const getLabelWithValueForRejectNote = (label, value, props = {}) => {
     };
   };
 
+export const commentsContainerMultiLine = getCommonGrayCard({
+    header: {
+        uiFramework: "custom-atoms",
+        componentPath: "Container",
+        props: {
+            style: { marginBottom: "10px" }
+        },
+        children: {
+            header: {
+                gridDefination: {
+                    xs: 8
+                },
+                ...getCommonSubHeader({
+                    labelName: "BPA_APPROVAL_REJECTION_NOTE_HEADER",
+                    labelKey: "BPA_APPROVAL_REJECTION_NOTE_HEADER"
+                })
+            },
+            editSection: {
+                componentPath: "Button",
+                props: {
+                    color: "primary",
+                    style: {
+                        marginTop: "-10px",
+                        marginRight: "-18px"
+                    }
+                },
+                gridDefination: {
+                    xs: 4,
+                    align: "right"
+                },
+                children: {
+                    editIcon: {
+                        uiFramework: "custom-atoms",
+                        componentPath: "Icon",
+                        props: {
+                            iconName: "edit"
+                        }
+                    },
+                    buttonLabel: getLabel({
+                        labelName: "Edit",
+                        labelKey: "BPA_SUMMARY_EDIT"
+                    })
+                },
+                onClickDefination: {
+                    action: "condition",
+                    callBack: (state, dispatch) => {
+                        onClick(state, dispatch);
+                    }
+                }
+            }
+        }
+    },
+    comments: {
+        uiFramework: "custom-molecules-local",
+        moduleName: "egov-bpa",
+        componentPath: "Table",
+        props: {
+            isApprover : true,
+            className: "mymuitable",
+            jsonPath: "approverNoteArray",
+            style: { marginBottom: 20 },
+            columns: {
+                "Approval/Rejection Note": {}
+            },
+            title: "",
+            options: {
+                filterType: "dropdown",
+                responsive: "stacked",
+                selectableRows: false,
+                pagination: false,
+                selectableRowsHeader: false,
+                sortFilterList: false,
+                sort: false,
+                filter: false,
+                search: false,
+                print: false,
+                download: false,
+                viewColumns: false,
+                rowHover: false                                            
+            }
+        },
+        // visible:false
+    }
+    });
+
 export const commentsContainer = getCommonGrayCard({
     header: {
         uiFramework: "custom-atoms",
@@ -549,5 +634,5 @@ export const commentsContainer = getCommonGrayCard({
                 callBack: checkValueForNA
             }
         )
-    }),
-    });
+    })
+    });    

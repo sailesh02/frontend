@@ -46,7 +46,7 @@ import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary
 import { fieldSummary } from "./summaryResource/fieldSummary";
 import { permitConditions } from "./summaryResource/permitConditions";
 import { permitListSummary } from "./summaryResource/permitListSummary";
-import { scrutinySummary, commentsContainer} from "./summaryResource/scrutinySummary";
+import { scrutinySummary, commentsContainer, commentsContainerMultiLine} from "./summaryResource/scrutinySummary";
 import { nocDetailsSearch } from "../egov-bpa/noc";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
@@ -714,6 +714,12 @@ const screenConfig = {
       false
     );
 
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.commentsContainerMultiLine.visible",
+      false
+    );
+
     if(isEditButtonVisible()){
       set(
         action,
@@ -821,6 +827,7 @@ const screenConfig = {
           fieldSummary: fieldSummary,
           scrutinySummary: scrutinySummary,
           commentsContainer : commentsContainer,
+          commentsContainerMultiLine : commentsContainerMultiLine,
           documentAndNocSummary: documentAndNocSummary,
           nocDetailsApply: nocDetailsSearch,
           permitConditions: permitConditions,

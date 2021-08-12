@@ -43,7 +43,7 @@ class TextAreaDialog extends Component {
       }
     })
 
-    if(sentences && sentences.length > 1){
+    if(sentences && sentences.length > 0){
       store.dispatch(
         handleField(
           "search-preview",

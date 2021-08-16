@@ -103,6 +103,9 @@ class NewNocContainer extends Component {
             children={
               <Grid
                 container="true"
+                style={{
+                  height:'400px'
+                }}
                 spacing={12}
                 marginTop={16}
                 className="action-container">

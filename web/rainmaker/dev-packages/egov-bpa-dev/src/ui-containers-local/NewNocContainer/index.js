@@ -15,6 +15,7 @@ import "./index.css";
 import {
     handleScreenConfigurationFieldChange as handleField
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {DocumentListContainer} from '../'
 
 const fieldConfig = {
     nocType: {
@@ -92,7 +93,7 @@ class NewNocContainer extends Component {
     return (
       <Dialog
       fullScreen={false}
-      open={true}
+      open={open}
       onClose={this.closeDialog}
       maxWidth={false}
     >
@@ -167,6 +168,23 @@ class NewNocContainer extends Component {
                         }
                         jsonPath={'mynocType'}
                       />
+                  </Grid>
+                  <Grid item sm={12}>
+                      <DocumentListContainer
+                        buttonLabel = {{
+                          labelName: "UPLOAD FILE",
+                          labelKey: "BPA_BUTTON_UPLOAD FILE"
+                        }}
+                        description = {{
+                          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+                          labelKey: "BPA_UPLOAD_FILE_RESTRICTIONS"
+                        }}
+                        inputProps = {{
+                          accept: "image/*, .pdf, .png, .jpeg"
+                        }}
+                        documentTypePrefix = "BPA_"
+                        maxFileSize = {5000}>
+                      </DocumentListContainer>
                   </Grid>
                 <Grid item sm={12}
                  style={{

@@ -113,14 +113,21 @@ export const nocDetailsSearch = getCommonGrayCard({
                   margin: "8px",
                   backgroundColor: "rgb(254, 122, 81)",
                   borderRadius: "2px",
-                  width: "220px",
-                  height: "48px",
+                  // width: "220px",
+                  // height: "48px",
                   marginTop:'-27px'
                 },
                 
               },
               children: {
-                buttonLabel: getLabel({
+                // buttonIcon: {
+                //   uiFramework: "custom-atoms",
+                //   componentPath: "Icon",
+                //   props: {
+                //     iconName: "keyboard_arrow_left"
+                //   }
+                // },
+                 buttonLabel: getLabel({
                   labelKey: "Add Noc"
                 })
               },

@@ -24,7 +24,7 @@ class DocumentListContainer extends Component {
 const mapStateToProps = state => {
   let documentsList = get(
     state,
-    "screenConfiguration.preparedFinalObject.BPARegDocumentsContract",
+    "screenConfiguration.preparedFinalObject.documentsContractNOC",
     []
   );
   return { documentsList };

@@ -129,7 +129,7 @@ class DocumentList extends Component {
   componentDidMount = () => {
     const {
       documentsList,
-      bparegDocumentDetailsUploadRedux = {},
+      nocDocumentsDetailsRedux = {},
       prepareFinalObject
     } = this.props;
     let index = 0;
@@ -139,15 +139,15 @@ class DocumentList extends Component {
           if (card.subCards) {
             card.subCards.forEach(subCard => {
               let oldDocType = get(
-                bparegDocumentDetailsUploadRedux,
+                nocDocumentsDetailsRedux,
                 `[${index}].documentType`
               );
               let oldDocCode = get(
-                bparegDocumentDetailsUploadRedux,
+                nocDocumentsDetailsRedux,
                 `[${index}].documentCode`
               );
               let oldDocSubCode = get(
-                bparegDocumentDetailsUploadRedux,
+                nocDocumentsDetailsRedux,
                 `[${index}].documentSubCode`
               );
               if (
@@ -155,7 +155,7 @@ class DocumentList extends Component {
                 oldDocCode != card.name ||
                 oldDocSubCode != subCard.name
               ) {
-                bparegDocumentDetailsUploadRedux[index] = {
+                nocDocumentsDetailsRedux[index] = {
                   documentType: docType.code,
                   documentCode: card.name,
                   documentSubCode: subCard.name
@@ -165,15 +165,15 @@ class DocumentList extends Component {
             });
           } else {
             let oldDocType = get(
-              bparegDocumentDetailsUploadRedux,
+              nocDocumentsDetailsRedux,
               `[${index}].documentType`
             );
             let oldDocCode = get(
-              bparegDocumentDetailsUploadRedux,
+              nocDocumentsDetailsRedux,
               `[${index}].documentCode`
             );
             if (oldDocType != docType.code || oldDocCode != card.name) {
-              bparegDocumentDetailsUploadRedux[index] = {
+              nocDocumentsDetailsRedux[index] = {
                 documentType: docType.code,
                 documentCode: card.name,
                 isDocumentRequired: card.required,
@@ -186,7 +186,7 @@ class DocumentList extends Component {
           }
         });
     });
-    prepareFinalObject("bparegDocumentDetailsUploadRedux", bparegDocumentDetailsUploadRedux);
+    prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux);
   };
 
   onUploadClick = uploadedDocIndex => {
@@ -195,13 +195,13 @@ class DocumentList extends Component {
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, bparegDocumentDetailsUploadRedux } = this.props;
+    const { prepareFinalObject, nocDocumentsDetailsRedux } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
 
     let appDocumentList = {
-      ...bparegDocumentDetailsUploadRedux,
+      ...nocDocumentsDetailsRedux,
       [uploadedDocIndex]: {
-        ...bparegDocumentDetailsUploadRedux[uploadedDocIndex],
+        ...nocDocumentsDetailsRedux[uploadedDocIndex],
         documents: [
           {
             fileName: file.name,
@@ -211,13 +211,13 @@ class DocumentList extends Component {
         ]
       }
     }
-    prepareFinalObject("bparegDocumentDetailsUploadRedux", appDocumentList );
+    prepareFinalObject("nocDocumentsDetailsRedux", appDocumentList );
   };
 
   removeDocument = remDocIndex => {
     const { prepareFinalObject } = this.props;
     prepareFinalObject(
-      `bparegDocumentDetailsUploadRedux.${remDocIndex}.documents`,
+      `nocDocumentsDetailsRedux.${remDocIndex}.documents`,
       undefined
     );
     this.forceUpdate();
@@ -225,24 +225,24 @@ class DocumentList extends Component {
 
   handleChange = (key, event) => {
 
-    const { bparegDocumentDetailsUploadRedux, prepareFinalObject } = this.props;
+    const { nocDocumentsDetailsRedux, prepareFinalObject } = this.props;
     let appDocumentList = {
-      ...bparegDocumentDetailsUploadRedux,
+      ...nocDocumentsDetailsRedux,
       [key]: {
-        ...bparegDocumentDetailsUploadRedux[key],
+        ...nocDocumentsDetailsRedux[key],
         dropDownValues: { value: event.target.value }
       }
     }
-    prepareFinalObject(`bparegDocumentDetailsUploadRedux`, appDocumentList);
+    prepareFinalObject(`nocDocumentsDetailsRedux`, appDocumentList);
   };
 
   getUploadCard = (card, key) => {
-    const { classes, bparegDocumentDetailsUploadRedux } = this.props;
-    let jsonPath = `bparegDocumentDetailsUploadRedux[${key}].dropDownValues.value`;
+    const { classes, nocDocumentsDetailsRedux } = this.props;
+    let jsonPath = `nocDocumentsDetailsRedux[${key}].dropDownValues.value`;
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
-          {bparegDocumentDetailsUploadRedux[key] && bparegDocumentDetailsUploadRedux[key].documents ? (
+          {nocDocumentsDetailsRedux[key] && nocDocumentsDetailsRedux[key].documents ? (
             <div className={classes.documentSuccess}>
               <Icon>
                 <i class="material-icons">done</i>
@@ -302,13 +302,13 @@ class DocumentList extends Component {
               handleFileUpload(e, this.handleDocument, this.props)
             }
             uploaded={
-              bparegDocumentDetailsUploadRedux[key] && bparegDocumentDetailsUploadRedux[key].documents
+              nocDocumentsDetailsRedux[key] && nocDocumentsDetailsRedux[key].documents
                 ? true
                 : false
             }
             removeDocument={() => this.removeDocument(key)}
             documents={
-              bparegDocumentDetailsUploadRedux[key] && bparegDocumentDetailsUploadRedux[key].documents
+              nocDocumentsDetailsRedux[key] && nocDocumentsDetailsRedux[key].documents
             }
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
@@ -371,12 +371,12 @@ DocumentList.propTypes = {
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const { moduleName } = screenConfiguration;
-  const bparegDocumentDetailsUploadRedux = get(
+  const nocDocumentsDetailsRedux = get(
     screenConfiguration.preparedFinalObject,
-    "bparegDocumentDetailsUploadRedux",
+    "nocDocumentsDetailsRedux",
     {}
   );
-  return { bparegDocumentDetailsUploadRedux, moduleName };
+  return { nocDocumentsDetailsRedux, moduleName };
 };
 
 const mapDispatchToProps = dispatch => {

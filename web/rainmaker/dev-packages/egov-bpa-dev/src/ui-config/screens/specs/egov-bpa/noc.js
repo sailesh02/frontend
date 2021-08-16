@@ -10,7 +10,10 @@ import {
     getLabel    
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { checkValueForNA } from "../utils/index";
-
+  import {
+    handleScreenConfigurationFieldChange as handleField
+  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  
   const getHeader = label => {
     return {
       uiFramework: "custom-molecules-local",
@@ -61,18 +64,88 @@ import {
     // }),
 })
 
+// open popup to create new noc
+export const onClickAdd = async (state, dispatch) => {
+   dispatch(handleField(
+     "search-preview",
+     "components.div.children.newNoc.props",
+     "open",
+     true
+   ))
+}
+
 export const nocDetailsSearch = getCommonGrayCard({
-  header: getCommonTitle(
-    {
-      labelName: "NOC Details",
-      // labelKey: "BPA_DOCUMENT_DETAILS_HEADER"
+  headerDiv: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: { marginBottom: "10px" }
     },
-    {
-      style: {
-        marginBottom: "10px"
-      }
+    children: {
+      header: {
+        gridDefination: {
+          xs: 12,
+          sm: 12
+        },
+        ...getCommonContainer({
+          header:getCommonSubHeader({
+            labelKey: "BPA_DOCUMENT_DETAILS_HEADER",
+            labelName: "NOC Details",
+            gridDefination: {
+              xs: 2,
+              sm: 2,
+              align: "left"
+            },
+          }),
+          // buttonContainer: getCommonContainer({
+            addNocButton: {
+              componentPath: "Button",
+              gridDefination: {
+                xs: 12,
+                sm: 12,
+                align: "right"
+              },
+              visible:true,
+              props: {
+                variant: "contained",
+                style: {
+                  color: "white",
+                  margin: "8px",
+                  backgroundColor: "rgb(254, 122, 81)",
+                  borderRadius: "2px",
+                  width: "220px",
+                  height: "48px",
+                  marginTop:'-27px'
+                },
+                
+              },
+              children: {
+                buttonLabel: getLabel({
+                  labelKey: "Add Noc"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: onClickAdd
+              }
+            },
+          })
+        // })
+      },
     }
-  ),  
+  },
+ 
+  // header: getCommonTitle(
+  //   {
+  //     labelName: "NOC Details",
+  //     // labelKey: "BPA_DOCUMENT_DETAILS_HEADER"
+  //   },
+  //   {
+  //     style: {
+  //       marginBottom: "10px"
+  //     }
+  //   }
+  // ),  
   // fireNocDetailsCard: getCommonCard({
       documentDetailsCard: {
           uiFramework: "custom-molecules-local",

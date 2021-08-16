@@ -1070,6 +1070,15 @@ const screenConfig = {
           permitConditions: permitConditions,
           permitListSummary: permitListSummary
         }),
+        newNoc :{
+          uiFramework: "custom-containers-local",
+          componentPath: "NewNocContainer",
+          moduleName: "egov-bpa",
+          visible: true,
+          props: {
+            open:false
+          }
+        },
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
     }

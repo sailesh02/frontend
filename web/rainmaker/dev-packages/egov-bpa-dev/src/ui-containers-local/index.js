@@ -127,6 +127,11 @@ const TextAreaContainer = Loadable({
   loading: () => <Loading />
 });
 
+const NewNocContainer = Loadable({
+  loader: () => import("./NewNocContainer"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -151,5 +156,6 @@ export {
   BpaConditionsContainer,
   DownloadFileContainerForFI,
   PreviewContainer,
-  TextAreaContainer
+  TextAreaContainer,
+  NewNocContainer
 };

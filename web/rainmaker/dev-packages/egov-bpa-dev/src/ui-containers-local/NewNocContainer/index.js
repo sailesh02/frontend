@@ -147,6 +147,7 @@ class NewNocContainer extends Component {
                     labelKey="BPA_SELECT_NOC_TYPE"
                   />
                   </Grid> */}
+                 
                   <Grid
                     item
                     sm={12}
@@ -173,6 +174,12 @@ class NewNocContainer extends Component {
                       />
                   </Grid>
                   <Grid item sm={12}>
+                  <Typography component="h2">
+                    <LabelContainer labelName="Required Documents"
+                    labelKey="BPA_DOCUMENT_DETAILS_HEADER" />
+                  </Typography>
+                  </Grid>
+                  <Grid item sm={12}>
                       <DocumentListContainer
                         buttonLabel = {{
                           labelName: "UPLOAD FILE",
@@ -192,7 +199,8 @@ class NewNocContainer extends Component {
                 <Grid item sm={12}
                  style={{
                   marginTop: 8,
-                  textAlign: "right"
+                  textAlign: "right",
+                  marginBottom:10
                 }}>
                   {/* <Button
                     variant={"contained"}

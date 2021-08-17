@@ -58,7 +58,7 @@ class NewNocContainer extends Component {
         "search-preview",
         "components.div.children.newNoc.props",
         "open",
-        true
+        false
       ))
   }
 
@@ -118,7 +118,7 @@ class NewNocContainer extends Component {
                   sm={10}>
                   <Typography component="h2" variant="subheading">
                     <LabelContainer labelName="NOC Details"
-                    labelKey="BPA_DOCUMENT_DETAILS_HEADER" />
+                    labelKey="NOC Details" />
                   </Typography>
                 </Grid>
                 <Grid
@@ -135,19 +135,6 @@ class NewNocContainer extends Component {
                 >
                   <CloseIcon />
                 </Grid>
-                {/* <Grid
-                    item
-                    sm="12"
-                    style={{
-                      marginTop: 16,
-                      fontSize:13
-                    }}>
-                  <LabelContainer
-                    labelName="BPA_SELECT_NOC_TYPE"
-                    labelKey="BPA_SELECT_NOC_TYPE"
-                  />
-                  </Grid> */}
-                 
                   <Grid
                     item
                     sm={12}

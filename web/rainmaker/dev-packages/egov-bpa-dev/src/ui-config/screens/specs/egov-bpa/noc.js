@@ -89,7 +89,7 @@ export const nocDetailsSearch = getCommonGrayCard({
         },
         ...getCommonContainer({
           header:getCommonSubHeader({
-            labelKey: "BPA_DOCUMENT_DETAILS_HEADER",
+            // labelKey: "BPA_DOCUMENT_DETAILS_HEADER",
             labelName: "NOC Details",
             gridDefination: {
               xs: 2,

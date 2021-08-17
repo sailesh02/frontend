@@ -17,6 +17,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
 import Typography from "@material-ui/core/Typography";
+import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -187,15 +188,74 @@ class DocumentList extends Component {
         });
     });
     prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux);
+    prepareFinalObject("payloadDocumentFormat", []);
   };
 
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
   };
 
+  //to prepare documents for NOC create API payload
+  prepareDocumentsForPayload = async (appDocumentList, documentsFormat, wfState) => {
+    let documnts = [];
+    if (appDocumentList) {
+      Object.keys(appDocumentList).forEach(function (key) {
+        if (appDocumentList && appDocumentList[key]) {
+          documnts.push(appDocumentList[key]);
+        }
+      });
+    }
+
+    // prepareFinalObject("nocDocumentsDetailsRedux", {});
+    let requiredDocuments = [], uploadingDocuments = [];
+    if (documnts && documnts.length > 0) {
+      documnts.forEach(documents => {
+        if (documents && documents.documents) {
+          documents.documents.map(docs => {
+            let doc = {};
+            doc.documentType = documents.documentCode;
+            doc.fileStoreId = docs.fileStoreId;
+            doc.fileStore = docs.fileStoreId;
+            doc.fileName = docs.fileName;
+            doc.fileUrl = docs.fileUrl;
+            doc.isClickable = true;
+            doc.additionalDetails = {
+              uploadedBy: getLoggedinUserRole(wfState),
+              uploadedTime: new Date().getTime()
+            }
+            if (doc.id) {
+              doc.id = docs.id;
+            }
+            uploadingDocuments.push(doc);
+          })
+        }
+      });
+
+      let diffDocs = [];
+      // documentsFormat && documentsFormat.length > 0 && documentsFormat.forEach(nocDocs => {
+      //   if (nocDocs) {
+      //     diffDocs.push(nocDocs);
+      //   }
+      // });
+
+      // if (uploadingDocuments && uploadingDocuments.length > 0) {
+      //   uploadingDocuments.forEach(tDoc => {
+      //     diffDocs.push(tDoc);
+      //   })
+      // };
+      this.props.prepareFinalObject("payloadDocumentFormat",uploadingDocuments);
+
+      // if (documentsFormat && documentsFormat.length > 0) {
+      //   documentsFormat = diffDocs;
+      //   prepareFinalObject("payloadDocumentFormat",documentsFormat);
+      // }
+    }
+  }
+
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, nocDocumentsDetailsRedux } = this.props;
+    const { prepareFinalObject, nocDocumentsDetailsRedux, preparedFinalObject } = this.props;
+    const { payloadDocumentFormat } = preparedFinalObject
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
 
     let appDocumentList = {
@@ -212,6 +272,7 @@ class DocumentList extends Component {
       }
     }
     prepareFinalObject("nocDocumentsDetailsRedux", appDocumentList );
+    this.prepareDocumentsForPayload(appDocumentList, payloadDocumentFormat);
   };
 
   removeDocument = remDocIndex => {
@@ -370,13 +431,13 @@ DocumentList.propTypes = {
 
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
-  const { moduleName } = screenConfiguration;
+  const { moduleName,preparedFinalObject } = screenConfiguration;
   const nocDocumentsDetailsRedux = get(
     screenConfiguration.preparedFinalObject,
     "nocDocumentsDetailsRedux",
     {}
   );
-  return { nocDocumentsDetailsRedux, moduleName };
+  return {preparedFinalObject, nocDocumentsDetailsRedux, moduleName };
 };
 
 const mapDispatchToProps = dispatch => {

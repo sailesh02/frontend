@@ -16,6 +16,7 @@ import {
     handleScreenConfigurationFieldChange as handleField
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {DocumentListContainer} from '../'
+import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
 
 const fieldConfig = {
     nocType: {
@@ -35,8 +36,69 @@ class NewNocContainer extends Component {
     comments : ''
   }
 
+  prepareDocumentsForPayload = async (wfState) => {
+    debugger
+    const {preparedFinalObject} = this.props
+    const {nocDocumentsDetailsRedux} = preparedFinalObject
+    let appDocumentList = nocDocumentsDetailsRedux
+    let documnts = [];
+    if (appDocumentList) {
+      Object.keys(appDocumentList).forEach(function (key) {
+        if (appDocumentList && appDocumentList[key]) {
+          documnts.push(appDocumentList[key]);
+        }
+      });
+    }
+
+    // prepareFinalObject("nocDocumentsDetailsRedux", {});
+    let requiredDocuments = [], uploadingDocuments = [];
+    if (documnts && documnts.length > 0) {
+      documnts.forEach(documents => {
+        if (documents && documents.documents) {
+          documents.documents.map(docs => {
+            let doc = {};
+            doc.documentType = documents.documentCode;
+            doc.fileStoreId = docs.fileStoreId;
+            doc.fileStore = docs.fileStoreId;
+            doc.fileName = docs.fileName;
+            doc.fileUrl = docs.fileUrl;
+            doc.isClickable = true;
+            doc.additionalDetails = {
+              uploadedBy: getLoggedinUserRole(wfState),
+              uploadedTime: new Date().getTime()
+            }
+            if (doc.id) {
+              doc.id = docs.id;
+            }
+            uploadingDocuments.push(doc);
+          })
+        }
+      });
+
+      let diffDocs = [];
+      // documentsFormat && documentsFormat.length > 0 && documentsFormat.forEach(nocDocs => {
+      //   if (nocDocs) {
+      //     diffDocs.push(nocDocs);
+      //   }
+      // });
+
+      // if (uploadingDocuments && uploadingDocuments.length > 0) {
+      //   uploadingDocuments.forEach(tDoc => {
+      //     diffDocs.push(tDoc);
+      //   })
+      // };
+      store.dispatch(prepareFinalObject("payloadDocumentFormat",uploadingDocuments));
+
+      // if (documentsFormat && documentsFormat.length > 0) {
+      //   documentsFormat = diffDocs;
+      //   prepareFinalObject("payloadDocumentFormat",documentsFormat);
+      // }
+    }
+  }
+
   saveDetails = () => {
-    store. store.dispatch(handleField(
+    this.prepareDocumentsForPayload("")
+    store.dispatch(handleField(
         "search-preview",
         "components.div.children.newNoc.props",
         "open",
@@ -227,8 +289,9 @@ class NewNocContainer extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { form } = state;
-  return { form };
+  const { form,screenConfiguration } = state;
+  const {preparedFinalObject} = screenConfiguration
+  return { form,preparedFinalObject };
 };
 
 const mapDispatchToProps = (dispatch) => {

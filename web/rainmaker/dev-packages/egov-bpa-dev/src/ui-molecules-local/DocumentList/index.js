@@ -272,11 +272,24 @@ class DocumentList extends Component {
       }
     }
     prepareFinalObject("nocDocumentsDetailsRedux", appDocumentList );
-    this.prepareDocumentsForPayload(appDocumentList, payloadDocumentFormat);
   };
 
   removeDocument = remDocIndex => {
-    const { prepareFinalObject } = this.props;
+    const { prepareFinalObject, preparedFinalObject } = this.props;
+    const { payloadDocumentFormat } = preparedFinalObject;
+    // let updatedDocuments = []
+    // updatedDocuments = payloadDocumentFormat && payloadDocumentFormat.length > 0 && payloadDocumentFormat.map( (doc,index) => {
+    //   if(index != remDocIndex){
+    //     return doc
+    //   }
+    // })
+    let updatedDocuments = payloadDocumentFormat
+    updatedDocuments.splice(remDocIndex)
+    prepareFinalObject(
+      `payloadDocumentFormat`,
+      updatedDocuments
+    );
+
     prepareFinalObject(
       `nocDocumentsDetailsRedux.${remDocIndex}.documents`,
       undefined
@@ -390,10 +403,10 @@ class DocumentList extends Component {
           documentsList.map(container => {
             return (
               <div>
-                <LabelContainer
+                {/* <LabelContainer
                   labelKey={getTransformedLocale(container.title)}
                   style={styles.documentTitle}
-                />
+                /> */}
                 {container.cards.map(card => {
                   return (
                     <div className={classes.documentContainer}>

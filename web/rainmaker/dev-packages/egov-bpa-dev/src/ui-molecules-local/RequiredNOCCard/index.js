@@ -240,6 +240,7 @@ const mapStateToProps = (state, ownProps) => {
           }
       })
     }
+    
   const wfState = get(
     screenConfiguration.preparedFinalObject.applicationProcessInstances,
     "state"

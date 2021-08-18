@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Grid, Typography, Button } from "@material-ui/core";
 import { Container } from "egov-ui-framework/ui-atoms";
 import store from "ui-redux/store";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   LabelContainer
 } from "egov-ui-framework/ui-containers";
@@ -18,7 +18,8 @@ import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.j
 import {
   getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
-  
+import { httpRequest } from "../../ui-utils/api";
+
 class TriggerNOCContainer extends Component {
   state = {
     comments : ''
@@ -45,10 +46,12 @@ class TriggerNOCContainer extends Component {
           documents.documents.map(docs => {
             let doc = {};
             doc.documentType = documents.documentCode;
+            doc.title = documents.documentCode;
             doc.fileStoreId = docs.fileStoreId;
-            doc.fileStore = docs.fileStoreId;
             doc.fileName = docs.fileName;
             doc.fileUrl = docs.fileUrl;
+            doc.link = docs.fileUrl;
+            doc.name = docs.fileName;
             doc.isClickable = true;
             doc.additionalDetails = {
               uploadedBy: getLoggedinUserRole(wfState),
@@ -65,14 +68,69 @@ class TriggerNOCContainer extends Component {
     }
   }
 
-  saveDetails = () => {
+  createNoc = async (nocType) => {
+    let { payloadDocumentFormat } = this.props.preparedFinalObject
+    let {BPA} = this.props.preparedFinalObject
+    let payload = {
+      tenantId : BPA.tenantId,
+      nocNo : null,
+      applicationType : BPA.applicationType,
+      nocType : nocType,
+      accountId : BPA.accountId,
+      sourceRefId : BPA.applicationNo,
+      source: "BPA",
+      applicationStatus : BPA.status,
+      landId : null,
+      status : null,
+      documents : payloadDocumentFormat,
+      workflow : null,
+      auditDetails : BPA.auditDetails,
+      additionalDetails : BPA.additionalDetails
+    }
+    try{
+      let response = await httpRequest(
+        "post",
+        "/noc-services/v1/noc/_creatsee",
+        "",
+        [],
+        { Noc: payload }
+      );
+      if(response){
+        store.dispatch(handleField(
+          "search-preview",
+          "components.div.children.triggerNocContainer.props",
+          "open",
+          false
+        ))
+        store.dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "BPA_NOC_CREATED_SUCCESS_MSG",
+              labelKey: "BPA_NOC_CREATED_SUCCESS_MSG",
+            },
+            "success"
+          )
+        )
+      }
+    }catch(err){
+      store.dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: err.message,
+            labelKey: err.message,
+          },
+          "error"
+        )
+      )
+    }
+     
+  };
+
+  saveDetails = (nocType) => {
     this.prepareDocumentsForPayload("")
-    store.dispatch(handleField(
-        "search-preview",
-        "components.div.children.triggerNocContainer.props",
-        "open",
-        false
-      ))
+    this.createNoc(nocType)  
   }
 
   resetMessage = () => {
@@ -187,7 +245,7 @@ class TriggerNOCContainer extends Component {
                     <Button
                       variant={"contained"}
                       color={"primary"}
-                      onClick={this.saveDetails}
+                      onClick={() => this.saveDetails(this.props.nocType)}
                     >
                       <LabelContainer
                         labelName={"BPA_ADD_BUTTON"}

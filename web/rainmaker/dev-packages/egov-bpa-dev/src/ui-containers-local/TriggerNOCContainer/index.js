@@ -19,6 +19,7 @@ import {
   getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../ui-utils/api";
+import {createNoc,getNocSearchResults} from "../../ui-utils/commons"
 
 class TriggerNOCContainer extends Component {
   state = {
@@ -87,21 +88,8 @@ class TriggerNOCContainer extends Component {
       auditDetails : BPA.auditDetails,
       additionalDetails : BPA.additionalDetails
     }
-    try{
-      let response = await httpRequest(
-        "post",
-        "/noc-services/v1/noc/_creatsee",
-        "",
-        [],
-        { Noc: payload }
-      );
+      let response = await createNoc(payload);
       if(response){
-        store.dispatch(handleField(
-          "search-preview",
-          "components.div.children.triggerNocContainer.props",
-          "open",
-          false
-        ))
         store.dispatch(
           toggleSnackbar(
             true,
@@ -112,20 +100,23 @@ class TriggerNOCContainer extends Component {
             "success"
           )
         )
-      }
-    }catch(err){
-      store.dispatch(
-        toggleSnackbar(
-          true,
+
+        await getNocSearchResults([
           {
-            labelName: err.message,
-            labelKey: err.message,
+            key: "tenantId",
+            value: BPA.tenantId
           },
-          "error"
-        )
-      )
-    }
-     
+          { key: "sourceRefId", value: BPA.applicationNo }
+        ],"",true);
+
+        store.dispatch(handleField(
+          "search-preview",
+          "components.div.children.triggerNocContainer.props",
+          "open",
+          false
+        ))
+
+      }   
   };
 
   saveDetails = (nocType) => {

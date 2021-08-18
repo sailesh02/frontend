@@ -1690,13 +1690,39 @@ export const submitOCBpaApplication = async (state, dispatch) => {
     }
   }
 };
-export const getNocSearchResults = async (queryObject, dispatch) => {
+export const getNocSearchResults = async (queryObject, dispatch,displayNoc) => {
   try {
     const response = await httpRequest(
       "post",
       "/noc-services/v1/noc/_search",
       "",
       queryObject
+    );
+    if(displayNoc){
+      store.dispatch(prepareFinalObject("Noc", response.Noc));
+
+    }
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+
+export const createNoc = async (payload) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/noc-services/v1/noc/_create",
+      "",
+      [],
+      { Noc: payload }
     );
     return response;
   } catch (error) {
@@ -1710,6 +1736,7 @@ export const getNocSearchResults = async (queryObject, dispatch) => {
     throw error;
   }
 };
+
 export const nocapplicationUpdate = (state) => {
   const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
   let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);

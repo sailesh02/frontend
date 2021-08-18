@@ -17,6 +17,8 @@ import {
 import {DocumentListContainer} from '../'
 import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { createNoc, getNocSearchResults } from "../../ui-utils/commons"
+
 const fieldConfig = {
     nocType: {
         label: {
@@ -32,7 +34,7 @@ const fieldConfig = {
   
 class NewNocContainer extends Component {
   state = {
-    comments : ''
+    nocType : ''
   }
 
   prepareDocumentsForPayload = async (wfState) => {
@@ -76,14 +78,59 @@ class NewNocContainer extends Component {
     }
   }
 
+  createNoc = async (nocType) => {
+    let { payloadDocumentFormat } = this.props.preparedFinalObject
+    let {BPA} = this.props.preparedFinalObject
+    let payload = {
+      tenantId : BPA.tenantId,
+      nocNo : null,
+      applicationType : BPA.applicationType,
+      nocType : nocType,
+      accountId : BPA.accountId,
+      sourceRefId : BPA.applicationNo,
+      source: "BPA",
+      applicationStatus : BPA.status,
+      landId : null,
+      status : null,
+      documents : payloadDocumentFormat,
+      workflow : null,
+      auditDetails : BPA.auditDetails,
+      additionalDetails : BPA.additionalDetails
+    }
+      let response = await createNoc(payload);
+      if(response){
+        store.dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "BPA_NOC_CREATED_SUCCESS_MSG",
+              labelKey: "BPA_NOC_CREATED_SUCCESS_MSG",
+            },
+            "success"
+          )
+        )
+
+        await getNocSearchResults([
+          {
+            key: "tenantId",
+            value: BPA.tenantId
+          },
+          { key: "sourceRefId", value: BPA.applicationNo }
+        ],"",true);
+
+        store.dispatch(handleField(
+          "search-preview",
+          "components.div.children.newNoc.props",
+          "open",
+          false
+        ))
+
+      }   
+  };
+
   saveDetails = () => {
     this.prepareDocumentsForPayload("")
-    store.dispatch(handleField(
-        "search-preview",
-        "components.div.children.newNoc.props",
-        "open",
-        false
-      ))
+    this.createNoc(this.state.nocType)
   }
 
   prepareDocumentsUploadData = (state, dispatch) => {
@@ -145,6 +192,14 @@ class NewNocContainer extends Component {
         "open",
         false
       ))
+  }
+
+  onNocChange = (e) => {
+    this.setState({
+      nocType:e.target.value
+    })
+    // mdms API call to change documents
+    //prepareDocumentsUploadData funtion with new documents
   }
 
   render() {
@@ -215,14 +270,10 @@ class NewNocContainer extends Component {
                         optionValue="value"
                         optionLabel="label"
                         hasLocalization={false}
+                        value = {this.state.nocType}
                         //onChange={e => this.onEmployeeClick(e)}
-                        onChange={e =>
-                          store.dispatch(prepareFinalObject(
-                            "mynocType",
-                            e.target.value
-                          ))
-                        }
-                        jsonPath={'mynocType'}
+                        onChange={this.onNocChange}
+                        // jsonPath={'mynocType'}
                       />
                   </Grid>
                   <Grid item sm={12}>

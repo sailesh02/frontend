@@ -19,7 +19,7 @@ import {
   getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../ui-utils/api";
-import {createNoc,getNocSearchResults} from "../../ui-utils/commons"
+import { createNoc, getNocSearchResults } from "../../ui-utils/commons"
 
 class TriggerNOCContainer extends Component {
   state = {

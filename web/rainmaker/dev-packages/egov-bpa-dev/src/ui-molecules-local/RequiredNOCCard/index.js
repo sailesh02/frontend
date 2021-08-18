@@ -194,7 +194,7 @@ class RequiredNOCCard extends Component {
             return (
               <Grid style={{paddingTop:'18px',paddingRight:'22px',paddingBottom:'18px',paddingLeft:'10px',marginBottom:'10px',width:'100%',backgroundColor: "#FFFFFF"}} container>
                 <Grid style={{align:'center'}} item xs={11}>
-                  <LabelContainer
+                  <LabelContainer style={{fontWeight:'bold',fontSize:'12px'}}
                     labelKey={getTransformedLocale(card)}/>
                 </Grid>
                 <Grid style={{align: "right"}} item xs={1}>

@@ -1,5 +1,4 @@
 import { Dialog, DialogContent } from "@material-ui/core";
-import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Grid, Typography, Button } from "@material-ui/core";
@@ -73,25 +72,7 @@ class NewNocContainer extends Component {
           })
         }
       });
-
-      let diffDocs = [];
-      // documentsFormat && documentsFormat.length > 0 && documentsFormat.forEach(nocDocs => {
-      //   if (nocDocs) {
-      //     diffDocs.push(nocDocs);
-      //   }
-      // });
-
-      // if (uploadingDocuments && uploadingDocuments.length > 0) {
-      //   uploadingDocuments.forEach(tDoc => {
-      //     diffDocs.push(tDoc);
-      //   })
-      // };
       store.dispatch(prepareFinalObject("payloadDocumentFormat",uploadingDocuments));
-
-      // if (documentsFormat && documentsFormat.length > 0) {
-      //   documentsFormat = diffDocs;
-      //   prepareFinalObject("payloadDocumentFormat",documentsFormat);
-      // }
     }
   }
 
@@ -103,12 +84,6 @@ class NewNocContainer extends Component {
         "open",
         false
       ))
-  }
-
-  resetMessage = () => {
-    this.setState({
-      comments:""
-    })
   }
 
   prepareDocumentsUploadData = (state, dispatch) => {
@@ -170,26 +145,6 @@ class NewNocContainer extends Component {
         "open",
         false
       ))
-  }
-
-  setComments = (e) => {
-    let stringArray = e.target.value.split(' ')
-    if(stringArray.length <= 201){
-      this.setState({
-        comments:e.target.value
-      })
-    }else{
-      store.dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "ERR_FILL_TWOHUNDRED_WORDS",
-            labelKey: "ERR_FILL_TWOHUNDRED_WORDS"
-          },
-          "warning"
-        )
-      );
-    }
   }
 
   render() {
@@ -299,20 +254,6 @@ class NewNocContainer extends Component {
                   textAlign: "right",
                   marginBottom:10
                 }}>
-                  {/* <Button
-                    variant={"contained"}
-                    color={"primary"}
-                    onClick={this.resetMessage}
-                    style={{
-                      marginRight:'4px'
-                    }}
-                    >
-                    <LabelContainer
-                      labelName={"BPA_RESET_BUTTON"}
-                      labelKey=
-                      {"BPA_RESET_BUTTON"}     
-                    />
-                    </Button> */}
                     <Button
                       variant={"contained"}
                       color={"primary"}

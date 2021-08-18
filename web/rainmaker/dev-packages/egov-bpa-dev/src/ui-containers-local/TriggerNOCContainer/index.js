@@ -1,14 +1,12 @@
 import { Dialog, DialogContent } from "@material-ui/core";
-import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Grid, Typography, Button } from "@material-ui/core";
 import { Container } from "egov-ui-framework/ui-atoms";
 import store from "ui-redux/store";
-import { prepareFinalObject,toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  LabelContainer,
-  TextFieldContainer
+  LabelContainer
 } from "egov-ui-framework/ui-containers";
 import CloseIcon from "@material-ui/icons/Close";
 import "./index.css";
@@ -20,18 +18,6 @@ import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.j
 import {
   getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
-const fieldConfig = {
-    nocType: {
-        label: {
-          labelName: "NOC Type",
-          labelKey: "BPA_NOC_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Select NOC Type",
-          labelKey: "BPA_NOC_TYPE_PLACEHOLDER"
-        }
-      }
-  };
   
 class TriggerNOCContainer extends Component {
   state = {
@@ -75,25 +61,7 @@ class TriggerNOCContainer extends Component {
           })
         }
       });
-
-      let diffDocs = [];
-      // documentsFormat && documentsFormat.length > 0 && documentsFormat.forEach(nocDocs => {
-      //   if (nocDocs) {
-      //     diffDocs.push(nocDocs);
-      //   }
-      // });
-
-      // if (uploadingDocuments && uploadingDocuments.length > 0) {
-      //   uploadingDocuments.forEach(tDoc => {
-      //     diffDocs.push(tDoc);
-      //   })
-      // };
       store.dispatch(prepareFinalObject("payloadDocumentFormat",uploadingDocuments));
-
-      // if (documentsFormat && documentsFormat.length > 0) {
-      //   documentsFormat = diffDocs;
-      //   prepareFinalObject("payloadDocumentFormat",documentsFormat);
-      // }
     }
   }
 
@@ -125,34 +93,8 @@ class TriggerNOCContainer extends Component {
       ))
   }
 
-  setComments = (e) => {
-    let stringArray = e.target.value.split(' ')
-    if(stringArray.length <= 201){
-      this.setState({
-        comments:e.target.value
-      })
-    }else{
-      store.dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "ERR_FILL_TWOHUNDRED_WORDS",
-            labelKey: "ERR_FILL_TWOHUNDRED_WORDS"
-          },
-          "warning"
-        )
-      );
-    }
-  }
-
   render() {
     let { open } = this.props;
-    console.log(open,"jkljkjkjkdjkldjfkldjfkdjkldkjdjkdfjfjdkfcjfkj")
-    const dropDownData = [
-    {
-        value: "Noc Type",
-        label: "Noc Type"
-    }]
 
     return (
       <Dialog
@@ -199,31 +141,6 @@ class TriggerNOCContainer extends Component {
                 >
                   <CloseIcon />
                 </Grid>
-                  {/* <Grid
-                    item
-                    sm={12}
-                    style={{
-                      marginTop: 12
-                    }}>
-                  <TextFieldContainer
-                        select={true}
-                        style={{ marginRight: "15px" }}
-                        label={fieldConfig.nocType.label}
-                        placeholder={fieldConfig.nocType.placeholder}
-                        data={dropDownData}
-                        optionValue="value"
-                        optionLabel="label"
-                        hasLocalization={false}
-                        //onChange={e => this.onEmployeeClick(e)}
-                        onChange={e =>
-                          store.dispatch(prepareFinalObject(
-                            "mynocType",
-                            e.target.value
-                          ))
-                        }
-                        jsonPath={'mynocType'}
-                      />
-                  </Grid> */}
                   <Grid item sm={12}>
                   <Typography component="h2">
                     <LabelContainer labelName="Required Documents"

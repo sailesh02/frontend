@@ -17,7 +17,9 @@ import {
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {DocumentListContainer} from '..'
 import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
-
+import {
+  getTransformedLocale,
+} from "egov-ui-framework/ui-utils/commons";
 const fieldConfig = {
     nocType: {
         label: {
@@ -179,8 +181,8 @@ class TriggerNOCContainer extends Component {
                   item
                   sm={10}>
                   <Typography component="h2" variant="subheading">
-                    <LabelContainer labelName={this.props.nocType}
-                    labelKey={this.props.nocType} />
+                    <LabelContainer labelName={getTransformedLocale(this.props.nocType)}
+                    labelKey={getTransformedLocale(this.props.nocType)} />
                   </Typography>
                 </Grid>
                 <Grid

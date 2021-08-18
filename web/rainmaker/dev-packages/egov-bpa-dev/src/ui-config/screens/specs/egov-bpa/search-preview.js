@@ -943,7 +943,7 @@ const screenConfig = {
     //}
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
-    prepareDocumentsUploadData(state,dispatch);
+    // prepareDocumentsUploadData(state,dispatch);
 
 
     // Hide edit buttons

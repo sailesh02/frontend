@@ -17,7 +17,7 @@ import {
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {DocumentListContainer} from '../'
 import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
-
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 const fieldConfig = {
     nocType: {
         label: {
@@ -111,7 +111,56 @@ class NewNocContainer extends Component {
     })
   }
 
+  prepareDocumentsUploadData = (state, dispatch) => {
+    // let documents = get(
+    //     state,
+    //     `screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.${currentDoc}`,
+    //     []
+    // );
+    let documents = [{"code":"OWNER.IDENTITYPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.IDENTITYPROOF.AADHAAR","active":true},{"code":"OWNER.IDENTITYPROOF.VOTERID","active":true},{"code":"OWNER.IDENTITYPROOF.DRIVING","active":true},{"code":"OWNER.IDENTITYPROOF.PAN","active":true},{"code":"OWNER.IDENTITYPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION"},{"code":"OWNER.ADDRESSPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.ADDRESSPROOF.ELECTRICITYBILL","active":true},{"code":"OWNER.ADDRESSPROOF.DL","active":true},{"code":"OWNER.ADDRESSPROOF.VOTERID","active":true},{"code":"OWNER.ADDRESSPROOF.AADHAAR","active":true},{"code":"OWNER.ADDRESSPROOF.PAN","active":true},{"code":"OWNER.ADDRESSPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.ADDRESSPROOF_DESCRIPTION"},{"code":"ELECTRICITY_BILL","documentType":"ELECTRICITY_BILL","active":true,"required":true,"description":"ELECTRICITY_BILL_DESCRIPTION"},{"code":"PLUMBER_REPORT_DRAWING","documentType":"PLUMBER_REPORT_DRAWING","active":true,"required":true,"description":"PLUMBER_REPORT_DRAWING_DESCRIPTION"},{"code":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE","documentType":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE","active":true,"required":false,"description":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE_DESCRIPTION"},{"code":"PROPERTY_TAX_RECIEPT","documentType":"PROPERTY_TAX_RECIEPT","active":true,"required":false,"description":"PROPERTY_TAX_RECIEPT_DESCRIPTION"}]
+    documents = documents.filter(item => {
+        return item.active;
+    });
+    let documentsContract = [];
+    let tempDoc = {};
+    documents.forEach(doc => {
+        let card = {};
+        card["code"] = doc.documentType;
+        card["title"] = doc.documentType;
+        card["cards"] = [];
+        tempDoc[doc.documentType] = card;
+    });
+  
+    documents.forEach(doc => {
+        // Handle the case for multiple muildings
+        let card = {};
+        card["name"] = doc.code;
+        card["code"] = doc.code;
+        card["required"] = doc.required ? true : false;
+        if (doc.hasDropdown && doc.dropdownData) {
+            let dropdown = {};
+            dropdown.label = "WS_SELECT_DOC_DD_LABEL";
+            dropdown.required = true;
+            dropdown.menu = doc.dropdownData.filter(item => {
+                return item.active;
+            });
+            dropdown.menu = dropdown.menu.map(item => {
+                return { code: item.code, label: getTransformedLocale(item.code) };
+            });
+            card["dropdown"] = dropdown;
+        }
+        tempDoc[doc.documentType].cards.push(card);
+    });
+  
+    Object.keys(tempDoc).forEach(key => {
+        documentsContract.push(tempDoc[key]);
+    });
+  
+    store.dispatch(prepareFinalObject("documentsContractNOC", documentsContract));
+  };
+
   componentDidMount = () => {
+    this.prepareDocumentsUploadData("")
   };
 
   closeDialog = () => {

@@ -44,18 +44,7 @@ const styles = {
     paddingBottom: 10,
   },
   whiteCard: {
-    // maxWidth: 250,
-    width: "100%",
-    backgroundColor: "#FFFFFF",
-    // paddingLeft: 8,
-    paddingRight: 0,
-    paddingTop: 3,
-    paddingBottom: 10,
-    marginRight: 16,
-    marginTop: 8,
-    marginBottom:16,
-    // marginBottom:4,
-    display: "inline-flex",
+    paddingTop:'18px',paddingRight:'22px',paddingBottom:'18px',paddingLeft:'10px',marginBottom:'10px',width:'100%',backgroundColor: "#FFFFFF"
   },
   fontStyle: {
     fontSize: "12px",
@@ -193,7 +182,6 @@ class RequiredNOCCard extends Component {
     }) 
   }
   render() {
-    const requiredNoc = ["NMA_NOC","HUDULB_NOC","PHEO_NOC","CGWA_NOC","HDPOLICE_NOC","RDMTEHSILDAR_NOC","FIRE_NOC"]
     const {
     requiredNocDisplay,
       ...rest
@@ -204,26 +192,23 @@ class RequiredNOCCard extends Component {
           requiredNocDisplay.length > 0 &&
           requiredNocDisplay.map((card) => {
             return (
-                    <Grid style={{padding:'10px'}} container>
-                    <Grid item xs={10}>
-                    <LabelContainer
-                      labelKey={getTransformedLocale(card)}
-                    />
-                    </Grid>
-                    <Grid style={{alignment:'right'}} item xs={2}>
-                    <Button 
+              <Grid style={{paddingTop:'18px',paddingRight:'22px',paddingBottom:'18px',paddingLeft:'10px',marginBottom:'10px',width:'100%',backgroundColor: "#FFFFFF"}} container>
+                <Grid style={{align:'center'}} item xs={11}>
+                  <LabelContainer
+                    labelKey={getTransformedLocale(card)}/>
+                </Grid>
+                <Grid style={{align: "right"}} item xs={1}>
+                  <Button 
                     onClick = {() => this.triggerNoc(card)}
                     style = {{
-                  color: "white",
-                  backgroundColor: "rgb(254, 122, 81)",
-                  borderRadius: "2px",
-                  
-                }}>
-                Trigger
-                </Button>
-            </Grid>
-        </Grid>
-        )
+                    color: "white",
+                    backgroundColor: "rgb(254, 122, 81)",
+                    borderRadius: "2px"}}>
+                    Trigger
+                  </Button>
+                </Grid>
+              </Grid>
+           )
     })
 }
 </div>

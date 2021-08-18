@@ -132,6 +132,11 @@ const NewNocContainer = Loadable({
   loading: () => <Loading />
 });
 
+const TriggerNOCContainer =  Loadable({
+  loader: () => import("./TriggerNOCContainer"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -157,5 +162,6 @@ export {
   DownloadFileContainerForFI,
   PreviewContainer,
   TextAreaContainer,
-  NewNocContainer
+  NewNocContainer,
+  TriggerNOCContainer
 };

@@ -37,7 +37,6 @@ class NewNocContainer extends Component {
   }
 
   prepareDocumentsForPayload = async (wfState) => {
-    debugger
     const {preparedFinalObject} = this.props
     const {nocDocumentsDetailsRedux} = preparedFinalObject
     let appDocumentList = nocDocumentsDetailsRedux

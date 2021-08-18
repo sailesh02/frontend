@@ -175,3 +175,46 @@ export const nocDetailsSearch = getCommonGrayCard({
       }
   // }),
 })
+
+export const requiredNOCContainer = getCommonGrayCard({
+  headerDiv: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: { marginBottom: "10px" }
+    },
+    children: {
+      header: {
+        gridDefination: {
+          xs: 12,
+          sm: 12
+        },
+        ...getCommonContainer({
+          header:getCommonSubHeader({
+            labelKey: "BPA_REQUIRED_NOC_HEADER",
+            labelName: "BPA_REQUIRED_NOC_HEADER",
+            gridDefination: {
+              xs: 2,
+              sm: 2,
+              align: "left"
+            },
+          }),
+          })
+      },
+    }
+  },
+      requiredNOCCard: {
+          uiFramework: "custom-molecules-local",
+          moduleName: "egov-bpa",
+          componentPath: "RequiredNOCCard",
+          visible:true,
+          props: {
+            requiredNocsJson : "requiredNOCList",  
+            nocsJson : "NOC",               
+            buttonLabel: {
+              labelName: "TRIGGER NOC",
+              labelKey: "BPA_TRIGGER NOC_BUTTON"
+            }          
+      }
+      }
+})

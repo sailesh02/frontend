@@ -101,7 +101,7 @@ class NewNocContainer extends Component {
         "search-preview",
         "components.div.children.newNoc.props",
         "open",
-        true
+        false
       ))
   }
 

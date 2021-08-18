@@ -10,7 +10,10 @@ import {
   getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
 import Button from '@material-ui/core/Button';
-
+import store from "ui-redux/store";
+import {
+    handleScreenConfigurationFieldChange as handleField
+  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 // import MultiDocDetailCard from "../../ui-molecules-local/MultiDocDetailCard";
 import NocDocDetailCard from "../../ui-molecules-local/NocDocDetailCard";
 import NocData from "../../ui-molecules-local/NocData";
@@ -22,78 +25,79 @@ import Grid from "@material-ui/core/Grid";
 import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 import { httpRequest } from "../../ui-utils/api";
 import { LinkAtom } from "../../ui-atoms-local"
+import {TriggerNOCContainer} from "../../ui-containers-local"
 
 const styles = {
-//   documentTitle: {
-//     color: "rgba(0, 0, 0, 0.87)",
-//     fontFamily: "Roboto",
-//     fontSize: "16px",
-//     fontWeight: 500,
-//     letterSpacing: "0.67px",
-//     lineHeight: "19px",
-//     marginBottom: 25,
-//     width: "100%",
-//     backgroundColor: "#FFFFFF",
-//     marginTop: 16,
-//     paddingTop: 16,
-//     paddingLeft: 16,    
-//     paddingBottom: 10,
-//   },
-//   whiteCard: {
-//     // maxWidth: 250,
-//     width: "100%",
-//     backgroundColor: "#FFFFFF",
-//     // paddingLeft: 8,
-//     paddingRight: 0,
-//     paddingTop: 3,
-//     paddingBottom: 10,
-//     marginRight: 16,
-//     marginTop: 8,
-//     marginBottom:16,
-//     // marginBottom:4,
-//     display: "inline-flex",
-//   },
-//   fontStyle: {
-//     fontSize: "12px",
-//     fontWeight: "500",
-//     color: "rgba(0, 0, 0, 0.87)",
-//     fontFamily: "Roboto",
-//     // width:150,
-//     // overflow: "hidden", 
-//     // whiteSpace: "nowrap",
-//     // textOverflow: "ellipsis",
-//     // marginLeft:"7px",
-//   },
-//   labelStyle: {
-//     position: "relative",
-//     fontFamily: "Roboto",
-//     fontSize: 14,
-//     letterSpacing: 0.6,
-//     padding: "5px 0px",
-//     display: "inline-block"
-//   },  
-//   underlineStyle: {
-//     position: "absolute",
-//     bottom: -1,
-//     borderBottom: "2px solid #FE7A51",
-//     width: "100%"
-//   },
-//   dividerStyle : {
-//     borderBottom: "1px solid rgba(5, 5, 5, 0.12)",
-//     width: "100%"
-//   },
-//   documentContainer: {
-//    backgroundColor: "#FFFFFF",
-//     padding: "16px",
-//     marginTop: "10px",
-//     marginBottom: "16px"
-//   },
-//   nocTitle: {
-//     color: "rgba(0, 0, 0, 0.87)",
-//   },
-//   spanStyle : {
-//     paddingLeft: "2px"
-//   }
+  documentTitle: {
+    color: "rgba(0, 0, 0, 0.87)",
+    fontFamily: "Roboto",
+    fontSize: "16px",
+    fontWeight: 500,
+    letterSpacing: "0.67px",
+    lineHeight: "19px",
+    marginBottom: 25,
+    width: "100%",
+    backgroundColor: "#FFFFFF",
+    marginTop: 16,
+    paddingTop: 16,
+    paddingLeft: 16,    
+    paddingBottom: 10,
+  },
+  whiteCard: {
+    // maxWidth: 250,
+    width: "100%",
+    backgroundColor: "#FFFFFF",
+    // paddingLeft: 8,
+    paddingRight: 0,
+    paddingTop: 3,
+    paddingBottom: 10,
+    marginRight: 16,
+    marginTop: 8,
+    marginBottom:16,
+    // marginBottom:4,
+    display: "inline-flex",
+  },
+  fontStyle: {
+    fontSize: "12px",
+    fontWeight: "500",
+    color: "rgba(0, 0, 0, 0.87)",
+    fontFamily: "Roboto",
+    // width:150,
+    // overflow: "hidden", 
+    // whiteSpace: "nowrap",
+    // textOverflow: "ellipsis",
+    // marginLeft:"7px",
+  },
+  labelStyle: {
+    position: "relative",
+    fontFamily: "Roboto",
+    fontSize: 14,
+    letterSpacing: 0.6,
+    padding: "5px 0px",
+    display: "inline-block"
+  },  
+  underlineStyle: {
+    position: "absolute",
+    bottom: -1,
+    borderBottom: "2px solid #FE7A51",
+    width: "100%"
+  },
+  dividerStyle : {
+    borderBottom: "1px solid rgba(5, 5, 5, 0.12)",
+    width: "100%"
+  },
+  documentContainer: {
+   backgroundColor: "#FFFFFF",
+    padding: "16px",
+    marginTop: "10px",
+    marginBottom: "16px"
+  },
+  nocTitle: {
+    color: "rgba(0, 0, 0, 0.87)",
+  },
+  spanStyle : {
+    paddingLeft: "2px"
+  }
 }
 // const LightTooltip = withStyles((theme) => ({
 //   tooltip: {
@@ -109,124 +113,85 @@ class RequiredNOCCard extends Component {
 //       editableDocuments: null,
 //     };
 //   }
+  state = {
+      openPopup : false,
+      nocType : ''
+  }
   componentDidMount = () => {
-    // const {
-    //   documentsList, 
-    //   nocDocumentDetailsUploadRedux = {}, 
-    //   prepareFinalObject
-    // } = this.props;
-    // let index = 0;
-    // documentsList.forEach(docType => {
-    //   docType.cards &&
-    //   docType.cards.forEach(card => {
-    //     if (card.subCards) {
-    //       card.subCards.forEach(subCard => {
-    //         let oldDocType = get(
-    //           nocDocumentDetailsUploadRedux,
-    //           `[${index}].documentType`
-    //         );
-    //         let oldDocCode = get(
-    //           nocDocumentDetailsUploadRedux,
-    //           `[${index}].documentCode`
-    //         );
-    //         let oldDocSubCode = get(
-    //           nocDocumentDetailsUploadRedux,
-    //           `[${index}].documentSubCode`
-    //         );
-    //         if (
-    //           oldDocType != docType.code ||
-    //           oldDocCode != card.name ||
-    //           oldDocSubCode != subCard.name
-    //         ) {
-    //           nocDocumentDetailsUploadRedux[index] = {
-    //             documentType: docType.code,
-    //             documentCode: card.name,
-    //             documentSubCode: subCard.name
-    //           };
-    //         }
-    //         index++;
-    //       });
-    //     } else {
-    //       let oldDocType = get(
-    //         nocDocumentDetailsUploadRedux,
-    //         `[${index}].documentType`
-    //       );
-    //       let oldDocCode = get(
-    //         nocDocumentDetailsUploadRedux,
-    //         `[${index}].documentCode`
-    //       );
-    //       if (oldDocType != docType.code || oldDocCode != card.name) {
-    //         nocDocumentDetailsUploadRedux[index] = {
-    //           documentType: docType.code,
-    //           documentCode: card.name,
-    //           isDocumentRequired: card.required,
-    //           isDocumentTypeRequired: card.dropDownValues
-    //             ? card.dropDownValues.required
-    //             : false
-    //         };
-    //       }
-    //       index++;
-    //     }
-    //   });
-    // });
-    // prepareFinalObject("nocDocumentDetailsUploadRedux", nocDocumentDetailsUploadRedux);
+ 
   };
-//   static getDerivedStateFromProps(props, state) {
-//     if (
-//       (state.editableDocuments == null &&
-//       props.nocFinalCardsforPreview &&
-//       props.nocFinalCardsforPreview.length > 0)||
-//       (state.editableDocuments !=null && state.editableDocuments.length >0 && props.nocFinalCardsforPreview.length>0 && 
-//         (state.editableDocuments.length != props.nocFinalCardsforPreview.length))
-//     ) {
-//       state.editableDocuments = Array(props.nocFinalCardsforPreview.length).fill({
-//         editable: false,
-//       });
-//     }
-//   }
-//   getCard = (card, key) => {
-//     const { classes, nocFinalCardsforPreview, ...rest } = this.props;
-//     if (this.state.editableDocuments)
-//       return (
-//         <React.Fragment>
-//           {this.state.editableDocuments &&
-//             this.state.editableDocuments.length > 0 &&
-//             (this.state.editableDocuments[key].editable ? (
-//               <div style={{backgroundColor:"rgb(255,255,255)", paddingRight:"10px", marginTop: "16px" }}><UploadCard
-//                 docItem={card}
-//                 docIndex={key}
-//                 key={key.toString()}
-//                 handleDocument={this.handleDocument}
-//                 removeDocument={this.removeDocument}
-//                 onUploadClick={this.onUploadClick}
-//                 handleFileUpload={this.handleFileUpload}
-//                 handleChange={this.handleChange}
-//                 uploadedDocIndex={this.state.uploadedDocIndex}
-//                 toggleEditClick={this.toggleEditClick}
-//                 isFromPreview={true}
-//                 jsonPath = {`nocDocumentDetailsUploadRedux`}
-//                 ids = {"nocDocumentDetailsUploadRedux"}
-//                 specificStyles= "preview_upload_btn"
-//                 {...rest}
-//               /></div>
-//             ) : (
-//               <NocDocDetailCard
-//                 docItem={card}
-//                 docIndex={key}
-//                 key={key.toString()}
-//                 handleDocument={this.handleDocument}
-//                 removeDocument={this.removeDocument}
-//                 onUploadClick={this.onUploadClick}
-//                 handleFileUpload={this.handleFileUpload}
-//                 handleChange={this.handleChange}
-//                 uploadedDocIndex={this.state.uploadedDocIndex}
-//                 toggleEditClick={this.toggleEditClick}
-//                 {...rest}
-//               />
-//             ))}
-//         </React.Fragment>
-//       );
-//   };
+
+  prepareDocumentsUploadData = (state, dispatch) => {
+    // let documents = get(
+    //     state,
+    //     `screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.${currentDoc}`,
+    //     []
+    // );
+    let documents = [{"code":"OWNER.IDENTITYPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.IDENTITYPROOF.AADHAAR","active":true},{"code":"OWNER.IDENTITYPROOF.VOTERID","active":true},{"code":"OWNER.IDENTITYPROOF.DRIVING","active":true},{"code":"OWNER.IDENTITYPROOF.PAN","active":true},{"code":"OWNER.IDENTITYPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION"},{"code":"OWNER.ADDRESSPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.ADDRESSPROOF.ELECTRICITYBILL","active":true},{"code":"OWNER.ADDRESSPROOF.DL","active":true},{"code":"OWNER.ADDRESSPROOF.VOTERID","active":true},{"code":"OWNER.ADDRESSPROOF.AADHAAR","active":true},{"code":"OWNER.ADDRESSPROOF.PAN","active":true},{"code":"OWNER.ADDRESSPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.ADDRESSPROOF_DESCRIPTION"},{"code":"ELECTRICITY_BILL","documentType":"ELECTRICITY_BILL","active":true,"required":true,"description":"ELECTRICITY_BILL_DESCRIPTION"},{"code":"PLUMBER_REPORT_DRAWING","documentType":"PLUMBER_REPORT_DRAWING","active":true,"required":true,"description":"PLUMBER_REPORT_DRAWING_DESCRIPTION"},{"code":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE","documentType":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE","active":true,"required":false,"description":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE_DESCRIPTION"}]
+    documents = documents.filter(item => {
+        return item.active;
+    });
+    let documentsContract = [];
+    let tempDoc = {};
+    documents.forEach(doc => {
+        let card = {};
+        card["code"] = doc.documentType;
+        card["title"] = doc.documentType;
+        card["cards"] = [];
+        tempDoc[doc.documentType] = card;
+    });
+  
+    documents.forEach(doc => {
+        // Handle the case for multiple muildings
+        let card = {};
+        card["name"] = doc.code;
+        card["code"] = doc.code;
+        card["required"] = doc.required ? true : false;
+        if (doc.hasDropdown && doc.dropdownData) {
+            let dropdown = {};
+            dropdown.label = "WS_SELECT_DOC_DD_LABEL";
+            dropdown.required = true;
+            dropdown.menu = doc.dropdownData.filter(item => {
+                return item.active;
+            });
+            dropdown.menu = dropdown.menu.map(item => {
+                return { code: item.code, label: getTransformedLocale(item.code) };
+            });
+            card["dropdown"] = dropdown;
+        }
+        tempDoc[doc.documentType].cards.push(card);
+    });
+  
+    Object.keys(tempDoc).forEach(key => {
+        documentsContract.push(tempDoc[key]);
+    });
+  
+    store.dispatch(prepareFinalObject("documentsContractNOC", documentsContract));
+  };
+
+  triggerNoc = (nocType) => {
+    if(nocType == "HUDULB_NOC"){
+      this.prepareDocumentsUploadData("")
+    }
+    store.dispatch(handleField(
+        "search-preview",
+        "components.div.children.triggerNocContainer.props",
+        "open",
+        true
+      ))
+      store.dispatch(handleField(
+        "search-preview",
+        "components.div.children.triggerNocContainer.props",
+        "nocType",
+        nocType
+      ))  
+  }
+
+  closeDialog = () => {
+    this.setState({
+        openPopup : false
+    }) 
+  }
   render() {
     const requiredNoc = ["NMA_NOC","HUDULB_NOC","PHEO_NOC","CGWA_NOC","HDPOLICE_NOC","RDMTEHSILDAR_NOC","FIRE_NOC"]
     const {
@@ -246,167 +211,24 @@ class RequiredNOCCard extends Component {
                     />
                     </Grid>
                     <Grid style={{alignment:'right'}} item xs={2}>
-                    <Button style = {{
+                    <Button 
+                    onClick = {() => this.triggerNoc(card)}
+                    style = {{
                   color: "white",
                   backgroundColor: "rgb(254, 122, 81)",
                   borderRadius: "2px",
                   
                 }}>
-                     Trigger
-                    </Button>
-                    </Grid>
-                  
-                    </Grid>
-            )
-          })
-        }
-      </div>
-    )
+                Trigger
+                </Button>
+            </Grid>
+        </Grid>
+        )
+    })
+}
+</div>
+)
   }
-
-//   onUploadClick = (uploadedDocIndex) => {
-//     this.setState({ uploadedDocIndex });
-//   };
-//   toggleEditClick = (itemIndex) => {
-//     let items = [...this.state.editableDocuments];
-//     let item = { ...items[itemIndex] };
-//     item.editable = item.editable ? false : true;
-//     items[itemIndex] = item;
-//     this.setState({ editableDocuments: items });
-//   };
-  
-//   handleDocument = async (file, fileStoreId) => {
-//     let { uploadedDocIndex } = this.state;
-//     const {
-//       prepareFinalObject,
-//       nocDocumentDetailsUploadRedux,
-//       nocFinalCardsforPreview,
-//       Noc,
-//       wfState
-//     } = this.props;
-//     const fileUrl = await getFileUrlFromAPI(fileStoreId);
-//     let documentCode = nocFinalCardsforPreview[uploadedDocIndex].dropDownValues.value;
-//     if(!documentCode){
-//       let documentMenu = nocFinalCardsforPreview[uploadedDocIndex].dropDownValues.menu;
-//       if(documentMenu && documentMenu.length > 0 && documentMenu.length == 1){
-//         documentCode = documentMenu[0].code;
-//       } else {
-//         documentCode = nocFinalCardsforPreview[uploadedDocIndex].documentCode
-//       }
-//     }
-//     let appDocumentList = [];
-
-//     let fileObj = {
-//       fileName: file.name,
-//       name: file.name,
-//       fileStoreId,
-//       fileUrl: Object.values(fileUrl)[0],
-//       isClickable: true,
-//       link: Object.values(fileUrl)[0],
-//       title: documentCode,
-//       documentType: documentCode,
-//       additionalDetails:{
-//         uploadedBy: getLoggedinUserRole(wfState),
-//         uploadedTime: new Date().getTime()
-//       }
-      
-//     };
-//     if (
-//       nocFinalCardsforPreview[uploadedDocIndex] &&
-//       nocFinalCardsforPreview[uploadedDocIndex].documents
-//     ) {
-//       nocFinalCardsforPreview[uploadedDocIndex].documents.push(fileObj);
-//       appDocumentList = [...nocFinalCardsforPreview];
-//     } else {
-//       nocFinalCardsforPreview[uploadedDocIndex]["documents"] = [fileObj];
-//       appDocumentList = [...nocFinalCardsforPreview];
-//     }
-//     // if (Array.isArray(NOCData)) {
-//     //   if (NOCData.length > 0) {
-//     //     if (NOCData[0].documents) {
-//     //       NOCData[0].documents.push(fileObj);
-//     //     } else {
-//     //       NOCData[0].documents = [fileObj];
-//     //     }
-//     //   }
-//     // } else {
-//     //   if (NOCData.documents) {
-//     //     NOCData.documents.push(fileObj);
-//     //   } else {
-//     //     NOCData.documents = [fileObj];
-//     //   }
-//     // }
-//     // prepareFinalObject("NOCData", NOCData);
-
-//     prepareFinalObject("nocFinalCardsforPreview", appDocumentList);
-
-//     prepareFinalObject("nocDocumentDetailsUploadRedux", appDocumentList);
-//     // if(appDocumentList && appDocumentList.length > 0) {
-//     //   for(let data = 0; data < Noc.length; data ++) {
-//     //     Noc[data].documents = appDocumentList[data].documents
-//     //     let response = httpRequest(
-//     //       "post",
-//     //       "/noc-services/v1/noc/_update",
-//     //       "",
-//     //       [],
-//     //       { Noc: Noc[data] }
-//     //     );
-//     //   }
-      
-//     // }
-//     // prepareFinalObject("Noc", Noc);
-//   };
-
-//   removeDocument = (cardIndex, uploadedDocIndex) => {
-//     const { prepareFinalObject, nocFinalCardsforPreview, Noc } = this.props;
-//     let uploadedDocs = [];
-//     let fileTobeRemoved =
-//     nocFinalCardsforPreview[cardIndex].documents[uploadedDocIndex];
-
-//     // if (Array.isArray(Noc)) {
-//     //   if (Noc.length > 0) {
-//     //     uploadedDocs = Noc[0].documents;
-//     //     uploadedDocs = this.getFinalDocsAfterRemovingDocument(uploadedDocs, fileTobeRemoved);
-//     //     Noc[0].documents = uploadedDocs;
-//     //   }
-//     // } else {
-//     //   uploadedDocs = Noc.documents;
-//     //   uploadedDocs = this.getFinalDocsAfterRemovingDocument(
-//     //     uploadedDocs,
-//     //     fileTobeRemoved
-//     //   );
-//     //   Noc.documents = uploadedDocs;
-//     // }
-
-//     nocFinalCardsforPreview[cardIndex].documents.splice(uploadedDocIndex, 1);
-//     prepareFinalObject("Noc", Noc);
-//     //uploadedDocs.map()
-//     prepareFinalObject("nocFinalCardsforPreview", nocFinalCardsforPreview);
-//     prepareFinalObject("nocDocumentDetailsUploadRedux", nocFinalCardsforPreview);
-
-//     this.forceUpdate();
-//   };
-
-//   getFinalDocsAfterRemovingDocument = (docs, file) => {
-//     for (var i = 0; i < docs.length; i++) {
-//       if (docs[i].fileStoreId == file.fileStoreId) {
-//         docs.splice(i, 1);
-//         break;
-//       }
-//     }
-
-//     return docs;
-//   };
-
-//   handleChange = (key, event) => {
-//     const { prepareFinalObject, nocFinalCardsforPreview } = this.props;
-//     let appDocumentList = [];
-
-//     appDocumentList = [...nocFinalCardsforPreview];
-//     appDocumentList[key].dropDownValues.value = event.target.value;
-//     prepareFinalObject("nocFinalCardsforPreview", appDocumentList);
-//     prepareFinalObject("nocDocumentDetailsUploadRedux", appDocumentList);
-//   };
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -419,21 +241,7 @@ const mapStateToProps = (state, ownProps) => {
   );
 
   let requiredNocsList = scrutinyDetails && scrutinyDetails.planDetail && scrutinyDetails.planDetail.planInformation.requiredNOCs || []
-  const nocDocumentDetailsUploadRedux = get(
-    screenConfiguration.preparedFinalObject,
-    "nocDocumentDetailsUploadRedux",
-    {}
-  );
-  const documentsList = get(
-    screenConfiguration.preparedFinalObject,
-    "nocBPADocumentsContract",
-    []
-  );
-  const nocFinalCardsforPreview = get(
-    screenConfiguration.preparedFinalObject,
-    ownProps.jsonPath,
-    []
-  );
+
   const Noc = get(screenConfiguration.preparedFinalObject, "Noc", []);
   let generatedNoc = Noc.map( noc => {
       return noc.nocType
@@ -452,7 +260,7 @@ const mapStateToProps = (state, ownProps) => {
     "state"
   );
 
-  return { nocDocumentDetailsUploadRedux, documentsList, nocFinalCardsforPreview, Noc,requiredNocDisplay, wfState };
+  return { Noc,requiredNocDisplay, wfState };
 };
 const mapDispatchToProps = (dispatch) => {
   return {

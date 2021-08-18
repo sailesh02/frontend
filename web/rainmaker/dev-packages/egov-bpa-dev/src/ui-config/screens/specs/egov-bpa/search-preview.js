@@ -1132,6 +1132,16 @@ const screenConfig = {
             open:false
           }
         },
+        triggerNocContainer :{
+          uiFramework: "custom-containers-local",
+          componentPath: "TriggerNOCContainer",
+          moduleName: "egov-bpa",
+          visible: true,
+          props: {
+            open:false,
+            nocType:''
+          }
+        },
       
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }

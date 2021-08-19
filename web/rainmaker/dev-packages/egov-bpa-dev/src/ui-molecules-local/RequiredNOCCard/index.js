@@ -26,6 +26,7 @@ import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 import { httpRequest } from "../../ui-utils/api";
 import { LinkAtom } from "../../ui-atoms-local"
 import {TriggerNOCContainer} from "../../ui-containers-local"
+import commonConfig from "config/common.js";
 
 const styles = {
   documentTitle: {
@@ -110,6 +111,33 @@ class RequiredNOCCard extends Component {
  
   };
 
+  getDocumentsFromMDMS = async (dispatch) => {
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+          {
+            moduleName: "NOC",
+            masterDetails: [
+              {
+                name: "DocumentTypeMapping"
+              },
+            ]
+          }
+        ]
+      }
+    };
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    // dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    // call prepare document upload data
+  }
+
   prepareDocumentsUploadData = (state, dispatch) => {
     // let documents = get(
     //     state,
@@ -159,6 +187,7 @@ class RequiredNOCCard extends Component {
   };
 
   triggerNoc = (nocType) => {
+    this.getDocumentsFromMDMS(nocType)
     if(nocType == "HUDULB_NOC"){
       this.prepareDocumentsUploadData("")
     }

@@ -18,6 +18,8 @@ import {DocumentListContainer} from '../'
 import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { createNoc, getNocSearchResults } from "../../ui-utils/commons"
+import { httpRequest } from "../../ui-utils/api";
+import commonConfig from "config/common.js";
 
 const fieldConfig = {
     nocType: {
@@ -194,11 +196,39 @@ class NewNocContainer extends Component {
       ))
   }
 
+  getDocumentsFromMDMS = async (dispatch) => {
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+          {
+            moduleName: "NOC",
+            masterDetails: [
+              {
+                name: "DocumentTypeMapping"
+              },
+            ]
+          }
+        ]
+      }
+    };
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    // dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    // call prepare document upload data
+  }
+
   onNocChange = (e) => {
     this.setState({
       nocType:e.target.value
     })
     // mdms API call to change documents
+    this.getDocumentsFromMDMS(e.target.value)
     //prepareDocumentsUploadData funtion with new documents
   }
 

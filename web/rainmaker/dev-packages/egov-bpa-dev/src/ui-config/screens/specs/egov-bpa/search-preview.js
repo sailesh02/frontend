@@ -534,6 +534,7 @@ const setSearchResponse = async (
     },
     { key: "sourceRefId", value: applicationNumber }
   ], state);
+  
   dispatch(prepareFinalObject("Noc", payload.Noc));
   payload.Noc.sort(compare);
   // await prepareNOCUploadData(state, dispatch);

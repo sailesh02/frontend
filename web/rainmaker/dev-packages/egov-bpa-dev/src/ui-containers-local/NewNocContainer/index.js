@@ -184,7 +184,7 @@ class NewNocContainer extends Component {
   };
 
   componentDidMount = () => {
-    this.prepareDocumentsUploadData("")
+    // this.prepareDocumentsUploadData("")
   };
 
   closeDialog = () => {

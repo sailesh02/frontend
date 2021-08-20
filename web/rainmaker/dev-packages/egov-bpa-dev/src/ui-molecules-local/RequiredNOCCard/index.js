@@ -111,7 +111,10 @@ class RequiredNOCCard extends Component {
  
   };
 
-  getDocumentsFromMDMS = async (dispatch) => {
+  getDocumentsFromMDMS = async (nocType) => {
+    debugger
+    let {BPA} = this.props.preparedFinalObject
+    let {applicationType} = BPA
     let mdmsBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -123,7 +126,7 @@ class RequiredNOCCard extends Component {
                 name: "DocumentTypeMapping"
               },
             ]
-          }
+          },     
         ]
       }
     };
@@ -134,17 +137,70 @@ class RequiredNOCCard extends Component {
       [],
       mdmsBody
     );
+
+    // let documents = payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.NocTypeMapping || []
+  
+    let documents = [
+                  {
+                      "applicationType": "BUILDING_PLAN_SCRUTINY",
+                      "nocType": "FIRE_NOC",
+                      "docTypes": [
+                          {
+                              "documentType": "NOC.FIRE",
+                              "required": true
+                          }
+                      ]
+                  },
+                  {
+                      "applicationType": "NEW",
+                      "nocType": "FIRE_NOC",
+                      "docTypes": [
+                          {
+                              "documentType": "NOC.FIRE",
+                              "required": true
+                          }
+                      ]
+                  },
+                  {
+                      "applicationType": "RENEW",
+                      "nocType": "FIRE_NOC",
+                      "docTypes": [
+                          {
+                              "documentType": "NOC.FIRE",
+                              "required": false
+                          }
+                      ]
+                  }
+    ]
+        
+    documents = documents.filter ( doc => {
+      if(doc.applicationType == applicationType){
+        return doc
+      }
+    })
+
+    let requiredDocumentsFormat = documents && documents[0].docTypes.map( doc => {
+      return {
+        code : doc.documentType,
+        documentType : doc.documentType,
+        required : doc.required,
+        active : doc.active || true
+      }
+    })
+
+    // [{"code":"OWNER.IDENTITYPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.IDENTITYPROOF.AADHAAR","active":true},{"code":"OWNER.IDENTITYPROOF.VOTERID","active":true},{"code":"OWNER.IDENTITYPROOF.DRIVING","active":true},{"code":"OWNER.IDENTITYPROOF.PAN","active":true},{"code":"OWNER.IDENTITYPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION"}]
     // dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
     // call prepare document upload data
+    this.prepareDocumentsUploadData(requiredDocumentsFormat)
   }
 
-  prepareDocumentsUploadData = (state, dispatch) => {
+  prepareDocumentsUploadData = (documents) => {
     // let documents = get(
     //     state,
     //     `screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.${currentDoc}`,
     //     []
     // );
-    let documents = [{"code":"OWNER.IDENTITYPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.IDENTITYPROOF.AADHAAR","active":true},{"code":"OWNER.IDENTITYPROOF.VOTERID","active":true},{"code":"OWNER.IDENTITYPROOF.DRIVING","active":true},{"code":"OWNER.IDENTITYPROOF.PAN","active":true},{"code":"OWNER.IDENTITYPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION"},{"code":"OWNER.ADDRESSPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.ADDRESSPROOF.ELECTRICITYBILL","active":true},{"code":"OWNER.ADDRESSPROOF.DL","active":true},{"code":"OWNER.ADDRESSPROOF.VOTERID","active":true},{"code":"OWNER.ADDRESSPROOF.AADHAAR","active":true},{"code":"OWNER.ADDRESSPROOF.PAN","active":true},{"code":"OWNER.ADDRESSPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.ADDRESSPROOF_DESCRIPTION"},{"code":"ELECTRICITY_BILL","documentType":"ELECTRICITY_BILL","active":true,"required":true,"description":"ELECTRICITY_BILL_DESCRIPTION"},{"code":"PLUMBER_REPORT_DRAWING","documentType":"PLUMBER_REPORT_DRAWING","active":true,"required":true,"description":"PLUMBER_REPORT_DRAWING_DESCRIPTION"},{"code":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE","documentType":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE","active":true,"required":false,"description":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE_DESCRIPTION"}]
+    // let documents = [{"code":"OWNER.IDENTITYPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.IDENTITYPROOF.AADHAAR","active":true},{"code":"OWNER.IDENTITYPROOF.VOTERID","active":true},{"code":"OWNER.IDENTITYPROOF.DRIVING","active":true},{"code":"OWNER.IDENTITYPROOF.PAN","active":true},{"code":"OWNER.IDENTITYPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION"},{"code":"OWNER.ADDRESSPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.ADDRESSPROOF.ELECTRICITYBILL","active":true},{"code":"OWNER.ADDRESSPROOF.DL","active":true},{"code":"OWNER.ADDRESSPROOF.VOTERID","active":true},{"code":"OWNER.ADDRESSPROOF.AADHAAR","active":true},{"code":"OWNER.ADDRESSPROOF.PAN","active":true},{"code":"OWNER.ADDRESSPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.ADDRESSPROOF_DESCRIPTION"},{"code":"ELECTRICITY_BILL","documentType":"ELECTRICITY_BILL","active":true,"required":true,"description":"ELECTRICITY_BILL_DESCRIPTION"},{"code":"PLUMBER_REPORT_DRAWING","documentType":"PLUMBER_REPORT_DRAWING","active":true,"required":true,"description":"PLUMBER_REPORT_DRAWING_DESCRIPTION"},{"code":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE","documentType":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE","active":true,"required":false,"description":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE_DESCRIPTION"}]
     documents = documents.filter(item => {
         return item.active;
     });
@@ -188,9 +244,6 @@ class RequiredNOCCard extends Component {
 
   triggerNoc = (nocType) => {
     this.getDocumentsFromMDMS(nocType)
-    if(nocType == "HUDULB_NOC"){
-      this.prepareDocumentsUploadData("")
-    }
     store.dispatch(handleField(
         "search-preview",
         "components.div.children.triggerNocContainer.props",
@@ -247,6 +300,7 @@ class RequiredNOCCard extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
+  const { preparedFinalObject } = screenConfiguration
 
   const scrutinyDetails = get(
     screenConfiguration.preparedFinalObject,
@@ -275,7 +329,7 @@ const mapStateToProps = (state, ownProps) => {
     "state"
   );
 
-  return { Noc,requiredNocDisplay, wfState };
+  return { Noc,requiredNocDisplay, wfState, preparedFinalObject };
 };
 const mapDispatchToProps = (dispatch) => {
   return {

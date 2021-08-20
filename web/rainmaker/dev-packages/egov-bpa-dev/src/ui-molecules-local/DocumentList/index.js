@@ -128,11 +128,15 @@ class DocumentList extends Component {
   };
 
   componentDidMount = () => {
+    prepareFinalObject("payloadDocumentFormat", []);
+  };
+
+  componentWillReceiveProps = (nextProps) => {
     const {
       documentsList,
       nocDocumentsDetailsRedux = {},
       prepareFinalObject
-    } = this.props;
+    } = nextProps;
     let index = 0;
     documentsList.forEach(docType => {
       docType.cards &&
@@ -189,7 +193,7 @@ class DocumentList extends Component {
     });
     prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux);
     prepareFinalObject("payloadDocumentFormat", []);
-  };
+  }
 
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });

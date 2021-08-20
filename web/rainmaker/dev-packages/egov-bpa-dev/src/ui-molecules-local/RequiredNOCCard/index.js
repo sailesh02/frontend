@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import get from "lodash/get";
 import { withStyles } from "@material-ui/core/styles";
 // import "./index.css";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -27,6 +26,7 @@ import { httpRequest } from "../../ui-utils/api";
 import { LinkAtom } from "../../ui-atoms-local"
 import {TriggerNOCContainer} from "../../ui-containers-local"
 import commonConfig from "config/common.js";
+import get from "lodash/get";
 
 const styles = {
   documentTitle: {
@@ -112,7 +112,6 @@ class RequiredNOCCard extends Component {
   };
 
   getDocumentsFromMDMS = async (nocType) => {
-    debugger
     let {BPA} = this.props.preparedFinalObject
     let {applicationType} = BPA
     let mdmsBody = {
@@ -120,13 +119,14 @@ class RequiredNOCCard extends Component {
         tenantId: commonConfig.tenantId,
         moduleDetails: [
           {
-            moduleName: "NOC",
-            masterDetails: [
-              {
-                name: "DocumentTypeMapping"
-              },
+            "moduleName": "NOC",
+            "masterDetails": [
+                {
+                    "name": "DocumentTypeMapping",
+                    "filter": `$.[?(@.nocType=='${nocType}')]`
+                }
             ]
-          },     
+        }     
         ]
       }
     };
@@ -138,48 +138,9 @@ class RequiredNOCCard extends Component {
       mdmsBody
     );
 
-    // let documents = payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.DocumentTypeMapping || []
+    let documents = payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.DocumentTypeMapping || []
   
-    let documents = [
-                  {
-                      "applicationType": "BUILDING_PLAN_SCRUTINY",
-                      "nocType": "FIRE_NOC",
-                      "docTypes": [
-                          {
-                              "documentType": "NOC.FIRE",
-                              "required": true
-                          }
-                      ]
-                  },
-                  {
-                      "applicationType": "NEW",
-                      "nocType": "FIRE_NOC",
-                      "docTypes": [
-                          {
-                              "documentType": "NOC.FIRE",
-                              "required": true
-                          }
-                      ]
-                  },
-                  {
-                      "applicationType": "RENEW",
-                      "nocType": "FIRE_NOC",
-                      "docTypes": [
-                          {
-                              "documentType": "NOC.FIRE",
-                              "required": false
-                          }
-                      ]
-                  }
-    ]
-        
-    documents = documents.filter ( doc => {
-      if(doc.applicationType == applicationType){
-        return doc
-      }
-    })
-
-    let requiredDocumentsFormat = documents && documents[0].docTypes.map( doc => {
+    let requiredDocumentsFormat = documents && documents.length > 0 && documents[0].docTypes.map( doc => {
       return {
         code : doc.documentType,
         documentType : doc.documentType,
@@ -187,34 +148,81 @@ class RequiredNOCCard extends Component {
         active : doc.active || true
       }
     })
-
-    // [{"code":"OWNER.IDENTITYPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.IDENTITYPROOF.AADHAAR","active":true},{"code":"OWNER.IDENTITYPROOF.VOTERID","active":true},{"code":"OWNER.IDENTITYPROOF.DRIVING","active":true},{"code":"OWNER.IDENTITYPROOF.PAN","active":true},{"code":"OWNER.IDENTITYPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION"}]
-    // dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-    // call prepare document upload data
     this.prepareDocumentsUploadData(requiredDocumentsFormat)
   }
 
+  prepareDocumentForRedux = async (documentsList) => {
+    const {nocDocumentsDetailsRedux} = this.props.preparedFinalObject 
+     let index = 0;
+     documentsList.forEach(docType => {
+       docType.cards &&
+         docType.cards.forEach(card => {
+           if (card.subCards) {
+             card.subCards.forEach(subCard => {
+               let oldDocType = get(
+                 nocDocumentsDetailsRedux,
+                 `[${index}].documentType`
+               );
+               let oldDocCode = get(
+                 nocDocumentsDetailsRedux,
+                 `[${index}].documentCode`
+               );
+               let oldDocSubCode = get(
+                 nocDocumentsDetailsRedux,
+                 `[${index}].documentSubCode`
+               );
+               if (
+                 oldDocType != docType.code ||
+                 oldDocCode != card.name ||
+                 oldDocSubCode != subCard.name
+               ) {
+                 nocDocumentsDetailsRedux[index] = {
+                   documentType: docType.code,
+                   documentCode: card.name,
+                   documentSubCode: subCard.name
+                 };
+               }
+               index++;
+             });
+           } else {
+             let oldDocType = get(
+               nocDocumentsDetailsRedux,
+               `[${index}].documentType`
+             );
+             let oldDocCode = get(
+               nocDocumentsDetailsRedux,
+               `[${index}].documentCode`
+             );
+             if (oldDocType != docType.code || oldDocCode != card.name) {
+               nocDocumentsDetailsRedux[index] = {
+                 documentType: docType.code,
+                 documentCode: card.name,
+                 isDocumentRequired: card.required,
+                 isDocumentTypeRequired: card.dropDownValues
+                   ? card.dropDownValues.required
+                   : false
+               };
+             }
+             index++;
+           }
+         });
+     });
+     store.dispatch(prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux))
+ }
+
   prepareDocumentsUploadData = (documents) => {
-    // let documents = get(
-    //     state,
-    //     `screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.${currentDoc}`,
-    //     []
-    // );
-    // let documents = [{"code":"OWNER.IDENTITYPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.IDENTITYPROOF.AADHAAR","active":true},{"code":"OWNER.IDENTITYPROOF.VOTERID","active":true},{"code":"OWNER.IDENTITYPROOF.DRIVING","active":true},{"code":"OWNER.IDENTITYPROOF.PAN","active":true},{"code":"OWNER.IDENTITYPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION"},{"code":"OWNER.ADDRESSPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.ADDRESSPROOF.ELECTRICITYBILL","active":true},{"code":"OWNER.ADDRESSPROOF.DL","active":true},{"code":"OWNER.ADDRESSPROOF.VOTERID","active":true},{"code":"OWNER.ADDRESSPROOF.AADHAAR","active":true},{"code":"OWNER.ADDRESSPROOF.PAN","active":true},{"code":"OWNER.ADDRESSPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.ADDRESSPROOF_DESCRIPTION"},{"code":"ELECTRICITY_BILL","documentType":"ELECTRICITY_BILL","active":true,"required":true,"description":"ELECTRICITY_BILL_DESCRIPTION"},{"code":"PLUMBER_REPORT_DRAWING","documentType":"PLUMBER_REPORT_DRAWING","active":true,"required":true,"description":"PLUMBER_REPORT_DRAWING_DESCRIPTION"},{"code":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE","documentType":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE","active":true,"required":false,"description":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE_DESCRIPTION"}]
-    documents = documents.filter(item => {
-        return item.active;
-    });
     let documentsContract = [];
     let tempDoc = {};
-    documents.forEach(doc => {
+    documents && documents.length > 0 && documents.forEach(doc => {
         let card = {};
         card["code"] = doc.documentType;
         card["title"] = doc.documentType;
+        card["documentType"] = doc.documentType
         card["cards"] = [];
         tempDoc[doc.documentType] = card;
     });
   
-    documents.forEach(doc => {
+    documents && documents.length > 0 && documents.forEach(doc => {
         // Handle the case for multiple muildings
         let card = {};
         card["name"] = doc.code;
@@ -240,6 +248,8 @@ class RequiredNOCCard extends Component {
     });
   
     store.dispatch(prepareFinalObject("documentsContractNOC", documentsContract));
+    this.prepareDocumentForRedux(documentsContract)
+
   };
 
   triggerNoc = (nocType) => {

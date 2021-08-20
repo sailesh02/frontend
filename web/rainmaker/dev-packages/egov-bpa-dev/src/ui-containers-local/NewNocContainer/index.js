@@ -140,30 +140,6 @@ class NewNocContainer extends Component {
     }
   }
 
-   mapDropdownValues = (documents) => {
-    let {applyScreenMdmsData} = this.props.preparedFinalObject
-    let documentsDropDownValues = applyScreenMdmsData["common-masters"].DocumentType
-     
-    let documentsList = [];
-    if (documents && documents.length > 0) {
-      documents.map(doc => {
-        let code = doc.documentType;
-        let nocType = doc.nocType;
-        doc.dropDownValues = [];
-        documentsDropDownValues.forEach(value => {
-          let values = value.code.slice(0, code.length);
-          if (code === values) {
-            doc.hasDropdown = true;
-            doc.dropDownValues.push(value);
-          }
-        });
-        documentsList.push(doc);
-      })
-    }
-    return documentsList;
-  
-  }
-
   getDocumentsFromMDMS = async (nocType) => {
     let {BPA} = this.props.preparedFinalObject
     let {applicationType} = BPA

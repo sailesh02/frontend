@@ -138,40 +138,7 @@ class RequiredNOCCard extends Component {
       mdmsBody
     );
 
-    // let documents = payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.NocTypeMapping || []
-  
-    let documents = [
-                  {
-                      "applicationType": "BUILDING_PLAN_SCRUTINY",
-                      "nocType": "FIRE_NOC",
-                      "docTypes": [
-                          {
-                              "documentType": "NOC.FIRE",
-                              "required": true
-                          }
-                      ]
-                  },
-                  {
-                      "applicationType": "NEW",
-                      "nocType": "FIRE_NOC",
-                      "docTypes": [
-                          {
-                              "documentType": "NOC.FIRE",
-                              "required": true
-                          }
-                      ]
-                  },
-                  {
-                      "applicationType": "RENEW",
-                      "nocType": "FIRE_NOC",
-                      "docTypes": [
-                          {
-                              "documentType": "NOC.FIRE",
-                              "required": false
-                          }
-                      ]
-                  }
-    ]
+    let documents = payload && payload.MdmsRes && payload.MdmsRes.NOC && payload.MdmsRes.NOC.DocumentTypeMapping || []
         
     documents = documents.filter ( doc => {
       if(doc.applicationType == applicationType){

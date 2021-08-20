@@ -852,88 +852,9 @@ export const getNocList = async (applicationType,dispatch) => {
     [],
     mdmsBody
   );
-  payload = {
-    "MdmsRes": {
-        "BPA": {
-            "NocTypeMapping": [
-                {
-                    "applicationType": "BUILDING_PLAN_SCRUTINY",
-                    "serviceType": "NEW_CONSTRUCTION",
-                    "riskType": "ALL",
-                    "nocTriggerState": "DOC_VERIFICATION_INPROGRESS",
-                    "nocTypes": [
-                        {
-                            "type": "AIRPORT_AUTHORITY",
-                            "required": true,
-                            "documentType": "NOC.AIRPORT"
-                        },
-                        {
-                            "type": "FIRE_NOC",
-                            "required": false,
-                            "documentType": "NOC.FIRE"
-                        }
-                    ]
-                },
-                {
-                    "applicationType": "BUILDING_PLAN_SCRUTINY",
-                    "serviceType": "NEW_CONSTRUCTION",
-                    "riskType": "LOW",
-                    "nocTriggerState": "DOC_VERIFICATION_INPROGRESS",
-                    "nocTypes": [
-                        {
-                            "type": "AIRPORT_AUTHORITY",
-                            "required": true,
-                            "documentType": "NOC.AIRPORT"
-                        },
-                        {
-                            "type": "FIRE_NOC",
-                            "required": false,
-                            "documentType": "NOC.FIRE"
-                        }
-                    ]
-                },
-                {
-                    "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
-                    "serviceType": "NEW_CONSTRUCTION",
-                    "riskType": "ALL",
-                    "nocTriggerState": "DOC_VERIFICATION_INPROGRESS",
-                    "nocTypes": [
-                        {
-                            "type": "AIRPORT_AUTHORITY",
-                            "required": true,
-                            "documentType": "NOC.AIRPORT"
-                        },
-                        {
-                            "type": "FIRE_NOC",
-                            "required": false,
-                            "documentType": "NOC.FIRE"
-                        }
-                    ]
-                },
-                {
-                    "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
-                    "serviceType": "NEW_CONSTRUCTION",
-                    "riskType": "LOW",
-                    "nocTriggerState": "DOC_VERIFICATION_INPROGRESS",
-                    "nocTypes": [
-                        {
-                            "type": "AIRPORT_AUTHORITY",
-                            "required": true,
-                            "documentType": "NOC.AIRPORT"
-                        },
-                        {
-                            "type": "FIRE_NOC",
-                            "required": false,
-                            "documentType": "NOC.FIRE"
-                        }
-                    ]
-                }
-            ]
-        }
-    }
-}
 
-let nocTypes = payload.MdmsRes.BPA.NocTypeMapping[0].nocTypes
+let nocTypes = payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.NocTypeMapping &&
+payload.MdmsRes.BPA.NocTypeMapping[0].nocTypes
 let nocList = nocTypes.map ( noc => {
   return {
     label : noc.type,

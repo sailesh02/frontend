@@ -108,52 +108,7 @@ class NewNocContainer extends Component {
       mdmsBody
     );
 
-    // let documents = payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.NocTypeMapping || []
-  
-    let documents = [
-                  {
-                      "applicationType": "BUILDING_PLAN_SCRUTINY",
-                      "nocType": "FIRE_NOC",
-                      "docTypes": [
-                          {
-                              "documentType": "NOC.FIRE",
-                              "required": true
-                          },
-                          {
-                            "documentType": "NOC.FIRE",
-                            "required": true
-                        },
-                        {
-                          "documentType": "NOC.FIRE",
-                          "required": true
-                      },
-                      {
-                        "documentType": "NOC.FIRE",
-                        "required": true
-                    }
-                      ]
-                  },
-                  {
-                      "applicationType": "NEW",
-                      "nocType": "FIRE_NOC",
-                      "docTypes": [
-                          {
-                              "documentType": "NOC.FIRE",
-                              "required": true
-                          }
-                      ]
-                  },
-                  {
-                      "applicationType": "RENEW",
-                      "nocType": "FIRE_NOC",
-                      "docTypes": [
-                          {
-                              "documentType": "NOC.FIRE",
-                              "required": false
-                          }
-                      ]
-                  }
-    ]
+    let documents = payload && payload.MdmsRes && payload.MdmsRes.NOC && payload.MdmsRes.NOC.DocumentTypeMapping || []
         
     documents = documents.filter ( doc => {
       if(doc.applicationType == applicationType){
@@ -168,10 +123,6 @@ class NewNocContainer extends Component {
         active : doc.active || true
       }
     })
-
-    // [{"code":"OWNER.IDENTITYPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.IDENTITYPROOF.AADHAAR","active":true},{"code":"OWNER.IDENTITYPROOF.VOTERID","active":true},{"code":"OWNER.IDENTITYPROOF.DRIVING","active":true},{"code":"OWNER.IDENTITYPROOF.PAN","active":true},{"code":"OWNER.IDENTITYPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION"}]
-    // dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-    // call prepare document upload data
     this.prepareDocumentsUploadData(requiredDocumentsFormat)
   }
 

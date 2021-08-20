@@ -128,15 +128,11 @@ class DocumentList extends Component {
   };
 
   componentDidMount = () => {
-    prepareFinalObject("payloadDocumentFormat", []);
-  };
-
-  componentWillReceiveProps = (nextProps) => {
     const {
-      documentsList,
-      nocDocumentsDetailsRedux = {},
-      prepareFinalObject
-    } = nextProps;
+    documentsList,
+    nocDocumentsDetailsRedux = {},
+    prepareFinalObject
+    } = this.props;
     let index = 0;
     documentsList.forEach(docType => {
       docType.cards &&
@@ -193,7 +189,71 @@ class DocumentList extends Component {
     });
     prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux);
     prepareFinalObject("payloadDocumentFormat", []);
-  }
+  };
+
+  // componentWillReceiveProps = (nextProps) => {
+  //   const {
+  //     documentsList,
+  //     nocDocumentsDetailsRedux = {},
+  //     prepareFinalObject
+  //   } = nextProps;
+  //   let index = 0;
+  //   documentsList.forEach(docType => {
+  //     docType.cards &&
+  //       docType.cards.forEach(card => {
+  //         if (card.subCards) {
+  //           card.subCards.forEach(subCard => {
+  //             let oldDocType = get(
+  //               nocDocumentsDetailsRedux,
+  //               `[${index}].documentType`
+  //             );
+  //             let oldDocCode = get(
+  //               nocDocumentsDetailsRedux,
+  //               `[${index}].documentCode`
+  //             );
+  //             let oldDocSubCode = get(
+  //               nocDocumentsDetailsRedux,
+  //               `[${index}].documentSubCode`
+  //             );
+  //             if (
+  //               oldDocType != docType.code ||
+  //               oldDocCode != card.name ||
+  //               oldDocSubCode != subCard.name
+  //             ) {
+  //               nocDocumentsDetailsRedux[index] = {
+  //                 documentType: docType.code,
+  //                 documentCode: card.name,
+  //                 documentSubCode: subCard.name
+  //               };
+  //             }
+  //             index++;
+  //           });
+  //         } else {
+  //           let oldDocType = get(
+  //             nocDocumentsDetailsRedux,
+  //             `[${index}].documentType`
+  //           );
+  //           let oldDocCode = get(
+  //             nocDocumentsDetailsRedux,
+  //             `[${index}].documentCode`
+  //           );
+  //           if (oldDocType != docType.code || oldDocCode != card.name) {
+  //             nocDocumentsDetailsRedux[index] = {
+  //               documentType: docType.code,
+  //               documentCode: card.name,
+  //               isDocumentRequired: card.required,
+  //               isDocumentTypeRequired: card.dropDownValues
+  //                 ? card.dropDownValues.required
+  //                 : false
+  //             };
+  //           }
+  //           index++;
+  //         }
+  //       });
+  //   });
+  //   prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux);
+  //   prepareFinalObject("payloadDocumentFormat", []);
+  // }
 
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });

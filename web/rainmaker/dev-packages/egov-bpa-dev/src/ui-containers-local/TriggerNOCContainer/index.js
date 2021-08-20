@@ -20,6 +20,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../ui-utils/api";
 import { createNoc, getNocSearchResults } from "../../ui-utils/commons"
+import get from "lodash/get";
 
 class TriggerNOCContainer extends Component {
   state = {

@@ -536,7 +536,6 @@ const setSearchResponse = async (
     { key: "sourceRefId", value: applicationNumber }
   ], state);
   
-  getNocList(get(response, "BPA[0].applicationType"),dispatch)
   dispatch(prepareFinalObject("Noc", payload.Noc));
   payload.Noc.sort(compare);
   // await prepareNOCUploadData(state, dispatch);
@@ -748,6 +747,8 @@ const setSearchResponse = async (
       applicationNumber
     )
   );
+  
+  getNocList(state,dispatch)
 
   // Set Institution/Applicant info card visibility
   if (
@@ -827,7 +828,9 @@ const setSearchResponse = async (
 
 };
 
-export const getNocList = async (applicationType,dispatch) => {
+export const getNocList = async (state,dispatch) => {
+  const {BPA} = state.screenConfiguration.preparedFinalObject
+  const {serviceType} = BPA
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -837,7 +840,7 @@ export const getNocList = async (applicationType,dispatch) => {
           "masterDetails": [
               {
                   "name": "NocTypeMapping",
-                  "filter": `$.[?(@.serviceType=='${applicationType}')]`
+                  "filter": `$.[?(@.serviceType=='${serviceType}')]`
               }
           ]
         }    
@@ -853,9 +856,9 @@ export const getNocList = async (applicationType,dispatch) => {
     mdmsBody
   );
 
-let nocTypes = payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.NocTypeMapping &&
-payload.MdmsRes.BPA.NocTypeMapping[0].nocTypes
-let nocList = nocTypes.map ( noc => {
+let nocTypes = payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.NocTypeMapping &&
+payload.MdmsRes.BPA.NocTypeMapping.length > 0 && payload.MdmsRes.BPA.NocTypeMapping[0].nocTypes
+let nocList = nocTypes && nocTypes.length > 0 && nocTypes.map ( noc => {
   return {
     label : noc.type,
     value : noc.type

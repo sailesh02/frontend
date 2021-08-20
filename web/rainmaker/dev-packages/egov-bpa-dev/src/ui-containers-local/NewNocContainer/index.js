@@ -20,6 +20,7 @@ import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { createNoc, getNocSearchResults } from "../../ui-utils/commons"
 import { httpRequest } from "../../ui-utils/api";
 import commonConfig from "config/common.js";
+import get from "lodash/get";
 
 const fieldConfig = {
     nocType: {
@@ -40,6 +41,64 @@ class NewNocContainer extends Component {
     nocList : this.props.nocList
   }
 
+  prepareDocumentForRedux = async (documentsList) => {
+     const {nocDocumentsDetailsRedux} = this.props.preparedFinalObject 
+      let index = 0;
+      documentsList.forEach(docType => {
+        docType.cards &&
+          docType.cards.forEach(card => {
+            if (card.subCards) {
+              card.subCards.forEach(subCard => {
+                let oldDocType = get(
+                  nocDocumentsDetailsRedux,
+                  `[${index}].documentType`
+                );
+                let oldDocCode = get(
+                  nocDocumentsDetailsRedux,
+                  `[${index}].documentCode`
+                );
+                let oldDocSubCode = get(
+                  nocDocumentsDetailsRedux,
+                  `[${index}].documentSubCode`
+                );
+                if (
+                  oldDocType != docType.code ||
+                  oldDocCode != card.name ||
+                  oldDocSubCode != subCard.name
+                ) {
+                  nocDocumentsDetailsRedux[index] = {
+                    documentType: docType.code,
+                    documentCode: card.name,
+                    documentSubCode: subCard.name
+                  };
+                }
+                index++;
+              });
+            } else {
+              let oldDocType = get(
+                nocDocumentsDetailsRedux,
+                `[${index}].documentType`
+              );
+              let oldDocCode = get(
+                nocDocumentsDetailsRedux,
+                `[${index}].documentCode`
+              );
+              if (oldDocType != docType.code || oldDocCode != card.name) {
+                nocDocumentsDetailsRedux[index] = {
+                  documentType: docType.code,
+                  documentCode: card.name,
+                  isDocumentRequired: card.required,
+                  isDocumentTypeRequired: card.dropDownValues
+                    ? card.dropDownValues.required
+                    : false
+                };
+              }
+              index++;
+            }
+          });
+      });
+      store.dispatch(prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux))
+  }
   prepareDocumentsForPayload = async (wfState) => {
     const {preparedFinalObject} = this.props
     const {nocDocumentsDetailsRedux} = preparedFinalObject
@@ -60,7 +119,7 @@ class NewNocContainer extends Component {
         if (documents && documents.documents) {
           documents.documents.map(docs => {
             let doc = {};
-            doc.documentType = documents.documentType;
+            doc.documentType = documents.documentCode;
             doc.fileStoreId = docs.fileStoreId;
             doc.fileStore = docs.fileStoreId;
             doc.fileName = docs.fileName;
@@ -79,6 +138,30 @@ class NewNocContainer extends Component {
       });
       store.dispatch(prepareFinalObject("payloadDocumentFormat",uploadingDocuments));
     }
+  }
+
+   mapDropdownValues = (documents) => {
+    let {applyScreenMdmsData} = this.props.preparedFinalObject
+    let documentsDropDownValues = applyScreenMdmsData["common-masters"].DocumentType
+     
+    let documentsList = [];
+    if (documents && documents.length > 0) {
+      documents.map(doc => {
+        let code = doc.documentType;
+        let nocType = doc.nocType;
+        doc.dropDownValues = [];
+        documentsDropDownValues.forEach(value => {
+          let values = value.code.slice(0, code.length);
+          if (code === values) {
+            doc.hasDropdown = true;
+            doc.dropDownValues.push(value);
+          }
+        });
+        documentsList.push(doc);
+      })
+    }
+    return documentsList;
+  
   }
 
   getDocumentsFromMDMS = async (nocType) => {
@@ -105,25 +188,20 @@ class NewNocContainer extends Component {
       "/egov-mdms-service/v1/_search",
       "_search",
       [],
-      mdmsBody
+    mdmsBody
     );
 
     let documents = payload && payload.MdmsRes && payload.MdmsRes.NOC && payload.MdmsRes.NOC.DocumentTypeMapping || []
-        
-    documents = documents.filter ( doc => {
-      if(doc.applicationType == applicationType){
-        return doc
-      }
-    })
 
-    let requiredDocumentsFormat = documents && documents[0].docTypes.map( doc => {
+    let documentList = documents && documents.length > 0 && documents[0].docTypes.map( doc => {
       return {
-        ...doc,
         code : doc.documentType,
+        documentType : doc.documentType,
+        required : doc.required,
         active : doc.active || true
       }
     })
-    this.prepareDocumentsUploadData(requiredDocumentsFormat)
+    this.prepareDocumentsUploadData(documentList)
   }
 
   createNoc = async (nocType) => {
@@ -182,9 +260,9 @@ class NewNocContainer extends Component {
   }
 
   prepareDocumentsUploadData = (documents) => {
-    documents = documents.filter(item => {
-        return item.active;
-    });
+    // documents = documents.filter(item => {
+    //     return item.active;
+    // });
     let documentsContract = [];
     let tempDoc = {};
     documents.forEach(doc => {
@@ -222,6 +300,8 @@ class NewNocContainer extends Component {
     });
   
     store.dispatch(prepareFinalObject("documentsContractNOC", documentsContract));
+    this.prepareDocumentForRedux(documentsContract)
+
   };
 
   componentDidMount = () => {

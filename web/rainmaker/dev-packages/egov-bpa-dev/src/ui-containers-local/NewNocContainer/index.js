@@ -322,7 +322,7 @@ class NewNocContainer extends Component {
               <Grid
                 container="true"
                 style={{
-                  height:'300px'
+                  height:'250px'
                 }}
                 spacing={12}
                 className="action-container">
@@ -334,8 +334,8 @@ class NewNocContainer extends Component {
                   item
                   sm={10}>
                   <Typography component="h2" variant="subheading">
-                    <LabelContainer labelName="NOC Details"
-                    labelKey="NOC Details" />
+                    <LabelContainer labelName="Apply for New NOC"
+                    labelKey="BPA_APPLY_NEW_NOC_HEADER" />
                   </Typography>
                 </Grid>
                 <Grid
@@ -371,12 +371,12 @@ class NewNocContainer extends Component {
                         // jsonPath={'mynocType'}
                       />
                   </Grid>
-                  <Grid item sm={12}>
+                  {this.state.nocType && <Grid item sm={12}>
                   <Typography component="h2">
                     <LabelContainer labelName="Required Documents"
                     labelKey="BPA_DOCUMENT_DETAILS_HEADER" />
                   </Typography>
-                  </Grid>
+                  </Grid>}
                   <Grid item sm={12}>
                       <DocumentListContainer
                         buttonLabel = {{
@@ -427,7 +427,7 @@ const mapStateToProps = (state) => {
   const { form,screenConfiguration } = state;
   const {preparedFinalObject} = screenConfiguration
   const { newNocList } = preparedFinalObject
-  
+
   return { form,preparedFinalObject, newNocList };
 };
 

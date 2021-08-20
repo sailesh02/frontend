@@ -160,7 +160,7 @@ class TriggerNOCContainer extends Component {
               <Grid
                 container="true"
                 style={{
-                  height:'300px'
+                  height:'250px'
                 }}
                 spacing={12}
                 marginTop={16}
@@ -174,7 +174,7 @@ class TriggerNOCContainer extends Component {
                   sm={10}>
                   <Typography component="h2" variant="subheading">
                     <LabelContainer labelName={getTransformedLocale(this.props.nocType)}
-                    labelKey={getTransformedLocale(this.props.nocType)} />
+                    labelKey={`Apply For ${getTransformedLocale(this.props.nocType)}`} />
                   </Typography>
                 </Grid>
                 <Grid

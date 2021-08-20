@@ -497,6 +497,17 @@ class DocumentList extends Component {
               </div>
             );
           })}
+          {
+            !documentsList || documentsList.length == 0 &&
+            <Grid>
+                <Typography
+                variant="subtitle1"
+                style={{ fontWeight: "bold", fontSize: "12px" }}
+              >
+                No Documents Found
+              </Typography>
+            </Grid>
+          }
       </div>
     );
   }

@@ -23,7 +23,7 @@ const themeStyles = theme => ({
   documentContainer: {
     backgroundColor: "#F2F2F2",
     padding: "16px",
-    marginTop: "10px",
+    // marginTop: "10px",
     marginBottom: "16px"
   },
   documentCard: {
@@ -463,7 +463,7 @@ class DocumentList extends Component {
     let index = 0;
     return (
       <div>
-        {documentsList &&
+        {documentsList && documentsList.length > 0 && 
           documentsList.map(container => {
             return (
               <div>

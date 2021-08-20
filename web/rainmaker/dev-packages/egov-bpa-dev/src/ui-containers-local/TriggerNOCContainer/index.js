@@ -159,7 +159,7 @@ class TriggerNOCContainer extends Component {
               <Grid
                 container="true"
                 style={{
-                  height:'400px'
+                  height:'300px'
                 }}
                 spacing={12}
                 marginTop={16}

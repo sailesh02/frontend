@@ -56,12 +56,11 @@ class NewNocContainer extends Component {
     // prepareFinalObject("nocDocumentsDetailsRedux", {});
     let requiredDocuments = [], uploadingDocuments = [];
     if (documnts && documnts.length > 0) {
-      debugger
       documnts.forEach(documents => {
         if (documents && documents.documents) {
           documents.documents.map(docs => {
             let doc = {};
-            doc.documentType = documents.documentCode;
+            doc.documentType = documents.documentType;
             doc.fileStoreId = docs.fileStoreId;
             doc.fileStore = docs.fileStoreId;
             doc.fileName = docs.fileName;
@@ -83,7 +82,6 @@ class NewNocContainer extends Component {
   }
 
   getDocumentsFromMDMS = async (nocType) => {
-    debugger
     let {BPA} = this.props.preparedFinalObject
     let {applicationType} = BPA
     let mdmsBody = {
@@ -120,7 +118,19 @@ class NewNocContainer extends Component {
                           {
                               "documentType": "NOC.FIRE",
                               "required": true
-                          }
+                          },
+                          {
+                            "documentType": "NOC.FIRE",
+                            "required": true
+                        },
+                        {
+                          "documentType": "NOC.FIRE",
+                          "required": true
+                      },
+                      {
+                        "documentType": "NOC.FIRE",
+                        "required": true
+                    }
                       ]
                   },
                   {
@@ -226,11 +236,11 @@ class NewNocContainer extends Component {
     });
     let documentsContract = [];
     let tempDoc = {};
-    debugger
     documents.forEach(doc => {
         let card = {};
         card["code"] = doc.documentType;
         card["title"] = doc.documentType;
+        card["documentType"] = doc.documentType
         card["cards"] = [];
         tempDoc[doc.documentType] = card;
     });
@@ -264,8 +274,7 @@ class NewNocContainer extends Component {
   };
 
   componentDidMount = () => {
-    debugger
-    console.log("this.props.newNocListthis.props.newNocListthis.props.newNocListthis.props.newNocListthis.props.newNocListthis.props.newNocList",this.props.nocList)
+    store.dispatch(prepareFinalObject("documentsContractNOC", []));
   };
 
   closeDialog = () => {
@@ -278,13 +287,10 @@ class NewNocContainer extends Component {
   }
 
   onNocChange = (e) => {
-    debugger
     this.setState({
       nocType:e.target.value
     })
-    // mdms API call to change documents
     this.getDocumentsFromMDMS(e.target.value)
-    //prepareDocumentsUploadData funtion with new documents
   }
 
   render() {
@@ -309,10 +315,9 @@ class NewNocContainer extends Component {
               <Grid
                 container="true"
                 style={{
-                  height:'400px'
+                  height:'300px'
                 }}
                 spacing={12}
-                marginTop={16}
                 className="action-container">
                 <Grid
                   style={{
@@ -343,9 +348,7 @@ class NewNocContainer extends Component {
                   <Grid
                     item
                     sm={12}
-                    style={{
-                      marginTop: 12
-                    }}>
+                  >
                   <TextFieldContainer
                         select={true}
                         style={{ marginRight: "15px" }}

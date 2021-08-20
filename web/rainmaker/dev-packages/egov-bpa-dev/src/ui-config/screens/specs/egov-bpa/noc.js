@@ -11,7 +11,7 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { checkValueForNA } from "../utils/index";
   import {
-    handleScreenConfigurationFieldChange as handleField
+    handleScreenConfigurationFieldChange as handleField,prepareFinalObject
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   
   const getHeader = label => {
@@ -72,6 +72,8 @@ export const onClickAdd = async (state, dispatch) => {
      "open",
      true
    ))
+   dispatch(prepareFinalObject("documentsContractNOC", []));
+
 }
 
 export const nocDetailsSearch = getCommonGrayCard({

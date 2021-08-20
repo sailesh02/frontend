@@ -36,7 +36,8 @@ const fieldConfig = {
   
 class NewNocContainer extends Component {
   state = {
-    nocType : ''
+    nocType : this.props.nocList ? this.props.nocList[0] : '',
+    nocList : this.props.nocList
   }
 
   prepareDocumentsForPayload = async (wfState) => {
@@ -55,6 +56,7 @@ class NewNocContainer extends Component {
     // prepareFinalObject("nocDocumentsDetailsRedux", {});
     let requiredDocuments = [], uploadingDocuments = [];
     if (documnts && documnts.length > 0) {
+      debugger
       documnts.forEach(documents => {
         if (documents && documents.documents) {
           documents.documents.map(docs => {
@@ -78,6 +80,89 @@ class NewNocContainer extends Component {
       });
       store.dispatch(prepareFinalObject("payloadDocumentFormat",uploadingDocuments));
     }
+  }
+
+  getDocumentsFromMDMS = async (nocType) => {
+    debugger
+    let {BPA} = this.props.preparedFinalObject
+    let {applicationType} = BPA
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+          {
+            "moduleName": "NOC",
+            "masterDetails": [
+                {
+                    "name": "DocumentTypeMapping",
+                    "filter": `$.[?(@.nocType=='${nocType}')]`
+                }
+            ]
+        }     
+        ]
+      }
+    };
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+
+    // let documents = payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.NocTypeMapping || []
+  
+    let documents = [
+                  {
+                      "applicationType": "BUILDING_PLAN_SCRUTINY",
+                      "nocType": "FIRE_NOC",
+                      "docTypes": [
+                          {
+                              "documentType": "NOC.FIRE",
+                              "required": true
+                          }
+                      ]
+                  },
+                  {
+                      "applicationType": "NEW",
+                      "nocType": "FIRE_NOC",
+                      "docTypes": [
+                          {
+                              "documentType": "NOC.FIRE",
+                              "required": true
+                          }
+                      ]
+                  },
+                  {
+                      "applicationType": "RENEW",
+                      "nocType": "FIRE_NOC",
+                      "docTypes": [
+                          {
+                              "documentType": "NOC.FIRE",
+                              "required": false
+                          }
+                      ]
+                  }
+    ]
+        
+    documents = documents.filter ( doc => {
+      if(doc.applicationType == applicationType){
+        return doc
+      }
+    })
+
+    let requiredDocumentsFormat = documents && documents[0].docTypes.map( doc => {
+      return {
+        ...doc,
+        code : doc.documentType,
+        active : doc.active || true
+      }
+    })
+
+    // [{"code":"OWNER.IDENTITYPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.IDENTITYPROOF.AADHAAR","active":true},{"code":"OWNER.IDENTITYPROOF.VOTERID","active":true},{"code":"OWNER.IDENTITYPROOF.DRIVING","active":true},{"code":"OWNER.IDENTITYPROOF.PAN","active":true},{"code":"OWNER.IDENTITYPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION"}]
+    // dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    // call prepare document upload data
+    this.prepareDocumentsUploadData(requiredDocumentsFormat)
   }
 
   createNoc = async (nocType) => {
@@ -135,18 +220,13 @@ class NewNocContainer extends Component {
     this.createNoc(this.state.nocType)
   }
 
-  prepareDocumentsUploadData = (state, dispatch) => {
-    // let documents = get(
-    //     state,
-    //     `screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.${currentDoc}`,
-    //     []
-    // );
-    let documents = [{"code":"OWNER.IDENTITYPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.IDENTITYPROOF.AADHAAR","active":true},{"code":"OWNER.IDENTITYPROOF.VOTERID","active":true},{"code":"OWNER.IDENTITYPROOF.DRIVING","active":true},{"code":"OWNER.IDENTITYPROOF.PAN","active":true},{"code":"OWNER.IDENTITYPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION"},{"code":"OWNER.ADDRESSPROOF","documentType":"OWNER","required":true,"active":true,"hasDropdown":true,"dropdownData":[{"code":"OWNER.ADDRESSPROOF.ELECTRICITYBILL","active":true},{"code":"OWNER.ADDRESSPROOF.DL","active":true},{"code":"OWNER.ADDRESSPROOF.VOTERID","active":true},{"code":"OWNER.ADDRESSPROOF.AADHAAR","active":true},{"code":"OWNER.ADDRESSPROOF.PAN","active":true},{"code":"OWNER.ADDRESSPROOF.PASSPORT","active":true}],"description":"OWNER.ADDRESSPROOF.ADDRESSPROOF_DESCRIPTION"},{"code":"ELECTRICITY_BILL","documentType":"ELECTRICITY_BILL","active":true,"required":true,"description":"ELECTRICITY_BILL_DESCRIPTION"},{"code":"PLUMBER_REPORT_DRAWING","documentType":"PLUMBER_REPORT_DRAWING","active":true,"required":true,"description":"PLUMBER_REPORT_DRAWING_DESCRIPTION"},{"code":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE","documentType":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE","active":true,"required":false,"description":"BUILDING_PLAN_OR_COMPLETION_CERTIFICATE_DESCRIPTION"},{"code":"PROPERTY_TAX_RECIEPT","documentType":"PROPERTY_TAX_RECIEPT","active":true,"required":false,"description":"PROPERTY_TAX_RECIEPT_DESCRIPTION"}]
+  prepareDocumentsUploadData = (documents) => {
     documents = documents.filter(item => {
         return item.active;
     });
     let documentsContract = [];
     let tempDoc = {};
+    debugger
     documents.forEach(doc => {
         let card = {};
         card["code"] = doc.documentType;
@@ -184,7 +264,8 @@ class NewNocContainer extends Component {
   };
 
   componentDidMount = () => {
-    // this.prepareDocumentsUploadData("")
+    debugger
+    console.log("this.props.newNocListthis.props.newNocListthis.props.newNocListthis.props.newNocListthis.props.newNocListthis.props.newNocList",this.props.nocList)
   };
 
   closeDialog = () => {
@@ -196,34 +277,8 @@ class NewNocContainer extends Component {
       ))
   }
 
-  getDocumentsFromMDMS = async (dispatch) => {
-    let mdmsBody = {
-      MdmsCriteria: {
-        tenantId: commonConfig.tenantId,
-        moduleDetails: [
-          {
-            moduleName: "NOC",
-            masterDetails: [
-              {
-                name: "DocumentTypeMapping"
-              },
-            ]
-          }
-        ]
-      }
-    };
-    let payload = await httpRequest(
-      "post",
-      "/egov-mdms-service/v1/_search",
-      "_search",
-      [],
-      mdmsBody
-    );
-    // dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-    // call prepare document upload data
-  }
-
   onNocChange = (e) => {
+    debugger
     this.setState({
       nocType:e.target.value
     })
@@ -296,7 +351,7 @@ class NewNocContainer extends Component {
                         style={{ marginRight: "15px" }}
                         label={fieldConfig.nocType.label}
                         placeholder={fieldConfig.nocType.placeholder}
-                        data={dropDownData}
+                        data={this.props.nocList}
                         optionValue="value"
                         optionLabel="label"
                         hasLocalization={false}
@@ -361,7 +416,8 @@ class NewNocContainer extends Component {
 const mapStateToProps = (state) => {
   const { form,screenConfiguration } = state;
   const {preparedFinalObject} = screenConfiguration
-  return { form,preparedFinalObject };
+  const { newNocList } = preparedFinalObject
+  return { form,preparedFinalObject, newNocList };
 };
 
 const mapDispatchToProps = (dispatch) => {

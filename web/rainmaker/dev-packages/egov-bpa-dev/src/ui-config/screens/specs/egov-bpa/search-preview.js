@@ -499,7 +499,8 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
               name: "DocumentTypeMapping"
             },
           ]
-        }
+        },
+
       ]
     }
   };
@@ -535,6 +536,7 @@ const setSearchResponse = async (
     { key: "sourceRefId", value: applicationNumber }
   ], state);
   
+  getNocList(get(response, "BPA[0].applicationType"),dispatch)
   dispatch(prepareFinalObject("Noc", payload.Noc));
   payload.Noc.sort(compare);
   // await prepareNOCUploadData(state, dispatch);
@@ -580,6 +582,7 @@ const setSearchResponse = async (
       )
     );
   }
+
   if (get(response, "BPA[0].status") == "APPROVED" && ifUserRoleExists("CITIZEN")) {
 
 
@@ -823,6 +826,129 @@ const setSearchResponse = async (
   }
 
 };
+
+export const getNocList = async (applicationType,dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [
+        {
+          "moduleName": "BPA",
+          "masterDetails": [
+              {
+                  "name": "NocTypeMapping",
+                  "filter": `$.[?(@.serviceType=='${applicationType}')]`
+              }
+          ]
+        }    
+      ]
+    }
+  };
+
+  let payload = await httpRequest(
+    "post",
+    "/egov-mdms-service/v1/_search",
+    "_search",
+    [],
+    mdmsBody
+  );
+  payload = {
+    "MdmsRes": {
+        "BPA": {
+            "NocTypeMapping": [
+                {
+                    "applicationType": "BUILDING_PLAN_SCRUTINY",
+                    "serviceType": "NEW_CONSTRUCTION",
+                    "riskType": "ALL",
+                    "nocTriggerState": "DOC_VERIFICATION_INPROGRESS",
+                    "nocTypes": [
+                        {
+                            "type": "AIRPORT_AUTHORITY",
+                            "required": true,
+                            "documentType": "NOC.AIRPORT"
+                        },
+                        {
+                            "type": "FIRE_NOC",
+                            "required": false,
+                            "documentType": "NOC.FIRE"
+                        }
+                    ]
+                },
+                {
+                    "applicationType": "BUILDING_PLAN_SCRUTINY",
+                    "serviceType": "NEW_CONSTRUCTION",
+                    "riskType": "LOW",
+                    "nocTriggerState": "DOC_VERIFICATION_INPROGRESS",
+                    "nocTypes": [
+                        {
+                            "type": "AIRPORT_AUTHORITY",
+                            "required": true,
+                            "documentType": "NOC.AIRPORT"
+                        },
+                        {
+                            "type": "FIRE_NOC",
+                            "required": false,
+                            "documentType": "NOC.FIRE"
+                        }
+                    ]
+                },
+                {
+                    "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+                    "serviceType": "NEW_CONSTRUCTION",
+                    "riskType": "ALL",
+                    "nocTriggerState": "DOC_VERIFICATION_INPROGRESS",
+                    "nocTypes": [
+                        {
+                            "type": "AIRPORT_AUTHORITY",
+                            "required": true,
+                            "documentType": "NOC.AIRPORT"
+                        },
+                        {
+                            "type": "FIRE_NOC",
+                            "required": false,
+                            "documentType": "NOC.FIRE"
+                        }
+                    ]
+                },
+                {
+                    "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+                    "serviceType": "NEW_CONSTRUCTION",
+                    "riskType": "LOW",
+                    "nocTriggerState": "DOC_VERIFICATION_INPROGRESS",
+                    "nocTypes": [
+                        {
+                            "type": "AIRPORT_AUTHORITY",
+                            "required": true,
+                            "documentType": "NOC.AIRPORT"
+                        },
+                        {
+                            "type": "FIRE_NOC",
+                            "required": false,
+                            "documentType": "NOC.FIRE"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
+
+let nocTypes = payload.MdmsRes.BPA.NocTypeMapping[0].nocTypes
+let nocList = nocTypes.map ( noc => {
+  return {
+    label : noc.type,
+    value : noc.type
+  }
+})
+
+dispatch(handleField(
+  "search-preview",
+  "components.div.children.newNoc.props",
+  "nocList",
+  nocList
+))
+dispatch(prepareFinalObject("newNocList", nocList));
+}
 
 export const beforeSubmitHook = async () => {
   let state = store.getState();
@@ -1082,7 +1208,8 @@ const screenConfig = {
           moduleName: "egov-bpa",
           visible: true,
           props: {
-            open:false
+            open:false,
+            nocList: []
           }
         },
         triggerNocContainer :{

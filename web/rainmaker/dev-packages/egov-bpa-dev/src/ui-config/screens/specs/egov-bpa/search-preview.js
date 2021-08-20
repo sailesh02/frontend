@@ -858,7 +858,23 @@ export const getNocList = async (state,dispatch) => {
 
 let nocTypes = payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.NocTypeMapping &&
 payload.MdmsRes.BPA.NocTypeMapping.length > 0 && payload.MdmsRes.BPA.NocTypeMapping[0].nocTypes
-let nocList = nocTypes && nocTypes.length > 0 && nocTypes.map ( noc => {
+
+// to check already created NOC's
+const Noc = get(state.screenConfiguration.preparedFinalObject, "Noc", []);
+let generatedNoc = Noc.map( noc => {
+    return noc.nocType
+})
+
+let nocList = []
+if(nocTypes && nocTypes.length > 0){
+  nocList = nocTypes.filter ( noc => {
+        if(!generatedNoc.includes(noc.type)){
+          return noc
+        }
+    })
+  }
+
+nocList = nocList && nocList.length > 0 && nocList.map ( noc => {
   return {
     label : noc.type,
     value : noc.type

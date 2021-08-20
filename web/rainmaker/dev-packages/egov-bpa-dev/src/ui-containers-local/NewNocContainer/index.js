@@ -427,6 +427,7 @@ const mapStateToProps = (state) => {
   const { form,screenConfiguration } = state;
   const {preparedFinalObject} = screenConfiguration
   const { newNocList } = preparedFinalObject
+  
   return { form,preparedFinalObject, newNocList };
 };
 

@@ -5470,6 +5470,7 @@ export const getLicenseDetails = async (state, dispatch) => {
 
   let tenantId = getTenantId();
   let userInfo = JSON.parse(getUserInfo());
+  let userName = userInfo && userInfo.name
   const id = get(userInfo, "id");
   const queryObject = [
     {
@@ -5501,7 +5502,7 @@ export const getLicenseDetails = async (state, dispatch) => {
     }
   } catch (error) {
     console.log(error);
-    return {};
+    return userName;
   }
 };
 

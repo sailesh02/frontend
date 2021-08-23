@@ -17,7 +17,7 @@ import {
 import {DocumentListContainer} from '../'
 import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { createNoc, getNocSearchResults } from "../../ui-utils/commons"
+import { createNoc, getNocSearchResults, getAdditionalDetails } from "../../ui-utils/commons"
 import { httpRequest } from "../../ui-utils/api";
 import commonConfig from "config/common.js";
 import get from "lodash/get";
@@ -181,53 +181,68 @@ class NewNocContainer extends Component {
   }
 
   createNoc = async (nocType) => {
-    let { payloadDocumentFormat } = this.props.preparedFinalObject
-    let {BPA} = this.props.preparedFinalObject
-    let payload = {
-      tenantId : BPA.tenantId,
-      nocNo : null,
-      applicationType : BPA.applicationType,
-      nocType : nocType,
-      accountId : BPA.accountId,
-      sourceRefId : BPA.applicationNo,
-      source: "BPA",
-      applicationStatus : BPA.status,
-      landId : null,
-      status : null,
-      documents : payloadDocumentFormat,
-      workflow : null,
-      auditDetails : BPA.auditDetails,
-      additionalDetails : BPA.additionalDetails
-    }
-      let response = await createNoc(payload);
-      if(response){
-        store.dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName: "BPA_NOC_CREATED_SUCCESS_MSG",
-              labelKey: "BPA_NOC_CREATED_SUCCESS_MSG",
-            },
-            "success"
+    if(nocType){
+      let additionalDetails = getAdditionalDetails(nocType,this.props.preparedFinalObject)
+      let { payloadDocumentFormat } = this.props.preparedFinalObject
+      let {BPA} = this.props.preparedFinalObject
+      let payload = {
+        tenantId : BPA.tenantId,
+        nocNo : null,
+        applicationType : BPA.applicationType,
+        nocType : nocType,
+        accountId : BPA.accountId,
+        sourceRefId : BPA.applicationNo,
+        source: "BPA",
+        applicationStatus : BPA.status,
+        landId : null,
+        status : null,
+        documents : payloadDocumentFormat,
+        workflow : null,
+        auditDetails : BPA.auditDetails,
+        additionalDetails : additionalDetails
+      }
+        let response = await createNoc(payload);
+        if(response){
+          store.dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "BPA_NOC_CREATED_SUCCESS_MSG",
+                labelKey: "BPA_NOC_CREATED_SUCCESS_MSG",
+              },
+              "success"
+            )
           )
-        )
-
-        await getNocSearchResults([
+  
+          await getNocSearchResults([
+            {
+              key: "tenantId",
+              value: BPA.tenantId
+            },
+            { key: "sourceRefId", value: BPA.applicationNo }
+          ],"",true);
+  
+          store.dispatch(handleField(
+            "search-preview",
+            "components.div.children.newNoc.props",
+            "open",
+            false
+          ))
+  
+        } 
+    }else{
+      store.dispatch(
+        toggleSnackbar(
+          true,
           {
-            key: "tenantId",
-            value: BPA.tenantId
+            labelName: "BPA_SELECT_NOC_TYPE",
+            labelKey: "BPA_SELECT_NOC_TYPE",
           },
-          { key: "sourceRefId", value: BPA.applicationNo }
-        ],"",true);
-
-        store.dispatch(handleField(
-          "search-preview",
-          "components.div.children.newNoc.props",
-          "open",
-          false
-        ))
-
-      }   
+          "warning"
+        )
+      )
+    }
+      
   };
 
   saveDetails = () => {
@@ -241,7 +256,7 @@ class NewNocContainer extends Component {
     // });
     let documentsContract = [];
     let tempDoc = {};
-    documents.forEach(doc => {
+    documents && documents.length > 0 && documents.forEach(doc => {
         let card = {};
         card["code"] = doc.documentType;
         card["title"] = doc.documentType;
@@ -250,7 +265,7 @@ class NewNocContainer extends Component {
         tempDoc[doc.documentType] = card;
     });
   
-    documents.forEach(doc => {
+    documents && documents.length > 0 && documents.forEach(doc => {
         // Handle the case for multiple muildings
         let card = {};
         card["name"] = doc.code;

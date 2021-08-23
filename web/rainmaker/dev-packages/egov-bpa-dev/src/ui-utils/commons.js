@@ -1716,13 +1716,17 @@ export const getNocSearchResults = async (queryObject, dispatch,displayNoc) => {
 };
 
 export const createNoc = async (payload) => {
+  let customRequestInfo = JSON.parse(getUserInfo())
   try {
     const response = await httpRequest(
       "post",
       "/noc-services/v1/noc/_create",
       "",
       [],
-      { Noc: payload }
+      { Noc: payload },
+      [],
+      {userInfo :customRequestInfo }
+      
     );
     return response;
   } catch (error) {
@@ -1736,6 +1740,35 @@ export const createNoc = async (payload) => {
     throw error;
   }
 };
+
+export const getWorkflowCode = (noc,mode) => {
+  switch(mode){
+    case 'offline':
+      return noc[0].offlineWF
+    case 'online':
+      return noc[0].onlineWF
+    case 'third-party':
+      return noc[0].thirdPartyWF
+    default :
+      return ''      
+  }
+}
+export const getAdditionalDetails = (nocType,preparedFinalObject) => {
+  
+  let nocTypes = get(preparedFinalObject, "nocTypes", []);
+  let requiredNoc = nocTypes && nocTypes.length > 0 && nocTypes.filter( noc => {
+    if(noc.code == nocType ){
+      return noc
+    }
+  })
+
+  let mode = requiredNoc && requiredNoc.length > 0 && requiredNoc[0].mode || ""
+  let workflowCode = getWorkflowCode(requiredNoc,mode)
+  return {
+    mode : mode,
+    workflowCode : workflowCode
+  }
+}
 
 export const nocapplicationUpdate = (state) => {
   const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);

@@ -836,11 +836,10 @@ export const getNocList = async (state,dispatch) => {
       tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
-          "moduleName": "BPA",
+          "moduleName": "NOC",
           "masterDetails": [
               {
-                  "name": "NocTypeMapping",
-                  "filter": `$.[?(@.serviceType=='${serviceType}')]`
+                  "name": "NocType"
               }
           ]
         }    
@@ -856,8 +855,8 @@ export const getNocList = async (state,dispatch) => {
     mdmsBody
   );
 
-let nocTypes = payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.NocTypeMapping &&
-payload.MdmsRes.BPA.NocTypeMapping.length > 0 && payload.MdmsRes.BPA.NocTypeMapping[0].nocTypes
+let nocTypes = payload && payload.MdmsRes && payload.MdmsRes.NOC && payload.MdmsRes.NOC.NocType &&
+payload.MdmsRes.NOC.NocType.length > 0 && payload.MdmsRes.NOC.NocType
 
 // to check already created NOC's
 const Noc = get(state.screenConfiguration.preparedFinalObject, "Noc", []);
@@ -865,10 +864,13 @@ let generatedNoc = Noc.map( noc => {
     return noc.nocType
 })
 
+dispatch(prepareFinalObject("nocTypes", nocTypes));
+
+
 let nocList = []
 if(nocTypes && nocTypes.length > 0){
   nocList = nocTypes.filter ( noc => {
-        if(!generatedNoc.includes(noc.type)){
+        if(!generatedNoc.includes(noc.code)){
           return noc
         }
     })
@@ -876,8 +878,8 @@ if(nocTypes && nocTypes.length > 0){
 
 nocList = nocList && nocList.length > 0 && nocList.map ( noc => {
   return {
-    label : noc.type,
-    value : noc.type
+    label : noc.code,
+    value : noc.code
   }
 })
 

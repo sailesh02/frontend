@@ -19,7 +19,7 @@ import {
   getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../ui-utils/api";
-import { createNoc, getNocSearchResults } from "../../ui-utils/commons"
+import { createNoc, getNocSearchResults, getAdditionalDetails } from "../../ui-utils/commons"
 import get from "lodash/get";
 
 class TriggerNOCContainer extends Component {
@@ -71,6 +71,7 @@ class TriggerNOCContainer extends Component {
   }
 
   createNoc = async (nocType) => {
+    let additionalDetails = getAdditionalDetails(nocType,this.props.preparedFinalObject)
     let { payloadDocumentFormat } = this.props.preparedFinalObject
     let {BPA} = this.props.preparedFinalObject
     let payload = {
@@ -87,7 +88,7 @@ class TriggerNOCContainer extends Component {
       documents : payloadDocumentFormat,
       workflow : null,
       auditDetails : BPA.auditDetails,
-      additionalDetails : BPA.additionalDetails
+      additionalDetails : additionalDetails
     }
       let response = await createNoc(payload);
       if(response){

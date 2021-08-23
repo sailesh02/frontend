@@ -4,6 +4,7 @@ import IconButton from "material-ui/IconButton";
 import { Icon } from "components";
 import AppBar from "./components/AppBar";
 import LogoutDialog from "./components/LogoutDialog";
+import DigitalSignatureDialog from "./components/DigitalSignatureDialog"
 import SortDialog from "./components/SortDialog";
 import SessionExpiredDialog from "./components/SessionExpiredDialog";
 import NavigationDrawer from "./components/NavigationDrawer";
@@ -19,6 +20,7 @@ class Header extends Component {
   state = {
     toggleMenu: false,
     logoutPopupOpen: false,
+    openDigitalSignaturePopup:false,
     sortPopOpen: false,
     right: false,
     left: false,
@@ -68,6 +70,12 @@ class Header extends Component {
     this._closeLogoutDialog();
     this.props.logout();
   };
+
+  _closeDigitalSignatureDialog = () => {
+    this.setState({
+      openDigitalSignaturePopup: false,
+    });
+  }
 
 
 
@@ -138,6 +146,10 @@ class Header extends Component {
           logoutPopupOpen: true,
         });
         break;
+      case "digitalSignature":
+        this.setState({
+          openDigitalSignaturePopup:true
+        })  
       case "language-selection":
         break;
       default:
@@ -147,9 +159,9 @@ class Header extends Component {
   };
 
   render() {
-    const { toggleMenu, logoutPopupOpen, sortPopOpen, sessionExpiredPopupClosedClick } = this.state;
+    const { toggleMenu, logoutPopupOpen, sortPopOpen, sessionExpiredPopupClosedClick, openDigitalSignaturePopup } = this.state;
     let { sessionExpiredPopupOpen } = this.state;
-    const { _onUpdateMenuStatus, _handleItemClick, _logout, _closeLogoutDialog, _appBarProps, closeSortDialog, onSortClick } = this;
+    const { _onUpdateMenuStatus, _handleItemClick, _logout, _closeLogoutDialog, _appBarProps, closeSortDialog, onSortClick, _closeDigitalSignatureDialog } = this;
     const appBarProps = _appBarProps();
     const {
       className,
@@ -237,6 +249,13 @@ if(userInfoError && !sessionExpiredPopupClosedClick){
           canceltext={"CORE_LOGOUTPOPUP_CANCEL"}
           title={"CORE_COMMON_LOGOUT"}
           body={"CORE_LOGOUTPOPUP_CONFIRM"}
+        />
+        <DigitalSignatureDialog
+          openDigitalSignaturePopup={openDigitalSignaturePopup}
+          closeDigitalSignatureDialog={_closeDigitalSignatureDialog}
+          okText={"CORE_SIGNATURE_SUBMIT"}
+          resetText={"CORE_SIGNATURE_RESET"}
+          title={"CORE_DIGITAL_SIGNATURE_REGISTRATION"}
         />
         <SortDialog sortPopOpen={sortPopOpen} closeSortDialog={closeSortDialog} />
        {userInfoError && <SessionExpiredDialog

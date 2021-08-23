@@ -1,4 +1,33 @@
 .logout-popup > div {
     background-color: #fff !important;
   }
+  .action-container {
+    display: flex;
+    align-items: center; }
+
+  div#menu- {
+    z-index: 2001; }
+
+  @media only screen and (max-width: 768px) {
+    .action-container {
+      display: block; }
+    .bottom-button-container {
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0; }
+    .bottom-button {
+      width: 100%;
+      border-radius: 0; } }
+
+  @media only screen and (min-width: 768px) {
+    .bottom-button {
+      margin-right: 45px; } }
+
+.digitalSignatureHeading {
+  padding: "16px 0px 0px 24px";
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 500;
+  font-size: 20px;
+}      
   

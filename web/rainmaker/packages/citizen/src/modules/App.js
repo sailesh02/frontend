@@ -122,7 +122,7 @@ class App extends Component {
     const isPublicSearch = location && location.pathname && (location.pathname.includes("/withoutAuth/pt-mutation/public-search") || location.pathname.includes("/withoutAuth/wns/public-search"));
     const isPublicSearchPay = location && location.pathname && location.pathname.includes("/withoutAuth/egov-common/pay");
     if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect && !isPrivacyPolicy && !isPublicSearch && !isPublicSearchPay) {
-      nextProps.hasLocalisation && this.props.history.replace("/language-selection");
+      nextProps.hasLocalisation && this.props.history.replace("/user/login");
       //Reverted code to original like Product Digit
       //Reverted Feature: If Language is set in cookie/localstorage No need to show language selection page again
 //      if(nextProps.hasLocalisation){

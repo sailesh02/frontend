@@ -26,7 +26,8 @@ class LanguageSelection extends Component {
     const { onLanguageSelect, onClick } = this;
     const { bannerUrl, logoUrl, languages } = this.props;
     return (
-      <Banner className="language-selection" bannerUrl={bannerUrl} logoUrl={logoUrl}>
+      // <Banner className="language-selection" bannerUrl={bannerUrl} logoUrl={logoUrl}>
+       <Banner className="language-selection" logoUrl={logoUrl}>
         <LanguageSelectionForm items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} />
       </Banner>
     );

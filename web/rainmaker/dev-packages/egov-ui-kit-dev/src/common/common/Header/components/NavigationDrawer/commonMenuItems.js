@@ -18,6 +18,20 @@ export const CommonMenuItems = [
     renderforPGREmp: 1,
   },
   {
+    primaryText: <Label label="CORE_DIGITAL_SIGNATURE_REGISTRATION" />,
+    route: "/digitalSignature",
+    leftIcon:  <Icon action="social" name="person" className="iconClassHover material-icons whiteColor customMenuItem" />,
+    style: {
+      borderBottom: "none",
+      borderLeft: "red",
+    },
+    id: "header-profile",
+    path: "digitalSignature",
+    renderforcsr: 1,
+    renderforadmin: 1,
+    renderforPGREmp: 1,
+  },
+  {
     primaryText: <Label label="CORE_COMMON_LOGOUT" />,
     route: "/logout",
     leftIcon: <Icon action="action" name="power-settings-new" className="iconClassHover material-icons whiteColor customMenuItem" />,
@@ -30,18 +44,5 @@ export const CommonMenuItems = [
     renderforcsr: 1,
     renderforadmin: 1,
     renderforPGREmp: 1,
-  },
-  {
-    primaryText: <Label label="CORE_DIGITAL_SIGNATURE_REGISTRATION" />,
-    route: "/digitalSignature",
-    leftIcon: <Icon action="action" name="power-settings-new" className="iconClassHover material-icons whiteColor customMenuItem" />,
-    style: {
-      borderBottom: "none",
-      borderLeft: "red",
-    },
-    id: "header-logout",
-    renderforcsr: 1,
-    renderforadmin: 1,
-    renderforPGREmp: 1,
-  },
+  }
 ];

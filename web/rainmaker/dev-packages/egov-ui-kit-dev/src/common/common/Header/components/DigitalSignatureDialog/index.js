@@ -1,153 +1,3 @@
-// import React from "react";
-// import { Dialog, Button } from "components";
-// import Label from "egov-ui-kit/utils/translationNode";
-// import "./index.css";
-// import { Grid, Typography } from "@material-ui/core";
-// import { Container } from "egov-ui-framework/ui-atoms";
-// import store from "ui-redux/store";
-// import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-// import {
-//   LabelContainer,
-//   TextFieldContainer
-// } from "egov-ui-framework/ui-containers";
-// const styles = {
-//   logoutContentStyle: { textAlign: "center", padding: "24px 20px" },
-// };
-
-// const DigitalSignatureDialog = ({ logout, closeDigitalSignatureDialog, openDigitalSignaturePopup, okText, resetText, title, body }) => {
-//   const actions = [
-//     <Button
-//       id="logout-no-button"
-//       className="logout-no-button"
-//       label={<Label buttonLabel={true} label={resetText} color="#FE7A51" />}
-//       backgroundColor={"#fff"}
-//       onClick={closeDigitalSignatureDialog}
-//       style={{ boxShadow: "none" }}
-//     />,
-//     <Button
-//       id="logout-yes-button"
-//       className="logout-yes-button"
-//       label={<Label buttonLabel={true} label={okText} color="#FE7A51" />}
-//       backgroundColor={"#fff"}
-//       onClick={logout}
-//       style={{ boxShadow: "none" }}
-//     />,
-//   ];
-//   return (
-//     <Dialog
-//     style={{
-//         marginTop:'30px'
-//     }}
-//       open={openDigitalSignaturePopup}
-//       title={
-//         <Label
-//           label={title}
-//           bold={true}
-//           color="rgba(0, 0, 0, 0.8700000047683716)"
-//           fontSize="20px"
-//           labelStyle={{ padding: "16px 0px 0px 24px" }}
-//         />
-//       }
-
-//     children={[
-//         <Container
-//         style={{
-//             marginleft:'16px',
-//             marginTop:'10px'
-//          }}
-//           children={
-//             <Grid
-//               container="true"
-//               spacing={12}
-//               className="action-container"
-//               >
-//             <Grid
-//                     item
-//                     sm={12}
-//                   >
-//                   <TextFieldContainer
-//                         select={true}
-//                         style={{ marginRight: "15px" }}
-//                         label={{
-//                             labelName: "Token",
-//                             labelKey: "CORE_COMMON_TOKEN_LABEL"
-//                           }}
-//                         placeholder={{
-//                             labelName: "Select Token",
-//                             labelKey: "CORE_COMMON_SELECT_TOKEN_LABEL"
-//                           }}
-//                         data={[]}
-//                         optionValue="value"
-//                         optionLabel="label"
-//                         hasLocalization={false}
-//                         value = {"ksjk"}
-//                         //onChange={e => this.onEmployeeClick(e)}
-//                         // onChange={this.onNocChange}
-//                         // jsonPath={'mynocType'}
-//                       />
-//                   </Grid>
-//                   <Grid
-//                     item
-//                     sm={12}
-//                   >
-//                   <TextFieldContainer
-//                         select={true}
-//                         style={{ marginRight: "15px" }}
-//                         label={{
-//                             labelName: "Token",
-//                             labelKey: "CORE_COMMON_TOKEN_LABEL"
-//                           }}
-//                         placeholder={{
-//                             labelName: "Select Token",
-//                             labelKey: "CORE_COMMON_SELECT_TOKEN_LABEL"
-//                           }}
-//                         data={[]}
-//                         optionValue="value"
-//                         optionLabel="label"
-//                         hasLocalization={false}
-//                         value = {"ksjk"}
-//                         //onChange={e => this.onEmployeeClick(e)}
-//                         // onChange={this.onNocChange}
-//                         // jsonPath={'mynocType'}
-//                       />
-//                   </Grid>
-//                   <Grid
-//                     item
-//                     sm={12}
-//                   >
-//                   <TextFieldContainer
-//                         style={{ marginRight: "15px" }}
-//                         label={{
-//                             labelName: "Token",
-//                             labelKey: "CORE_COMMON_TOKEN_LABEL"
-//                           }}
-//                         placeholder={{
-//                             labelName: "Select Token",
-//                             labelKey: "CORE_COMMON_SELECT_TOKEN_LABEL"
-//                           }}
-                       
-//                         hasLocalization={false}
-//                         value = {"ksjk"}
-//                         //onChange={e => this.onEmployeeClick(e)}
-//                         // onChange={this.onNocChange}
-//                         // jsonPath={'mynocType'}
-//                       />
-//                   </Grid>
-//             </Grid>
-//           }
-//         />]
-//       }
-//       handleClose={closeDigitalSignatureDialog}
-//       actions={actions}
-//       contentClassName={"logout-popup"}
-//       contentStyle={{ width: "90%" }}
-//       isClose={true}
-//     />
-//   );
-// };
-
-// export default DigitalSignatureDialog;
-
 import { Dialog, DialogContent } from "@material-ui/core";
 import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
@@ -160,19 +10,30 @@ import {
   LabelContainer,
   TextFieldContainer
 } from "egov-ui-framework/ui-containers";
+import {
+    TextfieldWithIcon
+} from "egov-ui-framework/ui-molecules"
 import CloseIcon from "@material-ui/icons/Close";
 import "./index.css";
 import {
     handleScreenConfigurationFieldChange as handleField
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  
+import TextField from "material-ui/TextField";
+
 class DigitalSignatureDialog extends Component {
   state = {
-    comments : ''
+    comments : '',
+    password : '',
+  }
+
+  setPassword = (e) => {
+      this.setState({
+        password : e.target.value
+      })
   }
 
   render() {
-    let { closeDigitalSignatureDialog,openDigitalSignaturePopup,okText,resetText } = this.props;
+    let { closeDigitalSignatureDialog,openDigitalSignaturePopup,okText,resetText,title} = this.props;
    
     return (
       <Dialog
@@ -198,8 +59,8 @@ class DigitalSignatureDialog extends Component {
                   item
                   sm={10}>
                   <Typography component="h2" variant="subheading">
-                    <LabelContainer labelName="Approval/Rejection Note"
-                    labelKey="BPA_APPROVAL_REJECTION_NOTE_HEADER" />
+                    <LabelContainer labelName={title}
+                    labelKey={title} />
                   </Typography>
                 </Grid>
                 <Grid
@@ -216,18 +77,6 @@ class DigitalSignatureDialog extends Component {
                 >
                   <CloseIcon />
                 </Grid>
-                {/* <Grid
-                    item
-                    sm="12"
-                    style={{
-                      marginTop: 16,
-                      fontSize:13
-                    }}>
-                  <LabelContainer
-                    labelName="BPA_APPROVAL_REJECTION_NOTE"
-                    labelKey="BPA_APPROVAL_REJECTION_NOTE"
-                  />
-                  </Grid> */}
                   <Grid
                     item
                     sm={12}
@@ -250,9 +99,6 @@ class DigitalSignatureDialog extends Component {
                         optionLabel="label"
                         hasLocalization={false}
                         value = {"ksjk"}
-                        //onChange={e => this.onEmployeeClick(e)}
-                        // onChange={this.onNocChange}
-                        // jsonPath={'mynocType'}
                       />
                   </Grid>
                   <Grid
@@ -277,10 +123,19 @@ class DigitalSignatureDialog extends Component {
                         optionLabel="label"
                         hasLocalization={false}
                         value = {"ksjk"}
-                        //onChange={e => this.onEmployeeClick(e)}
-                        // onChange={this.onNocChange}
-                        // jsonPath={'mynocType'}
                       />
+                  </Grid>
+                  <Grid item
+                    sm={12}
+                    style={{
+                      marginTop: 12
+                    }}>
+                  <LabelContainer style={{
+                      fontSize: '12px',
+                      fontWeight: 500
+                  }}
+                  labelName={"CORE_COMMON_PASSWORD_LABEL"}
+                    labelKey={"CORE_COMMON_PASSWORD_LABEL"} />
                   </Grid>
                   <Grid
                     item
@@ -288,22 +143,16 @@ class DigitalSignatureDialog extends Component {
                     style={{
                       marginTop: 12
                     }}>
-                      <TextFieldContainer
+                      <TextfieldWithIcon
+                        type ="password"
+                        autoComplete='off'
                         style={{ marginRight: "15px" }}
-                        label={{
-                            labelName: "Token",
-                            labelKey: "CORE_COMMON_TOKEN_LABEL"
-                          }}
-                        placeholder={{
-                            labelName: "Select Token",
-                            labelKey: "CORE_COMMON_SELECT_TOKEN_LABEL"
-                          }}
-                       
+                        // label="CORE_COMMON_PASSWORD_LABEL"
+                        // placeholder="CORE_COMMON_ENTER_PASSWORD_LABEL"
+                        pattern = "^([a-zA-Z0-9!])+$"
+                        onChange ={ this.setPassword}
                         hasLocalization={false}
-                        value = {"ksjk"}
-                        //onChange={e => this.onEmployeeClick(e)}
-                        // onChange={this.onNocChange}
-                        // jsonPath={'mynocType'}
+                        value = {this.state.password}
                       />
                   </Grid>
                 <Grid item sm={12}

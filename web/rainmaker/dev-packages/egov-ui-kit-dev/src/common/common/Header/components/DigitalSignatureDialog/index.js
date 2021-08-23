@@ -131,30 +131,29 @@ class DigitalSignatureDialog extends Component {
                       marginTop: 12
                     }}>
                   <LabelContainer style={{
-                      fontSize: '12px',
+                      fontSize: '11px',
                       fontWeight: 500
                   }}
                   labelName={"CORE_COMMON_PASSWORD_LABEL"}
                     labelKey={"CORE_COMMON_PASSWORD_LABEL"} />
                   </Grid>
+                  <form style={{width:"100%"}} autocomplete="off">
                   <Grid
                     item
                     sm={12}
                     style={{
                       marginTop: 12
                     }}>
-                      <TextfieldWithIcon
+                    <TextfieldWithIcon
                         type ="password"
-                        autoComplete='off'
                         style={{ marginRight: "15px" }}
-                        // label="CORE_COMMON_PASSWORD_LABEL"
-                        // placeholder="CORE_COMMON_ENTER_PASSWORD_LABEL"
                         pattern = "^([a-zA-Z0-9!])+$"
                         onChange ={ this.setPassword}
                         hasLocalization={false}
                         value = {this.state.password}
                       />
                   </Grid>
+                  </form>
                 <Grid item sm={12}
                  style={{
                   marginTop: 8,

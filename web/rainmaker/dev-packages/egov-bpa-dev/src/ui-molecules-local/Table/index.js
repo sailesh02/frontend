@@ -30,8 +30,8 @@ class Table extends React.Component {
             fontSize: 14
           },
           head: {
-            color: this.props.isApprover ? "#7F7E7A" : "rgba(0, 0, 0, 0.8700000048)",
-            fontWeight: this.props.isApprover ? 400 : 700,
+            color: "rgba(0, 0, 0, 0.8700000048)",
+            fontWeight: 700,
             fontSize: 14
           }
         },

@@ -107,7 +107,7 @@ const styles = {
 class NocDetailCard extends Component {
   constructor(props) {
     super(props);
-    const { nocFinalCardsforPreview, ...rest } = this.props;
+    const { requiredNocToTrigger, ...rest } = this.props;
     this.state = {
       uploadedDocIndex: 0,
       editableDocuments: null,
@@ -178,18 +178,18 @@ class NocDetailCard extends Component {
   static getDerivedStateFromProps(props, state) {
     if (
       (state.editableDocuments == null &&
-      props.nocFinalCardsforPreview &&
-      props.nocFinalCardsforPreview.length > 0)||
-      (state.editableDocuments !=null && state.editableDocuments.length >0 && props.nocFinalCardsforPreview.length>0 && 
-        (state.editableDocuments.length != props.nocFinalCardsforPreview.length))
+      props.requiredNocToTrigger &&
+      props.requiredNocToTrigger.length > 0)||
+      (state.editableDocuments !=null && state.editableDocuments.length >0 && props.requiredNocToTrigger.length>0 && 
+        (state.editableDocuments.length != props.requiredNocToTrigger.length))
     ) {
-      state.editableDocuments = Array(props.nocFinalCardsforPreview.length).fill({
+      state.editableDocuments = Array(props.requiredNocToTrigger.length).fill({
         editable: false,
       });
     }
   }
   getCard = (card, key) => {
-    const { classes, nocFinalCardsforPreview, ...rest } = this.props;
+    const { classes, requiredNocToTrigger, ...rest } = this.props;
     if (this.state.editableDocuments)
       return (
         <React.Fragment>
@@ -231,132 +231,6 @@ class NocDetailCard extends Component {
         </React.Fragment>
       );
   };
-
-  // render() {
-  //   const {
-  //     requiredNocToTrigger,
-  //     documentData,
-  //     Noc,
-  //     ...rest
-  //   } = this.props;
-  //   return (
-  //     <div>
-  //       {requiredNocToTrigger &&
-  //         requiredNocToTrigger.length > 0 &&
-  //         requiredNocToTrigger.map((card, index) => {
-  //           return (
-  //             <div style={styles.documentTitle}>
-  //                   <div>
-  //                   <Grid container>
-  //                   <Grid item xs={3}>
-  //                   <LabelContainer
-  //                     labelKey={getTransformedLocale(card.nocType)}
-  //                     style={styles.nocTitle}
-  //                   />
-  //                   {card.required && process.env.REACT_APP_NAME !== "Citizen" ? <span style = {styles.spanStyle}>*</span> : ""}
-  //                   </Grid>
-  //                   {card.additionalDetails && <Grid item xs={3}>
-  //                     <LinkAtom 
-  //                       linkDetail = {card.additionalDetails.linkDetails} 
-  //                     />
-  //                   </Grid>}
-  //                   {card.additionalDetails && <Grid item xs={3}>
-  //                   <Button 
-  //                   // onClick = {() => this.triggerNoc(card)}
-  //                   style = {{
-  //                   color: "white",
-  //                   backgroundColor: "rgb(254, 122, 81)",
-  //                   borderRadius: "2px"}}>
-  //                   Trigger
-  //                 </Button>
-  //                   </Grid>}
-  //                   {card.additionalDetails && card.additionalDetails.nocNo ? (
-  //                   <Grid item xs={3}>
-  //                     <Typography
-  //                       variant="subtitle1"
-  //                       style={{ fontWeight: "bold", fontSize: "12px" }}
-  //                     >
-  //                     Approval Number
-  //                     </Typography>
-  //                     {card.additionalDetails.nocNo ?
-  //                     <div style={styles.fontStyle}>
-  //                       {card.additionalDetails.nocNo}
-  //                     </div>: "NA" }
-  //                   </Grid> ) : ( "" )}
-  //                   </Grid>
-  //                   {card.name && <NocData
-  //                     docItem={card}
-  //                     docIndex={index}
-  //                     key={index.toString()}
-  //                     {...rest}
-  //                   />}
-  //                   </div>
-  //               <div>{card.name && this.getCard(card, index)}</div>
-  //             </div>
-  //           )
-  //         })
-  //       }
-  //     </div>
-  //   )
-  // }
-
-  // render() {
-  //   const {
-  //     nocFinalCardsforPreview,
-  //     documentData,
-  //     Noc,
-  //     ...rest
-  //   } = this.props;
-  //   return (
-  //     <div>
-  //       {nocFinalCardsforPreview &&
-  //         nocFinalCardsforPreview.length > 0 &&
-  //         nocFinalCardsforPreview.map((card, index) => {
-  //           return (
-  //             <div style={styles.documentTitle}>
-  //                   <div>
-  //                   <Grid container>
-  //                   <Grid item xs={3}>
-  //                   <LabelContainer
-  //                     labelKey={getTransformedLocale(card.nocType)}
-  //                     style={styles.nocTitle}
-  //                   />
-  //                   {card.required && process.env.REACT_APP_NAME !== "Citizen" ? <span style = {styles.spanStyle}>*</span> : ""}
-  //                   </Grid>
-  //                   <Grid item xs={3}>
-  //                     <LinkAtom 
-  //                       linkDetail = {card.additionalDetails.linkDetails} 
-  //                     />
-  //                   </Grid>
-  //                   {card.additionalDetails.nocNo ? (
-  //                   <Grid item xs={3}>
-  //                     <Typography
-  //                       variant="subtitle1"
-  //                       style={{ fontWeight: "bold", fontSize: "12px" }}
-  //                     >
-  //                     Approval Number
-  //                     </Typography>
-  //                     {card.additionalDetails.nocNo ?
-  //                     <div style={styles.fontStyle}>
-  //                       {card.additionalDetails.nocNo}
-  //                     </div>: "NA" }
-  //                   </Grid> ) : ( "" )}
-  //                   </Grid>
-  //                   <NocData
-  //                     docItem={card}
-  //                     docIndex={index}
-  //                     key={index.toString()}
-  //                     {...rest}
-  //                   />
-  //                   </div>
-  //               <div>{this.getCard(card, index)}</div>  
-  //             </div>
-  //           )
-  //         })
-  //       }
-  //     </div>
-  //   )
-  // }
 
   getDocumentsFromMDMS = async (nocType) => {
     let {BPA} = this.props.preparedFinalObject
@@ -547,18 +421,18 @@ class NocDetailCard extends Component {
     const {
       prepareFinalObject,
       nocDocumentDetailsUploadRedux,
-      nocFinalCardsforPreview,
+      requiredNocToTrigger,
       Noc,
       wfState
     } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
-    let documentCode = nocFinalCardsforPreview[uploadedDocIndex].dropDownValues.value;
+    let documentCode = requiredNocToTrigger[uploadedDocIndex].dropDownValues.value;
     if(!documentCode){
-      let documentMenu = nocFinalCardsforPreview[uploadedDocIndex].dropDownValues.menu;
+      let documentMenu = requiredNocToTrigger[uploadedDocIndex].dropDownValues.menu;
       if(documentMenu && documentMenu.length > 0 && documentMenu.length == 1){
         documentCode = documentMenu[0].code;
       } else {
-        documentCode = nocFinalCardsforPreview[uploadedDocIndex].documentCode
+        documentCode = requiredNocToTrigger[uploadedDocIndex].documentCode
       }
     }
     let appDocumentList = [];
@@ -579,14 +453,14 @@ class NocDetailCard extends Component {
       
     };
     if (
-      nocFinalCardsforPreview[uploadedDocIndex] &&
-      nocFinalCardsforPreview[uploadedDocIndex].documents
+      requiredNocToTrigger[uploadedDocIndex] &&
+      requiredNocToTrigger[uploadedDocIndex].documents
     ) {
-      nocFinalCardsforPreview[uploadedDocIndex].documents.push(fileObj);
-      appDocumentList = [...nocFinalCardsforPreview];
+      requiredNocToTrigger[uploadedDocIndex].documents.push(fileObj);
+      appDocumentList = [...requiredNocToTrigger];
     } else {
-      nocFinalCardsforPreview[uploadedDocIndex]["documents"] = [fileObj];
-      appDocumentList = [...nocFinalCardsforPreview];
+      requiredNocToTrigger[uploadedDocIndex]["documents"] = [fileObj];
+      appDocumentList = [...requiredNocToTrigger];
     }
     // if (Array.isArray(NOCData)) {
     //   if (NOCData.length > 0) {
@@ -605,7 +479,7 @@ class NocDetailCard extends Component {
     // }
     // prepareFinalObject("NOCData", NOCData);
 
-    prepareFinalObject("nocFinalCardsforPreview", appDocumentList);
+    prepareFinalObject("requiredNocToTrigger", appDocumentList);
 
     prepareFinalObject("nocDocumentDetailsUploadRedux", appDocumentList);
     // if(appDocumentList && appDocumentList.length > 0) {
@@ -682,10 +556,10 @@ class NocDetailCard extends Component {
      store.dispatch(prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux))
  }
   removeDocument = (cardIndex, uploadedDocIndex) => {
-    const { prepareFinalObject, nocFinalCardsforPreview, Noc } = this.props;
+    const { prepareFinalObject, requiredNocToTrigger, Noc } = this.props;
     let uploadedDocs = [];
     let fileTobeRemoved =
-    nocFinalCardsforPreview[cardIndex].documents[uploadedDocIndex];
+    requiredNocToTrigger[cardIndex].documents[uploadedDocIndex];
 
     // if (Array.isArray(Noc)) {
     //   if (Noc.length > 0) {
@@ -702,11 +576,11 @@ class NocDetailCard extends Component {
     //   Noc.documents = uploadedDocs;
     // }
 
-    nocFinalCardsforPreview[cardIndex].documents.splice(uploadedDocIndex, 1);
+    requiredNocToTrigger[cardIndex].documents.splice(uploadedDocIndex, 1);
     prepareFinalObject("Noc", Noc);
     //uploadedDocs.map()
-    prepareFinalObject("nocFinalCardsforPreview", nocFinalCardsforPreview);
-    prepareFinalObject("nocDocumentDetailsUploadRedux", nocFinalCardsforPreview);
+    prepareFinalObject("requiredNocToTrigger", requiredNocToTrigger);
+    prepareFinalObject("nocDocumentDetailsUploadRedux", requiredNocToTrigger);
 
     this.forceUpdate();
   };
@@ -723,23 +597,14 @@ class NocDetailCard extends Component {
   };
 
   handleChange = (key, event) => {
-    const { prepareFinalObject, nocFinalCardsforPreview } = this.props;
+    const { prepareFinalObject, requiredNocToTrigger } = this.props;
     let appDocumentList = [];
 
-    appDocumentList = [...nocFinalCardsforPreview];
+    appDocumentList = [...requiredNocToTrigger];
     appDocumentList[key].dropDownValues.value = event.target.value;
-    prepareFinalObject("nocFinalCardsforPreview", appDocumentList);
+    prepareFinalObject("requiredNocToTrigger", appDocumentList);
     prepareFinalObject("nocDocumentDetailsUploadRedux", appDocumentList);
   };
-}
-
-const checkNoc = (type,data) => {
-  let details = data && data.find ( val => {
-    if(val.nocType == type){
-      return true
-    }
-  })
-  return details
 }
 
 const mapStateToProps = (state, ownProps) => {

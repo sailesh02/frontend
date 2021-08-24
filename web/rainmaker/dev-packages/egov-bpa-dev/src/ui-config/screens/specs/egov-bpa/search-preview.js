@@ -1138,7 +1138,7 @@ const screenConfig = {
           applicantSummary: applicantSummary,
           additionalDocsInformation: additionalDocsInformation,
           previewSummary: previewSummary,
-          requiredNocContainer : requiredNOCContainer,
+          // requiredNocContainer : requiredNOCContainer,
           nocDetailsApply: nocDetailsSearch,
           declarationSummary: declarationSummary,
           permitConditions: permitConditions,

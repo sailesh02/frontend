@@ -798,6 +798,106 @@ export const prepareNOCUploadData = async (state, dispatch) => {
 
 };
 
+export const prepareNOCUploadDataAfterCreation = async () => {
+
+  let state = store.getState()
+  let documents = await getNocDocuments(state);
+  let documentsList = await mapDropdownValues(documents,state);
+
+  const nocDocuments = documentsList;
+  let documentsContract = [];
+  let tempDoc = {};
+  if (nocDocuments && nocDocuments.length > 0) {
+    nocDocuments.forEach(doc => {
+      let card = {};
+      card["code"] = doc.documentType.split(".")[0];
+      card["title"] = doc.documentType.split(".")[0];
+      card["cards"] = [];
+      tempDoc[doc.documentType.split(".")[0]] = card;
+    });
+    nocDocuments.forEach(doc => {
+      let card = {};
+      card["name"] = doc.documentType;
+      card["code"] = doc.documentType;
+      card["nocType"] = doc.nocType;
+      card["additionalDetails"] = doc.additionalDetails;
+      card["required"] = doc.required ? true : false;
+      if (doc.hasDropdown && doc.dropDownValues) {
+        let dropDownValues = {};
+        dropDownValues.label = "Select Documents";
+        dropDownValues.required = doc.required;
+        dropDownValues.menu = doc.dropDownValues.filter(item => {
+          return item.active;
+        });
+        dropDownValues.menu = dropDownValues.menu.map(item => {
+          return { code: item.code, label: item.code };
+        });
+        card["dropDownValues"] = dropDownValues;
+      }
+      tempDoc[doc.documentType.split(".")[0]].cards.push(card);
+    });
+  }
+
+  if (tempDoc) {
+    Object.keys(tempDoc).forEach(key => {
+      documentsContract.push(tempDoc[key]);
+    });
+  }
+  store.dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
+  let Noc = fetchFileDetails(get(
+    state.screenConfiguration.preparedFinalObject,
+    "Noc",
+    []
+  ))
+
+  let finalCards = [];
+  documentsContract.length > 0 && documentsContract[0].cards && documentsContract[0].cards.map(docs => {
+    Noc && Noc.map(upDocs => {
+      if (docs.nocType === upDocs.nocType) {
+        docs.documents = upDocs.documents;
+        let card = {
+          code: docs.code,
+          name: docs.code,
+          nocType: docs.nocType,
+          dropDownValues: docs.dropDownValues,
+          documentCode: docs.code,
+          documents: upDocs.documents,
+          additionalDetails: docs.additionalDetails,
+          readOnly: false
+        };
+        finalCards.push(card);
+      }
+    })
+  })
+  store.dispatch(prepareFinalObject("nocFinalCardsforPreview", finalCards));
+  store.dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
+
+  if(finalCards && finalCards.length > 0){
+    const scrutinyDetails = get(
+      state.screenConfiguration.preparedFinalObject,
+      'scrutinyDetails',
+      []
+    );
+  
+    let requiredNocsList = scrutinyDetails && scrutinyDetails.planDetail && scrutinyDetails.planDetail.planInformation.requiredNOCs || []
+    let nocArray = finalCards
+  
+    requiredNocsList && requiredNocsList.length > 0 && nocArray && nocArray.length > 0 && requiredNocsList.map( noc => {
+      if(!checkNoc(noc,finalCards)){
+        nocArray.push(
+          {
+            name : null,
+            nocType : noc,
+            code : null
+          }
+        ) 
+      }
+    })
+    store.dispatch(prepareFinalObject("requiredNocToTrigger", nocArray));
+  }
+
+};
+
 /**
  * This method will be called to get teh noc documents matched with noctyps and applicationType
  */
@@ -860,6 +960,7 @@ const mapDropdownValues = (documents, state) => {
     []
   );
   let documentsList = [];
+  debugger
   if (documents && documents.length > 0) {
     documents.map(doc => {
       let code = doc.documentType;

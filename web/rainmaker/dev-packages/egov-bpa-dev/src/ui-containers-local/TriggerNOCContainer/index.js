@@ -19,7 +19,7 @@ import {
   getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../ui-utils/api";
-import { createNoc, getNocSearchResults, getAdditionalDetails } from "../../ui-utils/commons"
+import { createNoc, getNocSearchResults, getAdditionalDetails,prepareNOCUploadDataAfterCreation } from "../../ui-utils/commons"
 import get from "lodash/get";
 
 class TriggerNOCContainer extends Component {
@@ -119,6 +119,7 @@ class TriggerNOCContainer extends Component {
         ))
 
       }   
+      prepareNOCUploadDataAfterCreation()
   };
 
   saveDetails = (nocType) => {

@@ -19,6 +19,8 @@ import {
     handleScreenConfigurationFieldChange as handleField
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import TextField from "material-ui/TextField";
+import { getLocale, getTenantId,getAccessToken, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import axios from 'axios';
 
 class DigitalSignatureDialog extends Component {
   state = {
@@ -30,6 +32,50 @@ class DigitalSignatureDialog extends Component {
       this.setState({
         password : e.target.value
       })
+  }
+
+  getTokenList = () => {
+    const authToken = getAccessToken();
+    let RequestInfo = {
+      apiId: "Rainmaker",
+      ver: ".01",
+      // ts: getDateInEpoch(),
+      action: "_search",
+      did: "1",
+      key: "",
+      msgId: `20170310130900|${getLocale()}`,
+      requesterId: "",
+      authToken
+    };
+  
+    RequestInfo = { ...RequestInfo };
+    let body =  Object.assign(
+      {},
+      {
+        RequestInfo
+      },
+      {
+        "encryptedRequest": "R1",
+        "encryptionKeyId": "R2"
+      }
+    
+    );
+
+    axios.post("/DSC/ListToken", body, {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+     })
+      .then(response => {
+        console.log(response,"ndjhhhhhhhhhhhhhhhhhh")
+      })
+      .catch(error => {
+        console.log(error.response)
+      });
+  
+  }
+
+  componentDidMount = () => {
+    this.getTokenList()
   }
 
   render() {

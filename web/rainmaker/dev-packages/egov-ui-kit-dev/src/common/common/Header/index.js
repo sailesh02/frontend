@@ -250,13 +250,13 @@ if(userInfoError && !sessionExpiredPopupClosedClick){
           title={"CORE_COMMON_LOGOUT"}
           body={"CORE_LOGOUTPOPUP_CONFIRM"}
         />
-        <DigitalSignatureDialog
+        {openDigitalSignaturePopup && <DigitalSignatureDialog
           openDigitalSignaturePopup={openDigitalSignaturePopup}
           closeDigitalSignatureDialog={_closeDigitalSignatureDialog}
           okText={"CORE_SIGNATURE_SUBMIT"}
           resetText={"CORE_SIGNATURE_RESET"}
           title={"CORE_DIGITAL_SIGNATURE_REGISTRATION"}
-        />
+        />}
         <SortDialog sortPopOpen={sortPopOpen} closeSortDialog={closeSortDialog} />
        {userInfoError && <SessionExpiredDialog
           logoutPopupOpen={sessionExpiredPopupOpen}

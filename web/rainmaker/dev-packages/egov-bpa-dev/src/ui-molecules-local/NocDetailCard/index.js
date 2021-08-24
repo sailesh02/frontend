@@ -4,11 +4,16 @@ import get from "lodash/get";
 import { withStyles } from "@material-ui/core/styles";
 // import "./index.css";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import commonConfig from "config/common.js";
 import {
   getFileUrlFromAPI,
   handleFileUpload,
   getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
+import Button from '@material-ui/core/Button';
+import {
+  handleScreenConfigurationFieldChange as handleField
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 // import MultiDocDetailCard from "../../ui-molecules-local/MultiDocDetailCard";
 import NocDocDetailCard from "../../ui-molecules-local/NocDocDetailCard";
 import NocData from "../../ui-molecules-local/NocData";
@@ -20,6 +25,7 @@ import Grid from "@material-ui/core/Grid";
 import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 import { httpRequest } from "../../ui-utils/api";
 import { LinkAtom } from "../../ui-atoms-local"
+import store from "ui-redux/store";
 
 const styles = {
   documentTitle: {
@@ -225,57 +231,299 @@ class NocDetailCard extends Component {
         </React.Fragment>
       );
   };
+
+  // render() {
+  //   const {
+  //     requiredNocToTrigger,
+  //     documentData,
+  //     Noc,
+  //     ...rest
+  //   } = this.props;
+  //   return (
+  //     <div>
+  //       {requiredNocToTrigger &&
+  //         requiredNocToTrigger.length > 0 &&
+  //         requiredNocToTrigger.map((card, index) => {
+  //           return (
+  //             <div style={styles.documentTitle}>
+  //                   <div>
+  //                   <Grid container>
+  //                   <Grid item xs={3}>
+  //                   <LabelContainer
+  //                     labelKey={getTransformedLocale(card.nocType)}
+  //                     style={styles.nocTitle}
+  //                   />
+  //                   {card.required && process.env.REACT_APP_NAME !== "Citizen" ? <span style = {styles.spanStyle}>*</span> : ""}
+  //                   </Grid>
+  //                   {card.additionalDetails && <Grid item xs={3}>
+  //                     <LinkAtom 
+  //                       linkDetail = {card.additionalDetails.linkDetails} 
+  //                     />
+  //                   </Grid>}
+  //                   {card.additionalDetails && <Grid item xs={3}>
+  //                   <Button 
+  //                   // onClick = {() => this.triggerNoc(card)}
+  //                   style = {{
+  //                   color: "white",
+  //                   backgroundColor: "rgb(254, 122, 81)",
+  //                   borderRadius: "2px"}}>
+  //                   Trigger
+  //                 </Button>
+  //                   </Grid>}
+  //                   {card.additionalDetails && card.additionalDetails.nocNo ? (
+  //                   <Grid item xs={3}>
+  //                     <Typography
+  //                       variant="subtitle1"
+  //                       style={{ fontWeight: "bold", fontSize: "12px" }}
+  //                     >
+  //                     Approval Number
+  //                     </Typography>
+  //                     {card.additionalDetails.nocNo ?
+  //                     <div style={styles.fontStyle}>
+  //                       {card.additionalDetails.nocNo}
+  //                     </div>: "NA" }
+  //                   </Grid> ) : ( "" )}
+  //                   </Grid>
+  //                   {card.name && <NocData
+  //                     docItem={card}
+  //                     docIndex={index}
+  //                     key={index.toString()}
+  //                     {...rest}
+  //                   />}
+  //                   </div>
+  //               <div>{card.name && this.getCard(card, index)}</div>
+  //             </div>
+  //           )
+  //         })
+  //       }
+  //     </div>
+  //   )
+  // }
+
+  // render() {
+  //   const {
+  //     nocFinalCardsforPreview,
+  //     documentData,
+  //     Noc,
+  //     ...rest
+  //   } = this.props;
+  //   return (
+  //     <div>
+  //       {nocFinalCardsforPreview &&
+  //         nocFinalCardsforPreview.length > 0 &&
+  //         nocFinalCardsforPreview.map((card, index) => {
+  //           return (
+  //             <div style={styles.documentTitle}>
+  //                   <div>
+  //                   <Grid container>
+  //                   <Grid item xs={3}>
+  //                   <LabelContainer
+  //                     labelKey={getTransformedLocale(card.nocType)}
+  //                     style={styles.nocTitle}
+  //                   />
+  //                   {card.required && process.env.REACT_APP_NAME !== "Citizen" ? <span style = {styles.spanStyle}>*</span> : ""}
+  //                   </Grid>
+  //                   <Grid item xs={3}>
+  //                     <LinkAtom 
+  //                       linkDetail = {card.additionalDetails.linkDetails} 
+  //                     />
+  //                   </Grid>
+  //                   {card.additionalDetails.nocNo ? (
+  //                   <Grid item xs={3}>
+  //                     <Typography
+  //                       variant="subtitle1"
+  //                       style={{ fontWeight: "bold", fontSize: "12px" }}
+  //                     >
+  //                     Approval Number
+  //                     </Typography>
+  //                     {card.additionalDetails.nocNo ?
+  //                     <div style={styles.fontStyle}>
+  //                       {card.additionalDetails.nocNo}
+  //                     </div>: "NA" }
+  //                   </Grid> ) : ( "" )}
+  //                   </Grid>
+  //                   <NocData
+  //                     docItem={card}
+  //                     docIndex={index}
+  //                     key={index.toString()}
+  //                     {...rest}
+  //                   />
+  //                   </div>
+  //               <div>{this.getCard(card, index)}</div>  
+  //             </div>
+  //           )
+  //         })
+  //       }
+  //     </div>
+  //   )
+  // }
+
+  getDocumentsFromMDMS = async (nocType) => {
+    let {BPA} = this.props.preparedFinalObject
+    let {applicationType} = BPA
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+          {
+            "moduleName": "NOC",
+            "masterDetails": [
+                {
+                    "name": "DocumentTypeMapping",
+                    "filter": `$.[?(@.nocType=='${nocType}')]`
+                }
+            ]
+        }     
+        ]
+      }
+    };
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+
+    let documents = payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.DocumentTypeMapping || []
+  
+    let requiredDocumentsFormat = documents && documents.length > 0 && documents[0].docTypes.map( doc => {
+      return {
+        code : doc.documentType,
+        documentType : doc.documentType,
+        required : doc.required,
+        active : doc.active || true
+      }
+    })
+    this.prepareDocumentsUploadData(requiredDocumentsFormat)
+  }
+  prepareDocumentsUploadData = (documents) => {
+    let documentsContract = [];
+    let tempDoc = {};
+    documents && documents.length > 0 && documents.forEach(doc => {
+        let card = {};
+        card["code"] = doc.documentType;
+        card["title"] = doc.documentType;
+        card["documentType"] = doc.documentType
+        card["cards"] = [];
+        tempDoc[doc.documentType] = card;
+    });
+  
+    documents && documents.length > 0 && documents.forEach(doc => {
+        // Handle the case for multiple muildings
+        let card = {};
+        card["name"] = doc.code;
+        card["code"] = doc.code;
+        card["required"] = doc.required ? true : false;
+        if (doc.hasDropdown && doc.dropdownData) {
+            let dropdown = {};
+            dropdown.label = "WS_SELECT_DOC_DD_LABEL";
+            dropdown.required = true;
+            dropdown.menu = doc.dropdownData.filter(item => {
+                return item.active;
+            });
+            dropdown.menu = dropdown.menu.map(item => {
+                return { code: item.code, label: getTransformedLocale(item.code) };
+            });
+            card["dropdown"] = dropdown;
+        }
+        tempDoc[doc.documentType].cards.push(card);
+    });
+  
+    Object.keys(tempDoc).forEach(key => {
+        documentsContract.push(tempDoc[key]);
+    });
+  
+    store.dispatch(prepareFinalObject("documentsContractNOC", documentsContract));
+    this.prepareDocumentForRedux(documentsContract)
+
+  };
+
+  triggerNoc = (nocType) => {
+    this.getDocumentsFromMDMS(nocType)
+    store.dispatch(handleField(
+        "search-preview",
+        "components.div.children.triggerNocContainer.props",
+        "open",
+        true
+      ))
+      store.dispatch(handleField(
+        "search-preview",
+        "components.div.children.triggerNocContainer.props",
+        "nocType",
+        nocType
+      ))  
+  }
+
   render() {
     const {
-      nocFinalCardsforPreview,
+      requiredNocToTrigger,
       documentData,
       Noc,
       ...rest
     } = this.props;
     return (
       <div>
-        {nocFinalCardsforPreview &&
-          nocFinalCardsforPreview.length > 0 &&
-          nocFinalCardsforPreview.map((card, index) => {
+        {requiredNocToTrigger &&
+          requiredNocToTrigger.length > 0 &&
+          requiredNocToTrigger.map((card, index) => {
             return (
-              <div style={styles.documentTitle}>
-                    <div>
-                    <Grid container>
-                    <Grid item xs={3}>
-                    <LabelContainer
-                      labelKey={getTransformedLocale(card.nocType)}
-                      style={styles.nocTitle}
-                    />
-                    {card.required && process.env.REACT_APP_NAME !== "Citizen" ? <span style = {styles.spanStyle}>*</span> : ""}
-                    </Grid>
-                    <Grid item xs={3}>
-                      <LinkAtom 
-                        linkDetail = {card.additionalDetails.linkDetails} 
-                      />
-                    </Grid>
-                    {card.additionalDetails.nocNo ? (
-                    <Grid item xs={3}>
-                      <Typography
-                        variant="subtitle1"
-                        style={{ fontWeight: "bold", fontSize: "12px" }}
-                      >
-                      Approval Number
-                      </Typography>
-                      {card.additionalDetails.nocNo ?
-                      <div style={styles.fontStyle}>
-                        {card.additionalDetails.nocNo}
-                      </div>: "NA" }
-                    </Grid> ) : ( "" )}
-                    </Grid>
-                    <NocData
-                      docItem={card}
-                      docIndex={index}
-                      key={index.toString()}
-                      {...rest}
-                    />
-                    </div>
-                <div>{this.getCard(card, index)}</div>  
-              </div>
+              card.name ? (<div style={styles.documentTitle}>
+                <div>
+                <Grid container>
+                <Grid item xs={3}>
+                <LabelContainer
+                  labelKey={getTransformedLocale(card.nocType)}
+                  style={styles.nocTitle}
+                />
+                {card.required && process.env.REACT_APP_NAME !== "Citizen" ? <span style = {styles.spanStyle}>*</span> : ""}
+                </Grid>
+                <Grid item xs={3}>
+                  <LinkAtom 
+                    linkDetail = {card.additionalDetails.linkDetails} 
+                  />
+                </Grid>
+                {card.additionalDetails.nocNo ? (
+                <Grid item xs={3}>
+                  <Typography
+                    variant="subtitle1"
+                    style={{ fontWeight: "bold", fontSize: "12px" }}
+                  >
+                  Approval Number
+                  </Typography>
+                  {card.additionalDetails.nocNo ?
+                  <div style={styles.fontStyle}>
+                    {card.additionalDetails.nocNo}
+                  </div>: "NA" }
+                </Grid> ) : ( "" )}
+                </Grid>
+                <NocData
+                  docItem={card}
+                  docIndex={index}
+                  key={index.toString()}
+                  {...rest}
+                />
+                </div>
+            <div>{this.getCard(card, index)}</div>  
+          </div>) : (
+             <Grid style={{paddingTop:'18px',paddingRight:'22px',paddingBottom:'18px',paddingLeft:'10px',marginBottom:'10px',width:'100%',backgroundColor: "#FFFFFF"}} container>
+             <Grid style={{align:'center'}} item xs={11}>
+               <LabelContainer style={{fontWeight:'bold',fontSize:'12px'}}
+                 labelKey={getTransformedLocale(card.nocType)}/>
+             </Grid>
+             <Grid style={{align: "right"}} item xs={1}>
+               <Button 
+                 onClick = {() => this.triggerNoc(card.nocType)}
+                 style = {{
+                 color: "white",
+                 backgroundColor: "rgb(254, 122, 81)",
+                 borderRadius: "2px"}}>
+                 Trigger
+               </Button>
+             </Grid>
+           </Grid>
+          )
+              
             )
           })
         }
@@ -375,7 +623,64 @@ class NocDetailCard extends Component {
     // }
     // prepareFinalObject("Noc", Noc);
   };
-
+  prepareDocumentForRedux = async (documentsList) => {
+    const {nocDocumentsDetailsRedux} = this.props.preparedFinalObject 
+     let index = 0;
+     documentsList.forEach(docType => {
+       docType.cards &&
+         docType.cards.forEach(card => {
+           if (card.subCards) {
+             card.subCards.forEach(subCard => {
+               let oldDocType = get(
+                 nocDocumentsDetailsRedux,
+                 `[${index}].documentType`
+               );
+               let oldDocCode = get(
+                 nocDocumentsDetailsRedux,
+                 `[${index}].documentCode`
+               );
+               let oldDocSubCode = get(
+                 nocDocumentsDetailsRedux,
+                 `[${index}].documentSubCode`
+               );
+               if (
+                 oldDocType != docType.code ||
+                 oldDocCode != card.name ||
+                 oldDocSubCode != subCard.name
+               ) {
+                 nocDocumentsDetailsRedux[index] = {
+                   documentType: docType.code,
+                   documentCode: card.name,
+                   documentSubCode: subCard.name
+                 };
+               }
+               index++;
+             });
+           } else {
+             let oldDocType = get(
+               nocDocumentsDetailsRedux,
+               `[${index}].documentType`
+             );
+             let oldDocCode = get(
+               nocDocumentsDetailsRedux,
+               `[${index}].documentCode`
+             );
+             if (oldDocType != docType.code || oldDocCode != card.name) {
+               nocDocumentsDetailsRedux[index] = {
+                 documentType: docType.code,
+                 documentCode: card.name,
+                 isDocumentRequired: card.required,
+                 isDocumentTypeRequired: card.dropDownValues
+                   ? card.dropDownValues.required
+                   : false
+               };
+             }
+             index++;
+           }
+         });
+     });
+     store.dispatch(prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux))
+ }
   removeDocument = (cardIndex, uploadedDocIndex) => {
     const { prepareFinalObject, nocFinalCardsforPreview, Noc } = this.props;
     let uploadedDocs = [];
@@ -428,8 +733,18 @@ class NocDetailCard extends Component {
   };
 }
 
+const checkNoc = (type,data) => {
+  let details = data && data.find ( val => {
+    if(val.nocType == type){
+      return true
+    }
+  })
+  return details
+}
+
 const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
+  const {preparedFinalObject} = screenConfiguration
   const nocDocumentDetailsUploadRedux = get(
     screenConfiguration.preparedFinalObject,
     "nocDocumentDetailsUploadRedux",
@@ -451,7 +766,14 @@ const mapStateToProps = (state, ownProps) => {
     "state"
   );
 
-  return { nocDocumentDetailsUploadRedux, documentsList, nocFinalCardsforPreview, Noc, wfState };
+  const requiredNocToTrigger = get(
+    screenConfiguration.preparedFinalObject,
+   "requiredNocToTrigger",
+    []
+  );
+  
+
+  return { nocDocumentDetailsUploadRedux,preparedFinalObject, documentsList, nocFinalCardsforPreview, Noc,requiredNocToTrigger, wfState };
 };
 const mapDispatchToProps = (dispatch) => {
   return {

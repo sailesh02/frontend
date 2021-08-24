@@ -678,6 +678,15 @@ var tempArray;
 
 };
 
+const checkNoc = (type,data) => {
+  let details = data && data.find ( val => {
+    if(val.nocType == type){
+      return true
+    }
+  })
+  return details
+}
+
 export const prepareNOCUploadData = async (state, dispatch) => {
 
 
@@ -762,6 +771,30 @@ export const prepareNOCUploadData = async (state, dispatch) => {
   })
   dispatch(prepareFinalObject("nocFinalCardsforPreview", finalCards));
   dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
+
+  if(finalCards && finalCards.length > 0){
+    const scrutinyDetails = get(
+      state.screenConfiguration.preparedFinalObject,
+      'scrutinyDetails',
+      []
+    );
+  
+    let requiredNocsList = scrutinyDetails && scrutinyDetails.planDetail && scrutinyDetails.planDetail.planInformation.requiredNOCs || []
+    let nocArray = finalCards
+  
+    requiredNocsList && requiredNocsList.length > 0 && nocArray && nocArray.length > 0 && requiredNocsList.map( noc => {
+      if(!checkNoc(noc,finalCards)){
+        nocArray.push(
+          {
+            name : null,
+            nocType : noc,
+            code : null
+          }
+        ) 
+      }
+    })
+    dispatch(prepareFinalObject("requiredNocToTrigger", nocArray));
+  }
 
 };
 

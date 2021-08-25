@@ -250,7 +250,7 @@ class NocDetailCard extends Component {
     this.setState({
       nocType:e.target.value
     })
-    store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.nocType`,e.target.value)
+    store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNocDetails.jkdjk`,e.target.value)
     )
   }
 
@@ -265,13 +265,105 @@ class NocDetailCard extends Component {
     return (
       <React.Fragment>
         <div style={{backgroundColor:"rgb(255,255,255)", paddingRight:"10px", marginTop: "16px" }}>
+        <Grid container="true" spacing={12}>
+        <Grid item xs={12}>
+        <div style={styles.dividerStyle}>
+          <div style={ styles.labelStyle}>
+          <span>Additional Details</span>
+          <div style={styles.underlineStyle} />
+          </div>
+        </div>
+        </Grid>
+        <Grid item xs={6}>
+        <LabelContainer style={{
+            fontSize: '11px',
+            fontWeight: 500
+        }}
+        labelName={"BPA_NOC_TYPE_LABEL"}
+        labelKey={"BPA_NOC_TYPE_LABEL"} />
           <TextFieldContainer
             style={{ marginRight: "15px" }}
-            label={fieldConfig.nocType.label}
             placeholder={fieldConfig.nocType.placeholder}
             value = {this.state.nocType}
             onChange={this.onNocChange(key)}
-          /></div>
+          />
+          </Grid>
+          <Grid item xs={6}>
+        <LabelContainer style={{
+            fontSize: '11px',
+            fontWeight: 500
+        }}
+        labelName={"BPA_NOC_TYPE_LABEL"}
+        labelKey={"BPA_NOC_TYPE_LABEL"} />
+          <TextFieldContainer
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.nocType.placeholder}
+            value = {this.state.nocType}
+            onChange={this.onNocChange(key)}
+          />
+          </Grid>
+        </Grid>
+        <Grid container="true" spacing={12}>
+        <Grid item xs={6}>
+        <LabelContainer style={{
+            fontSize: '11px',
+            fontWeight: 500
+        }}
+        labelName={"BPA_NOC_TYPE_LABEL"}
+        labelKey={"BPA_NOC_TYPE_LABEL"} />
+          <TextFieldContainer
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.nocType.placeholder}
+            value = {this.state.nocType}
+            onChange={this.onNocChange(key)}
+          />
+          </Grid>
+          <Grid item xs={6}>
+        <LabelContainer style={{
+            fontSize: '11px',
+            fontWeight: 500
+        }}
+        labelName={"BPA_NOC_TYPE_LABEL"}
+        labelKey={"BPA_NOC_TYPE_LABEL"} />
+          <TextFieldContainer
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.nocType.placeholder}
+            value = {this.state.nocType}
+            onChange={this.onNocChange(key)}
+          />
+          </Grid>
+        </Grid>
+        <Grid container="true" spacing={12}>
+        <Grid item xs={6}>
+        <LabelContainer style={{
+            fontSize: '11px',
+            fontWeight: 500
+        }}
+        labelName={"BPA_NOC_TYPE_LABEL"}
+        labelKey={"BPA_NOC_TYPE_LABEL"} />
+          <TextFieldContainer
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.nocType.placeholder}
+            value = {this.state.nocType}
+            onChange={this.onNocChange(key)}
+          />
+          </Grid>
+          <Grid item xs={6}>
+        <LabelContainer style={{
+            fontSize: '11px',
+            fontWeight: 500
+        }}
+        labelName={"BPA_NOC_TYPE_LABEL"}
+        labelKey={"BPA_NOC_TYPE_LABEL"} />
+          <TextFieldContainer
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.nocType.placeholder}
+            value = {this.state.nocType}
+            onChange={this.onNocChange(key)}
+          />
+          </Grid>
+        </Grid>
+        </div>
       </React.Fragment>
     );
   }

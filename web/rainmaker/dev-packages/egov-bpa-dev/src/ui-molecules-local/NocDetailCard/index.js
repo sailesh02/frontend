@@ -19,14 +19,13 @@ import NocDocDetailCard from "../../ui-molecules-local/NocDocDetailCard";
 import NocData from "../../ui-molecules-local/NocData";
 import UploadCard from "../../ui-molecules-local/UploadCard";
 import {getLoggedinUserRole} from "../../ui-config/screens/specs/utils/index.js";
-import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { LabelContainer,TextFieldContainer } from "egov-ui-framework/ui-containers";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 import { httpRequest } from "../../ui-utils/api";
 import { LinkAtom } from "../../ui-atoms-local"
 import store from "ui-redux/store";
-
 const styles = {
   documentTitle: {
     color: "rgba(0, 0, 0, 0.87)",
@@ -99,6 +98,19 @@ const styles = {
     paddingLeft: "2px"
   }
 }
+
+const fieldConfig = {
+  nocType: {
+      label: {
+        labelName: "NOC Type",
+        labelKey: "BPA_NOC_TYPE_LABEL"
+      },
+      placeholder: {
+        labelName: "Select NOC Type",
+        labelKey: "BPA_NOC_TYPE_PLACEHOLDER"
+      }
+    }
+};
 // const LightTooltip = withStyles((theme) => ({
 //   tooltip: {
 //     fontSize: 12
@@ -111,6 +123,7 @@ class NocDetailCard extends Component {
     this.state = {
       uploadedDocIndex: 0,
       editableDocuments: null,
+      nocType : ''
     };
   }
   componentDidMount = () => {
@@ -188,6 +201,7 @@ class NocDetailCard extends Component {
       });
     }
   }
+
   getCard = (card, key) => {
     const { classes, requiredNocToTrigger, ...rest } = this.props;
     if (this.state.editableDocuments)
@@ -231,6 +245,36 @@ class NocDetailCard extends Component {
         </React.Fragment>
       );
   };
+
+  onNocChange = (e,key) => {
+    this.setState({
+      nocType:e.target.value
+    })
+    store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.nocType`,e.target.value)
+    )
+  }
+
+  onNocChange = key => e => {
+    this.setState({
+      nocType:e.target.value
+    })
+    store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.nocType`,e.target.value))
+  };
+
+  getNMANOCForm = (key) => {
+    return (
+      <React.Fragment>
+        <div style={{backgroundColor:"rgb(255,255,255)", paddingRight:"10px", marginTop: "16px" }}>
+          <TextFieldContainer
+            style={{ marginRight: "15px" }}
+            label={fieldConfig.nocType.label}
+            placeholder={fieldConfig.nocType.placeholder}
+            value = {this.state.nocType}
+            onChange={this.onNocChange(key)}
+          /></div>
+      </React.Fragment>
+    );
+  }
 
   getDocumentsFromMDMS = async (nocType) => {
     let {BPA} = this.props.preparedFinalObject
@@ -321,12 +365,25 @@ class NocDetailCard extends Component {
         "open",
         true
       ))
+    store.dispatch(handleField(
+        "apply",
+        "components.div.children.triggerNocContainer.props",
+        "open",
+        true
+    ))  
       store.dispatch(handleField(
         "search-preview",
         "components.div.children.triggerNocContainer.props",
         "nocType",
         nocType
-      ))  
+      )) 
+      
+      store.dispatch(handleField(
+        "apply",
+        "components.div.children.triggerNocContainer.props",
+        "nocType",
+        nocType
+      ))
   }
 
   render() {
@@ -379,6 +436,7 @@ class NocDetailCard extends Component {
                 />
                 </div>
             <div>{this.getCard(card, index)}</div>  
+            <div>{this.getNMANOCForm(index)}</div>
           </div>) : (
              <Grid style={{paddingTop:'18px',paddingRight:'22px',paddingBottom:'18px',paddingLeft:'10px',marginBottom:'10px',width:'100%',backgroundColor: "#FFFFFF"}} container>
                 <Grid style={{align:'center'}} item xs={11}>

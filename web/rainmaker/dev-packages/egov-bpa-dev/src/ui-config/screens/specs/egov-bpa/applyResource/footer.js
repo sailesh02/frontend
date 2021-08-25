@@ -345,63 +345,75 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 3) {
-    const documentsFormat = Object.values(
-      get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
-    );
-
-    let validateDocumentField = false;
-
-    if (documentsFormat && documentsFormat.length) {
-      for (let i = 0; i < documentsFormat.length; i++) {
-        let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-        let isDocumentTypeRequired = get(
-          documentsFormat[i],
-          "isDocumentTypeRequired"
-        );
-
-        let documents = get(documentsFormat[i], "documents");
-        if (isDocumentRequired) {
-          if (documents && documents.length > 0) {
-            if (isDocumentTypeRequired) {
-              if (get(documentsFormat[i], "dropDownValues.value")) {
-                validateDocumentField = true;
+    let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
+    let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
+    let noc = get(state.screenConfiguration.preparedFinalObject,"Noc",[]) 
+    if(noc.length == requiredNocs.length){
+      const documentsFormat = Object.values(
+        get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
+      );
+  
+      let validateDocumentField = false;
+  
+      if (documentsFormat && documentsFormat.length) {
+        for (let i = 0; i < documentsFormat.length; i++) {
+          let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+          let isDocumentTypeRequired = get(
+            documentsFormat[i],
+            "isDocumentTypeRequired"
+          );
+  
+          let documents = get(documentsFormat[i], "documents");
+          if (isDocumentRequired) {
+            if (documents && documents.length > 0) {
+              if (isDocumentTypeRequired) {
+                if (get(documentsFormat[i], "dropDownValues.value")) {
+                  validateDocumentField = true;
+                } else {
+                  dispatch(
+                    toggleSnackbar(
+                      true,
+                      { labelName: "Please select type of Document!", labelKey: "BPA_FOOTER_SELECT_DOC_TYPE" },
+                      "warning"
+                    )
+                  );
+                  validateDocumentField = false;
+                  break;
+                }
               } else {
-                dispatch(
-                  toggleSnackbar(
-                    true,
-                    { labelName: "Please select type of Document!", labelKey: "BPA_FOOTER_SELECT_DOC_TYPE" },
-                    "warning"
-                  )
-                );
-                validateDocumentField = false;
-                break;
+                validateDocumentField = true;
               }
             } else {
-              validateDocumentField = true;
+              dispatch(
+                toggleSnackbar(
+                  true,
+                  { labelName: "Please uplaod mandatory documents!", labelKey: "BPA_FOOTER_UPLOAD_MANDATORY_DOC" },
+                  "warning"
+                )
+              );
+              validateDocumentField = false;
+              break;
             }
           } else {
-            dispatch(
-              toggleSnackbar(
-                true,
-                { labelName: "Please uplaod mandatory documents!", labelKey: "BPA_FOOTER_UPLOAD_MANDATORY_DOC" },
-                "warning"
-              )
-            );
-            validateDocumentField = false;
-            break;
+            validateDocumentField = true;
           }
-        } else {
-          validateDocumentField = true;
         }
-      }
-      if (!validateDocumentField) {
-      isFormValid = false;
-      hasFieldToaster = true;
+        if (!validateDocumentField) {
+        isFormValid = false;
+        hasFieldToaster = true;
+        } else {
+          getSummaryRequiredDetails(state, dispatch);
+        }
       } else {
         getSummaryRequiredDetails(state, dispatch);
       }
-    } else {
-      getSummaryRequiredDetails(state, dispatch);
+    }else{
+      let errorMessage = {
+        labelName: "Please trigger all required noc's",
+        labelKey: "ERR_TRIGGER_REQUIRED_NOCS_TOAST"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      return
     }
   }
 
@@ -413,12 +425,24 @@ const callBackForNext = async (state, dispatch) => {
         // dispatch(prepareFinalObject("BPA.owners[0].ownerType", "NONE"));
       }
       if (activeStep === 3) {
-        let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
-        if(nocData && nocData.length > 0) {
-          nocData.map(items => {
-            if(!items.readOnly) items.readOnly = items.readOnly ? false : true;
-          })
-          dispatch(prepareFinalObject("nocForPreview", nocData));
+        let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
+        let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
+        let noc = get(state.screenConfiguration.preparedFinalObject,"Noc",[]) 
+        if(noc.length == requiredNocs.length){
+          let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
+          if(nocData && nocData.length > 0) {
+            nocData.map(items => {
+              if(!items.readOnly) items.readOnly = items.readOnly ? false : true;
+            })
+            dispatch(prepareFinalObject("nocForPreview", nocData));
+          }
+        }else{
+          let errorMessage = {
+            labelName: "Please trigger all required noc's",
+            labelKey: "ERR_TRIGGER_REQUIRED_NOCS_TOAST"
+          };
+          dispatch(toggleSnackbar(true, errorMessage, "warning"));
+          return
         }
       }
       if (activeStep === 2) {

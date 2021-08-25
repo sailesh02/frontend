@@ -118,6 +118,13 @@ class TriggerNOCContainer extends Component {
           false
         ))
 
+        store.dispatch(handleField(
+          "apply",
+          "components.div.children.triggerNocContainer.props",
+          "open",
+          false
+      ))
+
       }   
       prepareNOCUploadDataAfterCreation()
   };
@@ -143,6 +150,13 @@ class TriggerNOCContainer extends Component {
         "open",
         false
       ))
+
+    store.dispatch(handleField(
+        "apply",
+        "components.div.children.triggerNocContainer.props",
+        "open",
+        false
+    ))  
   }
 
   render() {

@@ -748,7 +748,7 @@ const setSearchResponse = async (
     )
   );
   
-  getNocList(state,dispatch)
+  getNocList(state,dispatch,true)
 
   // Set Institution/Applicant info card visibility
   if (
@@ -828,9 +828,7 @@ const setSearchResponse = async (
 
 };
 
-export const getNocList = async (state,dispatch) => {
-  const {BPA} = state.screenConfiguration.preparedFinalObject
-  const {serviceType} = BPA
+export const getNocList = async (state,dispatch,filter) => {
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -858,38 +856,38 @@ export const getNocList = async (state,dispatch) => {
 let nocTypes = payload && payload.MdmsRes && payload.MdmsRes.NOC && payload.MdmsRes.NOC.NocType &&
 payload.MdmsRes.NOC.NocType.length > 0 && payload.MdmsRes.NOC.NocType
 
-// to check already created NOC's
-const Noc = get(state.screenConfiguration.preparedFinalObject, "Noc", []);
-let generatedNoc = Noc.map( noc => {
-    return noc.nocType
-})
-
 dispatch(prepareFinalObject("nocTypes", nocTypes));
-
-
-let nocList = []
-if(nocTypes && nocTypes.length > 0){
-  nocList = nocTypes.filter ( noc => {
-        if(!generatedNoc.includes(noc.code)){
-          return noc
-        }
-    })
-  }
-
-nocList = nocList && nocList.length > 0 && nocList.map ( noc => {
-  return {
-    label : noc.code,
-    value : noc.code
-  }
-})
-
-dispatch(handleField(
-  "search-preview",
-  "components.div.children.newNoc.props",
-  "nocList",
-  nocList
-))
-dispatch(prepareFinalObject("newNocList", nocList));
+// to check already created NOC's
+if(filter){
+  const Noc = get(state.screenConfiguration.preparedFinalObject, "Noc", []);
+  let generatedNoc = Noc.map( noc => {
+      return noc.nocType
+  })
+  
+  let nocList = []
+  if(nocTypes && nocTypes.length > 0){
+    nocList = nocTypes.filter ( noc => {
+          if(!generatedNoc.includes(noc.code)){
+            return noc
+          }
+      })
+    }
+  
+  nocList = nocList && nocList.length > 0 && nocList.map ( noc => {
+    return {
+      label : noc.code,
+      value : noc.code
+    }
+  })
+  
+  dispatch(handleField(
+    "search-preview",
+    "components.div.children.newNoc.props",
+    "nocList",
+    nocList
+  ))
+  dispatch(prepareFinalObject("newNocList", nocList));
+}
 }
 
 export const beforeSubmitHook = async () => {

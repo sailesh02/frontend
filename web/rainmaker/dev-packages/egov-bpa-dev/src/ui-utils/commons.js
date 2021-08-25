@@ -960,7 +960,6 @@ const mapDropdownValues = (documents, state) => {
     []
   );
   let documentsList = [];
-  debugger
   if (documents && documents.length > 0) {
     documents.map(doc => {
       let code = doc.documentType;

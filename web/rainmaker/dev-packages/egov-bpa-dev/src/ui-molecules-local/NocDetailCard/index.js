@@ -344,32 +344,32 @@ class NocDetailCard extends Component {
             return (
               card.name ? (<div style={styles.documentTitle}>
                 <div>
-                <Grid container>
-                <Grid item xs={3}>
-                <LabelContainer
-                  labelKey={getTransformedLocale(card.nocType)}
-                  style={styles.nocTitle}
-                />
-                {card.required && process.env.REACT_APP_NAME !== "Citizen" ? <span style = {styles.spanStyle}>*</span> : ""}
-                </Grid>
-                <Grid item xs={3}>
-                  <LinkAtom 
-                    linkDetail = {card.additionalDetails.linkDetails} 
-                  />
-                </Grid>
-                {card.additionalDetails.nocNo ? (
-                <Grid item xs={3}>
-                  <Typography
-                    variant="subtitle1"
-                    style={{ fontWeight: "bold", fontSize: "12px" }}
-                  >
-                  Approval Number
-                  </Typography>
-                  {card.additionalDetails.nocNo ?
+                  <Grid container>
+                    <Grid item xs={3}>
+                      <LabelContainer
+                      labelKey={getTransformedLocale(card.nocType)}
+                      style={styles.nocTitle}
+                      />
+                      {card.required && process.env.REACT_APP_NAME !== "Citizen" ? <span style = {styles.spanStyle}>*</span> : ""}
+                    </Grid>
+                    <Grid item xs={3}>
+                      <LinkAtom 
+                      linkDetail = {card.additionalDetails.linkDetails} 
+                      />
+                    </Grid>
+                    {card.additionalDetails.nocNo ? (
+                    <Grid item xs={3}>
+                      <Typography
+                      variant="subtitle1"
+                      style={{ fontWeight: "bold", fontSize: "12px" }}
+                      >
+                      Approval Number
+                      </Typography>
+                    {card.additionalDetails.nocNo ?
                   <div style={styles.fontStyle}>
                     {card.additionalDetails.nocNo}
                   </div>: "NA" }
-                </Grid> ) : ( "" )}
+                  </Grid> ) : ( "" )}
                 </Grid>
                 <NocData
                   docItem={card}
@@ -381,10 +381,10 @@ class NocDetailCard extends Component {
             <div>{this.getCard(card, index)}</div>  
           </div>) : (
              <Grid style={{paddingTop:'18px',paddingRight:'22px',paddingBottom:'18px',paddingLeft:'10px',marginBottom:'10px',width:'100%',backgroundColor: "#FFFFFF"}} container>
-             <Grid style={{align:'center'}} item xs={11}>
-               <LabelContainer style={{fontWeight:'bold',fontSize:'12px'}}
-                 labelKey={getTransformedLocale(card.nocType)}/>
-             </Grid>
+                <Grid style={{align:'center'}} item xs={11}>
+                  <LabelContainer style={{fontWeight:'bold',fontSize:'12px'}}
+                    labelKey={getTransformedLocale(card.nocType)}/>
+                </Grid>
              <Grid style={{align: "right"}} item xs={1}>
                <Button 
                  onClick = {() => this.triggerNoc(card.nocType)}

@@ -80,6 +80,13 @@ export const onClickAdd = async (state, dispatch) => {
     "type",
     "new"
   ))
+
+  dispatch(handleField(
+    "search-preview",
+    "components.div.children.triggerNocContainer.props",
+    "nocType",
+    null
+  ))
    dispatch(prepareFinalObject("documentsContractNOC", []));
 
 }

@@ -99,7 +99,7 @@ const styles = {
   }
 }
 
-const fieldConfig = {
+export const fieldConfig = {
   MonumentName: {
       label: {
         labelName: "Monument Name",
@@ -298,14 +298,7 @@ const fieldConfig = {
 // }))(Tooltip);
 
 const onNmaFieldChange = (key,jsonPath) => e => {
-  if(jsonPath == "ApproximateDateOfCommencementOfWorks" || jsonPath == "ApproximateDurationOfCommencementOfWorks"){
-    let date = e.target.value
-    date = date.split('-')
-    let modifiedDate = date[2]+'/'+date[1]+'/'+date[0]
-    store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,modifiedDate))
-  }else{
     store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
-  }
 };
 
 export const getNMANOCForm = (key,filter) => {
@@ -334,7 +327,7 @@ export const getNMANOCForm = (key,filter) => {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.MonumentName.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.MonumentName`}
-              onChange={() => onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.MonumentName")}
+              onChange={onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.MonumentName")}
             />
             </Grid>
           <Grid item xs={6}>
@@ -348,7 +341,7 @@ export const getNMANOCForm = (key,filter) => {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.State.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`}
-              onChange={() => onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.State")}
+              onChange={onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.State")}
             />
           </Grid>
         </Grid>
@@ -364,7 +357,7 @@ export const getNMANOCForm = (key,filter) => {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.District.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.District`}
-            onChange={() => onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.District")}
+            onChange={onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.District")}
             />
           </Grid>
           <Grid item xs={6}>
@@ -378,7 +371,7 @@ export const getNMANOCForm = (key,filter) => {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.Taluka.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Taluka`}
-              onChange={ () => onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Taluka")}
+              onChange={ onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Taluka")}
             />
           </Grid>
         </Grid>
@@ -394,7 +387,7 @@ export const getNMANOCForm = (key,filter) => {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.Locality.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Locality`}
-              onChange={() => onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Locality")}
+              onChange={onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Locality")}
             />
           </Grid>
         </Grid>
@@ -420,7 +413,7 @@ export const getNMANOCForm = (key,filter) => {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.DistanceFromTheMainMonument.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument`}
-            onChange={() => onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument")}
+            onChange={onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument")}
             />
           </Grid>
         <Grid item xs={6}>
@@ -434,7 +427,7 @@ export const getNMANOCForm = (key,filter) => {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.DistanceFromTheProtectedBoundaryWall.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall`}
-            onChange={ () => onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall")}
+            onChange={ onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall")}
           />
         </Grid>
         </Grid>
@@ -461,7 +454,7 @@ export const getNMANOCForm = (key,filter) => {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.ApproximateDateOfCommencementOfWorks.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.ApproximateDateOfCommencementOfWorks`}
-              onChange={() => onNmaFieldChange(key,"ApproximateDateOfCommencementOfWorks")}
+              onChange={onNmaFieldChange(key,"ApproximateDateOfCommencementOfWorks")}
             />
           </Grid>
           <Grid item xs={6}>
@@ -476,7 +469,7 @@ export const getNMANOCForm = (key,filter) => {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.ApproximateDurationOfCommencementOfWorks.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.ApproximateDurationOfCommencementOfWorks`}
-              onChange={() => onNmaFieldChange(key,"ApproximateDurationOfCommencementOfWorks")}
+              onChange={onNmaFieldChange(key,"ApproximateDurationOfCommencementOfWorks")}
             />
           </Grid>
         </Grid>
@@ -503,7 +496,7 @@ export const getNMANOCForm = (key,filter) => {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.NearTheMonument.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument`}
-              onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument")}
+              onChange={onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument")}
             />
           </Grid>
           <Grid item xs={6}>
@@ -517,7 +510,7 @@ export const getNMANOCForm = (key,filter) => {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.NearTheSiteConstructionRelatedActivity.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity`}
-              onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity")}
+              onChange={onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity")}
             />
           </Grid>
         </Grid>
@@ -533,7 +526,7 @@ export const getNMANOCForm = (key,filter) => {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf`}
-            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf")}
+            onChange={onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf")}
           />
         </Grid>
         <Grid item xs={6}>
@@ -558,7 +551,7 @@ export const getNMANOCForm = (key,filter) => {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage`}
-            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage")}
+            onChange={onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage")}
           />
         </Grid>
       </Grid>
@@ -575,7 +568,7 @@ export const getNMANOCForm = (key,filter) => {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.StatusOfModernConstructions.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions`}
-            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions")}
+            onChange={onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions")}
           />
         </Grid>
         <Grid item xs={6}>
@@ -589,7 +582,7 @@ export const getNMANOCForm = (key,filter) => {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea`}
-            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea")}
+            onChange={onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea")}
           />
         </Grid>
       </Grid>
@@ -617,7 +610,7 @@ export const getNMANOCForm = (key,filter) => {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction`}
-            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction")}
+            onChange={onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction")}
           />
         </Grid>
         <Grid item xs={6}>
@@ -631,7 +624,7 @@ export const getNMANOCForm = (key,filter) => {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.Remarks.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks`}
-            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks")}
+            onChange={onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks")}
           />
         </Grid>
       </Grid>
@@ -648,7 +641,7 @@ export const getNMANOCForm = (key,filter) => {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.TermAndCondition.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition`}
-            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition")}
+            onChange={onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition")}
           />
         </Grid>
       </Grid>
@@ -895,6 +888,9 @@ class NocDetailCard extends Component {
         "nocType",
         nocType
       ))
+      
+      store.dispatch(prepareFinalObject(`NewNocAdditionalDetails`,{})) 
+      
   }
 
   render() {

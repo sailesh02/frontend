@@ -1874,6 +1874,74 @@ export const createNoc = async (payload) => {
   }
 };
 
+export const validateThirdPartyDetails = (thirdPartyDetails) => {
+  if (thirdPartyDetails == null || Object.keys(thirdPartyDetails).length === 0) {
+    return false
+  }else if(thirdPartyDetails && thirdPartyDetails.thirdPartNOC && Object.keys(thirdPartyDetails.thirdPartNOC).length === 0 ){
+    return false
+  } 
+  else if (thirdPartyDetails && thirdPartyDetails.thirdPartNOC) {
+    let valid = [];
+      if (
+          thirdPartyDetails.thirdPartNOC.hasOwnProperty("NameOfTheNearestMonumentOrSite") && 
+          thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("MonumentName") && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['MonumentName'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['MonumentName'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("State") && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['State'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['State'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("District") && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['District'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['District'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("Taluka") &&
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Taluka'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Taluka'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("Locality") &&
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Locality'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Locality'] !== "" && 
+              
+          thirdPartyDetails.thirdPartNOC.hasOwnProperty("DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument") && 
+          thirdPartyDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.hasOwnProperty("DistanceFromTheMainMonument") &&
+          thirdPartyDetails.thirdPartNOC['DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument']['DistanceFromTheMainMonument'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument']['DistanceFromTheMainMonument'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.hasOwnProperty("DistanceFromTheProtectedBoundaryWall") &&
+          thirdPartyDetails.thirdPartNOC['DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument']['DistanceFromTheProtectedBoundaryWall'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument']['DistanceFromTheProtectedBoundaryWall'] !== "" &&
+
+          thirdPartyDetails.thirdPartNOC.hasOwnProperty("ApproximateDateOfCommencementOfWorks") &&
+          thirdPartyDetails.thirdPartNOC['ApproximateDateOfCommencementOfWorks'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['ApproximateDateOfCommencementOfWorks'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.hasOwnProperty("ApproximateDurationOfCommencementOfWorks") &&
+          thirdPartyDetails.thirdPartNOC['ApproximateDurationOfCommencementOfWorks'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['ApproximateDurationOfCommencementOfWorks'] !== "" &&
+
+          thirdPartyDetails.thirdPartNOC.hasOwnProperty("MaximumHeightOfExistingModernBuildingInCloseVicinityOf") && 
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("NearTheMonument") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['NearTheMonument'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['NearTheMonument'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("NearTheSiteConstructionRelatedActivity") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['NearTheSiteConstructionRelatedActivity'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['NearTheSiteConstructionRelatedActivity'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("WhetherMonumentIsLocatedWithinLimitOf") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['WhetherMonumentIsLocatedWithinLimitOf'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['WhetherMonumentIsLocatedWithinLimitOf'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage'] !== "" && 
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("StatusOfModernConstructions") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['StatusOfModernConstructions'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['StatusOfModernConstructions'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea'] !== ""
+      ) { valid.push(1) } else { valid.push(0) }
+      if (valid.includes(0)) { return false; } else { return true; }
+  }
+}
+
 export const getWorkflowCode = (noc,mode) => {
   switch(mode){
     case 'offline':

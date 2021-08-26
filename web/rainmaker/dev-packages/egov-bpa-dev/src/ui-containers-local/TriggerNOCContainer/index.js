@@ -19,7 +19,7 @@ import {
   getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../ui-utils/api";
-import { createNoc, getNocSearchResults, getAdditionalDetails,prepareNOCUploadDataAfterCreation } from "../../ui-utils/commons"
+import { createNoc, validateThirdPartyDetails, getNocSearchResults, getAdditionalDetails,prepareNOCUploadDataAfterCreation } from "../../ui-utils/commons"
 import get from "lodash/get";
 import {fieldConfig} from "../../ui-molecules-local/NocDetailCard"
 import { withStyles } from "@material-ui/core/styles";
@@ -122,8 +122,9 @@ const getNMANOCForm = (key) => {
               fontWeight: 500
               }}
               labelName={fieldConfig.MonumentName.label.labelName}
-              labelKey={fieldConfig.MonumentName.label.labelKey} />
+              labelKey={fieldConfig.MonumentName.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
+              required={true}
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.MonumentName.placeholder}
               jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.MonumentName`}
@@ -136,8 +137,9 @@ const getNMANOCForm = (key) => {
                 fontWeight: 500
             }}
             labelName={fieldConfig.State.label.labelName}
-            labelKey={fieldConfig.State.label.labelKey} />
+            labelKey={fieldConfig.State.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
+              required= "true"
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.State.placeholder}
               jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`}
@@ -152,7 +154,7 @@ const getNMANOCForm = (key) => {
             fontWeight: 500
              }}
             labelName={fieldConfig.District.label.labelName}
-            labelKey={fieldConfig.District.label.labelKey} />
+            labelKey={fieldConfig.District.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.District.placeholder}
@@ -166,7 +168,7 @@ const getNMANOCForm = (key) => {
               fontWeight: 500
             }}
             labelName={fieldConfig.Taluka.label.labelName}
-            labelKey={fieldConfig.Taluka.label.labelKey} />
+            labelKey={fieldConfig.Taluka.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.Taluka.placeholder}
@@ -182,7 +184,7 @@ const getNMANOCForm = (key) => {
                 fontWeight: 500
             }}
             labelName={fieldConfig.Locality.label.labelName}
-            labelKey={fieldConfig.Locality.label.labelKey} />
+            labelKey={fieldConfig.Locality.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.Locality.placeholder}
@@ -208,7 +210,7 @@ const getNMANOCForm = (key) => {
                 fontWeight: 500
             }}
             labelName={fieldConfig.DistanceFromTheMainMonument.label.labelName}
-            labelKey={fieldConfig.DistanceFromTheMainMonument.label.labelKey} />
+            labelKey={fieldConfig.DistanceFromTheMainMonument.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.DistanceFromTheMainMonument.placeholder}
@@ -222,7 +224,7 @@ const getNMANOCForm = (key) => {
             fontWeight: 500
           }}
           labelName={fieldConfig.DistanceFromTheProtectedBoundaryWall.label.labelName}
-          labelKey={fieldConfig.DistanceFromTheProtectedBoundaryWall.label.labelKey} />
+          labelKey={fieldConfig.DistanceFromTheProtectedBoundaryWall.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
           <TextFieldContainer
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.DistanceFromTheProtectedBoundaryWall.placeholder}
@@ -248,7 +250,7 @@ const getNMANOCForm = (key) => {
                 fontWeight: 500
             }}
             labelName={fieldConfig.ApproximateDateOfCommencementOfWorks.label.labelName}
-            labelKey={fieldConfig.ApproximateDateOfCommencementOfWorks.label.labelKey} />
+            labelKey={fieldConfig.ApproximateDateOfCommencementOfWorks.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
               type = "date"
               style={{ marginRight: "15px" }}
@@ -263,7 +265,7 @@ const getNMANOCForm = (key) => {
               fontWeight: 500
             }}
             labelName={fieldConfig.ApproximateDurationOfCommencementOfWorks.label.labelName}
-            labelKey={fieldConfig.ApproximateDurationOfCommencementOfWorks.label.labelKey} />
+            labelKey={fieldConfig.ApproximateDurationOfCommencementOfWorks.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
               type = "date"
               style={{ marginRight: "15px" }}
@@ -291,7 +293,7 @@ const getNMANOCForm = (key) => {
                 fontWeight: 500
             }}
             labelName={fieldConfig.NearTheMonument.label.labelName}
-            labelKey={fieldConfig.NearTheMonument.label.labelKey} />
+            labelKey={fieldConfig.NearTheMonument.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.NearTheMonument.placeholder}
@@ -305,7 +307,7 @@ const getNMANOCForm = (key) => {
               fontWeight: 500
             }}
             labelName={fieldConfig.NearTheSiteConstructionRelatedActivity.label.labelName}
-            labelKey={fieldConfig.NearTheSiteConstructionRelatedActivity.label.labelKey} />
+            labelKey={fieldConfig.NearTheSiteConstructionRelatedActivity.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.NearTheSiteConstructionRelatedActivity.placeholder}
@@ -321,7 +323,7 @@ const getNMANOCForm = (key) => {
               fontWeight: 500
           }}
           labelName={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelName}
-          labelKey={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelKey} />
+          labelKey={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
           <TextFieldContainer
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.placeholder}
@@ -335,7 +337,7 @@ const getNMANOCForm = (key) => {
             fontWeight: 500
           }}
           labelName={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.label.labelName}
-          labelKey={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.label.labelKey} />
+          labelKey={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
           <TextFieldContainer
             select ={true}
             data={[{
@@ -363,7 +365,7 @@ const getNMANOCForm = (key) => {
               fontWeight: 500
             }}
             labelName={fieldConfig.StatusOfModernConstructions.label.labelName}
-            labelKey={fieldConfig.StatusOfModernConstructions.label.labelKey} />
+            labelKey={fieldConfig.StatusOfModernConstructions.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
           <TextFieldContainer
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.StatusOfModernConstructions.placeholder}
@@ -377,7 +379,7 @@ const getNMANOCForm = (key) => {
             fontWeight: 500
           }}
             labelName={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.label.labelName}
-            labelKey={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.label.labelKey} />
+            labelKey={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
           <TextFieldContainer          
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.placeholder}
@@ -394,7 +396,7 @@ const getNMANOCForm = (key) => {
                 fontWeight: 500
             }}
           labelName={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.label.labelName}
-          labelKey={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.label.labelKey} />
+          labelKey={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
           <TextFieldContainer
             select ={true}
             data={[{
@@ -436,7 +438,7 @@ const getNMANOCForm = (key) => {
               fontWeight: 500
           }}
           labelName={fieldConfig.TermAndCondition.label.labelName}
-          labelKey={fieldConfig.TermAndCondition.label.labelKey} />
+          labelKey={fieldConfig.TermAndCondition.label.labelKey}/>
           <TextFieldContainer
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.TermAndCondition.placeholder}
@@ -499,65 +501,87 @@ class TriggerNOCContainer extends Component {
   }
 
   createNoc = async (nocType) => {
+    let isValid = true
     let additionalDetails = getAdditionalDetails(nocType,this.props.preparedFinalObject)
     let { payloadDocumentFormat,NewNocAdditionalDetails } = this.props.preparedFinalObject
-    let details = {
-      ...additionalDetails, ...NewNocAdditionalDetails
+    if(nocType === "NMA_NOC"){
+      if(validateThirdPartyDetails(NewNocAdditionalDetails)){
+        isValid = true
+      }else{
+        isValid = false
+      }
     }
-    let {BPA} = this.props.preparedFinalObject
-    let payload = {
-      tenantId : BPA.tenantId,
-      nocNo : null,
-      applicationType : BPA.applicationType,
-      nocType : nocType,
-      accountId : BPA.accountId,
-      sourceRefId : BPA.applicationNo,
-      source: "BPA",
-      applicationStatus : BPA.status,
-      landId : null,
-      status : null,
-      documents : payloadDocumentFormat,
-      workflow : null,
-      auditDetails : BPA.auditDetails,
-      additionalDetails : details
-    }
-      let response = await createNoc(payload);
-      if(response){
-        store.dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName: "BPA_NOC_CREATED_SUCCESS_MSG",
-              labelKey: "BPA_NOC_CREATED_SUCCESS_MSG",
-            },
-            "success"
+    if(isValid){
+      let details = {
+        ...additionalDetails, ...NewNocAdditionalDetails
+      }
+      let {BPA} = this.props.preparedFinalObject
+      let payload = {
+        tenantId : BPA.tenantId,
+        nocNo : null,
+        applicationType : BPA.applicationType,
+        nocType : nocType,
+        accountId : BPA.accountId,
+        sourceRefId : BPA.applicationNo,
+        source: "BPA",
+        applicationStatus : BPA.status,
+        landId : null,
+        status : null,
+        documents : payloadDocumentFormat,
+        workflow : null,
+        auditDetails : BPA.auditDetails,
+        additionalDetails : details
+      }
+        let response = await createNoc(payload);
+        if(response){
+          store.dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "BPA_NOC_CREATED_SUCCESS_MSG",
+                labelKey: "BPA_NOC_CREATED_SUCCESS_MSG",
+              },
+              "success"
+            )
           )
-        )
-
-        await getNocSearchResults([
-          {
-            key: "tenantId",
-            value: BPA.tenantId
-          },
-          { key: "sourceRefId", value: BPA.applicationNo }
-        ],"",true);
-
-        store.dispatch(handleField(
-          "search-preview",
-          "components.div.children.triggerNocContainer.props",
-          "open",
-          false
+  
+          await getNocSearchResults([
+            {
+              key: "tenantId",
+              value: BPA.tenantId
+            },
+            { key: "sourceRefId", value: BPA.applicationNo }
+          ],"",true);
+  
+          store.dispatch(handleField(
+            "search-preview",
+            "components.div.children.triggerNocContainer.props",
+            "open",
+            false
+          ))
+  
+          store.dispatch(handleField(
+            "apply",
+            "components.div.children.triggerNocContainer.props",
+            "open",
+            false
         ))
-
-        store.dispatch(handleField(
-          "apply",
-          "components.div.children.triggerNocContainer.props",
-          "open",
-          false
-      ))
-
-      }   
-      prepareNOCUploadDataAfterCreation()
+  
+        }   
+        prepareNOCUploadDataAfterCreation()
+    }else{
+      store.dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "ERR_FILL_ALL_FIELDS",
+            labelKey: "ERR_FILL_ALL_FIELDS",
+          },
+          "warning"
+        )
+      )
+    }
+   
   };
 
   saveDetails = (nocType) => {

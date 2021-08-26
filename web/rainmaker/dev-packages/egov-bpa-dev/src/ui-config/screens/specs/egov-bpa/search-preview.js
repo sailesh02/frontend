@@ -46,7 +46,7 @@ import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary
 import { fieldSummary } from "./summaryResource/fieldSummary";
 import { previewSummary } from "./summaryResource/previewSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
-import { nocDetailsSearch, requiredNOCContainer} from "./noc";
+import { nocDetailsSearch} from "./noc";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
@@ -1142,7 +1142,6 @@ const screenConfig = {
           applicantSummary: applicantSummary,
           additionalDocsInformation: additionalDocsInformation,
           previewSummary: previewSummary,
-          // requiredNocContainer : requiredNOCContainer,
           nocDetailsApply: nocDetailsSearch,
           declarationSummary: declarationSummary,
           permitConditions: permitConditions,

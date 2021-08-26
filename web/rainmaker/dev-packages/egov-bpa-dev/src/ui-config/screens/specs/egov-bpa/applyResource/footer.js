@@ -14,7 +14,8 @@ import {
   prepareNOCUploadData,
   submitBpaApplication,
   updateBpaApplication,
-  getNocSearchResults
+  getNocSearchResults,
+  validateThirdPartyDetails
 } from "../../../../../ui-utils/commons";
 import { prepareNocFinalCards, compare, checkOwnerAndArchitectMobileNo } from "../../../specs/utils/index";
 import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -348,7 +349,31 @@ const callBackForNext = async (state, dispatch) => {
     let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
     let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
     let noc = get(state.screenConfiguration.preparedFinalObject,"Noc",[]) 
-    if(noc.length == requiredNocs.length){
+    let isValid = true
+    if(requiredNocs && requiredNocs.length > 0 && requiredNocs.includes("NMA_NOC")){
+      let NMANoc = noc && noc.length > 0 && noc.filter( noc => {
+        if(noc.nocType == "NMA_NOC"){
+          return noc
+        }
+      })
+      if(NMANoc && NMANoc.length > 0 && !validateThirdPartyDetails(NMANoc[0].additionalDetails)){
+        isValid = false
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "ERR_FILL_ALL_FIELDS",
+              labelKey: "ERR_FILL_ALL_FIELDS",
+            },
+            "warning"
+          )
+        )
+        return
+      }else{
+       isValid = true
+      }
+    }
+    if(((noc.length == requiredNocs.length) || (noc.length > requiredNocs.length)) && isValid){
       const documentsFormat = Object.values(
         get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
       );
@@ -425,10 +450,6 @@ const callBackForNext = async (state, dispatch) => {
         // dispatch(prepareFinalObject("BPA.owners[0].ownerType", "NONE"));
       }
       if (activeStep === 3) {
-        let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
-        let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
-        let noc = get(state.screenConfiguration.preparedFinalObject,"Noc",[]) 
-        if(noc.length == requiredNocs.length){
           let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
           if(nocData && nocData.length > 0) {
             nocData.map(items => {
@@ -436,14 +457,6 @@ const callBackForNext = async (state, dispatch) => {
             })
             dispatch(prepareFinalObject("nocForPreview", nocData));
           }
-        }else{
-          let errorMessage = {
-            labelName: "Please trigger all required noc's",
-            labelKey: "ERR_TRIGGER_REQUIRED_NOCS_TOAST"
-          };
-          dispatch(toggleSnackbar(true, errorMessage, "warning"));
-          return
-        }
       }
       if (activeStep === 2) {
         let checkingOwner = get(

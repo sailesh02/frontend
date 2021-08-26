@@ -100,22 +100,563 @@ const styles = {
 }
 
 const fieldConfig = {
-  nocType: {
+  MonumentName: {
       label: {
-        labelName: "NOC Type",
-        labelKey: "BPA_NOC_TYPE_LABEL"
+        labelName: "Monument Name",
+        labelKey: "BPA_NMA_NOC_MONUMENT_NAME_LABEL"
       },
       placeholder: {
-        labelName: "Select NOC Type",
-        labelKey: "BPA_NOC_TYPE_PLACEHOLDER"
+        labelName: "Enter Monument Name",
+        labelKey: "BPA_NMA_NOC_MONUMENT_NAME_PLACEHOLDER"
       }
+    },
+    State: {
+      label: {
+        labelName: "State",
+        labelKey: "BPA_NMA_NOC_STATE_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter State",
+        labelKey: "BPA_NMA_NOC_STATE_PLACEHOLDER"
+      }
+  },
+  District: {
+    label: {
+      labelName: "District",
+      labelKey: "BPA_NMA_NOC_DISTRICT_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter District Name",
+      labelKey: "BPA_NMA_NOC_DISTRICT_PLACEHOLDER"
     }
+  },
+  Taluka: {
+    label: {
+      labelName: "Taluka",
+      labelKey: "BPA_NMA_NOC_TALUKA_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Taluka Name",
+      labelKey: "BPA_NMA_NOC_TALUKA_PLACEHOLDER"
+    }
+  },
+  Locality: {
+    label: {
+      labelName: "Locality",
+      labelKey: "BPA_NEW_TRADE_DETAILS_MOHALLA_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Locality",
+      labelKey: "BPA_NEW_TRADE_DETAILS_MOHALLA_PLACEHOLDER"
+    }
+  },
+  DistanceFromTheMainMonument: {
+    label: {
+      labelName: "Distance From Main Monument",
+      labelKey: "BPA_NMA_NOC_DISTANCE_FROM_MONUMENT_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Distance From Main Monument",
+      labelKey: "BPA_NMA_NOC_DISTANCE_FROM_MONUMENT_PLACEHOLDER"
+    }
+  },
+  DistanceFromTheProtectedBoundaryWall: {
+    label: {
+      labelName: "Distance From Protected Boundary Wall",
+      labelKey: "BPA_NMA_NOC_DISTANCE_PROTECTED_WALL_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Distance From Protected Boundary Wall",
+      labelKey: "BPA_NMA_NOC_DISTANCE_PROTECTED_WAL_PLACEHOLDER"
+    }
+  },
+  ApproximateDateOfCommencementOfWorks: {
+    label: {
+      labelName: "Date of Commencement of Work",
+      labelKey: "BPA_NMA_NOC_COMMENCEMENT_DATE_LABEL"
+    },
+    placeholder: {
+      labelName: "Select Date of Commencement of Work",
+      labelKey: "BPA_NMA_NOC_COMMENCEMENT_DATE_PLACEHOLDER"
+    }
+  },
+  ApproximateDurationOfCommencementOfWorks: {
+    label: {
+      labelName: "Duration of Commencement of Work",
+      labelKey: "BPA_NMA_NOC_COMMENCEMENT_DURATION_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Monument Name",
+      labelKey: "BPA_NMA_NOC_COMMENCEMENT_DURATION_PLACEHOLDER"
+    }
+  },
+  NearTheMonument: {
+    label: {
+      labelName: "Near the Monument",
+      labelKey: "BPA_NMA_NOC_NEAR_MONUMENT_LABEL"
+    },
+    placeholder: {
+      labelName: "Near Monument",
+      labelKey: "BPA_NMA_NOC_NEAR_MONUMENT_PLACEHOLDER"
+    }
+  },
+  NearTheSiteConstructionRelatedActivity: {
+    label: {
+      labelName: "Near the Side Construction Related Activity",
+      labelKey: "BPA_NMA_NOC_NEAR_SIDE_CONSTRUCTION_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Near the Side Construction Related Activity",
+      labelKey: "BPA_NMA_NOC_NEAR_SIDE_CONSTRUCTION_PLACEHOLDER"
+    }
+  },
+  WhetherMonumentIsLocatedWithinLimitOf: {
+    label: {
+      labelName: "Whether the Monument is Located Within Limit of",
+      labelKey: "BPA_NMA_NOC_MONUMENT_WITHIN_LIMIT_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Whether the Monument is Located Within Limit of",
+      labelKey: "BPA_NMA_NOC_MONUMENT_WITHIN_LIMIT_PLACEHOLDER"
+    }
+  },
+  DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage: {
+    label: {
+      labelName: "Does Master Plan Approved By Concerned Authorities Exists For The City/Town/Village",
+      labelKey: "BPA_NMA_NOC_MASTER_PLAN_APPROVED_LABEL"
+    },
+    placeholder: {
+      labelName: "Select",
+      labelKey: "BPA_NMA_NOC_MASTER_PLAN_APPROVED_PLACEHOLDER"
+    }
+  },  
+  MonumentName: {
+    label: {
+      labelName: "Monument Name",
+      labelKey: "BPA_NMA_NOC_MONUMENT_NAME_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Monument Name",
+      labelKey: "BPA_NMA_NOC_MONUMENT_NAME_PLACEHOLDER"
+    }
+  },
+  StatusOfModernConstructions: {
+    label: {
+      labelName: "Status Of Modern Constructions",
+      labelKey: "BPA_NMA_NOC_MODERN_CONSTRUCTION_STATUS_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Status Of Modern Constructions",
+      labelKey: "BPA_NMA_NOC_MODERN_CONSTRUCTION_STATUS_PLACEHOLDER"
+    }
+  },
+  OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea: {
+    label: {
+      labelName: "Open Space Or Park Or Green Area Close To Protected Monument Or Protected Area",
+      labelKey: "BPA_NMA_NOC_AREA_CLOSE_TO_PROTECTED_MONUMENT_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Open Space Or Park Or Green Area Close To Protected Monument Or Protected Area",
+      labelKey: "BPA_NMA_NOC_AREA_CLOSE_TO_PROTECTED_MONUMENT_PLACEHOLDER"
+    }
+  },
+  WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction: {
+    label: {
+      labelName: "Whether Any Road Exists Between The Monument And The Site Of Construction",
+      labelKey: "BPA_NMA_NOC_ROAD_EXISTS_BETWEEN_MONUMENT_LABEL"
+    },
+    placeholder: {
+      labelName: "Select Whether Any Road Exists Between The Monument And The Site Of Construction ",
+      labelKey: "BPA_NMA_NOC_ROAD_EXISTS_BETWEEN_MONUMENT_PLACEHOLDER"
+    }
+  },
+  Remarks: {
+    label: {
+      labelName: "Remarks",
+      labelKey: "BPA_NMA_NOC_REMARKS_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Remarks",
+      labelKey: "BPA_NMA_NOC_REMARKS_PLACEHOLDER"
+    }
+  },
+  TermAndCondition : {
+    label: {
+      labelName: "Terms and Conditions",
+      labelKey: "BPA_NMA_NOC_TERM_CONDITION_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Terms and Conditions",
+      labelKey: "BPA_NMA_NOC_TERM_CONDITIO_PLACEHOLDER"
+    }
+  }
 };
 // const LightTooltip = withStyles((theme) => ({
 //   tooltip: {
 //     fontSize: 12
 //   }
 // }))(Tooltip);
+
+const onNmaFieldChange = (key,jsonPath) => e => {
+  if(jsonPath == "ApproximateDateOfCommencementOfWorks" || jsonPath == "ApproximateDurationOfCommencementOfWorks"){
+    let date = e.target.value
+    date = date.split('-')
+    let modifiedDate = date[2]+'/'+date[1]+'/'+date[0]
+    store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,modifiedDate))
+  }else{
+    store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
+  }
+};
+
+export const getNMANOCForm = (key,filter) => {
+  return (
+    <React.Fragment>
+      <div style={{backgroundColor:"rgb(255,255,255)", paddingRight:"10px", marginTop: "16px" }}>
+        <Grid container="true" spacing={12}>
+          <Grid item xs={12}>
+            <div style={styles.dividerStyle}>
+              <div style={ styles.labelStyle}>
+                <span>Name of the Nearest Monument or Site</span>
+                <div style={styles.underlineStyle} />
+              </div>
+            </div>
+          </Grid>
+        </Grid>
+        <Grid container="true" spacing={12}>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+              fontSize: '11px',
+              fontWeight: 500
+              }}
+              labelName={fieldConfig.MonumentName.label.labelName}
+              labelKey={fieldConfig.MonumentName.label.labelKey} />
+            <TextFieldContainer
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.MonumentName.placeholder}
+              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.MonumentName`}
+              onChange={() => onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.MonumentName")}
+            />
+            </Grid>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+                fontSize: '11px',
+                fontWeight: 500
+            }}
+            labelName={fieldConfig.State.label.labelName}
+            labelKey={fieldConfig.State.label.labelKey} />
+            <TextFieldContainer
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.State.placeholder}
+              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`}
+              onChange={() => onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.State")}
+            />
+          </Grid>
+        </Grid>
+        <Grid container="true" spacing={12}>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+            fontSize: '11px',
+            fontWeight: 500
+             }}
+            labelName={fieldConfig.District.label.labelName}
+            labelKey={fieldConfig.District.label.labelKey} />
+            <TextFieldContainer
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.District.placeholder}
+            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.District`}
+            onChange={() => onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.District")}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+              fontSize: '11px',
+              fontWeight: 500
+            }}
+            labelName={fieldConfig.Taluka.label.labelName}
+            labelKey={fieldConfig.Taluka.label.labelKey} />
+            <TextFieldContainer
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.Taluka.placeholder}
+              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Taluka`}
+              onChange={ () => onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Taluka")}
+            />
+          </Grid>
+        </Grid>
+        <Grid container="true" spacing={12}>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+                fontSize: '11px',
+                fontWeight: 500
+            }}
+            labelName={fieldConfig.Locality.label.labelName}
+            labelKey={fieldConfig.Locality.label.labelKey} />
+            <TextFieldContainer
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.Locality.placeholder}
+              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Locality`}
+              onChange={() => onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Locality")}
+            />
+          </Grid>
+        </Grid>
+        <Grid container="true" spacing={12} style={{marginTop: "10px"}} >
+          <Grid item xs={12}>
+            <div style={styles.dividerStyle}>
+              <div style={ styles.labelStyle}>
+              <span>Distance Of The Site Of The Construction From Protected Boundary Of Monument</span>
+              <div style={styles.underlineStyle} />
+              </div>
+            </div>
+          </Grid>
+        </Grid>
+        <Grid container="true" spacing={12}>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+                fontSize: '11px',
+                fontWeight: 500
+            }}
+            labelName={fieldConfig.DistanceFromTheMainMonument.label.labelName}
+            labelKey={fieldConfig.DistanceFromTheMainMonument.label.labelKey} />
+            <TextFieldContainer
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.DistanceFromTheMainMonument.placeholder}
+            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument`}
+            onChange={() => onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument")}
+            />
+          </Grid>
+        <Grid item xs={6}>
+          <LabelContainer style={{
+            fontSize: '11px',
+            fontWeight: 500
+          }}
+          labelName={fieldConfig.DistanceFromTheProtectedBoundaryWall.label.labelName}
+          labelKey={fieldConfig.DistanceFromTheProtectedBoundaryWall.label.labelKey} />
+          <TextFieldContainer
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.DistanceFromTheProtectedBoundaryWall.placeholder}
+            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall`}
+            onChange={ () => onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall")}
+          />
+        </Grid>
+        </Grid>
+      <Grid container="true" spacing={12} style={{marginTop: "10px"}}>
+        <Grid item xs={12}>
+          <div style={styles.dividerStyle}>
+            <div style={ styles.labelStyle}>
+            <span>Date Of Commencement Of Work</span>
+            <div style={styles.underlineStyle} />
+            </div>
+          </div>
+        </Grid>
+      </Grid>
+      <Grid container="true" spacing={12}>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+                fontSize: '11px',
+                fontWeight: 500
+            }}
+            labelName={fieldConfig.ApproximateDateOfCommencementOfWorks.label.labelName}
+            labelKey={fieldConfig.ApproximateDateOfCommencementOfWorks.label.labelKey} />
+            <TextFieldContainer
+              type = "date"
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.ApproximateDateOfCommencementOfWorks.placeholder}
+              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.ApproximateDateOfCommencementOfWorks`}
+              onChange={() => onNmaFieldChange(key,"ApproximateDateOfCommencementOfWorks")}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+              fontSize: '11px',
+              fontWeight: 500
+            }}
+            labelName={fieldConfig.ApproximateDurationOfCommencementOfWorks.label.labelName}
+            labelKey={fieldConfig.ApproximateDurationOfCommencementOfWorks.label.labelKey} />
+            <TextFieldContainer
+              type = "date"
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.ApproximateDurationOfCommencementOfWorks.placeholder}
+              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.ApproximateDurationOfCommencementOfWorks`}
+              onChange={() => onNmaFieldChange(key,"ApproximateDurationOfCommencementOfWorks")}
+            />
+          </Grid>
+        </Grid>
+
+        <Grid container="true" spacing={12} style={{marginTop: "10px"}}>
+          <Grid item xs={12}>
+            <div style={styles.dividerStyle}>
+              <div style={ styles.labelStyle}>
+              <span>Maximum Height Of Existing Modern Building In Close Vicinity Of</span>
+              <div style={styles.underlineStyle} />
+              </div>
+            </div>
+          </Grid>
+        </Grid>
+        <Grid container="true" spacing={12}>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+                fontSize: '11px',
+                fontWeight: 500
+            }}
+            labelName={fieldConfig.NearTheMonument.label.labelName}
+            labelKey={fieldConfig.NearTheMonument.label.labelKey} />
+            <TextFieldContainer
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.NearTheMonument.placeholder}
+              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument`}
+              onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument")}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+              fontSize: '11px',
+              fontWeight: 500
+            }}
+            labelName={fieldConfig.NearTheSiteConstructionRelatedActivity.label.labelName}
+            labelKey={fieldConfig.NearTheSiteConstructionRelatedActivity.label.labelKey} />
+            <TextFieldContainer
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.NearTheSiteConstructionRelatedActivity.placeholder}
+              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity`}
+              onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity")}
+            />
+          </Grid>
+        </Grid>
+        <Grid container="true" spacing={12}>
+        <Grid item xs={6}>
+          <LabelContainer style={{
+              fontSize: '11px',
+              fontWeight: 500
+          }}
+          labelName={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelName}
+          labelKey={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelKey} />
+          <TextFieldContainer
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.placeholder}
+            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf`}
+            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf")}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <LabelContainer style={{
+            fontSize: '11px',
+            fontWeight: 500
+          }}
+          labelName={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.label.labelName}
+          labelKey={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.label.labelKey} />
+          <TextFieldContainer
+            select ={true}
+            data={[{
+              "code":'Y',
+              "label":"Yes"
+            },
+            {
+              "code":'N',
+              "label":"No"
+            }]}
+            optionValue="code"
+            optionLabel="label"
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.placeholder}
+            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage`}
+            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage")}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container="true" spacing={12}>
+        <Grid item xs={6}>
+          <LabelContainer style={{
+              fontSize: '11px',
+              fontWeight: 500
+            }}
+            labelName={fieldConfig.StatusOfModernConstructions.label.labelName}
+            labelKey={fieldConfig.StatusOfModernConstructions.label.labelKey} />
+          <TextFieldContainer
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.StatusOfModernConstructions.placeholder}
+            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions`}
+            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions")}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <LabelContainer style={{
+            fontSize: '11px',
+            fontWeight: 500
+          }}
+            labelName={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.label.labelName}
+            labelKey={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.label.labelKey} />
+          <TextFieldContainer          
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.placeholder}
+            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea`}
+            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea")}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container="true" spacing={12}>
+        <Grid item xs={6}>
+            <LabelContainer style={{
+                fontSize: '11px',
+                fontWeight: 500
+            }}
+          labelName={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.label.labelName}
+          labelKey={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.label.labelKey} />
+          <TextFieldContainer
+            select ={true}
+            data={[{
+              "code":'Y',
+              "label":"Yes"
+            },
+            {
+              "code":'N',
+              "label":"No"
+            }]}
+            optionValue="code"
+            optionLabel="label"
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.placeholder}
+            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction`}
+            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction")}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <LabelContainer style={{
+            fontSize: '11px',
+            fontWeight: 500
+          }}
+          labelName={fieldConfig.Remarks.label.labelName}
+          labelKey={fieldConfig.Remarks.label.labelKey} />
+          <TextFieldContainer          
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.Remarks.placeholder}
+            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks`}
+            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks")}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container="true" spacing={12}>
+        <Grid item xs={6}>
+          <LabelContainer style={{
+              fontSize: '11px',
+              fontWeight: 500
+          }}
+          labelName={fieldConfig.TermAndCondition.label.labelName}
+          labelKey={fieldConfig.TermAndCondition.label.labelKey} />
+          <TextFieldContainer
+            style={{ marginRight: "15px" }}
+            placeholder={fieldConfig.TermAndCondition.placeholder}
+            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition`}
+            onChange={() => onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition")}
+          />
+        </Grid>
+      </Grid>
+    </div>
+    </React.Fragment>
+  );
+}
+
 class NocDetailCard extends Component {
   constructor(props) {
     super(props);
@@ -245,128 +786,6 @@ class NocDetailCard extends Component {
         </React.Fragment>
       );
   };
-
-  onNocChange = (e,key) => {
-    this.setState({
-      nocType:e.target.value
-    })
-    store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNocDetails.jkdjk`,e.target.value)
-    )
-  }
-
-  onNocChange = key => e => {
-    this.setState({
-      nocType:e.target.value
-    })
-    store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.nocType`,e.target.value))
-  };
-
-  getNMANOCForm = (key) => {
-    return (
-      <React.Fragment>
-        <div style={{backgroundColor:"rgb(255,255,255)", paddingRight:"10px", marginTop: "16px" }}>
-        <Grid container="true" spacing={12}>
-        <Grid item xs={12}>
-        <div style={styles.dividerStyle}>
-          <div style={ styles.labelStyle}>
-          <span>Additional Details</span>
-          <div style={styles.underlineStyle} />
-          </div>
-        </div>
-        </Grid>
-        <Grid item xs={6}>
-        <LabelContainer style={{
-            fontSize: '11px',
-            fontWeight: 500
-        }}
-        labelName={"BPA_NOC_TYPE_LABEL"}
-        labelKey={"BPA_NOC_TYPE_LABEL"} />
-          <TextFieldContainer
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.nocType.placeholder}
-            value = {this.state.nocType}
-            onChange={this.onNocChange(key)}
-          />
-          </Grid>
-          <Grid item xs={6}>
-        <LabelContainer style={{
-            fontSize: '11px',
-            fontWeight: 500
-        }}
-        labelName={"BPA_NOC_TYPE_LABEL"}
-        labelKey={"BPA_NOC_TYPE_LABEL"} />
-          <TextFieldContainer
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.nocType.placeholder}
-            value = {this.state.nocType}
-            onChange={this.onNocChange(key)}
-          />
-          </Grid>
-        </Grid>
-        <Grid container="true" spacing={12}>
-        <Grid item xs={6}>
-        <LabelContainer style={{
-            fontSize: '11px',
-            fontWeight: 500
-        }}
-        labelName={"BPA_NOC_TYPE_LABEL"}
-        labelKey={"BPA_NOC_TYPE_LABEL"} />
-          <TextFieldContainer
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.nocType.placeholder}
-            value = {this.state.nocType}
-            onChange={this.onNocChange(key)}
-          />
-          </Grid>
-          <Grid item xs={6}>
-        <LabelContainer style={{
-            fontSize: '11px',
-            fontWeight: 500
-        }}
-        labelName={"BPA_NOC_TYPE_LABEL"}
-        labelKey={"BPA_NOC_TYPE_LABEL"} />
-          <TextFieldContainer
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.nocType.placeholder}
-            value = {this.state.nocType}
-            onChange={this.onNocChange(key)}
-          />
-          </Grid>
-        </Grid>
-        <Grid container="true" spacing={12}>
-        <Grid item xs={6}>
-        <LabelContainer style={{
-            fontSize: '11px',
-            fontWeight: 500
-        }}
-        labelName={"BPA_NOC_TYPE_LABEL"}
-        labelKey={"BPA_NOC_TYPE_LABEL"} />
-          <TextFieldContainer
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.nocType.placeholder}
-            value = {this.state.nocType}
-            onChange={this.onNocChange(key)}
-          />
-          </Grid>
-          <Grid item xs={6}>
-        <LabelContainer style={{
-            fontSize: '11px',
-            fontWeight: 500
-        }}
-        labelName={"BPA_NOC_TYPE_LABEL"}
-        labelKey={"BPA_NOC_TYPE_LABEL"} />
-          <TextFieldContainer
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.nocType.placeholder}
-            value = {this.state.nocType}
-            onChange={this.onNocChange(key)}
-          />
-          </Grid>
-        </Grid>
-        </div>
-      </React.Fragment>
-    );
-  }
 
   getDocumentsFromMDMS = async (nocType) => {
     let {BPA} = this.props.preparedFinalObject
@@ -528,7 +947,7 @@ class NocDetailCard extends Component {
                 />
                 </div>
             <div>{this.getCard(card, index)}</div>  
-            <div>{this.getNMANOCForm(index)}</div>
+            <div>{getNMANOCForm(index)}</div>
           </div>) : (
              <Grid style={{paddingTop:'18px',paddingRight:'22px',paddingBottom:'18px',paddingLeft:'10px',marginBottom:'10px',width:'100%',backgroundColor: "#FFFFFF"}} container>
                 <Grid style={{align:'center'}} item xs={11}>

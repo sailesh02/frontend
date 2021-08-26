@@ -69,10 +69,17 @@ import {
 export const onClickAdd = async (state, dispatch) => {
    dispatch(handleField(
      "search-preview",
-     "components.div.children.newNoc.props",
+     "components.div.children.triggerNocContainer.props",
      "open",
      true
    ))
+
+   dispatch(handleField(
+    "search-preview",
+    "components.div.children.triggerNocContainer.props",
+    "type",
+    "new"
+  ))
    dispatch(prepareFinalObject("documentsContractNOC", []));
 
 }

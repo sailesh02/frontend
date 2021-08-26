@@ -100,6 +100,16 @@ const styles = {
 }
 
 export const fieldConfig = {
+  nocType: {
+    label: {
+      labelName: "NOC Type",
+      labelKey: "BPA_NOC_TYPE_LABEL"
+    },
+    placeholder: {
+      labelName: "Select NOC Type",
+      labelKey: "BPA_NOC_TYPE_PLACEHOLDER"
+    }
+  },
   MonumentName: {
       label: {
         labelName: "Monument Name",
@@ -837,6 +847,7 @@ class NocDetailCard extends Component {
     })
     this.prepareDocumentsUploadData(requiredDocumentsFormat)
   }
+
   prepareDocumentsUploadData = (documents) => {
     let documentsContract = [];
     let tempDoc = {};
@@ -906,7 +917,13 @@ class NocDetailCard extends Component {
         "nocType",
         nocType
       ))
-      
+
+      store.dispatch(handleField(
+        "search-preview",
+        "components.div.children.triggerNocContainer.props",
+        "type",
+        "trigger"
+      ))
       store.dispatch(prepareFinalObject(`NewNocAdditionalDetails`,{})) 
       
   }
@@ -1082,6 +1099,7 @@ class NocDetailCard extends Component {
     // }
     // prepareFinalObject("Noc", Noc);
   };
+
   prepareDocumentForRedux = async (documentsList) => {
     const {nocDocumentsDetailsRedux} = this.props.preparedFinalObject 
      let index = 0;

@@ -23,6 +23,7 @@ import { createNoc, validateThirdPartyDetails, getNocSearchResults, getAdditiona
 import get from "lodash/get";
 import {fieldConfig} from "../../ui-molecules-local/NocDetailCard"
 import { withStyles } from "@material-ui/core/styles";
+import commonConfig from "config/common.js";
 
 const styles = {
   documentTitle: {
@@ -454,7 +455,8 @@ const getNMANOCForm = (key) => {
 
 class TriggerNOCContainer extends Component {
   state = {
-    comments : ''
+    comments : '',
+    nocType : ''
   }
   
   prepareDocumentsForPayload = async (wfState) => {
@@ -499,6 +501,158 @@ class TriggerNOCContainer extends Component {
       store.dispatch(prepareFinalObject("payloadDocumentFormat",uploadingDocuments));
     }
   }
+
+  prepareDocumentForRedux = async (documentsList) => {
+    const {nocDocumentsDetailsRedux} = this.props.preparedFinalObject 
+     let index = 0;
+     documentsList.forEach(docType => {
+       docType.cards &&
+         docType.cards.forEach(card => {
+           if (card.subCards) {
+             card.subCards.forEach(subCard => {
+               let oldDocType = get(
+                 nocDocumentsDetailsRedux,
+                 `[${index}].documentType`
+               );
+               let oldDocCode = get(
+                 nocDocumentsDetailsRedux,
+                 `[${index}].documentCode`
+               );
+               let oldDocSubCode = get(
+                 nocDocumentsDetailsRedux,
+                 `[${index}].documentSubCode`
+               );
+               if (
+                 oldDocType != docType.code ||
+                 oldDocCode != card.name ||
+                 oldDocSubCode != subCard.name
+               ) {
+                 nocDocumentsDetailsRedux[index] = {
+                   documentType: docType.code,
+                   documentCode: card.name,
+                   documentSubCode: subCard.name
+                 };
+               }
+               index++;
+             });
+           } else {
+             let oldDocType = get(
+               nocDocumentsDetailsRedux,
+               `[${index}].documentType`
+             );
+             let oldDocCode = get(
+               nocDocumentsDetailsRedux,
+               `[${index}].documentCode`
+             );
+             if (oldDocType != docType.code || oldDocCode != card.name) {
+               nocDocumentsDetailsRedux[index] = {
+                 documentType: docType.code,
+                 documentCode: card.name,
+                 isDocumentRequired: card.required,
+                 isDocumentTypeRequired: card.dropDownValues
+                   ? card.dropDownValues.required
+                   : false
+               };
+             }
+             index++;
+           }
+         });
+     });
+     store.dispatch(prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux))
+ }
+
+  prepareDocumentsUploadData = (documents) => {
+    // documents = documents.filter(item => {
+    //     return item.active;
+    // });
+    let documentsContract = [];
+    let tempDoc = {};
+    documents && documents.length > 0 && documents.forEach(doc => {
+        let card = {};
+        card["code"] = doc.documentType;
+        card["title"] = doc.documentType;
+        card["documentType"] = doc.documentType
+        card["cards"] = [];
+        tempDoc[doc.documentType] = card;
+    });
+  
+    documents && documents.length > 0 && documents.forEach(doc => {
+        // Handle the case for multiple muildings
+        let card = {};
+        card["name"] = doc.code;
+        card["code"] = doc.code;
+        card["required"] = doc.required ? true : false;
+        if (doc.hasDropdown && doc.dropdownData) {
+            let dropdown = {};
+            dropdown.label = "WS_SELECT_DOC_DD_LABEL";
+            dropdown.required = true;
+            dropdown.menu = doc.dropdownData.filter(item => {
+                return item.active;
+            });
+            dropdown.menu = dropdown.menu.map(item => {
+                return { code: item.code, label: getTransformedLocale(item.code) };
+            });
+            card["dropdown"] = dropdown;
+        }
+        tempDoc[doc.documentType].cards.push(card);
+    });
+  
+    Object.keys(tempDoc).forEach(key => {
+        documentsContract.push(tempDoc[key]);
+    });
+  
+    store.dispatch(prepareFinalObject("documentsContractNOC", documentsContract));
+    this.prepareDocumentForRedux(documentsContract)
+
+  };
+
+  getDocumentsFromMDMS = async (nocType) => {
+    let {BPA} = this.props.preparedFinalObject
+    let {applicationType} = BPA
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+          {
+            "moduleName": "NOC",
+            "masterDetails": [
+                {
+                    "name": "DocumentTypeMapping",
+                    "filter": `$.[?(@.nocType=='${nocType}')]`
+                }
+            ]
+        }     
+        ]
+      }
+    };
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+    mdmsBody
+    );
+
+    let documents = payload && payload.MdmsRes && payload.MdmsRes.NOC && payload.MdmsRes.NOC.DocumentTypeMapping || []
+
+    let documentList = documents && documents.length > 0 && documents[0].docTypes.map( doc => {
+      return {
+        code : doc.documentType,
+        documentType : doc.documentType,
+        required : doc.required,
+        active : doc.active || true
+      }
+    })
+    this.prepareDocumentsUploadData(documentList)
+  }
+
+  onNocChange = (e) => {
+    this.setState({
+      nocType:e.target.value
+    })
+    this.getDocumentsFromMDMS(e.target.value)
+  }
+
 
   createNoc = async (nocType) => {
     let isValid = true
@@ -662,8 +816,28 @@ class TriggerNOCContainer extends Component {
                 >
                   <CloseIcon />
                 </Grid>
+                 {
+                   this.props.type == 'new' &&
+                   <Grid item xs = {12}>
+                      <TextFieldContainer
+                        select={true}
+                        style={{ marginRight: "15px" }}
+                        label={fieldConfig.nocType.label}
+                        placeholder={fieldConfig.nocType.placeholder}
+                        data={this.props.nocList}
+                        optionValue="value"
+                        optionLabel="label"
+                        hasLocalization={false}
+                        value = {this.state.nocType}
+                        //onChange={e => this.onEmployeeClick(e)}
+                        onChange={this.onNocChange}
+                        // jsonPath={'mynocType'}
+                      />
+                    </Grid>
+
+                 }
                   <Grid item xs = {12} style={{marginTop:'10px'}}>
-                  {this.props.nocType && this.props.nocType == "NMA_NOC" && 
+                  {(this.state.nocType == "NMA_NOC"  || this.props.nocType == "NMA_NOC") && 
                   <React.Fragment>
                     <Typography component="h2">
                       <LabelContainer labelName="Required Documents"
@@ -702,24 +876,10 @@ class TriggerNOCContainer extends Component {
                   textAlign: "right",
                   marginBottom:10
                 }}>
-                  {/* <Button
-                    variant={"contained"}
-                    color={"primary"}
-                    onClick={this.resetMessage}
-                    style={{
-                      marginRight:'4px'
-                    }}
-                    >
-                    <LabelContainer
-                      labelName={"BPA_RESET_BUTTON"}
-                      labelKey=
-                      {"BPA_RESET_BUTTON"}     
-                    />
-                    </Button> */}
                     <Button
                       variant={"contained"}
                       color={"primary"}
-                      onClick={() => this.saveDetails(this.props.nocType)}
+                      onClick={() => this.saveDetails(this.props.nocType || this.state.nocType)}
                     >
                       <LabelContainer
                         labelName={"BPA_ADD_BUTTON"}

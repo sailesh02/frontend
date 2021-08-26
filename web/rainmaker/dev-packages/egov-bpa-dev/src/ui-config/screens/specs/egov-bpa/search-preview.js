@@ -886,6 +886,12 @@ if(filter){
     "nocList",
     nocList
   ))
+  dispatch(handleField(
+    "search-preview",
+    "components.div.children.triggerNocContainer.props",
+    "nocList",
+    nocList
+  ))
   dispatch(prepareFinalObject("newNocList", nocList));
 }
 }

@@ -301,7 +301,7 @@ const onNmaFieldChange = (key,jsonPath) => e => {
     store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
 };
 
-export const getNMANOCForm = (key,filter) => {
+export const getNMANOCForm = (key,disabled) => {
   return (
     <React.Fragment>
       <div style={{backgroundColor:"rgb(255,255,255)", paddingRight:"10px", marginTop: "16px" }}>
@@ -322,8 +322,9 @@ export const getNMANOCForm = (key,filter) => {
               fontWeight: 500
               }}
               labelName={fieldConfig.MonumentName.label.labelName}
-              labelKey={fieldConfig.MonumentName.label.labelKey} />
+              labelKey={fieldConfig.MonumentName.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
+              disabled={disabled}
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.MonumentName.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.MonumentName`}
@@ -336,8 +337,9 @@ export const getNMANOCForm = (key,filter) => {
                 fontWeight: 500
             }}
             labelName={fieldConfig.State.label.labelName}
-            labelKey={fieldConfig.State.label.labelKey} />
+            labelKey={fieldConfig.State.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
+              disabled={disabled}
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.State.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`}
@@ -352,8 +354,9 @@ export const getNMANOCForm = (key,filter) => {
             fontWeight: 500
              }}
             labelName={fieldConfig.District.label.labelName}
-            labelKey={fieldConfig.District.label.labelKey} />
+            labelKey={fieldConfig.District.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
+            disabled={disabled}
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.District.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.District`}
@@ -366,8 +369,9 @@ export const getNMANOCForm = (key,filter) => {
               fontWeight: 500
             }}
             labelName={fieldConfig.Taluka.label.labelName}
-            labelKey={fieldConfig.Taluka.label.labelKey} />
+            labelKey={fieldConfig.Taluka.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
+              disabled={disabled}
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.Taluka.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Taluka`}
@@ -382,8 +386,9 @@ export const getNMANOCForm = (key,filter) => {
                 fontWeight: 500
             }}
             labelName={fieldConfig.Locality.label.labelName}
-            labelKey={fieldConfig.Locality.label.labelKey} />
+            labelKey={fieldConfig.Locality.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
+              disabled={disabled}
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.Locality.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Locality`}
@@ -408,8 +413,9 @@ export const getNMANOCForm = (key,filter) => {
                 fontWeight: 500
             }}
             labelName={fieldConfig.DistanceFromTheMainMonument.label.labelName}
-            labelKey={fieldConfig.DistanceFromTheMainMonument.label.labelKey} />
+            labelKey={fieldConfig.DistanceFromTheMainMonument.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
+            disabled={disabled}
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.DistanceFromTheMainMonument.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument`}
@@ -422,8 +428,9 @@ export const getNMANOCForm = (key,filter) => {
             fontWeight: 500
           }}
           labelName={fieldConfig.DistanceFromTheProtectedBoundaryWall.label.labelName}
-          labelKey={fieldConfig.DistanceFromTheProtectedBoundaryWall.label.labelKey} />
+          labelKey={fieldConfig.DistanceFromTheProtectedBoundaryWall.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
           <TextFieldContainer
+            disabled={disabled}
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.DistanceFromTheProtectedBoundaryWall.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall`}
@@ -448,8 +455,9 @@ export const getNMANOCForm = (key,filter) => {
                 fontWeight: 500
             }}
             labelName={fieldConfig.ApproximateDateOfCommencementOfWorks.label.labelName}
-            labelKey={fieldConfig.ApproximateDateOfCommencementOfWorks.label.labelKey} />
+            labelKey={fieldConfig.ApproximateDateOfCommencementOfWorks.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
+              disabled={disabled}
               type = "date"
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.ApproximateDateOfCommencementOfWorks.placeholder}
@@ -463,8 +471,9 @@ export const getNMANOCForm = (key,filter) => {
               fontWeight: 500
             }}
             labelName={fieldConfig.ApproximateDurationOfCommencementOfWorks.label.labelName}
-            labelKey={fieldConfig.ApproximateDurationOfCommencementOfWorks.label.labelKey} />
+            labelKey={fieldConfig.ApproximateDurationOfCommencementOfWorks.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
+              disabled={disabled}
               type = "date"
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.ApproximateDurationOfCommencementOfWorks.placeholder}
@@ -491,8 +500,9 @@ export const getNMANOCForm = (key,filter) => {
                 fontWeight: 500
             }}
             labelName={fieldConfig.NearTheMonument.label.labelName}
-            labelKey={fieldConfig.NearTheMonument.label.labelKey} />
+            labelKey={fieldConfig.NearTheMonument.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
+              disabled={disabled}
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.NearTheMonument.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument`}
@@ -505,8 +515,9 @@ export const getNMANOCForm = (key,filter) => {
               fontWeight: 500
             }}
             labelName={fieldConfig.NearTheSiteConstructionRelatedActivity.label.labelName}
-            labelKey={fieldConfig.NearTheSiteConstructionRelatedActivity.label.labelKey} />
+            labelKey={fieldConfig.NearTheSiteConstructionRelatedActivity.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
+              disabled={disabled}
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.NearTheSiteConstructionRelatedActivity.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity`}
@@ -521,8 +532,9 @@ export const getNMANOCForm = (key,filter) => {
               fontWeight: 500
           }}
           labelName={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelName}
-          labelKey={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelKey} />
+          labelKey={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
           <TextFieldContainer
+            disabled={disabled}
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf`}
@@ -535,7 +547,7 @@ export const getNMANOCForm = (key,filter) => {
             fontWeight: 500
           }}
           labelName={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.label.labelName}
-          labelKey={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.label.labelKey} />
+          labelKey={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
           <TextFieldContainer
             select ={true}
             data={[{
@@ -546,6 +558,7 @@ export const getNMANOCForm = (key,filter) => {
               "code":'N',
               "label":"No"
             }]}
+            disabled={disabled}
             optionValue="code"
             optionLabel="label"
             style={{ marginRight: "15px" }}
@@ -563,8 +576,9 @@ export const getNMANOCForm = (key,filter) => {
               fontWeight: 500
             }}
             labelName={fieldConfig.StatusOfModernConstructions.label.labelName}
-            labelKey={fieldConfig.StatusOfModernConstructions.label.labelKey} />
+            labelKey={fieldConfig.StatusOfModernConstructions.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
           <TextFieldContainer
+            disabled={disabled}
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.StatusOfModernConstructions.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions`}
@@ -577,8 +591,9 @@ export const getNMANOCForm = (key,filter) => {
             fontWeight: 500
           }}
             labelName={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.label.labelName}
-            labelKey={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.label.labelKey} />
-          <TextFieldContainer          
+            labelKey={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+          <TextFieldContainer   
+            disabled={disabled}       
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea`}
@@ -594,8 +609,9 @@ export const getNMANOCForm = (key,filter) => {
                 fontWeight: 500
             }}
           labelName={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.label.labelName}
-          labelKey={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.label.labelKey} />
+          labelKey={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
           <TextFieldContainer
+            disabled={disabled}
             select ={true}
             data={[{
               "code":'Y',
@@ -620,7 +636,8 @@ export const getNMANOCForm = (key,filter) => {
           }}
           labelName={fieldConfig.Remarks.label.labelName}
           labelKey={fieldConfig.Remarks.label.labelKey} />
-          <TextFieldContainer          
+          <TextFieldContainer  
+            disabled={disabled}        
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.Remarks.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks`}
@@ -638,6 +655,7 @@ export const getNMANOCForm = (key,filter) => {
           labelName={fieldConfig.TermAndCondition.label.labelName}
           labelKey={fieldConfig.TermAndCondition.label.labelKey} />
           <TextFieldContainer
+            disabled={disabled}
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.TermAndCondition.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition`}
@@ -898,6 +916,7 @@ class NocDetailCard extends Component {
       requiredNocToTrigger,
       documentData,
       Noc,
+      disabled,
       ...rest
     } = this.props;
     return (
@@ -943,7 +962,8 @@ class NocDetailCard extends Component {
                 />
                 </div>
             <div>{this.getCard(card, index)}</div>  
-            <div>{getNMANOCForm(index)}</div>
+            <div>{card.nocType == 'NMA_NOC' && 
+            getNMANOCForm(index,disabled)}</div>
           </div>) : (
              <Grid style={{paddingTop:'18px',paddingRight:'22px',paddingBottom:'18px',paddingLeft:'10px',marginBottom:'10px',width:'100%',backgroundColor: "#FFFFFF"}} container>
                 <Grid style={{align:'center'}} item xs={11}>

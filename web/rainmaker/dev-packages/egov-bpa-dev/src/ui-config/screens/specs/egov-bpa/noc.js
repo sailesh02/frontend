@@ -47,6 +47,7 @@ import {
             moduleName: "egov-bpa",
             componentPath: "NocDetailCard",
             props: {
+              disabled:false,
               jsonPath: "nocForPreview",                  
               sourceJsonPath: "documentDetailsPreview",
               className: "noc-review-documents",
@@ -161,6 +162,7 @@ export const nocDetailsSearch = getCommonGrayCard({
           moduleName: "egov-bpa",
           componentPath: "NocDetailCard",
           props: {
+            disabled:true,
             jsonPath: "nocForPreview",                  
             sourceJsonPath: "documentDetailsPreview",
             className: "noc-review-documents",

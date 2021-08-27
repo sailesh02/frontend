@@ -97,12 +97,17 @@ const tradeLicenseSearchAndResult = {
             items: cardItems,
             history: {}
           }
+        },
+        listCard: {
+          uiFramework: "custom-molecules-local",
+          moduleName: "egov-bpa",
+          componentPath: "HowItWorks"
+        },
+        listCard1: {
+          uiFramework: "custom-molecules-local",
+          moduleName: "egov-bpa",
+          componentPath: "TrainingTutorials"
         }
-        // listCard: {
-        //   uiFramework: "custom-molecules-local",
-        //   moduleName: "egov-tradelicence",
-        //   componentPath: "HowItWorks"
-        // }
       }
     },
     // div: {

@@ -354,8 +354,7 @@ class DescriptionDashboard extends React.Component {
             }
 
 
-            console.log(columnData, "Nero ssss")
-            console.log(unchangeColumnData, "Nero  unchangeColumnData ssss")
+
             const indexingColumn = this.customColumnSort(columnData, unchangeColumnData, reportHeader && reportHeader.length);
 
             var rowData = []
@@ -366,7 +365,7 @@ class DescriptionDashboard extends React.Component {
                 }
                 rowData.push(singleRow)
             }
-            console.log(indexingColumn, "Nero indexingColumn")
+
             this.setState({
                 checkData: this.props.data,
                 allData: formatedData,
@@ -392,7 +391,7 @@ class DescriptionDashboard extends React.Component {
         //debugger;
         const dataProps = this.props.data[0] ? this.props.data[0] : [];
         const sortByProp = this.props.data[1] ? this.props.data[1] : "";
-        console.log(this.props.data, "Nero this.props.data")
+
         if (JSON.stringify(this.props.data) == JSON.stringify(this.state.checkData)) {
             console.log("Hello")
         }
@@ -405,35 +404,33 @@ class DescriptionDashboard extends React.Component {
 
             const reportData = dataProps.reportData;
             const formatedData = [];
-            console.log("Nero graphSearchOption 111")
+
             var graphSearchOption = this.graphSearchDataOption(sortBy);
-            console.log(graphSearchOption, "Nero graphSearchOption")
+
             for (var i = 0; i < reportHeader.length; i++) {
                 var singleData = {}
                 var listData = []
                 singleData[reportHeader[i].name] = listData;
                 formatedData.push(singleData);
             }
-            console.log("Before Group By Status :: ", reportData);
+
 
             // Dynamic Sorting
             //debugger;
             var sortNo = null
             for (var i = 0; i < reportHeader.length; i++) {
-                console.log(reportHeader[i].name, "Nero reportHeader[i].name")
-                console.log(graphSearchOption[0].sortBy, "Nero graphSearchOption[0].sortBy")
+
                 if (reportHeader[i].name === graphSearchOption[0].sortBy) {
                     sortNo = i;
                     break;
                 }
             }
-            console.log(sortNo, "Nero sortNo")
+
             var group = reportData.reduce((r, a) => {
                 r[a[sortNo]] = [...r[a[sortNo]] || [], a];
                 return r;
             }, {});
-            console.log("Group By Status :: ", group);
-            console.log("Header Status in componentDidUpdate::", reportHeader);
+
 
             var filteredGroupData = []
             var graphData = []
@@ -460,10 +457,9 @@ class DescriptionDashboard extends React.Component {
                 col["show"] = true
                 unchangeColumnData.push(col)
             }
-            console.log(columnData, "Nero ssss111")
-            console.log(unchangeColumnData, "Nero  unchangeColumnData ssss11")
+
             const indexingColumn = this.customColumnSort(columnData, unchangeColumnData, reportHeader && reportHeader.length);
-            console.log(indexingColumn, "nero indexing in component update")
+
             var rowData = []
             for (var i = 0; i < reportData.length; i++) {
                 var singleRow = {}
@@ -496,7 +492,7 @@ class DescriptionDashboard extends React.Component {
     }
 
     render() {
-        console.log(this.state, "Nero column data")
+
         // Pie Graph
         var graphDatabyStatus = {
             labels: this.state.graphLabel,
@@ -520,7 +516,7 @@ class DescriptionDashboard extends React.Component {
                 }
             ]
         }
-        console.log(graphDatabyStatus, "Nero graphDatabyStatus")
+
         var graphOptionbyStatus = {
             responsive: true,
             // aspectRatio : 3,

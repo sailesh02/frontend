@@ -52,6 +52,18 @@ export const reviewcounsilForArchNo = getLabelWithValue(
   }
 );
 
+export const reviewDirectorateForTpNo = getLabelWithValue(
+  {
+    labelName: "Directorate of Town Planning No.",
+    labelKey: "BPA_DIR_TOWN_PLANNING_NO_LABEL"
+  },
+  {
+    jsonPath:
+      "Licenses[0].tradeLicenseDetail.additionalDetail.DirectorateForTpNo",
+    callBack: checkValueForNA
+  }
+);
+
 export const reviewValidityPeriod = getLabelWithValue(
   {
     labelName: "License valid up to.",
@@ -122,6 +134,7 @@ export const getReviewLicenseDetails = (isEditable = true) => {
         reviewLicenseeType,
         // reviewLicenseeSubType,
         reviewcounsilForArchNo,
+        reviewDirectorateForTpNo,
         reviewValidityPeriod
       })
     })

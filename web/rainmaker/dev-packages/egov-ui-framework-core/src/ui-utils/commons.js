@@ -764,10 +764,20 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
     case 'TradeLicense':
       if (closePopUp) {
         return (state, dispatch) => {
+          let applyTlfor = window.localStorage.getItem('licenseType');
+          let legacyLicenseRenewal = window.localStorage.getItem('legacyLicenseRenewal');
+
           dispatch(prepareFinalObject("Licenses", []));
           dispatch(prepareFinalObject("LicensesTemp", []));
           dispatch(prepareFinalObject("DynamicMdms", {}));
-          const applyUrl = `/tradelicence/apply?tenantId=${tenant}`;
+          console.log(legacyLicenseRenewal, "Nero legacyLicenseRenewal")
+          let applyUrl = '';
+          if(legacyLicenseRenewal === "true"){
+             applyUrl = `/tradelicence/apply?tenantId=${tenant}&licenseType=${applyTlfor}&legacyLicenseRenewal=true`;
+          }else{
+             applyUrl = `/tradelicence/apply?tenantId=${tenant}&licenseType=${applyTlfor}`;
+          }
+
           dispatch(
             handleField("search", "components.adhocDialog", "props.open", false)
           );

@@ -20,7 +20,7 @@ const AddComplaintForm = ({
   history
 }) => {
   const fields = form.fields || {};
-  const { name, phone, mohalla, city, address, landmark, houseNo } = fields;
+  const { name, phone, mohalla, city, address, landmark, houseNo, pinCode } = fields;
   const submit = form.submit;
   if(city && city.dropDownData && city.dropDownData.length > 0) {
     city.dropDownData.map((item, key)=>{
@@ -138,6 +138,14 @@ const AddComplaintForm = ({
                   {...landmark}
                   onChange={(e, value) => handleFieldChange("landmark", value)}
                   name="landmark-details"
+                />
+              </div>
+              <div className="col-sm-6 col-xs-12">
+                <TextField
+                  className="fix-for-layout-break"
+                  {...pinCode}
+                  onChange={(e, value) => handleFieldChange("pinCode", value)}
+                  name="pincode-details"
                 />
               </div>
             </div>

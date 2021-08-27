@@ -1063,6 +1063,7 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
   }
 }
 
+
 export const downloadProvisionalCertificateForm = async (Licenses, mode = 'download') => {
   let tenantId = get(Licenses[0], "tenantId");
   let applicationNumber = get(Licenses[0], "applicationNumber")
@@ -1087,6 +1088,56 @@ export const downloadProvisionalCertificateForm = async (Licenses, mode = 'downl
   const LicensesPayload = await getSearchResults(queryObject);
   const updatedLicenses = get(LicensesPayload, "Licenses");
   const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
+  if (oldFileStoreId) {
+    downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+  }
+  else {
+    try {
+      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        .then(res => {
+          res.filestoreIds[0]
+          if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+            res.filestoreIds.map(fileStoreId => {
+              downloadReceiptFromFilestoreID(fileStoreId, mode)
+            })
+          } else {
+            console.log("Error In Acknowledgement form Download");
+          }
+        });
+    } catch (exception) {
+      alert('Some Error Occured while downloading Acknowledgement form!');
+    }
+  }
+}
+
+export const downloadProvisionalCertificateFormPaymentSuccess = async (Licenses, mode = 'download') => {
+  //let tenantId = get(Licenses[0], "tenantId");
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  //let applicationNumber = get(Licenses[0], "applicationNumber")
+  let applicationNumber = getQueryArg(window.location.href, "consumerCode");
+  //const applicationType = Licenses && Licenses.length > 0 ? get(Licenses[0], "applicationType") : "NEW";
+  const queryStr = [
+    { key: "key", value: "tplcertificate" },
+    { key: "tenantId", value: "od" }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    {
+      key: "applicationNumber",
+      value: applicationNumber
+    }
+  ];
+  const LicensesPayload = await getSearchResults(queryObject);
+
+  const updatedLicenses = get(LicensesPayload, "Licenses");
+  const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
+   Licenses = updatedLicenses;
   if (oldFileStoreId) {
     downloadReceiptFromFilestoreID(oldFileStoreId, mode)
   }
@@ -1276,7 +1327,8 @@ const getBillingSlabData = async (
               result.tradeUnitData.push({
                 rate: item.rate,
                 category: item.tradeType,
-                type: "trade"
+                type: "trade",
+                rateType: item.type === "RATE"? item.type :null
               });
             } else {
               const count = accessories.find(
@@ -1288,7 +1340,8 @@ const getBillingSlabData = async (
                 rate: item.rate,
                 total: item.rate * count,
                 category: item.accessoryCategory,
-                type: "accessories"
+                type: "accessories",
+                rateType: item.type === "RATE"? item.type :null
               });
             }
             return result;
@@ -2114,6 +2167,15 @@ export const showCityPicker = (state, dispatch) => {
 export const applyForm = (state, dispatch, action) => {
 
   let tlApplyFor = window.localStorage.getItem('licenseType');
+  let legacyLicenseRenewal = window.localStorage.getItem('legacyLicenseRenewal');
+  console.log(legacyLicenseRenewal, "Nero legacyLicenseRenewal egov")
+  console.log(typeof legacyLicenseRenewal, "Nero legacyLicenseRenewal type of")
+  let urlString = '';
+  if(legacyLicenseRenewal === "true"){
+    urlString = `licenseType=${tlApplyFor}&legacyLicenseRenewal=${true}`;
+  }else{
+    urlString = `licenseType=${tlApplyFor}`;
+  }
   const tenantId = get(
     state.screenConfiguration.preparedFinalObject,
     "citiesByModule.citizenTenantId"
@@ -2124,10 +2186,10 @@ export const applyForm = (state, dispatch, action) => {
     callBack: (state, dispatch) => {
       dispatch(prepareFinalObject('documentsUploadRedux', {}))
       const applyUrl = process.env.NODE_ENV === "production"
-        ? `/tradelicense-citizen/apply?tenantId=${tenantId}&licenseType=${tlApplyFor}`
+        ? `/tradelicense-citizen/apply?tenantId=${tenantId}&${urlString}`
         : process.env.REACT_APP_SELF_RUNNING === true
           ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
-          : `/tradelicense-citizen/apply?tenantId=${tenantId}&licenseType=${tlApplyFor}`;
+          : `/tradelicense-citizen/apply?tenantId=${tenantId}&${urlString}`;
       dispatch(setRoute(applyUrl))
     }
   })
@@ -2309,8 +2371,7 @@ export const checkValueForNA = value => {
   return value ? value : "NA";
 };
 export const triggerUpdateByKey = (state, keyIndex, value, dispatch) => {
-  console.log(keyIndex, "Nero KeyIndex");
-  console.log(value, "Nero Value s")
+
   if(dispatch == "set"){
     set(state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.selectedValues[${keyIndex}]`, value);
   } else {
@@ -2320,10 +2381,12 @@ export const triggerUpdateByKey = (state, keyIndex, value, dispatch) => {
 export const updateMdmsDropDowns = async ( state, dispatch ) => {
   let appNo = getQueryArg(window.location.href, "applicationNumber");
 
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+
   let queryObject = [
     {
       key: "tenantId",
-      value: getTenantId()
+      value: tenantId? tenantId: getTenantId()
     },
     { key: "applicationNumber", value: appNo }
   ];

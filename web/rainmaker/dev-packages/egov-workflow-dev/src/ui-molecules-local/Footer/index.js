@@ -176,8 +176,17 @@ class Footer extends React.Component {
     let reNewDurationInMiliSeconds = 0;
     if(tlType && tlType === "TEMPORARY"){
        reNewDurationInMiliSeconds =  1000 * 60 * 60 * 24 * Number(TlPeriod);
+       set(licences[0], "validTo", validFrom+reNewDurationInMiliSeconds);
     }else{
-       reNewDurationInMiliSeconds =  1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
+       //reNewDurationInMiliSeconds =  1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
+
+       var dt = new Date(validFrom);
+       let dt1 = new Date(dt.setFullYear(dt.getFullYear() + Number(TlPeriod)));
+
+
+       // set(queryObject[0], "validTo", tlcommencementDate + selectedYearInMiliSeconds);
+       set(licences[0], "validTo", dt1.getTime());
+
     }
 
     const wfCode = "DIRECTRENEWAL";
@@ -185,7 +194,7 @@ class Footer extends React.Component {
     set(licences[0], "workflowCode", wfCode);
     set(licences[0], "applicationType", "RENEWAL");
     set(licences[0], "validFrom", validFrom);
-    set(licences[0], "validTo", validFrom+reNewDurationInMiliSeconds);
+
    // set(licences[0], "financialYear", nextFinancialYear);
 
     try {
@@ -300,6 +309,7 @@ class Footer extends React.Component {
         state.screenConfiguration.preparedFinalObject,
         `renewalPeriod`
       );
+
       if (rolecheck && (status === "APPROVED" || status === "EXPIRED") &&
         duration <= renewalPeriod) {
         const editButton = {
@@ -326,14 +336,14 @@ class Footer extends React.Component {
         if (responseLength > 1) {
           if (applicationType !== "NEW") {
             downloadMenu && downloadMenu.push(editButton);
-            downloadMenu && downloadMenu.push(submitButton);
+           // downloadMenu && downloadMenu.push(submitButton);
           }
 
         }
         else if (responseLength === 1) {
 
           downloadMenu && downloadMenu.push(editButton);
-          downloadMenu && downloadMenu.push(submitButton);
+         // downloadMenu && downloadMenu.push(submitButton);
         }
 
 
@@ -341,6 +351,7 @@ class Footer extends React.Component {
 
       }
     }
+
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
       rightIcon: "arrow_drop_down",

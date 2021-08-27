@@ -79,7 +79,7 @@ export const httpRequest = async (
   endPoint = addQueryArg(endPoint, queryObject);
   var response;
   try {
-    console.log("Nero in Try")
+
     // response["X-Powered-By"] = "Express"
     switch (method) {
       case "post":
@@ -93,7 +93,7 @@ export const httpRequest = async (
         response = await instance.get(endPoint);
     }
     const responseStatus = parseInt(response.status, 10);
-    console.log(responseStatus, "Nero res status")
+
     store.dispatch(toggleSpinner());
     if (responseStatus === 200 || responseStatus === 201) {
       return response.data;

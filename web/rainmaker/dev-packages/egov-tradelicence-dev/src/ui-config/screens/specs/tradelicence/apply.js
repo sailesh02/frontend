@@ -72,6 +72,9 @@ export const tradeDocumentDetails = getCommonCard({
 });
 
 export const getMdmsData = async (action, state, dispatch) => {
+
+  let TenantIdAppliedFor = getQueryArg(window.location.href, "tenantId");
+
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -107,6 +110,24 @@ export const getMdmsData = async (action, state, dispatch) => {
       ]
     }
   };
+  let mdmsWardBody = {
+    MdmsCriteria: {
+      tenantId: TenantIdAppliedFor,
+      moduleDetails: [
+
+        {
+          moduleName: "Ward",
+          masterDetails: [
+            {
+              name: "Ward"
+            }
+          ]
+        },
+
+      ]
+    }
+  };
+
   try {
     let payload = null;
     payload = await httpRequest(
@@ -127,7 +148,25 @@ export const getMdmsData = async (action, state, dispatch) => {
     payload.MdmsRes.TradeLicense.TlPeriod = [{code: "1", active: true},{code: "2", active: true}, {code: "3", active: true}, {code: "4", active: true}, {code: "5", active: true}]
    // payload.MdmsRes.TradeLicense.UOMDropBoxValues = []
 
+
+   let payload2 = null;
+    payload2 = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsWardBody
+    );
+
+    let wardData = get(
+      payload2,
+      "MdmsRes.Ward",
+      []
+    )
+    payload.MdmsRes.TradeLicense.Ward = wardData;
+
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    //dispatch(prepareFinalObject("applyScreenMdmsData", payload2.MdmsRes));
     let financialYearData = get(
       payload,
       "MdmsRes.egf-master.FinancialYear",
@@ -282,6 +321,7 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    const applicationNo = getQueryArg(window.location.href, "applicationNumber");
     // let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
     dispatch(unMountScreen("search"));
     dispatch(unMountScreen("search-preview"));
@@ -328,6 +368,81 @@ const screenConfig = {
         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
         "PERMANENT"
       );
+
+      const applyFor = window.localStorage.getItem('licenseType');
+      let legacyLicenseRenewal = window.localStorage.getItem('legacyLicenseRenewal');
+      if(applyFor !== null){
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
+        applyFor
+      );
+
+      dispatch(prepareFinalObject("Licenses[0].licenseType", applyFor));
+      }
+      if(applyFor === "TEMPORARY"){
+        set(
+          action.screenConfig,
+          "components.div.children.headerDiv.children.header.children.header.children.key.props.labelKey",
+          "TL_APPLY_TEMP_TRADELICENSE"
+        );
+
+        set(
+          action.screenConfig,
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate.visible",
+
+            true
+
+        );
+        set(
+          action.screenConfig,
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod.visible",
+
+            false
+
+        );
+        dispatch(prepareFinalObject("Licenses[0].tradeLicensePeriod", null));
+        dispatch(prepareFinalObject("Licenses[0].validTo", null));
+
+
+        }else{
+          set(
+            action.screenConfig,
+              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate.visible",
+
+              false
+
+          );
+          // set(
+          //   action.screenConfig,
+          //     "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo.visible",
+
+          //     true
+
+          // );
+          set(
+            action.screenConfig,
+              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod.visible",
+
+              true
+
+          );
+
+          if (!applicationNo) {
+          dispatch(prepareFinalObject("Licenses[0].tradeLicensePeriod", null));
+          dispatch(prepareFinalObject("Licenses[0].validTo", null));
+          if(legacyLicenseRenewal === "true"){
+            set(
+              action.screenConfig,
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo.visible",
+
+                true
+
+            );
+
+          }
+          }
+        }
 
     });
 

@@ -48,6 +48,7 @@ class SingleApplication extends React.Component {
 
   onCardClick = async (item) => {
     const { moduleName, toggleSnackbar, setRoute } = this.props;
+
     if (moduleName === "TL") {
       const wfCode = get(item, "workflowCode");
       const businessServiceQueryObject = [
@@ -80,9 +81,18 @@ class SingleApplication extends React.Component {
     } else if (moduleName === "BPAREG") {
       const userInfo = JSON.parse(getUserInfo());
       const roles = get(userInfo, "roles");
-      if (item.serviceType === "BPAREG") {
+      if (item.serviceType === "BPAREG" && item.rawService === "BPAREG") {
+        switch (item.status) {
+          case "Initiated":
+            setRoute(`/bpastakeholder-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+            break;
+          default:
+            setRoute(`/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+        }
+      }else if (item.serviceType === "BPAREG") {
         switch (item.status) {
           case "INITIATED":
+          case "Initiated":
             setRoute(`/bpastakeholder-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
             break;
           default:
@@ -152,6 +162,9 @@ class SingleApplication extends React.Component {
     return validity;
   }
   generateLabelKey = (content, item) => {
+    const { moduleName, screenName } = this.props;
+
+
     let LabelKey = "";
     if (content.prefix && content.suffix) {
       LabelKey = `${content.prefix}${get(item, content.jsonPath, "").replace(
@@ -159,10 +172,17 @@ class SingleApplication extends React.Component {
         "_"
       )}${content.suffix}`;
     } else if (content.prefix) {
+      if(moduleName === "TL" && screenName === "myApplications"){
+        LabelKey = `WF_${item && item.workflowCode.toUpperCase()}_${get(item, content.jsonPath, "").replace(
+          /[._:-\s\/]/g,
+          "_"
+        )}`;
+      }else{
       LabelKey = `${content.prefix}${get(item, content.jsonPath, "").replace(
         /[._:-\s\/]/g,
         "_"
       )}`;
+    }
     } else if (content.suffix) {
       LabelKey = `${get(item, content.jsonPath, "").replace(/[._:-\s\/]/g, "_")}${
         content.suffix
@@ -175,7 +195,7 @@ class SingleApplication extends React.Component {
 
   render() {
     const { searchResults, classes, contents, moduleName, setRoute } = this.props;
-    console.log(searchResults, "Nero SearchResult")
+
     return (
       <div className="application-card">
         {searchResults && searchResults.length > 0 ? (

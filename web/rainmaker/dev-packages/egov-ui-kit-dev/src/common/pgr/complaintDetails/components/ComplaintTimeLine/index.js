@@ -621,7 +621,7 @@ class ComplaintTimeLine extends Component {
     assigneeStatusCount = 0;
     reassignRequestedCount = 0;
     let { status, history, role, timeLine, feedback, rating, filedBy, filedUserMobileNumber, timelineSLAStatus, reopenValidChecker, slaEndTime, applicationNo } = this.props;
-    console.log(timeLine, "Nero Time Line")
+
     const daysCount = dateDiffInDays(new Date(Date.now()), new Date(slaEndTime));
 
 
@@ -710,7 +710,7 @@ class ComplaintTimeLine extends Component {
                 {timelineSLAStatus && role && role !== "citizen" && <DueDate duedateText={timelineSLAStatus} />}
 
                 {/* {daysCount > 0 && role && role == "citizen" && <EsclateDueToSlaExpired changeRoute={history} applicationNo={applicationNo} />} */}
-                {(()=>{
+                {/* {(()=>{
                   if(daysCount < 1 && role && role == "citizen" && escl1Exists.length < 1){
                   return <EsclateDueToSlaExpired changeRoute={history} applicationNo={applicationNo} />;
                   }else if(escl1DaysCount < -2 && role && role == "citizen" && escl2Exists.length < 1){
@@ -720,7 +720,7 @@ class ComplaintTimeLine extends Component {
                   }else if(escl3DaysCount < -2 && role && role == "citizen" && escl4Exists.length < 1){
                     return <EsclateDueToSlaExpired changeRoute={history} applicationNo={applicationNo} />;
                   }
-                })()}
+                })()} */}
               </div>
               <div className="complaintTimeLineContainer">
                 <TimeLine

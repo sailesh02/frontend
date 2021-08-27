@@ -12,6 +12,7 @@ import { transformComplaintForComponent } from "egov-ui-kit/utils/commons";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { connect } from "react-redux";
 import orderby from "lodash/orderBy";
+import get from "lodash/get";
 import {
   toggleSnackbarAndSetText,
   fetchUiCommonConfig,
@@ -79,7 +80,73 @@ class AllComplaints extends Component {
               : "assigned,reassignrequested",
         },
       ];*/
-      let complaintCountRequest = [
+      let servicesQueryData = [];
+      let servicesQueryparams = '';
+      if (role === "eo1pgreo1") {
+        let pgrMdmsReq = {
+          MdmsCriteria: {
+            tenantId: "od",
+            moduleDetails: [
+
+              {
+                moduleName: "RAINMAKER-PGR",
+                masterDetails: [
+                  {
+                    name: "ServiceDefs",
+                    filter: "[?(@.menuPath IN ['BuildingPermission'])]"
+                  }
+                ]
+              },
+
+            ]
+          }
+        };
+
+
+        let payload = null;
+        payload = await httpRequest(
+          "egov-mdms-service/v1/_search",
+          "_search",
+          [{ key: "tenantId", value: "od" }],
+          pgrMdmsReq
+        );
+
+        let servicesData = get(
+          payload,
+          "MdmsRes.RAINMAKER-PGR.ServiceDefs",
+          []
+        )
+
+        if(servicesData && servicesData.length > 0){
+          for(let i = 0; i<servicesData.length;i++){
+            servicesQueryData.push(servicesData[i].serviceCode);
+          }
+        }
+
+        servicesQueryparams = servicesQueryData.join();
+
+
+      }
+
+
+      let complaintCountRequest;
+      let payloadCount;
+      if(role === "eo1pgreo1"){
+        complaintCountRequest = [
+          { key: "tenantId", value: getTenantId() },
+          {
+            key: "status",
+            value: "escalatedlevel1pending"
+          },
+          { key: "serviceCodes", value: servicesQueryparams },
+        ];
+         payloadCount = await httpRequest(
+          "rainmaker-pgr/v1/requests/_count",
+          "_search",
+          complaintCountRequest
+        );
+      }else{
+       complaintCountRequest = [
         { key: "tenantId", value: getTenantId() },
         {
           key: "status",
@@ -97,13 +164,16 @@ class AllComplaints extends Component {
               :role ==="eo4"
               ? "escalatedlevel4pending"
               : "assigned,reassignrequested"
+
         }
       ];
-      let payloadCount = await httpRequest(
+       payloadCount = await httpRequest(
         "rainmaker-pgr/v1/requests/_count",
         "_search",
         complaintCountRequest
       );
+      }
+
       if (role === "csr") {
         payloadCount
           ? payloadCount.count
@@ -164,6 +234,16 @@ class AllComplaints extends Component {
           true,
           false
         );
+        fetchComplaints(
+          [
+            {
+              key: "status",
+              value: "escalatedlevel1pending,escalatedlevel2pending,escalatedlevel3pending,escalatedlevel4pending",
+            },
+          ],
+          true,
+          false
+        );
       } else if(role === "eo"){
         fetchComplaints(
           [
@@ -181,6 +261,21 @@ class AllComplaints extends Component {
             {
               key: "status",
               value:"escalatedlevel1pending"
+            }
+          ],
+          true,
+          true
+        );
+      }else if(role === "eo1pgreo1"){
+        fetchComplaints(
+          [
+            {
+              key: "status",
+              value:"escalatedlevel1pending"
+            },
+            {
+              key: "serviceCodes",
+              value: servicesQueryparams
             }
           ],
           true,
@@ -359,6 +454,7 @@ class AllComplaints extends Component {
   };
 
   onChange = (value) => {
+
     this.setState({ value });
   };
 
@@ -387,6 +483,7 @@ class AllComplaints extends Component {
       assignedTotalComplaints,
       unassignedTotalComplaints,
       employeeTotalComplaints,
+      allEsclatedComplaints
     } = this.props;
     const hintTextStyle = {
       letterSpacing: "0.7px",
@@ -539,6 +636,46 @@ class AllComplaints extends Component {
                       }
                       onComplaintClick={onComplaintClick}
                       complaints={assignedComplaints}
+                      complaintLocation={true}
+                      role={role}
+                      heightOffset="116px"
+                    />
+                  </div>
+                </Screen>
+              ),
+            },
+            {
+              label: (
+                <div className="inline-Localization-text">
+                  <Label
+                    // labelClassName="assigned-label-text"
+                    labelClassName={
+                      this.state.value === 2
+                        ? "selected-tab-label-text"
+                        : "unselected-tab-label-text"
+                    }
+                    //color={this.state.value === 1 ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.7)"}
+                    bold={true}
+                    label={`ES_ALL_COMPLAINTS_ESCLATED_TAB_LABEL`}
+                    labelStyle={tabStyle}
+                  />
+
+                </div>
+              ),
+              children: (
+                <Screen className="gro-screen" loading={loading}>
+                  <div className="tab3-content form-without-button-cont-generic">
+                    <CountDetails
+                      count={allEsclatedComplaints.length}
+                      total={allEsclatedComplaints.length}
+                      status="escalated"
+                    />
+                    <Complaints
+                      noComplaintMessage={
+                        "ES_MYCOMPLAINTS_NO_ASSIGNED_COMPLAINTS"
+                      }
+                      onComplaintClick={onComplaintClick}
+                      complaints={allEsclatedComplaints}
                       complaintLocation={true}
                       role={role}
                       heightOffset="116px"
@@ -903,6 +1040,9 @@ const mapStateToProps = (state) => {
         :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER1") &&
         roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER2")
         ? "eo"
+        :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER1") &&
+        roleFromUserInfo(userInfo.roles, "PGR_BP_ESCALATION_OFFICER1")
+        ? "eo1pgreo1"
         :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER1")
         ? 'eo1'
         :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER2")
@@ -922,10 +1062,12 @@ const mapStateToProps = (state) => {
     categoriesById,
     displayStatus
   );
+
   let assignedComplaints = [],
     unassignedComplaints = [],
     employeeComplaints = [],
-    csrComplaints = [];
+    csrComplaints = [],
+    allEsclatedComplaints = [];
   let filteredEmployeeComplaints = transformedComplaints.filter(
     (complaint) =>
     complaint.complaintStatus === "ASSIGNED" ||
@@ -950,6 +1092,10 @@ const mapStateToProps = (state) => {
     (complaint) => complaint.complaintStatus === "UNASSIGNED"
   );
 
+  let filteredEsclatedComplaints = transformedComplaints.filter(
+    (complaint) => complaint.complaintStatus === "ESCALATED"
+  );
+
   if (role === "ao") {
     if (order === "Old to New") {
       assignedComplaints = orderby(
@@ -962,6 +1108,12 @@ const mapStateToProps = (state) => {
         ["latestCreationTime"],
         ["asc"]
       );
+      allEsclatedComplaints = orderby(
+        filteredEsclatedComplaints,
+        ["latestCreationTime"],
+        ["asc"]
+      );
+
     } else if (order === "SLA") {
       assignedComplaints = orderby(
         filteredAssignedComplaints,
@@ -973,6 +1125,11 @@ const mapStateToProps = (state) => {
         ["SLA"],
         ["asc"]
       );
+      allEsclatedComplaints = orderby(
+        filteredEsclatedComplaints,
+        ["SLA"],
+        ["asc"]
+      );
     } else {
       assignedComplaints = orderby(
         filteredAssignedComplaints,
@@ -981,6 +1138,11 @@ const mapStateToProps = (state) => {
       );
       unassignedComplaints = orderby(
         filteredUnassignedComplaints,
+        ["latestCreationTime"],
+        ["desc"]
+      );
+      allEsclatedComplaints = orderby(
+        filteredEsclatedComplaints,
         ["latestCreationTime"],
         ["desc"]
       );
@@ -1029,6 +1191,7 @@ const mapStateToProps = (state) => {
   );
   const numEmpComplaint = employeeComplaints.length;
   const numCSRComplaint = transformedComplaints.length;
+
   return {
     assignedComplaints,
     unassignedComplaints,
@@ -1043,6 +1206,7 @@ const mapStateToProps = (state) => {
     assignedTotalComplaints,
     unassignedTotalComplaints,
     employeeTotalComplaints,
+    allEsclatedComplaints
   };
 };
 

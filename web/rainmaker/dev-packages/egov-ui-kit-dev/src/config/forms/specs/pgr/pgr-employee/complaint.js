@@ -114,6 +114,7 @@ const formConfig = {
       hintText: "CS_ADDCOMPLAINT_HOUSE_NO_PLACEHOLDER",
       errorMessage: "PT_HOUSE_NO_ERROR_MESSAGE",
       value: "",
+      required: true
     },
     landmark: {
       id: "landmark",
@@ -123,6 +124,14 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       value: "",
       errorText: "",
+    },
+    pinCode: {
+      id: "pinCode",
+      jsonPath: "services[0].addressDetail.pinCode",
+      floatingLabelText: "CS_ADDCOMPLAINT_PINCODE",
+      hintText: "CS_ADDCOMPLAINT_PINCODE_PLACEHOLDER",
+      errorMessage: "PT_PINCODE_ERROR_MESSAGE",
+      required: true,
     },
     additionalDetails: {
       id: "additional details",

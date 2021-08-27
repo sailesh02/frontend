@@ -7,7 +7,7 @@ import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import {
   acceptedFiles, getFileUrl,
   getFileUrlFromAPI, getMultiUnits, getQueryArg, setBusinessServiceDataToLocalStorage,
-  enableField, disableField ,enableFieldAndHideSpinner
+  enableField, disableField, enableFieldAndHideSpinner
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
@@ -60,7 +60,7 @@ export const getSearchResults = async queryObject => {
     );
     return response;
   } catch (error) {
-    enableFieldAndHideSpinner('search',"components.div.children.tradeLicenseApplication.children.cardContent.children.button.children.buttonContainer.children.searchButton",store.dispatch);
+    enableFieldAndHideSpinner('search', "components.div.children.tradeLicenseApplication.children.cardContent.children.button.children.buttonContainer.children.searchButton", store.dispatch);
     store.dispatch(
       toggleSnackbar(
         true,
@@ -85,7 +85,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
   );
   let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
     let applicationDocument = {}
-    applicationDocuments&&applicationDocuments.map(appDoc => {
+    applicationDocuments && applicationDocuments.map(appDoc => {
       if (appDoc.documentType == mdmsDoc.documentType) {
         applicationDocument = { ...appDoc }
       }
@@ -174,37 +174,142 @@ export const updatePFOforSearchResults = async (
   // getQueryArg(window.location.href, "action") === "edit" &&
   //   (await setDocsForEditFlow(state, dispatch));
 
-  let tlType = get(payload.Licenses[0],'licenseType',"PERMANENT");
+  let tlType = get(payload.Licenses[0], 'licenseType', "PERMANENT");
+  let oldLicenseNumber = get(payload.Licenses[0], 'oldLicenseNumber', null);
 
-if(queryValue && tlType === "TEMPORARY"){
-  dispatch(
-    handleField(
-      "apply",
-      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
-      "visible",
-      true
-    )
-  );
-}
+  if (queryValue && tlType === "TEMPORARY") {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+        "visible",
+        true
+      )
+    );
+  }
 
+  if (queryValue && tlType === "PERMANENT") {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod",
+        "visible",
+        true
+      )
+    );
+if(oldLicenseNumber !== null){
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
+        "visible",
+        true
+      )
+    );
+    }
+  }
+
+  let tlStatus = get(payload.Licenses[0], 'status', "");
+  let userAction = getQueryArg(window.location.href, "action");
+  if (tlStatus && (tlStatus != "INITIATED") && userAction != "EDITRENEWAL") {
+
+    // let selectedTrades = get(
+    //   state.screenConfiguration.screenConfig.apply,
+    //   "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items",
+    //   null
+    // )
+
+    let tradeDetails = get(payload.Licenses[0], 'tradeLicenseDetail', "{}");
+
+    let selectedTrades = get(tradeDetails, "tradeUnits", [])
+
+    if (selectedTrades && selectedTrades.length > 0) {
+      for (let i = 0; i < selectedTrades.length; i++) {
+
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${i}].item${i}.children.cardContent.children.tradeUnitCardContainer.children.dynamicMdms.props.dropdownFields[0]`,
+            "isDisabled",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${i}].item${i}.children.cardContent.children.tradeUnitCardContainer.children.dynamicMdms.props.dropdownFields[1]`,
+            "isDisabled",
+            true
+          )
+        );
+
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${i}].item${i}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue.props`,
+            "disabled",
+            true
+          )
+        );
+      }
+    }
+
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+        "props.disabled",
+        true
+      )
+    );
+
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod",
+        "props.disabled",
+        true
+      )
+    );
+
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeCommencementDate",
+        "props.disabled",
+        true
+      )
+    );
+
+  }
+  if(userAction == "EDITRENEWAL"){
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeName",
+        "props.disabled",
+        true
+      )
+    );
+  }
   if (payload && payload.Licenses) {
 
-    let ownersInitial=get(payload.Licenses[0],'tradeLicenseDetail.owners',[]);
-    set(payload.Licenses[0],'tradeLicenseDetail.owners',ownersInitial.filter(owner=>owner.userActive));
+    let ownersInitial = get(payload.Licenses[0], 'tradeLicenseDetail.owners', []);
+    set(payload.Licenses[0], 'tradeLicenseDetail.owners', ownersInitial.filter(owner => owner.userActive));
     dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
-    dispatch(prepareFinalObject("LicensesTemp[0].oldOwners",  [...payload.Licenses[0].tradeLicenseDetail.owners]));
-    if(payload && payload.Licenses.length > 0 && payload.Licenses[0].tradeLicenseDetail.structureType){
-    const structureTypes=get(payload,'Licenses[0].tradeLicenseDetail.structureType','').split('.')||[];
-    const structureType=structureTypes&&Array.isArray(structureTypes)&&structureTypes.length>0&&structureTypes[0]||'none';
-    const selectedValues=[{
-      structureType:structureType,
-      structureSubType:get(payload,'Licenses[0].tradeLicenseDetail.structureType','')||'none'
-    }]
-    dispatch(
-      prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues", selectedValues));
+    dispatch(prepareFinalObject("LicensesTemp[0].oldOwners", [...payload.Licenses[0].tradeLicenseDetail.owners]));
+    if (payload && payload.Licenses.length > 0 && payload.Licenses[0].tradeLicenseDetail.structureType) {
+      const structureTypes = get(payload, 'Licenses[0].tradeLicenseDetail.structureType', '').split('.') || [];
+      const structureType = structureTypes && Array.isArray(structureTypes) && structureTypes.length > 0 && structureTypes[0] || 'none';
+      const selectedValues = [{
+        structureType: structureType,
+        structureSubType: get(payload, 'Licenses[0].tradeLicenseDetail.structureType', '') || 'none'
+      }]
       dispatch(
-        prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", get(state.screenConfiguration.preparedFinalObject,`applyScreenMdmsData.common-masters.StructureType.${structureType}`,[])));
-   }
+        prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues", selectedValues));
+      dispatch(
+        prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", get(state.screenConfiguration.preparedFinalObject, `applyScreenMdmsData.common-masters.StructureType.${structureType}`, [])));
+    }
   }
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
@@ -219,8 +324,8 @@ if(queryValue && tlType === "TEMPORARY"){
   setApplicationNumberBox(state, dispatch);
 
   createOwnersBackup(dispatch, payload);
-  if(payload && payload.Licenses.length > 0){
-  dispatch(prepareFinalObject("Licenses[0].TlPeriod", payload.Licenses[0].tradeLicenseDetail.additionalDetail.licensePeriod));
+  if (payload && payload.Licenses.length > 0) {
+    dispatch(prepareFinalObject("Licenses[0].TlPeriod", payload.Licenses[0].tradeLicenseDetail.additionalDetail.licensePeriod));
   }
 };
 
@@ -346,7 +451,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     //------ removing null from document array ------
     let documentArray = compact(get(queryObject[0], "tradeLicenseDetail.applicationDocuments"));
     let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");
-    documents=documents.filter(item=> item.fileUrl&&item.fileName);
+    documents = documents.filter(item => item.fileUrl && item.fileName);
     set(queryObject[0], "tradeLicenseDetail.applicationDocuments", documents);
     //-----------------------------------------------
     // let documents = get(queryObject[0], "tradeLicenseDetail.applicationDocuments");
@@ -356,11 +461,14 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       convertDateToEpoch(queryObject[0].validFrom, "dayend")
     );
     set(queryObject[0], "wfDocuments", documents);
+    let validToForTempTL = queryObject[0] && queryObject[0].validTo;
     set(
       queryObject[0],
       "validTo",
       convertDateToEpoch(queryObject[0].validTo, "dayend")
     );
+
+    let commencementDateForTempTL = queryObject[0] && queryObject[0].commencementDate;
     if (queryObject[0] && queryObject[0].commencementDate) {
       queryObject[0].commencementDate = convertDateToEpoch(
         queryObject[0].commencementDate,
@@ -380,17 +488,20 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "NewTL" }
     ];
-    disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-    disableField('apply', "components.div.children.footer.children.payButton",dispatch);
+    disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+    disableField('apply', "components.div.children.footer.children.payButton", dispatch);
 
-    if (process.env.REACT_APP_NAME === "Citizen") {
+    if (process.env.REACT_APP_NAME === "Citizen"&& queryObject[0].workflowCode === "NewTL") {
       // let currentFinancialYr = getCurrentFinancialYear();
       // //Changing the format of FY
       // let fY1 = currentFinancialYr.split("-")[1];
       // fY1 = fY1.substring(2, 4);
       // currentFinancialYr = currentFinancialYr.split("-")[0] + "-" + fY1;
       // set(queryObject[0], "financialYear", currentFinancialYr);
+
+
       setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
+
     }
 
     set(queryObject[0], "tenantId", tenantId);
@@ -402,32 +513,56 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     let tlType = get(queryObject[0], "licenseType");
     let TlPeriod = get(queryObject[0], "TlPeriod");
     let tlcommencementDate = get(queryObject[0], "commencementDate");
+    let TlStatus = get(queryObject[0], "status");
+
     let tlPeriodDisplay = "";
-    if(tlType && tlType === "TEMPORARY" && validTo && tlcommencementDate){
+
+    if (tlType && tlType === "TEMPORARY" && validTo && tlcommencementDate) {
+
+      tlcommencementDate = convertDateToEpoch(
+        commencementDateForTempTL,
+        "daystart"
+      );
+      validTo = convertDateToEpoch(
+        validToForTempTL,
+        "dayend"
+      );
       //var date1 = new Date(tlcommencementDate);
       var date2 = new Date(validTo);
       // To calculate the time difference of two dates
-      var Difference_In_Time = date2.getTime() - tlcommencementDate;
+      var Difference_In_Time = date2.getTime() - new Date(tlcommencementDate).getTime();
 
       // To calculate the no. of days between two dates
       var Difference_In_Days = Math.ceil((((Difference_In_Time / 1000) / 60) / 60) / 24);
+
       set(queryObject[0], "tradeLicenseDetail.additionalDetail.licensePeriod", Difference_In_Days);
       tlPeriodDisplay = `${Difference_In_Days} Days`;
-      queryObject[0].validTo = convertDateToEpoch(
-        validTo,
-        "dayend"
-      );
+      queryObject[0].validTo = validTo
       set(queryObject[0], "validFrom", tlcommencementDate);
-    }else{
+      set(queryObject[0], "commencementDate", tlcommencementDate);
+
+    } else {
       set(queryObject[0], "tradeLicenseDetail.additionalDetail.licensePeriod", TlPeriod);
       tlPeriodDisplay = `${TlPeriod} Years`;
-      set(queryObject[0], "validFrom", tlcommencementDate);
-      let selectedYearInMiliSeconds =  1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
-      set(queryObject[0], "validTo", tlcommencementDate+selectedYearInMiliSeconds);
+if(TlStatus === "INITIATED" && getQueryArg(window.location.href, "action") === "EDITRENEWAL"){
+
+}else{
+  set(queryObject[0], "validFrom", tlcommencementDate);
+}
+      // let selectedYearInMiliSeconds = 1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
+
+      var dt = new Date(queryObject[0] && queryObject[0].commencementDate);
+      let dt1 = new Date(dt.setFullYear(dt.getFullYear() + Number(TlPeriod)));
+
+
+      // set(queryObject[0], "validTo", tlcommencementDate + selectedYearInMiliSeconds);
+      //set(queryObject[0], "validTo", dt1.getTime());
+
     }
     dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", tlPeriodDisplay));
 
     if (queryObject[0].applicationNumber) {
+
       //call update
       const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
       if (isEditRenewal) {
@@ -437,9 +572,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         // }
         set(queryObject[0], "applicationType", "RENEWAL");
         set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));
+        if (TlStatus === "EXPIRED" || TlStatus === "APPROVED") {
 
-        const validFrom = 1000 * 60 * 60 * 24 + validTo;
-        set(queryObject[0], "validFrom", validFrom);
+
+          const validFrom = 1000 * 60 * 60 * 24 + validTo;
+          set(queryObject[0], "validFrom", validFrom);
+        }
       }
 
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
@@ -506,17 +644,20 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
       let updateResponse = [];
       if (!isEditFlow) {
-        let oldOwners = JSON.parse(
-          JSON.stringify(
-            get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].tradeLicenseDetail.owners", [])
-          )
-        );
-        set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwners(get(queryObject[0], "tradeLicenseDetail.owners",[]),oldOwners));
+
+        // let oldOwners = JSON.parse(
+        //   JSON.stringify(
+        //     get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].tradeLicenseDetail.owners", [])
+        //   )
+        // );
+        // set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwners(get(queryObject[0], "tradeLicenseDetail.owners", []), oldOwners));
 
 
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject
         })
+
+
       }
       //Renewal flow
 
@@ -530,6 +671,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           { key: "tenantId", value: tenantId },
           { key: "businessServices", value: workflowCode ? workflowCode : "NewTL" }
         ];
+
         setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
       } else {
         updatedApplicationNo = queryObject[0].applicationNumber;
@@ -545,8 +687,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       } else {
         dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
       }
-      enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-      enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+      enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+      enableField('apply', "components.div.children.footer.children.payButton", dispatch);
 
       const updatedtradeUnits = get(
         searchResponse,
@@ -594,16 +736,16 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       );
       dispatch(prepareFinalObject("Licenses", response.Licenses));
       dispatch(prepareFinalObject("Licenses[0].TlPeriod", TlPeriod));
-      enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-      enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+      enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+      enableField('apply', "components.div.children.footer.children.payButton", dispatch);
       createOwnersBackup(dispatch, response);
     }
     /** Application no. box setting */
     setApplicationNumberBox(state, dispatch);
     return true;
   } catch (error) {
-    enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-    enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+    enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+    enableField('apply', "components.div.children.footer.children.payButton", dispatch);
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
     console.log(error);
     return false;
@@ -763,22 +905,22 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
   }
 }
 
- export const checkValidOwners=(currentOwners=[],oldOwners=[])=>{
+export const checkValidOwners = (currentOwners = [], oldOwners = []) => {
 
   for (var i = 0, len = currentOwners.length; i < len; i++) {
     for (var j = 0, len2 = oldOwners.length; j < len2; j++) {
-        if (currentOwners[i].name === oldOwners[j].name) {
-          oldOwners.splice(j, 1);
-            len2=oldOwners.length;
-        }
+      if (currentOwners[i].name === oldOwners[j].name) {
+        oldOwners.splice(j, 1);
+        len2 = oldOwners.length;
+      }
     }
-}
-oldOwners=oldOwners&&Array.isArray(oldOwners)&&oldOwners.map(owner=>{
-  return {...owner, userActive :false}
-})
-currentOwners=currentOwners&&Array.isArray(currentOwners)&&currentOwners.map(owner=>{
-  return {...owner, userActive :true}
-})
+  }
+  oldOwners = oldOwners && Array.isArray(oldOwners) && oldOwners.map(owner => {
+    return { ...owner, userActive: false }
+  })
+  currentOwners = currentOwners && Array.isArray(currentOwners) && currentOwners.map(owner => {
+    return { ...owner, userActive: true }
+  })
 
-return [...currentOwners, ...oldOwners];
- }
+  return [...currentOwners, ...oldOwners];
+}

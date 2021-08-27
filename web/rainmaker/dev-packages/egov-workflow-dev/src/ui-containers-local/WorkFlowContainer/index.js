@@ -142,8 +142,10 @@ class WorkFlowContainer extends React.Component {
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
+    console.log(updateUrl, moduleName, dataPath)
     if (moduleName === "NewTL") {
       if (getQueryArg(window.location.href, "edited")) {
+        console.log(data, "nero data 1")
         const removedDocs = get(
           preparedFinalObject,
           "LicensesTemp[0].removedDocs",
@@ -222,6 +224,8 @@ class WorkFlowContainer extends React.Component {
           data = beforeSubmitHook(data);
         }
       }
+      console.log(data, "nero data")
+
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
@@ -576,7 +580,7 @@ class WorkFlowContainer extends React.Component {
       moduleName,
       preparedFinalObject
     } = this.props;
-    console.log(preparedFinalObject, "Nero THis Props")
+
     const workflowContract =
       ProcessInstances &&
       ProcessInstances.length > 0 &&

@@ -109,14 +109,22 @@ const remoteComponentPath = (moduleName, path) => {
         component = import("egov-noc/ui-containers-local");
       }
       break;
-    case "egov-dashboard":
-      if (path === "ui-atoms-local") {
-        component = import("egov-dashboard/ui-atoms-local");
-      } else if (path === "ui-molecules-local") {
-        component = import("egov-dashboard/ui-molecules-local");
-      } else if (path === "ui-containers-local") {
-        component = import("egov-dashboard/ui-containers-local");
-      } break;
+    // case "egov-dashboard":
+    //   if (path === "ui-atoms-local") {
+    //     component = import("egov-dashboard/ui-atoms-local");
+    //   } else if (path === "ui-molecules-local") {
+    //     component = import("egov-dashboard/ui-molecules-local");
+    //   } else if (path === "ui-containers-local") {
+    //     component = import("egov-dashboard/ui-containers-local");
+    //   } break;
+    // case "egov-mr":
+    //   if (path === "ui-atoms-local") {
+    //     component = import("egov-mr/ui-atoms-local");
+    //   } else if (path === "ui-molecules-local") {
+    //     component = import("egov-mr/ui-molecules-local");
+    //   } else if (path === "ui-containers-local") {
+    //     component = import("egov-mr/ui-containers-local");
+    //   } break;
     default:
       if (path === "ui-atoms-local") {
         component = import("ui-atoms-local");

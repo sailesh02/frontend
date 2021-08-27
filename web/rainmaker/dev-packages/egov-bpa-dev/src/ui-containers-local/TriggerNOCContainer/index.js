@@ -799,7 +799,7 @@ class TriggerNOCContainer extends Component {
                   sm={10}>
                   <Typography component="h2" variant="subheading">
                     <LabelContainer labelName={getTransformedLocale(this.props.nocType)}
-                    labelKey={`Apply For ${getTransformedLocale(this.props.nocType)}`} />
+                    labelKey={this.props.type == 'new' ? `Apply` : `Apply For ${getTransformedLocale(this.props.nocType)}`} />
                   </Typography>
                 </Grid>
                 <Grid

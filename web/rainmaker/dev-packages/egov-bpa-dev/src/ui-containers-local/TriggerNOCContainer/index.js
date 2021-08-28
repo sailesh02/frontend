@@ -655,87 +655,99 @@ class TriggerNOCContainer extends Component {
 
 
   createNoc = async (nocType) => {
-    let isValid = true
-    let additionalDetails = getAdditionalDetails(nocType,this.props.preparedFinalObject)
-    let { payloadDocumentFormat,NewNocAdditionalDetails } = this.props.preparedFinalObject
-    if(nocType === "NMA_NOC"){
-      if(validateThirdPartyDetails(NewNocAdditionalDetails)){
-        isValid = true
-      }else{
-        isValid = false
+    if(nocType && nocType != ""){
+      let isValid = true
+      let additionalDetails = getAdditionalDetails(nocType,this.props.preparedFinalObject)
+      let { payloadDocumentFormat,NewNocAdditionalDetails } = this.props.preparedFinalObject
+      if(nocType === "NMA_NOC"){
+        if(validateThirdPartyDetails(NewNocAdditionalDetails)){
+          isValid = true
+        }else{
+          isValid = false
+        }
       }
-    }
-    if(isValid){
-      let details = {
-        ...additionalDetails, ...NewNocAdditionalDetails
-      }
-      let {BPA} = this.props.preparedFinalObject
-      let payload = {
-        tenantId : BPA.tenantId,
-        nocNo : null,
-        applicationType : BPA.applicationType,
-        nocType : nocType,
-        accountId : BPA.accountId,
-        sourceRefId : BPA.applicationNo,
-        source: "BPA",
-        applicationStatus : BPA.status,
-        landId : null,
-        status : null,
-        documents : payloadDocumentFormat,
-        workflow : null,
-        auditDetails : BPA.auditDetails,
-        additionalDetails : details
-      }
-        let response = await createNoc(payload);
-        if(response){
-          store.dispatch(
-            toggleSnackbar(
-              true,
-              {
-                labelName: "BPA_NOC_CREATED_SUCCESS_MSG",
-                labelKey: "BPA_NOC_CREATED_SUCCESS_MSG",
-              },
-              "success"
+      if(isValid){
+        let details = {
+          ...additionalDetails, ...NewNocAdditionalDetails
+        }
+        let {BPA} = this.props.preparedFinalObject
+        let payload = {
+          tenantId : BPA.tenantId,
+          nocNo : null,
+          applicationType : BPA.applicationType,
+          nocType : nocType,
+          accountId : BPA.accountId,
+          sourceRefId : BPA.applicationNo,
+          source: "BPA",
+          applicationStatus : BPA.status,
+          landId : null,
+          status : null,
+          documents : payloadDocumentFormat,
+          workflow : null,
+          auditDetails : BPA.auditDetails,
+          additionalDetails : details
+        }
+          let response = await createNoc(payload);
+          if(response){
+            store.dispatch(
+              toggleSnackbar(
+                true,
+                {
+                  labelName: "BPA_NOC_CREATED_SUCCESS_MSG",
+                  labelKey: "BPA_NOC_CREATED_SUCCESS_MSG",
+                },
+                "success"
+              )
             )
-          )
-  
-          await getNocSearchResults([
-            {
-              key: "tenantId",
-              value: BPA.tenantId
-            },
-            { key: "sourceRefId", value: BPA.applicationNo }
-          ],"",true);
-  
-          store.dispatch(handleField(
-            "search-preview",
-            "components.div.children.triggerNocContainer.props",
-            "open",
-            false
+    
+            await getNocSearchResults([
+              {
+                key: "tenantId",
+                value: BPA.tenantId
+              },
+              { key: "sourceRefId", value: BPA.applicationNo }
+            ],"",true);
+    
+            store.dispatch(handleField(
+              "search-preview",
+              "components.div.children.triggerNocContainer.props",
+              "open",
+              false
+            ))
+    
+            store.dispatch(handleField(
+              "apply",
+              "components.div.children.triggerNocContainer.props",
+              "open",
+              false
           ))
-  
-          store.dispatch(handleField(
-            "apply",
-            "components.div.children.triggerNocContainer.props",
-            "open",
-            false
-        ))
-  
-        }   
-        prepareNOCUploadDataAfterCreation()
+    
+          }   
+          prepareNOCUploadDataAfterCreation()
+      }else{
+        store.dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "ERR_FILL_ALL_FIELDS",
+              labelKey: "ERR_FILL_ALL_FIELDS",
+            },
+            "warning"
+          )
+        )
+      }
     }else{
       store.dispatch(
         toggleSnackbar(
           true,
           {
-            labelName: "ERR_FILL_ALL_FIELDS",
-            labelKey: "ERR_FILL_ALL_FIELDS",
+            labelName: "BPA_SELECT_NOC_TYPE",
+            labelKey: "BPA_SELECT_NOC_TYPE",
           },
           "warning"
         )
       )
     }
-   
   };
 
   saveDetails = (nocType) => {
@@ -766,6 +778,10 @@ class TriggerNOCContainer extends Component {
         "open",
         false
     ))  
+
+    this.setState({
+      nocType : ""
+    })
   }
 
   render() {
@@ -799,7 +815,7 @@ class TriggerNOCContainer extends Component {
                   sm={10}>
                   <Typography component="h2" variant="subheading">
                     <LabelContainer labelName={getTransformedLocale(this.props.nocType)}
-                    labelKey={this.props.type == 'new' ? `Apply` : `Apply For ${getTransformedLocale(this.props.nocType)}`} />
+                    labelKey={this.props.type == 'new' ? `${getTransformedLocale("BPA_CREATE_NEW_NOC")}` : `Create ${getTransformedLocale(this.props.nocType)}`} />
                   </Typography>
                 </Grid>
                 <Grid
@@ -836,17 +852,15 @@ class TriggerNOCContainer extends Component {
                     </Grid>
 
                  }
-                  <Grid item xs = {12} style={{marginTop:'10px'}}>
                   {(this.state.nocType == "NMA_NOC"  || this.props.nocType == "NMA_NOC") && 
-                  <React.Fragment>
+                  <Grid item xs = {12} style={{marginTop:'8px'}}>
                     <Typography component="h2">
                       <LabelContainer labelName="Required Documents"
                       labelKey="BPA_ADDITIONAL_DETAILS" />
                     </Typography>
                     {getNMANOCForm(0)}
-                  </React.Fragment>
+                    </Grid>
                   }
-                  </Grid>
                   <Grid item sm={12}>
                   <Typography component="h2">
                     <LabelContainer labelName="Required Documents"

@@ -316,7 +316,8 @@ class DocumentList extends Component {
     }
   }
 
-  handleDocument = async (file, fileStoreId) => {
+  handleDocumentNOC = async (file, fileStoreId) => {
+    debugger
     let { uploadedDocIndex } = this.state;
     const { prepareFinalObject, nocDocumentsDetailsRedux, preparedFinalObject } = this.props;
     const { payloadDocumentFormat } = preparedFinalObject
@@ -375,6 +376,7 @@ class DocumentList extends Component {
   };
 
   getUploadCard = (card, key) => {
+    debugger
     const { classes, nocDocumentsDetailsRedux } = this.props;
     let jsonPath = `nocDocumentsDetailsRedux[${key}].dropDownValues.value`;
     return (
@@ -437,7 +439,7 @@ class DocumentList extends Component {
           <UploadSingleFile
             classes={this.props.classes}
             handleFileUpload={e =>
-              handleFileUpload(e, this.handleDocument, this.props)
+              handleFileUpload(e,this.handleDocumentNOC, this.props)
             }
             uploaded={
               nocDocumentsDetailsRedux[key] && nocDocumentsDetailsRedux[key].documents

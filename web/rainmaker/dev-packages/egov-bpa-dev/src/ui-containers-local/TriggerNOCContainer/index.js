@@ -544,6 +544,7 @@ class TriggerNOCContainer extends Component {
                nocDocumentsDetailsRedux,
                `[${index}].documentCode`
              );
+             debugger
              if (oldDocType != docType.code || oldDocCode != card.name) {
                nocDocumentsDetailsRedux[index] = {
                  documentType: docType.code,
@@ -762,6 +763,8 @@ class TriggerNOCContainer extends Component {
   }
 
   componentDidMount = () => {
+    store.dispatch(prepareFinalObject("nocDocumentsDetailsRedux", {}));
+    store.dispatch(prepareFinalObject("documentsContractNOC", []));
   };
 
   closeDialog = () => {

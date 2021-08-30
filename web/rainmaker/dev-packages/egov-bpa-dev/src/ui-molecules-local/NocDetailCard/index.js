@@ -827,15 +827,15 @@ class NocDetailCard extends Component {
         ]
       }
     };
-    let payload = await httpRequest(
-      "post",
-      "/egov-mdms-service/v1/_search",
-      "_search",
-      [],
-      mdmsBody
-    );
-
-    let documents = payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.DocumentTypeMapping || []
+    // let payload = await httpRequest(
+    //   "post",
+    //   "/egov-mdms-service/v1/_search",
+    //   "_search",
+    //   [],
+    //   mdmsBody
+    // );
+    let payload = {"ResponseInfo":null,"MdmsRes":{"NOC":{"DocumentTypeMapping":[{"applicationType":"PROVISIONAL","nocType":"HBDA_NOC","docTypes":[{"documentType":"NOC.HBDA","required":true}]},{"applicationType":"NEW","nocType":"HBDA_NOC","docTypes":[{"documentType":"NOC.HBDA","required":true}]},{"applicationType":"RENEW","nocType":"HBDA_NOC","docTypes":[{"documentType":"NOC.HBDA","required":false}]}]}}}
+    let documents = payload && payload.MdmsRes && payload.MdmsRes.NOC && payload.MdmsRes.NOC.DocumentTypeMapping || []
   
     let requiredDocumentsFormat = documents && documents.length > 0 && documents[0].docTypes.map( doc => {
       return {
@@ -1101,6 +1101,7 @@ class NocDetailCard extends Component {
   };
 
   prepareDocumentForRedux = async (documentsList) => {
+    debugger
     const {nocDocumentsDetailsRedux} = this.props.preparedFinalObject 
      let index = 0;
      documentsList.forEach(docType => {
@@ -1142,7 +1143,7 @@ class NocDetailCard extends Component {
                nocDocumentsDetailsRedux,
                `[${index}].documentCode`
              );
-             if (oldDocType != docType.code || oldDocCode != card.name) {
+             if ((oldDocType != docType.code || oldDocCode != card.name)) {
                nocDocumentsDetailsRedux[index] = {
                  documentType: docType.code,
                  documentCode: card.name,

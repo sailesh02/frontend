@@ -18,6 +18,7 @@ import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
 import Typography from "@material-ui/core/Typography";
 import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
+import UploadCard from "../UploadCard";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -316,8 +317,7 @@ class DocumentList extends Component {
     }
   }
 
-  handleDocumentNOC = async (file, fileStoreId) => {
-    debugger
+  handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
     const { prepareFinalObject, nocDocumentsDetailsRedux, preparedFinalObject } = this.props;
     const { payloadDocumentFormat } = preparedFinalObject
@@ -376,87 +376,28 @@ class DocumentList extends Component {
   };
 
   getUploadCard = (card, key) => {
-    debugger
-    const { classes, nocDocumentsDetailsRedux } = this.props;
+    const { classes, nocDocumentsDetailsRedux,...rest } = this.props;
+    card.documents = nocDocumentsDetailsRedux[key] && nocDocumentsDetailsRedux[key].documents
+  
     let jsonPath = `nocDocumentsDetailsRedux[${key}].dropDownValues.value`;
     return (
-      <Grid container={true}>
-        <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
-          {nocDocumentsDetailsRedux[key] && nocDocumentsDetailsRedux[key].documents ? (
-            <div className={classes.documentSuccess}>
-              <Icon>
-                <i class="material-icons">done</i>
-              </Icon>
-            </div>
-          ) : (
-            <div className={classes.documentIcon}>
-              <span>{key + 1}</span>
-            </div>
-          )}
-        </Grid>
-        <Grid
-          item={true}
-          xs={10}
-          sm={5}
-          md={4}
-          align="left"
-          className={classes.descriptionDiv}
-        >
-          <LabelContainer
-            labelKey={getTransformedLocale(card.name)}
-            style={styles.documentName}
-          />
-          {card.required && requiredIcon}
-          <Typography variant="caption">
-            <LabelContainer
-              labelKey={getTransformedLocale("BPA_UPLOAD_FILE_RESTRICTIONS")}
-            />
-          </Typography>
-        </Grid>
-        <Grid item={true} xs={12} sm={6} md={4}>
-          {card.dropDownValues && (
-            <TextFieldContainer
-              select={true}
-              label={{ labelKey: getTransformedLocale(card.dropDownValues.label) }}
-              placeholder={{ labelKey: card.dropDownValues.label }}
-              data={card.dropDownValues.menu}
-              optionValue="code"
-              optionLabel="label"
-              autoSelect={true}
-              required={card.required}
-              onChange={event => this.handleChange(key, event)}
-              jsonPath={jsonPath}
-            />
-          )}
-        </Grid>
-        <Grid
-          item={true}
-          xs={12}
-          sm={12}
-          md={3}
-          className={classes.fileUploadDiv}
-        >
-          <UploadSingleFile
-            classes={this.props.classes}
-            handleFileUpload={e =>
-              handleFileUpload(e,this.handleDocumentNOC, this.props)
-            }
-            uploaded={
-              nocDocumentsDetailsRedux[key] && nocDocumentsDetailsRedux[key].documents
-                ? true
-                : false
-            }
-            removeDocument={() => this.removeDocument(key)}
-            documents={
-              nocDocumentsDetailsRedux[key] && nocDocumentsDetailsRedux[key].documents
-            }
-            onButtonClick={() => this.onUploadClick(key)}
-            inputProps={this.props.inputProps}
-            buttonLabel={this.props.buttonLabel}
-            id={`doc-${key+1}`}
-          />
-        </Grid>
-      </Grid>
+      <React.Fragment>
+       <UploadCard
+       docItem={card}
+       docIndex={key}
+       key={key.toString()}
+       handleDocument={this.handleDocument}
+       removeDocument={this.removeDocument}
+       onUploadClick={this.onUploadClick}
+       handleFileUpload={this.handleFileUpload}
+       handleChange={this.handleChange}
+       uploadedDocIndex={this.state.uploadedDocIndex}
+       jsonPath = {`nocDocumentsDetailsRedux`}
+       ids = {"nocDocumentsDetailsRedux"}
+       specificStyles= "preview_upload_btn"
+       {...rest}
+      />  
+      </React.Fragment>
     );
   };
 

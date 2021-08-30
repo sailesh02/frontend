@@ -2,7 +2,7 @@ name: A workflow to build egov frontend
 on: 
  push:
     branches:
-      - feature/bpa-nma-functionalitu
+      - feature/upload-documents-issue
 jobs:
   build:
     name: Build citizen

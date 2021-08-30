@@ -4788,8 +4788,8 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
 }
 export const compare = (a, b) => {
   // Use toUpperCase() to ignore character casing
-  const nocTypeA = a.nocType.toUpperCase();
-  const nocTypeB = b.nocType.toUpperCase();
+  const nocTypeA = a && a.nocType && a.nocType.toUpperCase();
+  const nocTypeB = b && b.nocType && b.nocType.toUpperCase();
   let comparison = 0;
   if (nocTypeA > nocTypeB) {
     comparison = 1;

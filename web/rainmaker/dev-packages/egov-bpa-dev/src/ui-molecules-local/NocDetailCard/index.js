@@ -812,7 +812,7 @@ class NocDetailCard extends Component {
       );
   };
 
-  getDocumentsFromMDMS = async (nocType) => {
+  getDocumentsFromMDMS = async (nocType,isUpdate) => {
     let {BPA} = this.props.preparedFinalObject
     let {applicationType} = BPA
     let mdmsBody = {
@@ -850,24 +850,25 @@ class NocDetailCard extends Component {
       }
     })
 
-    let {nocBPADocumentsContract} = this.props.preparedFinalObject
-    let certificate = null
-    certificate = nocBPADocumentsContract && nocBPADocumentsContract.length > 0 && nocBPADocumentsContract[0].cards && nocBPADocumentsContract[0].cards.length > 0 &&
-    nocBPADocumentsContract[0].cards.filter(card => {
-      if(card.nocType == nocType){
-        return card
-      }
-    })
-
-    if(certificate){
-      requiredDocumentsFormat.push({
-        active: true,
-          code: certificate[0].code,
-          documentType: certificate[0].name + '_CERTIFICATE',
-          required: true
+    if(isUpdate){
+      let {nocBPADocumentsContract} = this.props.preparedFinalObject
+      let certificate = null
+      certificate = nocBPADocumentsContract && nocBPADocumentsContract.length > 0 && nocBPADocumentsContract[0].cards && nocBPADocumentsContract[0].cards.length > 0 &&
+      nocBPADocumentsContract[0].cards.filter(card => {
+        if(card.nocType == nocType){
+          return card
+        }
       })
+  
+      if(certificate){
+        requiredDocumentsFormat.push({
+          active: true,
+            code: certificate[0].code,
+            documentType: certificate[0].name + '_CERTIFICATE',
+            required: true
+        })
+      }
     }
-
     this.prepareDocumentsUploadData(requiredDocumentsFormat)
   }
 
@@ -924,7 +925,7 @@ class NocDetailCard extends Component {
       ))
     }
     debugger
-    this.getDocumentsFromMDMS(nocType)
+    this.getDocumentsFromMDMS(nocType,isUpdate)
     store.dispatch(handleField(
         "search-preview",
         "components.div.children.triggerNocContainer.props",

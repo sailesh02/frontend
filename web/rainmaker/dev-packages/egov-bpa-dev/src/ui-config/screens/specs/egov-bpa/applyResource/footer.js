@@ -346,34 +346,34 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 3) {
-    // let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
-    // let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
-    // let noc = get(state.screenConfiguration.preparedFinalObject,"Noc",[]) 
-    // let isValid = true
-    // if(requiredNocs && requiredNocs.length > 0 && requiredNocs.includes("NMA_NOC")){
-    //   let NMANoc = noc && noc.length > 0 && noc.filter( noc => {
-    //     if(noc.nocType == "NMA_NOC"){
-    //       return noc
-    //     }
-    //   })
-    //   if(NMANoc && NMANoc.length > 0 && !validateThirdPartyDetails(NMANoc[0].additionalDetails)){
-    //     isValid = false
-    //     dispatch(
-    //       toggleSnackbar(
-    //         true,
-    //         {
-    //           labelName: "ERR_FILL_ALL_FIELDS",
-    //           labelKey: "ERR_FILL_ALL_FIELDS",
-    //         },
-    //         "warning"
-    //       )
-    //     )
-    //     return
-    //   }else{
-    //    isValid = true
-    //   }
-    // }
-    // if(((noc.length == requiredNocs.length) || (noc.length > requiredNocs.length)) && isValid){
+    let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
+    let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
+    let noc = get(state.screenConfiguration.preparedFinalObject,"Noc",[]) 
+    let isValid = true
+    if(requiredNocs && requiredNocs.length > 0 && requiredNocs.includes("NMA_NOC")){
+      let NMANoc = noc && noc.length > 0 && noc.filter( noc => {
+        if(noc.nocType == "NMA_NOC"){
+          return noc
+        }
+      })
+      if(NMANoc && NMANoc.length > 0 && !validateThirdPartyDetails(NMANoc[0].additionalDetails)){
+        isValid = false
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "ERR_FILL_ALL_FIELDS",
+              labelKey: "ERR_FILL_ALL_FIELDS",
+            },
+            "warning"
+          )
+        )
+        return
+      }else{
+       isValid = true
+      }
+    }
+    if(((noc.length == requiredNocs.length) || (noc.length > requiredNocs.length)) && isValid){
       const documentsFormat = Object.values(
         get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
       );
@@ -432,14 +432,14 @@ const callBackForNext = async (state, dispatch) => {
       } else {
         getSummaryRequiredDetails(state, dispatch);
       }
-    // }else{
-    //   let errorMessage = {
-    //     labelName: "Please trigger all required noc's",
-    //     labelKey: "ERR_TRIGGER_REQUIRED_NOCS_TOAST"
-    //   };
-    //   dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    //   return
-    // }
+    }else{
+      let errorMessage = {
+        labelName: "Please trigger all required noc's",
+        labelKey: "ERR_TRIGGER_REQUIRED_NOCS_TOAST"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      return
+    }
   }
 
   if (activeStep !== 4) {

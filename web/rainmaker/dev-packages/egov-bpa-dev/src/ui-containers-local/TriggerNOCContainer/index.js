@@ -781,6 +781,19 @@ class TriggerNOCContainer extends Component {
 
   closeDialog = () => {
     store.dispatch(handleField(
+      "search-preview",
+      "components.div.children.triggerNocContainer.props",
+      "isUpdate",
+       false
+    ))
+    store.dispatch(handleField(
+      "apply",
+      "components.div.children.triggerNocContainer.props",
+      "isUpdate",
+       false
+    ))
+    
+    store.dispatch(handleField(
         "search-preview",
         "components.div.children.triggerNocContainer.props",
         "open",
@@ -792,7 +805,14 @@ class TriggerNOCContainer extends Component {
         "components.div.children.triggerNocContainer.props",
         "open",
         false
-    ))  
+    )) 
+    
+    store.dispatch(handleField(
+      "search-preview",
+      "components.div.children.triggerNocContainer.props",
+      "isUpdate",
+       false
+    ))
 
     this.setState({
       nocType : ""

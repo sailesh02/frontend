@@ -923,6 +923,12 @@ class NocDetailCard extends Component {
         "isUpdate",
          false
       ))
+      store.dispatch(handleField(
+        "apply",
+        "components.div.children.triggerNocContainer.props",
+        "isUpdate",
+         false
+      ))
     }
     debugger
     this.getDocumentsFromMDMS(nocType,isUpdate)
@@ -1063,7 +1069,7 @@ class NocDetailCard extends Component {
       "isUpdate",
        true
     ))
-    this.triggerNoc(nocType)
+    this.triggerNoc(nocType,true)
   };
   
   handleDocument = async (file, fileStoreId) => {

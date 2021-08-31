@@ -346,34 +346,34 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 3) {
-    let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
-    let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
-    let noc = get(state.screenConfiguration.preparedFinalObject,"Noc",[]) 
-    let isValid = true
-    if(requiredNocs && requiredNocs.length > 0 && requiredNocs.includes("NMA_NOC")){
-      let NMANoc = noc && noc.length > 0 && noc.filter( noc => {
-        if(noc.nocType == "NMA_NOC"){
-          return noc
-        }
-      })
-      if(NMANoc && NMANoc.length > 0 && !validateThirdPartyDetails(NMANoc[0].additionalDetails)){
-        isValid = false
-        dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName: "ERR_FILL_ALL_FIELDS",
-              labelKey: "ERR_FILL_ALL_FIELDS",
-            },
-            "warning"
-          )
-        )
-        return
-      }else{
-       isValid = true
-      }
-    }
-    if(((noc.length == requiredNocs.length) || (noc.length > requiredNocs.length)) && isValid){
+    // let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
+    // let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
+    // let noc = get(state.screenConfiguration.preparedFinalObject,"Noc",[]) 
+    // let isValid = true
+    // if(requiredNocs && requiredNocs.length > 0 && requiredNocs.includes("NMA_NOC")){
+    //   let NMANoc = noc && noc.length > 0 && noc.filter( noc => {
+    //     if(noc.nocType == "NMA_NOC"){
+    //       return noc
+    //     }
+    //   })
+    //   if(NMANoc && NMANoc.length > 0 && !validateThirdPartyDetails(NMANoc[0].additionalDetails)){
+    //     isValid = false
+    //     dispatch(
+    //       toggleSnackbar(
+    //         true,
+    //         {
+    //           labelName: "ERR_FILL_ALL_FIELDS",
+    //           labelKey: "ERR_FILL_ALL_FIELDS",
+    //         },
+    //         "warning"
+    //       )
+    //     )
+    //     return
+    //   }else{
+    //    isValid = true
+    //   }
+    // }
+    // if(((noc.length == requiredNocs.length) || (noc.length > requiredNocs.length)) && isValid){
       const documentsFormat = Object.values(
         get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
       );
@@ -432,14 +432,14 @@ const callBackForNext = async (state, dispatch) => {
       } else {
         getSummaryRequiredDetails(state, dispatch);
       }
-    }else{
-      let errorMessage = {
-        labelName: "Please trigger all required noc's",
-        labelKey: "ERR_TRIGGER_REQUIRED_NOCS_TOAST"
-      };
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
-      return
-    }
+    // }else{
+    //   let errorMessage = {
+    //     labelName: "Please trigger all required noc's",
+    //     labelKey: "ERR_TRIGGER_REQUIRED_NOCS_TOAST"
+    //   };
+    //   dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    //   return
+    // }
   }
 
   if (activeStep !== 4) {
@@ -552,6 +552,8 @@ const callBackForNext = async (state, dispatch) => {
           },
           { key: "sourceRefId", value: applicationNumber }
         ], state);
+        // let payload = {"ResponseInfo":{"apiId":"Rainmaker","ver":".01","ts":null,"resMsgId":"uief87324","msgId":"20170310130900|en_IN","status":"successful"},"Noc":[{"id":"d65d13cf-e920-4b34-9779-f9a86e0c68c5","tenantId":"od.cuttack","applicationNo":"OD-NOCSRV-2021-08-30-001252","nocNo":null,"applicationType":"NEW","nocType":"AIRPORT_AUTHORITY","accountId":"fa8efaf4-ef7d-45eb-a495-d18002a4fd09","source":"BPA","sourceRefId":"BP-CTC-2021-08-30-000649","landId":null,"status":null,"applicationStatus":"CREATED","documents":null,"workflow":null,"auditDetails":{"createdBy":"fa8efaf4-ef7d-45eb-a495-d18002a4fd09","lastModifiedBy":"fa8efaf4-ef7d-45eb-a495-d18002a4fd09","createdTime":1630302771503,"lastModifiedTime":1630302771503},"additionalDetails":{"mode":"offline","workflowCode":"AIRPORT_NOC_OFFLINE"}},{"id":"bd4af567-a228-46b1-8a65-768655d9ae73","tenantId":"od.cuttack","applicationNo":"OD-NOCSRV-2021-08-30-001253","nocNo":null,"applicationType":"NEW","nocType":"FIRE_NOC","accountId":"fa8efaf4-ef7d-45eb-a495-d18002a4fd09","source":"BPA","sourceRefId":"BP-CTC-2021-08-30-000649","landId":null,"status":null,"applicationStatus":"CREATED","documents":null,"workflow":null,"auditDetails":{"createdBy":"fa8efaf4-ef7d-45eb-a495-d18002a4fd09","lastModifiedBy":"fa8efaf4-ef7d-45eb-a495-d18002a4fd09","createdTime":1630302771764,"lastModifiedTime":1630302771764},"additionalDetails":{"mode":"online","workflowCode":"FIRE_NOC_SRV"}},
+        // {"id":"d65d13cf-e920-4b34-9779-f9a86e0c68g5","tenantId":"od.cuttack","applicationNo":"OD-NOCSRV-2021-08-30-001256","nocNo":null,"applicationType":"NEW","nocType":"NMA_NOC","accountId":"fa8efaf4-ef7d-45eb-a495-d18002a4fd09","source":"BPA","sourceRefId":"BP-CTC-2021-08-30-000649","landId":null,"status":null,"applicationStatus":"CREATED","documents":null,"workflow":null,"auditDetails":{"createdBy":"fa8efaf4-ef7d-45eb-a495-d18002a4fd09","lastModifiedBy":"fa8efaf4-ef7d-45eb-a495-d18002a4fd09","createdTime":1630302771503,"lastModifiedTime":1630302771503},"additionalDetails":{"mode":"offline","workflowCode":"AIRPORT_NOC_OFFLINE"}}]}
         payload.Noc.sort(compare);
         dispatch(prepareFinalObject("Noc", payload.Noc));
         await prepareNOCUploadData(state, dispatch);

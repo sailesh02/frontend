@@ -19,7 +19,7 @@ import {
   getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../ui-utils/api";
-import { createNoc, validateThirdPartyDetails, getNocSearchResults, getAdditionalDetails,prepareNOCUploadDataAfterCreation } from "../../ui-utils/commons"
+import { createNoc, updateNoc, validateThirdPartyDetails, getNocSearchResults, getAdditionalDetails,prepareNOCUploadDataAfterCreation } from "../../ui-utils/commons"
 import get from "lodash/get";
 import {fieldConfig} from "../../ui-molecules-local/NocDetailCard"
 import { withStyles } from "@material-ui/core/styles";
@@ -688,14 +688,26 @@ class TriggerNOCContainer extends Component {
           auditDetails : BPA.auditDetails,
           additionalDetails : details
         }
-          let response = await createNoc(payload);
+        let response = null
+         if(this.props.isUpdate){
+          const {Noc} = this.props.preparedFinalObject
+          let updateNocPayload = Noc && Noc.length > 0 && Noc.filter( noc => {
+            if(noc.nocType === nocType){
+              return noc
+            }
+          })
+          updateNocPayload[0].documents = payloadDocumentFormat,
+          response = await updateNoc(updateNocPayload[0])
+         }else{
+          response = await createNoc(payload);
+         }
           if(response){
             store.dispatch(
               toggleSnackbar(
                 true,
                 {
-                  labelName: "BPA_NOC_CREATED_SUCCESS_MSG",
-                  labelKey: "BPA_NOC_CREATED_SUCCESS_MSG",
+                  labelName: this.props.isUpdate ? 'BPA_NOC_UPDATE_SUCCESS_MSG':"BPA_NOC_CREATED_SUCCESS_MSG",
+                  labelKey: this.props.isUpdate ? 'BPA_NOC_UPDATE_SUCCESS_MSG': "BPA_NOC_CREATED_SUCCESS_MSG",
                 },
                 "success"
               )
@@ -818,7 +830,7 @@ class TriggerNOCContainer extends Component {
                   sm={10}>
                   <Typography component="h2" variant="subheading">
                     <LabelContainer labelName={getTransformedLocale(this.props.nocType)}
-                    labelKey={this.props.type == 'new' ? `${getTransformedLocale("BPA_CREATE_NEW_NOC")}` : `Create ${getTransformedLocale(this.props.nocType)}`} />
+                    labelKey={this.props.type == 'new' ? `${getTransformedLocale("BPA_CREATE_NEW_NOC")}` : this.props.isUpdate ? `Update ${getTransformedLocale(this.props.nocType)}` : `Create ${getTransformedLocale(this.props.nocType)}`} />
                   </Typography>
                 </Grid>
                 <Grid

@@ -1874,6 +1874,31 @@ export const createNoc = async (payload) => {
   }
 };
 
+export const updateNoc = async (payload) => {
+  let customRequestInfo = JSON.parse(getUserInfo())
+  try {
+    const response = await httpRequest(
+      "post",
+      "/noc-services/v1/noc/_update",
+      "",
+      [],
+      { Noc: payload },
+      [],
+      {userInfo :customRequestInfo }
+    );
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+
 export const validateThirdPartyDetails = (thirdPartyDetails) => {
   if (thirdPartyDetails == null || Object.keys(thirdPartyDetails).length === 0) {
     return false
@@ -1973,12 +1998,12 @@ export const getAdditionalDetails = (nocType,preparedFinalObject) => {
 
 export const nocapplicationUpdate = (state) => {
   const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
-  let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
+  let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.requiredNocToTrigger", []);
   if (Noc.length > 0) {
     let count = 0;
     for (let data = 0; data < Noc.length; data++) {
       let documents = nocDocuments[data].documents;
-      set(Noc[data], "documents", documents);
+      // set(Noc[data], "documents", documents);
       let response = httpRequest(
         "post",
         "/noc-services/v1/noc/_update",

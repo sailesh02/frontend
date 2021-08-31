@@ -685,7 +685,8 @@ class NocDetailCard extends Component {
     this.state = {
       uploadedDocIndex: 0,
       editableDocuments: null,
-      nocType : ''
+      nocType : '',
+      isUpdate:false
     };
   }
   componentDidMount = () => {
@@ -771,25 +772,28 @@ class NocDetailCard extends Component {
         <React.Fragment>
           {this.state.editableDocuments &&
             this.state.editableDocuments.length > 0 &&
-            (this.state.editableDocuments[key].editable ? (
-              <div style={{backgroundColor:"rgb(255,255,255)", paddingRight:"10px", marginTop: "16px" }}><UploadCard
-                docItem={card}
-                docIndex={key}
-                key={key.toString()}
-                handleDocument={this.handleDocument}
-                removeDocument={this.removeDocument}
-                onUploadClick={this.onUploadClick}
-                handleFileUpload={this.handleFileUpload}
-                handleChange={this.handleChange}
-                uploadedDocIndex={this.state.uploadedDocIndex}
-                toggleEditClick={this.toggleEditClick}
-                isFromPreview={true}
-                jsonPath = {`nocDocumentDetailsUploadRedux`}
-                ids = {"nocDocumentDetailsUploadRedux"}
-                specificStyles= "preview_upload_btn"
-                {...rest}
-              /></div>
-            ) : (
+            (this.state.editableDocuments[key].editable ? 
+              ""
+              // (
+              // <div style={{backgroundColor:"rgb(255,255,255)", paddingRight:"10px", marginTop: "16px" }}><UploadCard
+              //   docItem={card}
+              //   docIndex={key}
+              //   key={key.toString()}
+              //   handleDocument={this.handleDocument}
+              //   removeDocument={this.removeDocument}
+              //   onUploadClick={this.onUploadClick}
+              //   handleFileUpload={this.handleFileUpload}
+              //   handleChange={this.handleChange}
+              //   uploadedDocIndex={this.state.uploadedDocIndex}
+              //   toggleEditClick={this.toggleEditClick}
+              //   isFromPreview={true}
+              //   jsonPath = {`nocDocumentDetailsUploadRedux`}
+              //   ids = {"nocDocumentDetailsUploadRedux"}
+              //   specificStyles= "preview_upload_btn"
+              //   {...rest}
+              // /></div>
+            // ) 
+            : (
               <NocDocDetailCard
                 docItem={card}
                 docIndex={key}
@@ -800,7 +804,7 @@ class NocDetailCard extends Component {
                 handleFileUpload={this.handleFileUpload}
                 handleChange={this.handleChange}
                 uploadedDocIndex={this.state.uploadedDocIndex}
-                toggleEditClick={this.toggleEditClick}
+                toggleEditClick={() => this.toggleEditClick(card.nocType,true)}
                 {...rest}
               />
             ))}
@@ -834,6 +838,7 @@ class NocDetailCard extends Component {
       [],
       mdmsBody
     );
+    // let payload = {"ResponseInfo":null,"MdmsRes":{"NOC":{"DocumentTypeMapping":[{"applicationType":"PROVISIONAL","nocType":"NOC.AIRPORT","docTypes":[{"documentType":"NOC.AIRPORT","required":true},{"documentType":"NOC.AIRPORTT","required":true}]},{"applicationType":"NEW","nocType":"HBDA_NOC","docTypes":[{"documentType":"NOC.HBDA","required":true}]},{"applicationType":"RENEW","nocType":"HBDA_NOC","docTypes":[{"documentType":"NOC.HBDA","required":false}]}]}}}
     let documents = payload && payload.MdmsRes && payload.MdmsRes.NOC && payload.MdmsRes.NOC.DocumentTypeMapping || []
   
     let requiredDocumentsFormat = documents && documents.length > 0 && documents[0].docTypes.map( doc => {
@@ -844,6 +849,25 @@ class NocDetailCard extends Component {
         active : doc.active || true
       }
     })
+
+    let {nocBPADocumentsContract} = this.props.preparedFinalObject
+    let certificate = null
+    certificate = nocBPADocumentsContract && nocBPADocumentsContract.length > 0 && nocBPADocumentsContract[0].cards && nocBPADocumentsContract[0].cards.length > 0 &&
+    nocBPADocumentsContract[0].cards.filter(card => {
+      if(card.nocType == nocType){
+        return card
+      }
+    })
+
+    if(certificate){
+      requiredDocumentsFormat.push({
+        active: true,
+          code: certificate[0].code,
+          documentType: certificate[0].name + '_CERTIFICATE',
+          required: true
+      })
+    }
+
     this.prepareDocumentsUploadData(requiredDocumentsFormat)
   }
 
@@ -885,11 +909,21 @@ class NocDetailCard extends Component {
     });
   
     store.dispatch(prepareFinalObject("documentsContractNOC", documentsContract));
+
     this.prepareDocumentForRedux(documentsContract)
 
   };
 
-  triggerNoc = (nocType) => {
+  triggerNoc = (nocType,isUpdate) => {
+    if(!isUpdate){
+      store.dispatch(handleField(
+        "search-preview",
+        "components.div.children.triggerNocContainer.props",
+        "isUpdate",
+         false
+      ))
+    }
+    debugger
     this.getDocumentsFromMDMS(nocType)
     store.dispatch(handleField(
         "search-preview",
@@ -988,7 +1022,7 @@ class NocDetailCard extends Component {
                 </Grid>
              <Grid style={{align: "right"}} item xs={1}>
                <Button 
-                 onClick = {() => this.triggerNoc(card.nocType)}
+                 onClick = {() => this.triggerNoc(card.nocType,false)}
                  style = {{
                  color: "white",
                  backgroundColor: "rgb(254, 122, 81)",
@@ -1009,12 +1043,26 @@ class NocDetailCard extends Component {
   onUploadClick = (uploadedDocIndex) => {
     this.setState({ uploadedDocIndex });
   };
-  toggleEditClick = (itemIndex) => {
-    let items = [...this.state.editableDocuments];
-    let item = { ...items[itemIndex] };
-    item.editable = item.editable ? false : true;
-    items[itemIndex] = item;
-    this.setState({ editableDocuments: items });
+
+  toggleEditClick = (nocType) => {
+    // let items = [...this.state.editableDocuments];
+    // let item = { ...items[itemIndex] };
+    // item.editable = item.editable ? false : true;
+    // items[itemIndex] = item;
+    // this.setState({ editableDocuments: items });
+    store.dispatch(handleField(
+      "apply",
+      "components.div.children.triggerNocContainer.props",
+      "isUpdate",
+       true
+    ))
+    store.dispatch(handleField(
+      "search-preview",
+      "components.div.children.triggerNocContainer.props",
+      "isUpdate",
+       true
+    ))
+    this.triggerNoc(nocType)
   };
   
   handleDocument = async (file, fileStoreId) => {
@@ -1100,7 +1148,6 @@ class NocDetailCard extends Component {
   };
 
   prepareDocumentForRedux = async (documentsList) => {
-    debugger
     const {nocDocumentsDetailsRedux} = this.props.preparedFinalObject 
      let index = 0;
      documentsList.forEach(docType => {

@@ -277,6 +277,57 @@ const getNMANOCForm = (key) => {
           </Grid>
         </Grid>
 
+        <Grid container="true" spacing={12}>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+                fontSize: '11px',
+                fontWeight: 500
+            }}
+            labelName={fieldConfig.BasementIfAnyProposedWithDetails.label.labelName}
+            labelKey={fieldConfig.BasementIfAnyProposedWithDetails.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+            <TextFieldContainer
+              type = "date"
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.BasementIfAnyProposedWithDetails.placeholder}
+              jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.BasementIfAnyProposedWithDetails`}
+              onChange={onNmaFieldChange(key,"BasementIfAnyProposedWithDetails")}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+              fontSize: '11px',
+              fontWeight: 500
+            }}
+            labelName={fieldConfig.DetailsOfRepairAndRenovation.label.labelName}
+            labelKey={fieldConfig.DetailsOfRepairAndRenovation.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+            <TextFieldContainer
+              type = "date"
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.DetailsOfRepairAndRenovation.placeholder}
+              jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.DetailsOfRepairAndRenovation`}
+              onChange={onNmaFieldChange(key,"DetailsOfRepairAndRenovation")}
+            />
+          </Grid>
+        </Grid>
+
+        <Grid container="true" spacing={12}>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+                fontSize: '11px',
+                fontWeight: 500
+            }}
+            labelName={fieldConfig.PlotSurveyNo.label.labelName}
+            labelKey={fieldConfig.PlotSurveyNo.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+            <TextFieldContainer
+              type = "date"
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.PlotSurveyNo.placeholder}
+              jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.PlotSurveyNo`}
+              onChange={onNmaFieldChange(key,"PlotSurveyNo")}
+            />
+          </Grid>
+        </Grid>
+
         <Grid container="true" spacing={12} style={{marginTop: "10px"}}>
           <Grid item xs={12}>
             <div style={styles.dividerStyle}>
@@ -441,6 +492,17 @@ const getNMANOCForm = (key) => {
           labelName={fieldConfig.TermAndCondition.label.labelName}
           labelKey={fieldConfig.TermAndCondition.label.labelKey}/>
           <TextFieldContainer
+            select ={true}
+            data={[{
+              "code":'Yes',
+              "label":"Yes"
+            },
+            {
+              "code":'No',
+              "label":"No"
+            }]}
+            optionValue="code"
+          optionLabel="label"
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.TermAndCondition.placeholder}
             jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition`}

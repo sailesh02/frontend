@@ -200,6 +200,36 @@ export const fieldConfig = {
       labelKey: "BPA_NMA_NOC_COMMENCEMENT_DURATION_PLACEHOLDER"
     }
   },
+  BasementIfAnyProposedWithDetails: {
+    label: {
+      labelName: "Basement IfAny Proposed With Details",
+      labelKey: "BPA_NMA_NOC_BASEMENT_IF_PROPOSED_ANY_LABEL"
+    },
+    placeholder: {
+      labelName: "Basement IfAny Proposed With Details",
+      labelKey: "BPA_NMA_NOC_BASEMENT_IF_PROPOSED_ANY_PLACEHOLDER"
+    }
+  },
+  DetailsOfRepairAndRenovation: {
+    label: {
+      labelName: "Details Of Repair And Renovation",
+      labelKey: "BPA_REPAIR_RENOVATION_DETAILS_LABEL"
+    },
+    placeholder: {
+      labelName: "Details Of Repair And Renovation",
+      labelKey: "BPA_REPAIR_RENOVATION_DETAILS_PLACEHOLDER"
+    }
+  },
+  PlotSurveyNo : {
+    label: {
+      labelName: "Plot Survey No",
+      labelKey: "BPA_PLOT_SURVEY_NUMBER_LABEL"
+    },
+    placeholder: {
+      labelName: "Plot Survey No",
+      labelKey: "BPA_PLOT_SURVEY_NUMBER_PLACEHOLDER"
+    }
+  },
   NearTheMonument: {
     label: {
       labelName: "Near the Monument",
@@ -493,6 +523,60 @@ export const getNMANOCForm = (key,disabled) => {
           </Grid>
         </Grid>
 
+        <Grid container="true" spacing={12}>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+                fontSize: '11px',
+                fontWeight: 500
+            }}
+            labelName={fieldConfig.BasementIfAnyProposedWithDetails.label.labelName}
+            labelKey={fieldConfig.BasementIfAnyProposedWithDetails.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+            <TextFieldContainer
+              disabled={disabled}
+              type = "date"
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.BasementIfAnyProposedWithDetails.placeholder}
+              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.BasementIfAnyProposedWithDetails`}
+              onChange={onNmaFieldChange(key,"BasementIfAnyProposedWithDetails")}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+              fontSize: '11px',
+              fontWeight: 500
+            }}
+            labelName={fieldConfig.DetailsOfRepairAndRenovation.label.labelName}
+            labelKey={fieldConfig.DetailsOfRepairAndRenovation.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+            <TextFieldContainer
+              disabled={disabled}
+              type = "date"
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.DetailsOfRepairAndRenovation.placeholder}
+              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DetailsOfRepairAndRenovation`}
+              onChange={onNmaFieldChange(key,"DetailsOfRepairAndRenovation")}
+            />
+          </Grid>
+        </Grid>
+
+        <Grid container="true" spacing={12}>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+                fontSize: '11px',
+                fontWeight: 500
+            }}
+            labelName={fieldConfig.PlotSurveyNo.label.labelName}
+            labelKey={fieldConfig.PlotSurveyNo.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+            <TextFieldContainer
+              disabled={disabled}
+              type = "date"
+              style={{ marginRight: "15px" }}
+              placeholder={fieldConfig.PlotSurveyNo.placeholder}
+              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.PlotSurveyNo`}
+              onChange={onNmaFieldChange(key,"PlotSurveyNo")}
+            />
+          </Grid>
+        </Grid>
+
         <Grid container="true" spacing={12} style={{marginTop: "10px"}}>
           <Grid item xs={12}>
             <div style={styles.dividerStyle}>
@@ -665,6 +749,17 @@ export const getNMANOCForm = (key,disabled) => {
           labelName={fieldConfig.TermAndCondition.label.labelName}
           labelKey={fieldConfig.TermAndCondition.label.labelKey} />
           <TextFieldContainer
+            select ={true}
+            data={[{
+              "code":'Yes',
+              "label":"Yes"
+            },
+            {
+              "code":'No',
+              "label":"No"
+            }]}
+            optionValue="code"
+            optionLabel="label"
             disabled={disabled}
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.TermAndCondition.placeholder}

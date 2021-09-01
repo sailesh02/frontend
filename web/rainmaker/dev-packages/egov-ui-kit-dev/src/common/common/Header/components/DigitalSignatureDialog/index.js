@@ -38,6 +38,17 @@ class DigitalSignatureDialog extends Component {
       })
   }
 
+  onChangeToken = (e) => {
+
+  }
+
+  oncChangeCertificate = (e) => {
+
+  }
+
+  register = () => {
+    
+  }
 
   getTokenList = () => {
     const authToken = getAccessToken();
@@ -68,23 +79,14 @@ class DigitalSignatureDialog extends Component {
      })
       .then(response => {
         if(response){
-          let RequestInfo = {
-            apiId: "Rainmaker",
-            ver: ".01",
-            // ts: getDateInEpoch(),
-            action: "_search",
-            did: "1",
-            key: "",
-            msgId: `20170310130900|${getLocale()}`,
-            requesterId: "",
-            authToken
-          };
-        
-          RequestInfo = { ...RequestInfo };
+          let data = response.data.info
           let body =  Object.assign(
             {},
             {
               RequestInfo
+            },
+            {
+              data
             }
           
           );
@@ -93,8 +95,32 @@ class DigitalSignatureDialog extends Component {
             'Accept': 'application/json'
            })
             .then(response => {
+              let data = response.data.responseData
+              let body =  Object.assign(
+                {},
+                {
+                  RequestInfo
+                },
+                {
+                  data
+                }
+              
+              );
               if(response){
-                
+                axios.post("/DSC/getR1R2", body, { //to get list of tokens
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+                 })
+                  .then(response => {
+                    if(response){
+                      this.setState({
+                        tokensArray : response.data.data
+                      })
+                    }
+                  })
+                  .catch(error => {
+                    console.log(error.response)
+                  });
               }
             })
             .catch(error => {
@@ -166,6 +192,7 @@ class DigitalSignatureDialog extends Component {
                       <TextFieldContainer
                         select={true}
                         style={{ marginRight: "15px" }}
+                        onChange={this.onChangeToken}
                         label={{
                             labelName: "Token",
                             labelKey: "CORE_COMMON_TOKEN_LABEL"

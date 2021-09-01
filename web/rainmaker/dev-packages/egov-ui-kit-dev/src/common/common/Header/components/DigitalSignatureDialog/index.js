@@ -24,8 +24,12 @@ import axios from 'axios';
 
 class DigitalSignatureDialog extends Component {
   state = {
-    comments : '',
+    tokensArray : '',
+    ceriticatesArray : '',
     password : '',
+    selectedToken : '',
+    selectedCeritificate : ''
+
   }
 
   setPassword = (e) => {
@@ -33,6 +37,7 @@ class DigitalSignatureDialog extends Component {
         password : e.target.value
       })
   }
+
 
   getTokenList = () => {
     const authToken = getAccessToken();
@@ -53,20 +58,49 @@ class DigitalSignatureDialog extends Component {
       {},
       {
         RequestInfo
-      },
-      {
-        "encryptedRequest": "R1",
-        "encryptionKeyId": "R2"
       }
     
     );
 
-    axios.post("/DSC/ListToken", body, {
+    axios.post("/DSC/getR1R2", body, { // to get R1 R2
       'Content-Type': 'application/json',
       'Accept': 'application/json'
      })
       .then(response => {
-        console.log(response,"ndjhhhhhhhhhhhhhhhhhh")
+        if(response){
+          let RequestInfo = {
+            apiId: "Rainmaker",
+            ver: ".01",
+            // ts: getDateInEpoch(),
+            action: "_search",
+            did: "1",
+            key: "",
+            msgId: `20170310130900|${getLocale()}`,
+            requesterId: "",
+            authToken
+          };
+        
+          RequestInfo = { ...RequestInfo };
+          let body =  Object.assign(
+            {},
+            {
+              RequestInfo
+            }
+          
+          );
+          axios.post("/DSC/getR1R2", body, { //to get access token
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+           })
+            .then(response => {
+              if(response){
+                
+              }
+            })
+            .catch(error => {
+              console.log(error.response)
+            });
+        }
       })
       .catch(error => {
         console.log(error.response)

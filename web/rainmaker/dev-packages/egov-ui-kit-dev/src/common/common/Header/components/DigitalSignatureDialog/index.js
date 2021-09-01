@@ -4,8 +4,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Grid, Typography, Button } from "@material-ui/core";
 import { Container } from "egov-ui-framework/ui-atoms";
-import store from "ui-redux/store";
-import { prepareFinalObject,toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import store from "egov-ui-framework/ui-redux/store";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import {
   LabelContainer,
   TextFieldContainer
@@ -15,14 +15,12 @@ import {
 } from "egov-ui-framework/ui-molecules"
 import CloseIcon from "@material-ui/icons/Close";
 import "./index.css";
-import {
-    handleScreenConfigurationFieldChange as handleField
-  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import TextField from "material-ui/TextField";
 import { getLocale, getTenantId,getAccessToken, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import axios from 'axios';
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {getTokenList} from './functions'
+
+const passwordPattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
 const authToken = getAccessToken();
 let RequestInfo = {
   apiId: "Rainmaker",
@@ -42,42 +40,148 @@ class DigitalSignatureDialog extends Component {
     ceriticatesArray : '',
     password : '',
     selectedToken : '',
-    selectedCeritificate : ''
+    selectedCeritificate : '',
+    passwordErr:false
 
   }
 
   setPassword = (e) => {
+    if(e.target.value.match(passwordPattern)){
       this.setState({
-        password : e.target.value
+        password : e.target.value,
+        passwordErr:false
       })
+    }else{
+      this.setState({
+        password : e.target.value,
+        passwordErr:true
+      })
+    }
   }
 
   onChangeToken = (e) => {
-
+    this.setState({
+      selectedToken:e.target.value
+    })
   }
 
-  oncChangeCertificate = (e) => {
-
+  onChangeCertificate = (e) => {
+    this.setState({
+      selectedCeritificate:e.target.value
+    })
   }
 
   register = () => {
     
   }
 
-  getTokenList = () => {
-    let tokenList = []
-    store.dispatch(toggleSpinner());
+  getCertificateList = (token) => {
+    this.props.toggleSpinner();
     RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
     let body =  Object.assign(
       {},
       {
         RequestInfo,
         "tenantId":getTenantId(),
-        "responseData":null, responseData:null
+        "responseData":null,
+        "tokenDisplayName":token
       }
     );
     
-    axios.post("/DSC/getR1R2", body, { // to get R1 R2
+    axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+     })
+      .then(response => {
+        // response.data.input
+      })
+      .catch(error => {
+        let response = {
+          "ResponseInfo":null,
+          "input":{
+          "encryptedRequest":"XXXX",
+          "encryptionKeyId":"YYYYY"
+          }
+          }
+        let body = response.input
+        axios.post("/.emudhra.com:26769/DSC/ListCertificate", body, { // to get R1 R2
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+         })
+          .then(response => {
+            // response.responseData
+          })
+          .catch(error => {
+            let response = {
+              "responseData": "QuyKW0m6EdBEuTltdWrj2rA5O77bukrGcxlpp4atnn0KoadBXlTZXoEpHp3Q3Qxne1pcmXUSBedS3Ocj3/5Nqjtj6Q1QuqQxo1yMtoOmeGjlilICxaqs9ldgRu8rlbuXrzeip6VMqMCEM+f21+tKf3c4UKWd6/gYOg8rG+37HAVDRAjz21HECLLP2lq3bThBTIPog74D8Lvs4MHXE7D28kd2znHny2v/r3lGnmLxmzYlMiBUlYPnPQa8WSyOROpfXNDnD0/fgiIUuNA82mXC7F7x4VHf+GYj94aldkeSE7MKSqDPRsSp3/4gJ4Y8bHNa",
+              "status": 1,
+              "errorMessage": null,
+              "version": "3.1.0.0",
+              "errorCode": null
+             }
+
+             RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+             let body =  Object.assign(
+               {},
+                {
+                 RequestInfo,
+                 "tenantId":getTenantId(),
+                  responseData:response.responseData,
+                  tokenDisplayName:token
+                }
+             );
+            axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getCertificate", body, { // to get R1 R2
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+             })
+              .then(response => {
+                // response.responseData
+              })
+              .catch(error => { //will return tokens
+                let response = {
+                  "ResponseInfo":null,
+                  "certificates":[
+                  {
+                  "keyId":"XXXX",
+                  "commonName":"YYYYY",
+                  "certificateDate":"ZZZZZ"
+                  },
+                  {
+                  "keyId":"XXXX",
+                  "commonName":"YYYYY",
+                  "certificateDate":"ZZZZZ"
+                  }
+                  ]
+                  } 
+                let requiredCertificateFormat = response.certificates.map (certificate => {
+                  return {
+                    label : certificate.commonName,
+                    value : certificate.keyId
+                  }
+                }) 
+                this.setState({
+                  ceriticatesArray : requiredCertificateFormat,
+                  // selectedCeritificate : requiredCertificateFormat[0].label
+                })
+                this.props.toggleSpinner();
+              });
+          });
+      });
+  }
+
+  getTokenList = () => {
+    this.props.toggleSpinner();
+    RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+    let body =  Object.assign(
+      {},
+      {
+        RequestInfo,
+        "tenantId":getTenantId(),
+        "responseData":null
+      }
+    );
+    
+    axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
       'Content-Type': 'application/json',
       'Accept': 'application/json'
      })
@@ -112,14 +216,13 @@ class DigitalSignatureDialog extends Component {
              RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
              let body =  Object.assign(
                {},
-               {
+                {
                  RequestInfo,
                  "tenantId":getTenantId(),
-                 "responseData":null, responseData:response.responseData
-               }
-             
+                 "responseData":response.responseData
+                }
              );
-            axios.post("/dsc-services/dsc/_getTokens", body, { // to get R1 R2
+            axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getTokens", body, { // to get R1 R2
               'Content-Type': 'application/json',
               'Accept': 'application/json'
              })
@@ -140,17 +243,129 @@ class DigitalSignatureDialog extends Component {
                     value : token
                   }
                 }) 
-                tokenList = requiredTokenFormat
+                
                 this.setState({
                   tokensArray : requiredTokenFormat,
                   selectedToken : requiredTokenFormat[0].label
                 })
-                store.dispatch(toggleSpinner());  
+                this.props.toggleSpinner();
+                this.getCertificateList(requiredTokenFormat[0].label) 
               });
           });
       });
-      return tokenList
   
+  }
+
+  resetMessage = () => {
+    this.setState({
+      selectedCeritificate:'',
+      selectedToken:'',
+      password:''
+    })
+  }
+
+  saveDetails = () => {
+    if(this.state.selectedToken && this.state.selectedToken != " " && 
+    this.state.selectedCeritificate && this.state.selectedCeritificate != " " &&
+    this.state.password && this.state.password != " " && this.state.password.match(passwordPattern)){
+      this.props.toggleSpinner();
+      RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+      let body =  Object.assign(
+        {},
+        {
+          RequestInfo,
+          "tenantId":getTenantId(),
+          "tokenDisplayName":this.state.selectedToken,
+          "keyStorePassPhrase":this.state.password,
+          "keyId":this.state.selectedCeritificate,
+          "channelId":"ch1",
+          responseData:null
+        }
+      );
+      
+      axios.post("/dsc-services.egov:8080/dsc-services/dsc/_dataSignInput", body, { // to get R1 R2
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       })
+        .then(response => {
+          // response.data.input
+        })
+        .catch(error => {
+          let response = {
+            "ResponseInfo":null,
+            "input":{
+            "encryptedRequest":"XXXX",
+                "encryptionKeyId":"YYYYY"
+            }
+          } 
+          let body = response.input
+          axios.post("/.emudhra.com:26769/DSC/PKCSSign", body, { // to get R1 R2
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+           })
+            .then(response => {
+              // response.responseData
+            })
+            .catch(error => {
+              let response = {
+                "responseData": "QuyKW0m6EdBEuTltdWrj2rA5O77bukrGcxlpp4atnn0KoadBXlTZXoEpHp3Q3Qxne1pcmXUSBedS3Ocj3/5Nqjtj6Q1QuqQxo1yMtoOmeGjlilICxaqs9ldgRu8rlbuXrzeip6VMqMCEM+f21+tKf3c4UKWd6/gYOg8rG+37HAVDRAjz21HECLLP2lq3bThBTIPog74D8Lvs4MHXE7D28kd2znHny2v/r3lGnmLxmzYlMiBUlYPnPQa8WSyOROpfXNDnD0/fgiIUuNA82mXC7F7x4VHf+GYj94aldkeSE7MKSqDPRsSp3/4gJ4Y8bHNa",
+                "status": 1,
+                "errorMessage": null,
+                "version": "3.1.0.0",
+                "errorCode": null
+               }
+  
+               RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+               let body =  Object.assign(
+                 {},
+                  {
+                   RequestInfo,
+                   "tenantId":getTenantId(),
+                   "tokenDisplayName":this.state.selectedToken,
+                   "keyStorePassPhrase":this.state.password,
+                   "keyId":this.state.selectedCeritificate,
+                   "channelId":"ch1",
+                   "responseData":response.responseData
+                  }
+               );
+              axios.post("/dsc-services.egov:8080/dsc-services/dsc/_dataSign", body, { // to get R1 R2
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+               })
+                .then(response => {
+                  // response.responseData
+                })
+                .catch(error => { //will return tokens
+                  let response = {
+                    "ResponseInfo":null,
+                    "result":"Success"
+                    } 
+                    if(response && response.result && response.result == "Success"){
+                      this.props.toggleSnackbarAndSetText(
+                          true,
+                          {
+                            labelName: "CORE_COMMON_SIGNATURE_SUCCESS_MSG",
+                            labelKey: "CORE_COMMON_SIGNATURE_SUCCESS_MSG"
+                          },
+                          "success"
+                      );
+                      this.props.closeDigitalSignatureDialog()
+                    }
+                    this.props.toggleSpinner();
+                  });
+            });
+        });
+    }else{
+      this.props.toggleSnackbarAndSetText(
+        true,
+        {
+          labelName: "CORE_COMMON_FILL_ALL_DETAILS",
+          labelKey: "CORE_COMMON_FILL_ALL_DETAILS"
+        },
+        "warning"
+    );
+    return
+    }
   }
 
   componentDidMount = () => {
@@ -209,6 +424,7 @@ class DigitalSignatureDialog extends Component {
                       marginTop: 12
                     }}>
                       <TextFieldContainer
+                        required={true}
                         select={true}
                         style={{ marginRight: "15px" }}
                         onChange={this.onChangeToken}
@@ -234,21 +450,23 @@ class DigitalSignatureDialog extends Component {
                       marginTop: 12
                     }}>
                       <TextFieldContainer
+                        required={true}
                         select={true}
+                        onChange={this.onChangeCertificate}
                         style={{ marginRight: "15px" }}
                         label={{
-                            labelName: "Token",
+                            labelName: "Certificate",
                             labelKey: "CORE_COMMON_CERTIFICATE_LABEL"
                           }}
                         placeholder={{
-                            labelName: "Select Token",
+                            labelName: "Select Certificate",
                             labelKey: "CORE_COMMON_SELECT_CERTIFICATE_LABEL"
                           }}
-                        data={[]}
+                        data={this.state.ceriticatesArray}
                         optionValue="value"
                         optionLabel="label"
                         hasLocalization={false}
-                        value = {"ksjk"}
+                        value = {this.state.selectedCeritificate}
                       />
                   </Grid>
                   <Grid item
@@ -261,7 +479,7 @@ class DigitalSignatureDialog extends Component {
                       fontWeight: 500
                   }}
                   labelName={"CORE_COMMON_PASSWORD_LABEL"}
-                    labelKey={"CORE_COMMON_PASSWORD_LABEL"} />
+                    labelKey={"CORE_COMMON_PASSWORD_LABEL"} /><span>&thinsp;*</span>
                   </Grid>
                   <form style={{width:"100%"}} autocomplete="off">
                   <Grid
@@ -271,14 +489,17 @@ class DigitalSignatureDialog extends Component {
                       marginTop: 12
                     }}>
                     <TextfieldWithIcon
+                        required={true}
                         type ="password"
                         style={{ marginRight: "15px" }}
-                        pattern = "^([a-zA-Z0-9!])+$"
                         onChange ={ this.setPassword}
                         hasLocalization={false}
                         value = {this.state.password}
                       />
                   </Grid>
+                  {this.state.passwordErr && <Grid item sm={12}>
+                    <span className="colorRed">Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character</span>
+                  </Grid>}
                   </form>
                 <Grid item sm={12}
                  style={{
@@ -302,7 +523,7 @@ class DigitalSignatureDialog extends Component {
                     <Button
                       variant={"contained"}
                       color={"primary"}
-                    //   onClick={this.saveDetails}
+                      onClick={this.saveDetails}
                     >
                       <LabelContainer
                         labelName={okText}
@@ -329,7 +550,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-  };
+    toggleSpinner: () => dispatch(toggleSpinner()),
+    toggleSnackbarAndSetText: (open, message, variant) => {
+      dispatch(toggleSnackbarAndSetText(open, message, variant));
+    }  };
 };
 
 export default connect(

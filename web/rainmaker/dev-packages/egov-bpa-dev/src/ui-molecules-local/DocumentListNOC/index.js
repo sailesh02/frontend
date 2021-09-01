@@ -456,7 +456,7 @@ class DocumentListNOC extends Component {
   }
 }
 
-DocumentList.propTypes = {
+DocumentListNOC.propTypes = {
   classes: PropTypes.object.isRequired
 };
 

@@ -184,7 +184,7 @@ const requiredIcon = (
 
 class NocDocDetailCard extends Component {
   render(){
-  const { classes, docItem, docIndex, name, ...rest } = this.props;
+  const { classes, docItem, docIndex, name,disabled,...rest } = this.props;
 
   let submittedOn,
   satus = "";
@@ -241,6 +241,7 @@ class NocDocDetailCard extends Component {
               ""
             ) : (
               <Button
+                disabled = {disabled}
                 color="primary"
                 style={{ float: "right" }}
                 onClick={() => this.props.toggleEditClick(docIndex)}

@@ -803,6 +803,7 @@ class NocDetailCard extends Component {
                 onUploadClick={this.onUploadClick}
                 handleFileUpload={this.handleFileUpload}
                 handleChange={this.handleChange}
+                disabled ={this.props.disabled}
                 uploadedDocIndex={this.state.uploadedDocIndex}
                 toggleEditClick={() => this.toggleEditClick(card.nocType,true)}
                 {...rest}

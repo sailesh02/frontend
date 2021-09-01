@@ -17,14 +17,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
 import Typography from "@material-ui/core/Typography";
-import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
-import UploadCard from "../UploadCard";
 
 const themeStyles = theme => ({
   documentContainer: {
     backgroundColor: "#F2F2F2",
     padding: "16px",
-    // marginTop: "10px",
+    marginTop: "10px",
     marginBottom: "16px"
   },
   documentCard: {
@@ -130,9 +128,9 @@ class DocumentList extends Component {
 
   componentDidMount = () => {
     const {
-    documentsList,
-    nocDocumentsDetailsRedux = {},
-    prepareFinalObject
+      documentsList,
+      bparegDocumentDetailsUploadRedux = {},
+      prepareFinalObject
     } = this.props;
     let index = 0;
     documentsList.forEach(docType => {
@@ -141,15 +139,15 @@ class DocumentList extends Component {
           if (card.subCards) {
             card.subCards.forEach(subCard => {
               let oldDocType = get(
-                nocDocumentsDetailsRedux,
+                bparegDocumentDetailsUploadRedux,
                 `[${index}].documentType`
               );
               let oldDocCode = get(
-                nocDocumentsDetailsRedux,
+                bparegDocumentDetailsUploadRedux,
                 `[${index}].documentCode`
               );
               let oldDocSubCode = get(
-                nocDocumentsDetailsRedux,
+                bparegDocumentDetailsUploadRedux,
                 `[${index}].documentSubCode`
               );
               if (
@@ -157,7 +155,7 @@ class DocumentList extends Component {
                 oldDocCode != card.name ||
                 oldDocSubCode != subCard.name
               ) {
-                nocDocumentsDetailsRedux[index] = {
+                bparegDocumentDetailsUploadRedux[index] = {
                   documentType: docType.code,
                   documentCode: card.name,
                   documentSubCode: subCard.name
@@ -167,15 +165,15 @@ class DocumentList extends Component {
             });
           } else {
             let oldDocType = get(
-              nocDocumentsDetailsRedux,
+              bparegDocumentDetailsUploadRedux,
               `[${index}].documentType`
             );
             let oldDocCode = get(
-              nocDocumentsDetailsRedux,
+              bparegDocumentDetailsUploadRedux,
               `[${index}].documentCode`
             );
             if (oldDocType != docType.code || oldDocCode != card.name) {
-              nocDocumentsDetailsRedux[index] = {
+              bparegDocumentDetailsUploadRedux[index] = {
                 documentType: docType.code,
                 documentCode: card.name,
                 isDocumentRequired: card.required,
@@ -188,145 +186,22 @@ class DocumentList extends Component {
           }
         });
     });
-    prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux);
-    prepareFinalObject("payloadDocumentFormat", []);
+    prepareFinalObject("bparegDocumentDetailsUploadRedux", bparegDocumentDetailsUploadRedux);
   };
-
-  // componentWillReceiveProps = (nextProps) => {
-  //   const {
-  //     documentsList,
-  //     nocDocumentsDetailsRedux = {},
-  //     prepareFinalObject
-  //   } = nextProps;
-  //   let index = 0;
-  //   documentsList.forEach(docType => {
-  //     docType.cards &&
-  //       docType.cards.forEach(card => {
-  //         if (card.subCards) {
-  //           card.subCards.forEach(subCard => {
-  //             let oldDocType = get(
-  //               nocDocumentsDetailsRedux,
-  //               `[${index}].documentType`
-  //             );
-  //             let oldDocCode = get(
-  //               nocDocumentsDetailsRedux,
-  //               `[${index}].documentCode`
-  //             );
-  //             let oldDocSubCode = get(
-  //               nocDocumentsDetailsRedux,
-  //               `[${index}].documentSubCode`
-  //             );
-  //             if (
-  //               oldDocType != docType.code ||
-  //               oldDocCode != card.name ||
-  //               oldDocSubCode != subCard.name
-  //             ) {
-  //               nocDocumentsDetailsRedux[index] = {
-  //                 documentType: docType.code,
-  //                 documentCode: card.name,
-  //                 documentSubCode: subCard.name
-  //               };
-  //             }
-  //             index++;
-  //           });
-  //         } else {
-  //           let oldDocType = get(
-  //             nocDocumentsDetailsRedux,
-  //             `[${index}].documentType`
-  //           );
-  //           let oldDocCode = get(
-  //             nocDocumentsDetailsRedux,
-  //             `[${index}].documentCode`
-  //           );
-  //           if (oldDocType != docType.code || oldDocCode != card.name) {
-  //             nocDocumentsDetailsRedux[index] = {
-  //               documentType: docType.code,
-  //               documentCode: card.name,
-  //               isDocumentRequired: card.required,
-  //               isDocumentTypeRequired: card.dropDownValues
-  //                 ? card.dropDownValues.required
-  //                 : false
-  //             };
-  //           }
-  //           index++;
-  //         }
-  //       });
-  //   });
-  //   prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux);
-  //   prepareFinalObject("payloadDocumentFormat", []);
-  // }
 
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
   };
 
-  //to prepare documents for NOC create API payload
-  prepareDocumentsForPayload = async (appDocumentList, documentsFormat, wfState) => {
-    let documnts = [];
-    if (appDocumentList) {
-      Object.keys(appDocumentList).forEach(function (key) {
-        if (appDocumentList && appDocumentList[key]) {
-          documnts.push(appDocumentList[key]);
-        }
-      });
-    }
-
-    // prepareFinalObject("nocDocumentsDetailsRedux", {});
-    let requiredDocuments = [], uploadingDocuments = [];
-    if (documnts && documnts.length > 0) {
-      documnts.forEach(documents => {
-        if (documents && documents.documents) {
-          documents.documents.map(docs => {
-            let doc = {};
-            doc.documentType = documents.documentCode;
-            doc.fileStoreId = docs.fileStoreId;
-            doc.fileStore = docs.fileStoreId;
-            doc.fileName = docs.fileName;
-            doc.fileUrl = docs.fileUrl;
-            doc.isClickable = true;
-            doc.additionalDetails = {
-              uploadedBy: getLoggedinUserRole(wfState),
-              uploadedTime: new Date().getTime()
-            }
-            if (doc.id) {
-              doc.id = docs.id;
-            }
-            uploadingDocuments.push(doc);
-          })
-        }
-      });
-
-      let diffDocs = [];
-      // documentsFormat && documentsFormat.length > 0 && documentsFormat.forEach(nocDocs => {
-      //   if (nocDocs) {
-      //     diffDocs.push(nocDocs);
-      //   }
-      // });
-
-      // if (uploadingDocuments && uploadingDocuments.length > 0) {
-      //   uploadingDocuments.forEach(tDoc => {
-      //     diffDocs.push(tDoc);
-      //   })
-      // };
-      this.props.prepareFinalObject("payloadDocumentFormat",uploadingDocuments);
-
-      // if (documentsFormat && documentsFormat.length > 0) {
-      //   documentsFormat = diffDocs;
-      //   prepareFinalObject("payloadDocumentFormat",documentsFormat);
-      // }
-    }
-  }
-
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, nocDocumentsDetailsRedux, preparedFinalObject } = this.props;
-    const { payloadDocumentFormat } = preparedFinalObject
+    const { prepareFinalObject, bparegDocumentDetailsUploadRedux } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
 
     let appDocumentList = {
-      ...nocDocumentsDetailsRedux,
+      ...bparegDocumentDetailsUploadRedux,
       [uploadedDocIndex]: {
-        ...nocDocumentsDetailsRedux[uploadedDocIndex],
+        ...bparegDocumentDetailsUploadRedux[uploadedDocIndex],
         documents: [
           {
             fileName: file.name,
@@ -336,27 +211,13 @@ class DocumentList extends Component {
         ]
       }
     }
-    prepareFinalObject("nocDocumentsDetailsRedux", appDocumentList );
+    prepareFinalObject("bparegDocumentDetailsUploadRedux", appDocumentList );
   };
 
   removeDocument = remDocIndex => {
-    const { prepareFinalObject, preparedFinalObject } = this.props;
-    const { payloadDocumentFormat } = preparedFinalObject;
-    // let updatedDocuments = []
-    // updatedDocuments = payloadDocumentFormat && payloadDocumentFormat.length > 0 && payloadDocumentFormat.map( (doc,index) => {
-    //   if(index != remDocIndex){
-    //     return doc
-    //   }
-    // })
-    let updatedDocuments = payloadDocumentFormat
-    updatedDocuments.splice(remDocIndex)
+    const { prepareFinalObject } = this.props;
     prepareFinalObject(
-      `payloadDocumentFormat`,
-      updatedDocuments
-    );
-
-    prepareFinalObject(
-      `nocDocumentsDetailsRedux.${remDocIndex}.documents`,
+      `bparegDocumentDetailsUploadRedux.${remDocIndex}.documents`,
       undefined
     );
     this.forceUpdate();
@@ -364,40 +225,98 @@ class DocumentList extends Component {
 
   handleChange = (key, event) => {
 
-    const { nocDocumentsDetailsRedux, prepareFinalObject } = this.props;
+    const { bparegDocumentDetailsUploadRedux, prepareFinalObject } = this.props;
     let appDocumentList = {
-      ...nocDocumentsDetailsRedux,
+      ...bparegDocumentDetailsUploadRedux,
       [key]: {
-        ...nocDocumentsDetailsRedux[key],
+        ...bparegDocumentDetailsUploadRedux[key],
         dropDownValues: { value: event.target.value }
       }
     }
-    prepareFinalObject(`nocDocumentsDetailsRedux`, appDocumentList);
+    prepareFinalObject(`bparegDocumentDetailsUploadRedux`, appDocumentList);
   };
 
   getUploadCard = (card, key) => {
-    const { classes, nocDocumentsDetailsRedux,...rest } = this.props;
-    card.documents = nocDocumentsDetailsRedux[key] && nocDocumentsDetailsRedux[key].documents
-  
-    let jsonPath = `nocDocumentsDetailsRedux[${key}].dropDownValues.value`;
+    const { classes, bparegDocumentDetailsUploadRedux } = this.props;
+    let jsonPath = `bparegDocumentDetailsUploadRedux[${key}].dropDownValues.value`;
     return (
-      <React.Fragment>
-       <UploadCard
-       docItem={card}
-       docIndex={key}
-       key={key.toString()}
-       handleDocument={this.handleDocument}
-       removeDocument={this.removeDocument}
-       onUploadClick={this.onUploadClick}
-       handleFileUpload={this.handleFileUpload}
-       handleChange={this.handleChange}
-       uploadedDocIndex={this.state.uploadedDocIndex}
-       jsonPath = {`nocDocumentsDetailsRedux`}
-       ids = {"nocDocumentsDetailsRedux"}
-       specificStyles= "preview_upload_btn"
-       {...rest}
-      />  
-      </React.Fragment>
+      <Grid container={true}>
+        <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
+          {bparegDocumentDetailsUploadRedux[key] && bparegDocumentDetailsUploadRedux[key].documents ? (
+            <div className={classes.documentSuccess}>
+              <Icon>
+                <i class="material-icons">done</i>
+              </Icon>
+            </div>
+          ) : (
+            <div className={classes.documentIcon}>
+              <span>{key + 1}</span>
+            </div>
+          )}
+        </Grid>
+        <Grid
+          item={true}
+          xs={10}
+          sm={5}
+          md={4}
+          align="left"
+          className={classes.descriptionDiv}
+        >
+          <LabelContainer
+            labelKey={getTransformedLocale(card.name)}
+            style={styles.documentName}
+          />
+          {card.required && requiredIcon}
+          <Typography variant="caption">
+            <LabelContainer
+              labelKey={getTransformedLocale("BPA_UPLOAD_FILE_RESTRICTIONS")}
+            />
+          </Typography>
+        </Grid>
+        <Grid item={true} xs={12} sm={6} md={4}>
+          {card.dropDownValues && (
+            <TextFieldContainer
+              select={true}
+              label={{ labelKey: getTransformedLocale(card.dropDownValues.label) }}
+              placeholder={{ labelKey: card.dropDownValues.label }}
+              data={card.dropDownValues.menu}
+              optionValue="code"
+              optionLabel="label"
+              autoSelect={true}
+              required={card.required}
+              onChange={event => this.handleChange(key, event)}
+              jsonPath={jsonPath}
+            />
+          )}
+        </Grid>
+        <Grid
+          item={true}
+          xs={12}
+          sm={12}
+          md={3}
+          className={classes.fileUploadDiv}
+        >
+          <UploadSingleFile
+            classes={this.props.classes}
+            handleFileUpload={e =>
+              handleFileUpload(e, this.handleDocument, this.props)
+            }
+            uploaded={
+              bparegDocumentDetailsUploadRedux[key] && bparegDocumentDetailsUploadRedux[key].documents
+                ? true
+                : false
+            }
+            removeDocument={() => this.removeDocument(key)}
+            documents={
+              bparegDocumentDetailsUploadRedux[key] && bparegDocumentDetailsUploadRedux[key].documents
+            }
+            onButtonClick={() => this.onUploadClick(key)}
+            inputProps={this.props.inputProps}
+            buttonLabel={this.props.buttonLabel}
+            id={`doc-${key+1}`}
+          />
+        </Grid>
+      </Grid>
     );
   };
 
@@ -406,14 +325,14 @@ class DocumentList extends Component {
     let index = 0;
     return (
       <div>
-        {documentsList && documentsList.length > 0 && 
+        {documentsList &&
           documentsList.map(container => {
             return (
               <div>
-                {/* <LabelContainer
+                <LabelContainer
                   labelKey={getTransformedLocale(container.title)}
                   style={styles.documentTitle}
-                /> */}
+                />
                 {container.cards.map(card => {
                   return (
                     <div className={classes.documentContainer}>
@@ -440,17 +359,6 @@ class DocumentList extends Component {
               </div>
             );
           })}
-          {
-            !documentsList || documentsList.length == 0 &&
-            <Grid>
-                <Typography
-                variant="subtitle1"
-                style={{ fontWeight: "bold", fontSize: "12px" }}
-              >
-                No Documents Found
-              </Typography>
-            </Grid>
-          }
       </div>
     );
   }
@@ -462,13 +370,13 @@ DocumentList.propTypes = {
 
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
-  const { moduleName,preparedFinalObject } = screenConfiguration;
-  const nocDocumentsDetailsRedux = get(
+  const { moduleName } = screenConfiguration;
+  const bparegDocumentDetailsUploadRedux = get(
     screenConfiguration.preparedFinalObject,
-    "nocDocumentsDetailsRedux",
+    "bparegDocumentDetailsUploadRedux",
     {}
   );
-  return {preparedFinalObject, nocDocumentsDetailsRedux, moduleName };
+  return { bparegDocumentDetailsUploadRedux, moduleName };
 };
 
 const mapDispatchToProps = dispatch => {

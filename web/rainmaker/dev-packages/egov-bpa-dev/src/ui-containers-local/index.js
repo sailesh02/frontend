@@ -19,6 +19,11 @@ const DocumentListContainer = Loadable({
   loading: () => <Loading />
 });
 
+const DocumentListContainerNOC = Loadable({
+  loader: () => import("./DocumentListContainerNOC"),
+  loading: () => <Loading />
+});
+
 const BpaDocumentListContainer = Loadable({
   loader: () => import("./BpaDocumentListContainer"),
   loading: () => <Loading />
@@ -146,6 +151,7 @@ export {
   EstimateCardContainer,
   AutosuggestContainer,
   DocumentListContainer,
+  DocumentListContainerNOC,
   BpaDocumentListContainer,
   PaymentRedirectPage,
   ViewBreakupContainer,

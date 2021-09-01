@@ -13,7 +13,7 @@ import "./index.css";
 import {
     handleScreenConfigurationFieldChange as handleField
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {DocumentListContainer} from '..'
+import {DocumentListContainerNOC} from '..'
 import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
 import {
   getTransformedLocale,
@@ -965,7 +965,7 @@ class TriggerNOCContainer extends Component {
                   </Typography>
                   </Grid>
                   <Grid item sm={12}>
-                      <DocumentListContainer
+                      <DocumentListContainerNOC
                         buttonLabel = {{
                           labelName: "UPLOAD FILE",
                           labelKey: "BPA_BUTTON_UPLOAD FILE"
@@ -979,7 +979,7 @@ class TriggerNOCContainer extends Component {
                         }}
                         documentTypePrefix = "BPA_"
                         maxFileSize = {5000}>
-                      </DocumentListContainer>
+                      </DocumentListContainerNOC>
                   </Grid>
                 <Grid item sm={12}
                  style={{

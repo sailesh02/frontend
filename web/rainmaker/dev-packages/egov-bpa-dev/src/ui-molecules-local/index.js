@@ -19,6 +19,11 @@ const DocumentList = Loadable({
   loading: () => <Loading />
 });
 
+const DocumentListNOC = Loadable({
+  loader: () => import("./DocumentListNOC"),
+  loading: () => <Loading />
+});
+
 const BpaDocumentList = Loadable({
   loader: () => import("./BpaDocumentList"),
   loading: () => <Loading />
@@ -145,6 +150,7 @@ export {
   Tooltip,
   CustomTab,
   DocumentList,
+  DocumentListNOC,
   BpaDocumentList,
   MapLocator,
   FeesEstimateCard,

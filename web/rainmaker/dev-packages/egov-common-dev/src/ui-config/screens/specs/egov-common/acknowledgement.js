@@ -7,6 +7,8 @@ import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils"
 import { paymentFooter } from "./acknowledgementResource/paymentFooter";
 import "./index.css";
 import { getHeader } from "./pay";
+import { downloadProvisionalCertificateFormPaymentSuccess } from "egov-tradelicence/ui-config/screens/specs/utils";
+
 
 const downloadprintMenu = (
   state,
@@ -52,11 +54,37 @@ const downloadprintMenu = (
     },
     leftIcon: "receipt",
   };
+
+
+
   let downloadMenu = [];
   let printMenu = [];
+  const businessService = getQueryArg(window.location, "businessService");
+  if(businessService && businessService === "TL"){
+    let tlPLDownloadObject = {
+      label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
+      link: () => {
+        const { Licenses } = state.screenConfiguration.preparedFinalObject;
+        downloadProvisionalCertificateFormPaymentSuccess(Licenses);
+      },
+      leftIcon: "book"
+    };
+
+    let tlPLPrintObject = {
+      label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
+      link: () => {
+        const { Licenses } = state.screenConfiguration.preparedFinalObject;
+        downloadProvisionalCertificateFormPaymentSuccess(Licenses, 'print');
+      },
+      leftIcon: "book"
+    };
+
+  downloadMenu = [receiptDownloadObject, tlPLDownloadObject];
+  printMenu = [receiptPrintObject, tlPLPrintObject];
+  }else{
   downloadMenu = [receiptDownloadObject];
   printMenu = [receiptPrintObject];
-
+  }
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
@@ -115,6 +143,7 @@ const getAcknowledgementCard = (
   consumerCode,
   tenant
 ) => {
+
   const roleExists = ifUserRoleExists("CITIZEN");
   let header = getHeader(state);
   const businessService = getQueryArg(window.location.href, "businessService");

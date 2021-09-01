@@ -109,6 +109,23 @@ export const LicenseeCard = getCommonCard({
                 true
               )
             )
+
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container4.children.DirectorateForTpNo",
+                "visible",
+                false
+              )
+            );
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container4.children.DirectorateForTpNo",
+                "required",
+                false
+              )
+            );
           } else {
             dispatch(
               handleField(
@@ -133,7 +150,7 @@ export const LicenseeCard = getCommonCard({
                 "visible",
                 false
               )
-            );   
+            );
             dispatch(
               handleField(
                 "apply",
@@ -141,10 +158,19 @@ export const LicenseeCard = getCommonCard({
                 "visible",
                 false
               )
-            )      
+            )
             if(counsilForArchNo) {
               dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo", ""));
             }
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container4.children.DirectorateForTpNo",
+                "visible",
+                true
+              )
+            );
+
           }
           let getClassOfLicenseType = get(
             state.screenConfiguration.preparedFinalObject,
@@ -201,6 +227,23 @@ export const LicenseeCard = getCommonCard({
         required: true,
         jsonPath:
           "Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo"
+      })
+    }),
+
+    container4: getCommonContainer({
+      DirectorateForTpNo: getTextField({
+        label: {
+          labelName: "Directorate of Town Planning No.",
+          labelKey: "BPA_DIR_TOWN_PLANNING_NO_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Directorate of Town Planning No.",
+          labelKey: "BPA_DIR_TOWN_PLANNING_NO_PLACEHOLDER"
+        },
+        visible: false,
+        required: true,
+        jsonPath:
+          "Licenses[0].tradeLicenseDetail.additionalDetail.DirectorateForTpNo"
       })
     })
   })

@@ -209,7 +209,8 @@ class ViewBreakupContainer extends React.Component {
     const PenaltyTotal=PenaltyArray&& get(PenaltyArray[0],"value",0);
     const { style } = this.state;
     const { getGridItem, handleClose } = this;
-    const totalBill = tlPeriodinYears? (tradeTotal*tlPeriodinYears):tradeTotal + accessoriesTotal+RebateTotal+PenaltyTotal;
+    //const totalBill = tlPeriodinYears? (tradeTotal*tlPeriodinYears):tradeTotal + accessoriesTotal+RebateTotal+PenaltyTotal;
+    const totalBill = estimateCardData && estimateCardData.length> 0 && estimateCardData[0].value;
     return (
       <Dialog
         open={open}
@@ -335,10 +336,28 @@ const mapStateToProps = (state, ownProps) => {
     preparedFinalObject,
     "LicensesTemp[0].billingSlabData.accessoriesUnitData"
   );
-  const tradeUnitData = get(
+
+  const userSelectedTradeUnitsData = get(
+    preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.tradeUnits"
+  );
+
+  const tradeUnitDataMasterSelected = get(
     preparedFinalObject,
     "LicensesTemp[0].billingSlabData.tradeUnitData"
   );
+
+  let tradeUnitData =  [];
+if(userSelectedTradeUnitsData && userSelectedTradeUnitsData.length > 0 && tradeUnitDataMasterSelected && tradeUnitDataMasterSelected.length > 0)
+for(let i =0; i<tradeUnitDataMasterSelected.length; i++){
+    for(let j =0; j<userSelectedTradeUnitsData.length; j++){
+        if(tradeUnitDataMasterSelected[i].category == userSelectedTradeUnitsData[j].tradeType){
+          tradeUnitData.push({...tradeUnitDataMasterSelected[i], uomValue:userSelectedTradeUnitsData[j].uomValue});
+        }
+    }
+}
+
+console.log(tradeUnitData, "Nero tradeUnitData")
   const tradeTotal = get(
     preparedFinalObject,
     "LicensesTemp[0].billingSlabData.tradeTotal"

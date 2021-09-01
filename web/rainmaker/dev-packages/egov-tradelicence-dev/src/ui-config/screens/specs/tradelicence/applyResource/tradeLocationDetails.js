@@ -252,6 +252,26 @@ export const tradeLocationDetails = getCommonCard(
         jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode",
         required: true,
       }),
+
+      tradeLocWard: {
+        ...getSelectField({
+          label: {
+            labelName: "Ward",
+            labelKey: "TL_NEW_TRADE_DETAILS_WARD_LABEL"
+          },
+
+          optionLabel: "name",
+          placeholder: { labelName: "Select Ward", labelKey: "TL_SELECT_WARD" },
+          sourceJsonPath: "applyScreenMdmsData.TradeLicense.Ward.Ward",
+          jsonPath: "Licenses[0].tradeLicenseDetail.address.ward",
+          required: true,
+          props: {
+            required: true,
+
+          }
+
+        })
+      },
       // tradeLocGISCoord: {
       //   uiFramework: "custom-atoms",
       //   componentPath: "Div",
@@ -299,19 +319,19 @@ export const tradeLocationDetails = getCommonCard(
       //     }
       //   }
       // },
-      tradeLocElectricity: getTextField({
-        label: {
-          labelName: "Electricity Connection No.",
-          labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Electricity Connection No. of Trade Loaction",
-          labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_PLACEHOLDER"
-        },
-        // pattern: getPattern("ElectricityConnNo"),
-        jsonPath:
-          "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo"
-      })
+      // tradeLocElectricity: getTextField({
+      //   label: {
+      //     labelName: "Electricity Connection No.",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Enter Electricity Connection No. of Trade Loaction",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_PLACEHOLDER"
+      //   },
+      //   // pattern: getPattern("ElectricityConnNo"),
+      //   jsonPath:
+      //     "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo"
+      // })
     },
     {
       style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}

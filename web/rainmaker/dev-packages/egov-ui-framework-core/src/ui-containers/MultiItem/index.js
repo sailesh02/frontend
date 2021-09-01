@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import get from "lodash/get";
 import set from "lodash/set";
 import cloneDeep from "lodash/cloneDeep";
-import { addComponentJsonpath } from "../../ui-utils/commons";
+import { addComponentJsonpath, getQueryArg } from "../../ui-utils/commons";
 import { prepareFinalObject as pFO } from "../../ui-redux/screen-configuration/actions";
 import isEqual from "lodash/isEqual";
 import LabelConatiner from "../LabelContainer";
@@ -282,7 +282,44 @@ class MultiItem extends React.Component {
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const { screenConfig, preparedFinalObject } = screenConfiguration;
-  return { screenConfig, preparedFinalObject, state };
+  let hasAddItem = true;
+  let Licenses = get(preparedFinalObject, "Licenses", null);
+  if(Licenses){
+
+  let tlStatus = get(Licenses[0], 'status', "");
+  let userAction = getQueryArg(window.location.href, "action");
+
+  if (tlStatus && (tlStatus != "INITIATED") && userAction != "EDITRENEWAL") {
+    hasAddItem = false
+  }
+  // if (userAction === "EDITRENEWAL" && (tlStatus == "APPROVED" || tlStatus == "EXPIRED" || tlStatus == "INITIATED")) {
+  //   hasAddItem = false
+  // }
+
+  if (tlStatus && !(tlStatus == "INITIATED" || tlStatus == "APPROVED" || tlStatus == "EXPIRED") && userAction === "EDITRENEWAL") {
+    hasAddItem = false
+  }
+
+  let tradeUnitJsonPath =
+      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items";
+  let tradeUnits = get(
+    state.screenConfiguration.screenConfig.apply,
+    tradeUnitJsonPath,
+    []
+  );
+
+  let tradeCount = 0;
+    for (var j = 0; j < tradeUnits.length; j++) {
+      if (tradeUnits[j].isDeleted !== false) {
+        tradeCount++;
+      }
+    }
+
+    if (tradeCount && tradeCount === 5) {
+      hasAddItem = false;
+    }
+  }
+  return { screenConfig, preparedFinalObject, state, hasAddItem };
 };
 
 const mapDispatchToProps = dispatch => {

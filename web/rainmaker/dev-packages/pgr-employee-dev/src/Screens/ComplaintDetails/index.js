@@ -294,6 +294,9 @@ class ComplaintDetails extends Component {
         } else if (complaint.complaintStatus.toLowerCase() === "assigned") {
           btnTwoLabel = "ES_COMMON_REASSIGN";
           btnThreeLabel = "ES_RESOLVE_MARK_RESOLVED";
+        } else if (complaint.complaintStatus.toLowerCase() === "escalatedlevel1pending" || complaint.complaintStatus.toLowerCase() === "escalatedlevel2pending" || complaint.complaintStatus.toLowerCase() === "escalatedlevel3pending" || complaint.complaintStatus.toLowerCase() === "escalatedlevel4pending") {
+
+          btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
         }
       } else if (role === "employee") {
         if (complaint.complaintStatus.toLowerCase() === "assigned") {
@@ -448,6 +451,24 @@ class ComplaintDetails extends Component {
                     btnOneOnClick={() =>
                       this.btnOneOnClick(serviceRequestId, btnOneLabel)
                     }
+                    btnTwoLabel={btnTwoLabel}
+                    btnTwoOnClick={() =>
+                      this.btnTwoOnClick(serviceRequestId, btnTwoLabel)
+                    }
+
+
+                    groResolveButton={false}
+                  />
+                ) : (
+                  ""
+                )}
+
+{(role === "ao" &&
+                  complaint.complaintStatus.toLowerCase() !== "closed" && (complaint.status.toLowerCase() === "escalatedlevel1pending" ||
+                  complaint.status.toLowerCase() === "escalatedlevel2pending" || complaint.status.toLowerCase() === "escalatedlevel3pending" ||
+                  complaint.status.toLowerCase() === "escalatedlevel4pending")) ? (
+                  <ActionButton
+
                     btnTwoLabel={btnTwoLabel}
                     btnTwoOnClick={() =>
                       this.btnTwoOnClick(serviceRequestId, btnTwoLabel)

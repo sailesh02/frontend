@@ -11,7 +11,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import some from "lodash/some";
 import { applyTradeLicense, checkValidOwners, getNextFinancialYearForRenewal } from "../../../../../ui-utils/commons";
-import {createEstimateData,downloadCertificateForm, getButtonVisibility,getCommonApplyFooter,getDocList, setMultiOwnerForApply,setValidToFromVisibilityForApply,validateFields, downloadProvisionalCertificateForm} from "../../utils";
+import { createEstimateData, downloadCertificateForm, getButtonVisibility, getCommonApplyFooter, getDocList, setMultiOwnerForApply, setValidToFromVisibilityForApply, validateFields, downloadProvisionalCertificateForm } from "../../utils";
 import "./index.css";
 
 const moveToSuccess = (LicenseData, dispatch) => {
@@ -86,6 +86,8 @@ export const callBackForNext = async (state, dispatch) => {
   let hasFieldToaster = true;
   let isValidToGreatorThanStartDate = true;
   let isCommencementDateInPast = true;
+  let isTempTradeValid = true;
+  let onlyFiveTradesAllowed = true;
   if (activeStep === 0) {
     const isTradeDetailsValid = validateFields(
       "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children",
@@ -160,8 +162,8 @@ export const callBackForNext = async (state, dispatch) => {
 
     let tlcommencementDate = get(queryObject[0], "commencementDate");
     let tlValidTo = get(queryObject[0], "validTo");
-console.log(tlValidTo, "Nero ValidTo")
-tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
+
+    tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
     var dt = new Date();
 
     let h = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
@@ -173,13 +175,34 @@ tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
 
 
 
-    if(pastDateTimeStamp < currentTimeStamp){
+    if (pastDateTimeStamp < currentTimeStamp) {
       isCommencementDateInPast = false;
     }
-    if(pastDateTimeStamp > tlValidTo){
+    if (pastDateTimeStamp > tlValidTo) {
       isValidToGreatorThanStartDate = false;
     }
 
+    let tradeLicenseDetail = get(queryObject[0], "tradeLicenseDetail");
+    let tradeUnitsArray = get(tradeLicenseDetail, "tradeUnits");
+
+if(tlType && tlType === "TEMPORARY"){
+    if (tradeUnitsArray && tradeUnitsArray.length > 0 && tradeUnitsArray[0].uomValue > 30) {
+      isTempTradeValid = false;
+    }
+
+  }
+  if(tlType){
+  let tradeCount = 0;
+    for (var j = 0; j < tradeUnits.length; j++) {
+      if (tradeUnits[j].isDeleted !== false) {
+        tradeCount++;
+      }
+    }
+
+    if (tradeCount && tradeCount > 5) {
+      onlyFiveTradesAllowed = false;
+    }
+  }
 
     if (
       !isTradeDetailsValid ||
@@ -188,7 +211,9 @@ tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
       !isTradeUnitValid ||
       //!isTradeSubTypeValidForTempTL ||
       !isCommencementDateInPast ||
-      !isValidToGreatorThanStartDate
+      !isValidToGreatorThanStartDate ||
+      !isTempTradeValid ||
+      !onlyFiveTradesAllowed
     ) {
       isFormValid = false;
     }
@@ -199,25 +224,25 @@ tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
     );
     // ownership = ownership.split(".")[0];
     let subOwnerShipCategoryType = ownership.split(".")[1];
-      if (subOwnerShipCategoryType === "MULTIPLEOWNERS") {
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-            "props.hasAddItem",
-            true
-          )
-        );
-      }else {
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-            "props.hasAddItem",
-            false
-          )
-        );
-      }
+    if (subOwnerShipCategoryType === "MULTIPLEOWNERS") {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+          "props.hasAddItem",
+          true
+        )
+      );
+    } else {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+          "props.hasAddItem",
+          false
+        )
+      );
+    }
   }
 
   if (activeStep === 1) {
@@ -349,7 +374,7 @@ tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
             get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].tradeLicenseDetail.owners", [])
           )
         );
-        dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.owners", checkValidOwners(get(state.screenConfiguration.preparedFinalObject, "Licenses[0].tradeLicenseDetail.owners",[]),oldOwners)));
+        dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.owners", checkValidOwners(get(state.screenConfiguration.preparedFinalObject, "Licenses[0].tradeLicenseDetail.owners", []), oldOwners)));
         dispatch(
           setRoute(
             `/tradelicence/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`
@@ -361,7 +386,7 @@ tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
         };
         dispatch(toggleSnackbar(true, updateMessage, "info"));
       }
-      uploadedDocData=uploadedDocData.filter(item=> item.fileUrl&&item.fileName)
+      uploadedDocData = uploadedDocData.filter(item => item.fileUrl && item.fileName)
       const reviewDocData =
         uploadedDocData &&
         uploadedDocData.map(item => {
@@ -406,25 +431,40 @@ tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
       };
       switch (activeStep) {
         case 0:
-          if(!isCommencementDateInPast){
+          if (!isCommencementDateInPast) {
             errorMessage = {
               labelName:
                 "Past commensement date not allowed",
               labelKey: "ERR_COMMENSEMENT_PAST_DATE_NOT_ALLOWED_TL"
             };
-          }else if(!isValidToGreatorThanStartDate){
+          } else if (!isValidToGreatorThanStartDate) {
             errorMessage = {
               labelName:
                 "Commensement date greator than validto not allowed",
               labelKey: "ERR_COMMENSEMENT_DATE_GREATOR_THAN_VALIDTO_NOT_ALLOWED_TL"
             };
-          }else{
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Trade Details, then do next !",
-            labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
-          };
-        }
+          }
+          else if (!isTempTradeValid) {
+            errorMessage = {
+              labelName:
+                "Temporary trade more than 30 days not allowed",
+              labelKey: "ERR_TEMP_TRADE_RANGE_NOT_VALID_TL"
+            };
+          } else if (!onlyFiveTradesAllowed) {
+            errorMessage = {
+              labelName:
+                "Only five trades allowed",
+              labelKey: "ERR_ONLY_FIVE_TRADES_ALLOWED_TL"
+            };
+          }
+
+          else {
+            errorMessage = {
+              labelName:
+                "Please fill all mandatory fields for Trade Details, then do next !",
+              labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
+            };
+          }
           break;
         case 1:
           errorMessage = {
@@ -952,7 +992,7 @@ export const footerReviewTop = (
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "businessService", value:'TL' }
+        { key: "businessService", value: 'TL' }
       ]
       download(receiptQueryString, "download", receiptKey, state);
       // generateReceipt(state, dispatch, "receipt_download");
@@ -965,7 +1005,7 @@ export const footerReviewTop = (
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "businessService", value:'TL' }
+        { key: "businessService", value: 'TL' }
       ]
       download(receiptQueryString, "print", receiptKey, state);
       // generateReceipt(state, dispatch, "receipt_print");
@@ -1184,7 +1224,7 @@ export const downloadPrintContainer = (
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "businessService", value:'TL' }
+        { key: "businessService", value: 'TL' }
       ]
       download(receiptQueryString, "download", receiptKey);
     },
@@ -1196,7 +1236,7 @@ export const downloadPrintContainer = (
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "businessService", value:'TL' }
+        { key: "businessService", value: 'TL' }
       ]
       download(receiptQueryString, "print", receiptKey);
     },

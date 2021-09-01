@@ -18,6 +18,7 @@ import Home from "modules/employee/Home";
 import Report from "modules/employee/reports/report";
 import EGFFinance from "modules/employee/Erp/EGF";
 import Notifications from "modules/employee/Notifications";
+import Trainings from "modules/employee/Trainings";
 
 import pgrRoutes from "pgr-employee/Routes/pgr-routes";
 import ptRoutes from "pt-employee/Routes/pt-routes";
@@ -181,6 +182,19 @@ const routes = [
       redirectionUrl,
     },
   },
+  {
+    path: "how-it-works",
+    component: Trainings,
+    needsAuthentication: true,
+
+    options: {
+      hideFooter: true,
+      title: "How it Works",
+      hideTitle: true,
+      redirectionUrl,
+    },
+  },
+
   ...pgrRoutes,
   ...ptRoutes,
   ...frameworkScreens,

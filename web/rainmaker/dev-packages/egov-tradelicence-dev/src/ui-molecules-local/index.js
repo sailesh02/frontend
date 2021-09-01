@@ -56,6 +56,11 @@ const HowItWorks = Loadable({
   loading: () => <Loading />
 });
 
+const TLHowItWorks = Loadable({
+  loader: () => import("./TLHowItWorks"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -66,5 +71,6 @@ export {
   MapLocator,
   FeesEstimateCard,
   HowItWorks,
-  ActionDialog
+  ActionDialog,
+  TLHowItWorks
 };

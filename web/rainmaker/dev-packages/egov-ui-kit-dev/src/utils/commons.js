@@ -434,6 +434,12 @@ export const getTransformedStatus = (status) => {
     case "assigned":
       transformedStatus = "ASSIGNED";
       break;
+    case "escalatedlevel1pending":
+    case "escalatedlevel2pending":
+    case "escalatedlevel3pending":
+    case "escalatedlevel4pending":
+      transformedStatus = "ESCALATED";
+      break;
     default:
       transformedStatus = "UNASSIGNED";
       break;
@@ -533,7 +539,7 @@ export const getTenantForLatLng = async (lat, lng) => {
 };
 
 export const findLatestAssignee = (actionArray) => {
-  console.log(actionArray, "Nero ActionArray")
+
   for (let i = 0; i < actionArray.length; i++) {
     if (actionArray[i].status === "assigned") {
       return actionArray[i].assignee;
@@ -1105,7 +1111,8 @@ export const getModuleName = () => {
   else if (pathName.indexOf("bpastakeholder") > -1 || pathName.indexOf("edcrscrutiny") > -1 ||
     pathName.indexOf("egov-bpa") > -1 || pathName.indexOf("oc-bpa") > -1) { return "rainmaker-bpa,rainmaker-bpareg"; }
   else if (pathName.indexOf("noc") > -1) { return "rainmaker-common-noc"; }
-  else if(pathName.indexOf("egov-dashboard") > -1){ return "rainmaker-dashboard"; } 
+  //else if(pathName.indexOf("egov-dashboard") > -1){ return "rainmaker-dashboard"; } 
+  //else if(pathName.indexOf("egov-mr") > -1){ return "rainmaker-mr"; } 
   else {
     return "rainmaker-common";
   }

@@ -53,6 +53,7 @@ class LandingPage extends React.Component {
 
       if (route && route.moduleName === "TL") {
         window.localStorage.setItem('licenseType', route.licenseType);
+        window.localStorage.setItem('legacyLicenseRenewal', route.legacyLicenseRenewal);
 
       }
       let toggle = get(

@@ -62,8 +62,8 @@ export const fetchLocalizationLabel = (locale, module, tenantId, isFromModule) =
       if(module!=null){
        tenantModule=`rainmaker-${module}`;
       }
-      
-      if((window.location.href.includes("/language-selection") || window.location.href.includes("/user/login"))) {
+
+      if((window.location.href.includes("/language-selection") || window.location.href.includes("/user/login") || window.location.href.includes("/user/register"))) {
          if((moduleName && storedModuleList.includes(moduleName) === false) || moduleName == null) isCommonScreen = true;
       }
 
@@ -79,7 +79,7 @@ export const fetchLocalizationLabel = (locale, module, tenantId, isFromModule) =
         ]);
         resultArray = [...payload1.messages];
       }
-      
+
       if((module && storedModuleList.includes(tenantModule)===false)){
         storedModuleList.push(tenantModule);
         var newList =JSON.stringify(storedModuleList);
@@ -95,8 +95,8 @@ export const fetchLocalizationLabel = (locale, module, tenantId, isFromModule) =
             resultArray = [...resultArray, ...payload2.messages];
           }
       }
-      
-      let prevLocalisationLabels=[];  
+
+      let prevLocalisationLabels=[];
       if(getLocalizationLabels()!=null && !isCommonScreen && storedModuleList.length > 0){
         prevLocalisationLabels=JSON.parse(getLocalizationLabels());
       }

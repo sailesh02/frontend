@@ -247,5 +247,5 @@ const acknowledgementCard = ({
       tailNumber:number
   }
 };
- 
+
 // export default getAcknowledgementCard;

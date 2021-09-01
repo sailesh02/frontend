@@ -19,7 +19,8 @@ import {
   fillOldLicenseData,
   getTradeTypeDropdownData,
   updateMdmsDropDowns,
-  updateStructureTypes
+  updateStructureTypes,
+  convertDateToEpoch
 } from "../../utils";
 import {
   prepareFinalObject as pFO,
@@ -69,6 +70,14 @@ const setTempTLUOMValue = (reqObj) => {
   let tlType = get(queryObject[0], "licenseType");
 
   let tlcommencementDate = get(queryObject[0], "commencementDate");
+  tlcommencementDate = convertDateToEpoch(
+    tlcommencementDate,
+    "daystart"
+  );
+  validTo = convertDateToEpoch(
+    validTo,
+    "dayend"
+  );
 
   if (validTo && tlcommencementDate) {
 
@@ -473,8 +482,10 @@ const structureSubTypeChange = (reqObj) => {
 const tradeUnitCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
-  props: {
+  //moduleName: "egov-tradelicence",
 
+  props: {
+    hasAddItem: true,
     scheama: getCommonGrayCard({
       header: getCommonSubHeader(
         {
@@ -508,7 +519,9 @@ const tradeUnitCard = {
                   className: "applicant-details-error autocomplete-dropdown",
                   callBack: tradeTypeChange,
                   isRequired: false,
-                  requiredValue: true
+                  requiredValue: true,
+                  isDisabled: false
+
                 },
                 {
                   key: 'tradeSubType',
@@ -516,7 +529,8 @@ const tradeUnitCard = {
                   className: "applicant-details-error autocomplete-dropdown",
                   fieldType: "autosuggest",
                   isRequired: false,
-                  requiredValue: true
+                  requiredValue: true,
+                  isDisabled: false
                 }
               ],
               moduleName: "TradeLicense",
@@ -1050,7 +1064,7 @@ export const tradeDetails = getCommonCard({
       },
       props: {
         className: "applicant-details-error",
-        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
+       // disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
       },
       placeholder: {
         labelName: "Example Diljit Da Dhaba",
@@ -1059,6 +1073,24 @@ export const tradeDetails = getCommonCard({
       required: true,
       pattern: getPattern("TradeName"),
       jsonPath: "Licenses[0].tradeName"
+    }),
+    oldLicenseNo: getTextField({
+      label: {
+        labelName: "Old License No",
+        labelKey: "TL_OLD_LICENSE_NO"
+      },
+      props: {
+        className: "applicant-details-error",
+        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? true : false,
+      },
+      placeholder: {
+        labelName: "Enter Old License No",
+        labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
+      },
+      visible: false,
+      required: true,
+      //visible: getQueryArg(window.location.href, "legacyLicenseRenewal") === "true" ? true : false,
+      jsonPath: "Licenses[0].oldLicenseNumber"
     }),
     // tradeFromDate: {
     //   ...getDateField({
@@ -1129,6 +1161,58 @@ export const tradeDetails = getCommonCard({
             )
           );
 
+
+          let queryObject = JSON.parse(
+            JSON.stringify(
+              get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
+            )
+          );
+          let applyForTL = get(queryObject[0], "licenseType", null);
+          if(applyForTL === "TEMPORARY"){
+          let tlcommencementDate = action.value;
+
+
+          let validTo = get(queryObject[0], "validTo", null);
+          tlcommencementDate = convertDateToEpoch(
+            tlcommencementDate,
+            "daystart"
+          );
+          validTo = convertDateToEpoch(
+            validTo,
+            "dayend"
+          );
+          if (validTo && tlcommencementDate) {
+
+            //var date1 = new Date(tlcommencementDate);
+            var date2 = new Date(validTo);
+            // To calculate the time difference of two dates
+
+            var Difference_In_Time = date2.getTime() - new Date(tlcommencementDate).getTime();
+
+            // To calculate the no. of days between two dates
+            var Difference_In_Days = Math.ceil((((Difference_In_Time / 1000) / 60) / 60) / 24);
+
+            let selectedTrades = get(
+              state.screenConfiguration.screenConfig.apply,
+              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items",
+              null
+            )
+
+            if (selectedTrades && selectedTrades.length > 0) {
+              for (let i = 0; i < selectedTrades.length; i++) {
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${i}].item${i}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
+                    "props.value",
+                    Difference_In_Days
+                  )
+                );
+              }
+            }
+          }
+        }
+
         }
       },
     },
@@ -1197,7 +1281,14 @@ export const tradeDetails = getCommonCard({
           let tlType = get(queryObject[0], "licenseType");
 
           let tlcommencementDate = get(queryObject[0], "commencementDate");
-
+          tlcommencementDate = convertDateToEpoch(
+            tlcommencementDate,
+            "daystart"
+          );
+          validTo = convertDateToEpoch(
+            validTo,
+            "dayend"
+          );
           if (validTo && tlcommencementDate) {
 
             //var date1 = new Date(tlcommencementDate);
@@ -1329,6 +1420,7 @@ export const tradeDetails = getCommonCard({
     //   pattern: getPattern("NoOfEmp"),
     //   jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
     // })
+
     tradePurpose: getTextField({
       label: {
         labelName: "Trade Purpose",
@@ -1353,6 +1445,7 @@ export const tradeDetails = getCommonCard({
 });
 
 const setFieldsOnAddItem = (state, multiItemContent) => {
+
   const preparedFinalObject = JSON.parse(
     JSON.stringify(state.screenConfiguration.preparedFinalObject)
   );

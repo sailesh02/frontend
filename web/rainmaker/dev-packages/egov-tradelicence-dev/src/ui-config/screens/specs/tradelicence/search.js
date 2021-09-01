@@ -1,11 +1,12 @@
 import {
   getBreak, getCommonHeader,
-  getLabel
+  getLabel,getSelectField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, unMountScreen, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
+import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
 import "./index.css";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
@@ -54,6 +55,15 @@ const getMdmsData = async (dispatch) => {
         types
       )
     );
+
+
+    let EmpApplyAppsFor = [{code: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},{code: "TL_HOME_SEARCH_RESULTS_NEW_TEMP_APP_BUTTON", active: true}, {code: "TL_HOME_SEARCH_RESULTS_LEGACY_TL_RENEW_APP_BUTTON", active: true}]
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.searchScreen.EmpApplyAppsFor",
+        EmpApplyAppsFor
+      )
+    );
   } catch (e) {
     console.log(e);
   }
@@ -68,6 +78,9 @@ const tradeLicenseSearchAndResult = {
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("searchScreen", {}))
+    //dispatch(prepareFinalObject("EmpApplyAppsFor", []))
+    //screenConfiguration.screenConfig.search.components.div.children.headerDiv.children.tradeLicenseType.props
+
     dispatch(unMountScreen("apply"));
     dispatch(unMountScreen("search-preview"));
     getMdmsData(dispatch);
@@ -78,6 +91,21 @@ const tradeLicenseSearchAndResult = {
       }
     ];
     getRequiredDocData(action, dispatch, moduleDetails, true);
+  //  console.log(action.screenConfig, "Nero action.screenConfig")
+    // set(
+    //   action.screenConfig,
+    //   "search.components.div.children.headerDiv.children.tradeLicenseType.props.value",
+    //   ''
+    // );
+//console.log("Nero hss")
+    // dispatch(
+    //   handleField(
+    //     "search",
+    //     `components.div.children.headerDiv.children.tradeLicenseType`,
+    //     "props.value",
+    //     ''
+    //   )
+    // );
     return action;
   },
   components: {
@@ -101,54 +129,153 @@ const tradeLicenseSearchAndResult = {
               },
               ...header
             },
-            newApplicationButton: {
-              componentPath: "Button",
-              gridDefination: {
-                xs: 12,
-                sm: 6,
-                align: "right"
-              },
-              visible: enableButton,
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px"
-                }
-              },
-              children: {
-                plusIconInsideButton: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "add",
-                    style: {
-                      fontSize: "24px"
-                    }
-                  }
-                },
-                buttonLabel: getLabel({
-                  labelName: "NEW APPLICATION",
+            tradeLicenseType: {
+              ...getSelectField({
+                label: {
+                  labelName: "License Type",
                   labelKey: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
+                },
+                placeholder: {
+                  labelName: "Select License Type",
+                  labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_PLACEHOLDER"
+                },
+                required: true,
+                jsonPath: "EmpApplyAppsFor",
+                // localePrefix: {
+                //   moduleName: "TRADELICENSE",
+                //   masterName: "LICENSETYPE"
+                // },
 
-                  showHideAdhocPopup(state, dispatch, 'search');
-                  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
-                  dispatch(prepareFinalObject("LicensesTemp", []));
+                props: {
+
+                  //value: "PERMANENT",
+                  className: "tl-trade-type"
+                },
+                sourceJsonPath: "applyScreenMdmsData.searchScreen.EmpApplyAppsFor"
+              }),
+              afterFieldChange: (action, state, dispatch) => {
+
+              let licenceType = "PERMANENT";
+              if(action.value === "TL_HOME_SEARCH_RESULTS_NEW_TEMP_APP_BUTTON"){
+                licenceType = "TEMPORARY";
                 }
+                  showHideAdhocPopup(state, dispatch, 'search');
+                  dispatch(prepareFinalObject("Licenses", [{ licenseType: licenceType }]));
+                  dispatch(prepareFinalObject("LicensesTemp", []));
+                  window.localStorage.setItem('licenseType', licenceType);
+                  if(action.value === "TL_HOME_SEARCH_RESULTS_LEGACY_TL_RENEW_APP_BUTTON"){
+                    window.localStorage.setItem('legacyLicenseRenewal', true);
+                  }else{
+                    window.localStorage.setItem('legacyLicenseRenewal', false);
+                  }
+
               },
               roleDefination: {
                 rolePath: "user-info.roles",
-                path: "tradelicence/search?action=showRequiredDocuments"
+                path: "tradelicence/search"
+                //path: "tradelicence/search?action=showRequiredDocuments"
               }
-            }
+            },
+            // newApplicationButton: {
+            //   componentPath: "Button",
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 6,
+            //     align: "right"
+            //   },
+            //   visible: enableButton,
+            //   props: {
+            //     variant: "contained",
+            //     color: "primary",
+            //     style: {
+            //       color: "white",
+            //       borderRadius: "2px",
+            //       width: "250px",
+            //       height: "48px"
+            //     }
+            //   },
+            //   children: {
+            //     plusIconInsideButton: {
+            //       uiFramework: "custom-atoms",
+            //       componentPath: "Icon",
+            //       props: {
+            //         iconName: "add",
+            //         style: {
+            //           fontSize: "24px"
+            //         }
+            //       }
+            //     },
+            //     buttonLabel: getLabel({
+            //       labelName: "NEW APPLICATION",
+            //       labelKey: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
+            //     })
+            //   },
+            //   onClickDefination: {
+            //     action: "condition",
+            //     callBack: (state, dispatch) => {
+
+            //       showHideAdhocPopup(state, dispatch, 'search');
+            //       dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
+            //       dispatch(prepareFinalObject("LicensesTemp", []));
+            //       window.localStorage.setItem('licenseType', "PERMANENT");
+            //      // dispatch(prepareFinalObject("tlApplyFor", [{ licenseType: "PERMANENT" }]));
+            //     }
+            //   },
+            //   roleDefination: {
+            //     rolePath: "user-info.roles",
+            //     path: "tradelicence/search?action=showRequiredDocuments"
+            //   }
+            // },
+            // newTempApplicationButton: {
+            //   componentPath: "Button",
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 6,
+            //     align: "right"
+            //   },
+            //   visible: enableButton,
+            //   props: {
+            //     variant: "contained",
+            //     color: "primary",
+            //     style: {
+            //       color: "white",
+            //       borderRadius: "2px",
+            //       width: "250px",
+            //       height: "48px"
+            //     }
+            //   },
+            //   children: {
+            //     plusIconInsideButton: {
+            //       uiFramework: "custom-atoms",
+            //       componentPath: "Icon",
+            //       props: {
+            //         iconName: "add",
+            //         style: {
+            //           fontSize: "24px"
+            //         }
+            //       }
+            //     },
+            //     buttonLabel: getLabel({
+            //       labelName: "NEW TEMP APPLICATION",
+            //       labelKey: "TL_HOME_SEARCH_RESULTS_NEW_TEMP_APP_BUTTON"
+            //     })
+            //   },
+            //   onClickDefination: {
+            //     action: "condition",
+            //     callBack: (state, dispatch) => {
+
+            //       showHideAdhocPopup(state, dispatch, 'search');
+            //       dispatch(prepareFinalObject("Licenses", [{ licenseType: "TEMPORARY" }]));
+            //       dispatch(prepareFinalObject("LicensesTemp", []));
+            //       window.localStorage.setItem('licenseType', "TEMPORARY");
+            //      // dispatch(prepareFinalObject("tlApplyFor", [{ licenseType: "TEMPORARY" }]));
+            //     }
+            //   },
+            //   roleDefination: {
+            //     rolePath: "user-info.roles",
+            //     path: "tradelicence/search?action=showRequiredDocuments"
+            //   }
+            // }
           }
         },
         pendingApprovals,

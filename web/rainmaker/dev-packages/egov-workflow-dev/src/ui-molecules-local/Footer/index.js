@@ -334,9 +334,9 @@ class Footer extends React.Component {
         });
     }
 
-    if(item.moduleName === "BPA_OC1" || item.moduleName === "BPA_OC2" || item.moduleName === "BPA_OC3"
+    if((item.moduleName === "BPA_OC1" || item.moduleName === "BPA_OC2" || item.moduleName === "BPA_OC3"
     || item.moduleName === "BPA_OC4" || item.moduleName === "BPA1" || item.moduleName === "BPA2" ||
-    item.moduleName === "BPA3" || item.moduleName === "BPA4"){
+    item.moduleName === "BPA3" || item.moduleName === "BPA4") && item.buttonLabel === "APPROVE"){
       this.getTokenList()
     }
     this.setState({ open: true, data: item, employeeList });

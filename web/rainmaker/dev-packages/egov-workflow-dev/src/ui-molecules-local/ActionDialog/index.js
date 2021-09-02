@@ -12,6 +12,8 @@ import { withStyles } from "@material-ui/core/styles";
 import { UploadMultipleFiles,TextfieldWithIcon } from "egov-ui-framework/ui-molecules";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
+import store from "ui-redux/store";
+import get from "lodash/get";
 
 const styles = theme => ({
   root: {
@@ -136,6 +138,22 @@ class ActionDialog extends React.Component {
       isDocRequired
     } = dialogData;
     const { getButtonLabelName } = this;
+    let isCertificateDetailsVisible = false
+    let tokenPath = ''
+    let certificatePath = ''
+    let passwordPath = ''
+    if(dialogHeader && dialogHeader.labelKey === "WF_APPROVE_APPLICATION" && dataPath === 'BPA' && (moduleName == "BPA1" ||
+    moduleName == 'BPA2' || moduleName === 'BPA3') || moduleName === 'BPA4'){
+      const state = store.getState()
+      let applicationStatus = get(state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
+      state.screenConfiguration.preparedFinalObject, `${dataPath}.status`, "")
+      isCertificateDetailsVisible = dialogHeader && dialogHeader.labelKey === "WF_APPROVE_APPLICATION" && dataPath == "BPA"
+      &&  applicationStatus == "APPROVAL_INPROGRESS" ? true : false
+      tokenPath = `${dataPath}.token`
+      passwordPath = `${dataPath}.password`
+      certificatePath = `${dataPath}.certificate`
+    }
+    
     let fullscreen = false;
     const showAssignee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     if (window.innerWidth <= 768) {
@@ -294,7 +312,10 @@ class ActionDialog extends React.Component {
                       jsonPath={wfDocumentsPath}
                       maxFileSize={5000}
                     />
-                    <Grid
+                    {isCertificateDetailsVisible && 
+                      <React.Fragment>
+
+<Grid
                       item
                       sm="12"
                       style={{
@@ -312,12 +333,12 @@ class ActionDialog extends React.Component {
                         hasLocalization={false}
                         onChange={e =>{
                           handleFieldChange(
-                            `signature.token`,
+                            tokenPath,
                             e.target.value
                           )
                           getCertificateList(e)
                         }}
-                        jsonPath={`signature.token`}
+                        jsonPath={tokenPath}
                       />
                     </Grid>
                     <Grid
@@ -338,11 +359,11 @@ class ActionDialog extends React.Component {
                         hasLocalization={false}
                         onChange={e =>{
                           handleFieldChange(
-                            `signature.certificate`,
+                            certificatePath,
                             e.target.value
                           )
                         }}
-                        jsonPath={`signature.certificate`}
+                        jsonPath={certificatePath}
                       />
                     </Grid>
 
@@ -356,7 +377,7 @@ class ActionDialog extends React.Component {
                       fontWeight: 500
                   }}
                   labelName={"CORE_COMMON_PASSWORD_LABEL"}
-                    labelKey={"CORE_COMMON_PASSWORD_LABEL"} /><span>&thinsp;*</span>
+                    labelKey={"CORE_COMMON_PASSWORD_LABEL"} />
                   </Grid>
                   <form style={{width:"100%"}} autocomplete="off">
                   <Grid
@@ -370,15 +391,18 @@ class ActionDialog extends React.Component {
                         style={{ marginRight: "15px" }}
                         onChange={e =>{
                           handleFieldChange(
-                            `signature.password`,
+                            passwordPath,
                             e.target.value
                           )
                         }}
-                        jsonPath={`signature.password`}
+                        jsonPath={passwordPath}
                         hasLocalization={false}
                       />
                   </Grid>
                   </form>
+                      </React.Fragment>
+                    }
+                  
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                       <Button
                         variant={"contained"}

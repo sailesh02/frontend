@@ -949,7 +949,7 @@ class TriggerNOCContainer extends Component {
         let payload = {
           tenantId : BPA.tenantId,
           nocNo : null,
-          applicationType : BPA.applicationType,
+          applicationType : 'NEW',
           nocType : nocType,
           accountId : BPA.accountId,
           sourceRefId : BPA.applicationNo,

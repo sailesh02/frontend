@@ -99,6 +99,9 @@ const styles = {
   }
 }
 
+export const numberPattern = /^([0-9][0-9]{0,49})(\.\d{1,2})?$/
+export const stringPattern = /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i
+
 export const fieldConfig = {
   nocType: {
     label: {
@@ -416,6 +419,40 @@ class NocDetailCard extends Component {
   };
 
   onNmaFieldChange = (key,jsonPath) => e => {
+    // const stringJsonPaths = [""]
+    // const numberJsonPaths = [""]
+    // if(jsonPath.endsWith('MonumentName')){
+    //   if(e.target.value.match(stringPattern)){
+    //     this.setState({
+    //       stringErr:false
+    //     })
+    //     store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
+    //   }else{
+    //     this.setState({
+    //       stringErr:true
+    //     })
+    //     store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
+    //   }
+    // }else if(jsonPath.endsWith('MonumentName')){
+    //   if(e.target.value.match(numberPattern)){
+    //     this.setState({
+    //       numberErr:false
+    //     })
+    //     store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
+
+    //   }else{
+    //     this.setState({
+    //       numberErr:true
+    //     })
+    //     store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
+    //   }
+    // }else{
+    //   this.setState({
+    //     numberErr:true,
+    //     stringErr:false
+    //   })
+    //   store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
+    // }
     store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
   };
 

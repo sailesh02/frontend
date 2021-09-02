@@ -1145,25 +1145,25 @@ class NocDetailCard extends Component {
       }
     })
 
-    if(isUpdate){
-      let {nocBPADocumentsContract} = this.props.preparedFinalObject
-      let certificate = null
-      certificate = nocBPADocumentsContract && nocBPADocumentsContract.length > 0 && nocBPADocumentsContract[0].cards && nocBPADocumentsContract[0].cards.length > 0 &&
-      nocBPADocumentsContract[0].cards.filter(card => {
-        if(card.nocType == nocType){
-          return card
-        }
-      })
+    // if(isUpdate){
+      // let {nocBPADocumentsContract} = this.props.preparedFinalObject
+      // let certificate = null
+      // certificate = nocBPADocumentsContract && nocBPADocumentsContract.length > 0 && nocBPADocumentsContract[0].cards && nocBPADocumentsContract[0].cards.length > 0 &&
+      // nocBPADocumentsContract[0].cards.filter(card => {
+      //   if(card.nocType == nocType){
+      //     return card
+      //   }
+      // })
   
-      if(certificate){
-        requiredDocumentsFormat.push({
-          active: true,
-            code: certificate[0].code,
-            documentType: certificate[0].name + '_CERTIFICATE',
-            required: true
-        })
-      }
-    }
+      // if(certificate){
+      //   requiredDocumentsFormat.push({
+      //     active: true,
+      //       code: certificate[0].code,
+      //       documentType: certificate[0].name + '_CERTIFICATE',
+      //       required: true
+      //   })
+      // }
+    // }
     this.prepareDocumentsUploadData(requiredDocumentsFormat)
   }
 
@@ -1225,7 +1225,8 @@ class NocDetailCard extends Component {
          false
       ))
     }
-    debugger
+    store.dispatch(prepareFinalObject("documentsContractNOC", []));
+    store.dispatch(prepareFinalObject("nocDocumentsDetailsRedux", {}));
     this.getDocumentsFromMDMS(nocType,isUpdate)
     store.dispatch(handleField(
         "search-preview",

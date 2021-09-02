@@ -923,7 +923,7 @@ class TriggerNOCContainer extends Component {
       let isValid = true
       let additionalDetails = getAdditionalDetails(nocType,this.props.preparedFinalObject)
       let { payloadDocumentFormat,NewNocAdditionalDetails } = this.props.preparedFinalObject
-      if(nocType === "NMA_NOC"){
+      if(nocType === "NMA_NOC" && this.props.type == 'new'){
         if(validateThirdPartyDetails(NewNocAdditionalDetails)){
           isValid = true
         }else{

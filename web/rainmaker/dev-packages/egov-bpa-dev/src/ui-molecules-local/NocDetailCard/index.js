@@ -334,12 +334,6 @@ export const fieldConfig = {
     }
   }
 };
-// const LightTooltip = withStyles((theme) => ({
-//   tooltip: {
-//     fontSize: 12
-//   }
-// }))(Tooltip);
-
 class NocDetailCard extends Component {
   constructor(props) {
     super(props);
@@ -349,10 +343,23 @@ class NocDetailCard extends Component {
       editableDocuments: null,
       nocType : '',
       isUpdate:false,
-      numberErr:false,
-      stringErr:false,
-      numberErrMsg:'',
-      stringErrMsg:''
+      monumentNameErr:false,
+      basementProposedErr:false,
+      distanceFromMonumentErr:false,
+      districtErr :false,
+      localityErr:false,
+      modernStatusErr:false,
+      monumentLocatedErr:false,
+      nearTheConstructionErr:false,
+      nearTheMonumentErr:false,
+      openSpaceParkErr:false,
+      protectedBoundryErr:false,
+      renovationErr:false,
+      stateNameErr:false,
+      surveryNoErr:false,
+      talukaErr:false,
+      numberErrMsg:'Please Enter Valid Number upto two Decimal Points',
+      stringErrMsg:'Please Enter Valid String'
     };
   }
   componentDidMount = () => {
@@ -418,41 +425,194 @@ class NocDetailCard extends Component {
     prepareFinalObject("nocDocumentDetailsUploadRedux", nocDocumentDetailsUploadRedux);
   };
 
-  onNmaFieldChange = (key,jsonPath) => e => {
-    // const stringJsonPaths = [""]
-    // const numberJsonPaths = [""]
-    // if(jsonPath.endsWith('MonumentName')){
-    //   if(e.target.value.match(stringPattern)){
-    //     this.setState({
-    //       stringErr:false
-    //     })
-    //     store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
-    //   }else{
-    //     this.setState({
-    //       stringErr:true
-    //     })
-    //     store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
-    //   }
-    // }else if(jsonPath.endsWith('MonumentName')){
-    //   if(e.target.value.match(numberPattern)){
-    //     this.setState({
-    //       numberErr:false
-    //     })
-    //     store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
+  onNmaFieldChange = (key,jsonPath,fieldName) => e => {
+    switch(fieldName){
+      case 'MonumentName':
+        if(e.target.value.match(stringPattern)){
+          this.setState({
+            monumentNameErr:false,
+          })
+        }else{
+          this.setState({
+            monumentNameErr:true,
+          })
+        }
+        break;
+      case 'State':
+        if(e.target.value.match(stringPattern)){
+          this.setState({
+            stateNameErr:false,
+          })
+        }else{
+          this.setState({
+            stateNameErr:true,
+          })
+        }
+        break;
+      case 'District':
+        if(e.target.value.match(stringPattern)){
+          this.setState({
+            districtErr:false,
+          })
+        }else{
+          this.setState({
+            districtErr:true,
+          })
+        }
+        break; 
+      case 'Taluka':
+        if(e.target.value.match(stringPattern)){
+          this.setState({
+            talukaErr:false,
+          })
+        }else{
+          this.setState({
+            talukaErr:true,
+          })
+        }
+        break;
+      case 'Locality':
+        if(e.target.value.match(stringPattern)){
+          this.setState({
+            localityErr:false,
+          })
+        }else{
+          this.setState({
+            localityErr:true,
+          })
+        }
+        break;
+      case 'DistanceFromMonument':
+        if(e.target.value.match(numberPattern)){
+          this.setState({
+            distanceFromMonumentErr:false,
+          })
+        }else{
+          this.setState({
+            distanceFromMonumentErr:true,
+          })
+        }
+        break; 
+        case 'ProtectedBountryWall':
+          if(e.target.value.match(numberPattern)){
+            this.setState({
+              protectedBoundryErr:false,
+            })
+          }else{
+            this.setState({
+              protectedBoundryErr:true,
+            })
+          }
+          break; 
+        case 'BasementProposed':
+          if(e.target.value.match(stringPattern)){
+            this.setState({
+              basementProposedErr:false,
+            })
+          }else{
+            this.setState({
+              basementProposedErr:true,
+            })
+          }
+          break
+        case 'DetailsOfRepairAndRenovation':
+          if(e.target.value.match(stringPattern)){
+            this.setState({
+              renovationErr:false,
+            })
+          }else{
+            this.setState({
+              renovationErr:true,
+            })
+          }
+          break;
 
-    //   }else{
-    //     this.setState({
-    //       numberErr:true
-    //     })
-    //     store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
-    //   }
-    // }else{
-    //   this.setState({
-    //     numberErr:true,
-    //     stringErr:false
-    //   })
-    //   store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
-    // }
+        case 'PlotSurveyNo':
+          if(e.target.value.match(numberPattern)){
+            this.setState({
+              surveryNoErr:false,
+            })
+          }else{
+            this.setState({
+              surveryNoErr:true,
+            })
+          }
+          break;
+        case 'NearTheMonument':
+          if(e.target.value.match(numberPattern)){
+            this.setState({
+              nearTheMonumentErr:false,
+            })
+          }else{
+            this.setState({
+              nearTheMonumentErr:true,
+            })
+          }
+          break;
+        case 'NearTheSiteConstructionRelatedActivity':
+          if(e.target.value.match(numberPattern)){
+            this.setState({
+              nearTheConstructionErr:false,
+            })
+          }else{
+            this.setState({
+              nearTheConstructionErr:true,
+            })
+          }
+          break;
+        case 'WhetherMonumentIsLocatedWithinLimitOf':
+          if(e.target.value.match(stringPattern)){
+            this.setState({
+              monumentLocatedErr:false,
+            })
+          }else{
+            this.setState({
+              monumentLocatedErr:true,
+            })
+          }
+          break;
+        case 'StatusOfModernConstructions':
+          if(e.target.value.match(stringPattern)){
+            this.setState({
+              modernStatusErr:false,
+            })
+          }else{
+            this.setState({
+              modernStatusErr:true,
+            })
+          }
+          break;
+
+        case 'OpenSpaceOrPark':
+          if(e.target.value.match(stringPattern)){
+            this.setState({
+              openSpaceParkErr:false,
+            })
+          }else{
+            this.setState({
+              openSpaceParkErr:true,
+            })
+          }
+          break;                      
+      default:
+        this.setState({
+          monumentNameErr:false,
+          basementProposedErr:false,
+          distanceFromMonumentErr:false,
+          districtErr :false,
+          localityErr:false,
+          modernStatusErr:false,
+          monumentLocatedErr:false,
+          nearTheConstructionErr:false,
+          nearTheMonumentErr:false,
+          openSpaceParkErr:false,
+          protectedBoundryErr:false,
+          renovationErr:false,
+          stateNameErr:false,
+          surveryNoErr:false,
+          talukaErr:false,
+        })  
+    }
     store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
   };
 
@@ -483,8 +643,8 @@ class NocDetailCard extends Component {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.MonumentName.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.MonumentName`}
-              onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.MonumentName")}
-            /><span class="MuiFormLabel-asterisk">Errorfff</span>
+              onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.MonumentName","MonumentName")}
+            />{this.state.monumentNameErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
             </Grid>
           <Grid item xs={6}>
             <LabelContainer style={{
@@ -498,8 +658,8 @@ class NocDetailCard extends Component {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.State.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`}
-              onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.State")}
-            />
+              onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.State","State")}
+            />{this.state.stateNameErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
           </Grid>
         </Grid>
         <Grid container="true" spacing={12}>
@@ -515,8 +675,8 @@ class NocDetailCard extends Component {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.District.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.District`}
-            onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.District")}
-            />
+            onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.District","District")}
+            />{this.state.districtErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
           </Grid>
           <Grid item xs={6}>
             <LabelContainer style={{
@@ -530,8 +690,8 @@ class NocDetailCard extends Component {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.Taluka.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Taluka`}
-              onChange={ this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Taluka")}
-            />
+              onChange={ this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Taluka","Taluka")}
+            />{this.state.talukaErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
           </Grid>
         </Grid>
         <Grid container="true" spacing={12}>
@@ -547,8 +707,8 @@ class NocDetailCard extends Component {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.Locality.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Locality`}
-              onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Locality")}
-            />
+              onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Locality","Locality")}
+            />{this.state.localityErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
           </Grid>
         </Grid>
         <Grid container="true" spacing={12} style={{marginTop: "10px"}} >
@@ -574,8 +734,8 @@ class NocDetailCard extends Component {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.DistanceFromTheMainMonument.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument`}
-            onChange={this.onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument")}
-            />
+            onChange={this.onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument","DistanceFromMonument")}
+            />{this.state.distanceFromMonumentErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
           </Grid>
         <Grid item xs={6}>
           <LabelContainer style={{
@@ -589,8 +749,8 @@ class NocDetailCard extends Component {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.DistanceFromTheProtectedBoundaryWall.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall`}
-            onChange={ this.onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall")}
-          />
+            onChange={ this.onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall","ProtectedBountryWall")}
+          />{this.state.protectedBoundryErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
         </Grid>
         </Grid>
       <Grid container="true" spacing={12} style={{marginTop: "10px"}}>
@@ -651,8 +811,8 @@ class NocDetailCard extends Component {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.BasementIfAnyProposedWithDetails.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.BasementIfAnyProposedWithDetails`}
-              onChange={this.onNmaFieldChange(key,"BasementIfAnyProposedWithDetails")}
-            />
+              onChange={this.onNmaFieldChange(key,"BasementIfAnyProposedWithDetails","BasementProposed")}
+            />{this.state.basementProposedErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
           </Grid>
           <Grid item xs={6}>
             <LabelContainer style={{
@@ -666,8 +826,8 @@ class NocDetailCard extends Component {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.DetailsOfRepairAndRenovation.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DetailsOfRepairAndRenovation`}
-              onChange={this.onNmaFieldChange(key,"DetailsOfRepairAndRenovation")}
-            />
+              onChange={this.onNmaFieldChange(key,"DetailsOfRepairAndRenovation","DetailsOfRepairAndRenovation")}
+            />{this.state.renovationErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
           </Grid>
         </Grid>
 
@@ -684,8 +844,8 @@ class NocDetailCard extends Component {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.PlotSurveyNo.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.PlotSurveyNo`}
-              onChange={this.onNmaFieldChange(key,"PlotSurveyNo")}
-            />
+              onChange={this.onNmaFieldChange(key,"PlotSurveyNo","PlotSurveyNo")}
+            />{this.state.surveryNoErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
           </Grid>
         </Grid>
 
@@ -712,8 +872,8 @@ class NocDetailCard extends Component {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.NearTheMonument.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument`}
-              onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument")}
-            />
+              onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument","NearTheMonument")}
+            />{this.state.nearTheMonumentErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
           </Grid>
           <Grid item xs={6}>
             <LabelContainer style={{
@@ -727,8 +887,8 @@ class NocDetailCard extends Component {
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.NearTheSiteConstructionRelatedActivity.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity`}
-              onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity")}
-            />
+              onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity","NearTheSiteConstructionRelatedActivity")}
+            />{this.state.nearTheConstructionErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
           </Grid>
         </Grid>
         <Grid container="true" spacing={12}>
@@ -744,8 +904,8 @@ class NocDetailCard extends Component {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf`}
-            onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf")}
-          />
+            onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf","WhetherMonumentIsLocatedWithinLimitOf")}
+          />{this.state.monumentLocatedErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
         </Grid>
         <Grid item xs={6}>
           <LabelContainer style={{
@@ -788,8 +948,8 @@ class NocDetailCard extends Component {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.StatusOfModernConstructions.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions`}
-            onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions")}
-          />
+            onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions","StatusOfModernConstructions")}
+          />{this.state.modernStatusErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
         </Grid>
         <Grid item xs={6}>
           <LabelContainer style={{
@@ -803,8 +963,8 @@ class NocDetailCard extends Component {
             style={{ marginRight: "15px" }}
             placeholder={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.placeholder}
             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea`}
-            onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea")}
-          />
+            onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea","OpenSpaceOrPark")}
+          />{this.state.openSpaceParkErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
         </Grid>
       </Grid>
 

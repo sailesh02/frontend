@@ -9,7 +9,7 @@ import {
 import { Dialog, DialogContent } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { withStyles } from "@material-ui/core/styles";
-import { UploadMultipleFiles } from "egov-ui-framework/ui-molecules";
+import { UploadMultipleFiles,TextfieldWithIcon } from "egov-ui-framework/ui-molecules";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 
@@ -21,6 +21,36 @@ const styles = theme => ({
 });
 
 const fieldConfig = {
+  token: {
+    label: {
+      labelName: "Token",
+      labelKey: "CORE_COMMON_TOKEN_LABEL"
+    },
+    placeholder: {
+      labelName: "Select Token",
+      labelKey: "CORE_COMMON_SELECT_TOKEN_LABEL"
+    }
+  },
+  certificate: {
+    label: {
+      labelName: "Certificate",
+      labelKey: "CORE_COMMON_CERTIFICATE_LABEL"
+    },
+    placeholder: {
+      labelName: "Select Certificate",
+      labelKey: "CORE_COMMON_SELECT_CERTIFICATE_LABEL"
+    }
+  },
+  password: {
+    label: {
+      labelName: "Password",
+      labelKey: "CORE_COMMON_PASSWORD_LABEL"
+    },
+    placeholder: {
+      labelName: "Select assignee Name",
+      labelKey: "CORE_COMMON_PASSWORD_LABEL"
+    }
+  },
   approverName: {
     label: {
       labelName: "Assignee Name",
@@ -92,6 +122,9 @@ class ActionDialog extends React.Component {
       dropDownData,
       handleFieldChange,
       onButtonClick,
+      getCertificateList,
+      tokensArray,
+      certicatesArray,
       dialogData,
       dataPath
     } = this.props;
@@ -261,6 +294,91 @@ class ActionDialog extends React.Component {
                       jsonPath={wfDocumentsPath}
                       maxFileSize={5000}
                     />
+                    <Grid
+                      item
+                      sm="12"
+                      style={{
+                        marginTop: 16
+                      }}
+                    >
+                      <TextFieldContainer
+                        select={true}
+                        style={{ marginRight: "15px" }}
+                        label={fieldConfig.token.label}
+                        placeholder={fieldConfig.token.placeholder}
+                        data={tokensArray}
+                        optionValue="value"
+                        optionLabel="label"
+                        hasLocalization={false}
+                        onChange={e =>{
+                          handleFieldChange(
+                            `signature.token`,
+                            e.target.value
+                          )
+                          getCertificateList(e)
+                        }}
+                        jsonPath={`signature.token`}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      sm="12"
+                      style={{
+                        marginTop: 16
+                      }}
+                    >
+                      <TextFieldContainer
+                        select={true}
+                        style={{ marginRight: "15px" }}
+                        label={fieldConfig.certificate.label}
+                        placeholder={fieldConfig.certificate.placeholder}
+                        data={certicatesArray}
+                        optionValue="value"
+                        optionLabel="label"
+                        hasLocalization={false}
+                        onChange={e =>{
+                          handleFieldChange(
+                            `signature.certificate`,
+                            e.target.value
+                          )
+                        }}
+                        jsonPath={`signature.certificate`}
+                      />
+                    </Grid>
+
+                     <Grid item
+                    sm={12}
+                    style={{
+                      marginTop: 12
+                    }}>
+                  <LabelContainer style={{
+                      fontSize: '11px',
+                      fontWeight: 500
+                  }}
+                  labelName={"CORE_COMMON_PASSWORD_LABEL"}
+                    labelKey={"CORE_COMMON_PASSWORD_LABEL"} /><span>&thinsp;*</span>
+                  </Grid>
+                  <form style={{width:"100%"}} autocomplete="off">
+                  <Grid
+                    item
+                    sm={12}
+                    style={{
+                      marginTop: 12
+                    }}>
+                    <TextfieldWithIcon
+                        type ="password"
+                        style={{ marginRight: "15px" }}
+                        onChange={e =>{
+                          handleFieldChange(
+                            `signature.password`,
+                            e.target.value
+                          )
+                        }}
+                        jsonPath={`signature.password`}
+                        hasLocalization={false}
+                      />
+                  </Grid>
+                  </form>
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                       <Button
                         variant={"contained"}

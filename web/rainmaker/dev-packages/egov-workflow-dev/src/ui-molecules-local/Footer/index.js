@@ -4,7 +4,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo,getAccessToken,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import set from "lodash/set";
@@ -16,12 +16,29 @@ import {
 } from "../../ui-utils/commons";
 import { getDownloadItems } from "./downloadItems";
 import "./index.css";
+import axios from 'axios';
+
+const authToken = getAccessToken();
+let RequestInfo = {
+  apiId: "Rainmaker",
+  ver: ".01",
+  // ts: getDateInEpoch(),
+  action: "_search",
+  did: "1",
+  key: "",
+  msgId: `20170310130900|${getLocale()}`,
+  requesterId: "",
+  authToken
+};
+let customRequestInfo = JSON.parse(getUserInfo())
 
 class Footer extends React.Component {
   state = {
     open: false,
     data: {},
-    employeeList: []
+    employeeList: [],
+    tokensArray:[],
+    certicatesArray :[]
     //responseLength: 0
   };
 
@@ -58,6 +75,186 @@ class Footer extends React.Component {
       menu: getDownloadItems(status, applicationNumber, state).printMenu
     };
   };
+
+  getTokenList = () => {
+    this.props.showSpinner();
+    RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+    let body =  Object.assign(
+      {},
+      {
+        RequestInfo,
+        "tenantId":getTenantId(),
+        "responseData":null
+      }
+    );
+
+    axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+     })
+      .then(response => {
+        // response.data.input
+      })
+      .catch(error => {
+        let response = {
+          "ResponseInfo":null,
+          "input":{
+          "encryptedRequest":"XXXX",
+              "encryptionKeyId":"YYYYY"
+          }
+        } 
+        let body = response.input
+        axios.post("/.emudhra.com:26769/DSC/ListToken", body, { // to get R1 R2
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+         })
+          .then(response => {
+            // response.responseData
+          })
+          .catch(error => {
+            let response = {
+              "responseData": "QuyKW0m6EdBEuTltdWrj2rA5O77bukrGcxlpp4atnn0KoadBXlTZXoEpHp3Q3Qxne1pcmXUSBedS3Ocj3/5Nqjtj6Q1QuqQxo1yMtoOmeGjlilICxaqs9ldgRu8rlbuXrzeip6VMqMCEM+f21+tKf3c4UKWd6/gYOg8rG+37HAVDRAjz21HECLLP2lq3bThBTIPog74D8Lvs4MHXE7D28kd2znHny2v/r3lGnmLxmzYlMiBUlYPnPQa8WSyOROpfXNDnD0/fgiIUuNA82mXC7F7x4VHf+GYj94aldkeSE7MKSqDPRsSp3/4gJ4Y8bHNa",
+              "status": 1,
+              "errorMessage": null,
+              "version": "3.1.0.0",
+              "errorCode": null
+             }
+
+             RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+             let body =  Object.assign(
+               {},
+                {
+                 RequestInfo,
+                 "tenantId":getTenantId(),
+                 "responseData":response.responseData
+                }
+             );
+            axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getTokens", body, { // to get R1 R2
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+             })
+              .then(response => {
+                // response.responseData
+              })
+              .catch(error => { //will return tokens
+                let response = {
+                  "ResponseInfo":null,
+                  "tokens":[
+                  "Token 1",
+                      "Token 2"
+                  ]
+                  } 
+                let requiredTokenFormat = response.tokens.map (token => {
+                  return {
+                    label : token,
+                    value : token
+                  }
+                }) 
+
+                this.setState({
+                  tokensArray : requiredTokenFormat,
+                })
+                this.props.hideSpinner();
+                this.getCertificateList({target:{value:requiredTokenFormat[0].label}}) 
+              });
+          });
+      });
+
+  }
+
+  getCertificateList = (token) => {
+    this.props.showSpinner();
+    RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+    let body =  Object.assign(
+      {},
+      {
+        RequestInfo,
+        "tenantId":getTenantId(),
+        "responseData":null,
+        "tokenDisplayName":token.target.value
+      }
+    );
+
+    axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+     })
+      .then(response => {
+        // response.data.input
+      })
+      .catch(error => {
+        let response = {
+          "ResponseInfo":null,
+          "input":{
+          "encryptedRequest":"XXXX",
+          "encryptionKeyId":"YYYYY"
+          }
+          }
+        let body = response.input
+        axios.post("/.emudhra.com:26769/DSC/ListCertificate", body, { // to get R1 R2
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+         })
+          .then(response => {
+            // response.responseData
+          })
+          .catch(error => {
+            let response = {
+              "responseData": "QuyKW0m6EdBEuTltdWrj2rA5O77bukrGcxlpp4atnn0KoadBXlTZXoEpHp3Q3Qxne1pcmXUSBedS3Ocj3/5Nqjtj6Q1QuqQxo1yMtoOmeGjlilICxaqs9ldgRu8rlbuXrzeip6VMqMCEM+f21+tKf3c4UKWd6/gYOg8rG+37HAVDRAjz21HECLLP2lq3bThBTIPog74D8Lvs4MHXE7D28kd2znHny2v/r3lGnmLxmzYlMiBUlYPnPQa8WSyOROpfXNDnD0/fgiIUuNA82mXC7F7x4VHf+GYj94aldkeSE7MKSqDPRsSp3/4gJ4Y8bHNa",
+              "status": 1,
+              "errorMessage": null,
+              "version": "3.1.0.0",
+              "errorCode": null
+             }
+
+             RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+             let body =  Object.assign(
+               {},
+                {
+                 RequestInfo,
+                 "tenantId":getTenantId(),
+                  responseData:response.responseData,
+                  tokenDisplayName:token.target.name
+                }
+             );
+            axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getCertificate", body, { // to get R1 R2
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+             })
+              .then(response => {
+                // response.responseData
+              })
+              .catch(error => { //will return tokens
+                let response = {
+                  "ResponseInfo":null,
+                  "certificates":[
+                  {
+                  "keyId":"XXXX",
+                  "commonName":"YYYYY",
+                  "certificateDate":"ZZZZZ"
+                  },
+                  {
+                  "keyId":"XXXX",
+                  "commonName":"YYYYY",
+                  "certificateDate":"ZZZZZ"
+                  }
+                  ]
+                  } 
+                let requiredCertificateFormat = response.certificates.map (certificate => {
+                  return {
+                    label : certificate.commonName,
+                    value : certificate.keyId
+                  }
+                }) 
+                this.setState({
+                  certicatesArray : requiredCertificateFormat,
+                  // selectedCeritificate : requiredCertificateFormat[0].label
+                })
+                this.props.hideSpinner();
+              });
+          });
+      });
+  }
 
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
@@ -137,6 +334,11 @@ class Footer extends React.Component {
         });
     }
 
+    if(item.moduleName === "BPA_OC1" || item.moduleName === "BPA_OC2" || item.moduleName === "BPA_OC3"
+    || item.moduleName === "BPA_OC4" || item.moduleName === "BPA1" || item.moduleName === "BPA2" ||
+    item.moduleName === "BPA3" || item.moduleName === "BPA4"){
+      this.getTokenList()
+    }
     this.setState({ open: true, data: item, employeeList });
   };
 
@@ -241,7 +443,7 @@ class Footer extends React.Component {
       state,
       dispatch
     } = this.props;
-    const { open, data, employeeList } = this.state;
+    const { open, data, employeeList,tokensArray,certicatesArray } = this.state;
     const { isDocRequired } = data;
     const appName = process.env.REACT_APP_NAME;
     const downloadMenu =
@@ -381,6 +583,9 @@ class Footer extends React.Component {
           open={open}
           onClose={this.onClose}
           dialogData={data}
+          tokensArray={tokensArray}
+          certicatesArray={certicatesArray}
+          getCertificateList={this.getCertificateList}
           dropDownData={employeeList}
           handleFieldChange={handleFieldChange}
           onButtonClick={onDialogButtonClick}

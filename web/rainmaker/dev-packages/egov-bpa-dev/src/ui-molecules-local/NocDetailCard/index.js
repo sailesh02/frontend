@@ -1314,7 +1314,7 @@ class NocDetailCard extends Component {
                 />
                 </div>
             <div>{this.getCard(card, index)}</div>  
-            <div>{card.nocType == 'FIRE_NOC' && 
+            <div>{card.nocType == 'NMA_NOC' && 
             this.getNMANOCForm(index,disabled)}</div>
           </div>) : (
              <Grid style={{paddingTop:'18px',paddingRight:'22px',paddingBottom:'18px',paddingLeft:'10px',marginBottom:'10px',width:'100%',backgroundColor: "#FFFFFF"}} container>

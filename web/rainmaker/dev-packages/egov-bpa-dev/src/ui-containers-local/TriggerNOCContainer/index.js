@@ -24,6 +24,7 @@ import get from "lodash/get";
 import {fieldConfig,numberPattern,stringPattern} from "../../ui-molecules-local/NocDetailCard"
 import { withStyles } from "@material-ui/core/styles";
 import commonConfig from "config/common.js";
+import {convertDateToEpoch} from "../../ui-config/screens/specs/utils/index"
 
 const styles = {
   documentTitle: {
@@ -917,8 +918,18 @@ class TriggerNOCContainer extends Component {
     this.getDocumentsFromMDMS(e.target.value)
   }
 
+  //to convert today's date into epoch
+  getSubmittedDataInEpoch = () => {
+    var d = new Date(),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+    let date =  [year, month, day].join('-');
+    return convertDateToEpoch(date)
+  }
 
   createNoc = async (nocType) => {
+    let submittedOn = this.getSubmittedDataInEpoch()
     if(nocType && nocType != ""){
       let isValid = true
       let additionalDetails = getAdditionalDetails(nocType,this.props.preparedFinalObject)
@@ -932,7 +943,7 @@ class TriggerNOCContainer extends Component {
       }
       if(isValid){
         let details = {
-          ...additionalDetails, ...NewNocAdditionalDetails
+          ...additionalDetails, ...NewNocAdditionalDetails,"SubmittedOn":submittedOn
         }
         let {BPA} = this.props.preparedFinalObject
         let payload = {
@@ -960,6 +971,7 @@ class TriggerNOCContainer extends Component {
             }
           })
           updateNocPayload[0].documents = payloadDocumentFormat,
+          updateNocPayload[0].additionalDetails.SubmittedOn = submittedOn
           response = await updateNoc(updateNocPayload[0])
          }else{
           response = await createNoc(payload);

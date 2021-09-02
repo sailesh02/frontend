@@ -148,10 +148,10 @@ class ActionDialog extends React.Component {
       let applicationStatus = get(state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
       state.screenConfiguration.preparedFinalObject, `${dataPath}.status`, "")
       isCertificateDetailsVisible = dialogHeader && dialogHeader.labelKey === "WF_APPROVE_APPLICATION" && dataPath == "BPA"
-      &&  applicationStatus == "APPROVAL_INPROGRESS" ? true : false
-      tokenPath = `${dataPath}.token`
-      passwordPath = `${dataPath}.password`
-      certificatePath = `${dataPath}.certificate`
+      && (applicationStatus == "APPROVAL_PENDING") ? true : false
+      tokenPath = `DsInfo.token`
+      passwordPath = `DsInfo.password`
+      certificatePath = `DsInfo.certificate`
     }
     
     let fullscreen = false;
@@ -314,8 +314,7 @@ class ActionDialog extends React.Component {
                     />
                     {isCertificateDetailsVisible && 
                       <React.Fragment>
-
-<Grid
+                    <Grid
                       item
                       sm="12"
                       style={{

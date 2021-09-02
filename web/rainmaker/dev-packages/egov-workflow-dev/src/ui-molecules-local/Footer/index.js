@@ -76,6 +76,135 @@ class Footer extends React.Component {
     };
   };
 
+  //actual API's
+
+  // getTokenList = () => {
+  //   this.props.showSpinner();
+  //   RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+  //   let body =  Object.assign(
+  //     {},
+  //     {
+  //       RequestInfo,
+  //       "tenantId":getTenantId(),
+  //       "responseData":null
+  //     }
+  //   );
+
+  //   axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
+  //     'Content-Type': 'application/json',
+  //     'Accept': 'application/json'
+  //    })
+  //     .then(response => { 
+  //       let body = response.data.input
+  //       axios.post("https://localhost.emudhra.com:26769/DSC/ListToken", body, { 
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json'
+  //        })
+  //         .then(response => {
+  //            RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+  //            let body =  Object.assign(
+  //              {},
+  //               {
+  //                RequestInfo,
+  //                "tenantId":getTenantId(),
+  //                "responseData":response.data.responseData
+  //               }
+  //            );
+  //           axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getTokens", body, { 
+  //             'Content-Type': 'application/json',
+  //             'Accept': 'application/json'
+  //            })
+  //             .then(response => {
+  //               let requiredTokenFormat = response && response.data && response.data.tokens.map (token => {
+  //                 return {
+  //                   label : token,
+  //                   value : token
+  //                 }
+  //               }) 
+
+  //               this.setState({
+  //                 tokensArray : requiredTokenFormat,
+  //               })
+  //               this.props.hideSpinner();
+  //               this.getCertificateList({target:{value:requiredTokenFormat[0].label}}) 
+  //             })
+  //             .catch(error => { 
+  //               this.props.hideSpinner();
+  //             });
+  //         })
+  //         .catch(error => {
+  //           this.props.hideSpinner();
+  //         });
+  //     })
+  //     .catch(error => {
+  //       this.props.hideSpinner();
+  //     });
+  // }
+
+  // getCertificateList = (token) => {
+  //   this.props.showSpinner();
+  //   RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+  //   let body =  Object.assign(
+  //     {},
+  //     {
+  //       RequestInfo,
+  //       "tenantId":getTenantId(),
+  //       "responseData":null,
+  //       "tokenDisplayName":token.target.value
+  //     }
+  //   );
+
+  //   axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
+  //     'Content-Type': 'application/json',
+  //     'Accept': 'application/json'
+  //    })
+  //     .then(response => {
+  //       let body = response.data.input
+  //       axios.post("https://localhost.emudhra.com:26769/DSC/ListCertificate", body, { // to get R1 R2
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json'
+  //        })
+  //         .then(response => {
+  //            RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+  //            let body =  Object.assign(
+  //              {},
+  //               {
+  //                RequestInfo,
+  //                "tenantId":getTenantId(),
+  //                 responseData:response.data.responseData,
+  //                 tokenDisplayName:token.target.name
+  //               }
+  //            );
+  //           axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getCertificate", body, { // to get R1 R2
+  //             'Content-Type': 'application/json',
+  //             'Accept': 'application/json'
+  //            })
+  //             .then(response => {
+  //               let requiredCertificateFormat = response && response.data && response.data.certificates && response.data.certificates.map (certificate => {
+  //                 return {
+  //                   label : certificate.commonName,
+  //                   value : certificate.keyId
+  //                 }
+  //               }) 
+  //               this.setState({
+  //                 certicatesArray : requiredCertificateFormat,
+  //               })
+  //               this.props.hideSpinner();
+  //             })
+  //             .catch(error => { 
+  //               this.props.hideSpinner();
+  //             });
+  //         })
+  //         .catch(error => {
+  //           this.props.hideSpinner();
+  //         });
+  //     })
+  //     .catch(error => {
+  //       this.props.hideSpinner();
+  //     });
+  // }
+
+  //for testing
   getTokenList = () => {
     this.props.showSpinner();
     RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};

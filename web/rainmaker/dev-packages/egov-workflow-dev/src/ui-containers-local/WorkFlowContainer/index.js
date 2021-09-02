@@ -141,7 +141,9 @@ class WorkFlowContainer extends React.Component {
       beforeSubmitHook
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
+    let isDsInfo = get(preparedFinalObject,'DsInfo')
     let data = get(preparedFinalObject, dataPath, []);
+    let payload
     console.log(updateUrl, moduleName, dataPath)
     if (moduleName === "NewTL") {
       if (getQueryArg(window.location.href, "edited")) {
@@ -225,11 +227,16 @@ class WorkFlowContainer extends React.Component {
         }
       }
       console.log(data, "nero data")
-
-      let payload = await httpRequest("post", updateUrl, "", [], {
-        [dataPath]: data
-      });
-
+      if(isDsInfo && (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4"|| moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4')){
+        payload = await httpRequest("post", updateUrl, "", [], {
+          [dataPath]: data,
+          "DsInfo":isDsInfo
+        });
+      }else{
+        payload = await httpRequest("post", updateUrl, "", [], {
+          [dataPath]: data
+        });
+      }
       this.setState({
         open: false
       });

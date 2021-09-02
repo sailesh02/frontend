@@ -332,7 +332,9 @@ class DocumentListNOC extends Component {
             fileName: file.name,
             fileStoreId,
             fileUrl: Object.values(fileUrl)[0],
-            isClickable :true
+            isClickable :true,
+            link: Object.values(fileUrl)[0],
+            title: file.name,
           }
         ]
       }

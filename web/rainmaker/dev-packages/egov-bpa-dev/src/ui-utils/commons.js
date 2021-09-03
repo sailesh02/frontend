@@ -2002,7 +2002,7 @@ export const nocapplicationUpdate = (state) => {
   if (Noc.length > 0) {
     let count = 0;
     for (let data = 0; data < Noc.length; data++) {
-      let documents = nocDocuments[data].documents;
+      // let documents = nocDocuments[data].documents;
       // set(Noc[data], "documents", documents);
       let response = httpRequest(
         "post",

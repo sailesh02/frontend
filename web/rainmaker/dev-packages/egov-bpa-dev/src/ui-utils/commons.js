@@ -1530,12 +1530,12 @@ export const handleFileUpload = (event, handleDocument, props) => {
 
 const updateNocApplication = async (state, dispatch, bpaAction) => {
   const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
-  let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocForPreview", []);
+  // let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocForPreview", []);
   if (Noc.length > 0) {
     let count = 0;
     for (let data = 0; data < Noc.length; data++) {
-      let documents = nocDocuments[data].documents;
-      set(Noc[data], "documents", documents);
+      // let documents = nocDocuments[data].documents;
+      // set(Noc[data], "documents", documents);
       // set(NOCData[data], "workflow.action", bpaAction)
       let response = await httpRequest(
         "post",

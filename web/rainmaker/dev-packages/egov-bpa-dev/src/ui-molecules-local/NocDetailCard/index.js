@@ -143,13 +143,13 @@ export const fieldConfig = {
       labelKey: "BPA_NMA_NOC_DISTRICT_PLACEHOLDER"
     }
   },
-  Taluka: {
+  Taluk: {
     label: {
-      labelName: "Taluka",
+      labelName: "Taluk",
       labelKey: "BPA_NMA_NOC_TALUKA_LABEL"
     },
     placeholder: {
-      labelName: "Enter Taluka Name",
+      labelName: "Enter Taluk Name",
       labelKey: "BPA_NMA_NOC_TALUKA_PLACEHOLDER"
     }
   },
@@ -461,7 +461,7 @@ class NocDetailCard extends Component {
           })
         }
         break; 
-      case 'Taluka':
+      case 'Taluk':
         if(e.target.value.match(stringPattern)){
           this.setState({
             talukaErr:false,
@@ -685,14 +685,14 @@ class NocDetailCard extends Component {
               fontSize: '11px',
               fontWeight: 500
             }}
-            labelName={fieldConfig.Taluka.label.labelName}
-            labelKey={fieldConfig.Taluka.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+            labelName={fieldConfig.Taluk.label.labelName}
+            labelKey={fieldConfig.Taluk.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
               disabled={disabled}
               style={{ marginRight: "15px" }}
-              placeholder={fieldConfig.Taluka.placeholder}
-              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Taluka`}
-              onChange={ this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Taluka","Taluka")}
+              placeholder={fieldConfig.Taluk.placeholder}
+              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Taluk`}
+              onChange={ this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Taluk","Taluk")}
             />{this.state.talukaErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
           </Grid>
         </Grid>

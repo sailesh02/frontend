@@ -1918,9 +1918,9 @@ export const validateThirdPartyDetails = (thirdPartyDetails) => {
           thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("District") && 
           thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['District'] !== undefined && 
           thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['District'] !== "" &&
-          thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("Taluka") &&
-          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Taluka'] !== undefined && 
-          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Taluka'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("Taluk") &&
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Taluk'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Taluk'] !== "" &&
           thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("Locality") &&
           thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Locality'] !== undefined && 
           thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Locality'] !== "" && 

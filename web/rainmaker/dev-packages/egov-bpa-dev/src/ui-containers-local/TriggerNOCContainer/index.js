@@ -200,7 +200,7 @@ class TriggerNOCContainer extends Component {
           })
         }
         break; 
-      case 'Taluka':
+      case 'Taluk':
         if(e.target.value.match(stringPattern)){
           this.setState({
             talukaErr:false,
@@ -423,13 +423,13 @@ class TriggerNOCContainer extends Component {
                 fontSize: '11px',
                 fontWeight: 500
               }}
-              labelName={fieldConfig.Taluka.label.labelName}
-              labelKey={fieldConfig.Taluka.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+              labelName={fieldConfig.Taluk.label.labelName}
+              labelKey={fieldConfig.Taluk.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
               <TextFieldContainer
                 style={{ marginRight: "15px" }}
-                placeholder={fieldConfig.Taluka.placeholder}
-                jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Taluka`}
-                onChange={ this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Taluka","Taluka")}
+                placeholder={fieldConfig.Taluk.placeholder}
+                jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Taluk`}
+                onChange={ this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Taluk","Taluk")}
               />{this.state.talukaErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
             </Grid>
           </Grid>

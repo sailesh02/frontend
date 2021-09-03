@@ -743,7 +743,7 @@ export const prepareNOCUploadData = async (state, dispatch) => {
       documentsContract.push(tempDoc[key]);
     });
   }
-  dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
+  store.dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
   let Noc = fetchFileDetails(get(
     state.screenConfiguration.preparedFinalObject,
     "Noc",
@@ -769,8 +769,8 @@ export const prepareNOCUploadData = async (state, dispatch) => {
       }
     })
   })
-  dispatch(prepareFinalObject("nocFinalCardsforPreview", finalCards));
-  dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
+  store.dispatch(prepareFinalObject("nocFinalCardsforPreview", finalCards));
+  store.dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
 
   if(finalCards && finalCards.length > 0){
     const scrutinyDetails = get(
@@ -793,7 +793,7 @@ export const prepareNOCUploadData = async (state, dispatch) => {
         ) 
       }
     })
-    dispatch(prepareFinalObject("requiredNocToTrigger", nocArray));
+    store.dispatch(prepareFinalObject("requiredNocToTrigger", nocArray));
   }
 
 };

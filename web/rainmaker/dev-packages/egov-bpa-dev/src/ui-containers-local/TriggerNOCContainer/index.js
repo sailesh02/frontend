@@ -19,13 +19,12 @@ import {
   getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../ui-utils/api";
-import { createNoc, updateNoc, validateThirdPartyDetails, getNocSearchResults, getAdditionalDetails,prepareNOCUploadDataAfterCreation } from "../../ui-utils/commons"
+import { createNoc, updateNoc, validateThirdPartyDetails, getNocSearchResults, getAdditionalDetails,prepareNOCUploadData } from "../../ui-utils/commons"
 import get from "lodash/get";
 import {fieldConfig,numberPattern,stringPattern} from "../../ui-molecules-local/NocDetailCard"
 import { withStyles } from "@material-ui/core/styles";
 import commonConfig from "config/common.js";
-import {convertDateToEpoch} from "../../ui-config/screens/specs/utils/index"
-
+import {convertDateToEpoch,prepareNocFinalCards} from "../../ui-config/screens/specs/utils/index"
 const styles = {
   documentTitle: {
     color: "rgba(0, 0, 0, 0.87)",
@@ -1011,7 +1010,8 @@ class TriggerNOCContainer extends Component {
           ))
     
           }   
-          prepareNOCUploadDataAfterCreation()
+          await prepareNOCUploadData(store.getState())
+          prepareNocFinalCards(store.getState());
       }else{
         store.dispatch(
           toggleSnackbar(

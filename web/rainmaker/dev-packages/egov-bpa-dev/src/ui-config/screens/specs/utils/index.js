@@ -29,6 +29,7 @@ import { edcrHttpRequest, httpRequest, wrapRequestBody } from "../../../../ui-ut
 import { getBpaSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
 import "./index.css";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
+import store from "ui-redux/store";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -4539,7 +4540,7 @@ export const prepareNocDocumentsView = async (state, dispatch) => {
       return obj;
     })
   });
-  dispatch(prepareFinalObject("nocDocumentDetailsPreview", documentsPreview));
+  store.dispatch(prepareFinalObject("nocDocumentDetailsPreview", documentsPreview));
   return documentsPreview;
 };
 
@@ -4723,7 +4724,7 @@ export const prepareNocFinalCards = async (state, dispatch, isVisibleTrue) => {
     }
 
 
-    dispatch(prepareFinalObject("nocfinalcards", finalNocDocs));
+    store.dispatch(prepareFinalObject("nocfinalcards", finalNocDocs));
 
   }
   let nocDocumentsContractFinal = await prepareNocDocumentsView(state, dispatch);
@@ -4783,7 +4784,7 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
 
     cards.sort(compare);
   }
-  dispatch(prepareFinalObject("nocForPreview", cards));
+  store.dispatch(prepareFinalObject("nocForPreview", cards));
 
 }
 export const compare = (a, b) => {

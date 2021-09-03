@@ -271,7 +271,7 @@ class NocDocDetailCard extends Component {
                   </div>
                   </LightTooltip>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                   <Typography
                     variant="h6"
                     gutterBottom
@@ -285,7 +285,20 @@ class NocDocDetailCard extends Component {
                   </div>
                   </LightTooltip>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    style={titleStyle}
+                  >
+                    File Type
+                  </Typography>
+                  
+                  <div style={fontStyle}>
+                    {!(doc && doc.documentType) ? "" :doc.documentType}
+                  </div>
+                </Grid>
+                <Grid item xs={2}>
                   <Typography
                     variant="h6"
                     gutterBottom

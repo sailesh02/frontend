@@ -879,13 +879,7 @@ if(filter){
       value : noc.code
     }
   })
-  
-  dispatch(handleField(
-    "search-preview",
-    "components.div.children.newNoc.props",
-    "nocList",
-    nocList
-  ))
+
   dispatch(handleField(
     "search-preview",
     "components.div.children.triggerNocContainer.props",
@@ -1147,16 +1141,6 @@ const screenConfig = {
           permitConditions: permitConditions,
           permitListSummary: permitListSummary
         }),
-        newNoc :{
-          uiFramework: "custom-containers-local",
-          componentPath: "NewNocContainer",
-          moduleName: "egov-bpa",
-          visible: true,
-          props: {
-            open:false,
-            nocList: []
-          }
-        },
         triggerNocContainer :{
           uiFramework: "custom-containers-local",
           componentPath: "TriggerNOCContainer",

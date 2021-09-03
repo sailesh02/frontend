@@ -132,11 +132,6 @@ const TextAreaContainer = Loadable({
   loading: () => <Loading />
 });
 
-const NewNocContainer = Loadable({
-  loader: () => import("./NewNocContainer"),
-  loading: () => <Loading />
-});
-
 const TriggerNOCContainer =  Loadable({
   loader: () => import("./TriggerNOCContainer"),
   loading: () => <Loading />
@@ -168,6 +163,5 @@ export {
   DownloadFileContainerForFI,
   PreviewContainer,
   TextAreaContainer,
-  NewNocContainer,
   TriggerNOCContainer
 };

@@ -1215,6 +1215,9 @@ class NocDetailCard extends Component {
   };
 
   triggerNoc = (nocType,isUpdate) => {
+    this.setState({
+      nocType : nocType
+    })
     if(!isUpdate){
       store.dispatch(handleField(
         "search-preview",
@@ -1418,41 +1421,26 @@ class NocDetailCard extends Component {
       requiredNocToTrigger[uploadedDocIndex]["documents"] = [fileObj];
       appDocumentList = [...requiredNocToTrigger];
     }
-    // if (Array.isArray(NOCData)) {
-    //   if (NOCData.length > 0) {
-    //     if (NOCData[0].documents) {
-    //       NOCData[0].documents.push(fileObj);
-    //     } else {
-    //       NOCData[0].documents = [fileObj];
-    //     }
-    //   }
-    // } else {
-    //   if (NOCData.documents) {
-    //     NOCData.documents.push(fileObj);
-    //   } else {
-    //     NOCData.documents = [fileObj];
-    //   }
-    // }
-    // prepareFinalObject("NOCData", NOCData);
-
     prepareFinalObject("requiredNocToTrigger", appDocumentList);
 
     prepareFinalObject("nocDocumentDetailsUploadRedux", appDocumentList);
-    // if(appDocumentList && appDocumentList.length > 0) {
-    //   for(let data = 0; data < Noc.length; data ++) {
-    //     Noc[data].documents = appDocumentList[data].documents
-    //     let response = httpRequest(
-    //       "post",
-    //       "/noc-services/v1/noc/_update",
-    //       "",
-    //       [],
-    //       { Noc: Noc[data] }
-    //     );
-    //   }
-      
-    // }
-    // prepareFinalObject("Noc", Noc);
   };
+
+  getOldDocuments = (docType) => {
+    let {Noc} = this.props.preparedFinalObject
+    let filteredNoc = Noc && Noc.length > 0 && Noc.filter( noc => {
+      if(noc.nocType == this.state.nocType){
+        return noc
+      }
+    })
+    let Nocdocuments = filteredNoc && filteredNoc.length > 0 && filteredNoc[0].documents && filteredNoc[0].documents
+    let documents = Nocdocuments && Nocdocuments.length > 0 && Nocdocuments.filter( doc => {
+      if(doc.documentType == docType ){
+        return doc
+      }
+    })
+    return documents
+  }
 
   prepareDocumentForRedux = async (documentsList) => {
     const {nocDocumentsDetailsRedux} = this.props.preparedFinalObject 
@@ -1500,6 +1488,7 @@ class NocDetailCard extends Component {
                nocDocumentsDetailsRedux[index] = {
                  documentType: docType.code,
                  documentCode: card.name,
+                 documents : this.getOldDocuments(docType.documentType) || [],
                  isDocumentRequired: card.required,
                  isDocumentTypeRequired: card.dropDownValues
                    ? card.dropDownValues.required
@@ -1517,25 +1506,9 @@ class NocDetailCard extends Component {
     let uploadedDocs = [];
     let fileTobeRemoved =
     requiredNocToTrigger[cardIndex].documents[uploadedDocIndex];
-
-    // if (Array.isArray(Noc)) {
-    //   if (Noc.length > 0) {
-    //     uploadedDocs = Noc[0].documents;
-    //     uploadedDocs = this.getFinalDocsAfterRemovingDocument(uploadedDocs, fileTobeRemoved);
-    //     Noc[0].documents = uploadedDocs;
-    //   }
-    // } else {
-    //   uploadedDocs = Noc.documents;
-    //   uploadedDocs = this.getFinalDocsAfterRemovingDocument(
-    //     uploadedDocs,
-    //     fileTobeRemoved
-    //   );
-    //   Noc.documents = uploadedDocs;
-    // }
-
     requiredNocToTrigger[cardIndex].documents.splice(uploadedDocIndex, 1);
     prepareFinalObject("Noc", Noc);
-    //uploadedDocs.map()
+    
     prepareFinalObject("requiredNocToTrigger", requiredNocToTrigger);
     prepareFinalObject("nocDocumentDetailsUploadRedux", requiredNocToTrigger);
 
@@ -1559,6 +1532,7 @@ class NocDetailCard extends Component {
 
     appDocumentList = [...requiredNocToTrigger];
     appDocumentList[key].dropDownValues.value = event.target.value;
+    
     prepareFinalObject("requiredNocToTrigger", appDocumentList);
     prepareFinalObject("nocDocumentDetailsUploadRedux", appDocumentList);
   };

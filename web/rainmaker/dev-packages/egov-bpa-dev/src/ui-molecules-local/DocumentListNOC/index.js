@@ -188,73 +188,10 @@ class DocumentListNOC extends Component {
           }
         });
     });
+    
     prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux);
     prepareFinalObject("payloadDocumentFormat", []);
   };
-
-  // componentWillReceiveProps = (nextProps) => {
-  //   const {
-  //     documentsList,
-  //     nocDocumentsDetailsRedux = {},
-  //     prepareFinalObject
-  //   } = nextProps;
-  //   let index = 0;
-  //   documentsList.forEach(docType => {
-  //     docType.cards &&
-  //       docType.cards.forEach(card => {
-  //         if (card.subCards) {
-  //           card.subCards.forEach(subCard => {
-  //             let oldDocType = get(
-  //               nocDocumentsDetailsRedux,
-  //               `[${index}].documentType`
-  //             );
-  //             let oldDocCode = get(
-  //               nocDocumentsDetailsRedux,
-  //               `[${index}].documentCode`
-  //             );
-  //             let oldDocSubCode = get(
-  //               nocDocumentsDetailsRedux,
-  //               `[${index}].documentSubCode`
-  //             );
-  //             if (
-  //               oldDocType != docType.code ||
-  //               oldDocCode != card.name ||
-  //               oldDocSubCode != subCard.name
-  //             ) {
-  //               nocDocumentsDetailsRedux[index] = {
-  //                 documentType: docType.code,
-  //                 documentCode: card.name,
-  //                 documentSubCode: subCard.name
-  //               };
-  //             }
-  //             index++;
-  //           });
-  //         } else {
-  //           let oldDocType = get(
-  //             nocDocumentsDetailsRedux,
-  //             `[${index}].documentType`
-  //           );
-  //           let oldDocCode = get(
-  //             nocDocumentsDetailsRedux,
-  //             `[${index}].documentCode`
-  //           );
-  //           if (oldDocType != docType.code || oldDocCode != card.name) {
-  //             nocDocumentsDetailsRedux[index] = {
-  //               documentType: docType.code,
-  //               documentCode: card.name,
-  //               isDocumentRequired: card.required,
-  //               isDocumentTypeRequired: card.dropDownValues
-  //                 ? card.dropDownValues.required
-  //                 : false
-  //             };
-  //           }
-  //           index++;
-  //         }
-  //       });
-  //   });
-  //   prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux);
-  //   prepareFinalObject("payloadDocumentFormat", []);
-  // }
 
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
@@ -295,72 +232,66 @@ class DocumentListNOC extends Component {
           })
         }
       });
-
-      let diffDocs = [];
-      // documentsFormat && documentsFormat.length > 0 && documentsFormat.forEach(nocDocs => {
-      //   if (nocDocs) {
-      //     diffDocs.push(nocDocs);
-      //   }
-      // });
-
-      // if (uploadingDocuments && uploadingDocuments.length > 0) {
-      //   uploadingDocuments.forEach(tDoc => {
-      //     diffDocs.push(tDoc);
-      //   })
-      // };
       this.props.prepareFinalObject("payloadDocumentFormat",uploadingDocuments);
-
-      // if (documentsFormat && documentsFormat.length > 0) {
-      //   documentsFormat = diffDocs;
-      //   prepareFinalObject("payloadDocumentFormat",documentsFormat);
-      // }
     }
   }
 
-  handleDocument = async (file, fileStoreId) => {
-    let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, nocDocumentsDetailsRedux, preparedFinalObject } = this.props;
-    const { payloadDocumentFormat } = preparedFinalObject
-    const fileUrl = await getFileUrlFromAPI(fileStoreId);
+handleDocument = async (file, fileStoreId) => {
+  let { uploadedDocIndex } = this.state;
+  const { prepareFinalObject, nocDocumentsDetailsRedux, preparedFinalObject,wfState } = this.props;
+  const { payloadDocumentFormat } = preparedFinalObject
+  const fileUrl = await getFileUrlFromAPI(fileStoreId);
+ 
+  let appDocumentList = {}
+  let fileObj = {
+    fileName: file.name,
+    fileStoreId,
+    fileUrl: Object.values(fileUrl)[0],
+    isClickable: true,
+    additionalDetails: {
+      uploadedBy: getLoggedinUserRole(wfState),
+      uploadedTime: new Date().getTime()
+    }
+  }
 
-    let appDocumentList = {
+  if (nocDocumentsDetailsRedux[uploadedDocIndex] &&
+    nocDocumentsDetailsRedux[uploadedDocIndex].documents) {
+
+      nocDocumentsDetailsRedux[uploadedDocIndex].documents.push(fileObj);
+    appDocumentList = {
+      ...nocDocumentsDetailsRedux
+    };
+
+  } else {
+    appDocumentList = {
       ...nocDocumentsDetailsRedux,
       [uploadedDocIndex]: {
         ...nocDocumentsDetailsRedux[uploadedDocIndex],
         documents: [
-          {
-            fileName: file.name,
-            fileStoreId,
-            fileUrl: Object.values(fileUrl)[0],
-            isClickable :true,
-            link: Object.values(fileUrl)[0],
-            title: file.name,
-          }
+          fileObj
         ]
       }
     }
-    prepareFinalObject("nocDocumentsDetailsRedux", appDocumentList );
-  };
+  }
+  
+  prepareFinalObject("nocDocumentsDetailsRedux", appDocumentList );
+};
 
-  removeDocument = remDocIndex => {
-    const { prepareFinalObject, preparedFinalObject } = this.props;
+removeDocument = (remDocIndex, docIndex) => {
+    const { prepareFinalObject, preparedFinalObject,nocDocumentsDetailsRedux} = this.props;
     const { payloadDocumentFormat } = preparedFinalObject;
-    // let updatedDocuments = []
-    // updatedDocuments = payloadDocumentFormat && payloadDocumentFormat.length > 0 && payloadDocumentFormat.map( (doc,index) => {
-    //   if(index != remDocIndex){
-    //     return doc
-    //   }
-    // })
-    let updatedDocuments = payloadDocumentFormat
-    updatedDocuments.splice(remDocIndex)
+    for (let key in nocDocumentsDetailsRedux) {
+      if (key === `${remDocIndex}`) {
+        nocDocumentsDetailsRedux[key].documents.splice(docIndex, 1);
+      }
+    }
+    // prepareFinalObject(
+    //   `payloadDocumentFormat`,
+    //   nocDocumentsDetailsRedux
+    // );
     prepareFinalObject(
-      `payloadDocumentFormat`,
-      updatedDocuments
-    );
-
-    prepareFinalObject(
-      `nocDocumentsDetailsRedux.${remDocIndex}.documents`,
-      undefined
+      `nocDocumentsDetailsRedux`,
+      nocDocumentsDetailsRedux
     );
     this.forceUpdate();
   };
@@ -375,6 +306,7 @@ class DocumentListNOC extends Component {
         dropDownValues: { value: event.target.value }
       }
     }
+    
     prepareFinalObject(`nocDocumentsDetailsRedux`, appDocumentList);
   };
 
@@ -471,7 +403,11 @@ const mapStateToProps = state => {
     "nocDocumentsDetailsRedux",
     {}
   );
-  return {preparedFinalObject, nocDocumentsDetailsRedux, moduleName };
+  const wfState = get(
+    screenConfiguration.preparedFinalObject.applicationProcessInstances,
+    "state"
+  );
+  return {preparedFinalObject, nocDocumentsDetailsRedux, moduleName,wfState };
 };
 
 const mapDispatchToProps = dispatch => {

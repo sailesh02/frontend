@@ -176,6 +176,7 @@ class TriggerNOCContainer extends Component {
             monumentNameErr:true,
           })
         }
+        store.dispatch(prepareFinalObject(`NewNocAdditionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`,e.target.value)) 
         break;
       case 'State':
         if(e.target.value.match(stringPattern)){
@@ -394,6 +395,7 @@ class TriggerNOCContainer extends Component {
               labelKey={fieldConfig.State.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
               <TextFieldContainer
                 required= "true"
+                value = "Odisha"
                 style={{ marginRight: "15px" }}
                 placeholder={fieldConfig.State.placeholder}
                 jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`}

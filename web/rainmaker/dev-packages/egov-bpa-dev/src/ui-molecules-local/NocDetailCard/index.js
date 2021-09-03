@@ -437,6 +437,7 @@ class NocDetailCard extends Component {
             monumentNameErr:true,
           })
         }
+        store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`,'Odisha'))
         break;
       case 'State':
         if(e.target.value.match(stringPattern)){
@@ -655,6 +656,7 @@ class NocDetailCard extends Component {
             labelKey={fieldConfig.State.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
               disabled={disabled}
+              value = "Odisha"
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.State.placeholder}
               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`}

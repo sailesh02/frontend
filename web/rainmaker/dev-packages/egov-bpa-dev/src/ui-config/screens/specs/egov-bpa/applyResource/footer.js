@@ -346,10 +346,24 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 3) {
+    
     let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
     let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
     let noc = get(state.screenConfiguration.preparedFinalObject,"Noc",[]) 
+   
+    let nocAlreadyCreated = noc && noc.length > 0 && noc.map( nc => { // to get noc's created during BPA creation
+      return nc.nocType
+    })
     let isValid = true
+    // add required nocs and already created noc's
+    let mergedNocs = requiredNocs
+    nocAlreadyCreated && nocAlreadyCreated.length > 0 && nocAlreadyCreated.map( noc => {
+      if(!mergedNocs.includes(noc)){
+        mergedNocs.push(noc)
+      }
+    })
+
+    // to check NMA noc details if NMA NOC is required
     if(requiredNocs && requiredNocs.length > 0 && requiredNocs.includes("NMA_NOC")){
       let NMANoc = noc && noc.length > 0 && noc.filter( noc => {
         if(noc.nocType == "NMA_NOC"){
@@ -373,7 +387,9 @@ const callBackForNext = async (state, dispatch) => {
        isValid = true
       }
     }
-    if(((noc.length == requiredNocs.length) || (noc.length > requiredNocs.length)) && isValid){
+
+    // to check if all required NOC's are triggered
+    if((noc.length == mergedNocs.length) && isValid){
       const documentsFormat = Object.values(
         get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
       );

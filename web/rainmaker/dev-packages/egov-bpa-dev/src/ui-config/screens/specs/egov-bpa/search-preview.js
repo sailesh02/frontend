@@ -825,7 +825,17 @@ const setSearchResponse = async (
       }
     }
   }
-
+  //only architech can add noc
+  if(ifUserRoleExists("BPA_ARCHITECT")){
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.nocDetailsApply.children.cardContent.children.headerDiv.children.header.children.addNocButton",
+        "visible",
+        true
+      )
+    );
+  }
 };
 
 export const getNocList = async (state,dispatch,filter) => {

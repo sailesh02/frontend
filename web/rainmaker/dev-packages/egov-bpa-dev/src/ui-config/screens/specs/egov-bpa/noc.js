@@ -122,7 +122,7 @@ export const nocDetailsSearch = getCommonGrayCard({
                 sm: 12,
                 align: "right"
               },
-              visible:true,
+              visible:false,
               props: {
                 variant: "contained",
                 style: {
@@ -137,13 +137,6 @@ export const nocDetailsSearch = getCommonGrayCard({
                 
               },
               children: {
-                // buttonIcon: {
-                //   uiFramework: "custom-atoms",
-                //   componentPath: "Icon",
-                //   props: {
-                //     iconName: "keyboard_arrow_left"
-                //   }
-                // },
                  buttonLabel: getLabel({
                   labelKey: "Add Noc"
                 })

@@ -1010,10 +1010,10 @@ class TriggerNOCContainer extends Component {
               "open",
               false
           ))
-    
-          }   
           await prepareNOCUploadData(store.getState())
           prepareNocFinalCards(store.getState());
+        }   
+          
       }else{
         store.dispatch(
           toggleSnackbar(

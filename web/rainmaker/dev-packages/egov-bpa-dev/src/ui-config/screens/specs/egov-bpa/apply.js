@@ -45,7 +45,7 @@ import jp from "jsonpath";
 import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
 import { changeStep } from "./applyResource/footer";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { nocDetailsApply } from "./noc";
+import { nocDetailsApplyBPA } from "./noc";
 import { getNocList } from "../egov-bpa/search-preview"
 
 export const stepsData = [
@@ -126,7 +126,7 @@ export const formwizardFourthStep = {
   children: {
     documentDetails,
     additionalDocsInformation,
-    nocDetailsApply
+    nocDetailsApplyBPA
   },
   visible: false
 };

@@ -127,6 +127,14 @@ const MultiDownloadCard = Loadable({
   loader: () => import("./NocDocDetailCard"),
   loading: () => <Loading />
  });
+ const NocDetailCardBPA = Loadable({
+  loader: () => import("./NocDetailCardBPA"),
+  loading: () => <Loading />
+ });
+ const NocDocDetailCardBPA = Loadable({
+  loader: () => import("./NocDocDetailCardBPA"),
+  loading: () => <Loading />
+ });
  const NocData = Loadable({
   loader: () => import("./NocData"),
   loading: () => <Loading />
@@ -170,7 +178,9 @@ export {
   UploadCard,
   ComparisionLink,
   NocDetailCard,
+  NocDetailCardBPA,
   NocDocDetailCard,
+  NocDocDetailCardBPA,
   NocData,
   BPAHowItWorks,
   TrainingTutorials,

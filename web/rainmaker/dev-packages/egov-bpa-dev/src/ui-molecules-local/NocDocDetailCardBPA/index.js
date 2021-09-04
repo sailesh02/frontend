@@ -1,3 +1,4 @@
+
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
@@ -181,9 +182,9 @@ const requiredIcon = (
   </sup>
 );
 
-class NocDocDetailCard extends Component {
+class NocDocDetailCardBPA extends Component {
   render(){
-  const { classes, docItem, docIndex, name, ...rest } = this.props;
+  const { classes, docItem, docIndex, name,disabled,...rest } = this.props;
 
   let submittedOn,
   satus = "";
@@ -240,6 +241,7 @@ class NocDocDetailCard extends Component {
               ""
             ) : (
               <Button
+                disabled = {disabled}
                 color="primary"
                 style={{ float: "right" }}
                 onClick={() => this.props.toggleEditClick(docIndex)}
@@ -269,7 +271,7 @@ class NocDocDetailCard extends Component {
                   </div>
                   </LightTooltip>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                   <Typography
                     variant="h6"
                     gutterBottom
@@ -283,7 +285,20 @@ class NocDocDetailCard extends Component {
                   </div>
                   </LightTooltip>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    style={titleStyle}
+                  >
+                    File Type
+                  </Typography>
+                  
+                  <div style={fontStyle}>
+                    {!(doc && doc.documentType) ? "" :doc.documentType}
+                  </div>
+                </Grid>
+                <Grid item xs={2}>
                   <Typography
                     variant="h6"
                     gutterBottom
@@ -314,6 +329,6 @@ class NocDocDetailCard extends Component {
 }
 }
 
-NocDocDetailCard.propTypes = {};
+NocDocDetailCardBPA.propTypes = {};
 
-export default withStyles(styles)(NocDocDetailCard);
+export default withStyles(styles)(NocDocDetailCardBPA);

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import get from "lodash/get";
 import { withStyles } from "@material-ui/core/styles";
 // import "./index.css";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
 import {
   getFileUrlFromAPI,
@@ -44,30 +44,11 @@ const styles = {
     paddingLeft: 16,    
     paddingBottom: 10,
   },
-  whiteCard: {
-    // maxWidth: 250,
-    width: "100%",
-    backgroundColor: "#FFFFFF",
-    // paddingLeft: 8,
-    paddingRight: 0,
-    paddingTop: 3,
-    paddingBottom: 10,
-    marginRight: 16,
-    marginTop: 8,
-    marginBottom:16,
-    // marginBottom:4,
-    display: "inline-flex",
-  },
   fontStyle: {
     fontSize: "12px",
     fontWeight: "500",
     color: "rgba(0, 0, 0, 0.87)",
     fontFamily: "Roboto",
-    // width:150,
-    // overflow: "hidden", 
-    // whiteSpace: "nowrap",
-    // textOverflow: "ellipsis",
-    // marginLeft:"7px",
   },
   labelStyle: {
     position: "relative",
@@ -86,12 +67,6 @@ const styles = {
   dividerStyle : {
     borderBottom: "1px solid rgba(5, 5, 5, 0.12)",
     width: "100%"
-  },
-  documentContainer: {
-   backgroundColor: "#FFFFFF",
-    padding: "16px",
-    marginTop: "10px",
-    marginBottom: "16px"
   },
   nocTitle: {
     color: "rgba(0, 0, 0, 0.87)",
@@ -1082,6 +1057,54 @@ class NocDetailCardBPA extends Component {
       );
   };
 
+  checkAllRequiredDocumentsUploaded = (nocType,requiredDocuments) => {
+    let allDocumentsUploaded = false
+    //get codes of requiredDocuments
+    let docFromMDMS = requiredDocuments && requiredDocuments.length > 0 && requiredDocuments.map ( doc => {
+      return doc.code
+    })
+    //get all noc's
+    let {Noc} = this.props.preparedFinalObject
+    let requiredNoc = Noc && Noc.length > 0 && Noc.filter( noc => {
+      if(noc.nocType == nocType){
+        return noc
+      }
+    })
+    
+    let documents = []
+    // to get uploaded documents
+    requiredNoc && requiredNoc.length > 0 && requiredNoc[0].documents && 
+    requiredNoc[0].documents.length > 0 && requiredNoc[0].documents.map( doc => {
+      if(!documents.includes(doc.documentType)){
+        documents.push(doc.documentType)
+      }
+    })
+
+    let isUploadedDoc = docFromMDMS && docFromMDMS.length > 0 && docFromMDMS.map ( doc => {
+      if(documents.includes(doc)){
+        return true
+      }else{
+        return false
+      }
+    })
+    
+    if(isUploadedDoc && isUploadedDoc.includes(false)){
+      allDocumentsUploaded = false
+    }
+    else if(documents && documents.length > 0 && docFromMDMS && docFromMDMS.length > 0){
+        if(documents.length == 1 && docFromMDMS.length == 1){
+          if(docFromMDMS[0].endsWith('CERTIFICATE') && documents[0].endsWith('CERTIFICATE')){
+            allDocumentsUploaded = true
+          }
+      }
+    }
+    else{
+      allDocumentsUploaded = false
+    }
+
+    return allDocumentsUploaded
+  }
+
   getDocumentsFromMDMS = async (nocType,isUpdate) => {
     let {BPA} = this.props.preparedFinalObject
     let {applicationType} = BPA
@@ -1124,26 +1147,26 @@ class NocDetailCardBPA extends Component {
       }
     })
 
-    // if(isUpdate){
-      // let {nocBPADocumentsContract} = this.props.preparedFinalObject
-      // let certificate = null
-      // certificate = nocBPADocumentsContract && nocBPADocumentsContract.length > 0 && nocBPADocumentsContract[0].cards && nocBPADocumentsContract[0].cards.length > 0 &&
-      // nocBPADocumentsContract[0].cards.filter(card => {
-      //   if(card.nocType == nocType){
-      //     return card
-      //   }
-      // })
-  
-      // if(certificate){
-      //   requiredDocumentsFormat.push({
-      //     active: true,
-      //       code: certificate[0].code,
-      //       documentType: certificate[0].name + '_CERTIFICATE',
-      //       required: true
-      //   })
-      // }
-    // }
-    this.prepareDocumentsUploadData(requiredDocumentsFormat)
+    if(this.checkAllRequiredDocumentsUploaded(nocType,requiredDocumentsFormat)){
+      store.dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName:  'BPA_NOC_UP_TO_DATE_MSG',
+            labelKey:  'BPA_NOC_UP_TO_DATE_MSG'
+          },
+          "success"
+        )
+      )
+    }else{
+      store.dispatch(handleField(
+        "apply",
+        "components.div.children.triggerNocContainer.props",
+        "open",
+        true
+    ))
+      this.prepareDocumentsUploadData(requiredDocumentsFormat)
+    }
   }
 
   prepareDocumentsUploadData = (documents) => {
@@ -1216,12 +1239,7 @@ class NocDetailCardBPA extends Component {
         "open",
         true
       ))
-    store.dispatch(handleField(
-        "apply",
-        "components.div.children.triggerNocContainer.props",
-        "open",
-        true
-    ))  
+ 
       store.dispatch(handleField(
         "search-preview",
         "components.div.children.triggerNocContainer.props",

@@ -1961,7 +1961,9 @@ export const validateThirdPartyDetails = (thirdPartyDetails) => {
           thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction'] !== "" &&
           thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea") &&
           thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea'] !== undefined && 
-          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea'] !== ""
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea'] !== "" && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['TermAndCondition'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['TermAndCondition'] !== false
       ) { valid.push(1) } else { valid.push(0) }
       if (valid.includes(0)) { return false; } else { return true; }
   }

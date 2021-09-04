@@ -26,6 +26,8 @@ import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 import { httpRequest } from "../../ui-utils/api";
 import { LinkAtom } from "../../ui-atoms-local"
 import store from "ui-redux/store";
+import { CheckboxContainer } from "../../ui-containers-local";
+
 const styles = {
   documentTitle: {
     color: "rgba(0, 0, 0, 0.87)",
@@ -326,6 +328,8 @@ export const fieldConfig = {
   TermAndCondition : {
     label: {
       labelName: "Terms and Conditions",
+      key:'BPA_NMA_NOC_TERM_CONDITION_LABEL',
+      label:'Terms and Conditions',
       labelKey: "BPA_NMA_NOC_TERM_CONDITION_LABEL"
     },
     placeholder: {
@@ -643,7 +647,7 @@ class NocDetailCard extends Component {
             labelName={fieldConfig.State.label.labelName}
             labelKey={fieldConfig.State.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
-              disabled={disabled}
+              disabled={true}
               value = "Odisha"
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.State.placeholder}
@@ -1004,30 +1008,11 @@ class NocDetailCard extends Component {
 
       <Grid container="true" spacing={12}>
         <Grid item xs={6}>
-          <LabelContainer style={{
-              fontSize: '11px',
-              fontWeight: 500
-          }}
-          labelName={fieldConfig.TermAndCondition.label.labelName}
-          labelKey={fieldConfig.TermAndCondition.label.labelKey} />
-          <TextFieldContainer
-            select ={true}
-            data={[{
-              "code":'Yes',
-              "label":"Yes"
-            },
-            {
-              "code":'No',
-              "label":"No"
-            }]}
-            optionValue="code"
-            optionLabel="label"
-            disabled={disabled}
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.TermAndCondition.placeholder}
-            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition`}
-            onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition")}
-          />
+          <CheckboxContainer
+              label={fieldConfig.TermAndCondition.label}
+              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition`}
+              onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition","termsAndCondition")}
+            />
         </Grid>
       </Grid>
     </div>

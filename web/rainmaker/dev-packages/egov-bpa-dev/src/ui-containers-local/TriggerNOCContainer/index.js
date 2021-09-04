@@ -384,6 +384,7 @@ class TriggerNOCContainer extends Component {
               labelName={fieldConfig.State.label.labelName}
               labelKey={fieldConfig.State.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
               <TextFieldContainer
+                disabled={true}
                 required= "true"
                 value = "Odisha"
                 style={{ marginRight: "15px" }}

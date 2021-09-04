@@ -21,7 +21,7 @@ import {
 import { httpRequest } from "../../ui-utils/api";
 import { createNoc, updateNoc, validateThirdPartyDetails, getNocSearchResults, getAdditionalDetails,prepareNOCUploadData } from "../../ui-utils/commons"
 import get from "lodash/get";
-import {fieldConfig,numberPattern,stringPattern} from "../../ui-molecules-local/NocDetailCard"
+import {fieldConfig,numberPattern,stringPattern} from "../../ui-molecules-local/NocDetailCardBPA"
 import { withStyles } from "@material-ui/core/styles";
 import commonConfig from "config/common.js";
 import {convertDateToEpoch,prepareNocFinalCards} from "../../ui-config/screens/specs/utils/index"
@@ -975,7 +975,8 @@ class TriggerNOCContainer extends Component {
         )
         return
       }
-      if(nocType === "NMA_NOC" && this.props.type == 'new'){
+      if(nocType === "NMA_NOC"){
+      // if(nocType === "NMA_NOC" && this.props.type == 'new'){
         if(validateThirdPartyDetails(NewNocAdditionalDetails)){
           isValid = true
         }else{
@@ -1051,7 +1052,7 @@ class TriggerNOCContainer extends Component {
               "open",
               false
           ))
-          await prepareNOCUploadData(store.getState())
+          await prepareNOCUploadData(store.getState(),'',true)
           prepareNocFinalCards(store.getState());
         }   
           
@@ -1205,7 +1206,7 @@ class TriggerNOCContainer extends Component {
                     </Grid>
 
                  }
-                  {((this.state.nocType == "NMA_NOC"  || this.props.nocType == 'NMA_NOC') && this.props.type == 'new') &&
+                  {((this.state.nocType == "NMA_NOC"  || this.props.nocType == 'NMA_NOC')) &&
                   <Grid item xs = {12} style={{marginTop:'8px'}}>
                     <Typography component="h2">
                       <LabelContainer labelName="Required Documents"

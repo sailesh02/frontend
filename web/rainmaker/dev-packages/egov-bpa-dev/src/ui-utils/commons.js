@@ -687,7 +687,7 @@ const checkNoc = (type,data) => {
   return details
 }
 
-export const prepareNOCUploadData = async (state, dispatch) => {
+export const prepareNOCUploadData = async (state, dispatch,filter) => {
 
 
   let documents = await getNocDocuments(state);
@@ -753,18 +753,34 @@ export const prepareNOCUploadData = async (state, dispatch) => {
   let finalCards = [];
   documentsContract.length > 0 && documentsContract[0].cards && documentsContract[0].cards.map(docs => {
     Noc && Noc.map(upDocs => {
+      let card = {}
       if (docs.nocType === upDocs.nocType) {
         docs.documents = upDocs.documents;
-        let card = {
-          code: docs.code,
-          name: docs.code,
-          nocType: docs.nocType,
-          dropDownValues: docs.dropDownValues,
-          documentCode: docs.code,
-          documents: upDocs.documents,
-          additionalDetails: docs.additionalDetails,
-          readOnly: false
-        };
+        if(upDocs.nocType == 'NMA_NOC'){
+           card = {
+            code: docs.code,
+            name: docs.code,
+            nocType: docs.nocType,
+            nmaDetails : upDocs.additionalDetails,
+            dropDownValues: docs.dropDownValues,
+            documentCode: docs.code,
+            documents: upDocs.documents,
+            additionalDetails: docs.additionalDetails,
+            readOnly: false
+          }
+        }
+        else{
+          card = {
+            code: docs.code,
+            name: docs.code,
+            nocType: docs.nocType,
+            dropDownValues: docs.dropDownValues,
+            documentCode: docs.code,
+            documents: upDocs.documents,
+            additionalDetails: docs.additionalDetails,
+            readOnly: false
+          };
+        }
         finalCards.push(card);
       }
     })

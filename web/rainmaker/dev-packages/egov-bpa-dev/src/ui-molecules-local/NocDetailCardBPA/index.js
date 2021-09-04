@@ -313,6 +313,28 @@ export const fieldConfig = {
     }
   }
 };
+
+const titleStyle = {
+  fontWeight: "bold",
+  fontSize: "12px",
+  // fontWeight: "500",
+  // color: "rgba(120,110,110,0.64)",
+  fontFamily: "Roboto",
+  // marginLeft:"7px",
+  
+};
+
+const fontStyle = {
+  fontSize: "12px",
+  fontWeight: "500",
+  color: "rgba(0, 0, 0, 0.87)",
+  fontFamily: "Roboto",
+  width:150,
+  overflow: "hidden", 
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+  // marginLeft:"7px",
+};
 class NocDetailCardBPA extends Component {
   constructor(props) {
     super(props);
@@ -584,416 +606,731 @@ class NocDetailCardBPA extends Component {
     store.dispatch(prepareFinalObject(`Noc[${key}].additionalDetails.thirdPartNOC.${jsonPath}`,e.target.value))
   };
 
-  getNMANOCForm = (key,disabled) => {
+  getNMANOCForm = (key,disabled,nmaDetails) => {
   return (
-    <React.Fragment>
-      <div style={{backgroundColor:"rgb(255,255,255)", paddingRight:"10px", marginTop: "16px" }}>
-        <Grid container="true" spacing={12}>
-          <Grid item xs={12}>
-            <div style={styles.dividerStyle}>
-              <div style={ styles.labelStyle}>
-                <span>Name of the Nearest Monument or Site</span>
-                <div style={styles.underlineStyle} />
-              </div>
-            </div>
-          </Grid>
-        </Grid>
-        <Grid container="true" spacing={12}>
-          <Grid item xs={6}>
-            <LabelContainer style={{
-              fontSize: '11px',
-              fontWeight: 500
-              }}
-              labelName={fieldConfig.MonumentName.label.labelName}
-              labelKey={fieldConfig.MonumentName.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-            <TextFieldContainer
-              disabled={disabled}
-              style={{ marginRight: "15px" }}
-              placeholder={fieldConfig.MonumentName.placeholder}
-              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.MonumentName`}
-              onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.MonumentName","MonumentName")}
-            />{this.state.monumentNameErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
-            </Grid>
-          <Grid item xs={6}>
-            <LabelContainer style={{
-                fontSize: '11px',
-                fontWeight: 500
-            }}
-            labelName={fieldConfig.State.label.labelName}
-            labelKey={fieldConfig.State.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-            <TextFieldContainer
-              disabled={true}
-              value = "Odisha"
-              style={{ marginRight: "15px" }}
-              placeholder={fieldConfig.State.placeholder}
-              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`}
-              onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.State","State")}
-            />{this.state.stateNameErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
-          </Grid>
-        </Grid>
-        <Grid container="true" spacing={12}>
-          <Grid item xs={6}>
-            <LabelContainer style={{
-            fontSize: '11px',
-            fontWeight: 500
-             }}
-            labelName={fieldConfig.District.label.labelName}
-            labelKey={fieldConfig.District.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-            <TextFieldContainer
-            disabled={disabled}
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.District.placeholder}
-            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.District`}
-            onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.District","District")}
-            />{this.state.districtErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
-          </Grid>
-          <Grid item xs={6}>
-            <LabelContainer style={{
-              fontSize: '11px',
-              fontWeight: 500
-            }}
-            labelName={fieldConfig.Taluk.label.labelName}
-            labelKey={fieldConfig.Taluk.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-            <TextFieldContainer
-              disabled={disabled}
-              style={{ marginRight: "15px" }}
-              placeholder={fieldConfig.Taluk.placeholder}
-              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Taluk`}
-              onChange={ this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Taluk","Taluk")}
-            />{this.state.talukaErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
-          </Grid>
-        </Grid>
-        <Grid container="true" spacing={12}>
-          <Grid item xs={6}>
-            <LabelContainer style={{
-                fontSize: '11px',
-                fontWeight: 500
-            }}
-            labelName={fieldConfig.Locality.label.labelName}
-            labelKey={fieldConfig.Locality.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-            <TextFieldContainer
-              disabled={disabled}
-              style={{ marginRight: "15px" }}
-              placeholder={fieldConfig.Locality.placeholder}
-              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Locality`}
-              onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Locality","Locality")}
-            />{this.state.localityErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
-          </Grid>
-        </Grid>
-        <Grid container="true" spacing={12} style={{marginTop: "10px"}} >
-          <Grid item xs={12}>
-            <div style={styles.dividerStyle}>
-              <div style={ styles.labelStyle}>
-              <span>Distance Of The Site Of The Construction From Protected Boundary Of Monument</span>
-              <div style={styles.underlineStyle} />
-              </div>
-            </div>
-          </Grid>
-        </Grid>
-        <Grid container="true" spacing={12}>
-          <Grid item xs={6}>
-            <LabelContainer style={{
-                fontSize: '11px',
-                fontWeight: 500
-            }}
-            labelName={fieldConfig.DistanceFromTheMainMonument.label.labelName}
-            labelKey={fieldConfig.DistanceFromTheMainMonument.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-            <TextFieldContainer
-            disabled={disabled}
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.DistanceFromTheMainMonument.placeholder}
-            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument`}
-            onChange={this.onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument","DistanceFromMonument")}
-            />{this.state.distanceFromMonumentErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
-          </Grid>
-        <Grid item xs={6}>
-          <LabelContainer style={{
-            fontSize: '11px',
-            fontWeight: 500
-          }}
-          labelName={fieldConfig.DistanceFromTheProtectedBoundaryWall.label.labelName}
-          labelKey={fieldConfig.DistanceFromTheProtectedBoundaryWall.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-          <TextFieldContainer
-            disabled={disabled}
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.DistanceFromTheProtectedBoundaryWall.placeholder}
-            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall`}
-            onChange={ this.onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall","ProtectedBountryWall")}
-          />{this.state.protectedBoundryErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
-        </Grid>
-        </Grid>
-      <Grid container="true" spacing={12} style={{marginTop: "10px"}}>
+    <React.Fragment >
+      <Grid container="true" spacing={12}>
         <Grid item xs={12}>
           <div style={styles.dividerStyle}>
             <div style={ styles.labelStyle}>
-            <span>Date Of Commencement Of Work</span>
-            <div style={styles.underlineStyle} />
+              <span>Name of the Nearest Monument or Site</span>
+              <div style={styles.underlineStyle} />
             </div>
           </div>
         </Grid>
       </Grid>
       <Grid container="true" spacing={12}>
-          <Grid item xs={6}>
-            <LabelContainer style={{
-                fontSize: '11px',
-                fontWeight: 500
-            }}
-            labelName={fieldConfig.ApproximateDateOfCommencementOfWorks.label.labelName}
-            labelKey={fieldConfig.ApproximateDateOfCommencementOfWorks.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-            <TextFieldContainer
-              disabled={disabled}
-              type = "date"
-              style={{ marginRight: "15px" }}
-              placeholder={fieldConfig.ApproximateDateOfCommencementOfWorks.placeholder}
-              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.ApproximateDateOfCommencementOfWorks`}
-              onChange={this.onNmaFieldChange(key,"ApproximateDateOfCommencementOfWorks")}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <LabelContainer style={{
-              fontSize: '11px',
-              fontWeight: 500
-            }}
-            labelName={fieldConfig.ApproximateDurationOfCommencementOfWorks.label.labelName}
-            labelKey={fieldConfig.ApproximateDurationOfCommencementOfWorks.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-            <TextFieldContainer
-              disabled={disabled}
-              type = "date"
-              style={{ marginRight: "15px" }}
-              placeholder={fieldConfig.ApproximateDurationOfCommencementOfWorks.placeholder}
-              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.ApproximateDurationOfCommencementOfWorks`}
-              onChange={this.onNmaFieldChange(key,"ApproximateDurationOfCommencementOfWorks")}
-            />
-          </Grid>
+        <Grid item xs={4}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            style={titleStyle}>
+            {getTransformedLocale(fieldConfig.MonumentName.label.labelKey)}
+          </Typography>
+          <div style={fontStyle}>
+            {nmaDetails && nmaDetails.NameOfTheNearestMonumentOrSite && nmaDetails.NameOfTheNearestMonumentOrSite.MonumentName
+            ? nmaDetails.NameOfTheNearestMonumentOrSite.MonumentName : ''}
+          </div>
         </Grid>
-
-        <Grid container="true" spacing={12}>
-          <Grid item xs={6}>
-            <LabelContainer style={{
-                fontSize: '11px',
-                fontWeight: 500
-            }}
-            labelName={fieldConfig.BasementIfAnyProposedWithDetails.label.labelName}
-            labelKey={fieldConfig.BasementIfAnyProposedWithDetails.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-            <TextFieldContainer
-              disabled={disabled}
-              style={{ marginRight: "15px" }}
-              placeholder={fieldConfig.BasementIfAnyProposedWithDetails.placeholder}
-              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.BasementIfAnyProposedWithDetails`}
-              onChange={this.onNmaFieldChange(key,"BasementIfAnyProposedWithDetails","BasementProposed")}
-            />{this.state.basementProposedErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
-          </Grid>
-          <Grid item xs={6}>
-            <LabelContainer style={{
-              fontSize: '11px',
-              fontWeight: 500
-            }}
-            labelName={fieldConfig.DetailsOfRepairAndRenovation.label.labelName}
-            labelKey={fieldConfig.DetailsOfRepairAndRenovation.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-            <TextFieldContainer
-              disabled={disabled}
-              style={{ marginRight: "15px" }}
-              placeholder={fieldConfig.DetailsOfRepairAndRenovation.placeholder}
-              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DetailsOfRepairAndRenovation`}
-              onChange={this.onNmaFieldChange(key,"DetailsOfRepairAndRenovation","DetailsOfRepairAndRenovation")}
-            />{this.state.renovationErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
-          </Grid>
+        <Grid item xs={4}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            style={titleStyle}>
+            {getTransformedLocale(fieldConfig.State.label.labelKey)}
+          </Typography>
+          <div style={fontStyle}>
+            {nmaDetails && nmaDetails.NameOfTheNearestMonumentOrSite && nmaDetails.NameOfTheNearestMonumentOrSite.State
+            ? nmaDetails.NameOfTheNearestMonumentOrSite.State : ''}
+          </div>
         </Grid>
-
-        <Grid container="true" spacing={12}>
-          <Grid item xs={6}>
-            <LabelContainer style={{
-                fontSize: '11px',
-                fontWeight: 500
-            }}
-            labelName={fieldConfig.PlotSurveyNo.label.labelName}
-            labelKey={fieldConfig.PlotSurveyNo.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-            <TextFieldContainer
-              disabled={disabled}
-              style={{ marginRight: "15px" }}
-              placeholder={fieldConfig.PlotSurveyNo.placeholder}
-              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.PlotSurveyNo`}
-              onChange={this.onNmaFieldChange(key,"PlotSurveyNo","PlotSurveyNo")}
-            />{this.state.surveryNoErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
-          </Grid>
+        <Grid item xs={4}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            style={titleStyle}>
+            {getTransformedLocale(fieldConfig.Locality.label.labelKey)}
+          </Typography>
+          <div style={fontStyle}>
+            {nmaDetails && nmaDetails.NameOfTheNearestMonumentOrSite && nmaDetails.NameOfTheNearestMonumentOrSite.Locality
+            ? nmaDetails.NameOfTheNearestMonumentOrSite.Locality : ''}
+          </div>
         </Grid>
-
-        <Grid container="true" spacing={12} style={{marginTop: "10px"}}>
-          <Grid item xs={12}>
-            <div style={styles.dividerStyle}>
-              <div style={ styles.labelStyle}>
-              <span>Maximum Height Of Existing Modern Building In Close Vicinity Of</span>
-              <div style={styles.underlineStyle} />
-              </div>
-            </div>
-          </Grid>
-        </Grid>
-        <Grid container="true" spacing={12}>
-          <Grid item xs={6}>
-            <LabelContainer style={{
-                fontSize: '11px',
-                fontWeight: 500
-            }}
-            labelName={fieldConfig.NearTheMonument.label.labelName}
-            labelKey={fieldConfig.NearTheMonument.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-            <TextFieldContainer
-              disabled={disabled}
-              style={{ marginRight: "15px" }}
-              placeholder={fieldConfig.NearTheMonument.placeholder}
-              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument`}
-              onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument","NearTheMonument")}
-            />{this.state.nearTheMonumentErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
-          </Grid>
-          <Grid item xs={6}>
-            <LabelContainer style={{
-              fontSize: '11px',
-              fontWeight: 500
-            }}
-            labelName={fieldConfig.NearTheSiteConstructionRelatedActivity.label.labelName}
-            labelKey={fieldConfig.NearTheSiteConstructionRelatedActivity.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-            <TextFieldContainer
-              disabled={disabled}
-              style={{ marginRight: "15px" }}
-              placeholder={fieldConfig.NearTheSiteConstructionRelatedActivity.placeholder}
-              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity`}
-              onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity","NearTheSiteConstructionRelatedActivity")}
-            />{this.state.nearTheConstructionErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
-          </Grid>
-        </Grid>
-        <Grid container="true" spacing={12}>
-        <Grid item xs={6}>
-          <LabelContainer style={{
-              fontSize: '11px',
-              fontWeight: 500
-          }}
-          labelName={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelName}
-          labelKey={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-          <TextFieldContainer
-            disabled={disabled}
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.placeholder}
-            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf`}
-            onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf","WhetherMonumentIsLocatedWithinLimitOf")}
-          />{this.state.monumentLocatedErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
-        </Grid>
-        <Grid item xs={6}>
-          <LabelContainer style={{
-            fontSize: '11px',
-            fontWeight: 500
-          }}
-          labelName={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.label.labelName}
-          labelKey={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-          <TextFieldContainer
-            select ={true}
-            data={[{
-              "code":'Y',
-              "label":"Yes"
-            },
-            {
-              "code":'N',
-              "label":"No"
-            }]}
-            disabled={disabled}
-            optionValue="code"
-            optionLabel="label"
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.placeholder}
-            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage`}
-            onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage")}
-          />
-        </Grid>
-      </Grid>
-
+      </Grid>  
       <Grid container="true" spacing={12}>
-        <Grid item xs={6}>
-          <LabelContainer style={{
-              fontSize: '11px',
-              fontWeight: 500
-            }}
-            labelName={fieldConfig.StatusOfModernConstructions.label.labelName}
-            labelKey={fieldConfig.StatusOfModernConstructions.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-          <TextFieldContainer
-            disabled={disabled}
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.StatusOfModernConstructions.placeholder}
-            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions`}
-            onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions","StatusOfModernConstructions")}
-          />{this.state.modernStatusErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
+        <Grid item xs={4}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            style={titleStyle}>
+            {getTransformedLocale(fieldConfig.District.label.labelKey)}
+          </Typography>
+          <div style={fontStyle}>
+            {nmaDetails && nmaDetails.NameOfTheNearestMonumentOrSite && nmaDetails.NameOfTheNearestMonumentOrSite.District
+            ? nmaDetails.NameOfTheNearestMonumentOrSite.District : ''}
+          </div>
         </Grid>
-        <Grid item xs={6}>
-          <LabelContainer style={{
-            fontSize: '11px',
-            fontWeight: 500
-          }}
-            labelName={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.label.labelName}
-            labelKey={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-          <TextFieldContainer   
-            disabled={disabled}       
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.placeholder}
-            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea`}
-            onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea","OpenSpaceOrPark")}
-          />{this.state.openSpaceParkErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+        <Grid item xs={4}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            style={titleStyle}>
+            {getTransformedLocale(fieldConfig.Taluk.label.labelKey)}
+          </Typography>
+          <div style={fontStyle}>
+            {nmaDetails && nmaDetails.NameOfTheNearestMonumentOrSite && nmaDetails.NameOfTheNearestMonumentOrSite.Taluk
+            ? nmaDetails.NameOfTheNearestMonumentOrSite.Taluk : ''}
+          </div>
         </Grid>
-      </Grid>
+    </Grid>
 
-      <Grid container="true" spacing={12}>
-        <Grid item xs={6}>
-            <LabelContainer style={{
-                fontSize: '11px',
-                fontWeight: 500
-            }}
-          labelName={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.label.labelName}
-          labelKey={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
-          <TextFieldContainer
-            disabled={disabled}
-            select ={true}
-            data={[{
-              "code":'Y',
-              "label":"Yes"
-            },
-            {
-              "code":'N',
-              "label":"No"
-            }]}
-            optionValue="code"
-            optionLabel="label"
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.placeholder}
-            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction`}
-            onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction")}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <LabelContainer style={{
-            fontSize: '11px',
-            fontWeight: 500
-          }}
-          labelName={fieldConfig.Remarks.label.labelName}
-          labelKey={fieldConfig.Remarks.label.labelKey} />
-          <TextFieldContainer  
-            disabled={disabled}        
-            style={{ marginRight: "15px" }}
-            placeholder={fieldConfig.Remarks.placeholder}
-            jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks`}
-            onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks")}
-          />
-        </Grid>
+    <Grid container="true" spacing={12}>
+      <Grid item xs={12}>
+        <div style={styles.dividerStyle}>
+          <div style={ styles.labelStyle}>
+            <span>Distance Of The Site Of The Construction From Protected Boundary Of Monument</span>
+            <div style={styles.underlineStyle} />
+          </div>
+        </div>
       </Grid>
+    </Grid>
+    <Grid container="true" spacing={12}>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.DistanceFromTheMainMonument.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument && nmaDetails.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument
+          ? nmaDetails.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument : ''}
+        </div>
+      </Grid>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.DistanceFromTheProtectedBoundaryWall.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument && nmaDetails.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall
+          ? nmaDetails.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall : ''}
+        </div>
+      </Grid>
+    </Grid> 
 
-      <Grid container="true" spacing={12}>
-        <Grid item xs={6}>
-          <CheckboxContainer
-              label={fieldConfig.TermAndCondition.label}
-              jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition`}
-              onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition","termsAndCondition")}
-            />
-        </Grid>
+    <Grid container="true" spacing={12}>
+      <Grid item xs={12}>
+        <div style={styles.dividerStyle}>
+          <div style={ styles.labelStyle}>
+            <span>Commencement Of Work</span>
+            <div style={styles.underlineStyle} />
+          </div>
+        </div>
       </Grid>
-    </div>
+    </Grid>
+    <Grid container="true" spacing={12}>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.ApproximateDateOfCommencementOfWorks.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.ApproximateDateOfCommencementOfWorks
+          ? nmaDetails.ApproximateDateOfCommencementOfWorks : ''}
+        </div>
+      </Grid>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.ApproximateDurationOfCommencementOfWorks.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.ApproximateDurationOfCommencementOfWorks
+          ? nmaDetails.ApproximateDurationOfCommencementOfWorks : ''}
+        </div>
+      </Grid>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.BasementIfAnyProposedWithDetails.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.BasementIfAnyProposedWithDetails
+          ? nmaDetails.BasementIfAnyProposedWithDetails : ''}
+        </div>
+      </Grid>
+    </Grid> 
+    <Grid container="true" spacing={12}>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.DetailsOfRepairAndRenovation.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.DetailsOfRepairAndRenovation
+          ? nmaDetails.DetailsOfRepairAndRenovation : ''}
+        </div>
+      </Grid>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.PlotSurveyNo.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.PlotSurveyNo
+          ? nmaDetails.PlotSurveyNo : ''}
+        </div>
+      </Grid>
+    </Grid> 
+
+    <Grid container="true" spacing={12}>
+      <Grid item xs={12}>
+        <div style={styles.dividerStyle}>
+          <div style={ styles.labelStyle}>
+            <span>Maximum Height Of Existing Modern Building In Close Vicinity Of</span>
+            <div style={styles.underlineStyle} />
+          </div>
+        </div>
+      </Grid>
+    </Grid>
+    <Grid container="true" spacing={12}>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.NearTheMonument.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf &&
+           nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument
+          ? nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument : ''}
+        </div>
+      </Grid>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf &&
+           nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage
+          ? nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage : ''}
+        </div>
+      </Grid>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf &&
+           nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea
+          ? nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea : ''}
+        </div>
+      </Grid>
+    </Grid> 
+    
+    <Grid container="true" spacing={12}>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.StatusOfModernConstructions.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf &&
+           nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions
+          ? nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions : ''}
+        </div>
+      </Grid>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf &&
+           nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction
+          ? nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction : ''}
+        </div>
+      </Grid>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf &&
+           nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf
+          ? nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf : ''}
+        </div>
+      </Grid>
+    </Grid> 
+    <Grid container="true" spacing={12}>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.Remarks.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf &&
+           nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks
+          ? nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks : ''}
+        </div>
+      </Grid>
+      <Grid item xs={4}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={titleStyle}>
+          {getTransformedLocale(fieldConfig.TermAndCondition.label.labelKey)}
+        </Typography>
+        <div style={fontStyle}>
+          {nmaDetails && nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf &&
+           nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition
+          ? nmaDetails.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition : ''}
+        </div>
+      </Grid>
+    </Grid>  
     </React.Fragment>
   );
 }
+
+// getNMANOCForm = (key,disabled) => {
+//   return (
+//     <React.Fragment>
+//       <div style={{backgroundColor:"rgb(255,255,255)", paddingRight:"10px", marginTop: "16px" }}>
+//         <Grid container="true" spacing={12}>
+//           <Grid item xs={12}>
+//             <div style={styles.dividerStyle}>
+//               <div style={ styles.labelStyle}>
+//                 <span>Name of the Nearest Monument or Site</span>
+//                 <div style={styles.underlineStyle} />
+//               </div>
+//             </div>
+//           </Grid>
+//         </Grid>
+//         <Grid container="true" spacing={12}>
+//           <Grid item xs={6}>
+//             <LabelContainer style={{
+//               fontSize: '11px',
+//               fontWeight: 500
+//               }}
+//               labelName={fieldConfig.MonumentName.label.labelName}
+//               labelKey={fieldConfig.MonumentName.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//             <TextFieldContainer
+//               disabled={disabled}
+//               style={{ marginRight: "15px" }}
+//               placeholder={fieldConfig.MonumentName.placeholder}
+//               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.MonumentName`}
+//               onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.MonumentName","MonumentName")}
+//             />{this.state.monumentNameErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+//             </Grid>
+//           <Grid item xs={6}>
+//             <LabelContainer style={{
+//                 fontSize: '11px',
+//                 fontWeight: 500
+//             }}
+//             labelName={fieldConfig.State.label.labelName}
+//             labelKey={fieldConfig.State.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//             <TextFieldContainer
+//               disabled={true}
+//               value = "Odisha"
+//               style={{ marginRight: "15px" }}
+//               placeholder={fieldConfig.State.placeholder}
+//               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`}
+//               onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.State","State")}
+//             />{this.state.stateNameErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+//           </Grid>
+//         </Grid>
+//         <Grid container="true" spacing={12}>
+//           <Grid item xs={6}>
+//             <LabelContainer style={{
+//             fontSize: '11px',
+//             fontWeight: 500
+//              }}
+//             labelName={fieldConfig.District.label.labelName}
+//             labelKey={fieldConfig.District.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//             <TextFieldContainer
+//             disabled={disabled}
+//             style={{ marginRight: "15px" }}
+//             placeholder={fieldConfig.District.placeholder}
+//             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.District`}
+//             onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.District","District")}
+//             />{this.state.districtErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+//           </Grid>
+//           <Grid item xs={6}>
+//             <LabelContainer style={{
+//               fontSize: '11px',
+//               fontWeight: 500
+//             }}
+//             labelName={fieldConfig.Taluk.label.labelName}
+//             labelKey={fieldConfig.Taluk.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//             <TextFieldContainer
+//               disabled={disabled}
+//               style={{ marginRight: "15px" }}
+//               placeholder={fieldConfig.Taluk.placeholder}
+//               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Taluk`}
+//               onChange={ this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Taluk","Taluk")}
+//             />{this.state.talukaErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+//           </Grid>
+//         </Grid>
+//         <Grid container="true" spacing={12}>
+//           <Grid item xs={6}>
+//             <LabelContainer style={{
+//                 fontSize: '11px',
+//                 fontWeight: 500
+//             }}
+//             labelName={fieldConfig.Locality.label.labelName}
+//             labelKey={fieldConfig.Locality.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//             <TextFieldContainer
+//               disabled={disabled}
+//               style={{ marginRight: "15px" }}
+//               placeholder={fieldConfig.Locality.placeholder}
+//               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Locality`}
+//               onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Locality","Locality")}
+//             />{this.state.localityErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+//           </Grid>
+//         </Grid>
+//         <Grid container="true" spacing={12} style={{marginTop: "10px"}} >
+//           <Grid item xs={12}>
+//             <div style={styles.dividerStyle}>
+//               <div style={ styles.labelStyle}>
+//               <span>Distance Of The Site Of The Construction From Protected Boundary Of Monument</span>
+//               <div style={styles.underlineStyle} />
+//               </div>
+//             </div>
+//           </Grid>
+//         </Grid>
+//         <Grid container="true" spacing={12}>
+//           <Grid item xs={6}>
+//             <LabelContainer style={{
+//                 fontSize: '11px',
+//                 fontWeight: 500
+//             }}
+//             labelName={fieldConfig.DistanceFromTheMainMonument.label.labelName}
+//             labelKey={fieldConfig.DistanceFromTheMainMonument.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//             <TextFieldContainer
+//             disabled={disabled}
+//             style={{ marginRight: "15px" }}
+//             placeholder={fieldConfig.DistanceFromTheMainMonument.placeholder}
+//             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument`}
+//             onChange={this.onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument","DistanceFromMonument")}
+//             />{this.state.distanceFromMonumentErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
+//           </Grid>
+//         <Grid item xs={6}>
+//           <LabelContainer style={{
+//             fontSize: '11px',
+//             fontWeight: 500
+//           }}
+//           labelName={fieldConfig.DistanceFromTheProtectedBoundaryWall.label.labelName}
+//           labelKey={fieldConfig.DistanceFromTheProtectedBoundaryWall.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//           <TextFieldContainer
+//             disabled={disabled}
+//             style={{ marginRight: "15px" }}
+//             placeholder={fieldConfig.DistanceFromTheProtectedBoundaryWall.placeholder}
+//             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall`}
+//             onChange={ this.onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall","ProtectedBountryWall")}
+//           />{this.state.protectedBoundryErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
+//         </Grid>
+//         </Grid>
+//       <Grid container="true" spacing={12} style={{marginTop: "10px"}}>
+//         <Grid item xs={12}>
+//           <div style={styles.dividerStyle}>
+//             <div style={ styles.labelStyle}>
+//             <span>Date Of Commencement Of Work</span>
+//             <div style={styles.underlineStyle} />
+//             </div>
+//           </div>
+//         </Grid>
+//       </Grid>
+//       <Grid container="true" spacing={12}>
+//           <Grid item xs={6}>
+//             <LabelContainer style={{
+//                 fontSize: '11px',
+//                 fontWeight: 500
+//             }}
+//             labelName={fieldConfig.ApproximateDateOfCommencementOfWorks.label.labelName}
+//             labelKey={fieldConfig.ApproximateDateOfCommencementOfWorks.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//             <TextFieldContainer
+//               disabled={disabled}
+//               type = "date"
+//               style={{ marginRight: "15px" }}
+//               placeholder={fieldConfig.ApproximateDateOfCommencementOfWorks.placeholder}
+//               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.ApproximateDateOfCommencementOfWorks`}
+//               onChange={this.onNmaFieldChange(key,"ApproximateDateOfCommencementOfWorks")}
+//             />
+//           </Grid>
+//           <Grid item xs={6}>
+//             <LabelContainer style={{
+//               fontSize: '11px',
+//               fontWeight: 500
+//             }}
+//             labelName={fieldConfig.ApproximateDurationOfCommencementOfWorks.label.labelName}
+//             labelKey={fieldConfig.ApproximateDurationOfCommencementOfWorks.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//             <TextFieldContainer
+//               disabled={disabled}
+//               type = "date"
+//               style={{ marginRight: "15px" }}
+//               placeholder={fieldConfig.ApproximateDurationOfCommencementOfWorks.placeholder}
+//               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.ApproximateDurationOfCommencementOfWorks`}
+//               onChange={this.onNmaFieldChange(key,"ApproximateDurationOfCommencementOfWorks")}
+//             />
+//           </Grid>
+//         </Grid>
+
+//         <Grid container="true" spacing={12}>
+//           <Grid item xs={6}>
+//             <LabelContainer style={{
+//                 fontSize: '11px',
+//                 fontWeight: 500
+//             }}
+//             labelName={fieldConfig.BasementIfAnyProposedWithDetails.label.labelName}
+//             labelKey={fieldConfig.BasementIfAnyProposedWithDetails.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//             <TextFieldContainer
+//               disabled={disabled}
+//               style={{ marginRight: "15px" }}
+//               placeholder={fieldConfig.BasementIfAnyProposedWithDetails.placeholder}
+//               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.BasementIfAnyProposedWithDetails`}
+//               onChange={this.onNmaFieldChange(key,"BasementIfAnyProposedWithDetails","BasementProposed")}
+//             />{this.state.basementProposedErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+//           </Grid>
+//           <Grid item xs={6}>
+//             <LabelContainer style={{
+//               fontSize: '11px',
+//               fontWeight: 500
+//             }}
+//             labelName={fieldConfig.DetailsOfRepairAndRenovation.label.labelName}
+//             labelKey={fieldConfig.DetailsOfRepairAndRenovation.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//             <TextFieldContainer
+//               disabled={disabled}
+//               style={{ marginRight: "15px" }}
+//               placeholder={fieldConfig.DetailsOfRepairAndRenovation.placeholder}
+//               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.DetailsOfRepairAndRenovation`}
+//               onChange={this.onNmaFieldChange(key,"DetailsOfRepairAndRenovation","DetailsOfRepairAndRenovation")}
+//             />{this.state.renovationErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+//           </Grid>
+//         </Grid>
+
+//         <Grid container="true" spacing={12}>
+//           <Grid item xs={6}>
+//             <LabelContainer style={{
+//                 fontSize: '11px',
+//                 fontWeight: 500
+//             }}
+//             labelName={fieldConfig.PlotSurveyNo.label.labelName}
+//             labelKey={fieldConfig.PlotSurveyNo.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//             <TextFieldContainer
+//               disabled={disabled}
+//               style={{ marginRight: "15px" }}
+//               placeholder={fieldConfig.PlotSurveyNo.placeholder}
+//               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.PlotSurveyNo`}
+//               onChange={this.onNmaFieldChange(key,"PlotSurveyNo","PlotSurveyNo")}
+//             />{this.state.surveryNoErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
+//           </Grid>
+//         </Grid>
+
+//         <Grid container="true" spacing={12} style={{marginTop: "10px"}}>
+//           <Grid item xs={12}>
+//             <div style={styles.dividerStyle}>
+//               <div style={ styles.labelStyle}>
+//               <span>Maximum Height Of Existing Modern Building In Close Vicinity Of</span>
+//               <div style={styles.underlineStyle} />
+//               </div>
+//             </div>
+//           </Grid>
+//         </Grid>
+//         <Grid container="true" spacing={12}>
+//           <Grid item xs={6}>
+//             <LabelContainer style={{
+//                 fontSize: '11px',
+//                 fontWeight: 500
+//             }}
+//             labelName={fieldConfig.NearTheMonument.label.labelName}
+//             labelKey={fieldConfig.NearTheMonument.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//             <TextFieldContainer
+//               disabled={disabled}
+//               style={{ marginRight: "15px" }}
+//               placeholder={fieldConfig.NearTheMonument.placeholder}
+//               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument`}
+//               onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument","NearTheMonument")}
+//             />{this.state.nearTheMonumentErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
+//           </Grid>
+//           <Grid item xs={6}>
+//             <LabelContainer style={{
+//               fontSize: '11px',
+//               fontWeight: 500
+//             }}
+//             labelName={fieldConfig.NearTheSiteConstructionRelatedActivity.label.labelName}
+//             labelKey={fieldConfig.NearTheSiteConstructionRelatedActivity.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//             <TextFieldContainer
+//               disabled={disabled}
+//               style={{ marginRight: "15px" }}
+//               placeholder={fieldConfig.NearTheSiteConstructionRelatedActivity.placeholder}
+//               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity`}
+//               onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity","NearTheSiteConstructionRelatedActivity")}
+//             />{this.state.nearTheConstructionErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
+//           </Grid>
+//         </Grid>
+//         <Grid container="true" spacing={12}>
+//         <Grid item xs={6}>
+//           <LabelContainer style={{
+//               fontSize: '11px',
+//               fontWeight: 500
+//           }}
+//           labelName={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelName}
+//           labelKey={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//           <TextFieldContainer
+//             disabled={disabled}
+//             style={{ marginRight: "15px" }}
+//             placeholder={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.placeholder}
+//             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf`}
+//             onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf","WhetherMonumentIsLocatedWithinLimitOf")}
+//           />{this.state.monumentLocatedErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+//         </Grid>
+//         <Grid item xs={6}>
+//           <LabelContainer style={{
+//             fontSize: '11px',
+//             fontWeight: 500
+//           }}
+//           labelName={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.label.labelName}
+//           labelKey={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//           <TextFieldContainer
+//             select ={true}
+//             data={[{
+//               "code":'Y',
+//               "label":"Yes"
+//             },
+//             {
+//               "code":'N',
+//               "label":"No"
+//             }]}
+//             disabled={disabled}
+//             optionValue="code"
+//             optionLabel="label"
+//             style={{ marginRight: "15px" }}
+//             placeholder={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.placeholder}
+//             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage`}
+//             onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage")}
+//           />
+//         </Grid>
+//       </Grid>
+
+//       <Grid container="true" spacing={12}>
+//         <Grid item xs={6}>
+//           <LabelContainer style={{
+//               fontSize: '11px',
+//               fontWeight: 500
+//             }}
+//             labelName={fieldConfig.StatusOfModernConstructions.label.labelName}
+//             labelKey={fieldConfig.StatusOfModernConstructions.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//           <TextFieldContainer
+//             disabled={disabled}
+//             style={{ marginRight: "15px" }}
+//             placeholder={fieldConfig.StatusOfModernConstructions.placeholder}
+//             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions`}
+//             onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions","StatusOfModernConstructions")}
+//           />{this.state.modernStatusErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
+//         </Grid>
+//         <Grid item xs={6}>
+//           <LabelContainer style={{
+//             fontSize: '11px',
+//             fontWeight: 500
+//           }}
+//             labelName={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.label.labelName}
+//             labelKey={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//           <TextFieldContainer   
+//             disabled={disabled}       
+//             style={{ marginRight: "15px" }}
+//             placeholder={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.placeholder}
+//             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea`}
+//             onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea","OpenSpaceOrPark")}
+//           />{this.state.openSpaceParkErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+//         </Grid>
+//       </Grid>
+
+//       <Grid container="true" spacing={12}>
+//         <Grid item xs={6}>
+//             <LabelContainer style={{
+//                 fontSize: '11px',
+//                 fontWeight: 500
+//             }}
+//           labelName={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.label.labelName}
+//           labelKey={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+//           <TextFieldContainer
+//             disabled={disabled}
+//             select ={true}
+//             data={[{
+//               "code":'Y',
+//               "label":"Yes"
+//             },
+//             {
+//               "code":'N',
+//               "label":"No"
+//             }]}
+//             optionValue="code"
+//             optionLabel="label"
+//             style={{ marginRight: "15px" }}
+//             placeholder={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.placeholder}
+//             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction`}
+//             onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction")}
+//           />
+//         </Grid>
+//         <Grid item xs={6}>
+//           <LabelContainer style={{
+//             fontSize: '11px',
+//             fontWeight: 500
+//           }}
+//           labelName={fieldConfig.Remarks.label.labelName}
+//           labelKey={fieldConfig.Remarks.label.labelKey} />
+//           <TextFieldContainer  
+//             disabled={disabled}        
+//             style={{ marginRight: "15px" }}
+//             placeholder={fieldConfig.Remarks.placeholder}
+//             jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks`}
+//             onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks")}
+//           />
+//         </Grid>
+//       </Grid>
+
+//       <Grid container="true" spacing={12}>
+//         <Grid item xs={6}>
+//           <CheckboxContainer
+//               label={fieldConfig.TermAndCondition.label}
+//               jsonPath = {`Noc[${key}].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition`}
+//               onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition","termsAndCondition")}
+//             />
+//         </Grid>
+//       </Grid>
+//     </div>
+//     </React.Fragment>
+//   );
+// }
 
   static getDerivedStateFromProps(props, state) {
     if (
@@ -1316,8 +1653,8 @@ class NocDetailCardBPA extends Component {
                 />
                 </div>
             <div>{this.getCard(card, index)}</div>  
-            <div>{card.nocType == 'NMA_NOC' && 
-            this.getNMANOCForm(index,disabled)}</div>
+            <div>{card.nocType == 'NMA_NOC' && card.nmaDetails && card.nmaDetails.thirdPartNOC && 
+            this.getNMANOCForm(index,disabled,card.nmaDetails.thirdPartNOC)}</div>
           </div>) : (
              <Grid style={{paddingTop:'18px',paddingRight:'22px',paddingBottom:'18px',paddingLeft:'10px',marginBottom:'10px',width:'100%',backgroundColor: "#FFFFFF"}} container>
                 <Grid style={{align:'center'}} item xs={11}>

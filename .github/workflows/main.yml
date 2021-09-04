@@ -2,7 +2,7 @@ name: A workflow to build egov frontend
 on: 
  push:
     branches:
-      - feature/preview-documents-issue
+      - feature/form-refreshing-after-trigger
 jobs:
   build:
     name: Build citizen

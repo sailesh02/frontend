@@ -527,18 +527,6 @@ class NocDetailCard extends Component {
             })
           }
           break;
-
-        case 'PlotSurveyNo':
-          if(e.target.value.match(numberPattern)){
-            this.setState({
-              surveryNoErr:false,
-            })
-          }else{
-            this.setState({
-              surveryNoErr:true,
-            })
-          }
-          break;
         case 'NearTheMonument':
           if(e.target.value.match(numberPattern)){
             this.setState({

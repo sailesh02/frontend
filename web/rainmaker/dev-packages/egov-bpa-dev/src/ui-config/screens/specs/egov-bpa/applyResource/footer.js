@@ -12,8 +12,8 @@ import {
   createUpdateBpaApplication,
   prepareDocumentsUploadData,
   prepareNOCUploadData,
-  submitBpaApplication,
-  updateBpaApplication,
+  submitBpaApplicationNOC,
+  updateBpaApplicationNOC,
   getNocSearchResults,
   validateThirdPartyDetails
 } from "../../../../../ui-utils/commons";
@@ -894,7 +894,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: submitBpaApplication
+      callBack: submitBpaApplicationNOC
     },
     roleDefination: {
       rolePath: "user-info.roles",
@@ -928,7 +928,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: updateBpaApplication
+      callBack: updateBpaApplicationNOC
     },
     // roleDefination: {
     //   rolePath: "user-info.roles",

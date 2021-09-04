@@ -20,7 +20,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { edcrHttpRequest, httpRequest } from "../../../../ui-utils/api";
-import { getAppSearchResults, getNocSearchResults, prepareNOCUploadData, nocapplicationUpdate, getStakeHolderRoles } from "../../../../ui-utils/commons";
+import { getAppSearchResults, getNocSearchResults, prepareNOCUploadData, nocapplicationUpdateBPA, getStakeHolderRoles } from "../../../../ui-utils/commons";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { permitConditions } from "../egov-bpa/summaryResource/permitConditions";
@@ -37,7 +37,7 @@ import {
   compare
 } from "../utils/index";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
-import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved } from "./searchResource/citizenFooter";
+import { citizenFooter, updateBpaApplicationNOC, updateBpaApplicationAfterApproved } from "./searchResource/citizenFooter";
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
@@ -219,13 +219,13 @@ const sendToArchDownloadMenu = (action, state, dispatch) => {
   let sendToArchObject = {
     label: { labelName: "SEND TO ARCHITECT", labelKey: "BPA_SEND_TO_ARCHITECT_BUTTON", },
     link: () => {
-      updateBpaApplication(state, dispatch, "SEND_TO_ARCHITECT");
+      updateBpaApplicationNOC(state, dispatch, "SEND_TO_ARCHITECT");
     },
   };
   let ApproveObject = {
     label: { labelName: "Approve", labelKey: "BPA_APPROVE_BUTTON" },
     link: () => {
-      updateBpaApplication(state, dispatch, "APPROVE");
+      updateBpaApplicationNOC(state, dispatch, "APPROVE");
     },
   };
   downloadMenu = [sendToArchObject, ApproveObject];
@@ -244,7 +244,7 @@ const buttonAfterApprovedMenu = (action, state, dispatch) => {
   let sendToArchObject = {
     label: { labelName: "BPA_INTIMATE_CONSTRUCT_START_BUTTON", labelKey: "BPA_INTIMATE_CONSTRUCT_START_BUTTON", },
     link: () => {
-      updateBpaApplication(state, dispatch, "INTIMATE_CONSTRUCT_START");
+      updateBpaApplicationNOC(state, dispatch, "INTIMATE_CONSTRUCT_START");
     },
   };
 

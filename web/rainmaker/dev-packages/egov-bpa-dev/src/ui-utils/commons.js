@@ -1530,13 +1530,38 @@ export const handleFileUpload = (event, handleDocument, props) => {
 
 const updateNocApplication = async (state, dispatch, bpaAction) => {
   const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
-  // let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocForPreview", []);
+  let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocForPreview", []);
   if (Noc.length > 0) {
     let count = 0;
     for (let data = 0; data < Noc.length; data++) {
-      // let documents = nocDocuments[data].documents;
-      // set(Noc[data], "documents", documents);
+      let documents = nocDocuments[data].documents;
+      set(Noc[data], "documents", documents);
       // set(NOCData[data], "workflow.action", bpaAction)
+      let response = await httpRequest(
+        "post",
+        "/noc-services/v1/noc/_update",
+        "",
+        [],
+        { Noc: Noc[data] }
+      );
+      if (get(response, "ResponseInfo.status") == "successful") {
+        count++;
+        if (Noc.length == count) {
+          return "successful"
+        }
+      }
+    }
+  }else{
+    return "successful";
+  }
+};
+
+// update NOC for BPA only
+const updateNocApplicationBPA = async (state, dispatch, bpaAction) => {
+  const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
+  if (Noc.length > 0) {
+    let count = 0;
+    for (let data = 0; data < Noc.length; data++) {
       let response = await httpRequest(
         "post",
         "/noc-services/v1/noc/_update",
@@ -1592,6 +1617,43 @@ export const submitBpaApplication = async (state, dispatch) => {
   }
 };
 
+// to submit BPA application with NOC update API (NOC update to fetch documents from NOC search preview)
+export const submitBpaApplicationNOC = async (state, dispatch) => {
+  const bpaAction = "APPLY";
+  let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
+
+  if (isDeclared) {
+    let nocRespose = await nocapplicationUpdateBPA(state);
+    let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
+    const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    if (get(response, "status", "") === "success") {
+      let status = get(state, "screenConfiguration.preparedFinalObject.BPA.status");
+      if (status === "DOC_VERIFICATION_INPROGRESS") {
+        const acknowledgementUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true"
+            ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+            : `/egov-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        dispatch(setRoute(acknowledgementUrl));
+      } else {
+        const acknowledgementUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true"
+            ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+            : `/egov-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        dispatch(setRoute(acknowledgementUrl));
+      }
+
+    }
+  }
+  else {
+    let errorMessage = {
+      labelName: "Please confirm the declaration!",
+      labelKey: "BPA_DECLARATION_COMMON_LABEL"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+  }
+};
+
 export const updateBpaApplication = async (state, dispatch) => {
   const bpaAction = "SEND_TO_CITIZEN";
   let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
@@ -1606,6 +1668,23 @@ export const updateBpaApplication = async (state, dispatch) => {
     dispatch(setRoute(acknowledgementUrl));
   }
 };
+
+// noc update should not take documents from preview
+export const updateBpaApplicationNOC = async (state, dispatch) => {
+  const bpaAction = "SEND_TO_CITIZEN";
+  let nocRespose = await updateNocApplicationBPA(state, dispatch, "INITIATE");
+  let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
+  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  if (get(response, "status", "") === "success" && nocRespose == "successful") {
+    const acknowledgementUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
+  }
+};
+
 export const updateOcBpaApplication = async (state, dispatch) => {
   const bpaAction = "SEND_TO_CITIZEN";
   let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
@@ -2000,6 +2079,31 @@ export const getAdditionalDetails = (nocType,preparedFinalObject) => {
 
 export const nocapplicationUpdate = (state) => {
   const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
+  let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
+  if (Noc.length > 0) {
+    let count = 0;
+    for (let data = 0; data < Noc.length; data++) {
+      let documents = nocDocuments[data].documents;
+      set(Noc[data], "documents", documents);
+      let response = httpRequest(
+        "post",
+        "/noc-services/v1/noc/_update",
+        "",
+        [],
+        { Noc: Noc[data] }
+      );
+      if (get(response, "ResponseInfo.status") == "successful") {
+        count++;
+        if (Noc.length == count) {
+          return "successful"
+        }
+      }
+    }
+  }
+}
+
+export const nocapplicationUpdateBPA = (state) => {
+  const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
   let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.requiredNocToTrigger", []);
   if (Noc.length > 0) {
     let count = 0;
@@ -2022,6 +2126,7 @@ export const nocapplicationUpdate = (state) => {
     }
   }
 }
+
 
 export const getStakeHolderRoles = () => {
   let roles = [

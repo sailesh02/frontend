@@ -1497,6 +1497,21 @@ class NocDetailCardBPA extends Component {
         )
       )
     }else{
+      if(nocType == 'NMA_NOC'){
+        store.dispatch(handleField(
+          "apply",
+          "components.div.children.triggerNocContainer.props",
+          "height",
+          '400px'
+       ))
+      }else{
+        store.dispatch(handleField(
+          "apply",
+          "components.div.children.triggerNocContainer.props",
+          "height",
+          '270px'
+       ))
+      }
       store.dispatch(handleField(
         "apply",
         "components.div.children.triggerNocContainer.props",

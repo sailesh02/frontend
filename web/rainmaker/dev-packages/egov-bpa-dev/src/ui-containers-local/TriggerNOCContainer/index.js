@@ -666,7 +666,7 @@ class TriggerNOCContainer extends Component {
               placeholder={fieldConfig.StatusOfModernConstructions.placeholder}
               jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions`}
               onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions","StatusOfModernConstructions")}
-            />{this.state.modernStatusErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
+            />{this.state.modernStatusErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
           </Grid>
           <Grid item xs={6}>
             <LabelContainer style={{
@@ -864,11 +864,11 @@ class TriggerNOCContainer extends Component {
 
     uploadedDocTypes = uploadedDocumentCodes && uploadedDocumentCodes.length > 0 && uploadedDocumentCodes.map(doc => {
       return doc.documentType
-    }) 
+    }) || []
 
     requiredDocTypes = requiredDocuments && requiredDocuments.length > 0 && requiredDocuments.map(doc => {
       return doc.code
-    }) 
+    }) || []
 
     if(uploadedDocTypes.length == 0 && requiredDocTypes.length == 0){
       isValid = true
@@ -1146,8 +1146,8 @@ class TriggerNOCContainer extends Component {
       fullScreen={false}
       open={open}
       onClose={this.closeDialog}
-      maxWidth={false}
-    >
+      maxWidth={false}    
+      >
       <DialogContent
         children={
           <Container
@@ -1155,7 +1155,7 @@ class TriggerNOCContainer extends Component {
               <Grid
                 container="true"
                 style={{
-                  height:'270px'
+                  height: this.props.height ? this.props.height : '270px'
                 }}
                 spacing={12}
                 marginTop={16}

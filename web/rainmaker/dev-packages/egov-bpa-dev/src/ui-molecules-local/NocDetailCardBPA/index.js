@@ -1131,9 +1131,8 @@ class NocDetailCardBPA extends Component {
       [],
       mdmsBody
     );
-    // let payload = {"ResponseInfo":null,"MdmsRes":{"NOC":{"DocumentTypeMapping":[{"applicationType":"PROVISIONAL","nocType":"NOC.AIRPORT","docTypes":[{"documentType":"NOC.AIRPORT","required":true},{"documentType":"NOC.AIRPORTT","required":true}]},{"applicationType":"NEW","nocType":"HBDA_NOC","docTypes":[{"documentType":"NOC.HBDA","required":true}]},{"applicationType":"RENEW","nocType":"HBDA_NOC","docTypes":[{"documentType":"NOC.HBDA","required":false}]}]}}}
+
     let documents = payload && payload.MdmsRes && payload.MdmsRes.NOC && payload.MdmsRes.NOC.DocumentTypeMapping || []
-    
     let requiredDocumentsFormat = documents && documents.length > 0 && documents[0].docTypes.map( doc => {
       let docTypeArray = doc.documentType && doc.documentType.split('.')
       let length = docTypeArray.length
@@ -1146,6 +1145,8 @@ class NocDetailCardBPA extends Component {
         active : doc.active || true
       }
     })
+
+    store.dispatch(prepareFinalObject("SelectedNocDocument",requiredDocumentsFormat))
 
     if(this.checkAllRequiredDocumentsUploaded(nocType,requiredDocumentsFormat)){
       store.dispatch(

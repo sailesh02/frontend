@@ -843,6 +843,58 @@ class TriggerNOCContainer extends Component {
 
   };
 
+  checkRequiredDocument = (uploadedDocument) => {
+    let isValid = false
+    let requiredDocuments = []
+    let uploadedDocumentCodes = []
+    let uploadedDocTypes = []
+    let requiredDocTypes = []
+    let {SelectedNocDocument} = this.props.preparedFinalObject
+    requiredDocuments = SelectedNocDocument && SelectedNocDocument.length > 0 && SelectedNocDocument.filter( doc => {
+      if(doc.required && !doc.code.endsWith('CERTIFICATE')){
+        return doc.code
+      }
+    }) || []
+    
+    uploadedDocumentCodes = uploadedDocument && uploadedDocument.length > 0 && uploadedDocument.filter(doc => {
+      if(!doc.documentType.endsWith('CERTIFICATE')){
+        return doc.documentType
+      }
+    }) || []
+
+    uploadedDocTypes = uploadedDocumentCodes && uploadedDocumentCodes.length > 0 && uploadedDocumentCodes.map(doc => {
+      return doc.documentType
+    }) 
+
+    requiredDocTypes = requiredDocuments && requiredDocuments.length > 0 && requiredDocuments.map(doc => {
+      return doc.code
+    }) 
+
+    if(uploadedDocTypes.length == 0 && requiredDocTypes.length == 0){
+      isValid = true
+    }else if(uploadedDocTypes === requiredDocTypes){
+      isValid = true
+    }
+     else if(uploadedDocTypes.length > 0 && requiredDocTypes.length > 0){
+      let isExist =  requiredDocTypes.map(doc => {
+        if(uploadedDocTypes.includes(doc)){
+          return true
+        }else{
+          return false
+        }
+      })
+      if(isExist && isExist.length > 0 && isExist.includes(false)){
+        isValid = false
+      }else{
+        isValid = true
+      }
+    }else{
+      isValid = false
+    }
+  
+    return isValid
+  }
+
   getDocumentsFromMDMS = async (nocType) => {
     let {BPA} = this.props.preparedFinalObject
     let {applicationType} = BPA
@@ -880,6 +932,8 @@ class TriggerNOCContainer extends Component {
         active : doc.active || true
       }
     })
+
+    store.dispatch(prepareFinalObject("SelectedNocDocument",documentList))
     this.prepareDocumentsUploadData(documentList)
   }
 
@@ -904,8 +958,23 @@ class TriggerNOCContainer extends Component {
     let submittedOn = this.getSubmittedDataInEpoch()
     if(nocType && nocType != ""){
       let isValid = true
+      let isRequiredDocumentsUpload = false
       let additionalDetails = getAdditionalDetails(nocType,this.props.preparedFinalObject)
       let { payloadDocumentFormat,NewNocAdditionalDetails } = this.props.preparedFinalObject
+      isRequiredDocumentsUpload = this.checkRequiredDocument(payloadDocumentFormat)
+      if(!isRequiredDocumentsUpload){
+        store.dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "ERR_UPLOAD_ALL_DOCUMENTS",
+              labelKey: "ERR_UPLOAD_ALL_DOCUMENTS",
+            },
+            "warning"
+          )
+        )
+        return
+      }
       if(nocType === "NMA_NOC" && this.props.type == 'new'){
         if(validateThirdPartyDetails(NewNocAdditionalDetails)){
           isValid = true
@@ -913,7 +982,8 @@ class TriggerNOCContainer extends Component {
           isValid = false
         }
       }
-      if(isValid){
+
+      if(isValid && isRequiredDocumentsUpload){
         let details = {
           ...additionalDetails, ...NewNocAdditionalDetails,"SubmittedOn":submittedOn
         }

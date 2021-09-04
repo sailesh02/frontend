@@ -25,6 +25,8 @@ import {fieldConfig,numberPattern,stringPattern} from "../../ui-molecules-local/
 import { withStyles } from "@material-ui/core/styles";
 import commonConfig from "config/common.js";
 import {convertDateToEpoch,prepareNocFinalCards} from "../../ui-config/screens/specs/utils/index"
+import { CheckboxContainer } from "..";
+
 const styles = {
   documentTitle: {
     color: "rgba(0, 0, 0, 0.87)",
@@ -722,32 +724,12 @@ class TriggerNOCContainer extends Component {
             />
           </Grid>
         </Grid>
-  
         <Grid container="true" spacing={12}>
           <Grid item xs={6}>
-            <LabelContainer style={{
-                fontSize: '11px',
-                fontWeight: 500
-            }}
-            labelName={fieldConfig.TermAndCondition.label.labelName}
-            labelKey={fieldConfig.TermAndCondition.label.labelKey}/>
-            <TextFieldContainer
-              select ={true}
-              data={[{
-                "code":'Yes',
-                "label":"Yes"
-              },
-              {
-                "code":'No',
-                "label":"No"
-              }]}
-              optionValue="code"
-            optionLabel="label"
-              style={{ marginRight: "15px" }}
-              placeholder={fieldConfig.TermAndCondition.placeholder}
-              jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition`}
-              onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition")}
-            />
+          <CheckboxContainer
+            label={fieldConfig.TermAndCondition.label}
+            jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition`}
+          />
           </Grid>
         </Grid>
       </div>
@@ -1152,7 +1134,7 @@ class TriggerNOCContainer extends Component {
                     </Grid>
 
                  }
-                  {((this.state.nocType == "NMA_NOC"  || this.props.nocType == 'NMA_NOC') && this.props.type == 'new') && 
+                  {((this.state.nocType == "NMA_NOC"  || this.props.nocType == 'NMA_NOC') && this.props.type == 'new') &&
                   <Grid item xs = {12} style={{marginTop:'8px'}}>
                     <Typography component="h2">
                       <LabelContainer labelName="Required Documents"

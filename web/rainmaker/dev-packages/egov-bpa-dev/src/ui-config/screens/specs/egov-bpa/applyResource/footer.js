@@ -376,8 +376,8 @@ const callBackForNext = async (state, dispatch) => {
           toggleSnackbar(
             true,
             {
-              labelName: "ERR_FILL_ALL_FIELDS",
-              labelKey: "ERR_FILL_ALL_FIELDS",
+              labelName: "ERR_FILL_NMA_NOC_DETAILS",
+              labelKey: "ERR_FILL_NMA_NOC_DETAILS",
             },
             "warning"
           )

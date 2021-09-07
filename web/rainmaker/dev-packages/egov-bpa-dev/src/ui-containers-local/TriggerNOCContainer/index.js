@@ -1015,6 +1015,9 @@ class TriggerNOCContainer extends Component {
           })
           updateNocPayload[0].documents = payloadDocumentFormat,
           updateNocPayload[0].additionalDetails.SubmittedOn = submittedOn
+          if(nocType == 'NMA_NOC'){
+            updateNocPayload[0].additionalDetails.thirdPartNOC = updateNocPayload[0].additionalDetails.thirdPartNOC ? updateNocPayload[0].additionalDetails.thirdPartNOC : NewNocAdditionalDetails.thirdPartNOC
+          }
           response = await updateNoc(updateNocPayload[0])
          }else{
           response = await createNoc(payload);

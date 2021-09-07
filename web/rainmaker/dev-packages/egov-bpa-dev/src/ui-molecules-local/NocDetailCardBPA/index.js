@@ -1416,29 +1416,33 @@ class NocDetailCardBPA extends Component {
         documents.push(doc.documentType)
       }
     })
-
-    let isUploadedDoc = docFromMDMS && docFromMDMS.length > 0 && docFromMDMS.map ( doc => {
-      if(documents.includes(doc)){
-        return true
-      }else{
-        return false
+    if(requiredNoc && requiredNoc.length > 0 && requiredNoc[0].nocType == 'NMA_NOC'){
+      if(requiredNoc[0].additionalDetails && requiredNoc[0].additionalDetails.thirdPartNOC){
+        allDocumentsUploaded = true
       }
-    })
-    
-    if(isUploadedDoc && isUploadedDoc.includes(false)){
-      allDocumentsUploaded = false
-    }
-    else if(documents && documents.length > 0 && docFromMDMS && docFromMDMS.length > 0){
-        if(documents.length == 1 && docFromMDMS.length == 1){
-          if(docFromMDMS[0].endsWith('CERTIFICATE') && documents[0].endsWith('CERTIFICATE')){
-            allDocumentsUploaded = true
-          }
+    }else{
+      let isUploadedDoc = docFromMDMS && docFromMDMS.length > 0 && docFromMDMS.map ( doc => {
+        if(documents.includes(doc)){
+          return true
+        }else{
+          return false
+        }
+      })
+      
+      if(isUploadedDoc && isUploadedDoc.includes(false)){
+        allDocumentsUploaded = false
+      }
+      else if(documents && documents.length > 0 && docFromMDMS && docFromMDMS.length > 0){
+          if(documents.length == 1 && docFromMDMS.length == 1){
+            if(docFromMDMS[0].endsWith('CERTIFICATE') && documents[0].endsWith('CERTIFICATE')){
+              allDocumentsUploaded = true
+            }
+        }
+      }
+      else{
+        allDocumentsUploaded = false
       }
     }
-    else{
-      allDocumentsUploaded = false
-    }
-
     return allDocumentsUploaded
   }
 

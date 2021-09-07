@@ -47,10 +47,10 @@ jobs:
       - name: Install lerna globally
         run: npm install --global lerna
       - name: Install dependencies
-        run: yarn install
+        run: npm install
         working-directory: ./web/rainmaker
       - name: Build
-        run: yarn run prod:employee
+        run: npm run prod:employee
         working-directory: ./web/rainmaker
         env:
           NODE_OPTIONS: --max-old-space-size=6800

@@ -4565,7 +4565,6 @@ export const prepareNocFinalCards = async (state, dispatch, isVisibleTrue) => {
     "screenConfiguration.preparedFinalObject.nocBPADocumentsContract",
     {}
   );
-
   let nocDocuments = {};
   var uploadedAppDocuments = [];
   let requiredDocTypesFromMdms = [],
@@ -4580,7 +4579,6 @@ export const prepareNocFinalCards = async (state, dispatch, isVisibleTrue) => {
       }
     });
   });
-  console.log('nocDocsFromMdms', nocDocsFromMdms);
 
   let documentsList = [],
     finalDoc = {},
@@ -4588,7 +4586,6 @@ export const prepareNocFinalCards = async (state, dispatch, isVisibleTrue) => {
   for (let item in nocDocuments) {
     let documents = nocDocuments[item];
     if (documents && documents.length > 0) {
-
       documents.forEach(doc => {
         let card = {};
         card["code"] = doc.documentType.split(".")[0];
@@ -4759,8 +4756,8 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
   }
 
   if (nocDocumentsFromMdms && nocDocumentsFromMdms.length > 0) {
-    const allCards = [].concat(...nocDocumentsFromMdms.map(({ cards }) => cards || []));
-    allCards && allCards.map((mdmsCard) => {
+    // const allCards = [].concat(...nocDocumentsFromMdms.map(({ cards }) => cards || []));
+    cards && cards.length > 0 && cards && cards.map((mdmsCard) => {
       let found = false;
       for (var i = 0; i < cards.length; i++) {
 
@@ -4779,8 +4776,6 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
         cards.push(mdmsCard)
       }
     });
-
-
     cards.sort(compare);
   }
   dispatch(prepareFinalObject("nocForPreview", cards));
@@ -4788,8 +4783,8 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
 }
 export const compare = (a, b) => {
   // Use toUpperCase() to ignore character casing
-  const nocTypeA = a.nocType.toUpperCase();
-  const nocTypeB = b.nocType.toUpperCase();
+  const nocTypeA = a && a.nocType && a.nocType.toUpperCase();
+  const nocTypeB = b && b.nocType && b.nocType.toUpperCase();
   let comparison = 0;
   if (nocTypeA > nocTypeB) {
     comparison = 1;

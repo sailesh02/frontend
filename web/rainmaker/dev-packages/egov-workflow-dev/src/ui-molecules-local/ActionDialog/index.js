@@ -14,6 +14,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import "./index.css";
 import store from "ui-redux/store";
 import get from "lodash/get";
+import { prepareFinalObject } from "../../../../../packages/lib/egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const styles = theme => ({
   root: {
@@ -138,6 +139,8 @@ class ActionDialog extends React.Component {
       isDocRequired
     } = dialogData;
     const { getButtonLabelName } = this;
+
+    // to handle pdf signing/Digital certificate
     let isCertificateDetailsVisible = false
     let tokenPath = ''
     let certificatePath = ''
@@ -148,7 +151,7 @@ class ActionDialog extends React.Component {
       let applicationStatus = get(state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
       state.screenConfiguration.preparedFinalObject, `${dataPath}.status`, "")
       isCertificateDetailsVisible = dialogHeader && dialogHeader.labelKey === "WF_APPROVE_APPLICATION" && dataPath == "BPA"
-      && (applicationStatus == "APPROVAL_PENDING") ? true : false
+      && (applicationStatus == "APPROVAL_PENDING" || applicationStatus == "APPROVAL_INPROGRESS") ? true : false
       tokenPath = `DsInfo.token`
       passwordPath = `DsInfo.password`
       certificatePath = `DsInfo.certificate`
@@ -316,13 +319,10 @@ class ActionDialog extends React.Component {
                       <React.Fragment>
                     <Grid
                       item
-                      sm="12"
-                      style={{
-                        marginTop: 16
-                      }}
-                    >
+                      sm="12">
                       <TextFieldContainer
                         select={true}
+                        required={true}
                         style={{ marginRight: "15px" }}
                         label={fieldConfig.token.label}
                         placeholder={fieldConfig.token.placeholder}
@@ -342,12 +342,9 @@ class ActionDialog extends React.Component {
                     </Grid>
                     <Grid
                       item
-                      sm="12"
-                      style={{
-                        marginTop: 16
-                      }}
-                    >
+                      sm="12">
                       <TextFieldContainer
+                        required={true}
                         select={true}
                         style={{ marginRight: "15px" }}
                         label={fieldConfig.certificate.label}
@@ -367,10 +364,7 @@ class ActionDialog extends React.Component {
                     </Grid>
 
                      <Grid item
-                    sm={12}
-                    style={{
-                      marginTop: 12
-                    }}>
+                    sm={12}>
                   <LabelContainer style={{
                       fontSize: '11px',
                       fontWeight: 500
@@ -381,10 +375,7 @@ class ActionDialog extends React.Component {
                   <form style={{width:"100%"}} autocomplete="off">
                   <Grid
                     item
-                    sm={12}
-                    style={{
-                      marginTop: 12
-                    }}>
+                    sm={12}>
                     <TextfieldWithIcon
                         type ="password"
                         style={{ marginRight: "15px" }}

@@ -301,6 +301,7 @@ class WorkFlowContainer extends React.Component {
 
   createWorkFLow = async (label, isDocRequired) => {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
+    const {isCertificateDetailsVisible} = preparedFinalObject
     let data = {};
 
     if (dataPath == "BPA" || dataPath == "Assessment" || dataPath == "Property" || dataPath === "Noc") {
@@ -337,8 +338,34 @@ class WorkFlowContainer extends React.Component {
           "error"
         );
       }
-    } else {
-      this.wfUpdate(label);
+    }
+    else {
+      if(isCertificateDetailsVisible){
+        const {DsInfo} = preparedFinalObject
+        if(DsInfo){
+          const {token,certificate,password} = DsInfo
+          if(token && certificate && password ){
+            this.wfUpdate(label);
+          }else{
+            toggleSnackbar(
+              true,
+              { labelName: "Please fill mandatory fiels", labelKey: "ERR_ALL_FIELDS" },
+              "error"
+            );
+            return
+          }
+        }
+        else{
+          toggleSnackbar(
+            true,
+            { labelName: "Please fill mandatory fiels", labelKey: "ERR_ALL_FIELDS" },
+            "error"
+          );
+          return
+        }
+      }else{
+        this.wfUpdate(label);
+      }
     }
   };
 

@@ -295,7 +295,7 @@ class NocDocDetailCardBPA extends Component {
                   </Typography>
                   
                   <div style={fontStyle}>
-                    {!(doc && doc.documentType) ? "" :doc.documentType}
+                    {!(doc && doc.documentType) ? "" :getTransformedLocale(doc.documentType)}
                   </div>
                 </Grid>
                 <Grid item xs={2}>

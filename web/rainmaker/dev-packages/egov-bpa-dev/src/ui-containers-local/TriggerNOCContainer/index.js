@@ -967,8 +967,8 @@ class TriggerNOCContainer extends Component {
           toggleSnackbar(
             true,
             {
-              labelName: "ERR_UPLOAD_ALL_DOCUMENTS",
-              labelKey: "ERR_UPLOAD_ALL_DOCUMENTS",
+              labelName: "ERR_UPLOAD_ALL_NOC_DOCUMENTS",
+              labelKey: "ERR_UPLOAD_ALL_NOC_DOCUMENTS",
             },
             "warning"
           )

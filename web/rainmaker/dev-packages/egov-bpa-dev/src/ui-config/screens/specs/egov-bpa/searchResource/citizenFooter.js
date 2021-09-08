@@ -84,25 +84,6 @@ export const updateBpaApplication = async (state, dispatch, action) => {
   }
 };
 
-export const getPdfDetails = async (isCertificateVisible,bpaDetails,state) => {
-  debugger
-  if(isCertificateVisible){
-    let {preparedFinalObject} = state
-    let {DsInfo} = preparedFinalObject
-    let documents = bpaDetails.documents
-    documents.push({
-      "fileStore":"hfdhdj"
-    })
-    //API call to get file store id
-    bpaDetails = {
-      ...bpaDetails,documents :documents
-    }
-    return bpaDetails
-  }else{
-    return bpaDetails
-  }
-}
-
 export const updateBpaApplicationAfterApproved = async (state, dispatch, action) => {
   let bpaAction = action;
   let toggle = get(

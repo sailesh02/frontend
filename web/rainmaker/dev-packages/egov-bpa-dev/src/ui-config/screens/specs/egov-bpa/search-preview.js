@@ -37,7 +37,7 @@ import {
   compare
 } from "../utils/index";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
-import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved,getPdfDetails} from "./searchResource/citizenFooter";
+import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved} from "./searchResource/citizenFooter";
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
@@ -847,17 +847,17 @@ export const beforeSubmitHook = async () => {
           count++;
           if (Noc.length == count) {
             store.dispatch(prepareFinalObject("BPA.isNocTrue", true));
-            bpaDetails = getPdfDetails (isDigitalCertificate,bpaDetails,state)
+            // bpaDetails = await getPdfDetails (isDigitalCertificate,bpaDetails,state)
             return bpaDetails;
           }
         }
       }
     } else {
-      bpaDetails = getPdfDetails (isDigitalCertificate,bpaDetails,state)
+      // bpaDetails = await getPdfDetails (isDigitalCertificate,bpaDetails,state)
       return bpaDetails;
     } 
   } else {
-    bpaDetails = getPdfDetails (isDigitalCertificate,bpaDetails,state)
+    // bpaDetails = await getPdfDetails (isDigitalCertificate,bpaDetails,state)
     return bpaDetails;
   }
 }

@@ -13,6 +13,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Footer } from "../../ui-molecules-local";
 import TaskStatusContainer from "../TaskStatusContainer";
+import {getPdfDetails} from "../../ui-molecules-local/Footer"
 
 const tenant = getQueryArg(window.location.href, "tenantId");
 
@@ -221,22 +222,28 @@ class WorkFlowContainer extends React.Component {
     try {
       if (beforeSubmitHook) {
         if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4"|| moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+          debugger
           data = await beforeSubmitHook(data);
+          if(isDsInfo){
+            data = await getPdfDetails(data,preparedFinalObject)
+          }
         } else {
           data = beforeSubmitHook(data);
         }
       }
+      debugger
       console.log(data, "nero data")
-      if(isDsInfo && (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4"|| moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4')){
-        payload = await httpRequest("post", updateUrl, "", [], {
-          [dataPath]: data,
-          "DsInfo":isDsInfo
-        });
-      }else{
+      // if(isDsInfo && (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4"|| moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4')){
+      //   payload = await httpRequest("post", updateUrl, "", [], {
+      //     [dataPath]: data,
+      //     "DsInfo":isDsInfo
+      //   });
+      // }else{
+        debugger
         payload = await httpRequest("post", updateUrl, "", [], {
           [dataPath]: data
         });
-      }
+      // }
       this.setState({
         open: false
       });

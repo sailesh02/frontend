@@ -34,6 +34,107 @@ let RequestInfo = {
 };
 let customRequestInfo = JSON.parse(getUserInfo())
 
+  // pdf signing @final approval step in BPA and OC
+  export const getPdfDetails = async (data,preparedFinalObject) => {
+      let {DsInfo} = preparedFinalObject
+      let {token,certificate,password} = DsInfo
+      let RequestInfo = {}
+      let body = {} // not finalised yet
+      store.dispatch(showSpinner())
+      await axios.post("/dsc-services.egov:8080/dsc-services/dsc/_pdfServie", body, { // call pdf service to get fileStore id
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       })
+       .then(response => {
+        
+      })
+      .catch(error => {
+        debugger
+        let response = {
+          "ResponseInfo":null,
+          "fileStoreId":"dfdhgfgjj"
+        }
+        RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+        let body =  Object.assign(
+          {},
+          {
+            RequestInfo,
+            "tenantId":getTenantId(),
+            "responseData":null,
+            "fileStoreId":response.fileStoreId,
+            "token":token,
+            "certificate" : certificate,
+            "password": password
+          }
+        );
+  
+        axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getEncryptedData", body, { // to get R1 R2
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+         })
+          .then(response => {
+            // response.data.input
+          })
+          .catch(error => {
+            let response = {
+              "ResponseInfo":null,
+              "input":{
+              "encryptedRequest":"XXXX",
+              "encryptionKeyId":"YYYYY"
+              }
+              }
+            let body = response.input
+            axios.post("/.emudhra.com:26769/DSC/someurl", body, { // to get response Data
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+             })
+             .then(response => {
+              // response.responseData
+            })
+            .catch(error => {  
+              let response = {
+                "responseData": "QuyKW0m6EdBEuTltdWrj2rA5O77bukrGcxlpp4atnn0KoadBXlTZXoEpHp3Q3Qxne1pcmXUSBedS3Ocj3/5Nqjtj6Q1QuqQxo1yMtoOmeGjlilICxaqs9ldgRu8rlbuXrzeip6VMqMCEM+f21+tKf3c4UKWd6/gYOg8rG+37HAVDRAjz21HECLLP2lq3bThBTIPog74D8Lvs4MHXE7D28kd2znHny2v/r3lGnmLxmzYlMiBUlYPnPQa8WSyOROpfXNDnD0/fgiIUuNA82mXC7F7x4VHf+GYj94aldkeSE7MKSqDPRsSp3/4gJ4Y8bHNa",
+                "status": 1,
+                "errorMessage": null,
+                "version": "3.1.0.0",
+                "errorCode": null
+               }
+  
+               RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+               let body =  Object.assign(
+                 {},
+                  {
+                   RequestInfo,
+                   "tenantId":getTenantId(),
+                    responseData:response.responseData,
+                  }
+               );
+               axios.post("/.emudhra.com:26769/DSC/getFileStoreId", body, { // to get filestoreId for pdf signing
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+               })
+               .then(response => {
+                // response.responseData
+              })
+              .catch(err => {
+                store.dispatch(hideSpinner())
+                let response = {
+                  "ResponseInfo":null,
+                  "fileStoreId": "jfdoooooooooooooooooooooooooffff"
+                  }
+              })
+              debugger
+              data.documents = data.documents.push({
+                "fileName":'DOCUMENT',
+                "fileStoreId":''
+              })
+              return data
+              //update this fileStoreId in the BPA documents with document type and update BPA
+            })
+          });
+        
+      });    
+    }
 class Footer extends React.Component {
   state = {
     open: false,

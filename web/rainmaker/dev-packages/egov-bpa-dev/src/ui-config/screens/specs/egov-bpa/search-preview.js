@@ -37,7 +37,7 @@ import {
   compare
 } from "../utils/index";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
-import { citizenFooter, updateBpaApplicationNOC, updateBpaApplicationAfterApproved } from "./searchResource/citizenFooter";
+import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved } from "./searchResource/citizenFooter";
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
@@ -219,13 +219,13 @@ const sendToArchDownloadMenu = (action, state, dispatch) => {
   let sendToArchObject = {
     label: { labelName: "SEND TO ARCHITECT", labelKey: "BPA_SEND_TO_ARCHITECT_BUTTON", },
     link: () => {
-      updateBpaApplicationNOC(state, dispatch, "SEND_TO_ARCHITECT");
+      updateBpaApplication(state, dispatch, "SEND_TO_ARCHITECT");
     },
   };
   let ApproveObject = {
     label: { labelName: "Approve", labelKey: "BPA_APPROVE_BUTTON" },
     link: () => {
-      updateBpaApplicationNOC(state, dispatch, "APPROVE");
+      updateBpaApplication(state, dispatch, "APPROVE");
     },
   };
   downloadMenu = [sendToArchObject, ApproveObject];
@@ -244,7 +244,7 @@ const buttonAfterApprovedMenu = (action, state, dispatch) => {
   let sendToArchObject = {
     label: { labelName: "BPA_INTIMATE_CONSTRUCT_START_BUTTON", labelKey: "BPA_INTIMATE_CONSTRUCT_START_BUTTON", },
     link: () => {
-      updateBpaApplicationNOC(state, dispatch, "INTIMATE_CONSTRUCT_START");
+      updateBpaApplication(state, dispatch, "INTIMATE_CONSTRUCT_START");
     },
   };
 

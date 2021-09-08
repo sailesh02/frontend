@@ -169,60 +169,7 @@ class TriggerNOCContainer extends Component {
   onNmaFieldChange = (key,jsonPath,fieldName) => e => {
     switch(fieldName){
       case 'MonumentName':
-        if(e.target.value.match(stringPattern)){
-          this.setState({
-            monumentNameErr:false,
-          })
-        }else{
-          this.setState({
-            monumentNameErr:true,
-          })
-        }
         store.dispatch(prepareFinalObject(`NewNocAdditionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`,e.target.value)) 
-        break;
-      case 'State':
-        if(e.target.value.match(stringPattern)){
-          this.setState({
-            stateNameErr:false,
-          })
-        }else{
-          this.setState({
-            stateNameErr:true,
-          })
-        }
-        break;
-      case 'District':
-        if(e.target.value.match(stringPattern)){
-          this.setState({
-            districtErr:false,
-          })
-        }else{
-          this.setState({
-            districtErr:true,
-          })
-        }
-        break; 
-      case 'Taluk':
-        if(e.target.value.match(stringPattern)){
-          this.setState({
-            talukaErr:false,
-          })
-        }else{
-          this.setState({
-            talukaErr:true,
-          })
-        }
-        break;
-      case 'Locality':
-        if(e.target.value.match(stringPattern)){
-          this.setState({
-            localityErr:false,
-          })
-        }else{
-          this.setState({
-            localityErr:true,
-          })
-        }
         break;
       case 'DistanceFromMonument':
         if(e.target.value.match(numberPattern)){
@@ -246,28 +193,6 @@ class TriggerNOCContainer extends Component {
             })
           }
           break; 
-        case 'BasementProposed':
-          if(e.target.value.match(stringPattern)){
-            this.setState({
-              basementProposedErr:false,
-            })
-          }else{
-            this.setState({
-              basementProposedErr:true,
-            })
-          }
-          break
-        case 'DetailsOfRepairAndRenovation':
-          if(e.target.value.match(stringPattern)){
-            this.setState({
-              renovationErr:false,
-            })
-          }else{
-            this.setState({
-              renovationErr:true,
-            })
-          }
-          break;
         case 'NearTheMonument':
           if(e.target.value.match(numberPattern)){
             this.setState({
@@ -289,41 +214,7 @@ class TriggerNOCContainer extends Component {
               nearTheConstructionErr:true,
             })
           }
-          break;
-        case 'WhetherMonumentIsLocatedWithinLimitOf':
-          if(e.target.value.match(stringPattern)){
-            this.setState({
-              monumentLocatedErr:false,
-            })
-          }else{
-            this.setState({
-              monumentLocatedErr:true,
-            })
-          }
-          break;
-        case 'StatusOfModernConstructions':
-          if(e.target.value.match(stringPattern)){
-            this.setState({
-              modernStatusErr:false,
-            })
-          }else{
-            this.setState({
-              modernStatusErr:true,
-            })
-          }
-          break;
-
-        case 'OpenSpaceOrPark':
-          if(e.target.value.match(stringPattern)){
-            this.setState({
-              openSpaceParkErr:false,
-            })
-          }else{
-            this.setState({
-              openSpaceParkErr:true,
-            })
-          }
-          break;                      
+          break;                     
       default:
         this.setState({
           monumentNameErr:false,

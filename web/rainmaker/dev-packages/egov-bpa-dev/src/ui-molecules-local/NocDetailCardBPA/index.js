@@ -309,7 +309,7 @@ export const fieldConfig = {
     },
     placeholder: {
       labelName: "Enter Terms and Conditions",
-      labelKey: "BPA_NMA_NOC_TERM_CONDITIO_PLACEHOLDER"
+      labelKey: "BPA_NMA_NOC_TERM_CONDITIONS_PLACEHOLDER"
     }
   }
 };

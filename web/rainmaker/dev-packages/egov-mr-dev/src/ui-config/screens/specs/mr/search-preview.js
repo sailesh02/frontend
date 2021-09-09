@@ -33,8 +33,10 @@ import {
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { downloadPrintContainer, footerReviewTop } from "./applyResource/footer";
 import { getReviewDocuments } from "./applyResource/review-documents";
-import { getReviewOwner } from "./applyResource/review-owner";
+import { getBrideAddressAndGuardianDetails } from "./applyResource/review-owner";
 import { getReviewTrade } from "./applyResource/review-trade";
+import { getgroomAddressAndGuardianDetails } from "./applyResource/groom-address-guardian-detail";
+import { getWitnessDetails } from "./applyResource/witness-detail";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -44,7 +46,7 @@ let headerSideText = { word1: "", word2: "" };
 const getTradeTypeSubtypeDetails = payload => {
   const tradeUnitsFromApi = get(
     payload,
-    "Licenses[0].tradeLicenseDetail.tradeUnits",
+    "MarriageRegistrations[0].tradeUnits",
     []
   );
   const tradeUnitDetails = [];
@@ -68,41 +70,29 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   let payload = await getSearchResults(queryObject);
 
   headerSideText = getHeaderSideText(
-    get(payload, "Licenses[0].status"),
-    get(payload, "Licenses[0].licenseNumber")
+    get(payload, "MarriageRegistrations[0].status"),
+    get(payload, "MarriageRegistrations[0].licenseNumber")
   );
-  set(payload, "Licenses[0].headerSideText", headerSideText);
-  set(payload, "Licenses[0].assignee", []);
-  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-      "."
-    )[0] === "INDIVIDUAL"
-    ? setMultiOwnerForSV(action, true)
-    : setMultiOwnerForSV(action, false);
+  set(payload, "MarriageRegistrations[0].headerSideText", headerSideText);
+  set(payload, "MarriageRegistrations[0].assignee", []);
 
-  if (get(payload, "Licenses[0].licenseType")) {
-    setValidToFromVisibilityForSV(
-      action,
-      get(payload, "Licenses[0].licenseType")
-    );
-  }
 
   await setDocuments(
     payload,
-    "Licenses[0].tradeLicenseDetail.applicationDocuments",
+    "MarriageRegistrations[0].applicationDocuments",
     "LicensesTemp[0].reviewDocData",
     dispatch, 'TL'
   );
 
-  let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
-  payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
-  payload && dispatch(prepareFinalObject("LicensesTemp[0].oldOwners", [...payload.Licenses[0].tradeLicenseDetail.owners]));
+  let sts = getTransformedStatus(get(payload, "MarriageRegistrations[0].status"));
+  payload && dispatch(prepareFinalObject("MarriageRegistrations[0]", payload.MarriageRegistrations[0]));
+
 
   //set business service data
 
   const businessService = get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].workflowCode"
+    "MarriageRegistrations[0].workflowCode"
   );
   const businessServiceQueryObject = [
     { key: "tenantId", value: tenantId },
@@ -123,7 +113,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
         getTradeTypeSubtypeDetails(payload)
       )
     );
-  const LicenseData = payload.Licenses[0];
+  const LicenseData = payload.MarriageRegistrations[0];
   const fetchFromReceipt = sts !== "pending_payment";
 
 
@@ -136,18 +126,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     fetchFromReceipt
   );
 
-  if(payload && payload.Licenses.length > 0){
 
-    let licenseType = get(payload, "Licenses[0].licenseType");
-    let tlPeriod = get(payload, "Licenses[0].tradeLicenseDetail.additionalDetail.licensePeriod")
-
-    if(licenseType === "PERMANENT"){
-      dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", `${tlPeriod} Years`));
-    }else{
-      dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", `${tlPeriod} Days`));
-    }
-
-   }
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
@@ -163,7 +142,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     //check for renewal flow
     const licenseNumber = get(
       state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].licenseNumber`
+      `MarriageRegistrations[0].licenseNumber`
     );
     let queryObjectSearch = [
       {
@@ -174,28 +153,23 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       { key: "licenseNumbers", value: licenseNumber }
     ];
     const payload = await getSearchResults(queryObjectSearch);
-    const length = payload && payload.Licenses.length > 0 ? get(payload, `Licenses`, []).length : 0;
+    const length = payload && payload.MarriageRegistrations.length > 0 ? get(payload, `MarriageRegistrations`, []).length : 0;
     dispatch(prepareFinalObject("licenseCount", length));
-    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-      get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-        "."
-      )[0] === "INDIVIDUAL"
-      ? setMultiOwnerForSV(action, true)
-      : setMultiOwnerForSV(action, false);
+
     const status = get(
       state,
-      "screenConfiguration.preparedFinalObject.Licenses[0].status"
+      "screenConfiguration.preparedFinalObject.MarriageRegistrations[0].status"
     );
 
     const financialYear = get(
       state,
-      "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
+      "screenConfiguration.preparedFinalObject.MarriageRegistrations[0].financialYear"
     );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
     const obj = setStatusBasedValue(status);
-    let appDocuments=get(data, "Licenses[0].tradeLicenseDetail.applicationDocuments",[]);
+    let appDocuments=get(data, "MarriageRegistrations[0].applicationDocuments",[]);
     if (appDocuments) {
       let applicationDocs = [];
       appDocuments.forEach(doc => {
@@ -211,10 +185,10 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
             applicationDocs=applicationDocs.filter(appDocument=>!(appDocument.documentType===removedDoc.documentType&&appDocument.fileStoreId===removedDoc.fileStoreId))
           })
       }
-      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments",applicationDocs));
+      dispatch(prepareFinalObject("MarriageRegistrations[0].applicationDocuments",applicationDocs));
       await setDocuments(
         get(state, "screenConfiguration.preparedFinalObject"),
-        "Licenses[0].tradeLicenseDetail.applicationDocuments",
+        "MarriageRegistrations[0].applicationDocuments",
         "LicensesTemp[0].reviewDocData",
         dispatch, 'TL'
       );
@@ -222,7 +196,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
 
     const businessService = get(
       state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].businessService`
+      `MarriageRegistrations[0].businessService`
     );
     let mdmsBody = {
       MdmsCriteria: {
@@ -258,7 +232,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       word1: {
         ...getCommonTitle(
           {
-            jsonPath: "Licenses[0].headerSideText.word1"
+            jsonPath: "MarriageRegistrations[0].headerSideText.word1"
           },
           {
             style: {
@@ -270,7 +244,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       },
       word2: {
         ...getCommonTitle({
-          jsonPath: "Licenses[0].headerSideText.word2"
+          jsonPath: "MarriageRegistrations[0].headerSideText.word2"
         })
       },
       cancelledLabel: {
@@ -330,10 +304,10 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         true
       );
 
-      if (get(data, "Licenses[0].tradeLicenseDetail.verificationDocuments")) {
+      if (get(data, "MarriageRegistrations[0].verificationDocuments")) {
         await setDocuments(
           data,
-          "Licenses[0].tradeLicenseDetail.verificationDocuments",
+          "MarriageRegistrations[0].verificationDocuments",
           "LicensesTemp[0].verifyDocData",
           dispatch, 'TL'
         );
@@ -357,7 +331,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
 
     const applicationType = get(
       state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].applicationType"
+      "MarriageRegistrations[0].applicationType"
     );
 
     const headerrow = getCommonContainer({
@@ -470,9 +444,11 @@ const estimate = getCommonGrayCard({
 
 const reviewTradeDetails = getReviewTrade(false);
 
-const reviewOwnerDetails = getReviewOwner(false);
+const BrideAddressAndGuardianDetails = getBrideAddressAndGuardianDetails(false);
 
 const reviewDocumentDetails = getReviewDocuments(false, false);
+const groomAddressAndGuardianDetails = getgroomAddressAndGuardianDetails(false);
+const witnessDetails = getWitnessDetails(false);
 
 // let approvalDetails = getApprovalDetails(status);
 let title = getCommonTitle({ labelName: titleText });
@@ -507,18 +483,17 @@ export const tradeReviewDetails = getCommonCard({
     "search-preview"
   ),
   reviewTradeDetails,
-  reviewOwnerDetails,
+  BrideAddressAndGuardianDetails,
+  groomAddressAndGuardianDetails,
+  witnessDetails,
   reviewDocumentDetails
 });
 
-export const beforeSubmitHook =  (Licenses=[{}]) => {
+export const beforeSubmitHook =  (MarriageRegistrations=[{}]) => {
   let state = store.getState();
-  let oldOwners =  JSON.parse(
-    JSON.stringify(get(state, "screenConfiguration.preparedFinalObject.LicensesTemp[0].oldOwners", {}))
-  );
-  Licenses&&Array.isArray(Licenses)&&Licenses.length>0&& set(Licenses[0] ,"tradeLicenseDetail.owners", checkValidOwners(get(Licenses[0], "tradeLicenseDetail.owners",[]),oldOwners));
 
-return Licenses;
+
+return MarriageRegistrations;
 
 }
 const screenConfig = {
@@ -580,9 +555,9 @@ const screenConfig = {
           moduleName: "egov-workflow",
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
-            dataPath: "Licenses",
+            dataPath: "MarriageRegistrations",
             moduleName: "NewTL",
-            updateUrl: "/tl-services/v1/_update",
+            updateUrl: "/mr-services/v1/_update",
             beforeSubmitHook:beforeSubmitHook
           }
         },
@@ -593,7 +568,7 @@ const screenConfig = {
         //   visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
         //   props: {
         //     open: true,
-        //     dataPath: "Licenses",
+        //     dataPath: "MarriageRegistrations",
         //     moduleName: "NewTL",
         //     updateUrl: "/tl-services/v1/_update",
         //     data: {

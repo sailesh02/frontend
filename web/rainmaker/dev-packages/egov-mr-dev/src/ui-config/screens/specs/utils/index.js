@@ -506,7 +506,7 @@ export const calculateBill = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-calculator/v1/_getbill",
+      "/mr-services/v1/_getbill",
       "",
       queryObject
     );
@@ -1166,7 +1166,7 @@ export const prepareDocumentTypeObj = documents => {
       ? documents.reduce((documentsArr, item, ind) => {
         documentsArr.push({
           ...item,
-          jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+          jsonPath: `MarriageRegistrations[0].applicationDocuments[${ind}]`,
         });
         return documentsArr;
       }, [])
@@ -1311,7 +1311,7 @@ const getBillingSlabData = async (
     try {
       const response = await httpRequest(
         "post",
-        "/tl-calculator/billingslab/_search",
+        "/mr-services/billingslab/_search",
         "",
         queryObject
       );
@@ -1430,7 +1430,7 @@ export const createEstimateData = async (
     getQueryArg(href, "applicationNumber");
   const tenantId =
     get(LicenseData, "tenantId") || getQueryArg(href, "tenantId");
-  const businessService = "TL"; //Hardcoding Alert
+  const businessService = "MR"; //Hardcoding Alert
   const queryObj = [
     { key: "tenantId", value: tenantId },
     {
@@ -1865,18 +1865,15 @@ export const getTransformedStatus = status => {
 };
 
 export const getDocList = (state, dispatch) => {
-  const tradeUnits = get(
-    state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.tradeUnits[0]"
-  );
 
-  const documentObj = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.TradeLicense.documentObj");
+
+  const documentObj = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.MarriageRegistration.documentObj");
   const documentTypes = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.common-masters.DocumentType");
 
   const applicationType = getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? "RENEWAL" :
   get( state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "NEW");
-  const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeUnits.tradeType.split(".")[0]);
-
+  const documentObjArray = documentObj;
+console.log(documentObjArray, "Nero Docs");
   const filteredDocTypes = documentObjArray[0].allowedDocs.reduce((acc, item, index) => {
     documentTypes.find((document, index) => {
       if (document.code === item.documentType)
@@ -1886,6 +1883,8 @@ export const getDocList = (state, dispatch) => {
     });
     return acc;
   }, [])
+
+  console.log(filteredDocTypes, "Nero Docs 2");
   const applicationDocArray = filteredDocTypes && filteredDocTypes.reduce((result, item) => {
     const transformedDocObj = documentObjArray[0].allowedDocs.filter(docObj => docObj.documentType === item.code)[0];
     if (transformedDocObj.applicationType.includes(applicationType)) {
@@ -1916,7 +1915,7 @@ export const getDocList = (state, dispatch) => {
   //REARRANGE APPLICATION DOCS FROM TL SEARCH IN EDIT FLOW
   let applicationDocs = get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.applicationDocuments",
+    "MarriageRegistrations[0].applicationDocuments",
     []
   );
   let applicationDocsReArranged =
@@ -1934,7 +1933,7 @@ export const getDocList = (state, dispatch) => {
   applicationDocsReArranged &&
     dispatch(
       prepareFinalObject(
-        "Licenses[0].tradeLicenseDetail.applicationDocuments",
+        "MarriageRegistrations[0].applicationDocuments",
         applicationDocsReArranged
       )
     );
@@ -2186,10 +2185,10 @@ export const applyForm = (state, dispatch, action) => {
     callBack: (state, dispatch) => {
       dispatch(prepareFinalObject('documentsUploadRedux', {}))
       const applyUrl = process.env.NODE_ENV === "production"
-        ? `/mr-citizen/apply?tenantId=${tenantId}&${urlString}`
+        ? `/mr-citizen/apply?tenantId=${tenantId}`
         : process.env.REACT_APP_SELF_RUNNING === true
           ? `/egov-ui-framework/mr-citizen/apply?tenantId=${tenantId}`
-          : `/mr-citizen/apply?tenantId=${tenantId}&${urlString}`;
+          : `/mr-citizen/apply?tenantId=${tenantId}`;
       dispatch(setRoute(applyUrl))
     }
   })

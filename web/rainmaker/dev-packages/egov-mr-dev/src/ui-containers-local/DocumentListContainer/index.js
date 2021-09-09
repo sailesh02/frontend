@@ -38,7 +38,7 @@ const mapStateToProps = state => {
   );
   const tenantId = get(
     screenConfiguration.preparedFinalObject,
-    "Licenses[0].tenantId",
+    "MarriageRegistrations[0].tenantId",
     ""
   );
   const { preparedFinalObject } = screenConfiguration || {};

@@ -1,7 +1,7 @@
 import {
   getCommonContainer, getCommonGrayCard,
   getCommonSubHeader,
-
+  getCommonTitle,
 
   getDivider,
   getLabel, getLabelWithValue
@@ -10,368 +10,239 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA, convertEpochToDate } from "../../utils";
 import { changeStep } from "./footer";
 
-export const tradeAccessoriesDetails = {
-  reviewAccessoryType: getLabelWithValue(
+export const brideReviewDetails = {
+  header: getCommonTitle(
     {
-      labelName: "Accesory Type",
-      labelKey: "TL_REVIEWACCESSORY_TYPE_LABEL"
+      labelName: "Trade Location Details",
+      //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
+      labelKey: "MR_BRIDE_DETAIL"
     },
     {
-      jsonPath:
-        "Licenses[0].tradeLicenseDetail.accessories[0].accessoryCategory",
-      localePrefix: {
-        moduleName: "TRADELICENSE",
-        masterName: "ACCESSORIESCATEGORY"
-      },
-    }
-  ),
-  reviewAccessoryUOM: getLabelWithValue(
-    {
-      labelName: "UOM",
-      labelKey: "TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER"
-    },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uom", callBack: checkValueForNA }
-  ),
-  reviewAccessoryUOMValue: getLabelWithValue(
-    {
-      labelName: "UOM Value",
-      labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL"
-    },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uomValue", callBack: checkValueForNA }
-  ),
-  reviewAccessoryCount: getLabelWithValue(
-    {
-      labelName: "Accessory Count",
-      labelKey: "TL_NEW_TRADE_ACCESSORY_COUNT"
-    },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].count", callBack: checkValueForNA }
-  )
-}
-const accessoriesCard = {
-  uiFramework: "custom-containers",
-  componentPath: "MultiItem",
-  props: {
-    className: "review-trade-search-preview",
-    scheama: getCommonGrayCard({
-      accessoriesCardContainer: getCommonContainer(tradeAccessoriesDetails)
-    }),
-
-    items: [],
-    hasAddItem: false,
-    isReviewPage: true,
-    sourceJsonPath: "Licenses[0].tradeLicenseDetail.accessories",
-    prefixSourceJsonPath:
-      "children.cardContent.children.accessoriesCardContainer.children",
-    afterPrefixJsonPath: "children.value.children.key"
-  },
-  type: "array"
-};
-export const tradetypeDetails = {
-  // reviewTradeCategory: getLabelWithValue(
-  //   {
-  //     labelName: "Trade Category",
-  //     labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL"
-  //   },
-  //   {
-  //     jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-  //     localePrefix: {
-  //       moduleName: "TRADELICENSE",
-  //       masterName: "TRADETYPE"
-  //     },
-  //     callBack: value => {
-  //       return value ? value.split(".")[0] : "NA";
-  //     }
-  //   }
-  // ),
-  reviewTradeType: getLabelWithValue(
-    {
-      labelName: "Trade Type",
-      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL"
-    },
-    {
-      jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-      localePrefix: {
-        moduleName: "TRADELICENSE",
-        masterName: "TRADETYPE"
-      },
-      callBack: value => {
-        return value ? value.split(".")[0] : "NA";
+      style: {
+        marginBottom: 18,
+        fontSize: 15,
+        width: "100%"
       }
     }
   ),
-  reviewTradeSubtype: getLabelWithValue(
-    {
-      labelName: "Trade Sub-Type",
-      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
-    },
-    {
-      jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-      localePrefix: {
-        moduleName: "TRADELICENSE",
-        masterName: "TRADETYPE"
-      },
-      callBack: checkValueForNA
-    }
-  ),
-
-  reviewTradeUOM: getLabelWithValue(
-    {
-      labelName: "UOM (Unit of Measurement)",
-      labelKey: "TL_NEW_TRADE_DETAILS_UOM_LABEL"
-    },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom", callBack: checkValueForNA }
-  ),
-  reviewTradeUOMValue: getLabelWithValue(
-    {
-      labelName: "UOM Value",
-      labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL"
-    },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue", callBack: checkValueForNA }
-  )
-}
-
-const tradeTypeCard = {
-  uiFramework: "custom-containers",
-  componentPath: "MultiItem",
-  props: {
-    className: "review-trade-search-preview",
-    scheama: getCommonGrayCard({
-      tradeTypeCardContainer: getCommonContainer(tradetypeDetails)
-    }),
-    items: [],
-    hasAddItem: false,
-    isReviewPage: true,
-    sourceJsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits",
-    prefixSourceJsonPath:
-      "children.cardContent.children.tradeTypeCardContainer.children",
-    afterPrefixJsonPath: "children.value.children.key"
-  },
-  type: "array"
-};
-export const tradeReviewDetails = {
-  reviewApplicationType: getLabelWithValue(
+  brideFName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "TL_APPLICATION_TYPE"
+      labelKey: "MR_FIRST_NAME"
     },
     {
       jsonPath:
-        "Licenses[0].applicationType",
-      localePrefix: {
-        moduleName: "TradeLicense",
-        masterName: "ApplicationType"
-      },
-    }
-  ),
-  reviewLicenceType: getLabelWithValue(
-    {
-      labelName: "Licence Type",
-      labelKey: "TL_COMMON_TABLE_COL_LICENSE_TYPE"
-    },
-    {
-      jsonPath: "Licenses[0].licenseType",
-      localePrefix: {
-        moduleName: "TRADELICENSE",
-        masterName: "LICENSETYPE"
-      },
-    }
-  ),
-  reviewTradeName: getLabelWithValue(
-    {
-      labelName: "Trade Name",
-      labelKey: "TL_COMMON_TABLE_COL_TRD_NAME"
-    },
-    { jsonPath: "Licenses[0].tradeName" }
-  ),
-  oldLicenseNo: getLabelWithValue(
-    {
-      labelName: "Old License No",
-      labelKey: "TL_OLD_LICENSE_NO"
-    },
-    {
-      jsonPath: "Licenses[0].oldLicenseNumber",
-      callBack: checkValueForNA
-    }
-  ),
-  // reviewFromDate: getLabelWithValue(
-  //   { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
-  //   {
-  //     jsonPath: "Licenses[0].validFrom",
-  //     callBack: convertEpochToDate
-  //   }
-  // ),
-  // reviewToDate: getLabelWithValue(
-  //   { labelName: "To Date", labelKey: "TL_COMMON_TO_DATE_LABEL" },
-  //   {
-  //     jsonPath: "Licenses[0].validTo",
-  //     callBack: convertEpochToDate
-  //   }
-  // ),
-  reviewCommencementDate: getLabelWithValue(
-    {
-      labelName: "Commencement Date",
-      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
-    },
-    {
-      jsonPath: "Licenses[0].commencementDate",
-      callBack: convertEpochToDate
-    }
-  ),
-  reviewTlPeriod: getLabelWithValue(
-    { labelName: "Licence Period", labelKey: "TL_COMMON_LICENCE_PERIOD_LABEL" },
-    {
-      jsonPath: "TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview",
-      callback: checkValueForNA
-    }
-  ),
+        "MarriageRegistrations[0].coupleDetails[0].firstName",
 
-  // reviewStructureType: getLabelWithValue(
-  //   { labelName: "Structure Type", labelKey: "TL_STRUCTURE_TYPE" },
-  //   {
-  //     jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
-  //     localePrefix: {
-  //       moduleName: "common-masters",
-  //       masterName: "STRUCTURETYPE"
-  //     },
-  //     callBack: value => {
-  //       return value ? value.split(".")[0] : "NA";
-  //     }
-  //   }
-  // ),
-  // reviewSubStructureType: getLabelWithValue(
-  //   { labelName: "Structure Sub Type", labelKey: "TL_STRUCTURE_SUB_TYPE" },
-  //   {
-  //     jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
-  //     localePrefix: {
-  //       moduleName: "common-masters",
-  //       masterName: "STRUCTURETYPE"
-  //     },
-  //   }
-  // ),
-
-  reviewGSTNo: getLabelWithValue(
-    {
-      labelName: "GST No.",
-      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
-    },
-    {
-      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo",
-      callBack: checkValueForNA
     }
   ),
-  // reviewOperationalArea: getLabelWithValue(
-  //   {
-  //     labelName: "Operational Area",
-  //     labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
-  //   },
-  //   {
-  //     jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea",
-  //     callBack: checkValueForNA
-  //   }
-  // ),
-  // reviewNoOfEmployee: getLabelWithValue(
-  //   {
-  //     labelName: "No of Employees",
-  //     labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
-  //   },
-  //   {
-  //     jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees",
-  //     callBack: checkValueForNA
-  //   }
-  // )
-
-  tradePurpose: getLabelWithValue(
+  brideMName: getLabelWithValue(
     {
-      labelName: "Trade Purpose",
-      labelKey: "TL_NEW_TRADE_PURPOSE_LABEL"
+      labelName: "Application Type",
+      labelKey: "MR_MIDDLE_NAME"
     },
     {
-      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.licensePurpose",
-      callBack: checkValueForNA
+      jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].middleName",
+
+    }
+  ),
+  brideLName: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_LAST_NAME"
+    },
+    {
+      jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].lastName",
+
+    }
+  ),
+  brideFatherFName: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_FATHER_NAME"
+    },
+    {
+      jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].fatherName",
+
+    }
+  ),
+  brideMotherFName: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_MOTHER_NAME"
+    },
+    {
+      jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].motherName",
+
+    }
+  ),
+  isDisabled: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_IS_DIVYANG"
+    },
+    {
+      jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].isDivyang",
+
     }
   )
 }
 
+export const groomReviewDetails = {
+
+  header: getCommonTitle(
+    {
+      labelName: "Trade Location Details",
+      //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
+      labelKey: "MR_GROOM_DETAIL"
+    },
+    {
+      style: {
+        marginBottom: 18,
+        fontSize: 15,
+        width: "100%"
+      }
+    }
+  ),
+  groomFName: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_FIRST_NAME"
+    },
+    {
+      jsonPath:
+        "MarriageRegistrations[0].coupleDetails[1].firstName",
+
+    }
+  ),
+  groomMName: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_MIDDLE_NAME"
+    },
+    {
+      jsonPath:
+        "MarriageRegistrations[0].coupleDetails[1]].middleName",
+
+    }
+  ),
+  groomLName: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_LAST_NAME"
+    },
+    {
+      jsonPath:
+        "MarriageRegistrations[0].coupleDetails[1].lastName",
+
+    }
+  ),
+  groomFatherFName: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_FATHER_NAME"
+    },
+    {
+      jsonPath:
+        "MarriageRegistrations[0].coupleDetails[1].fatherName",
+
+    }
+  ),
+  groomMotherFName: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_MOTHER_NAME"
+    },
+    {
+      jsonPath:
+        "MarriageRegistrations[0].coupleDetails[1].motherName",
+
+    }
+  ),
+  isDisabled: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_IS_DIVYANG"
+    },
+    {
+      jsonPath:
+        "MarriageRegistrations[0].coupleDetails[1].isDivyang",
+
+    }
+  )
+}
 export const tradeLocationDetails = {
-  // reviewPropertyID: getLabelWithValue(
-  //   {
-  //     labelName: "Property Assessment ID",
-  //     labelKey: "TL_EMP_APPLICATION_PT_ASS_ID"
-  //   },
-  //   { jsonPath: "Licenses[0].propertyId", callBack: checkValueForNA }
-  // ),
+  header: getCommonTitle(
+    {
+      labelName: "Trade Location Details",
+      //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
+      labelKey: "Marriage Place"
+    },
+    {
+      style: {
+        marginBottom: 18,
+        fontSize: 15,
+        width: "100%"
+      }
+    }
+  ),
   reviewCity: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+      labelKey: "MR_CITY"
     },
     {
-      jsonPath: "Licenses[0].tradeLicenseDetail.address.city",
+      jsonPath: "MarriageRegistrations[0].tenantId",
       localePrefix: {
         moduleName: "TENANT",
         masterName: "TENANTS"
       },
     }
   ),
-  reviewDoorNo: getLabelWithValue(
-    {
-      labelName: "Door/House No.",
-      labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-    },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.address.doorNo", callBack: checkValueForNA }
-  ),
-  reviewBuildingName: getLabelWithValue(
-    {
-      labelName: "Building/Company Name",
-      labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
-    },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.address.buildingName", callBack: checkValueForNA }
-  ),
-  reviewStreetName: getLabelWithValue(
-    {
-      labelName: "Street Name",
-      labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
-    },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.address.street", callBack: checkValueForNA }
-  ),
+
+
   reviewMohalla: getLabelWithValue(
     {
       labelName: "Mohalla",
-      labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
+      labelKey: "MR_VILLAGE"
     },
     {
-      jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.code",
+      jsonPath: "MarriageRegistrations[0].marriagePlace.locality.code",
       localePrefix: {
         moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.', '_').toUpperCase() : "",
         masterName: "REVENUE"
       }, callBack: checkValueForNA
     }
   ),
-  reviewPincode: getLabelWithValue(
-    {
-      labelName: "Pincode",
-      labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
-    },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode", callBack: checkValueForNA }
-  ),
+
   tradeLocWard: getLabelWithValue(
     {
       labelName: "Ward",
-      labelKey: "TL_NEW_TRADE_DETAILS_WARD_LABEL"
+      labelKey: "MR_WARD"
     },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.address.ward", callBack: checkValueForNA }
+    { jsonPath: "MarriageRegistrations[0].marriagePlace.ward", callBack: checkValueForNA }
   ),
-  // reviewElectricityNo: getLabelWithValue(
-  //   {
-  //     labelName: "Electricity Connection No.",
-  //     labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_LABEL"
-  //   },
-  //   {
-  //     jsonPath:
-  //       "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo",
-  //     callBack: checkValueForNA
-  //   }
-  // )
+
+  reviewDoorNo: getLabelWithValue(
+    {
+      labelName: "Door/House No.",
+      labelKey: "MR_PLACE_OF_MARRIAGE"
+    },
+    { jsonPath: "MarriageRegistrations[0].marriagePlace.placeOfMarriage", callBack: checkValueForNA }
+  ),
+
+  reviewToDate: getLabelWithValue(
+    { labelName: "To Date", labelKey: "MR_MARRIAGE_DATE" },
+    {
+      jsonPath: "MarriageRegistrations[0].marriageDate",
+      callBack: convertEpochToDate
+    }
+  ),
 }
 export const getReviewTrade = (isEditable = true) => {
   return getCommonGrayCard({
@@ -389,7 +260,7 @@ export const getReviewTrade = (isEditable = true) => {
           },
           ...getCommonSubHeader({
             labelName: "Trade Details",
-            labelKey: "TL_COMMON_TR_DETAILS"
+            labelKey: "MR_MARRIAGE_DETAIL"
           })
         },
         editSection: {
@@ -425,13 +296,11 @@ export const getReviewTrade = (isEditable = true) => {
         }
       }
     },
-    viewOne: getCommonContainer(tradeReviewDetails),
-    div1: getDivider(),
-    viewTwo: tradeTypeCard,
-    //div2: getDivider(),
-    //viewThree: accessoriesCard,
-
+    viewOne: getCommonContainer(tradeLocationDetails),
+    div2: getDivider(),
+    viewTwo: getCommonContainer(brideReviewDetails),
     div3: getDivider(),
-    viewFour: getCommonContainer(tradeLocationDetails)
+    viewThree: getCommonContainer(groomReviewDetails),
   });
 };
+

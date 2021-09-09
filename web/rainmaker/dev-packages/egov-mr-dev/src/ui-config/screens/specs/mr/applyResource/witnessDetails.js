@@ -39,53 +39,20 @@ export const witness1Details = getCommonCard(
         label: {
           labelName: "Door/House No.",
           //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "First Name"
+          labelKey: "Name"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "First Name"
+          labelKey: "Name"
         },
         pattern: getPattern("Address"),
-        jsonPath: "Licenses[0].witness1FName",
+        jsonPath: "MarriageRegistrations[0].witness[0].firstName",
         required: true,
       }),
-      witness1MName: getTextField({
-        label: {
-          labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Middle Name"
-        },
-        props:{
-          className:"applicant-details-error"
-        },
-        placeholder: {
-          labelName: "Enter Door/House No.",
-          labelKey: "Middle Name"
-        },
-        pattern: getPattern("Address"),
-        jsonPath: "Licenses[0].witness1MName",
 
-      }),
-      witness1LName: getTextField({
-        label: {
-          labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Last Name"
-        },
-        props:{
-          className:"applicant-details-error"
-        },
-        placeholder: {
-          labelName: "Enter Door/House No.",
-          labelKey: "Last Name"
-        },
-        pattern: getPattern("Address"),
-        jsonPath: "Licenses[0].witness1LName",
-
-      }),
       witness1Address: getTextField({
         label: {
           labelName: "Door/House No.",
@@ -100,7 +67,7 @@ export const witness1Details = getCommonCard(
           labelKey: "Witness Address"
         },
         pattern: getPattern("Address"),
-        jsonPath: "Licenses[0].witness1Address",
+        jsonPath: "MarriageRegistrations[0].witness[0].address",
 
       }),
       witness1Country: {
@@ -113,8 +80,8 @@ export const witness1Details = getCommonCard(
 
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "Country" },
-          sourceJsonPath: "applyScreenMdmsData.TradeLicense.mrCountry",
-          jsonPath: "Licenses[0].witness1Country",
+          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
+          jsonPath: "MarriageRegistrations[0].witness[0].country",
           required: true,
 
         }),
@@ -129,8 +96,8 @@ export const witness1Details = getCommonCard(
 
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "State" },
-          sourceJsonPath: "applyScreenMdmsData.TradeLicense.mrState",
-          jsonPath: "Licenses[0].witness1State",
+          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
+          jsonPath: "MarriageRegistrations[0].witness[0].state",
           required: true,
 
         }),
@@ -145,8 +112,8 @@ export const witness1Details = getCommonCard(
 
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "District" },
-          sourceJsonPath: "applyScreenMdmsData.TradeLicense.mrDistrict",
-          jsonPath: "Licenses[0].witness1District",
+          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
+          jsonPath: "MarriageRegistrations[0].witness[0].district",
           required: true,
 
         }),
@@ -166,7 +133,7 @@ export const witness1Details = getCommonCard(
         },
         required: true,
         //pattern: getPattern("Address"),
-        jsonPath: "Licenses[0].witness1AddressPin",
+        jsonPath: "MarriageRegistrations[0].witness[0].pinCode",
 
       }),
       witness1Contact: getTextField({
@@ -184,7 +151,7 @@ export const witness1Details = getCommonCard(
         },
         required: true,
         //pattern: getPattern("Address"),
-        jsonPath: "Licenses[0].witness1Contact",
+        jsonPath: "MarriageRegistrations[0].witness[0].contact",
 
       }),
     })
@@ -210,68 +177,35 @@ export const witness2Details = getCommonCard(
         label: {
           labelName: "Door/House No.",
           //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "First Name"
+          labelKey: "Name"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "First Name"
+          labelKey: "Name"
         },
         pattern: getPattern("Address"),
-        jsonPath: "Licenses[0].witness2FName",
+        jsonPath: "MarriageRegistrations[0].witness[1].firstName",
         required: true,
       }),
-      witness2MName: getTextField({
-        label: {
-          labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Middle Name"
-        },
-        props:{
-          className:"applicant-details-error"
-        },
-        placeholder: {
-          labelName: "Enter Door/House No.",
-          labelKey: "Middle Name"
-        },
-        pattern: getPattern("Address"),
-        jsonPath: "Licenses[0].witness2MName",
 
-      }),
-      witness2LName: getTextField({
-        label: {
-          labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Last Name"
-        },
-        props:{
-          className:"applicant-details-error"
-        },
-        placeholder: {
-          labelName: "Enter Door/House No.",
-          labelKey: "Last Name"
-        },
-        pattern: getPattern("Address"),
-        jsonPath: "Licenses[0].witness2LName",
-
-      }),
       witness2Address: getTextField({
         label: {
           labelName: "Door/House No.",
           //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Witness Address"
+          labelKey: "Address"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "Witness Address"
+          labelKey: "Address"
         },
         pattern: getPattern("Address"),
-        jsonPath: "Licenses[0].witness2Address",
+        jsonPath: "MarriageRegistrations[0].witness[1].address",
 
       }),
       witness2Country: {
@@ -284,8 +218,8 @@ export const witness2Details = getCommonCard(
 
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "Country" },
-          sourceJsonPath: "applyScreenMdmsData.TradeLicense.mrCountry",
-          jsonPath: "Licenses[0].witness2Country",
+          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
+          jsonPath: "MarriageRegistrations[0].witness[1].country",
           required: true,
 
         }),
@@ -300,8 +234,8 @@ export const witness2Details = getCommonCard(
 
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "State" },
-          sourceJsonPath: "applyScreenMdmsData.TradeLicense.mrState",
-          jsonPath: "Licenses[0].witness2State",
+          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
+          jsonPath: "MarriageRegistrations[0].witness[1].state",
           required: true,
 
         }),
@@ -316,8 +250,8 @@ export const witness2Details = getCommonCard(
 
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "District" },
-          sourceJsonPath: "applyScreenMdmsData.TradeLicense.mrDistrict",
-          jsonPath: "Licenses[0].witness2District",
+          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
+          jsonPath: "MarriageRegistrations[0].witness[1].district",
           required: true,
 
         }),
@@ -337,7 +271,7 @@ export const witness2Details = getCommonCard(
         },
         required: true,
         //pattern: getPattern("Address"),
-        jsonPath: "Licenses[0].witness2AddressPin",
+        jsonPath: "MarriageRegistrations[0].witness[1].pinCode",
 
       }),
       witness2Contact: getTextField({
@@ -355,7 +289,7 @@ export const witness2Details = getCommonCard(
         },
         required: true,
         //pattern: getPattern("Address"),
-        jsonPath: "Licenses[0].witness2Contact",
+        jsonPath: "MarriageRegistrations[0].witness[1].contact",
 
       }),
     })

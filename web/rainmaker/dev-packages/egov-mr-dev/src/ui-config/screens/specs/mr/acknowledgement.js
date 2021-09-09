@@ -158,17 +158,17 @@ const getAcknowledgementCard = (
   status,
   applicationNumber,
   secondNumber,
-  financialYear,
+
   tenant
 ) => {
-  const financialYearText = financialYear ? financialYear : "";
+
   if (purpose === "apply" && status === "success") {
     searchResults(dispatch, applicationNumber, tenant);
     return {
       header: getCommonHeader({
-        labelName: `Application for New Trade License (${financialYearText})`,
-        labelKey: "TL_COMMON_APPLICATION_NEW_LICENSE",
-        dynamicArray: [financialYearText]
+        labelName: `Application for New Trade License`,
+        labelKey: "Marriage Registration",
+
       }),
       headerdownloadprint: downloadprintMenu(state, dispatch),
       applicationSuccessCard: {
@@ -215,9 +215,9 @@ const getAcknowledgementCard = (
   } else if (purpose === "resubmit" && status === "success") {
     return {
       header: getCommonHeader({
-        labelName: `Application for New Trade License (${financialYearText})`,
-        labelKey: "TL_COMMON_APPLICATION_NEW_LICENSE",
-        dynamicArray: [financialYearText]
+        labelName: `Application for New Trade License`,
+        labelKey: "TL_COMMON_APPLICATION_NEW_LICENSE"
+
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -262,9 +262,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Payment for New Trade License ${financialYearText}`,
-          labelKey: "TL_COMMON_PAYMENT_NEW_LICENSE",
-          dynamicArray: [financialYearText]
+          labelName: `Payment for New Trade License`,
+          labelKey: "TL_COMMON_PAYMENT_NEW_LICENSE"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -312,9 +311,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: `Trade License Application`,
+          labelKey: "TL_TRADE_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -356,9 +354,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: `Trade License Application`,
+          labelKey: "TL_TRADE_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -400,9 +397,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: `Trade License Application`,
+          labelKey: "TL_TRADE_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -443,9 +439,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: `Trade License Application`,
+          labelKey: "TL_TRADE_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -481,9 +476,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: `Trade License Application`,
+          labelKey: "TL_TRADE_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -524,8 +518,7 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          dynamicArray: [financialYearText],
+          labelName: `Trade License Application`,
           labelKey: "TL_TRADE_APPLICATION"
         }),
         applicationNumber: {
@@ -561,9 +554,8 @@ const getAcknowledgementCard = (
   } else if (purpose === "mark" && status === "success") {
     return {
       header: getCommonHeader({
-        labelName: `Application for Trade License ${financialYearText}`,
-        labelKey: "TL_APPLICATION_TRADE_LICENSE",
-        dynamicArray: [financialYearText]
+        labelName: `Application for Trade License`,
+        labelKey: "TL_APPLICATION_TRADE_LICENSE"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -593,9 +585,8 @@ const getAcknowledgementCard = (
   } else if (purpose === "forward" && status === "success") {
     return {
       header: getCommonHeader({
-        labelName: `Application for Trade License ${financialYearText}`,
-        labelKey: "TL_APPLICATION_TRADE_LICENSE",
-        dynamicArray: [financialYearText]
+        labelName: `Application for Trade License`,
+        labelKey: "TL_APPLICATION_TRADE_LICENSE"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -628,9 +619,8 @@ const getAcknowledgementCard = (
 
       header: getCommonContainer({
         Commonheader: getCommonHeader({
-          labelName: `Application for Trade License Renewal ${financialYearText}`,
-          labelKey: "TL_APPLICATION_TRADE_LICENSE_RENEWAL",
-          dynamicArray: [financialYearText]
+          labelName: `Application for Trade License Renewal`,
+          labelKey: "TL_APPLICATION_TRADE_LICENSE_RENEWAL"
         }),
         licenseNumber: {
           uiFramework: "custom-atoms-local",
@@ -686,7 +676,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
-    const financialYear = getQueryArg(window.location.href, "FY");
+
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -701,7 +691,7 @@ const screenConfig = {
       status,
       applicationNumber,
       secondNumber,
-      financialYear,
+
       tenant
     );
     set(action, "screenConfig.components.div.children", data);

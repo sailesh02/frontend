@@ -1,215 +1,217 @@
 import {
   getCommonContainer, getCommonGrayCard,
   getCommonSubHeader,
+  getCommonTitle,
 
-
+  getDivider,
   getLabel, getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA, convertEpochToDate } from "../../utils";
 import { changeStep } from "./footer";
 
 
-export const reviewownershipType = getLabelWithValue(
-  {
-    labelName: "Type of ownership",
-    labelKey: "TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL"
-  },
-  {
-    jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
-    localePrefix: {
-      moduleName: "common-masters",
-      masterName: "OwnerShipCategory"
-    },
-    callBack: value => {
-      return value ? value.split(".")[0] : "";
-    }
-  }
-);
-export const reviewsubOwnership = getLabelWithValue(
-  {
-    labelName: "Type of sub-ownership",
-    labelKey: "TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP"
-  },
-  {
-    jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
-    localePrefix: {
-      moduleName: "common-masters",
-      masterName: "OwnerShipCategory"
-    },
-  }
-);
-export const reviewOwnerFatherName = getLabelWithValue(
-  {
-    labelName: "Father/Husband's Name",
-    labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_LABEL"
-  },
-  {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
-  }
-);
-export const reviewRelationship = getLabelWithValue(
-  {
-    labelName: "Relationship",
-    labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
-  },
-  {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-    localePrefix: {
-      moduleName: "COMMON",
-      masterName: "RELATION"
-    },
+export const brideGuardianDetails = {
 
-  }
-);
-export const reviewOwnerGender = getLabelWithValue(
-  {
-    labelName: "Gender",
-    labelKey: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
-  },
-  {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
-    localePrefix: {
-      moduleName: "COMMON",
-      masterName: "GENDER"
-    }
-  }
-);
-
-export const reviewOwnerDOB = getLabelWithValue(
-  {
-    labelName: "Date of Birth",
-    labelKey: "TL_EMP_APPLICATION_DOB"
-  },
-  {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
-    callBack: convertEpochToDate
-  }
-);
-
-export const reviewOwnerPhoneNo = getLabelWithValue(
-  {
-    labelName: "Mobile No.",
-    labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
-  },
-  {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",
-  }
-);
-export const reviewOwnerEmail = getLabelWithValue(
-  {
-    labelName: "Email",
-    labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
-  },
-  {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId",
-    callBack: checkValueForNA
-  }
-);
-export const reviewOwnerPAN = getLabelWithValue(
-  {
-    labelName: "PAN No.",
-    labelKey: "TL_NEW_OWNER_DETAILS_PAN_LABEL"
-  },
-  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan", callBack: checkValueForNA }
-);
-
-
-
-export const tradeOwnerDetails = {
-  reviewownershipType,
-  reviewsubOwnership,
-  reviewOwnerPhoneNo,
-  reviewOwnerName: getLabelWithValue(
+  header: getCommonTitle(
     {
-      labelName: "Name",
-      labelKey: "TL_NEW_OWNER_DETAILS_NAME_LABEL"
+      labelName: "Trade Location Details",
+      //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
+      labelKey: "MR_GUARDIAN_DETAIL"
     },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name" }
+    {
+      style: {
+        marginBottom: 18,
+        fontSize: 15,
+        width: "100%"
+      }
+    }
   ),
-  reviewOwnerFatherName,
-  reviewRelationship,
-  reviewOwnerGender,
-  reviewOwnerDOB,
-  reviewOwnerEmail,
-  reviewOwnerPAN,
-  reviewOwnerAddr: getLabelWithValue(
+  rltnWithBride: getLabelWithValue(
     {
-      labelName: "Corrospondence Address",
-      labelKey: "TL_NEW_OWNER_DETAILS_ADDR_LABEL"
+      labelName: "Application Type",
+      labelKey: "MR_RELATIONSHIP"
     },
     {
       jsonPath:
-        "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
-      callBack: checkValueForNA
+      "MarriageRegistrations[0].coupleDetails[0].guardianDetails.relationship",
+
     }
   ),
-  reviewOwnerSpecialCat: getLabelWithValue(
+
+  brideGuardianName: getLabelWithValue(
     {
-      labelName: "Special Owner Category",
-      labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_LABEL"
+      labelName: "Application Type",
+      labelKey: "MR_NAME"
     },
     {
-      jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "OwnerType"
-      },
-      callBack: checkValueForNA
+      jsonPath:
+      "MarriageRegistrations[0].coupleDetails[0].guardianDetails.name",
+
     }
-  )
+  ),
+
+  brideGrdnAddressLine1: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_ADDRESS"
+    },
+    {
+      jsonPath:
+      "MarriageRegistrations[0].coupleDetails[0].guardianDetails.addressline1",
+
+    }
+  ),
+
+  brideGrdnCountry: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_COUNTRY"
+    },
+    {
+      jsonPath:
+      "MarriageRegistrations[0].coupleDetails[0].guardianDetails.country",
+
+    }
+  ),
+
+  brideGrdnState: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_STATE"
+    },
+    {
+      jsonPath:
+      "MarriageRegistrations[0].coupleDetails[0].guardianDetails.state",
+
+    }
+  ),
+  brideGrdnDistrict: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_DISTRICT"
+    },
+    {
+      jsonPath:
+      "MarriageRegistrations[0].coupleDetails[0].guardianDetails.district",
+
+    }
+  ),
+  brideGrdnAddressPin: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_PINCODE"
+    },
+    {
+      jsonPath:
+      "MarriageRegistrations[0].coupleDetails[0].guardianDetails.pinCode",
+
+    }
+  ),
+  brideGrdnContact: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_CONTACT"
+    },
+    {
+      jsonPath:
+      "MarriageRegistrations[0].coupleDetails[0].guardianDetails.contact",
+
+    }
+  ),
+  brideGrdnEmail: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "MR_EMAIL_ADDRESS"
+    },
+    {
+      jsonPath:
+      "MarriageRegistrations[0].coupleDetails[0].guardianDetails.emailAddress",
+
+    }
+  ),
+
 }
-export const tradeInstitutionDetails = {
-  reviewownershipType,
-  reviewsubOwnership,
-  reviewOwnerPhoneNo,
-  reviewoffTelephone: getLabelWithValue(
+export const brideAddressDetails = {
+  header: getCommonTitle(
     {
-      labelName: "Official Telephone No.",
-      labelKey: "TL_NEW_OWNER_PHONE_LABEL"
+      labelName: "Trade Location Details",
+      //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
+      labelKey: "MR_BRIDE_ADDRESS"
     },
     {
-      jsonPath:
-        "Licenses[0].tradeLicenseDetail.owners[0].altContactNumber",
-      callBack: checkValueForNA
+      style: {
+        marginBottom: 18,
+        fontSize: 15,
+        width: "100%"
+      }
     }
   ),
-  reviewOwnerName: getLabelWithValue(
+  brideAddressLine1: getLabelWithValue(
     {
-      labelName: "Name of the Authorised Person",
-      labelKey: "TL_NEW_OWNER_AUTH_PER_LABEL"
-    },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name" }
-  ),
-  reviewDesignation: getLabelWithValue(
-    {
-      labelName: "Designation",
-      labelKey: "TL_NEW_OWNER_DESIG_LABEL"
+      labelName: "City",
+      labelKey: "MR_ADDRESS"
     },
     {
-      jsonPath:
-        "Licenses[0].tradeLicenseDetail.institution.designation",
-      callBack: checkValueForNA
-    }
-  ),
-  reviewOwnerFatherName,
-  reviewRelationship,
-  reviewOwnerGender,
-  reviewOwnerDOB,
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.addressLine1",
 
-  reviewOwnerEmail,
-  reviewOwnerAddr: getLabelWithValue(
+    }
+  ),
+
+  brideCountry: getLabelWithValue(
     {
-      labelName: "Official Corrospondence Address",
-      labelKey: "TL_NEW_OWNER_OFF_ADDR_LABEL"
+      labelName: "City",
+      labelKey: "MR_COUNTRY"
     },
     {
-      jsonPath:
-        "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
-      callBack: checkValueForNA
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.country",
+
     }
-  )
+  ),
+
+  brideState: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "MR_STATE"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.state",
+
+    }
+  ),
+  brideDistrict: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "MR_DISTRICT"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.district",
+
+    }
+  ),
+  brideAddressPin: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "MR_PIN_CODE"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.pinCode",
+
+    }
+  ),
+  brideDob: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "MR_DATE_OF_BIRTH"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].dateOfBirth",
+      callBack: convertEpochToDate
+    }
+  ),
+
 }
-export const getReviewOwner = (isEditable = true) => {
+export const getBrideAddressAndGuardianDetails = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
       uiFramework: "custom-atoms",
@@ -224,8 +226,8 @@ export const getReviewOwner = (isEditable = true) => {
             sm: 10
           },
           ...getCommonSubHeader({
-            labelName: "Owner Details",
-            labelKey: "TL_COMMON_OWN_DETAILS"
+            labelName: "Trade Details",
+            labelKey: "MR_BRIDE_ADDRESS_GUARDIAN_DETAIL"
           })
         },
         editSection: {
@@ -255,41 +257,15 @@ export const getReviewOwner = (isEditable = true) => {
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch) => {
-              changeStep(state, dispatch, "", 1);
+              changeStep(state, dispatch, "", 0);
             }
           }
         }
       }
     },
-    multiOwner: {
-      uiFramework: "custom-containers",
-      componentPath: "MultiItem",
-      props: {
-        scheama: getCommonGrayCard({
-          viewFive: getCommonContainer(tradeOwnerDetails)
-        }),
-        items: [],
-        hasAddItem: false,
-        sourceJsonPath: "Licenses[0].tradeLicenseDetail.owners",
-        prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
-        afterPrefixJsonPath: "children.value.children.key"
-      },
-      type: "array"
-    },
-    multiOwnerInstitutional: {
-      uiFramework: "custom-containers",
-      componentPath: "MultiItem",
-      props: {
-        scheama: getCommonGrayCard({
-          viewFive: getCommonContainer(tradeInstitutionDetails)
-        }),
+    viewOne: getCommonContainer(brideAddressDetails),
+    div2: getDivider(),
+    viewTwo: getCommonContainer(brideGuardianDetails),
 
-        items: [],
-        hasAddItem: false,
-        sourceJsonPath: "Licenses[0].tradeLicenseDetail.owners",
-        prefixSourceJsonPath: "children.cardContent.children.viewFive.children"
-      },
-      type: "array"
-    }
   });
 };

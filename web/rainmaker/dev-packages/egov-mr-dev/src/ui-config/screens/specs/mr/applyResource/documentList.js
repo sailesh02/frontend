@@ -1,6 +1,6 @@
 export const documentList = {
   uiFramework: "custom-containers-local",
-  moduleName: "egov-tradelicence",
+  moduleName: "egov-mr",
   componentPath: "DocumentListContainer",
   props: {
     buttonLabel: {
@@ -16,7 +16,7 @@ export const documentList = {
         },
         formatProps :{
           accept : "image/*, .pdf, .png, .jpeg",
-        }, 
+        },
         maxFileSize: 5000
       },
       {
@@ -27,7 +27,7 @@ export const documentList = {
         },
         formatProps :{
           accept : "image/*, .pdf, .png, .jpeg",
-        },        
+        },
         maxFileSize: 5000
       },
       {
@@ -38,7 +38,7 @@ export const documentList = {
         },
         formatProps :{
           accept: "image/*, .png, .jpeg",
-        },        
+        },
         maxFileSize: 3000
       },
       {
@@ -49,7 +49,7 @@ export const documentList = {
         },
         formatProps :{
           accept : "image/*, .pdf, .png, .jpeg",
-        },        
+        },
         maxFileSize: 5000
       }
     ],

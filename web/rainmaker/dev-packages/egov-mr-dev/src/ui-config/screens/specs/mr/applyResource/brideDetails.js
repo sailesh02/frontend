@@ -48,7 +48,7 @@ export const brideDetails = getCommonCard(
          labelKey: "First Name"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.brideFName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].firstName",
         required: true,
       }),
 
@@ -67,7 +67,7 @@ export const brideDetails = getCommonCard(
          labelKey: "Middle Name"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.brideMName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].middleName",
         //required: true,
       }),
 
@@ -86,7 +86,7 @@ export const brideDetails = getCommonCard(
          labelKey: "Last Name"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.brideLName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].lastName",
 
       }),
 
@@ -94,7 +94,7 @@ export const brideDetails = getCommonCard(
         label: {
           labelName: "Door/House No.",
           //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Father's First Name"
+          labelKey: "Father's Name"
         },
         props:{
           className:"applicant-details-error"
@@ -102,56 +102,56 @@ export const brideDetails = getCommonCard(
         placeholder: {
           labelName: "Enter Door/House No.",
          // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Father's First Name"
+         labelKey: "Father's Name"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.brideFatherFName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].fatherName",
         required: true,
       }),
 
-      brideFatherMName: getTextField({
-        label: {
-          labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Father's Middle Name"
-        },
-        props:{
-          className:"applicant-details-error"
-        },
-        placeholder: {
-          labelName: "Enter Door/House No.",
-         // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Father's Middle Name"
-        },
-        pattern: getPattern("DoorHouseNo"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.brideFatherMName",
+      // brideFatherMName: getTextField({
+      //   label: {
+      //     labelName: "Door/House No.",
+      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
+      //     labelKey: "Father's Middle Name"
+      //   },
+      //   props:{
+      //     className:"applicant-details-error"
+      //   },
+      //   placeholder: {
+      //     labelName: "Enter Door/House No.",
+      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
+      //    labelKey: "Father's Middle Name"
+      //   },
+      //   pattern: getPattern("DoorHouseNo"),
+      //   jsonPath: "Licenses[0].tradeLicenseDetail.address.brideFatherMName",
 
-      }),
+      // }),
 
-      brideFatherLName: getTextField({
-        label: {
-          labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Father's Last Name"
-        },
-        props:{
-          className:"applicant-details-error"
-        },
-        placeholder: {
-          labelName: "Enter Door/House No.",
-         // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Father's Last Name"
-        },
-        pattern: getPattern("DoorHouseNo"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.brideFatherLName",
+      // brideFatherLName: getTextField({
+      //   label: {
+      //     labelName: "Door/House No.",
+      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
+      //     labelKey: "Father's Last Name"
+      //   },
+      //   props:{
+      //     className:"applicant-details-error"
+      //   },
+      //   placeholder: {
+      //     labelName: "Enter Door/House No.",
+      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
+      //    labelKey: "Father's Last Name"
+      //   },
+      //   pattern: getPattern("DoorHouseNo"),
+      //   jsonPath: "Licenses[0].tradeLicenseDetail.address.brideFatherLName",
 
-      }),
+      // }),
 
       brideMotherFName: getTextField({
         label: {
           labelName: "Door/House No.",
           //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Mother's First Name"
+          labelKey: "Mother's Name"
         },
         props:{
           className:"applicant-details-error"
@@ -159,50 +159,50 @@ export const brideDetails = getCommonCard(
         placeholder: {
           labelName: "Enter Door/House No.",
          // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Mother's First Name"
+         labelKey: "Mother's Name"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.brideMotherFName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].motherName",
         required: true,
       }),
 
-      brideMotherMName: getTextField({
-        label: {
-          labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Mother's Middle Name"
-        },
-        props:{
-          className:"applicant-details-error"
-        },
-        placeholder: {
-          labelName: "Enter Door/House No.",
-         // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Mother's Middle Name"
-        },
-        pattern: getPattern("DoorHouseNo"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.brideMotherMName",
+      // brideMotherMName: getTextField({
+      //   label: {
+      //     labelName: "Door/House No.",
+      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
+      //     labelKey: "Mother's Middle Name"
+      //   },
+      //   props:{
+      //     className:"applicant-details-error"
+      //   },
+      //   placeholder: {
+      //     labelName: "Enter Door/House No.",
+      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
+      //    labelKey: "Mother's Middle Name"
+      //   },
+      //   pattern: getPattern("DoorHouseNo"),
+      //   jsonPath: "Licenses[0].tradeLicenseDetail.address.brideMotherMName",
 
-      }),
+      // }),
 
-      brideMotherLName: getTextField({
-        label: {
-          labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Mother's Last Name"
-        },
-        props:{
-          className:"applicant-details-error"
-        },
-        placeholder: {
-          labelName: "Enter Door/House No.",
-         // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Mother's Last Name"
-        },
-        pattern: getPattern("DoorHouseNo"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.brideMotherLName",
+      // brideMotherLName: getTextField({
+      //   label: {
+      //     labelName: "Door/House No.",
+      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
+      //     labelKey: "Mother's Last Name"
+      //   },
+      //   props:{
+      //     className:"applicant-details-error"
+      //   },
+      //   placeholder: {
+      //     labelName: "Enter Door/House No.",
+      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
+      //    labelKey: "Mother's Last Name"
+      //   },
+      //   pattern: getPattern("DoorHouseNo"),
+      //   jsonPath: "MarriageRegistrations[0].coupleDetails[0].motherName",
 
-      }),
+      // }),
 
       isBrideDisabled: {
         ...getSelectField({
@@ -214,10 +214,9 @@ export const brideDetails = getCommonCard(
 
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "Is Bride Divyang?" },
-          sourceJsonPath: "applyScreenMdmsData.TradeLicense.yesNoBox",
-          jsonPath: "Licenses[0].isBrideDivyang",
+          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.yesNoBox",
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].isDivyang",
 
-          value: "No"
         }),
       },
 

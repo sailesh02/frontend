@@ -100,11 +100,11 @@ class DocumentList extends Component {
       getQueryArg(window.location.href, "action") !== "edit" &&
       Object.values(uploadedDocuments).forEach((item, index) => {
         prepareFinalObject(
-          `Licenses[0].tradeLicenseDetail.applicationDocuments[${uploadedIndex[index]}]`,
+          `MarriageRegistrations[0].applicationDocuments[${uploadedIndex[index]}]`,
           { ...item[0] }
         );
       });
-      
+
       this.setState({
         uploadedDocuments: uploadedDocumentsArranged,
         uploadedIndex
@@ -183,7 +183,7 @@ class DocumentList extends Component {
   };
   render() {
     const { classes, documents, documentTypePrefix } = this.props;
-    
+
     const { uploadedIndex } = this.state;
     return (
       <div style={{ paddingTop: 10 }}>

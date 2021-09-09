@@ -17,12 +17,12 @@ import "./index.css";
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
   const tenantId = get(LicenseData, "tenantId");
-  const financialYear = get(LicenseData, "financialYear");
+
   const purpose = "apply";
   const status = "success";
   dispatch(
     setRoute(
-      `/mr/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+      `/mr/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}`
     )
   );
 };
@@ -84,171 +84,26 @@ export const callBackForNext = async (state, dispatch) => {
   );
   let isFormValid = true;
   let hasFieldToaster = true;
-  let isValidToGreatorThanStartDate = true;
-  let isCommencementDateInPast = true;
-  let isTempTradeValid = true;
-  let onlyFiveTradesAllowed = true;
+
   if (activeStep === 0) {
-    // Applicant Details
-    const isTradeDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children",
-      state,
-      dispatch
-    );
-    const isTradeLocationValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children",
-      state,
-      dispatch
-    );
-    let accessoriesJsonPath =
-      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.accessoriesCard.props.items";
-    let accessories = get(
-      state.screenConfiguration.screenConfig.apply,
-      accessoriesJsonPath,
-      []
-    );
-    let isAccessoriesValid = true;
-    for (var i = 0; i < accessories.length; i++) {
-      if (
-        (accessories[i].isDeleted === undefined ||
-          accessories[i].isDeleted !== false) &&
-        !validateFields(
-          `${accessoriesJsonPath}[${i}].item${i}.children.cardContent.children.accessoriesCardContainer.children`,
-          state,
-          dispatch
-        )
-      )
-        isAccessoriesValid = false;
-    }
-
-    let tradeUnitJsonPath =
-      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items";
-    let tradeUnits = get(
-      state.screenConfiguration.screenConfig.apply,
-      tradeUnitJsonPath,
-      []
-    );
-    let isTradeUnitValid = true;
-
-    for (var j = 0; j < tradeUnits.length; j++) {
-      if (
-        (tradeUnits[j].isDeleted === undefined ||
-          tradeUnits[j].isDeleted !== false) &&
-        !validateFields(
-          `${tradeUnitJsonPath}[${j}].item${j}.children.cardContent.children.tradeUnitCardContainer.children`,
-          state,
-          dispatch
-        )
-      )
-        isTradeUnitValid = false;
-    }
-
-    let queryObject = JSON.parse(
-      JSON.stringify(
-        get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
-      )
-    );
-
-    let tlType = get(queryObject[0], "licenseType");
-
-    let combinedTradeUnits = get(queryObject[0], "tradeLicenseDetail");
-
-    // let selectedTradeUnits = combinedTradeUnits && combinedTradeUnits.tradeUnits && combinedTradeUnits.tradeUnits.length > 0 ? combinedTradeUnits.tradeUnits[0].tempUom : '';
-
-
-    // if(tlType && tlType === "TEMPORARY" && !combinedTradeUnits && combinedTradeUnits.tradeUnits && combinedTradeUnits.tradeUnits.length > 0 && combinedTradeUnits.tradeUnits[0].tempUom){
-    //    isTradeSubTypeValidForTempTL = false;
-
-    // }
-
-    let tlcommencementDate = get(queryObject[0], "commencementDate");
-    let tlValidTo = get(queryObject[0], "validTo");
-
-    tlValidTo = new Date(`${tlValidTo} 00:00:00`).getTime();
-    var dt = new Date();
-
-    let h = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
-
-    var currentTimeStamp = new Date(`${h} 00:00:00`).getTime();
-
-
-    var pastDateTimeStamp = new Date(`${tlcommencementDate} 00:00:00`).getTime();
 
 
 
-    if (pastDateTimeStamp < currentTimeStamp) {
-      isCommencementDateInPast = false;
-    }
-    if (pastDateTimeStamp > tlValidTo) {
-      isValidToGreatorThanStartDate = false;
-    }
 
-    let tradeLicenseDetail = get(queryObject[0], "tradeLicenseDetail");
-    let tradeUnitsArray = get(tradeLicenseDetail, "tradeUnits");
 
-    if (tlType && tlType === "TEMPORARY") {
-      if (tradeUnitsArray && tradeUnitsArray.length > 0 && tradeUnitsArray[0].uomValue > 30) {
-        isTempTradeValid = false;
-      }
 
-    }
-    if (tlType) {
-      let tradeCount = 0;
-      for (var j = 0; j < tradeUnits.length; j++) {
-        if (tradeUnits[j].isDeleted !== false) {
-          tradeCount++;
-        }
-      }
 
-      if (tradeCount && tradeCount > 5) {
-        onlyFiveTradesAllowed = false;
-      }
-    }
 
-    if (
-      !isTradeDetailsValid ||
-      !isTradeLocationValid ||
-      !isAccessoriesValid ||
-      !isTradeUnitValid ||
-      //!isTradeSubTypeValidForTempTL ||
-      !isCommencementDateInPast ||
-      !isValidToGreatorThanStartDate ||
-      !isTempTradeValid ||
-      !onlyFiveTradesAllowed
-    ) {
-      isFormValid = false;
-    }
-    let ownership = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
-      "INDIVIDUAL"
-    );
-    // ownership = ownership.split(".")[0];
-    let subOwnerShipCategoryType = ownership.split(".")[1];
-    if (subOwnerShipCategoryType === "MULTIPLEOWNERS") {
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-          "props.hasAddItem",
-          true
-        )
-      );
-    } else {
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-          "props.hasAddItem",
-          false
-        )
-      );
-    }
+
+
+
+
   }
 
-  if (activeStep === 1) {
+  if (activeStep === 0) {
+    console.log("Nero Hit")
     //Bride Address
-    // await getDocList(state, dispatch); Nero Demo
+     await getDocList(state, dispatch);
 
     // let isOwnerShipValid = validateFields(
     //   "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children",
@@ -257,7 +112,7 @@ export const callBackForNext = async (state, dispatch) => {
     // );
     // let ownership = get(
     //   state.screenConfiguration.preparedFinalObject,
-    //   "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+    //   "MarriageRegistrations[0].tradeLicenseDetail.subOwnerShipCategory",
     //   "INDIVIDUAL"
     // );
     // ownership = ownership.split(".")[0];
@@ -291,17 +146,17 @@ export const callBackForNext = async (state, dispatch) => {
     // if (
     //   get(
     //     state.screenConfiguration.preparedFinalObject,
-    //     "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+    //     "MarriageRegistrations[0].tradeLicenseDetail.subOwnerShipCategory"
     //   ) === "INDIVIDUAL.MULTIPLEOWNERS"
     //   &&
     //   get(
     //     state.screenConfiguration.preparedFinalObject,
-    //     "Licenses[0].tradeLicenseDetail.owners"
+    //     "MarriageRegistrations[0].tradeLicenseDetail.owners"
     //   )
     //   &&
     //   get(
     //     state.screenConfiguration.preparedFinalObject,
-    //     "Licenses[0].tradeLicenseDetail.owners"
+    //     "MarriageRegistrations[0].tradeLicenseDetail.owners"
     //   ).length <= 1
     // ) {
     //   dispatch(
@@ -316,43 +171,34 @@ export const callBackForNext = async (state, dispatch) => {
     //   );
     //   return false; // to show the above message
     // }
-    // if (isFormValid && isOwnerShipValid) {
-    //   isFormValid = await applyTradeLicense(state, dispatch, activeStep);
-    //   if (!isFormValid) {
-    //     hasFieldToaster = false;
-    //   }
-    // } else {
-    //   isFormValid = false;
-    // }
+     if (isFormValid) {
+       isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+       console.log(isFormValid, "Nero in")
+      if (!isFormValid) {
+        hasFieldToaster = false;
+      }
+    } else {
+      isFormValid = false;
+    }
   }
   if (activeStep === 2) {
     // Groom Address
     // const LicenseData = get(
     //   state.screenConfiguration.preparedFinalObject,
-    //   "Licenses[0]",
+    //   "MarriageRegistrations[0]",
     //   {}
     // );
 
-    // get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory") &&
-    //   get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory").split(
-    //     "."
-    //   )[0] === "INDIVIDUAL"
-    //   ? setMultiOwnerForApply(state, true)
-    //   : setMultiOwnerForApply(state, false);
-
-    // if (get(LicenseData, "licenseType")) {
-    //   setValidToFromVisibilityForApply(state, get(LicenseData, "licenseType"));
-    // }
 
     // let uploadedDocData = get(
     //   state.screenConfiguration.preparedFinalObject,
-    //   "Licenses[0].tradeLicenseDetail.applicationDocuments",
+    //   "MarriageRegistrations[0].tradeLicenseDetail.applicationDocuments",
     //   []
     // );
 
     // const uploadedTempDocData = get(
     //   state.screenConfiguration.preparedFinalObject,
-    //   "LicensesTemp[0].applicationDocuments",
+    //   "MarriageRegistrationsTemp[0].applicationDocuments",
     //   []
     // );
     // for (var y = 0; y < uploadedTempDocData.length; y++) {
@@ -377,7 +223,7 @@ export const callBackForNext = async (state, dispatch) => {
     //         get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].tradeLicenseDetail.owners", [])
     //       )
     //     );
-    //     dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.owners", checkValidOwners(get(state.screenConfiguration.preparedFinalObject, "Licenses[0].tradeLicenseDetail.owners", []), oldOwners)));
+    //     dispatch(prepareFinalObject("MarriageRegistrations[0].tradeLicenseDetail.owners", checkValidOwners(get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations[0].tradeLicenseDetail.owners", []), oldOwners)));
     //     dispatch(
     //       setRoute(
     //         `/mr/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`
@@ -414,7 +260,7 @@ export const callBackForNext = async (state, dispatch) => {
     //Witness Details
     // const LicenseData = get(
     //   state.screenConfiguration.preparedFinalObject,
-    //   "Licenses[0]"
+    //   "MarriageRegistrations[0]"
     // );
     // isFormValid = await applyTradeLicense(state, dispatch, activeStep);
     // if (isFormValid) {
@@ -424,10 +270,87 @@ export const callBackForNext = async (state, dispatch) => {
     //     moveToSuccess(LicenseData, dispatch);
     // }
   }
-  console.log(activeStep, "nero active step")
+  console.log(activeStep, isFormValid, "nero active step")
   if (activeStep === 4) {
 // Photo and Docs
+
+const LicenseData = get(
+  state.screenConfiguration.preparedFinalObject,
+  "MarriageRegistrations[0]",
+  {}
+);
+
+
+let uploadedDocData = get(
+  state.screenConfiguration.preparedFinalObject,
+  "MarriageRegistrations[0].applicationDocuments",
+  []
+);
+
+const uploadedTempDocData = get(
+  state.screenConfiguration.preparedFinalObject,
+  "LicensesTemp[0].applicationDocuments",
+  []
+);
+for (var y = 0; y < uploadedTempDocData.length; y++) {
+  if (
+    uploadedTempDocData[y].required &&
+    !some(uploadedDocData, { documentType: uploadedTempDocData[y].code })
+  ) {
+    isFormValid = false;
   }
+}
+
+if (isFormValid) {
+  if (getQueryArg(window.location.href, "action") === "edit") {
+    //EDIT FLOW
+    const businessId = getQueryArg(
+      window.location.href,
+      "applicationNumber"
+    );
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+
+  }
+  uploadedDocData = uploadedDocData.filter(item => item.fileUrl && item.fileName)
+  const reviewDocData =
+    uploadedDocData &&
+    uploadedDocData.map(item => {
+      return {
+        title: `TL_${item.documentType}`,
+        link: item.fileUrl && item.fileUrl.split(",")[0],
+        linkText: "View",
+        name: item.fileName
+      };
+    });
+  createEstimateData(
+    LicenseData,
+    "LicensesTemp[0].estimateCardData",
+    dispatch
+  ); //get bill and populate estimate card
+  dispatch(
+    prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
+  );
+}
+
+
+
+  isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+
+  }
+
+  if (activeStep === 5) {
+    //Review Summary
+    const LicenseData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "MarriageRegistrations[0]"
+    );
+   // isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+    if (isFormValid) {
+
+        moveToSuccess(LicenseData, dispatch);
+    }
+  }
+
   if (activeStep !== 5) {
     if (isFormValid) {
       changeStep(state, dispatch);
@@ -439,40 +362,15 @@ export const callBackForNext = async (state, dispatch) => {
       };
       switch (activeStep) {
         case 0:
-          if (!isCommencementDateInPast) {
-            errorMessage = {
-              labelName:
-                "Past commensement date not allowed",
-              labelKey: "ERR_COMMENSEMENT_PAST_DATE_NOT_ALLOWED_TL"
-            };
-          } else if (!isValidToGreatorThanStartDate) {
-            errorMessage = {
-              labelName:
-                "Commensement date greator than validto not allowed",
-              labelKey: "ERR_COMMENSEMENT_DATE_GREATOR_THAN_VALIDTO_NOT_ALLOWED_TL"
-            };
-          }
-          else if (!isTempTradeValid) {
-            errorMessage = {
-              labelName:
-                "Temporary trade more than 30 days not allowed",
-              labelKey: "ERR_TEMP_TRADE_RANGE_NOT_VALID_TL"
-            };
-          } else if (!onlyFiveTradesAllowed) {
-            errorMessage = {
-              labelName:
-                "Only five trades allowed",
-              labelKey: "ERR_ONLY_FIVE_TRADES_ALLOWED_TL"
-            };
-          }
 
-          else {
+
+
             errorMessage = {
               labelName:
                 "Please fill all mandatory fields for Trade Details, then do next !",
               labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
             };
-          }
+
           break;
         case 1:
           errorMessage = {
@@ -758,7 +656,7 @@ export const footer = getCommonApplyFooter({
 export const renewTradelicence = async (financialYear, state, dispatch) => {
   const licences = get(
     state.screenConfiguration.preparedFinalObject,
-    `Licenses`
+    `MarriageRegistrations`
   );
 
   const tenantId = get(licences[0], "tenantId");
@@ -771,16 +669,16 @@ export const renewTradelicence = async (financialYear, state, dispatch) => {
   set(licences[0], "applicationType", "RENEWAL");
   set(licences[0], "financialYear", nextFinancialYear);
 
-  const response = await httpRequest("post", "/tl-services/v1/_update", "", [], {
-    Licenses: licences
+  const response = await httpRequest("post", "/mr-services/v1/_update", "", [], {
+    MarriageRegistrations: licences
   })
   const renewedapplicationNo = get(
     response,
-    `Licenses[0].applicationNumber`
+    `MarriageRegistrations[0].applicationNumber`
   );
   const licenseNumber = get(
     response,
-    `Licenses[0].licenseNumber`
+    `MarriageRegistrations[0].licenseNumber`
   );
   dispatch(
     setRoute(
@@ -798,7 +696,7 @@ export const footerReview = (
   financialYear
 ) => {
   /** MenuButton data based on status */
-  let licenseNumber = get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
+  let licenseNumber = get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "licenseNumber")
   const responseLength = get(
     state.screenConfiguration.preparedFinalObject,
     `licenseCount`,
@@ -976,7 +874,7 @@ export const footerReviewTop = (
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
-  let licenseNumber = get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
+  let licenseNumber = get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "licenseNumber")
   const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
   const receiptKey = get(uiCommonConfig, "receiptKey");
   const responseLength = get(
@@ -988,16 +886,16 @@ export const footerReviewTop = (
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses);
+      const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(MarriageRegistrations);
     },
     leftIcon: "book"
   };
   let tlCertificatePrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses, 'print');
+      const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(MarriageRegistrations, 'print');
     },
     leftIcon: "book"
   };
@@ -1005,16 +903,16 @@ export const footerReviewTop = (
   let tlPLDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadProvisionalCertificateForm(Licenses);
+      const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
+      downloadProvisionalCertificateForm(MarriageRegistrations);
     },
     leftIcon: "book"
   };
   let tlPLPrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadProvisionalCertificateForm(Licenses, 'print');
+      const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
+      downloadProvisionalCertificateForm(MarriageRegistrations, 'print');
     },
     leftIcon: "book"
   };
@@ -1026,8 +924,8 @@ export const footerReviewTop = (
 
 
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "tenantId") },
         { key: "businessService", value: 'TL' }
       ]
       download(receiptQueryString, "download", receiptKey, state);
@@ -1039,8 +937,8 @@ export const footerReviewTop = (
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "tenantId") },
         { key: "businessService", value: 'TL' }
       ]
       download(receiptQueryString, "print", receiptKey, state);
@@ -1051,19 +949,19 @@ export const footerReviewTop = (
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const { MarriageRegistrations, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Licenses[0].applicationNumber}`);
+      set(MarriageRegistrations[0], "additionalDetails.documents", documents)
+      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${MarriageRegistrations[0].applicationNumber}`);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const { MarriageRegistrations, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
+      set(MarriageRegistrations[0], "additionalDetails.documents", documents)
       generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
 
     },
@@ -1221,16 +1119,16 @@ export const downloadPrintContainer = (
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses);
+      const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(MarriageRegistrations);
     },
     leftIcon: "book"
   };
   let tlCertificatePrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses, 'print');
+      const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(MarriageRegistrations, 'print');
     },
     leftIcon: "book"
   };
@@ -1239,16 +1137,16 @@ export const downloadPrintContainer = (
   let tlPLDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadProvisionalCertificateForm(Licenses);
+      const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
+      downloadProvisionalCertificateForm(MarriageRegistrations);
     },
     leftIcon: "book"
   };
   let tlPLPrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadProvisionalCertificateForm(Licenses, 'print');
+      const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
+      downloadProvisionalCertificateForm(MarriageRegistrations, 'print');
     },
     leftIcon: "book"
   };
@@ -1258,8 +1156,8 @@ export const downloadPrintContainer = (
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "tenantId") },
         { key: "businessService", value: 'TL' }
       ]
       download(receiptQueryString, "download", receiptKey);
@@ -1270,8 +1168,8 @@ export const downloadPrintContainer = (
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "tenantId") },
         { key: "businessService", value: 'TL' }
       ]
       download(receiptQueryString, "print", receiptKey);
@@ -1281,21 +1179,21 @@ export const downloadPrintContainer = (
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const { MarriageRegistrations, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
-      // downloadAcknowledgementForm(Licenses);
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Licenses[0].applicationNumber}`);
+      set(MarriageRegistrations[0], "additionalDetails.documents", documents)
+      // downloadAcknowledgementForm(MarriageRegistrations);
+      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${MarriageRegistrations[0].applicationNumber}`);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const { MarriageRegistrations, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
-      // downloadAcknowledgementForm(Licenses,'print');
+      set(MarriageRegistrations[0], "additionalDetails.documents", documents)
+      // downloadAcknowledgementForm(MarriageRegistrations,'print');
       generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
     },
     leftIcon: "assignment"

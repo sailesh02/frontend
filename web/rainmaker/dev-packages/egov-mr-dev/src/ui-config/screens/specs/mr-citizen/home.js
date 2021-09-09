@@ -31,9 +31,7 @@ const cardItems = [
     route: {
       screenKey: "home",
       jsonPath: "components.cityPickerDialog",
-      licenseType: "PERMANENT",
-      moduleName: "TL",
-      legacyLicenseRenewal: false
+
     }
   },
 

@@ -74,10 +74,10 @@ export const fetchData = async (action, state, dispatch) => {
     // );
     /*Mseva 2.0 */
 
-    if (response && response.Licenses && response.Licenses.length > 0) {
-      dispatch(prepareFinalObject("searchResults", response.Licenses));
+    if (response && response.MarriageRegistrations && response.MarriageRegistrations.length > 0) {
+      dispatch(prepareFinalObject("searchResults", response.MarriageRegistrations));
       dispatch(
-        prepareFinalObject("myApplicationsCount", response.Licenses.length)
+        prepareFinalObject("myApplicationsCount", response.MarriageRegistrations.length)
       );
     }
   } catch (error) {

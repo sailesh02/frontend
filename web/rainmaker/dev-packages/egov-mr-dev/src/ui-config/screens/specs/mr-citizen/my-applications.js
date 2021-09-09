@@ -1,6 +1,6 @@
 import { fetchData } from "./citizenSearchResource/citizenFunctions";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+import { checkValueForNA, convertEpochToDate } from "../utils";
 const header = getCommonHeader(
   {
     labelName: "My Applications",
@@ -32,35 +32,29 @@ const screenConfig = {
           visible: true,
           props: {
             contents: [
-              {
-                label: "TL_COMMON_TABLE_COL_APP_TYPE",
-                jsonPath: "applicationType"
-              },
-              {
-                label: "TL_COMMON_TABLE_COL_TRD_NAME",
-                jsonPath: "tradeName"
-              },
+
               {
                 label: "TL_COMMON_TABLE_COL_APP_NO",
                 jsonPath: "applicationNumber"
               },
-              {
-                label: "TL_COMMON_TABLE_COL_OWN_NAME",
-                jsonPath: "tradeLicenseDetail.owners[0].name"
-              },
-              {
-                label: "TL_COMMON_TABLE_COL_LIC_NO",
-                jsonPath: "licenseNumber"
-              },
+
               {
                 label: "TL_COMMON_TABLE_COL_STATUS",
                 jsonPath: "status",
                 prefix: "WF_NEWTL_"
+              },
+              {
+                label: "MR_GROOM_NAME",
+                jsonPath: "coupleDetails[1].firstName"
+              },
+              {
+                label: "MR_BRIDE_NAME",
+                jsonPath: "coupleDetails[0].firstName"
               }
             ],
-            moduleName: "TL",
+            moduleName: "MR",
             screenName: "myApplications",
-            homeURL: "/tradelicense-citizen/home"
+            homeURL: "/mr-citizen/home"
           }
         }
       }

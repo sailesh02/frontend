@@ -103,10 +103,10 @@ export const getMdmsData = async (action, state, dispatch) => {
       tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
-          moduleName: "TradeLicense",
+          moduleName: "MarriageRegistration",
           masterDetails: [
-            { name: "AccessoriesCategory" },
-            { name: "ApplicationType" },
+
+
             { name: "documentObj" }
           ]
         },
@@ -168,11 +168,11 @@ export const getMdmsData = async (action, state, dispatch) => {
     if (localities && localities.length > 0) {
       payload.MdmsRes.tenant.localities = localities;
     }
-    payload.MdmsRes.TradeLicense.TlPeriod = [{code: "1", active: true},{code: "2", active: true}, {code: "3", active: true}, {code: "4", active: true}, {code: "5", active: true}];
-    payload.MdmsRes.TradeLicense.mrCountry = [{code: "India", active: true},{code: "Country 2", active: true}, {code: "Country 3", active: true}, {code: "Country 4", active: true}, {code: "Country 5", active: true}];
-    payload.MdmsRes.TradeLicense.mrState = [{code: "State 1", active: true},{code: "State 2", active: true}, {code: "State 3", active: true}, {code: "State 4", active: true}, {code: "State 5", active: true}];
-    payload.MdmsRes.TradeLicense.mrDistrict = [{code: "District 1", active: true},{code: "District 2", active: true}, {code: "District 3", active: true}, {code: "District 4", active: true}, {code: "District 5", active: true}];
-    payload.MdmsRes.TradeLicense.yesNoBox = [{code: "No", active: true},{code: "Yes", active: true}];
+    payload.MdmsRes.MarriageRegistration.TlPeriod = [{code: "1", active: true},{code: "2", active: true}, {code: "3", active: true}, {code: "4", active: true}, {code: "5", active: true}];
+    payload.MdmsRes.MarriageRegistration.mrCountry = [{code: "India", active: true},{code: "Country 2", active: true}, {code: "Country 3", active: true}, {code: "Country 4", active: true}, {code: "Country 5", active: true}];
+    payload.MdmsRes.MarriageRegistration.mrState = [{code: "State 1", active: true},{code: "State 2", active: true}, {code: "State 3", active: true}, {code: "State 4", active: true}, {code: "State 5", active: true}];
+    payload.MdmsRes.MarriageRegistration.mrDistrict = [{code: "District 1", active: true},{code: "District 2", active: true}, {code: "District 3", active: true}, {code: "District 4", active: true}, {code: "District 5", active: true}];
+    payload.MdmsRes.MarriageRegistration.yesNoBox = [{code: "No", active: true},{code: "Yes", active: true}];
 
 
    let payload2 = null;
@@ -189,7 +189,7 @@ export const getMdmsData = async (action, state, dispatch) => {
       "MdmsRes.Ward",
       []
     )
-    payload.MdmsRes.TradeLicense.Ward = wardData;
+    payload.MdmsRes.MarriageRegistration.Ward = wardData;
 
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
     //dispatch(prepareFinalObject("applyScreenMdmsData", payload2.MdmsRes));

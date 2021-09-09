@@ -53,7 +53,7 @@ export const tradeLocationDetails = getCommonCard(
           optionLabel: "name",
           placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
           sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-          jsonPath: "Licenses[0].tradeLicenseDetail.address.tenantId",
+          jsonPath: "MarriageRegistrations[0].tenantId",
           required: true,
           props: {
             required: true,
@@ -65,7 +65,7 @@ export const tradeLocationDetails = getCommonCard(
 
           dispatch(
             prepareFinalObject(
-              "Licenses[0].tradeLicenseDetail.address.city",
+              "MarriageRegistrations[0].tenantId",
               action.value
             )
           );
@@ -128,59 +128,12 @@ export const tradeLocationDetails = getCommonCard(
         }
       },
 
-      // tradeLocDoorHouseNo: getTextField({
-      //   label: {
-      //     labelName: "Door/House No.",
-      //     labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Door/House No.",
-      //     labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      //   },
-      //   pattern: getPattern("DoorHouseNo"),
-      //   jsonPath: "Licenses[0].tradeLicenseDetail.address.doorNo",
-      //   required: true,
-      // }),
-      // // tradeLocBuilidingName: getTextField({
-      // //   label: {
-      // //     labelName: "Building/Colony Name",
-      // //     labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
-      // //   },
-      // //   props:{
-      // //     className:"applicant-details-error"
-      // //   },
-      // //   placeholder: {
-      // //     labelName: "Enter Building/Colony Name",
-      // //     labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_PLACEHOLDER"
-      // //   },
-      // //   pattern: getPattern("BuildingStreet"),
-      // //   jsonPath: "Licenses[0].tradeLicenseDetail.address.buildingName",
-      // //   required: true,
-      // // }),
-      // // tradeLocStreetName: getTextField({
-      // //   label: {
-      // //     labelName: "Street Name",
-      // //     labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
-      // //   },
-      // //   props:{
-      // //     className:"applicant-details-error"
-      // //   },
-      // //   placeholder: {
-      // //     labelName: "Enter Street Name",
-      // //     labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_PLACEHOLDER"
-      // //   },
-      // //   pattern: getPattern("BuildingStreet"),
-      // //   jsonPath: "Licenses[0].tradeLicenseDetail.address.street",
-      // //   required: true,
-      // // }),
+
       tradeLocMohalla: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-tradelicence",
         componentPath: "AutosuggestContainer",
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.code",
+        jsonPath: "MarriageRegistrations[0].marriagePlace.locality.code",
         required: true,
         props: {
           style: {
@@ -195,7 +148,7 @@ export const tradeLocationDetails = getCommonCard(
             labelName: "Select Mohalla",
             labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_PLACEHOLDER"
           },
-          jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.code",
+          jsonPath: "MarriageRegistrations[0].marriagePlace.locality.code",
           sourceJsonPath: "applyScreenMdmsData.tenant.localities",
           labelsFromLocalisation: true,
           suggestions: [],
@@ -246,8 +199,8 @@ export const tradeLocationDetails = getCommonCard(
 
           optionLabel: "name",
           placeholder: { labelName: "Select Ward", labelKey: "TL_SELECT_WARD" },
-          sourceJsonPath: "applyScreenMdmsData.TradeLicense.Ward.Ward",
-          jsonPath: "Licenses[0].tradeLicenseDetail.address.ward",
+          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.Ward.Ward",
+          jsonPath: "MarriageRegistrations[0].marriagePlace.ward",
           required: true,
           props: {
             required: true,
@@ -270,33 +223,33 @@ export const tradeLocationDetails = getCommonCard(
           labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.mrgplace",
+        jsonPath: "MarriageRegistrations[0].marriagePlace.placeOfMarriage",
         required: true,
       }),
 
       tradeToDate: {
         ...getDateField({
-          label: { labelName: "To Date",
-          labelKey: "Marriage Date"
+          label: { labelName: "Marriage Date",
+          labelKey: "MR_MARRIAGE_DATE"
           //labelKey: "TL_NEW_TRADE_DETAILS_TRADE_END_DATE_LABEL"
 
         },
           placeholder: {
             labelName: "Trade License From Date",
             //labelKey: "TL_TRADE_LICENCE_TO_DATE"
-            labelKey: "Marriage Date"
+            labelKey: "MR_MARRIAGE_DATE"
           },
 
           required: true,
 
           pattern: getPattern("Date"),
-          jsonPath: "Licenses[0].mrgdate",
+          jsonPath: "MarriageRegistrations[0].marriageDate",
 
           props: {
 
             inputProps: {
 
-              min: getCurrentDate()
+              max: getCurrentDate()
 
             }
           }

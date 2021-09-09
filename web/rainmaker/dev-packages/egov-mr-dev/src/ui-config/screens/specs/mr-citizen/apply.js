@@ -33,12 +33,55 @@ const getData = async (action, state, dispatch, tenantId) => {
   ]);
   dispatch(
     prepareFinalObject(
-      "Licenses[0].tradeLicenseDetail.address.tenantId",
-      tenantId
+      "MarriageRegistrations[0]",
+      ''
     )
   );
   dispatch(
-    prepareFinalObject("Licenses[0].tradeLicenseDetail.address.city", tenantId)
+    prepareFinalObject(
+      "MarriageRegistrations[0].tenantId",
+      tenantId
+    )
+  );
+  // dispatch(
+  //   prepareFinalObject("MarriageRegistrations[0].marriagePlace.placeOfMarriage", tenantId)
+  // );
+
+  dispatch(
+    prepareFinalObject(
+      "MarriageRegistrations[0].coupleDetails[0].isGroom",
+      false
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "MarriageRegistrations[0].coupleDetails[1].isGroom",
+      true
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "MarriageRegistrations[0].coupleDetails[0].title",
+      "MRs"
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "MarriageRegistrations[0].coupleDetails[1].title",
+      "MR"
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "MarriageRegistrations[0].coupleDetails[0].isDivyang",
+      false
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "MarriageRegistrations[0].coupleDetails[1].isDivyang",
+      false
+    )
   );
 };
 const updateSearchResults = async (

@@ -148,6 +148,27 @@ class SingleApplication extends React.Component {
           );
         }
       }
+    } else if (moduleName === "MR") {
+
+      const wfCode = get(item, "workflowCode");
+      const businessServiceQueryObject = [
+        { key: "tenantId", value: get(item, "tenantId") },
+        {
+          key: "businessServices",
+          value: wfCode
+        }
+      ];
+      this.setBusinessServiceDataToLocalStorage(businessServiceQueryObject);
+      switch (item.status) {
+        case "INITIATED":
+
+
+            setRoute(`/mr-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+
+          break;
+        default:
+          setRoute(`/mr/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+      }
     }
   };
 

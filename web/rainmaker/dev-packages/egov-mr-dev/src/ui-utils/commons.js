@@ -26,7 +26,7 @@ export const updateTradeDetails = async requestBody => {
   try {
     const payload = await httpRequest(
       "post",
-      "/tl-services/v1/_update",
+      "/mr-services/v1/_update",
       "",
       [],
       requestBody
@@ -54,7 +54,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-services/v1/_search",
+      "/mr-services/v1/_search",
       "",
       queryObject
     );
@@ -74,7 +74,7 @@ export const getSearchResults = async queryObject => {
 const setDocsForEditFlow = async (state, dispatch) => {
   let applicationDocuments = get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.applicationDocuments",
+    "MarriageRegistrations[0].applicationDocuments",
     []
   );
   /* To change the order of application documents similar order of mdms order*/
@@ -95,7 +95,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
   ).filter(docObj => Object.keys(docObj).length > 0)
   applicationDocuments = [...orderedApplicationDocuments];
   dispatch(
-    prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", applicationDocuments)
+    prepareFinalObject("MarriageRegistrations[0].applicationDocuments", applicationDocuments)
   );
 
   let uploadedDocuments = {};
@@ -197,15 +197,15 @@ export const updatePFOforSearchResults = async (
         true
       )
     );
-if(oldLicenseNumber !== null){
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
-        "visible",
-        true
-      )
-    );
+    if (oldLicenseNumber !== null) {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
+          "visible",
+          true
+        )
+      );
     }
   }
 
@@ -282,7 +282,7 @@ if(oldLicenseNumber !== null){
     );
 
   }
-  if(userAction == "EDITRENEWAL"){
+  if (userAction == "EDITRENEWAL") {
     dispatch(
       handleField(
         "apply",
@@ -445,53 +445,58 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
   try {
     let queryObject = JSON.parse(
       JSON.stringify(
-        get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
+        get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations", [])
       )
     );
+
+    console.log(queryObject, "Nero query Object")
+    set(
+      queryObject[0],
+      "marriageDate",
+      convertDateToEpoch(queryObject[0].marriageDate, "dayend")
+    );
     //------ removing null from document array ------
-    let documentArray = compact(get(queryObject[0], "tradeLicenseDetail.applicationDocuments"));
+    let documentArray = compact(get(queryObject[0], "applicationDocuments"));
     let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");
     documents = documents.filter(item => item.fileUrl && item.fileName);
-    set(queryObject[0], "tradeLicenseDetail.applicationDocuments", documents);
+    set(queryObject[0], "applicationDocuments", documents);
     //-----------------------------------------------
     // let documents = get(queryObject[0], "tradeLicenseDetail.applicationDocuments");
-    set(
-      queryObject[0],
-      "validFrom",
-      convertDateToEpoch(queryObject[0].validFrom, "dayend")
-    );
+
     set(queryObject[0], "wfDocuments", documents);
-    let validToForTempTL = queryObject[0] && queryObject[0].validTo;
-    set(
-      queryObject[0],
-      "validTo",
-      convertDateToEpoch(queryObject[0].validTo, "dayend")
-    );
-
-    let commencementDateForTempTL = queryObject[0] && queryObject[0].commencementDate;
-    if (queryObject[0] && queryObject[0].commencementDate) {
-      queryObject[0].commencementDate = convertDateToEpoch(
-        queryObject[0].commencementDate,
-        "dayend"
+    let coupleDetails = [];
+    if (queryObject[0] && queryObject[0].coupleDetails) {
+       coupleDetails = get(
+        queryObject[0],
+        "coupleDetails",
+        []
       );
-    }
-    let owners = get(queryObject[0], "tradeLicenseDetail.owners");
-    owners = (owners && convertOwnerDobToEpoch(owners)) || [];
+      for (let i = 0; i < coupleDetails.length; i++) {
+        coupleDetails[i].dateOfBirth = convertDateToEpoch(coupleDetails[i].dateOfBirth, "dayend")
+        if(coupleDetails[i].isDivyang == 'YES'){
+          coupleDetails[i].isDivyang = true;
+        }else{
+          coupleDetails[i].isDivyang = false;
+        }
+      }
 
+    }
+
+    set(queryObject[0], "coupleDetails", coupleDetails);
+    console.log(queryObject[0], "Nero Couple Details");
     const cityId = get(
       queryObject[0],
-      "tradeLicenseDetail.address.tenantId",
+      "tenantId",
       ""
     );
+
+
     const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
-    const BSqueryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "NewTL" }
-    ];
+
     disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
     disableField('apply', "components.div.children.footer.children.payButton", dispatch);
 
-    if (process.env.REACT_APP_NAME === "Citizen"&& queryObject[0].workflowCode === "NewTL") {
+    if (process.env.REACT_APP_NAME === "Citizen" && queryObject[0].workflowCode === "NewTL") {
       // let currentFinancialYr = getCurrentFinancialYear();
       // //Changing the format of FY
       // let fY1 = currentFinancialYr.split("-")[1];
@@ -500,142 +505,58 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       // set(queryObject[0], "financialYear", currentFinancialYr);
 
 
-      setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
+      //setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
 
     }
 
-    set(queryObject[0], "tenantId", tenantId);
-    set(queryObject[0], "workflowCode", "NewTL");
-    set(queryObject[0], "applicationType", "NEW");
 
+    set(queryObject[0], "workflowCode", "MR");
 
-    let validTo = get(queryObject[0], "validTo");
-    let tlType = get(queryObject[0], "licenseType");
-    let TlPeriod = get(queryObject[0], "TlPeriod");
-    let tlcommencementDate = get(queryObject[0], "commencementDate");
-    let TlStatus = get(queryObject[0], "status");
-
-    let tlPeriodDisplay = "";
-
-    if (tlType && tlType === "TEMPORARY" && validTo && tlcommencementDate) {
-
-      tlcommencementDate = convertDateToEpoch(
-        commencementDateForTempTL,
-        "daystart"
-      );
-      validTo = convertDateToEpoch(
-        validToForTempTL,
-        "dayend"
-      );
-      //var date1 = new Date(tlcommencementDate);
-      var date2 = new Date(validTo);
-      // To calculate the time difference of two dates
-      var Difference_In_Time = date2.getTime() - new Date(tlcommencementDate).getTime();
-
-      // To calculate the no. of days between two dates
-      var Difference_In_Days = Math.ceil((((Difference_In_Time / 1000) / 60) / 60) / 24);
-
-      set(queryObject[0], "tradeLicenseDetail.additionalDetail.licensePeriod", Difference_In_Days);
-      tlPeriodDisplay = `${Difference_In_Days} Days`;
-      queryObject[0].validTo = validTo
-      set(queryObject[0], "validFrom", tlcommencementDate);
-      set(queryObject[0], "commencementDate", tlcommencementDate);
-
-    } else {
-      set(queryObject[0], "tradeLicenseDetail.additionalDetail.licensePeriod", TlPeriod);
-      tlPeriodDisplay = `${TlPeriod} Years`;
-if(TlStatus === "INITIATED" && getQueryArg(window.location.href, "action") === "EDITRENEWAL"){
-
-}else{
-  set(queryObject[0], "validFrom", tlcommencementDate);
-}
-      // let selectedYearInMiliSeconds = 1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
-
-      var dt = new Date(queryObject[0] && queryObject[0].commencementDate);
-      let dt1 = new Date(dt.setFullYear(dt.getFullYear() + Number(TlPeriod)));
-
-
-      // set(queryObject[0], "validTo", tlcommencementDate + selectedYearInMiliSeconds);
-      //set(queryObject[0], "validTo", dt1.getTime());
-
-    }
-    dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", tlPeriodDisplay));
 
     if (queryObject[0].applicationNumber) {
 
       //call update
-      const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
-      if (isEditRenewal) {
-        // if(process.env.REACT_APP_NAME === "Citizen"){
-        //   const nextFinancialyear = await getNextFinancialYearForRenewal(queryObject[0].financialYear);
-        //   set(queryObject[0], "financialYear", nextFinancialyear);
-        // }
-        set(queryObject[0], "applicationType", "RENEWAL");
-        set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));
-        if (TlStatus === "EXPIRED" || TlStatus === "APPROVED") {
 
 
-          const validFrom = 1000 * 60 * 60 * 24 + validTo;
-          set(queryObject[0], "validFrom", validFrom);
-        }
-      }
 
-      let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
-      let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
-      // const selectedTradeSubType = get(state, "screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeSubType", []);
-      // tradeUnits[0].tradeType = selectedTradeSubType;
-      set(
-        queryObject[0],
-        "tradeLicenseDetail.tradeUnits",
-        getMultiUnits(tradeUnits)
-      );
-      set(
-        queryObject[0],
-        "tradeLicenseDetail.accessories",
-        getMultiUnits(accessories)
-      );
-      set(
-        queryObject[0],
-        "tradeLicenseDetail.owners",
-        getMultipleOwners(owners)
-      );
 
       let action = "INITIATE";
       //Code for edit flow
 
       if (
-        queryObject[0].tradeLicenseDetail &&
-        queryObject[0].tradeLicenseDetail.applicationDocuments
+        queryObject[0] &&
+        queryObject[0].applicationDocuments
       ) {
 
 
-        if (getQueryArg(window.location.href, "action") === "edit" || isEditRenewal) {
+        if (getQueryArg(window.location.href, "action") === "edit") {
         } else if (activeIndex === 1) {
-          set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
+          set(queryObject[0], "applicationDocuments", null);
         } else action = "APPLY";
       }
 
-      if ((activeIndex === 3 || activeIndex === 1) && isEditRenewal) {
-        action = activeIndex === 3 ? "APPLY" : "INITIATE";
-        let renewalSearchQueryObject = [
-          { key: "tenantId", value: queryObject[0].tenantId },
-          { key: "applicationNumber", value: queryObject[0].applicationNumber }
-        ];
-        const renewalResponse = await getSearchResults(renewalSearchQueryObject);
-        const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments");
-        for (let i = 1; i <= documents.length; i++) {
-          if (i > renewalDocuments.length) {
-            renewalDocuments.push(documents[i - 1])
-          }
-          else {
-            if (!documents[i - 1].hasOwnProperty("id")) {
-              renewalDocuments[i - 1].active = false;
-              renewalDocuments.push(documents[i - 1])
-            }
-          }
-        }
-        dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
-        set(queryObject[0], "tradeLicenseDetail.applicationDocuments", renewalDocuments);
+      if ((activeIndex === 4 || activeIndex === 1)) {
+        console.log("Nero 4")
+        action = activeIndex === 4 ? "APPLY" : "INITIATE";
+        // let renewalSearchQueryObject = [
+        //   { key: "tenantId", value: queryObject[0].tenantId },
+        //   { key: "applicationNumber", value: queryObject[0].applicationNumber }
+        // ];
+        // const renewalResponse = await getSearchResults(renewalSearchQueryObject);
+        //const renewalDocuments = get(renewalResponse, "Licenses[0].applicationDocuments");
+        // for (let i = 1; i <= documents.length; i++) {
+        //   if (i > renewalDocuments.length) {
+        //     renewalDocuments.push(documents[i - 1])
+        //   }
+        //   else {
+        //     if (!documents[i - 1].hasOwnProperty("id")) {
+        //       renewalDocuments[i - 1].active = false;
+        //       renewalDocuments.push(documents[i - 1])
+        //     }
+        //   }
+        // }
+        //dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
+       // set(queryObject[0], "applicationDocuments", renewalDocuments);
 
       }
       set(queryObject[0], "action", action);
@@ -645,82 +566,49 @@ if(TlStatus === "INITIATED" && getQueryArg(window.location.href, "action") === "
       let updateResponse = [];
       if (!isEditFlow) {
 
-        // let oldOwners = JSON.parse(
-        //   JSON.stringify(
-        //     get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].tradeLicenseDetail.owners", [])
-        //   )
-        // );
-        // set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwners(get(queryObject[0], "tradeLicenseDetail.owners", []), oldOwners));
 
 
-        updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
-          Licenses: queryObject
+        updateResponse = await httpRequest("post", "/mr-services/v1/_update", "", [], {
+          MarriageRegistrations: queryObject
         })
 
 
       }
       //Renewal flow
 
-      let updatedApplicationNo = "";
-      let updatedTenant = "";
-      if (isEditRenewal && updateResponse && get(updateResponse, "Licenses[0]")) {
-        updatedApplicationNo = get(updateResponse.Licenses[0], "applicationNumber");
-        updatedTenant = get(updateResponse.Licenses[0], "tenantId");
-        const workflowCode = get(updateResponse.Licenses[0], "workflowCode");
-        const bsQueryObject = [
-          { key: "tenantId", value: tenantId },
-          { key: "businessServices", value: workflowCode ? workflowCode : "NewTL" }
-        ];
+       let updatedApplicationNo = "";
+      // let updatedTenant = "";
+      // if (isEditRenewal && updateResponse && get(updateResponse, "Licenses[0]")) {
+      //   updatedApplicationNo = get(updateResponse.Licenses[0], "applicationNumber");
+      //   updatedTenant = get(updateResponse.Licenses[0], "tenantId");
+      //   const workflowCode = get(updateResponse.Licenses[0], "workflowCode");
+      //   const bsQueryObject = [
+      //     { key: "tenantId", value: tenantId },
+      //     { key: "businessServices", value: workflowCode ? workflowCode : "NewTL" }
+      //   ];
 
-        setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
-      } else {
-        updatedApplicationNo = queryObject[0].applicationNumber;
-        updatedTenant = queryObject[0].tenantId;
-      }
+      //   setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
+      // } else {
+      //   updatedApplicationNo = queryObject[0].applicationNumber;
+      //   updatedTenant = queryObject[0].tenantId;
+      // }
+      updatedApplicationNo = queryObject[0].applicationNumber;
       let searchQueryObject = [
-        { key: "tenantId", value: updatedTenant },
+        { key: "tenantId", value: tenantId },
         { key: "applicationNumber", value: updatedApplicationNo }
       ];
       let searchResponse = await getSearchResults(searchQueryObject);
       if (isEditFlow) {
-        searchResponse = { Licenses: queryObject };
+        searchResponse = { MarriageRegistrations: queryObject };
       } else {
-        dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
+        dispatch(prepareFinalObject("MarriageRegistrations", searchResponse.MarriageRegistrations));
       }
       enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
       enableField('apply', "components.div.children.footer.children.payButton", dispatch);
 
-      const updatedtradeUnits = get(
-        searchResponse,
-        "Licenses[0].tradeLicenseDetail.tradeUnits"
-      );
-      const tradeTemp = updatedtradeUnits.map((item, index) => {
-        return {
-          tradeSubType: item.tradeType.split(".")[1],
-          tradeType: item.tradeType.split(".")[0]
-        };
-      });
 
-
-      dispatch(prepareFinalObject("LicensesTemp.tradeUnits", tradeTemp));
-      createOwnersBackup(dispatch, searchResponse);
-      dispatch(prepareFinalObject("Licenses[0].TlPeriod", TlPeriod));
     } else {
 
-      let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
-      let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
-      // let owners = get(queryObject[0], "tradeLicenseDetail.owners");
-      let mergedTradeUnits =
-        tradeUnits &&
-        tradeUnits.filter(item => !item.hasOwnProperty("isDeleted"));
-      let mergedAccessories =
-        accessories &&
-        accessories.filter(item => !item.hasOwnProperty("isDeleted"));
-      let mergedOwners =
-        owners && owners.filter(item => !item.hasOwnProperty("isDeleted"));
-      set(queryObject[0], "tradeLicenseDetail.tradeUnits", mergedTradeUnits);
-      set(queryObject[0], "tradeLicenseDetail.accessories", mergedAccessories);
-      set(queryObject[0], "tradeLicenseDetail.owners", mergedOwners);
       set(queryObject[0], "action", "INITIATE");
       //Emptying application docs to "INITIATE" form in case of search and fill from old TL Id.
 
@@ -729,16 +617,16 @@ if(TlStatus === "INITIATED" && getQueryArg(window.location.href, "action") === "
 
       const response = await httpRequest(
         "post",
-        "/tl-services/v1/_create",
+        "/mr-services/v1/_create",
         "",
         [],
-        { Licenses: queryObject }
+        { MarriageRegistrations: queryObject }
       );
-      dispatch(prepareFinalObject("Licenses", response.Licenses));
-      dispatch(prepareFinalObject("Licenses[0].TlPeriod", TlPeriod));
+      dispatch(prepareFinalObject("MarriageRegistrations", response.MarriageRegistrations));
+
       enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
       enableField('apply', "components.div.children.footer.children.payButton", dispatch);
-      createOwnersBackup(dispatch, response);
+
     }
     /** Application no. box setting */
     setApplicationNumberBox(state, dispatch);
@@ -924,3 +812,4 @@ export const checkValidOwners = (currentOwners = [], oldOwners = []) => {
 
   return [...currentOwners, ...oldOwners];
 }
+

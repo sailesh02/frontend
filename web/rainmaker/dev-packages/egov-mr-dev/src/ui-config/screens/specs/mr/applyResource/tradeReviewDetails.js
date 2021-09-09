@@ -7,8 +7,10 @@ import {
 import { getFeesEstimateCard, getDialogButton } from "../../utils";
 
 import { getReviewTrade } from "./review-trade";
-import { getReviewOwner } from "./review-owner";
+import { getBrideAddressAndGuardianDetails } from "./review-owner";
 import { getReviewDocuments } from "./review-documents";
+import { getgroomAddressAndGuardianDetails } from "./groom-address-guardian-detail";
+import { getWitnessDetails } from "./witness-detail";
 
 const estimate = getCommonGrayCard({
   estimateSection: getFeesEstimateCard({
@@ -18,9 +20,11 @@ const estimate = getCommonGrayCard({
 
 const reviewTradeDetails = getReviewTrade();
 
-const reviewOwnerDetails = getReviewOwner();
+const brideAddressAndGuardianDetails = getBrideAddressAndGuardianDetails();
 
 const reviewDocumentDetails = getReviewDocuments();
+const groomAddressAndGuardianDetails = getgroomAddressAndGuardianDetails();
+const witnessDetails = getWitnessDetails();
 
 export const tradeReviewDetails = getCommonCard({
   header: getCommonTitle({
@@ -34,6 +38,8 @@ export const tradeReviewDetails = getCommonCard({
     "apply"
   ),
   reviewTradeDetails,
-  reviewOwnerDetails,
+  brideAddressAndGuardianDetails,
+  groomAddressAndGuardianDetails,
+  witnessDetails,
   reviewDocumentDetails
 });

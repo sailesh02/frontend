@@ -367,11 +367,11 @@ class ActionDialog extends React.Component {
                      <Grid item
                     sm={12}>
                   <LabelContainer style={{
-                      fontSize: '11px',
+                      fontSize: '12px',
                       fontWeight: 500
                   }}
                   labelName={"CORE_COMMON_PASSWORD_LABEL"}
-                    labelKey={"CORE_COMMON_PASSWORD_LABEL"} />
+                    labelKey={"CORE_COMMON_PASSWORD_LABEL"} /><span style={{color:'#e54d42'}}>*</span>
                   </Grid>
                   <form style={{width:"100%"}} autocomplete="off">
                   <Grid

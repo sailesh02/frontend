@@ -367,7 +367,7 @@ class WorkFlowContainer extends React.Component {
         else{
           toggleSnackbar(
             true,
-            { labelName: "Please fill mandatory fiels", labelKey: "ERR_ALL_FIELDS" },
+            { labelName: "Please fill mandatory fiels", labelKey: "ERR_TOKEN_CERTIFICATE_AND_PASSWORD" },
             "error"
           );
           return

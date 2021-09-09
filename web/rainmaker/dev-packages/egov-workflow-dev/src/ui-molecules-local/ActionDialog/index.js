@@ -195,6 +195,7 @@ class ActionDialog extends React.Component {
         style={{zIndex:2000}}
       >
         <DialogContent
+          style={isCertificateDetailsVisible ? {height:'400px'} : {}}
           children={
             <Container
               children={

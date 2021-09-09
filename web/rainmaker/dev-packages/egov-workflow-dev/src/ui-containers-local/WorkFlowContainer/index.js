@@ -223,8 +223,10 @@ class WorkFlowContainer extends React.Component {
       if (beforeSubmitHook) {
         if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4"|| moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
           debugger
-          data = await beforeSubmitHook(data);
-          if(isDsInfo){
+          if(!isDsInfo){
+            data = await beforeSubmitHook(data);
+          }else{
+            data = await beforeSubmitHook(data);
             data = await getPdfDetails(data,preparedFinalObject)
           }
         } else {

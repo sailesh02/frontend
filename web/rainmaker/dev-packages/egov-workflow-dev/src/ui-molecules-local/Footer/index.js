@@ -37,208 +37,207 @@ let customRequestInfo = JSON.parse(getUserInfo())
   // pdf signing @final approval step in BPA and OC
 
   // for testing using catch block
-  export const getPdfDetails = async (data,preparedFinalObject) => {
-      let {DsInfo} = preparedFinalObject
-      let {token,certificate,password} = DsInfo
-      let body = {} // not finalised yet
-      store.dispatch(showSpinner())
-      try{
-        let response = await axios.post("/dsc-services.egov:8080/dsc-services/dsc/_pdfServie", body, { // call pdf service to get fileStore id
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-         })
-        
-         if(response){
-           try{
-
-           }catch(err){
-
-           }
-         }
-
-      }catch(err){
-        if(err){
-          try{
-            let unsignedFileStoreId = {
-              "ResponseInfo":null,
-              "fileStoreId":"dfdhgfgjj"
-            }
-
-            RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-            let body =  Object.assign(
-              {},
-              {
-                RequestInfo,
-                "tenantId":getTenantId(),
-                "responseData":null,
-                "file":unsignedFileStoreId.fileStoreId,
-                "fileName":"unsigned.pdf",
-                "tokenDisplayName":token,
-                "certificate" : certificate,
-                "keyId":"CERT_ID",
-                "channelId":"default",
-                "keyStorePassPhrase": password
-              } 
-            );
-
-            let response = await axios.post("/dsc-services.egov:8080/dsc-services/dsc/_pdfSignInput", body, { // send file store id to get encrypted data
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            })
-          }catch(err){
-            if(err){
-              try{
-              let encryptedData = {
-                "ResponseInfo":null,
-                "input":{
-                "encryptedRequest":"XXXX",
-                "encryptionKeyId":"YYYYY",
-                }
-                }
-            let body = encryptedData.input
-            let response = await axios.post("/dsc-services/emudhra.com:26769/DSC/PKCSBulkSign", body, { // to get response Data
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            })
-            }catch(err){
-              if(err){
-                try{
-              let responseData = {
-                "responseData": "QuyKW0m6EdBEuTltdWrj2rA5O77bukrGcxlpp4atnn0KoadBXlTZXoEpHp3Q3Qxne1pcmXUSBedS3Ocj3/5Nqjtj6Q1QuqQxo1yMtoOmeGjlilICxaqs9ldgRu8rlbuXrzeip6VMqMCEM+f21+tKf3c4UKWd6/gYOg8rG+37HAVDRAjz21HECLLP2lq3bThBTIPog74D8Lvs4MHXE7D28kd2znHny2v/r3lGnmLxmzYlMiBUlYPnPQa8WSyOROpfXNDnD0/fgiIUuNA82mXC7F7x4VHf+GYj94aldkeSE7MKSqDPRsSp3/4gJ4Y8bHNa",
-                "status": 1,
-                "errorMessage": null,
-                "version": "3.1.0.0",
-                "errorCode": null
-              } 
-              RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-               let body =  Object.assign(
-                 {},
-                  {
-                   RequestInfo,
-                   "tokenDisplayName":null,
-                   "keyStorePassPhrase":null,
-                   "keyId":null,
-                   "channelId":"default",
-                   "file":null,
-                   "fileName":"unsigned.pdf",
-                   "tenantId":getTenantId(),
-                    responseData:responseData.responseData,
-                  }
-               );
-               let reponse = await axios.post("/dsc-services.egov:8080/dsc-services/dsc/_pdfSign", body, { // to get filestoreId for pdf signing
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-               })
-                }catch(error){
-                  debugger
-                  let singedFileStoreId = {
-                    "ResponseInfo":null,
-                    "fileStoreId": "jfdoooooooooooooooooooooooooffff"
-                  }
-                  data && data.documents.length > 0 && data.documents.push({
-                    "fileName":'DOCUMENT',
-                    "fileStoreId":singedFileStoreId.fileStoreId
-                  })
-                  debugger
-                  console.log("jkffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",data)
-                  return data
-                }
-              }
-            }
-            }
-          }
-        }
-      } 
-  }
-
-
-  //actual function
   // export const getPdfDetails = async (data,preparedFinalObject) => {
-  //   let {DsInfo} = preparedFinalObject
-  //   let {token,certificate,password} = DsInfo
-  //   let body = {} // not finalised yet
-  //   store.dispatch(showSpinner())
-  //   try{
-  //     let response = await axios.post("/dsc-services.egov:8080/dsc-services/dsc/_pdfServie", body, { // call pdf service to get fileStore id
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json'
-  //      })
-      
-  //      if(response){
-  //       try{
-  //         RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-  //         let body =  Object.assign(
-  //           {},
-  //           {
-  //             RequestInfo,
-  //             "tenantId":getTenantId(),
-  //             "responseData":null,
-  //             "file":response.data.fileStoreId,
-  //             "fileName":"unsigned.pdf",
-  //             "tokenDisplayName":token,
-  //             "certificate" : certificate,
-  //             "keyId":"CERT_ID",
-  //             "channelId":"default",
-  //             "keyStorePassPhrase": password
-  //           } 
-  //         );
+  //     let {DsInfo} = preparedFinalObject
+  //     let {token,certificate,password} = DsInfo
+  //     let body = {} // not finalised yet
+  //     store.dispatch(showSpinner())
+  //     try{
+  //       let response = await axios.post("/dsc-services.egov:8080/dsc-services/dsc/_pdfServie", body, { // call pdf service to get fileStore id
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json'
+  //        })
+        
+  //        if(response){
+  //          try{
 
-  //         let encryptedData = await axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_pdfSignInput", body, { // send file store id to get encrypted data
-  //           'Content-Type': 'application/json',
-  //           'Accept': 'application/json'
-  //         })
-  //         if(encryptedData){
+  //          }catch(err){
+
+  //          }
+  //        }
+
+  //     }catch(err){
+  //       if(err){
+  //         try{
+  //           let unsignedFileStoreId = {
+  //             "ResponseInfo":null,
+  //             "fileStoreId":"dfdhgfgjj"
+  //           }
+
+  //           RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+  //           let body =  Object.assign(
+  //             {},
+  //             {
+  //               RequestInfo,
+  //               "tenantId":getTenantId(),
+  //               "responseData":null,
+  //               "file":unsignedFileStoreId.fileStoreId,
+  //               "fileName":"unsigned.pdf",
+  //               "tokenDisplayName":token,
+  //               "certificate" : certificate,
+  //               "keyId":"CERT_ID",
+  //               "channelId":"default",
+  //               "keyStorePassPhrase": password
+  //             } 
+  //           );
+
+  //           let response = await axios.post("/dsc-services.egov:8080/dsc-services/dsc/_pdfSignInput", body, { // send file store id to get encrypted data
+  //             'Content-Type': 'application/json',
+  //             'Accept': 'application/json'
+  //           })
+  //         }catch(err){
+  //           if(err){
   //             try{
-  //               let body = encryptedData.data.input
-  //               let responseData = await axios.post("https://localhost.emudhra.com:26769/DSC/PKCSBulkSign", body, { // to get response Data
-  //                 'Content-Type': 'application/json',
-  //                 'Accept': 'application/json'
-  //               })
-  //               if(responseData){
-  //               try{
-  //                 RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-  //                 let body =  Object.assign(
-  //                   {},
-  //                     {
-  //                     RequestInfo,
-  //                     "tokenDisplayName":null,
-  //                     "keyStorePassPhrase":null,
-  //                     "keyId":null,
-  //                     "channelId":"default",
-  //                     "file":null,
-  //                     "fileName":"unsigned.pdf",
-  //                     "tenantId":getTenantId(),
-  //                       responseData:responseData.data.responseData,
-  //                     }
-  //                 );
-  //                 let singedFileStoreId = await axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_pdfSign", body, { // to get filestoreId for pdf signing
-  //                   'Content-Type': 'application/json',
-  //                   'Accept': 'application/json'
-  //                 })
-  //                 if(singedFileStoreId){
-  //                   data && data.documents.length > 0 && data.documents.push({
-  //                     "fileName":'DOCUMENT',
-  //                     "fileStoreId":singedFileStoreId.data.fileStoreId
-  //                   })
-  //                   return data
-  //                 }
-  //                   }catch(error){
-  //                     return data
-  //                   }
+  //             let encryptedData = {
+  //               "ResponseInfo":null,
+  //               "input":{
+  //               "encryptedRequest":"XXXX",
+  //               "encryptionKeyId":"YYYYY",
   //               }
-  //               }catch(err){  
-  //                 return data 
+  //               }
+  //           let body = encryptedData.input
+  //           let response = await axios.post("/dsc-services/emudhra.com:26769/DSC/PKCSBulkSign", body, { // to get response Data
+  //             'Content-Type': 'application/json',
+  //             'Accept': 'application/json'
+  //           })
+  //           }catch(err){
+  //             if(err){
+  //               try{
+  //             let responseData = {
+  //               "responseData": "QuyKW0m6EdBEuTltdWrj2rA5O77bukrGcxlpp4atnn0KoadBXlTZXoEpHp3Q3Qxne1pcmXUSBedS3Ocj3/5Nqjtj6Q1QuqQxo1yMtoOmeGjlilICxaqs9ldgRu8rlbuXrzeip6VMqMCEM+f21+tKf3c4UKWd6/gYOg8rG+37HAVDRAjz21HECLLP2lq3bThBTIPog74D8Lvs4MHXE7D28kd2znHny2v/r3lGnmLxmzYlMiBUlYPnPQa8WSyOROpfXNDnD0/fgiIUuNA82mXC7F7x4VHf+GYj94aldkeSE7MKSqDPRsSp3/4gJ4Y8bHNa",
+  //               "status": 1,
+  //               "errorMessage": null,
+  //               "version": "3.1.0.0",
+  //               "errorCode": null
+  //             } 
+  //             RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+  //              let body =  Object.assign(
+  //                {},
+  //                 {
+  //                  RequestInfo,
+  //                  "tokenDisplayName":null,
+  //                  "keyStorePassPhrase":null,
+  //                  "keyId":null,
+  //                  "channelId":"default",
+  //                  "file":null,
+  //                  "fileName":"unsigned.pdf",
+  //                  "tenantId":getTenantId(),
+  //                   responseData:responseData.responseData,
+  //                 }
+  //              );
+  //              let reponse = await axios.post("/dsc-services.egov:8080/dsc-services/dsc/_pdfSign", body, { // to get filestoreId for pdf signing
+  //               'Content-Type': 'application/json',
+  //               'Accept': 'application/json'
+  //              })
+  //               }catch(error){
+  //                 debugger
+  //                 let singedFileStoreId = {
+  //                   "ResponseInfo":null,
+  //                   "fileStoreId": "jfdoooooooooooooooooooooooooffff"
+  //                 }
+  //                 data && data.documents.length > 0 && data.documents.push({
+  //                   "fileName":'DOCUMENT',
+  //                   "fileStoreId":singedFileStoreId.fileStoreId
+  //                 })
+  //                 debugger
+  //                 console.log("jkffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",data)
+  //                 return data
+  //               }
+  //             }
+  //           }
   //           }
   //         }
-  //       }catch(err){
-  //         return data
   //       }
-  //     }
-  //   }catch(err){
-  //     store.dispatch(toggleSnackbar(true, err.message, "error"));
-  //     return data
-  //   }  
+  //     } 
   // }
+
+  //actual function
+  export const getPdfDetails = async (data,preparedFinalObject) => {
+    let {DsInfo} = preparedFinalObject
+    let {token,certificate,password} = DsInfo
+    let body = {} // not finalised yet
+    store.dispatch(showSpinner())
+    try{
+      let response = await axios.post("/dsc-services.egov:8080/dsc-services/dsc/_pdfServie", body, { // call pdf service to get fileStore id
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       })
+      
+       if(response){
+        try{
+          RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+          let body =  Object.assign(
+            {},
+            {
+              RequestInfo,
+              "tenantId":getTenantId(),
+              "responseData":null,
+              "file":response.data.fileStoreId,
+              "fileName":"unsigned.pdf",
+              "tokenDisplayName":token,
+              "certificate" : certificate,
+              "keyId":"CERT_ID",
+              "channelId":"default",
+              "keyStorePassPhrase": password
+            } 
+          );
+
+          let encryptedData = await axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_pdfSignInput", body, { // send file store id to get encrypted data
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          })
+          if(encryptedData){
+              try{
+                let body = encryptedData.data.input
+                let responseData = await axios.post("https://localhost.emudhra.com:26769/DSC/PKCSBulkSign", body, { // to get response Data
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+                })
+                if(responseData){
+                try{
+                  RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+                  let body =  Object.assign(
+                    {},
+                      {
+                      RequestInfo,
+                      "tokenDisplayName":null,
+                      "keyStorePassPhrase":null,
+                      "keyId":null,
+                      "channelId":"default",
+                      "file":null,
+                      "fileName":"unsigned.pdf",
+                      "tenantId":getTenantId(),
+                        responseData:responseData.data.responseData,
+                      }
+                  );
+                  let singedFileStoreId = await axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_pdfSign", body, { // to get filestoreId for pdf signing
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                  })
+                  if(singedFileStoreId){
+                    data && data.documents.length > 0 && data.documents.push({
+                      "fileName":'DOCUMENT',
+                      "fileStoreId":singedFileStoreId.data.fileStoreId
+                    })
+                    return data
+                  }
+                    }catch(error){
+                      return data
+                    }
+                }
+                }catch(err){  
+                  return data 
+            }
+          }
+        }catch(err){
+          return data
+        }
+      }
+    }catch(err){
+      store.dispatch(toggleSnackbar(true, err.message, "error"));
+      return data
+    }  
+  }
 class Footer extends React.Component {
   state = {
     open: false,

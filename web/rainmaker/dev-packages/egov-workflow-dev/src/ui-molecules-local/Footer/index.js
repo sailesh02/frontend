@@ -40,7 +40,6 @@ let customRequestInfo = JSON.parse(getUserInfo())
   export const getPdfDetails = async (data,preparedFinalObject) => {
       let {DsInfo} = preparedFinalObject
       let {token,certificate,password} = DsInfo
-      let RequestInfo = {}
       let body = {} // not finalised yet
       store.dispatch(showSpinner())
       try{
@@ -82,7 +81,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
               } 
             );
 
-            let response = await axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_pdfSignInput", body, { // send file store id to get encrypted data
+            let response = await axios.post("/dsc-services.egov:8080/dsc-services/dsc/_pdfSignInput", body, { // send file store id to get encrypted data
               'Content-Type': 'application/json',
               'Accept': 'application/json'
             })
@@ -94,11 +93,10 @@ let customRequestInfo = JSON.parse(getUserInfo())
                 "input":{
                 "encryptedRequest":"XXXX",
                 "encryptionKeyId":"YYYYY",
-                "fileName":"unsigned.pdf"
                 }
                 }
             let body = encryptedData.input
-            let response = await axios.post("https://localhost.emudhra.com:26769/DSC/PKCSBulkSign", body, { // to get response Data
+            let response = await axios.post("/dsc-services/emudhra.com:26769/DSC/PKCSBulkSign", body, { // to get response Data
               'Content-Type': 'application/json',
               'Accept': 'application/json'
             })
@@ -127,7 +125,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                     responseData:responseData.responseData,
                   }
                );
-               let reponse = await axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_pdfSign", body, { // to get filestoreId for pdf signing
+               let reponse = await axios.post("/dsc-services.egov:8080/dsc-services/dsc/_pdfSign", body, { // to get filestoreId for pdf signing
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
                })
@@ -158,7 +156,6 @@ let customRequestInfo = JSON.parse(getUserInfo())
   // export const getPdfDetails = async (data,preparedFinalObject) => {
   //   let {DsInfo} = preparedFinalObject
   //   let {token,certificate,password} = DsInfo
-  //   let RequestInfo = {}
   //   let body = {} // not finalised yet
   //   store.dispatch(showSpinner())
   //   try{

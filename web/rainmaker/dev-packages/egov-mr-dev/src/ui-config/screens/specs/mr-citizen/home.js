@@ -10,7 +10,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 const header = getCommonHeader(
   {
     labelName: "Trade License",
-    labelKey: "TL_COMMON_TL"
+    labelKey: "Marriage Registration"
   },
   {
     classes: {
@@ -37,7 +37,7 @@ const cardItems = [
 
   {
     label: {
-      labelKey: "MR_MY_APPLICATIONS",
+      labelKey: "My Applications",
       labelName: "My Applications"
     },
     icon: <FormIcon />,
@@ -53,7 +53,7 @@ const tradeLicenseSearchAndResult = {
     fetchData(action, state, dispatch);
     const moduleDetails = [
       {
-        moduleName: 'TradeLicense',
+        moduleName: 'MarriageRegistration',
         masterDetails: [{ name: 'Documents' }]
       }
     ];

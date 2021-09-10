@@ -70,18 +70,18 @@ export const witness1Details = getCommonCard(
         jsonPath: "MarriageRegistrations[0].witness[0].address",
 
       }),
-      witness1Country: {
+      witness1District: {
         ...getSelectField({
           label: {
             labelName: "City",
             //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "Country"
+            labelKey: "District"
           },
 
           optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "Country" },
-          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
-          jsonPath: "MarriageRegistrations[0].witness[0].country",
+          placeholder: { labelName: "Select Country", labelKey: "District" },
+          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
+          jsonPath: "MarriageRegistrations[0].witness[0].district",
           required: true,
 
         }),
@@ -102,18 +102,19 @@ export const witness1Details = getCommonCard(
 
         }),
       },
-      witness1District: {
+
+      witness1Country: {
         ...getSelectField({
           label: {
             labelName: "City",
             //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "District"
+            labelKey: "Country"
           },
 
           optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "District" },
-          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
-          jsonPath: "MarriageRegistrations[0].witness[0].district",
+          placeholder: { labelName: "Select Country", labelKey: "Country" },
+          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
+          jsonPath: "MarriageRegistrations[0].witness[0].country",
           required: true,
 
         }),
@@ -208,22 +209,23 @@ export const witness2Details = getCommonCard(
         jsonPath: "MarriageRegistrations[0].witness[1].address",
 
       }),
-      witness2Country: {
+      witness2District: {
         ...getSelectField({
           label: {
             labelName: "City",
             //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "Country"
+            labelKey: "District"
           },
 
           optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "Country" },
-          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
-          jsonPath: "MarriageRegistrations[0].witness[1].country",
+          placeholder: { labelName: "Select Country", labelKey: "District" },
+          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
+          jsonPath: "MarriageRegistrations[0].witness[1].district",
           required: true,
 
         }),
       },
+
       witness2State: {
         ...getSelectField({
           label: {
@@ -240,18 +242,18 @@ export const witness2Details = getCommonCard(
 
         }),
       },
-      witness2District: {
+      witness2Country: {
         ...getSelectField({
           label: {
             labelName: "City",
             //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "District"
+            labelKey: "Country"
           },
 
           optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "District" },
-          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
-          jsonPath: "MarriageRegistrations[0].witness[1].district",
+          placeholder: { labelName: "Select Country", labelKey: "Country" },
+          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
+          jsonPath: "MarriageRegistrations[0].witness[1].country",
           required: true,
 
         }),

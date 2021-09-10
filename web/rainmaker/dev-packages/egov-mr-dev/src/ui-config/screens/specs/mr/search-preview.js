@@ -33,7 +33,7 @@ import {
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { downloadPrintContainer, footerReviewTop } from "./applyResource/footer";
 import { getReviewDocuments } from "./applyResource/review-documents";
-import { getBrideAddressAndGuardianDetails } from "./applyResource/review-owner";
+//import { getBrideAddressAndGuardianDetails } from "./applyResource/review-owner";
 import { getReviewTrade } from "./applyResource/review-trade";
 import { getgroomAddressAndGuardianDetails } from "./applyResource/groom-address-guardian-detail";
 import { getWitnessDetails } from "./applyResource/witness-detail";
@@ -444,7 +444,7 @@ const estimate = getCommonGrayCard({
 
 const reviewTradeDetails = getReviewTrade(false);
 
-const BrideAddressAndGuardianDetails = getBrideAddressAndGuardianDetails(false);
+//const BrideAddressAndGuardianDetails = getBrideAddressAndGuardianDetails(false);
 
 const reviewDocumentDetails = getReviewDocuments(false, false);
 const groomAddressAndGuardianDetails = getgroomAddressAndGuardianDetails(false);
@@ -483,7 +483,7 @@ export const tradeReviewDetails = getCommonCard({
     "search-preview"
   ),
   reviewTradeDetails,
-  BrideAddressAndGuardianDetails,
+  //BrideAddressAndGuardianDetails,
   groomAddressAndGuardianDetails,
   witnessDetails,
   reviewDocumentDetails

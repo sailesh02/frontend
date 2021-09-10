@@ -17,7 +17,7 @@ import {
       {
         labelName: "Trade Location Details",
         //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-        labelKey: "MR_GUARDIAN_DETAIL"
+        labelKey: "Groom Guardian Details"
       },
       {
         style: {
@@ -30,7 +30,7 @@ import {
     rltnWithgroom: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_RELATIONSHIP"
+        labelKey: "Relationship"
       },
       {
         jsonPath:
@@ -42,7 +42,7 @@ import {
     groomGuardianName: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_NAME"
+        labelKey: "Name"
       },
       {
         jsonPath:
@@ -54,7 +54,7 @@ import {
     groomGrdnAddressLine1: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_ADDRESS"
+        labelKey: "Address"
       },
       {
         jsonPath:
@@ -63,33 +63,10 @@ import {
       }
     ),
 
-    groomGrdnCountry: getLabelWithValue(
-      {
-        labelName: "Application Type",
-        labelKey: "MR_COUNTRY"
-      },
-      {
-        jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.country",
-
-      }
-    ),
-
-    groomGrdnState: getLabelWithValue(
-      {
-        labelName: "Application Type",
-        labelKey: "MR_STATE"
-      },
-      {
-        jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.state",
-
-      }
-    ),
     groomGrdnDistrict: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_DISTRICT"
+        labelKey: "District"
       },
       {
         jsonPath:
@@ -97,10 +74,34 @@ import {
 
       }
     ),
+
+    groomGrdnState: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "State"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.state",
+
+      }
+    ),
+
+    groomGrdnCountry: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "Country"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.country",
+
+      }
+    ),
     groomGrdnAddressPin: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_PINCODE"
+        labelKey: "PIN"
       },
       {
         jsonPath:
@@ -111,7 +112,7 @@ import {
     groomGrdnContact: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_CONTACT"
+        labelKey: "Contact"
       },
       {
         jsonPath:
@@ -122,11 +123,133 @@ import {
     groomGrdnEmail: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_EMAIL_ADDRESS"
+        labelKey: "Email"
       },
       {
         jsonPath:
         "MarriageRegistrations[0].coupleDetails[1].guardianDetails.emailAddress",
+
+      }
+    ),
+
+  }
+
+  export const brideGuardianDetails = {
+
+    header: getCommonTitle(
+      {
+        labelName: "Trade Location Details",
+        //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
+        labelKey: "Bride Guardian Details"
+      },
+      {
+        style: {
+          marginBottom: 18,
+          fontSize: 15,
+          width: "100%"
+        }
+      }
+    ),
+    rltnWithBride: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "Relationship"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.relationship",
+
+      }
+    ),
+
+    brideGuardianName: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "Name"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.name",
+
+      }
+    ),
+
+    brideGrdnAddressLine1: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "Address"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.addressline1",
+
+      }
+    ),
+    brideGrdnDistrict: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "District"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.district",
+
+      }
+    ),
+
+
+    brideGrdnState: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "State"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.state",
+
+      }
+    ),
+    brideGrdnCountry: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "Country"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.country",
+
+      }
+    ),
+    brideGrdnAddressPin: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "Pincode"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.pinCode",
+
+      }
+    ),
+    brideGrdnContact: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "Contact"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.contact",
+
+      }
+    ),
+    brideGrdnEmail: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "Email"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.emailAddress",
 
       }
     ),
@@ -227,7 +350,7 @@ import {
             },
             ...getCommonSubHeader({
               labelName: "Trade Details",
-              labelKey: "MR_GROOM_ADDRESS_GUARDIAN_DETAIL"
+              labelKey: "Guardian Details"
             })
           },
           editSection: {
@@ -263,9 +386,11 @@ import {
           }
         }
       },
-      viewseven: getCommonContainer(groomAddressDetails),
+      viewseven: getCommonContainer(brideGuardianDetails),
       div3: getDivider(),
       vieweight: getCommonContainer(groomGuardianDetails),
 
     });
   };
+
+

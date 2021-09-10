@@ -17,7 +17,7 @@ import {
       {
         labelName: "Trade Location Details",
         //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-        labelKey: "MR_WITNESS_1_DETAIL"
+        labelKey: "Witness 1 details"
       },
       {
         style: {
@@ -32,7 +32,7 @@ import {
     witness1Fname: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_NAME"
+        labelKey: "Name"
       },
       {
         jsonPath:
@@ -44,7 +44,7 @@ import {
     witness1Address: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_ADDRESS"
+        labelKey: "Address"
       },
       {
         jsonPath:
@@ -53,34 +53,10 @@ import {
       }
     ),
 
-    witness1Country: getLabelWithValue(
-      {
-        labelName: "Application Type",
-        labelKey: "MR_COUNTRY"
-      },
-      {
-        jsonPath:
-        "MarriageRegistrations[0].witness[0].country",
-
-      }
-    ),
-
-    witness1State: getLabelWithValue(
-      {
-        labelName: "Application Type",
-        labelKey: "MR_STATE"
-      },
-      {
-        jsonPath:
-        "MarriageRegistrations[0].witness[0].state",
-
-      }
-    ),
-
     witness1District: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_DISTRICT"
+        labelKey: "Distrcit"
       },
       {
         jsonPath:
@@ -89,10 +65,34 @@ import {
       }
     ),
 
+
+    witness1State: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "State"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].witness[0].state",
+
+      }
+    ),
+
+    witness1Country: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "Country"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].witness[0].country",
+
+      }
+    ),
     witness1AddressPin: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_PIN_CODE"
+        labelKey: "PIN"
       },
       {
         jsonPath:
@@ -104,7 +104,7 @@ import {
     witness1Contact: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_CONTACT"
+        labelKey: "Contact"
       },
       {
         jsonPath:
@@ -121,7 +121,7 @@ import {
       {
         labelName: "Trade Location Details",
         //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-        labelKey: "MR_WITNESS_2_DETAIL"
+        labelKey: "Witness 2 detail"
       },
       {
         style: {
@@ -136,7 +136,7 @@ import {
     witness2Fname: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_NAME"
+        labelKey: "Name"
       },
       {
         jsonPath:
@@ -148,7 +148,7 @@ import {
     witness2Address: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_ADDRESS"
+        labelKey: "Address"
       },
       {
         jsonPath:
@@ -157,34 +157,10 @@ import {
       }
     ),
 
-    witness2Country: getLabelWithValue(
-      {
-        labelName: "Application Type",
-        labelKey: "MR_COUNTRY"
-      },
-      {
-        jsonPath:
-        "MarriageRegistrations[0].witness[1].country",
-
-      }
-    ),
-
-    witness2State: getLabelWithValue(
-      {
-        labelName: "Application Type",
-        labelKey: "MR_STATE"
-      },
-      {
-        jsonPath:
-        "MarriageRegistrations[0].witness[1].state",
-
-      }
-    ),
-
     witness2District: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_DISTRICT"
+        labelKey: "District"
       },
       {
         jsonPath:
@@ -193,10 +169,35 @@ import {
       }
     ),
 
+
+    witness2State: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "State"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].witness[1].state",
+
+      }
+    ),
+
+    witness2Country: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "Country"
+      },
+      {
+        jsonPath:
+        "MarriageRegistrations[0].witness[1].country",
+
+      }
+    ),
+
     witness2AddressPin: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_PIN_CODE"
+        labelKey: "PIN"
       },
       {
         jsonPath:
@@ -208,7 +209,7 @@ import {
     witness2Contact: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "MR_CONTACT"
+        labelKey: "Contact"
       },
       {
         jsonPath:
@@ -235,7 +236,7 @@ import {
             },
             ...getCommonSubHeader({
               labelName: "Trade Details",
-              labelKey: "MR_BRIDE_ADDRESS_GUARDIAN_DETAIL"
+              labelKey: "Wintess Details"
             })
           },
           editSection: {

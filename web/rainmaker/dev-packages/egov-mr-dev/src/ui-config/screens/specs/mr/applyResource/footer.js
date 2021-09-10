@@ -85,95 +85,16 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = true;
 
-  if (activeStep === 0) {
-
-
-
-
-
-
-
-
-
-
-
-
-  }
 
   if (activeStep === 0) {
-    console.log("Nero Hit")
-    //Bride Address
-     await getDocList(state, dispatch);
 
-    // let isOwnerShipValid = validateFields(
-    //   "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children",
-    //   state,
-    //   dispatch
-    // );
-    // let ownership = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "MarriageRegistrations[0].tradeLicenseDetail.subOwnerShipCategory",
-    //   "INDIVIDUAL"
-    // );
-    // ownership = ownership.split(".")[0];
-    // if (ownership === "INDIVIDUAL") {
-    //   let ownersJsonPath =
-    //     "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items";
-    //   let owners = get(
-    //     state.screenConfiguration.screenConfig.apply,
-    //     ownersJsonPath,
-    //     []
-    //   );
-    //   for (var k = 0; k < owners.length; k++) {
-    //     if (
-    //       (owners[k].isDeleted === undefined ||
-    //         owners[k].isDeleted !== false) &&
-    //       !validateFields(
-    //         `${ownersJsonPath}[${k}].item${k}.children.cardContent.children.tradeUnitCardContainer.children`,
-    //         state,
-    //         dispatch
-    //       )
-    //     )
-    //       isFormValid = false;
-    //   }
-    // } else {
-    //   let ownersJsonPath =
-    //     "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional.children.cardContent.children.tradeUnitCardContainerInstitutional.children";
-    //   if (!validateFields(ownersJsonPath, state, dispatch)) isFormValid = false;
-    // }
+    //Bride and Groom Details
+    await getDocList(state, dispatch);
 
-    // // check for multiple owners
-    // if (
-    //   get(
-    //     state.screenConfiguration.preparedFinalObject,
-    //     "MarriageRegistrations[0].tradeLicenseDetail.subOwnerShipCategory"
-    //   ) === "INDIVIDUAL.MULTIPLEOWNERS"
-    //   &&
-    //   get(
-    //     state.screenConfiguration.preparedFinalObject,
-    //     "MarriageRegistrations[0].tradeLicenseDetail.owners"
-    //   )
-    //   &&
-    //   get(
-    //     state.screenConfiguration.preparedFinalObject,
-    //     "MarriageRegistrations[0].tradeLicenseDetail.owners"
-    //   ).length <= 1
-    // ) {
-    //   dispatch(
-    //     toggleSnackbar(
-    //       true,
-    //       {
-    //         labelName: "Please add multiple owners !",
-    //         labelKey: "ERR_ADD_MULTIPLE_OWNERS"
-    //       },
-    //       "error"
-    //     )
-    //   );
-    //   return false; // to show the above message
-    // }
-     if (isFormValid) {
-       isFormValid = await applyTradeLicense(state, dispatch, activeStep);
-       console.log(isFormValid, "Nero in")
+
+    if (isFormValid) {
+      isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+      console.log(isFormValid, "Nero in")
       if (!isFormValid) {
         hasFieldToaster = false;
       }
@@ -181,8 +102,11 @@ export const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
     }
   }
+  if (activeStep === 1) {
+    //Bride and Groom Guardian Details
+  }
   if (activeStep === 2) {
-    // Groom Address
+    // Witness Details
     // const LicenseData = get(
     //   state.screenConfiguration.preparedFinalObject,
     //   "MarriageRegistrations[0]",
@@ -256,102 +180,89 @@ export const callBackForNext = async (state, dispatch) => {
     //   );
     // }
   }
+
+
   if (activeStep === 3) {
-    //Witness Details
-    // const LicenseData = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "MarriageRegistrations[0]"
-    // );
-    // isFormValid = await applyTradeLicense(state, dispatch, activeStep);
-    // if (isFormValid) {
-    //   if (getQueryArg(window.location.href, "action") === "EDITRENEWAL")
-    //     editRenewalMoveToSuccess(LicenseData, dispatch);
-    //   else
-    //     moveToSuccess(LicenseData, dispatch);
-    // }
-  }
-  console.log(activeStep, isFormValid, "nero active step")
-  if (activeStep === 4) {
-// Photo and Docs
+    // Photo and Docs
 
-const LicenseData = get(
-  state.screenConfiguration.preparedFinalObject,
-  "MarriageRegistrations[0]",
-  {}
-);
-
-
-let uploadedDocData = get(
-  state.screenConfiguration.preparedFinalObject,
-  "MarriageRegistrations[0].applicationDocuments",
-  []
-);
-
-const uploadedTempDocData = get(
-  state.screenConfiguration.preparedFinalObject,
-  "LicensesTemp[0].applicationDocuments",
-  []
-);
-for (var y = 0; y < uploadedTempDocData.length; y++) {
-  if (
-    uploadedTempDocData[y].required &&
-    !some(uploadedDocData, { documentType: uploadedTempDocData[y].code })
-  ) {
-    isFormValid = false;
-  }
-}
-
-if (isFormValid) {
-  if (getQueryArg(window.location.href, "action") === "edit") {
-    //EDIT FLOW
-    const businessId = getQueryArg(
-      window.location.href,
-      "applicationNumber"
+    const LicenseData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "MarriageRegistrations[0]",
+      {}
     );
-    const tenantId = getQueryArg(window.location.href, "tenantId");
+
+
+    let uploadedDocData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "MarriageRegistrations[0].applicationDocuments",
+      []
+    );
+
+    const uploadedTempDocData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "LicensesTemp[0].applicationDocuments",
+      []
+    );
+    for (var y = 0; y < uploadedTempDocData.length; y++) {
+      if (
+        uploadedTempDocData[y].required &&
+        !some(uploadedDocData, { documentType: uploadedTempDocData[y].code })
+      ) {
+        isFormValid = false;
+      }
+    }
+
+    if (isFormValid) {
+      if (getQueryArg(window.location.href, "action") === "edit") {
+        //EDIT FLOW
+        const businessId = getQueryArg(
+          window.location.href,
+          "applicationNumber"
+        );
+        const tenantId = getQueryArg(window.location.href, "tenantId");
+
+      }
+      uploadedDocData = uploadedDocData.filter(item => item.fileUrl && item.fileName)
+      const reviewDocData =
+        uploadedDocData &&
+        uploadedDocData.map(item => {
+          return {
+            title: `TL_${item.documentType}`,
+            link: item.fileUrl && item.fileUrl.split(",")[0],
+            linkText: "View",
+            name: item.fileName
+          };
+        });
+      createEstimateData(
+        LicenseData,
+        "LicensesTemp[0].estimateCardData",
+        dispatch
+      ); //get bill and populate estimate card
+      dispatch(
+        prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
+      );
+    }
+
+
+
+    isFormValid = await applyTradeLicense(state, dispatch, activeStep);
 
   }
-  uploadedDocData = uploadedDocData.filter(item => item.fileUrl && item.fileName)
-  const reviewDocData =
-    uploadedDocData &&
-    uploadedDocData.map(item => {
-      return {
-        title: `TL_${item.documentType}`,
-        link: item.fileUrl && item.fileUrl.split(",")[0],
-        linkText: "View",
-        name: item.fileName
-      };
-    });
-  createEstimateData(
-    LicenseData,
-    "LicensesTemp[0].estimateCardData",
-    dispatch
-  ); //get bill and populate estimate card
-  dispatch(
-    prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
-  );
-}
 
-
-
-  isFormValid = await applyTradeLicense(state, dispatch, activeStep);
-
-  }
-
-  if (activeStep === 5) {
+  if (activeStep === 4) {
     //Review Summary
     const LicenseData = get(
       state.screenConfiguration.preparedFinalObject,
       "MarriageRegistrations[0]"
     );
-   // isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+    // isFormValid = await applyTradeLicense(state, dispatch, activeStep);
     if (isFormValid) {
 
-        moveToSuccess(LicenseData, dispatch);
+      moveToSuccess(LicenseData, dispatch);
     }
   }
 
-  if (activeStep !== 5) {
+  if (activeStep !== 4) {
     if (isFormValid) {
       changeStep(state, dispatch);
     } else if (hasFieldToaster) {
@@ -365,11 +276,11 @@ if (isFormValid) {
 
 
 
-            errorMessage = {
-              labelName:
-                "Please fill all mandatory fields for Trade Details, then do next !",
-              labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
-            };
+          errorMessage = {
+            labelName:
+              "Please fill all mandatory fields for Trade Details, then do next !",
+            labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
+          };
 
           break;
         case 1:
@@ -380,6 +291,13 @@ if (isFormValid) {
           };
           break;
         case 2:
+          errorMessage = {
+            labelName:
+              "Please fill all mandatory fields for Owner Details, then do next !",
+            labelKey: "ERR_FILL_OWNERS_MANDATORY_FIELDS"
+          };
+          break;
+        case 3:
           errorMessage = {
             labelName: "Please upload all the required documents !",
             labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
@@ -403,13 +321,13 @@ export const changeStep = (
     0
   );
   if (defaultActiveStep === -1) {
-    if (activeStep === 5 && mode === "next") {
+    if (activeStep === 4 && mode === "next") {
       const isDocsUploaded = get(
         state.screenConfiguration.preparedFinalObject,
         "LicensesTemp[0].reviewDocData",
         null
       );
-      activeStep = isDocsUploaded ? 6 : 5
+      activeStep = isDocsUploaded ? 5 : 4
     } else {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
     }
@@ -418,8 +336,8 @@ export const changeStep = (
   }
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
-  const isNextButtonVisible = activeStep < 5 ? true : false;
-  const isPayButtonVisible = activeStep === 5 ? true : false;
+  const isNextButtonVisible = activeStep < 4 ? true : false;
+  const isPayButtonVisible = activeStep === 4 ? true : false;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -484,20 +402,20 @@ export const renderSteps = (activeStep, dispatch) => {
         dispatch
       );
       break;
-    case 4:
-      dispatchMultipleFieldChangeAction(
-        "apply",
-        getActionDefinationForStepper(
-          "components.div.children.formwizardFifthStep"
-        ),
-        dispatch
-      );
-      break;
+    // case 4:
+    //   dispatchMultipleFieldChangeAction(
+    //     "apply",
+    //     getActionDefinationForStepper(
+    //       "components.div.children.formwizardFifthStep"
+    //     ),
+    //     dispatch
+    //   );
+    //   break;
     default:
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(
-          "components.div.children.formwizardSixthStep"
+          "components.div.children.formwizardFifthStep"
         ),
         dispatch
       );
@@ -528,11 +446,6 @@ export const getActionDefinationForStepper = path => {
     },
     {
       path: "components.div.children.formwizardFifthStep",
-      property: "visible",
-      value: false
-    },
-    {
-      path: "components.div.children.formwizardSixthStep",
       property: "visible",
       value: false
     }

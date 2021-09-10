@@ -230,14 +230,14 @@ export const tradeLocationDetails = getCommonCard(
       tradeToDate: {
         ...getDateField({
           label: { labelName: "Marriage Date",
-          labelKey: "MR_MARRIAGE_DATE"
+          labelKey: "Marriage date"
           //labelKey: "TL_NEW_TRADE_DETAILS_TRADE_END_DATE_LABEL"
 
         },
           placeholder: {
             labelName: "Trade License From Date",
             //labelKey: "TL_TRADE_LICENCE_TO_DATE"
-            labelKey: "MR_MARRIAGE_DATE"
+            labelKey: "Marriage date"
           },
 
           required: true,
@@ -256,6 +256,24 @@ export const tradeLocationDetails = getCommonCard(
         }),
 
       },
+      mrgPlaceAddressPin: getTextField({
+        label: {
+          labelName: "Door/House No.",
+          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
+          labelKey: "PIN"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Door/House No.",
+          labelKey: "PIN"
+        },
+        required: true,
+        //pattern: getPattern("Address"),
+        jsonPath: "MarriageRegistrations[0].marriagePlace.pinCode",
+
+      }),
     },
     {
       style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}

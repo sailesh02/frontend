@@ -16,29 +16,26 @@ import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
 import { brideAddress } from "./applyResource/brideAddress";
 import { groomAddress } from "./applyResource/groomAddress";
 import { witnessDetails } from "./applyResource/witnessDetails";
+import { guardianDetails } from "./applyResource/guardianDetails";
 import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
 
 
 export const stepsData = [
   { labelName: "Trade Details",
 //  labelKey: "TL_COMMON_TR_DETAILS",
-labelKey: "Applicant Details",
+labelKey: "Marriage Details",
  },
   { labelName: "Owner Details",
-  labelKey: "Bride Address"
+  labelKey: "Guardian Details"
   //labelKey: "TL_COMMON_OWN_DETAILS"
 },
   { labelName: "Documents",
   // labelKey: "TL_COMMON_DOCS",
-  labelKey: "Groom Address"
+  labelKey: "Witness Details"
  },
   { labelName: "Summary",
-  labelKey: "Witness Details"
+  labelKey: "Photo & Docs"
   //labelKey: "TL_COMMON_SUMMARY"
-},
-{ labelName: "Summary",
-labelKey: "Photo & Docs"
-//labelKey: "TL_COMMON_SUMMARY"
 },
 { labelName: "Summary",
 labelKey: "Summary"
@@ -314,7 +311,7 @@ export const formwizardSecondStep = {
   props: {
     id: "apply_form2"
   },
-  children: brideAddress,
+  children: guardianDetails,
   visible: false
 };
 
@@ -324,7 +321,7 @@ export const formwizardThirdStep = {
   props: {
     id: "apply_form3"
   },
-  children:groomAddress,
+  children:witnessDetails,
   visible: false
 };
 
@@ -334,7 +331,10 @@ export const formwizardFourthStep = {
   props: {
     id: "apply_form4"
   },
-  children:witnessDetails,
+  children:{
+    tradeDocumentDetails
+  },
+
   visible: false
 };
 
@@ -345,22 +345,22 @@ export const formwizardFifthStep = {
     id: "apply_form5"
   },
   children: {
-    tradeDocumentDetails
-  },
-  visible: false
-};
-
-export const formwizardSixthStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form6"
-  },
-  children: {
     tradeReviewDetails
   },
   visible: false
 };
+
+// export const formwizardSixthStep = {
+//   uiFramework: "custom-atoms",
+//   componentPath: "Form",
+//   props: {
+//     id: "apply_form6"
+//   },
+//   children: {
+//     tradeReviewDetails
+//   },
+//   visible: false
+// };
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -521,6 +521,7 @@ const screenConfig = {
         formwizardSecondStep,
         formwizardThirdStep,
         formwizardFourthStep,
+        formwizardFifthStep,
         footer
       }
     },

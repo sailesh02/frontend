@@ -15,7 +15,7 @@ export const brideReviewDetails = {
     {
       labelName: "Trade Location Details",
       //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-      labelKey: "MR_BRIDE_DETAIL"
+      labelKey: "Bride details"
     },
     {
       style: {
@@ -28,7 +28,7 @@ export const brideReviewDetails = {
   brideFName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_FIRST_NAME"
+      labelKey: "Name"
     },
     {
       jsonPath:
@@ -36,32 +36,62 @@ export const brideReviewDetails = {
 
     }
   ),
-  brideMName: getLabelWithValue(
+  brideDob: getLabelWithValue(
     {
-      labelName: "Application Type",
-      labelKey: "MR_MIDDLE_NAME"
+      labelName: "City",
+      labelKey: "DOB"
     },
     {
-      jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].middleName",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].dateOfBirth",
+      callBack: convertEpochToDate
+    }
+  ),
+  brideContact: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "Contact"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].contact",
 
     }
   ),
-  brideLName: getLabelWithValue(
+  brideEmail: getLabelWithValue(
     {
-      labelName: "Application Type",
-      labelKey: "MR_LAST_NAME"
+      labelName: "City",
+      labelKey: "Email"
     },
     {
-      jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].lastName",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].emailAddress",
 
     }
   ),
+  // brideMName: getLabelWithValue(
+  //   {
+  //     labelName: "Application Type",
+  //     labelKey: "MR_MIDDLE_NAME"
+  //   },
+  //   {
+  //     jsonPath:
+  //       "MarriageRegistrations[0].coupleDetails[0].middleName",
+
+  //   }
+  // ),
+  // brideLName: getLabelWithValue(
+  //   {
+  //     labelName: "Application Type",
+  //     labelKey: "MR_LAST_NAME"
+  //   },
+  //   {
+  //     jsonPath:
+  //       "MarriageRegistrations[0].coupleDetails[0].lastName",
+
+  //   }
+  // ),
   brideFatherFName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_FATHER_NAME"
+      labelKey: "Father name"
     },
     {
       jsonPath:
@@ -72,7 +102,7 @@ export const brideReviewDetails = {
   brideMotherFName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_MOTHER_NAME"
+      labelKey: "Mother name"
     },
     {
       jsonPath:
@@ -80,10 +110,60 @@ export const brideReviewDetails = {
 
     }
   ),
+  brideAddressLine1: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "Address"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.addressLine1",
+
+    }
+  ),
+  brideDistrict: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "District"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.district",
+
+    }
+  ),
+  brideState: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "State"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.state",
+
+    }
+  ),
+  brideCountry: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "Country"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.country",
+
+    }
+  ),
+  brideAddressPin: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "PIN"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.pinCode",
+
+    }
+  ),
   isDisabled: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_IS_DIVYANG"
+      labelKey: "Is Bride Divyang"
     },
     {
       jsonPath:
@@ -99,7 +179,7 @@ export const groomReviewDetails = {
     {
       labelName: "Trade Location Details",
       //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-      labelKey: "MR_GROOM_DETAIL"
+      labelKey: "Groom Details"
     },
     {
       style: {
@@ -112,7 +192,7 @@ export const groomReviewDetails = {
   groomFName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_FIRST_NAME"
+      labelKey: "Name"
     },
     {
       jsonPath:
@@ -120,32 +200,40 @@ export const groomReviewDetails = {
 
     }
   ),
-  groomMName: getLabelWithValue(
+  groomDob: getLabelWithValue(
     {
-      labelName: "Application Type",
-      labelKey: "MR_MIDDLE_NAME"
+      labelName: "City",
+      labelKey: "DOB"
     },
     {
-      jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1]].middleName",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[1].dateOfBirth",
+      callBack: convertEpochToDate
+    }
+  ),
+  groomContact: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "Contact"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[1].contact",
 
     }
   ),
-  groomLName: getLabelWithValue(
+  groomEmail: getLabelWithValue(
     {
-      labelName: "Application Type",
-      labelKey: "MR_LAST_NAME"
+      labelName: "City",
+      labelKey: "Email"
     },
     {
-      jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].lastName",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[1].emailAddress",
 
     }
   ),
   groomFatherFName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_FATHER_NAME"
+      labelKey: "Father name"
     },
     {
       jsonPath:
@@ -156,7 +244,7 @@ export const groomReviewDetails = {
   groomMotherFName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_MOTHER_NAME"
+      labelKey: "Mother name"
     },
     {
       jsonPath:
@@ -164,10 +252,83 @@ export const groomReviewDetails = {
 
     }
   ),
+  groomAddressLine1: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "Address"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.addressLine1",
+
+    }
+  ),
+  groomDistrict: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "District"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.district",
+
+    }
+  ),
+  groomState: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "State"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.state",
+
+    }
+  ),
+  groomCountry: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "Country"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.country",
+
+    }
+  ),
+  groomAddressPin: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "PIN"
+    },
+    {
+      jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.pinCode",
+
+    }
+  ),
+  // groomMName: getLabelWithValue(
+  //   {
+  //     labelName: "Application Type",
+  //     labelKey: "MR_MIDDLE_NAME"
+  //   },
+  //   {
+  //     jsonPath:
+  //       "MarriageRegistrations[0].coupleDetails[1]].middleName",
+
+  //   }
+  // ),
+  // groomLName: getLabelWithValue(
+  //   {
+  //     labelName: "Application Type",
+  //     labelKey: "MR_LAST_NAME"
+  //   },
+  //   {
+  //     jsonPath:
+  //       "MarriageRegistrations[0].coupleDetails[1].lastName",
+
+  //   }
+  // ),
+
   isDisabled: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_IS_DIVYANG"
+      labelKey: "Is Groom Divyang"
     },
     {
       jsonPath:
@@ -194,7 +355,7 @@ export const tradeLocationDetails = {
   reviewCity: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "MR_CITY"
+      labelKey: "City"
     },
     {
       jsonPath: "MarriageRegistrations[0].tenantId",
@@ -209,7 +370,7 @@ export const tradeLocationDetails = {
   reviewMohalla: getLabelWithValue(
     {
       labelName: "Mohalla",
-      labelKey: "MR_VILLAGE"
+      labelKey: "Village"
     },
     {
       jsonPath: "MarriageRegistrations[0].marriagePlace.locality.code",
@@ -223,7 +384,7 @@ export const tradeLocationDetails = {
   tradeLocWard: getLabelWithValue(
     {
       labelName: "Ward",
-      labelKey: "MR_WARD"
+      labelKey: "Ward"
     },
     { jsonPath: "MarriageRegistrations[0].marriagePlace.ward", callBack: checkValueForNA }
   ),
@@ -231,13 +392,13 @@ export const tradeLocationDetails = {
   reviewDoorNo: getLabelWithValue(
     {
       labelName: "Door/House No.",
-      labelKey: "MR_PLACE_OF_MARRIAGE"
+      labelKey: "Marriage Place"
     },
     { jsonPath: "MarriageRegistrations[0].marriagePlace.placeOfMarriage", callBack: checkValueForNA }
   ),
 
   reviewToDate: getLabelWithValue(
-    { labelName: "To Date", labelKey: "MR_MARRIAGE_DATE" },
+    { labelName: "To Date", labelKey: "Date of marriage" },
     {
       jsonPath: "MarriageRegistrations[0].marriageDate",
       callBack: convertEpochToDate
@@ -260,7 +421,7 @@ export const getReviewTrade = (isEditable = true) => {
           },
           ...getCommonSubHeader({
             labelName: "Trade Details",
-            labelKey: "MR_MARRIAGE_DETAIL"
+            labelKey: "Marriage Details"
           })
         },
         editSection: {

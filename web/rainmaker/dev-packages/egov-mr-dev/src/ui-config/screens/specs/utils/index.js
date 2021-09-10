@@ -2165,16 +2165,7 @@ export const showCityPicker = (state, dispatch) => {
 
 export const applyForm = (state, dispatch, action) => {
 
-  let tlApplyFor = window.localStorage.getItem('licenseType');
-  let legacyLicenseRenewal = window.localStorage.getItem('legacyLicenseRenewal');
-  console.log(legacyLicenseRenewal, "Nero legacyLicenseRenewal egov")
-  console.log(typeof legacyLicenseRenewal, "Nero legacyLicenseRenewal type of")
-  let urlString = '';
-  if(legacyLicenseRenewal === "true"){
-    urlString = `licenseType=${tlApplyFor}&legacyLicenseRenewal=${true}`;
-  }else{
-    urlString = `licenseType=${tlApplyFor}`;
-  }
+
   const tenantId = get(
     state.screenConfiguration.preparedFinalObject,
     "citiesByModule.citizenTenantId"
@@ -2206,7 +2197,7 @@ export const applyForm = (state, dispatch, action) => {
   if (isTradeDetailsValid) {
     showReqDocPopup(state, dispatch, "home");
   }
-  dispatch(prepareFinalObject("Licenses", []));
+  dispatch(prepareFinalObject("MarriageRegistrations", []));
   dispatch(prepareFinalObject("LicensesTemp", []));
   dispatch(prepareFinalObject("DynamicMdms", []));
 };

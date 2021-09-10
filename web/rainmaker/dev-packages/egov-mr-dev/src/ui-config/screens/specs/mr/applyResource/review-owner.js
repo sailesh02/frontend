@@ -17,7 +17,7 @@ export const brideGuardianDetails = {
     {
       labelName: "Trade Location Details",
       //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-      labelKey: "MR_GUARDIAN_DETAIL"
+      labelKey: "Bride Guardian Details"
     },
     {
       style: {
@@ -30,7 +30,7 @@ export const brideGuardianDetails = {
   rltnWithBride: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_RELATIONSHIP"
+      labelKey: "Relationship"
     },
     {
       jsonPath:
@@ -42,7 +42,7 @@ export const brideGuardianDetails = {
   brideGuardianName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_NAME"
+      labelKey: "Name"
     },
     {
       jsonPath:
@@ -54,7 +54,7 @@ export const brideGuardianDetails = {
   brideGrdnAddressLine1: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_ADDRESS"
+      labelKey: "Address"
     },
     {
       jsonPath:
@@ -62,34 +62,10 @@ export const brideGuardianDetails = {
 
     }
   ),
-
-  brideGrdnCountry: getLabelWithValue(
-    {
-      labelName: "Application Type",
-      labelKey: "MR_COUNTRY"
-    },
-    {
-      jsonPath:
-      "MarriageRegistrations[0].coupleDetails[0].guardianDetails.country",
-
-    }
-  ),
-
-  brideGrdnState: getLabelWithValue(
-    {
-      labelName: "Application Type",
-      labelKey: "MR_STATE"
-    },
-    {
-      jsonPath:
-      "MarriageRegistrations[0].coupleDetails[0].guardianDetails.state",
-
-    }
-  ),
   brideGrdnDistrict: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_DISTRICT"
+      labelKey: "District"
     },
     {
       jsonPath:
@@ -97,10 +73,34 @@ export const brideGuardianDetails = {
 
     }
   ),
+
+
+  brideGrdnState: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "State"
+    },
+    {
+      jsonPath:
+      "MarriageRegistrations[0].coupleDetails[0].guardianDetails.state",
+
+    }
+  ),
+  brideGrdnCountry: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "Country"
+    },
+    {
+      jsonPath:
+      "MarriageRegistrations[0].coupleDetails[0].guardianDetails.country",
+
+    }
+  ),
   brideGrdnAddressPin: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_PINCODE"
+      labelKey: "Pincode"
     },
     {
       jsonPath:
@@ -111,7 +111,7 @@ export const brideGuardianDetails = {
   brideGrdnContact: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_CONTACT"
+      labelKey: "Contact"
     },
     {
       jsonPath:
@@ -122,7 +122,7 @@ export const brideGuardianDetails = {
   brideGrdnEmail: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "MR_EMAIL_ADDRESS"
+      labelKey: "Email"
     },
     {
       jsonPath:

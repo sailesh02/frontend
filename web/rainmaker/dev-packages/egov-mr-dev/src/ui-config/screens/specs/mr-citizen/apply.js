@@ -17,7 +17,6 @@ import {
   formwizardThirdStep,
   formwizardFourthStep,
   formwizardFifthStep,
-  formwizardSixthStep,
   stepper,
   getMdmsData
 } from "../mr/apply";
@@ -31,12 +30,7 @@ const getData = async (action, state, dispatch, tenantId) => {
   await getBoundaryData(action, state, dispatch, [
     { key: "tenantId", value: tenantId }
   ]);
-  dispatch(
-    prepareFinalObject(
-      "MarriageRegistrations[0]",
-      ''
-    )
-  );
+
   dispatch(
     prepareFinalObject(
       "MarriageRegistrations[0].tenantId",
@@ -257,7 +251,6 @@ const screenConfig = {
         formwizardThirdStep,
         formwizardFourthStep,
         formwizardFifthStep,
-        formwizardSixthStep,
         footer
       }
     },

@@ -5,6 +5,11 @@ export const getWFConfig = (module, businessService) => {
         INITIATED: "/tradelicence/apply",
         DEFAULT: "/tradelicence/search-preview",
       };
+    case "MR-SERVICES":
+      return {
+        INITIATED: "/marriageregistration/apply",
+        DEFAULT: "/marriageregistration/search-preview",
+      };      
     case "WS-SERVICES":
       return {
         INITIATED: "/wns/search-preview",

@@ -1417,7 +1417,7 @@ class FormWizard extends Component {
       });
     } else {
     }
-    if(isUpdate && index == 2){
+    if(isUpdate){
       this.props.setFieldProperty("ownerInfo", "ownerName", "disabled", true);
       this.props.setFieldProperty("ownerInfo", "ownerMobile", "disabled", true);
     }

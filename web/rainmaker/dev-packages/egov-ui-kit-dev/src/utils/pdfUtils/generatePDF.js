@@ -405,7 +405,8 @@ const getHeaderCard = (applicationData, logo) => {
     body.push({
         stack: [
             {
-                text: getLocaleLabels(("TENANT_TENANTS_" + applicationData.tenantId.replace('.', '_')).toUpperCase(), ("TENANT_TENANTS_" + applicationData.tenantId.replace('.', '_')).toUpperCase()) + " " + getLocaleLabels(("CORPORATION", "CMN_ACK_CORPORATION_HEADER").toUpperCase(), ("CORPORATION", "CMN_ACK_CORPORATION_HEADER").toUpperCase()),
+                text: getLocaleLabels(("TENANT_TENANTS_" + applicationData.tenantId.replace('.', '_')).toUpperCase(), ("TENANT_TENANTS_" + applicationData.tenantId.replace('.', '_')).toUpperCase()) + " " + applicationData.ulbGrade.toUpperCase(),
+                // text: getLocaleLabels(("TENANT_TENANTS_" + applicationData.tenantId.replace('.', '_')).toUpperCase(), ("TENANT_TENANTS_" + applicationData.tenantId.replace('.', '_')).toUpperCase()) + " " + getLocaleLabels(("CORPORATION", "CMN_ACK_CORPORATION_HEADER").toUpperCase(), ("CORPORATION", "CMN_ACK_CORPORATION_HEADER").toUpperCase()),
                 style: "pdf-header-text"
             },
             {

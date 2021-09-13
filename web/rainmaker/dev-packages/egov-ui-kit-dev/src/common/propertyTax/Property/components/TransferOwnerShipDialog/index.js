@@ -108,7 +108,7 @@ const TransferOwnerShipDialog = (props) => {
               onClick={() => { printDiv() }}
             />
             <Button
-              label={<Label buttonLabel={true} label="PT_TRANFER_OWNERSHIP" fontSize="16px" lineHeight="25px !important" labelClassName="footer-button-label" />}
+              label={<Label buttonLabel={true} label={getLocaleLabels("PT_TRANSFER_BUTTON")} fontSize="16px" lineHeight="25px !important" labelClassName="footer-button-label" />}
               primary={true}
               className="footer-button"
               labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51",lineHeight:"20px" }}

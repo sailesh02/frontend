@@ -356,7 +356,7 @@ class Property extends Component {
         }
         {!!selPropertyDetails && !!selPropertyDetails.owners && !!selPropertyDetails.owners.length && (<div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
           <div className="button-container col-xs-4 property-info-access-btn" style={{ float: "right" }}>
-          {editVisible && editVisible.includes(false) ? 
+          {editVisible && editVisible.includes(false) && process.env.REACT_APP_NAME == "Citizen"? 
           (
             <Button
             onClick={() => this.linkProperty()}

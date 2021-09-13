@@ -1408,6 +1408,7 @@ class FormWizard extends Component {
 
     let isAssesment = getQueryValue(search, "purpose") == 'assess';
     let isReassesment = getQueryValue(search, "purpose") == 'reassess';
+    let isUpdate = getQueryValue(search, "purpose") == 'update';
 
     if (formValidIndexArray.indexOf(index) !== -1 && selected >= index) {
       this.setState({
@@ -1416,6 +1417,11 @@ class FormWizard extends Component {
       });
     } else {
     }
+    if(isUpdate && index == 2){
+      this.props.setFieldProperty("ownerInfo", "ownerName", "disabled", true);
+      this.props.setFieldProperty("ownerInfo", "ownerMobile", "disabled", true);
+    }
+
   };
   
   closeDeclarationDialogue = () => {

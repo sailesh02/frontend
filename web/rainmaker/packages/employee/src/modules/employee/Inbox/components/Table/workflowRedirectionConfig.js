@@ -5,6 +5,11 @@ export const getWFConfig = (module, businessService) => {
         INITIATED: "/tradelicence/apply",
         DEFAULT: "/tradelicence/search-preview",
       };
+    case "MR-SERVICES":
+      return {
+        INITIATED: "/mr/apply",
+        DEFAULT: "/mr/search-preview",
+      };
     case "WS-SERVICES":
       return {
         INITIATED: "/wns/search-preview",
@@ -57,7 +62,7 @@ export const getWFConfig = (module, businessService) => {
           INITIATED: "/pt-assessment/search-preview",
           DEFAULT: "/pt-assessment/search-preview",
         };
-      }  
+      }
       else {
         return {
           INITIATED: "/pt-mutation/search-preview",

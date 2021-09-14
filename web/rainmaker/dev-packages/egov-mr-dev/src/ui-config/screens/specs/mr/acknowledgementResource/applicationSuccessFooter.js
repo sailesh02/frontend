@@ -172,7 +172,7 @@ export const applicationSuccessFooter = (
       },
       onClickDefination: {
         action: "page_change",
-        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=TL`,
+        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=MR`,
           // process.env.REACT_APP_SELF_RUNNING === "true"
           //   ? `BPA/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
           //   : `/BPA/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`

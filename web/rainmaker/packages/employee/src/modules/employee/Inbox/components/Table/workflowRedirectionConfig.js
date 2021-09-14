@@ -7,9 +7,9 @@ export const getWFConfig = (module, businessService) => {
       };
     case "MR-SERVICES":
       return {
-        INITIATED: "/marriageregistration/apply",
-        DEFAULT: "/marriageregistration/search-preview",
-      };      
+        INITIATED: "/mr/apply",
+        DEFAULT: "/mr/search-preview",
+      };
     case "WS-SERVICES":
       return {
         INITIATED: "/wns/search-preview",
@@ -62,7 +62,7 @@ export const getWFConfig = (module, businessService) => {
           INITIATED: "/pt-assessment/search-preview",
           DEFAULT: "/pt-assessment/search-preview",
         };
-      }  
+      }
       else {
         return {
           INITIATED: "/pt-mutation/search-preview",

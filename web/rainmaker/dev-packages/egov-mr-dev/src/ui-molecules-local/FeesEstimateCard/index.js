@@ -151,7 +151,7 @@ function FeesEstimateCard(props) {
         <Typography variant="body2" align="right"  style={{ color: 'green' }}>
           <LabelContainer
             labelName="Paid Successfully"
-            labelKey="TL_COMMON_PAID_SUCCESS"
+            labelKey="TL_COMMON_PAID_SUCCESS_Hello"
           />
         </Typography> ):
          (

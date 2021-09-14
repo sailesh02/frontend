@@ -77,6 +77,12 @@ const getData = async (action, state, dispatch, tenantId) => {
       false
     )
   );
+  dispatch(
+    prepareFinalObject(
+      "MarriageRegistrations[0].applicationType",
+      "NEW"
+    )
+  );
 };
 const updateSearchResults = async (
   action,

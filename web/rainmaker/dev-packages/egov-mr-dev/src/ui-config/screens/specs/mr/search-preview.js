@@ -81,7 +81,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     payload,
     "MarriageRegistrations[0].applicationDocuments",
     "LicensesTemp[0].reviewDocData",
-    dispatch, 'TL'
+    dispatch, 'MR'
   );
 
   let sts = getTransformedStatus(get(payload, "MarriageRegistrations[0].status"));
@@ -98,7 +98,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     { key: "tenantId", value: tenantId },
     {
       key: "businessServices",
-      value: businessService ? businessService : "NewTL"
+      value: businessService ? businessService : "MR"
     }
   ];
 
@@ -113,6 +113,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
         getTradeTypeSubtypeDetails(payload)
       )
     );
+
   const LicenseData = payload.MarriageRegistrations[0];
   const fetchFromReceipt = sts !== "pending_payment";
 
@@ -190,7 +191,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         get(state, "screenConfiguration.preparedFinalObject"),
         "MarriageRegistrations[0].applicationDocuments",
         "LicensesTemp[0].reviewDocData",
-        dispatch, 'TL'
+        dispatch, 'MR'
       );
     }
 
@@ -309,7 +310,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           data,
           "MarriageRegistrations[0].verificationDocuments",
           "LicensesTemp[0].verifyDocData",
-          dispatch, 'TL'
+          dispatch, 'MR'
         );
       } else {
         dispatch(
@@ -556,35 +557,12 @@ const screenConfig = {
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
             dataPath: "MarriageRegistrations",
-            moduleName: "NewTL",
+            moduleName: "MR",
             updateUrl: "/mr-services/v1/_update",
             beforeSubmitHook:beforeSubmitHook
           }
         },
-        // actionDialog: {
-        //   uiFramework: "custom-containers-local",
-        //   componentPath: "ResubmitActionContainer",
-        //   moduleName: "egov-tradelicence",
-        //   visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
-        //   props: {
-        //     open: true,
-        //     dataPath: "MarriageRegistrations",
-        //     moduleName: "NewTL",
-        //     updateUrl: "/tl-services/v1/_update",
-        //     data: {
-        //       buttonLabel: "RESUBMIT",
-        //       moduleName: "NewTL",
-        //       isLast: false,
-        //       dialogHeader: {
-        //         labelName: "RESUBMIT Application",
-        //         labelKey: "WF_RESUBMIT_APPLICATION"
-        //       },
-        //       showEmployeeList: false,
-        //       roles: "CITIZEN",
-        //       isDocRequired: false
-        //     }
-        //   }
-        // },
+
         tradeReviewDetails
       }
     },

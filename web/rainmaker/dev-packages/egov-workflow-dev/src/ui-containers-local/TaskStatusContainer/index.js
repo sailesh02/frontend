@@ -41,6 +41,7 @@ class TastStatusContainer extends React.Component {
 
   render() {
     const { classes, ProcessInstances, moduleName} = this.props;
+    console.log(ProcessInstances, moduleName, "Nero Process")
     let currentObj =
       ProcessInstances && ProcessInstances[ProcessInstances.length - 1];
       if(currentObj && currentObj.businessService && currentObj.businessService === "BPA"){
@@ -55,7 +56,7 @@ class TastStatusContainer extends React.Component {
       }
     let taskLabel = "Task Status";
     let taskKey   = "TL_TASK_STATUS";
-    if(moduleName === 'NewWS1' || moduleName === 'NewSW1' || moduleName === "SWCloseConnection" || 
+    if(moduleName === 'NewWS1' || moduleName === 'NewSW1' || moduleName === "SWCloseConnection" ||
     moduleName === "SWDisconnection" || moduleName === "WSCloseConnection" || moduleName === "WSDisconnection"
     || moduleName === "SWReconnection" || moduleName === "WSReconnection" || moduleName === "SWOwnershipChange"
     || moduleName === "WSOwnershipChange"){

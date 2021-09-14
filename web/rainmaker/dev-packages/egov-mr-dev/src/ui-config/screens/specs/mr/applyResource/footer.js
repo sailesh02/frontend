@@ -227,7 +227,7 @@ export const callBackForNext = async (state, dispatch) => {
         uploadedDocData &&
         uploadedDocData.map(item => {
           return {
-            title: `TL_${item.documentType}`,
+            title: `MR_${item.documentType}`,
             link: item.fileUrl && item.fileUrl.split(",")[0],
             linkText: "View",
             name: item.fileName
@@ -756,7 +756,7 @@ export const footerReview = (
                 callBack: () => {
                   dispatch(
                     setRoute(
-                      `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
+                      `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=MR`
                     )
                   );
                 },

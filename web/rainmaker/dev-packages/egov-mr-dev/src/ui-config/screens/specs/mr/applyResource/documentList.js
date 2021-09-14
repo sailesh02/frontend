@@ -51,8 +51,162 @@ export const documentList = {
           accept : "image/*, .pdf, .png, .jpeg",
         },
         maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 5000
       }
     ],
-    documentTypePrefix: "TL_",
+    documentTypePrefix: "MR_",
   }
 };

@@ -44,21 +44,21 @@ const searchResults = async (dispatch, applicationNo, tenantId) => {
   ];
   let payload = await getSearchResults(queryObject);
 
-  set(payload, "Licenses[0].assignee", []);
+  set(payload, "MarriageRegistrations[0].assignee", []);
 
   await setDocuments(
     payload,
-    "Licenses[0].tradeLicenseDetail.applicationDocuments",
+    "MarriageRegistrations[0].applicationDocuments",
     "LicensesTemp[0].reviewDocData",
-    dispatch, 'TL'
+    dispatch, 'MR'
   );
   //set Trade Types
 
   payload && dispatch(
     prepareFinalObject(
-      "Licenses", get(
+      "MarriageRegistrations", get(
         payload,
-        "Licenses",
+        "MarriageRegistrations",
         []
       )))
   payload &&
@@ -68,7 +68,7 @@ const searchResults = async (dispatch, applicationNo, tenantId) => {
         getTradeTypeSubtypeDetails(payload)
       )
     );
-  let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
+  let sts = getTransformedStatus(get(payload, "MarriageRegistrations[0].status"));
   const LicenseData = payload.Licenses[0];
   const fetchFromReceipt = sts !== "pending_payment";
 

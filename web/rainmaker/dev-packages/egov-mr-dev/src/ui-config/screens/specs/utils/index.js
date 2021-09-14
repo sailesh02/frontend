@@ -519,7 +519,7 @@ export const getReceipt = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      getPaymentSearchAPI('TL'),
+      getPaymentSearchAPI('MR'),
       "",
       queryObject
     );
@@ -574,7 +574,7 @@ export const getReceiptData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      getPaymentSearchAPI('TL'),
+      getPaymentSearchAPI('MR'),
       "",
       queryObject
     );
@@ -1022,7 +1022,7 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
   let applicationNumber = get(Licenses[0], "applicationNumber")
   const applicationType = Licenses && Licenses.length > 0 ? get(Licenses[0], "applicationType") : "NEW";
   const queryStr = [
-    { key: "key", value: applicationType === "RENEWAL" ? "tlrenewalcertificate" : "tlcertificate" },
+    { key: "key", value: "mrcertificate" },
     { key: "tenantId", value: tenantId ? tenantId.split(".")[0] : commonConfig.tenantId }
   ]
   const DOWNLOADRECEIPT = {
@@ -1064,10 +1064,10 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
 }
 
 
-export const downloadProvisionalCertificateForm = async (Licenses, mode = 'download') => {
-  let tenantId = get(Licenses[0], "tenantId");
-  let applicationNumber = get(Licenses[0], "applicationNumber")
-  const applicationType = Licenses && Licenses.length > 0 ? get(Licenses[0], "applicationType") : "NEW";
+export const downloadProvisionalCertificateForm = async (MarriageRegistrations, mode = 'download') => {
+  let tenantId = get(MarriageRegistrations[0], "tenantId");
+  let applicationNumber = get(MarriageRegistrations[0], "applicationNumber")
+  const applicationType = MarriageRegistrations && MarriageRegistrations.length > 0 ? get(MarriageRegistrations[0], "applicationType") : "NEW";
   const queryStr = [
     { key: "key", value: "tplcertificate" },
     { key: "tenantId", value: tenantId ? tenantId.split(".")[0] : commonConfig.tenantId }
@@ -1086,7 +1086,7 @@ export const downloadProvisionalCertificateForm = async (Licenses, mode = 'downl
     }
   ];
   const LicensesPayload = await getSearchResults(queryObject);
-  const updatedLicenses = get(LicensesPayload, "Licenses");
+  const updatedLicenses = get(LicensesPayload, "MarriageRegistrations");
   const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
   if (oldFileStoreId) {
     downloadReceiptFromFilestoreID(oldFileStoreId, mode)
@@ -1135,7 +1135,7 @@ export const downloadProvisionalCertificateFormPaymentSuccess = async (Licenses,
   ];
   const LicensesPayload = await getSearchResults(queryObject);
 
-  const updatedLicenses = get(LicensesPayload, "Licenses");
+  const updatedLicenses = get(LicensesPayload, "MarriageRegistrations");
   const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
    Licenses = updatedLicenses;
   if (oldFileStoreId) {
@@ -1459,7 +1459,6 @@ export const createEstimateData = async (
   const payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
     : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
-
   let estimateData = payload
     ? isPAID
       ? payload &&
@@ -1870,10 +1869,11 @@ export const getDocList = (state, dispatch) => {
   const documentObj = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.MarriageRegistration.documentObj");
   const documentTypes = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.common-masters.DocumentType");
 
-  const applicationType = getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? "RENEWAL" :
-  get( state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "NEW");
+  //const applicationType = getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? "RENEWAL" :
+  //get( state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "NEW");
+  const applicationType = "NEW";
   const documentObjArray = documentObj;
-console.log(documentObjArray, "Nero Docs");
+
   const filteredDocTypes = documentObjArray[0].allowedDocs.reduce((acc, item, index) => {
     documentTypes.find((document, index) => {
       if (document.code === item.documentType)
@@ -1884,9 +1884,10 @@ console.log(documentObjArray, "Nero Docs");
     return acc;
   }, [])
 
-  console.log(filteredDocTypes, "Nero Docs 2");
+
   const applicationDocArray = filteredDocTypes && filteredDocTypes.reduce((result, item) => {
     const transformedDocObj = documentObjArray[0].allowedDocs.filter(docObj => docObj.documentType === item.code)[0];
+
     if (transformedDocObj.applicationType.includes(applicationType)) {
       result.push(
         {

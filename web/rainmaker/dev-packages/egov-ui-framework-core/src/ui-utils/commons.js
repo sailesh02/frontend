@@ -209,6 +209,7 @@ export const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
+    if(fileStoreId){
     const fileUrl = await httpRequest(
       "get",
       "/filestore/v1/files/url",
@@ -216,6 +217,9 @@ export const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
       queryObject
     );
     return fileUrl;
+    }else{
+      return '';
+    }
   } catch (e) {
     console.log(e);
   }
@@ -295,6 +299,7 @@ export const setDocuments = async (
 
 
 export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
+
   const fileStoreIdByAction = await getAllFileStoreIds(ProcessInstances);
   const fileUrlPayload = await getFileUrlFromAPI(
     Object.values(fileStoreIdByAction).join(",")
@@ -305,7 +310,7 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
       item.documents.forEach(i => {
         if (i.fileStoreId && fileUrlPayload[i.fileStoreId]) {
           i.link = getFileUrl(fileUrlPayload[i.fileStoreId]);
-          i.title = `TL_${i.documentType}`;
+          i.title = item.businessService === "MR"? `MR_${i.documentType}` :`TL_${i.documentType}`;
           i.name = decodeURIComponent(
             getFileUrl(fileUrlPayload[i.fileStoreId])
               .split("?")[0]

@@ -507,11 +507,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     } else {
 
       set(queryObject[0], "action", "INITIATE");
-      //Emptying application docs to "INITIATE" form in case of search and fill from old TL Id.
-
-      if (!queryObject[0].applicationNumber)
-
-
       const response = await httpRequest(
         "post",
         "/mr-services/v1/_create",

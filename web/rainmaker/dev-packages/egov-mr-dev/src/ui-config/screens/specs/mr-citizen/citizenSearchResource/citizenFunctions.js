@@ -38,11 +38,11 @@ export const fetchData = async (action, state, dispatch) => {
     mdmsRes &&
     mdmsRes.MdmsRes &&
     mdmsRes.MdmsRes.tenant.citymodule.find(item => {
-      if (item.code === "TL") return true;
+      if (item.code === "MR") return true;
     });
   dispatch(
     prepareFinalObject(
-      "applyScreenMdmsData.common-masters.citiesByModule.TL",
+      "applyScreenMdmsData.common-masters.citiesByModule.MR",
       tenants
     )
   );

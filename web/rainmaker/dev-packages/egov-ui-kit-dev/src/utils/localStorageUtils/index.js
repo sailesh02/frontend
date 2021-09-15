@@ -62,12 +62,14 @@ export const setDefaultLocale = (locale) => {
 };
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {
-  Object.keys(localStorage).forEach((key) => {
-    if (key.startsWith(appName)) {
-      window.localStorage.removeItem(key);
-    }
-  });
- window.sessionStorage.clear();
+//   Object.keys(localStorage).forEach((key) => {
+//     if (key.startsWith(appName)) {
+//       window.localStorage.removeItem(key);
+//     }
+//   });
+//  window.sessionStorage.clear();
+  window.localStorage.clear();
+  window.sessionStorage.clear();
 };
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {

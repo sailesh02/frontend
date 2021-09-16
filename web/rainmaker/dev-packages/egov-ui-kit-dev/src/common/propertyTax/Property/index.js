@@ -325,6 +325,13 @@ class Property extends Component {
           return false
         }
     })
+    const showUpdateForEmployee = selPropertyDetails && selPropertyDetails.owners && selPropertyDetails.owners.map( (owner) => {
+      if(owner.mobileNumber){
+        return true
+      }else{
+        return false
+      }
+    })
     let urlArray = [];
     let assessmentHistory = [];
     const { pathname } = location;
@@ -364,19 +371,19 @@ class Property extends Component {
             primary={true}
             style={{ lineHeight: "auto", minWidth: "45%" }}
           />
-          ) : (<div>
-            <Button
-              label={
-                <Label buttonLabel={true}
-                  label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
-                  color="#fe7a51" />
-              }
-              onClick={() => this.onEditPropertyClick()}
-              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-              buttonStyle={{ border: "1px solid #fe7a51" }}
-              style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
-            />
-            </div>) }
+          ) : showUpdateForEmployee && !showUpdateForEmployee.includes(false)  ? (<div>
+           <Button
+            label={
+              <Label buttonLabel={true}
+                label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
+                color="#fe7a51" />
+            }
+            onClick={() => this.onEditPropertyClick()}
+            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
+            buttonStyle={{ border: "1px solid #fe7a51" }}
+            style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
+          />
+            </div>) : ("") }
           </div>
         </div>)}
         {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />}

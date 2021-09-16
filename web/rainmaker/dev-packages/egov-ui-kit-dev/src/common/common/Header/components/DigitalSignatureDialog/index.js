@@ -15,7 +15,7 @@ import {
 } from "egov-ui-framework/ui-molecules"
 import CloseIcon from "@material-ui/icons/Close";
 import "./index.css";
-import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
+import { hideSpinner,showSpinner } from "egov-ui-kit/redux/common/actions";
 import TextField from "material-ui/TextField";
 import { getLocale, getTenantId,getAccessToken, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import axios from 'axios';
@@ -72,224 +72,8 @@ class DigitalSignatureDialog extends Component {
   }
 
   //actual calls
-  // getCertificateList = (token) => {
-  //   this.props.toggleSpinner();
-  //   RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-  //   let body =  Object.assign(
-  //     {},
-  //     {
-  //       RequestInfo,
-  //       "tenantId":getTenantId(),
-  //       "responseData":null,
-  //       "tokenDisplayName":token
-  //     }
-  //   );
-    
-  //   axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
-  //     'Content-Type': 'application/json',
-  //     'Accept': 'application/json'
-  //    })
-  //     .then(response => {
-  //       let body = response.data.input
-  //       axios.post("https://localhost.emudhra.com:26769/DSC/ListCertificate", body, { // to get R1 R2
-  //         'Content-Type': 'application/json',
-  //         'Accept': 'application/json'
-  //        })
-  //         .then(response => {
-  //            RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-  //            let body =  Object.assign(
-  //              {},
-  //               {
-  //                RequestInfo,
-  //                "tenantId":getTenantId(),
-  //                 responseData:response.data.responseData,
-  //                 tokenDisplayName:token
-  //               }
-  //            );
-  //           axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getCertificate", body, { // to get R1 R2
-  //             'Content-Type': 'application/json',
-  //             'Accept': 'application/json'
-  //            })
-  //             .then(response => {
-              
-  //               let requiredCertificateFormat = response && response.data && response.data.certificates &&
-  //               response.certificates.map (certificate => {
-  //                 return {
-  //                   label : certificate.commonName,
-  //                   value : certificate.keyId
-  //                 }
-  //               }) 
-                
-  //               this.setState({
-  //                 ceriticatesArray : requiredCertificateFormat,
-  //               })
-  //               this.props.toggleSpinner();
-  //             })
-  //             .catch(error => {
-              
-  //             });
-  //         })
-  //         .catch(error => {
-            
-  //         });
-  //     })
-  //     .catch(error => {
-      
-  //     });
-  // }
-
-  // getTokenList = () => {
-  //   this.props.toggleSpinner();
-  //   RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-  //   let body =  Object.assign(
-  //     {},
-  //     {
-  //       RequestInfo,
-  //       "tenantId":getTenantId(),
-  //       "responseData":null
-  //     }
-  //   );
-    
-  //   axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
-  //     'Content-Type': 'application/json',
-  //     'Accept': 'application/json'
-  //    })
-  //     .then(response => {
-  //       let body = response.data.input
-  //       axios.post("https://localhost.emudhra.com:26769/DSC/ListToken", body, { // to get R1 R2
-  //         'Content-Type': 'application/json',
-  //         'Accept': 'application/json'
-  //        })
-  //         .then(response => {
-  //            RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-  //            let body =  Object.assign(
-  //              {},
-  //               {
-  //                RequestInfo,
-  //                "tenantId":getTenantId(),
-  //                "responseData":response.data.responseData
-  //               }
-  //            );
-  //           axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getTokens", body, { // to get tokens
-  //             'Content-Type': 'application/json',
-  //             'Accept': 'application/json'
-  //            })
-  //             .then(response => { 
-  //               let requiredTokenFormat = response && response.data && response.data.tokens && response.tokens.map (token => {
-  //                 return {
-  //                   label : token,
-  //                   value : token
-  //                 }
-  //               }) 
-
-  //               if(requiredTokenFormat && requiredTokenFormat.length > 0){
-  //                 this.setState({
-  //                   tokensArray : requiredTokenFormat,
-  //                   selectedToken : requiredTokenFormat[0].label
-  //                 })
-  //                 this.props.toggleSpinner();
-  //                 this.getCertificateList(requiredTokenFormat[0].label)
-  //               }
-  //             })
-  //             .catch(error => { 
-  //             });
-  //         })
-  //         .catch(error => { 
-  //         });
-  //     })
-  //     .catch(error => {
-  //     });
-  // }
-
-  // saveDetails = () => {
-  //   if(this.state.selectedToken && this.state.selectedToken != " " && 
-  //   this.state.selectedCeritificate && this.state.selectedCeritificate != " " &&
-  //   this.state.password && this.state.password != " " && this.state.password.match(passwordPattern)){
-  //     this.props.toggleSpinner();
-  //     RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-  //     let body =  Object.assign(
-  //       {},
-  //       {
-  //         RequestInfo,
-  //         "tenantId":getTenantId(),
-  //         "tokenDisplayName":this.state.selectedToken,
-  //         "keyStorePassPhrase":this.state.password,
-  //         "keyId":this.state.selectedCeritificate,
-  //         "channelId":"ch1",
-  //         responseData:null
-  //       }
-  //     );
-      
-  //     axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_dataSignInput", body, { // to get R1 R2
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json'
-  //      })
-  //       .then(response => {
-  //         let body = response.data.input
-  //         axios.post("https://localhost.emudhra.com:26769/DSC/PKCSSign", body, { // to get R1 R2
-  //           'Content-Type': 'application/json',
-  //           'Accept': 'application/json'
-  //          })
-  //           .then(response => {
-  //              RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-  //              let body =  Object.assign(
-  //                {},
-  //                 {
-  //                  RequestInfo,
-  //                  "tenantId":getTenantId(),
-  //                  "tokenDisplayName":this.state.selectedToken,
-  //                  "keyStorePassPhrase":this.state.password,
-  //                  "keyId":this.state.selectedCeritificate,
-  //                  "channelId":"ch1",
-  //                  "responseData":response.data.responseData
-  //                 }
-  //              );
-  //             axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_dataSign", body, { // to get R1 R2
-  //               'Content-Type': 'application/json',
-  //               'Accept': 'application/json'
-  //              })
-  //               .then(response => {
-  //                   if(response && response.result && response.result == "Success"){
-  //                     this.props.toggleSnackbarAndSetText(
-  //                         true,
-  //                         {
-  //                           labelName: "CORE_COMMON_SIGNATURE_SUCCESS_MSG",
-  //                           labelKey: "CORE_COMMON_SIGNATURE_SUCCESS_MSG"
-  //                         },
-  //                         "success"
-  //                     );
-  //                     this.props.closeDigitalSignatureDialog()
-  //                   }
-  //                   this.props.toggleSpinner();
-  //               })
-  //               .catch(error => { //will return tokens
-                 
-  //                 });
-  //           })
-  //           .catch(error => {
-             
-  //           });
-  //       })
-  //       .catch(error => {
-         
-  //       });
-  //   }else{
-  //     this.props.toggleSnackbarAndSetText(
-  //       true,
-  //       {
-  //         labelName: "CORE_COMMON_FILL_ALL_DETAILS",
-  //         labelKey: "CORE_COMMON_FILL_ALL_DETAILS"
-  //       },
-  //       "warning"
-  //   );
-  //   return
-  //   }
-  // }
-
-  //for testing
-  
   getCertificateList = (token) => {
-    this.props.toggleSpinner();
+    this.props.showSpinner();
     RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
     let body =  Object.assign(
       {},
@@ -301,89 +85,62 @@ class DigitalSignatureDialog extends Component {
       }
     );
     
-    axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
+    axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
       'Content-Type': 'application/json',
       'Accept': 'application/json'
      })
       .then(response => {
-        // response.data.input
-      })
-      .catch(error => {
-        let response = {
-          "ResponseInfo":null,
-          "input":{
-          "encryptedRequest":"XXXX",
-          "encryptionKeyId":"YYYYY"
-          }
-          }
-        let body = response.input
-        axios.post("/.emudhra.com:26769/DSC/ListCertificate", body, { // to get R1 R2
+        let body = response.data.input
+        axios.post("https://localhost.emudhra.com:26769/DSC/ListCertificate", body, { // to get R1 R2
           'Content-Type': 'application/json',
           'Accept': 'application/json'
          })
           .then(response => {
-            // response.responseData
-          })
-          .catch(error => {
-            let response = {
-              "responseData": "QuyKW0m6EdBEuTltdWrj2rA5O77bukrGcxlpp4atnn0KoadBXlTZXoEpHp3Q3Qxne1pcmXUSBedS3Ocj3/5Nqjtj6Q1QuqQxo1yMtoOmeGjlilICxaqs9ldgRu8rlbuXrzeip6VMqMCEM+f21+tKf3c4UKWd6/gYOg8rG+37HAVDRAjz21HECLLP2lq3bThBTIPog74D8Lvs4MHXE7D28kd2znHny2v/r3lGnmLxmzYlMiBUlYPnPQa8WSyOROpfXNDnD0/fgiIUuNA82mXC7F7x4VHf+GYj94aldkeSE7MKSqDPRsSp3/4gJ4Y8bHNa",
-              "status": 1,
-              "errorMessage": null,
-              "version": "3.1.0.0",
-              "errorCode": null
-             }
-
              RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
              let body =  Object.assign(
                {},
                 {
                  RequestInfo,
                  "tenantId":getTenantId(),
-                  responseData:response.responseData,
+                  responseData:response.data.responseData,
                   tokenDisplayName:token
                 }
              );
-            axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getCertificate", body, { // to get R1 R2
+            axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getCertificate", body, { // to get R1 R2
               'Content-Type': 'application/json',
               'Accept': 'application/json'
              })
               .then(response => {
-                // response.responseData
-              })
-              .catch(error => { //will return tokens
-                let response = {
-                  "ResponseInfo":null,
-                  "certificates":[
-                  {
-                  "keyId":"XXXX",
-                  "commonName":"YYYYY",
-                  "certificateDate":"ZZZZZ"
-                  },
-                  {
-                  "keyId":"XXXX",
-                  "commonName":"YYYYY",
-                  "certificateDate":"ZZZZZ"
-                  }
-                  ]
-                  } 
-                let requiredCertificateFormat = response.certificates.map (certificate => {
+              
+                let requiredCertificateFormat = response && response.data && response.data.certificates &&
+                response.certificates.map (certificate => {
                   return {
                     label : certificate.commonName,
                     value : certificate.keyId
                   }
                 }) 
+                this.props.hideSpinner();
                 this.setState({
                   ceriticatesArray : requiredCertificateFormat,
-                  // selectedCeritificate : requiredCertificateFormat[0].label
                 })
-                this.props.toggleSpinner();
+              })
+              .catch(error => {
+                this.props.hideSpinner();
+
               });
+          })
+          .catch(error => {
+            this.props.hideSpinner();
+
           });
+      })
+      .catch(error => {
+        this.props.hideSpinner();
       });
   }
 
   getTokenList = () => {
-    this.props.toggleSpinner();
+    this.props.showSpinner();
     RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
     let body =  Object.assign(
       {},
@@ -394,86 +151,64 @@ class DigitalSignatureDialog extends Component {
       }
     );
     
-    axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
+    axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
       'Content-Type': 'application/json',
       'Accept': 'application/json'
      })
       .then(response => {
-        // response.data.input
-      })
-      .catch(error => {
-        let response = {
-          "ResponseInfo":null,
-          "input":{
-          "encryptedRequest":"XXXX",
-              "encryptionKeyId":"YYYYY"
-          }
-        } 
-        let body = response.input
-        axios.post("/.emudhra.com:26769/DSC/ListToken", body, { // to get R1 R2
+        let body = response.data.input
+        axios.post("https://localhost.emudhra.com:26769/DSC/ListToken", body, { // to get R1 R2
           'Content-Type': 'application/json',
           'Accept': 'application/json'
          })
           .then(response => {
-            // response.responseData
-          })
-          .catch(error => {
-            let response = {
-              "responseData": "QuyKW0m6EdBEuTltdWrj2rA5O77bukrGcxlpp4atnn0KoadBXlTZXoEpHp3Q3Qxne1pcmXUSBedS3Ocj3/5Nqjtj6Q1QuqQxo1yMtoOmeGjlilICxaqs9ldgRu8rlbuXrzeip6VMqMCEM+f21+tKf3c4UKWd6/gYOg8rG+37HAVDRAjz21HECLLP2lq3bThBTIPog74D8Lvs4MHXE7D28kd2znHny2v/r3lGnmLxmzYlMiBUlYPnPQa8WSyOROpfXNDnD0/fgiIUuNA82mXC7F7x4VHf+GYj94aldkeSE7MKSqDPRsSp3/4gJ4Y8bHNa",
-              "status": 1,
-              "errorMessage": null,
-              "version": "3.1.0.0",
-              "errorCode": null
-             }
-
              RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
              let body =  Object.assign(
                {},
                 {
                  RequestInfo,
                  "tenantId":getTenantId(),
-                 "responseData":response.responseData
+                 "responseData":response.data.responseData
                 }
              );
-            axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getTokens", body, { // to get R1 R2
+            axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getTokens", body, { // to get tokens
               'Content-Type': 'application/json',
               'Accept': 'application/json'
              })
-              .then(response => {
-                // response.responseData
-              })
-              .catch(error => { //will return tokens
-                let response = {
-                  "ResponseInfo":null,
-                  "tokens":[
-                  "Token 1",
-                      "Token 2"
-                  ]
-                  } 
-                let requiredTokenFormat = response.tokens.map (token => {
+              .then(response => { 
+                let requiredTokenFormat = response && response.data && response.data.tokens && response.tokens.map (token => {
                   return {
                     label : token,
                     value : token
                   }
                 }) 
-                
-                this.setState({
-                  tokensArray : requiredTokenFormat,
-                  selectedToken : requiredTokenFormat[0].label
-                })
-                this.props.toggleSpinner();
-                this.getCertificateList(requiredTokenFormat[0].label) 
+                this.props.hideSpinner();
+
+                if(requiredTokenFormat && requiredTokenFormat.length > 0){
+                  this.setState({
+                    tokensArray : requiredTokenFormat,
+                    selectedToken : requiredTokenFormat[0].label
+                  })
+                }
+              })
+              .catch(error => { 
+                this.props.hideSpinner();
               });
+          })
+          .catch(error => { 
+            this.props.hideSpinner();
           });
+      })
+      .catch(error => {
+        this.props.hideSpinner();
       });
-  
   }
 
   saveDetails = () => {
     if(this.state.selectedToken && this.state.selectedToken != " " && 
     this.state.selectedCeritificate && this.state.selectedCeritificate != " " &&
     this.state.password && this.state.password != " " && this.state.password.match(passwordPattern)){
-      this.props.toggleSpinner();
+      this.props.showSpinner();
       RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
       let body =  Object.assign(
         {},
@@ -488,38 +223,19 @@ class DigitalSignatureDialog extends Component {
         }
       );
       
-      axios.post("/dsc-services.egov:8080/dsc-services/dsc/_dataSignInput", body, { // to get R1 R2
+      axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_dataSignInput", body, { // to get R1 R2
         'Content-Type': 'application/json',
         'Accept': 'application/json'
        })
         .then(response => {
-          // response.data.input
-        })
-        .catch(error => {
-          let response = {
-            "ResponseInfo":null,
-            "input":{
-            "encryptedRequest":"XXXX",
-                "encryptionKeyId":"YYYYY"
-            }
-          } 
-          let body = response.input
-          axios.post("/.emudhra.com:26769/DSC/PKCSSign", body, { // to get R1 R2
+          this.props.showSpinner();
+          let body = response.data.input
+          axios.post("https://localhost.emudhra.com:26769/DSC/PKCSSign", body, { // to get R1 R2
             'Content-Type': 'application/json',
             'Accept': 'application/json'
            })
             .then(response => {
-              // response.responseData
-            })
-            .catch(error => {
-              let response = {
-                "responseData": "QuyKW0m6EdBEuTltdWrj2rA5O77bukrGcxlpp4atnn0KoadBXlTZXoEpHp3Q3Qxne1pcmXUSBedS3Ocj3/5Nqjtj6Q1QuqQxo1yMtoOmeGjlilICxaqs9ldgRu8rlbuXrzeip6VMqMCEM+f21+tKf3c4UKWd6/gYOg8rG+37HAVDRAjz21HECLLP2lq3bThBTIPog74D8Lvs4MHXE7D28kd2znHny2v/r3lGnmLxmzYlMiBUlYPnPQa8WSyOROpfXNDnD0/fgiIUuNA82mXC7F7x4VHf+GYj94aldkeSE7MKSqDPRsSp3/4gJ4Y8bHNa",
-                "status": 1,
-                "errorMessage": null,
-                "version": "3.1.0.0",
-                "errorCode": null
-               }
-  
+              this.props.showSpinner();
                RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
                let body =  Object.assign(
                  {},
@@ -530,21 +246,15 @@ class DigitalSignatureDialog extends Component {
                    "keyStorePassPhrase":this.state.password,
                    "keyId":this.state.selectedCeritificate,
                    "channelId":"ch1",
-                   "responseData":response.responseData
+                   "responseData":response.data.responseData
                   }
                );
-              axios.post("/dsc-services.egov:8080/dsc-services/dsc/_dataSign", body, { // to get R1 R2
+              axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_dataSign", body, { // to get R1 R2
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
                })
                 .then(response => {
-                  // response.responseData
-                })
-                .catch(error => { //will return tokens
-                  let response = {
-                    "ResponseInfo":null,
-                    "result":"Success"
-                    } 
+                  this.props.hideSpinner();
                     if(response && response.result && response.result == "Success"){
                       this.props.toggleSnackbarAndSetText(
                           true,
@@ -556,9 +266,18 @@ class DigitalSignatureDialog extends Component {
                       );
                       this.props.closeDigitalSignatureDialog()
                     }
-                    this.props.toggleSpinner();
+                    this.props.showSpinner();
+                })
+                .catch(error => { //will return tokens
+                  this.props.hideSpinner();
                   });
+            })
+            .catch(error => {
+              this.props.hideSpinner();
             });
+        })
+        .catch(error => {
+          this.props.hideSpinner();
         });
     }else{
       this.props.toggleSnackbarAndSetText(
@@ -572,6 +291,293 @@ class DigitalSignatureDialog extends Component {
     return
     }
   }
+
+  //for testing
+  
+  // getCertificateList = (token) => {
+  //   this.props.showSpinner();
+  //   RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+  //   let body =  Object.assign(
+  //     {},
+  //     {
+  //       RequestInfo,
+  //       "tenantId":getTenantId(),
+  //       "responseData":null,
+  //       "tokenDisplayName":token
+  //     }
+  //   );
+    
+  //   axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
+  //     'Content-Type': 'application/json',
+  //     'Accept': 'application/json'
+  //    })
+  //     .then(response => {
+  //       // response.data.input
+  //     })
+  //     .catch(error => {
+  //       let response = {
+  //         "ResponseInfo":null,
+  //         "input":{
+  //         "encryptedRequest":"XXXX",
+  //         "encryptionKeyId":"YYYYY"
+  //         }
+  //         }
+  //       let body = response.input
+  //       axios.post("/.emudhra.com:26769/DSC/ListCertificate", body, { // to get R1 R2
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json'
+  //        })
+  //         .then(response => {
+  //           // response.responseData
+  //         })
+  //         .catch(error => {
+  //           let response = {
+  //             "responseData": "QuyKW0m6EdBEuTltdWrj2rA5O77bukrGcxlpp4atnn0KoadBXlTZXoEpHp3Q3Qxne1pcmXUSBedS3Ocj3/5Nqjtj6Q1QuqQxo1yMtoOmeGjlilICxaqs9ldgRu8rlbuXrzeip6VMqMCEM+f21+tKf3c4UKWd6/gYOg8rG+37HAVDRAjz21HECLLP2lq3bThBTIPog74D8Lvs4MHXE7D28kd2znHny2v/r3lGnmLxmzYlMiBUlYPnPQa8WSyOROpfXNDnD0/fgiIUuNA82mXC7F7x4VHf+GYj94aldkeSE7MKSqDPRsSp3/4gJ4Y8bHNa",
+  //             "status": 1,
+  //             "errorMessage": null,
+  //             "version": "3.1.0.0",
+  //             "errorCode": null
+  //            }
+
+  //            RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+  //            let body =  Object.assign(
+  //              {},
+  //               {
+  //                RequestInfo,
+  //                "tenantId":getTenantId(),
+  //                 responseData:response.responseData,
+  //                 tokenDisplayName:token
+  //               }
+  //            );
+  //           axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getCertificate", body, { // to get R1 R2
+  //             'Content-Type': 'application/json',
+  //             'Accept': 'application/json'
+  //            })
+  //             .then(response => {
+  //               // response.responseData
+  //             })
+  //             .catch(error => { //will return tokens
+  //               let response = {
+  //                 "ResponseInfo":null,
+  //                 "certificates":[
+  //                 {
+  //                 "keyId":"XXXX",
+  //                 "commonName":"YYYYY",
+  //                 "certificateDate":"ZZZZZ"
+  //                 },
+  //                 {
+  //                 "keyId":"XXXX",
+  //                 "commonName":"YYYYY",
+  //                 "certificateDate":"ZZZZZ"
+  //                 }
+  //                 ]
+  //                 } 
+  //               let requiredCertificateFormat = response.certificates.map (certificate => {
+  //                 return {
+  //                   label : certificate.commonName,
+  //                   value : certificate.keyId
+  //                 }
+  //               }) 
+  //               this.setState({
+  //                 ceriticatesArray : requiredCertificateFormat,
+  //                 // selectedCeritificate : requiredCertificateFormat[0].label
+  //               })
+  //               this.props.showSpinner();
+  //             });
+  //         });
+  //     });
+  // }
+
+  // getTokenList = () => {
+  //   this.props.showSpinner();
+  //   RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+  //   let body =  Object.assign(
+  //     {},
+  //     {
+  //       RequestInfo,
+  //       "tenantId":getTenantId(),
+  //       "responseData":null
+  //     }
+  //   );
+    
+  //   axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
+  //     'Content-Type': 'application/json',
+  //     'Accept': 'application/json'
+  //    })
+  //     .then(response => {
+  //       // response.data.input
+  //     })
+  //     .catch(error => {
+  //       let response = {
+  //         "ResponseInfo":null,
+  //         "input":{
+  //         "encryptedRequest":"XXXX",
+  //             "encryptionKeyId":"YYYYY"
+  //         }
+  //       } 
+  //       let body = response.input
+  //       axios.post("/.emudhra.com:26769/DSC/ListToken", body, { // to get R1 R2
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json'
+  //        })
+  //         .then(response => {
+  //           // response.responseData
+  //         })
+  //         .catch(error => {
+  //           let response = {
+  //             "responseData": "QuyKW0m6EdBEuTltdWrj2rA5O77bukrGcxlpp4atnn0KoadBXlTZXoEpHp3Q3Qxne1pcmXUSBedS3Ocj3/5Nqjtj6Q1QuqQxo1yMtoOmeGjlilICxaqs9ldgRu8rlbuXrzeip6VMqMCEM+f21+tKf3c4UKWd6/gYOg8rG+37HAVDRAjz21HECLLP2lq3bThBTIPog74D8Lvs4MHXE7D28kd2znHny2v/r3lGnmLxmzYlMiBUlYPnPQa8WSyOROpfXNDnD0/fgiIUuNA82mXC7F7x4VHf+GYj94aldkeSE7MKSqDPRsSp3/4gJ4Y8bHNa",
+  //             "status": 1,
+  //             "errorMessage": null,
+  //             "version": "3.1.0.0",
+  //             "errorCode": null
+  //            }
+
+  //            RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+  //            let body =  Object.assign(
+  //              {},
+  //               {
+  //                RequestInfo,
+  //                "tenantId":getTenantId(),
+  //                "responseData":response.responseData
+  //               }
+  //            );
+  //           axios.post("/dsc-services.egov:8080/dsc-services/dsc/_getTokens", body, { // to get R1 R2
+  //             'Content-Type': 'application/json',
+  //             'Accept': 'application/json'
+  //            })
+  //             .then(response => {
+  //               // response.responseData
+  //             })
+  //             .catch(error => { //will return tokens
+  //               let response = {
+  //                 "ResponseInfo":null,
+  //                 "tokens":[
+  //                 "Token 1",
+  //                     "Token 2"
+  //                 ]
+  //                 } 
+  //               let requiredTokenFormat = response.tokens.map (token => {
+  //                 return {
+  //                   label : token,
+  //                   value : token
+  //                 }
+  //               }) 
+                
+  //               this.setState({
+  //                 tokensArray : requiredTokenFormat,
+  //                 selectedToken : requiredTokenFormat[0].label
+  //               })
+  //               this.props.showSpinner();
+  //               this.getCertificateList(requiredTokenFormat[0].label) 
+  //             });
+  //         });
+  //     });
+  
+  // }
+
+  // saveDetails = () => {
+  //   if(this.state.selectedToken && this.state.selectedToken != " " && 
+  //   this.state.selectedCeritificate && this.state.selectedCeritificate != " " &&
+  //   this.state.password && this.state.password != " " && this.state.password.match(passwordPattern)){
+  //     this.props.showSpinner();
+  //     RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+  //     let body =  Object.assign(
+  //       {},
+  //       {
+  //         RequestInfo,
+  //         "tenantId":getTenantId(),
+  //         "tokenDisplayName":this.state.selectedToken,
+  //         "keyStorePassPhrase":this.state.password,
+  //         "keyId":this.state.selectedCeritificate,
+  //         "channelId":"ch1",
+  //         responseData:null
+  //       }
+  //     );
+      
+  //     axios.post("/dsc-services.egov:8080/dsc-services/dsc/_dataSignInput", body, { // to get R1 R2
+  //       'Content-Type': 'application/json',
+  //       'Accept': 'application/json'
+  //      })
+  //       .then(response => {
+  //         // response.data.input
+  //       })
+  //       .catch(error => {
+  //         let response = {
+  //           "ResponseInfo":null,
+  //           "input":{
+  //           "encryptedRequest":"XXXX",
+  //               "encryptionKeyId":"YYYYY"
+  //           }
+  //         } 
+  //         let body = response.input
+  //         axios.post("/.emudhra.com:26769/DSC/PKCSSign", body, { // to get R1 R2
+  //           'Content-Type': 'application/json',
+  //           'Accept': 'application/json'
+  //          })
+  //           .then(response => {
+  //             // response.responseData
+  //           })
+  //           .catch(error => {
+  //             let response = {
+  //               "responseData": "QuyKW0m6EdBEuTltdWrj2rA5O77bukrGcxlpp4atnn0KoadBXlTZXoEpHp3Q3Qxne1pcmXUSBedS3Ocj3/5Nqjtj6Q1QuqQxo1yMtoOmeGjlilICxaqs9ldgRu8rlbuXrzeip6VMqMCEM+f21+tKf3c4UKWd6/gYOg8rG+37HAVDRAjz21HECLLP2lq3bThBTIPog74D8Lvs4MHXE7D28kd2znHny2v/r3lGnmLxmzYlMiBUlYPnPQa8WSyOROpfXNDnD0/fgiIUuNA82mXC7F7x4VHf+GYj94aldkeSE7MKSqDPRsSp3/4gJ4Y8bHNa",
+  //               "status": 1,
+  //               "errorMessage": null,
+  //               "version": "3.1.0.0",
+  //               "errorCode": null
+  //              }
+  
+  //              RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+  //              let body =  Object.assign(
+  //                {},
+  //                 {
+  //                  RequestInfo,
+  //                  "tenantId":getTenantId(),
+  //                  "tokenDisplayName":this.state.selectedToken,
+  //                  "keyStorePassPhrase":this.state.password,
+  //                  "keyId":this.state.selectedCeritificate,
+  //                  "channelId":"ch1",
+  //                  "responseData":response.responseData
+  //                 }
+  //              );
+  //             axios.post("/dsc-services.egov:8080/dsc-services/dsc/_dataSign", body, { // to get R1 R2
+  //               'Content-Type': 'application/json',
+  //               'Accept': 'application/json'
+  //              })
+  //               .then(response => {
+  //                 // response.responseData
+  //               })
+  //               .catch(error => { //will return tokens
+  //                 let response = {
+  //                   "ResponseInfo":null,
+  //                   "result":"Success"
+  //                   } 
+  //                   if(response && response.result && response.result == "Success"){
+  //                     this.props.toggleSnackbarAndSetText(
+  //                         true,
+  //                         {
+  //                           labelName: "CORE_COMMON_SIGNATURE_SUCCESS_MSG",
+  //                           labelKey: "CORE_COMMON_SIGNATURE_SUCCESS_MSG"
+  //                         },
+  //                         "success"
+  //                     );
+  //                     this.props.closeDigitalSignatureDialog()
+  //                   }
+  //                   this.props.showSpinner();
+  //                 });
+  //           });
+  //       });
+  //   }else{
+  //     this.props.toggleSnackbarAndSetText(
+  //       true,
+  //       {
+  //         labelName: "CORE_COMMON_FILL_ALL_DETAILS",
+  //         labelKey: "CORE_COMMON_FILL_ALL_DETAILS"
+  //       },
+  //       "warning"
+  //   );
+  //   return
+  //   }
+  // }
 
   componentDidMount = () => {
      this.getTokenList()
@@ -755,7 +761,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    toggleSpinner: () => dispatch(toggleSpinner()),
+    showSpinner: () => dispatch(showSpinner()),
+    hideSpinner : () => dispatch(hideSpinner()),
     toggleSnackbarAndSetText: (open, message, variant) => {
       dispatch(toggleSnackbarAndSetText(open, message, variant));
     }  };

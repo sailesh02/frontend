@@ -299,6 +299,16 @@ class Property extends Component {
     const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
     generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, 'print');
   }
+
+  ifUserRoleExists = role => {
+    let userInfo = JSON.parse(getUserInfo());
+    const roles = get(userInfo, "roles");
+    const roleCodes = roles ? roles.map(role => role.code) : [];
+    if (roleCodes.indexOf(role) > -1) {
+      return true;
+    } else return false;
+  };
+
   render() {
     const {
       urls,
@@ -332,6 +342,8 @@ class Property extends Component {
         return false
       }
     })
+
+    const isCEMPEmployee = this.ifUserRoleExists('PT_CEMP')
     let urlArray = [];
     let assessmentHistory = [];
     const { pathname } = location;
@@ -371,7 +383,7 @@ class Property extends Component {
             primary={true}
             style={{ lineHeight: "auto", minWidth: "45%" }}
           />
-          ) : showUpdateForEmployee && !showUpdateForEmployee.includes(false)  ? (<div>
+          ) : showUpdateForEmployee && !showUpdateForEmployee.includes(false) && (process.env.REACT_APP_NAME == "Citizen" || isCEMPEmployee) ? (<div>
            <Button
             label={
               <Label buttonLabel={true}

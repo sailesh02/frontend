@@ -16,8 +16,7 @@ import {
     header: getCommonTitle(
       {
         labelName: "Trade Location Details",
-        //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-        labelKey: "Witness 1 details"
+        labelKey: "MR_BRIDE_WITNESS_HEADER"
       },
       {
         style: {
@@ -32,7 +31,7 @@ import {
     witness1Fname: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Name"
+        labelKey: "MR_NAME_LABEL"
       },
       {
         jsonPath:
@@ -44,7 +43,7 @@ import {
     witness1Address: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Address"
+        labelKey: "MR_ADDRESS_LABEL"
       },
       {
         jsonPath:
@@ -56,7 +55,7 @@ import {
     witness1District: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Distrcit"
+        labelKey: "MR_DISTRICT_LABEL"
       },
       {
         jsonPath:
@@ -69,7 +68,7 @@ import {
     witness1State: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "State"
+        labelKey: "MR_STATE_LABEL"
       },
       {
         jsonPath:
@@ -81,7 +80,7 @@ import {
     witness1Country: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Country"
+        labelKey: "MR_COUNTRY_LABEL"
       },
       {
         jsonPath:
@@ -92,7 +91,7 @@ import {
     witness1AddressPin: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "PIN"
+        labelKey: "MR_PINCODE_LABEL"
       },
       {
         jsonPath:
@@ -104,7 +103,7 @@ import {
     witness1Contact: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Contact"
+        labelKey: "MR_CONTACT_LABEL"
       },
       {
         jsonPath:
@@ -120,8 +119,7 @@ import {
     header: getCommonTitle(
       {
         labelName: "Trade Location Details",
-        //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-        labelKey: "Witness 2 detail"
+        labelKey: "MR_GROOM_WITNESS_HEADER"
       },
       {
         style: {
@@ -136,7 +134,7 @@ import {
     witness2Fname: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Name"
+        labelKey: "MR_NAME_LABEL"
       },
       {
         jsonPath:
@@ -148,7 +146,7 @@ import {
     witness2Address: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Address"
+        labelKey: "MR_ADDRESS_LABEL"
       },
       {
         jsonPath:
@@ -160,7 +158,7 @@ import {
     witness2District: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "District"
+        labelKey: "MR_DISTRICT_LABEL"
       },
       {
         jsonPath:
@@ -173,7 +171,7 @@ import {
     witness2State: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "State"
+        labelKey: "MR_STATE_LABEL"
       },
       {
         jsonPath:
@@ -185,7 +183,7 @@ import {
     witness2Country: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Country"
+        labelKey: "MR_COUNTRY_LABEL"
       },
       {
         jsonPath:
@@ -197,7 +195,7 @@ import {
     witness2AddressPin: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "PIN"
+        labelKey: "MR_PINCODE_LABEL"
       },
       {
         jsonPath:
@@ -209,7 +207,7 @@ import {
     witness2Contact: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Contact"
+        labelKey: "MR_CONTACT_LABEL"
       },
       {
         jsonPath:
@@ -236,7 +234,7 @@ import {
             },
             ...getCommonSubHeader({
               labelName: "Trade Details",
-              labelKey: "Wintess Details"
+              labelKey: "MR_WITNESS_DETAIL_HEADER"
             })
           },
           editSection: {

@@ -80,9 +80,21 @@ const setDocsForEditFlow = async (state, dispatch) => {
   /* To change the order of application documents similar order of mdms order*/
   const mdmsDocs = get(
     state.screenConfiguration.preparedFinalObject,
-    "applyScreenMdmsData.TradeLicense.documentObj[0].allowedDocs",
+    "applyScreenMdmsData.MarriageRegistration.documentObj[0].allowedDocs",
     []
   );
+
+  let orderedApplicationDocuments1 = mdmsDocs.map(mdmsDoc => {
+    let applicationDocument1 = {}
+    applicationDocuments1 && applicationDocuments1.map(appDoc => {
+      if (appDoc.documentType == mdmsDoc.documentType) {
+        applicationDocument1 = { ...appDoc }
+      }
+    })
+    return applicationDocument1;
+  }
+  );
+
   let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
     let applicationDocument = {}
     applicationDocuments && applicationDocuments.map(appDoc => {
@@ -93,7 +105,9 @@ const setDocsForEditFlow = async (state, dispatch) => {
     return applicationDocument;
   }
   ).filter(docObj => Object.keys(docObj).length > 0)
+
   applicationDocuments = [...orderedApplicationDocuments];
+
   dispatch(
     prepareFinalObject("MarriageRegistrations[0].applicationDocuments", applicationDocuments)
   );
@@ -127,6 +141,8 @@ const setDocsForEditFlow = async (state, dispatch) => {
         }
       ];
     });
+
+    console.log(uploadedDocuments, "nero uploadedDocuments")
   dispatch(
     prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", uploadedDocuments)
   );
@@ -168,7 +184,7 @@ export const updatePFOforSearchResults = async (
   const payload = !isPreviouslyEdited
     ? await getSearchResults(queryObject)
     : {
-      Licenses: get(state.screenConfiguration.preparedFinalObject, "Licenses")
+      MarriageRegistrations: get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations")
     };
   // const payload = await getSearchResults(queryObject)
   // getQueryArg(window.location.href, "action") === "edit" &&
@@ -189,7 +205,7 @@ export const updatePFOforSearchResults = async (
       )
     );
   }
-  if (payload && payload.Licenses) {
+  if (payload && payload.MarriageRegistrations) {
 
     // let ownersInitial = get(payload.Licenses[0], 'tradeLicenseDetail.owners', []);
     // set(payload.Licenses[0], 'tradeLicenseDetail.owners', ownersInitial.filter(owner => owner.userActive));
@@ -220,10 +236,10 @@ export const updatePFOforSearchResults = async (
 
   setApplicationNumberBox(state, dispatch);
 
-  createOwnersBackup(dispatch, payload);
-  if (payload && payload.Licenses.length > 0) {
-    dispatch(prepareFinalObject("Licenses[0].TlPeriod", payload.Licenses[0].tradeLicenseDetail.additionalDetail.licensePeriod));
-  }
+  //createOwnersBackup(dispatch, payload);
+  // if (payload && payload.Licenses.length > 0) {
+  //   dispatch(prepareFinalObject("Licenses[0].TlPeriod", payload.Licenses[0].tradeLicenseDetail.additionalDetail.licensePeriod));
+  // }
 };
 
 export const getBoundaryData = async (
@@ -340,20 +356,25 @@ const getMultipleOwners = owners => {
 
 export const applyTradeLicense = async (state, dispatch, activeIndex) => {
   try {
+
     let queryObject = JSON.parse(
       JSON.stringify(
         get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations", [])
       )
     );
+    var stateObj = get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations", []);
 
-    console.log(queryObject, "Nero query Object")
+    var appDocuments = stateObj && stateObj[0].applicationDocuments;
+
+    console.log(stateObj, "Nero query Object")
     set(
       queryObject[0],
       "marriageDate",
       convertDateToEpoch(queryObject[0].marriageDate, "dayend")
     );
     //------ removing null from document array ------
-    let documentArray = compact(get(queryObject[0], "applicationDocuments"));
+    let documentArray = compact(get(appDocuments, "applicationDocuments"));
+    console.log(documentArray, "Nero documentArray")
     let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");
     documents = documents.filter(item => item.fileUrl && item.fileName);
     set(queryObject[0], "applicationDocuments", documents);
@@ -393,18 +414,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
     disableField('apply', "components.div.children.footer.children.payButton", dispatch);
 
-    if (process.env.REACT_APP_NAME === "Citizen" && queryObject[0].workflowCode === "NewTL") {
-      // let currentFinancialYr = getCurrentFinancialYear();
-      // //Changing the format of FY
-      // let fY1 = currentFinancialYr.split("-")[1];
-      // fY1 = fY1.substring(2, 4);
-      // currentFinancialYr = currentFinancialYr.split("-")[0] + "-" + fY1;
-      // set(queryObject[0], "financialYear", currentFinancialYr);
 
-
-      //setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
-
-    }
 
 
     set(queryObject[0], "workflowCode", "MR");
@@ -429,11 +439,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         if (getQueryArg(window.location.href, "action") === "edit") {
         } else if (activeIndex === 1) {
           set(queryObject[0], "applicationDocuments", null);
-        } else action = "APPLY";
+        }
       }
-
+      console.log(activeIndex, "Nero active step")
       if ((activeIndex === 4 || activeIndex === 1)) {
-        console.log("Nero 4")
+
         action = activeIndex === 4 ? "APPLY" : "INITIATE";
         // let renewalSearchQueryObject = [
         //   { key: "tenantId", value: queryObject[0].tenantId },
@@ -576,7 +586,7 @@ export const isFileValid = (file, acceptedFiles) => {
 const setApplicationNumberBox = (state, dispatch) => {
   let applicationNumber = get(
     state,
-    "screenConfiguration.preparedFinalObject.Licenses[0].applicationNumber",
+    "screenConfiguration.preparedFinalObject.MarriageRegistrations[0].applicationNumber",
     null
   );
   if (applicationNumber) {

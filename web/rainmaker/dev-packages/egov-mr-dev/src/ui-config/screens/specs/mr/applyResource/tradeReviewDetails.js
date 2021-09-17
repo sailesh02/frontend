@@ -29,7 +29,7 @@ const witnessDetails = getWitnessDetails();
 export const tradeReviewDetails = getCommonCard({
   header: getCommonTitle({
     labelName: "Please review your Application and Submit",
-    labelKey: "TL_SUMMARY_HEADER"
+    labelKey: "MR_SUMMARY_HEADER"
   }),
   estimate,
   viewBreakupButton: getDialogButton(

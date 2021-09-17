@@ -83,6 +83,7 @@ const getData = async (action, state, dispatch, tenantId) => {
       "NEW"
     )
   );
+
 };
 const updateSearchResults = async (
   action,

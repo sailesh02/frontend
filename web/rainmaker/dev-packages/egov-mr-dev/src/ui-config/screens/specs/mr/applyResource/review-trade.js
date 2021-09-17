@@ -14,8 +14,7 @@ export const brideReviewDetails = {
   header: getCommonTitle(
     {
       labelName: "Trade Location Details",
-      //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-      labelKey: "Bride details"
+      labelKey: "MR_BRIDE_HEADER"
     },
     {
       style: {
@@ -28,7 +27,7 @@ export const brideReviewDetails = {
   brideFName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "Name"
+      labelKey: "MR_NAME_LABEL"
     },
     {
       jsonPath:
@@ -39,7 +38,7 @@ export const brideReviewDetails = {
   brideDob: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "DOB"
+      labelKey: "MR_DOB_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[0].dateOfBirth",
@@ -49,7 +48,7 @@ export const brideReviewDetails = {
   brideContact: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "Contact"
+      labelKey: "MR_CONTACT_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[0].contact",
@@ -59,7 +58,7 @@ export const brideReviewDetails = {
   brideEmail: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "Email"
+      labelKey: "MR_EMAIL_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[0].emailAddress",
@@ -91,7 +90,7 @@ export const brideReviewDetails = {
   brideFatherFName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "Father name"
+      labelKey: "MR_FATHERNAME_LABEL"
     },
     {
       jsonPath:
@@ -102,7 +101,7 @@ export const brideReviewDetails = {
   brideMotherFName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "Mother name"
+      labelKey: "MR_MOTHERNAME_LABEL"
     },
     {
       jsonPath:
@@ -113,7 +112,7 @@ export const brideReviewDetails = {
   brideAddressLine1: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "Address"
+      labelKey: "MR_ADDRESS_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.addressLine1",
@@ -123,7 +122,7 @@ export const brideReviewDetails = {
   brideDistrict: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "District"
+      labelKey: "MR_DISTRICT_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.district",
@@ -133,7 +132,7 @@ export const brideReviewDetails = {
   brideState: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "State"
+      labelKey: "MR_STATE_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.state",
@@ -143,7 +142,7 @@ export const brideReviewDetails = {
   brideCountry: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "Country"
+      labelKey: "MR_COUNTRY_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.country",
@@ -153,7 +152,7 @@ export const brideReviewDetails = {
   brideAddressPin: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "PIN"
+      labelKey: "MR_PINCODE_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.pinCode",
@@ -163,7 +162,7 @@ export const brideReviewDetails = {
   isDisabled: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "Is Bride Divyang"
+      labelKey: "MR_ISDIVYANG_LABEL"
     },
     {
       jsonPath:
@@ -178,8 +177,7 @@ export const groomReviewDetails = {
   header: getCommonTitle(
     {
       labelName: "Trade Location Details",
-      //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-      labelKey: "Groom Details"
+      labelKey: "MR_GROOM_HEADER"
     },
     {
       style: {
@@ -192,7 +190,7 @@ export const groomReviewDetails = {
   groomFName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "Name"
+      labelKey: "MR_NAME_LABEL"
     },
     {
       jsonPath:
@@ -203,7 +201,7 @@ export const groomReviewDetails = {
   groomDob: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "DOB"
+      labelKey: "MR_DOB_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[1].dateOfBirth",
@@ -213,7 +211,7 @@ export const groomReviewDetails = {
   groomContact: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "Contact"
+      labelKey: "MR_CONTACT_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[1].contact",
@@ -223,7 +221,7 @@ export const groomReviewDetails = {
   groomEmail: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "Email"
+      labelKey: "MR_EMAIL_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[1].emailAddress",
@@ -233,7 +231,7 @@ export const groomReviewDetails = {
   groomFatherFName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "Father name"
+      labelKey: "MR_FATHERNAME_LABEL"
     },
     {
       jsonPath:
@@ -244,7 +242,7 @@ export const groomReviewDetails = {
   groomMotherFName: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "Mother name"
+      labelKey: "MR_MOTHERNAME_LABEL"
     },
     {
       jsonPath:
@@ -255,7 +253,7 @@ export const groomReviewDetails = {
   groomAddressLine1: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "Address"
+      labelKey: "MR_ADDRESS_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.addressLine1",
@@ -265,7 +263,7 @@ export const groomReviewDetails = {
   groomDistrict: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "District"
+      labelKey: "MR_DISTRICT_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.district",
@@ -275,7 +273,7 @@ export const groomReviewDetails = {
   groomState: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "State"
+      labelKey: "MR_STATE_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.state",
@@ -285,7 +283,7 @@ export const groomReviewDetails = {
   groomCountry: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "Country"
+      labelKey: "MR_COUNTRY_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.country",
@@ -295,7 +293,7 @@ export const groomReviewDetails = {
   groomAddressPin: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "PIN"
+      labelKey: "MR_PINCODE_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.pinCode",
@@ -328,7 +326,7 @@ export const groomReviewDetails = {
   isDisabled: getLabelWithValue(
     {
       labelName: "Application Type",
-      labelKey: "Is Groom Divyang"
+      labelKey: "MR_ISDIVYANG_LABEL"
     },
     {
       jsonPath:
@@ -341,8 +339,7 @@ export const tradeLocationDetails = {
   header: getCommonTitle(
     {
       labelName: "Trade Location Details",
-      //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-      labelKey: "Marriage Place"
+      labelKey: "MR_MARRIAGEPLACE_LABEL"
     },
     {
       style: {
@@ -355,7 +352,7 @@ export const tradeLocationDetails = {
   reviewCity: getLabelWithValue(
     {
       labelName: "City",
-      labelKey: "City"
+      labelKey: "MR_CITY_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].tenantId",
@@ -370,7 +367,7 @@ export const tradeLocationDetails = {
   reviewMohalla: getLabelWithValue(
     {
       labelName: "Mohalla",
-      labelKey: "Village"
+      labelKey: "MR_MOHALLA_LABEL"
     },
     {
       jsonPath: "MarriageRegistrations[0].marriagePlace.locality.code",
@@ -384,7 +381,7 @@ export const tradeLocationDetails = {
   tradeLocWard: getLabelWithValue(
     {
       labelName: "Ward",
-      labelKey: "Ward"
+      labelKey: "MR_WARD_LABEL"
     },
     { jsonPath: "MarriageRegistrations[0].marriagePlace.ward", callBack: checkValueForNA }
   ),
@@ -392,13 +389,13 @@ export const tradeLocationDetails = {
   reviewDoorNo: getLabelWithValue(
     {
       labelName: "Door/House No.",
-      labelKey: "Marriage Place"
+      labelKey: "MR_MARRIAGEPLACE_LABEL"
     },
     { jsonPath: "MarriageRegistrations[0].marriagePlace.placeOfMarriage", callBack: checkValueForNA }
   ),
 
   reviewToDate: getLabelWithValue(
-    { labelName: "To Date", labelKey: "Date of marriage" },
+    { labelName: "To Date", labelKey: "MR_MARRIAGEDATE_LABEL" },
     {
       jsonPath: "MarriageRegistrations[0].marriageDate",
       callBack: convertEpochToDate
@@ -421,7 +418,7 @@ export const getReviewTrade = (isEditable = true) => {
           },
           ...getCommonSubHeader({
             labelName: "Trade Details",
-            labelKey: "Marriage Details"
+            labelKey: "MR_DETAILS_HEADER"
           })
         },
         editSection: {
@@ -445,7 +442,7 @@ export const getReviewTrade = (isEditable = true) => {
             },
             buttonLabel: getLabel({
               labelName: "Edit",
-              labelKey: "TL_SUMMARY_EDIT"
+              labelKey: "MR_SUMMARY_EDIT"
             })
           },
           onClickDefination: {

@@ -387,7 +387,7 @@ if(userSelectedTradeUnitsData && userSelectedTradeUnitsData.length > 0 && tradeU
     }
 }
 
-console.log(tradeUnitData, "Nero tradeUnitData", tradeTotal);
+
   // const tradeTotal = get(
   //   preparedFinalObject,
   //   "LicensesTemp[0].billingSlabData.tradeTotal"

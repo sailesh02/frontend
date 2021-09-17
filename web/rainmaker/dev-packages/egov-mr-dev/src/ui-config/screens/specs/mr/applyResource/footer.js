@@ -77,6 +77,7 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
 };
 
 export const callBackForNext = async (state, dispatch) => {
+
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.div.children.stepper.props.activeStep",
@@ -94,7 +95,7 @@ export const callBackForNext = async (state, dispatch) => {
 
     if (isFormValid) {
       isFormValid = await applyTradeLicense(state, dispatch, activeStep);
-      console.log(isFormValid, "Nero in")
+
       if (!isFormValid) {
         hasFieldToaster = false;
       }
@@ -104,81 +105,47 @@ export const callBackForNext = async (state, dispatch) => {
   }
   if (activeStep === 1) {
     //Bride and Groom Guardian Details
+    dispatch(
+      prepareFinalObject(
+        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.groomSideGuardian",
+        false
+      )
+    );
+    dispatch(
+      prepareFinalObject(
+        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.groomSideGuardian",
+        true
+      )
+    );
+    isFormValid = await applyTradeLicense(state, dispatch, activeStep);
   }
   if (activeStep === 2) {
     // Witness Details
-    // const LicenseData = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "MarriageRegistrations[0]",
-    //   {}
-    // );
-
-
-    // let uploadedDocData = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "MarriageRegistrations[0].tradeLicenseDetail.applicationDocuments",
-    //   []
-    // );
-
-    // const uploadedTempDocData = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "MarriageRegistrationsTemp[0].applicationDocuments",
-    //   []
-    // );
-    // for (var y = 0; y < uploadedTempDocData.length; y++) {
-    //   if (
-    //     uploadedTempDocData[y].required &&
-    //     !some(uploadedDocData, { documentType: uploadedTempDocData[y].code })
-    //   ) {
-    //     isFormValid = false;
-    //   }
-    // }
-
-    // if (isFormValid) {
-    //   if (getQueryArg(window.location.href, "action") === "edit") {
-    //     //EDIT FLOW
-    //     const businessId = getQueryArg(
-    //       window.location.href,
-    //       "applicationNumber"
-    //     );
-    //     const tenantId = getQueryArg(window.location.href, "tenantId");
-    //     let oldOwners = JSON.parse(
-    //       JSON.stringify(
-    //         get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].tradeLicenseDetail.owners", [])
-    //       )
-    //     );
-    //     dispatch(prepareFinalObject("MarriageRegistrations[0].tradeLicenseDetail.owners", checkValidOwners(get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations[0].tradeLicenseDetail.owners", []), oldOwners)));
-    //     dispatch(
-    //       setRoute(
-    //         `/mr/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`
-    //       )
-    //     );
-    //     const updateMessage = {
-    //       labelName: "Rates will be updated on submission",
-    //       labelKey: "TL_COMMON_EDIT_UPDATE_MESSAGE"
-    //     };
-    //     dispatch(toggleSnackbar(true, updateMessage, "info"));
-    //   }
-    //   uploadedDocData = uploadedDocData.filter(item => item.fileUrl && item.fileName)
-    //   const reviewDocData =
-    //     uploadedDocData &&
-    //     uploadedDocData.map(item => {
-    //       return {
-    //         title: `TL_${item.documentType}`,
-    //         link: item.fileUrl && item.fileUrl.split(",")[0],
-    //         linkText: "View",
-    //         name: item.fileName
-    //       };
-    //     });
-    //   createEstimateData(
-    //     LicenseData,
-    //     "LicensesTemp[0].estimateCardData",
-    //     dispatch
-    //   ); //get bill and populate estimate card
-    //   dispatch(
-    //     prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
-    //   );
-    // }
+  dispatch(
+      prepareFinalObject(
+        "MarriageRegistrations[0].witness[0].groomSideWitness",
+        false
+      )
+    );
+    dispatch(
+      prepareFinalObject(
+        "MarriageRegistrations[0].witness[1].groomSideWitness",
+        true
+      )
+    );
+    dispatch(
+      prepareFinalObject(
+        "MarriageRegistrations[0].witness[0].title",
+        "MR"
+      )
+    );
+    dispatch(
+      prepareFinalObject(
+        "MarriageRegistrations[0].witness[1].title",
+        "MR"
+      )
+    );
+    isFormValid = await applyTradeLicense(state, dispatch, activeStep);
   }
 
 
@@ -255,7 +222,7 @@ export const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "MarriageRegistrations[0]"
     );
-    // isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+     isFormValid = await applyTradeLicense(state, dispatch, activeStep);
     if (isFormValid) {
 
       moveToSuccess(LicenseData, dispatch);
@@ -307,6 +274,7 @@ export const callBackForNext = async (state, dispatch) => {
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
   }
+
 };
 
 export const changeStep = (
@@ -492,7 +460,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "TL_COMMON_BUTTON_PREV_STEP"
+        labelKey: "MR_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {
@@ -516,7 +484,7 @@ export const footer = getCommonApplyFooter({
     children: {
       nextButtonLabel: getLabel({
         labelName: "Next Step",
-        labelKey: "TL_COMMON_BUTTON_NXT_STEP"
+        labelKey: "MR_COMMON_BUTTON_NXT_STEP"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -546,7 +514,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Submit",
-        labelKey: "TL_COMMON_BUTTON_SUBMIT"
+        labelKey: "MR_COMMON_BUTTON_SUBMIT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",

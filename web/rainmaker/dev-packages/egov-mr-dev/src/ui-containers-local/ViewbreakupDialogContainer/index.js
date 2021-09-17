@@ -357,7 +357,7 @@ for(let i =0; i<tradeUnitDataMasterSelected.length; i++){
     }
 }
 
-console.log(tradeUnitData, "Nero tradeUnitData")
+
   const tradeTotal = get(
     preparedFinalObject,
     "LicensesTemp[0].billingSlabData.tradeTotal"

@@ -16,8 +16,7 @@ import {
     header: getCommonTitle(
       {
         labelName: "Trade Location Details",
-        //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-        labelKey: "Groom Guardian Details"
+        labelKey: "MR_GROOM_GUARDIAN_HEADER"
       },
       {
         style: {
@@ -30,7 +29,7 @@ import {
     rltnWithgroom: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Relationship"
+        labelKey: "MR_GROOMGUARDIAN_RELATION_LABEL"
       },
       {
         jsonPath:
@@ -42,7 +41,7 @@ import {
     groomGuardianName: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Name"
+        labelKey: "MR_NAME_LABEL"
       },
       {
         jsonPath:
@@ -54,7 +53,7 @@ import {
     groomGrdnAddressLine1: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Address"
+        labelKey: "MR_ADDRESS_LABEL"
       },
       {
         jsonPath:
@@ -66,7 +65,7 @@ import {
     groomGrdnDistrict: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "District"
+        labelKey: "MR_DISTRICT_LABEL"
       },
       {
         jsonPath:
@@ -78,7 +77,7 @@ import {
     groomGrdnState: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "State"
+        labelKey: "MR_STATE_LABEL"
       },
       {
         jsonPath:
@@ -90,7 +89,7 @@ import {
     groomGrdnCountry: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Country"
+        labelKey: "MR_COUNTRY_LABEL"
       },
       {
         jsonPath:
@@ -101,7 +100,7 @@ import {
     groomGrdnAddressPin: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "PIN"
+        labelKey: "MR_PINCODE_LABEL"
       },
       {
         jsonPath:
@@ -112,7 +111,7 @@ import {
     groomGrdnContact: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Contact"
+        labelKey: "MR_CONTACT_LABEL"
       },
       {
         jsonPath:
@@ -123,7 +122,7 @@ import {
     groomGrdnEmail: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Email"
+        labelKey: "MR_EMAIL_LABEL"
       },
       {
         jsonPath:
@@ -139,8 +138,7 @@ import {
     header: getCommonTitle(
       {
         labelName: "Trade Location Details",
-        //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-        labelKey: "Bride Guardian Details"
+        labelKey: "MR_BRIDE_GUARDIAN_HEADER"
       },
       {
         style: {
@@ -153,7 +151,7 @@ import {
     rltnWithBride: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Relationship"
+        labelKey: "MR_BRIDEGUARDIAN_RELATION_LABEL"
       },
       {
         jsonPath:
@@ -165,7 +163,7 @@ import {
     brideGuardianName: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Name"
+        labelKey: "MR_NAME_LABEL"
       },
       {
         jsonPath:
@@ -177,7 +175,7 @@ import {
     brideGrdnAddressLine1: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Address"
+        labelKey: "MR_ADDRESS_LABEL"
       },
       {
         jsonPath:
@@ -188,7 +186,7 @@ import {
     brideGrdnDistrict: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "District"
+        labelKey: "MR_DISTRICT_LABEL"
       },
       {
         jsonPath:
@@ -201,7 +199,7 @@ import {
     brideGrdnState: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "State"
+        labelKey: "MR_STATE_LABEL"
       },
       {
         jsonPath:
@@ -212,7 +210,7 @@ import {
     brideGrdnCountry: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Country"
+        labelKey: "MR_COUNTRY_LABEL"
       },
       {
         jsonPath:
@@ -223,7 +221,7 @@ import {
     brideGrdnAddressPin: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Pincode"
+        labelKey: "MR_PINCODE_LABEL"
       },
       {
         jsonPath:
@@ -234,7 +232,7 @@ import {
     brideGrdnContact: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Contact"
+        labelKey: "MR_CONTACT_LABEL"
       },
       {
         jsonPath:
@@ -245,7 +243,7 @@ import {
     brideGrdnEmail: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Email"
+        labelKey: "MR_EMAIL_LABEL"
       },
       {
         jsonPath:
@@ -350,7 +348,7 @@ import {
             },
             ...getCommonSubHeader({
               labelName: "Trade Details",
-              labelKey: "Guardian Details"
+              labelKey: "MR_GUARDIAN_DETAIL_HEADER"
             })
           },
           editSection: {
@@ -374,7 +372,7 @@ import {
               },
               buttonLabel: getLabel({
                 labelName: "Edit",
-                labelKey: "TL_SUMMARY_EDIT"
+                labelKey: "MR_SUMMARY_EDIT"
               })
             },
             onClickDefination: {

@@ -50,13 +50,9 @@ export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"
       ? getCommonHeader({
-        labelName: `Apply for New Trade License ${
-          process.env.REACT_APP_NAME === "Citizen"
-            ? "(" + getCurrentFinancialYear() + ")"
-            : ""
-          }`,
+        labelName: "MR_NEW_APPL_HEADER",
         // dynamicArray: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? [getnextFinancialYear(getCurrentFinancialYear())]:[getCurrentFinancialYear()],
-        labelKey: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR" : "Apply for Marriage Registration"
+        labelKey: "MR_NEW_APPL_HEADER"
 
       })
       : {},
@@ -75,7 +71,7 @@ export const tradeDocumentDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Required Documents",
-      labelKey: "TL_NEW-UPLOAD-DOCS_HEADER"
+      labelKey: "MR_UPLOAD_DOCS_HEADER"
     },
     {
       style: {
@@ -86,7 +82,7 @@ export const tradeDocumentDetails = getCommonCard({
   paragraph: getCommonParagraph({
     labelName:
       "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "TL_NEW-UPLOAD-DOCS_SUBHEADER"
+    labelKey: "MR_UPLOAD_DOCS_SUBHEADER"
   }),
   documentList
 });

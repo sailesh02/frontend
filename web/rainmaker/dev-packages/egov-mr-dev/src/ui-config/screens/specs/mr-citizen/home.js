@@ -22,9 +22,9 @@ const header = getCommonHeader(
 const cardItems = [
   {
     label: {
-      //labelKey: "MR_APPLY_MRG_LICENSE",
-      labelKey: "Apply for Marriage Registration",
-      labelName: "Apply for Trade License"
+
+      labelKey: "MR_APPLY_MARRIAGEREGISTRATION",
+      labelName: "MR_APPLY_MARRIAGEREGISTRATION"
     },
     icon: <TradeLicenseIcon />,
 
@@ -37,7 +37,7 @@ const cardItems = [
 
   {
     label: {
-      labelKey: "My Applications",
+      labelKey: "MR_MY_APPLICATIONS",
       labelName: "My Applications"
     },
     icon: <FormIcon />,

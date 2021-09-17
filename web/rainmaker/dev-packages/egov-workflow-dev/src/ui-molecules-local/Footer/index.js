@@ -34,9 +34,9 @@ let RequestInfo = {
 };
 let customRequestInfo = JSON.parse(getUserInfo())
 
-  // pdf signing @final approval step in BPA and OC
+// pdf signing @final approval step in BPA and OC
+// to form pdf body w.r.t modules and report type
   const getPdfBody = (moduleName,preparedFinalObject) => {
-    debugger
     switch(moduleName){  
       case 'BPA':
         const {BPA,scrutinyDetails} = preparedFinalObject
@@ -55,6 +55,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
     }
   }
 
+  // to get pdf key for calling pdf service
   const getKey = (moduleName,data) => {
     let pdfKey = "";
     switch(moduleName){
@@ -77,6 +78,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
     return pdfKey
   }
 
+  // to fetch tenantId from the data
   const getTenantIdForPdf = (moduleName,data) => {
     switch(moduleName){
       case 'BPA':

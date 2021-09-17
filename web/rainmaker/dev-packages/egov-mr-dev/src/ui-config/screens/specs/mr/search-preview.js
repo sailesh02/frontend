@@ -145,17 +145,17 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state.screenConfiguration.preparedFinalObject,
       `MarriageRegistrations[0].licenseNumber`
     );
-    let queryObjectSearch = [
-      {
-        key: "tenantId",
-        value: tenantId
-      },
-      { key: "offset", value: "0" },
-      { key: "licenseNumbers", value: licenseNumber }
-    ];
-    const payload = await getSearchResults(queryObjectSearch);
-    const length = payload && payload.MarriageRegistrations.length > 0 ? get(payload, `MarriageRegistrations`, []).length : 0;
-    dispatch(prepareFinalObject("licenseCount", length));
+    // let queryObjectSearch = [
+    //   {
+    //     key: "tenantId",
+    //     value: tenantId
+    //   },
+    //   { key: "offset", value: "0" },
+    //   { key: "licenseNumbers", value: licenseNumber }
+    // ];
+    // const payload = await getSearchResults(queryObjectSearch);
+    // const length = payload && payload.MarriageRegistrations.length > 0 ? get(payload, `MarriageRegistrations`, []).length : 0;
+    // dispatch(prepareFinalObject("licenseCount", length));
 
     const status = get(
       state,

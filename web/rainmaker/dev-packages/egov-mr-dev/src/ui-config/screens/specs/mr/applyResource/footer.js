@@ -330,6 +330,7 @@ export const changeStep = (
   ];
   dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
   renderSteps(activeStep, dispatch);
+  window.scrollTo(0,0);
 };
 
 export const renderSteps = (activeStep, dispatch) => {

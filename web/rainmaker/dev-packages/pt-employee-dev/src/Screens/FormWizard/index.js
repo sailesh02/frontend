@@ -9,7 +9,7 @@ import DocumentsUpload from "egov-ui-kit/common/propertyTax/Property/components/
 import { createAssessmentPayload, getCreatePropertyResponse, prefillPTDocuments, setOldPropertyData } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import { setRoute, toggleSnackbarAndSetText, fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { fetchGeneralMDMSData, generalMDMSFetchSuccess, hideSpinner, prepareFormData as prepareFormDataAction, showSpinner, toggleSpinner, updatePrepareFormDataFromDraft } from "egov-ui-kit/redux/common/actions";
-import { deleteForm, displayFormErrors, handleFieldChange, removeForm, updateForms } from "egov-ui-kit/redux/form/actions";
+import { deleteForm, displayFormErrors, handleFieldChange, removeForm, updateForms, setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
 import { fetchAssessments } from "egov-ui-kit/redux/properties/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
@@ -702,6 +702,7 @@ class FormWizard extends Component {
     const { formValidIndexArray, selected } = this.state;
     const { location } = this.props;
     let { search } = location;
+    let isUpdate = getQueryValue(search, "purpose") == 'update';
     const isCompletePayment = false;
     if (formValidIndexArray.indexOf(index) !== -1 && selected >= index) {
       !isCompletePayment
@@ -710,6 +711,10 @@ class FormWizard extends Component {
           formValidIndexArray: range(0, index)
         })
         : alert("Not authorized to edit this property details");
+    }
+    if(isUpdate){
+      this.props.setFieldProperty("ownerInfo", "ownerName", "disabled", true);
+      this.props.setFieldProperty("ownerInfo", "ownerMobile", "disabled", true);
     }
   };
 
@@ -2148,6 +2153,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(
         fetchGeneralMDMSData(requestBody, moduleName, masterName, key, tenantId)
       ),
+    setFieldProperty: (formKey, fieldKey, property, value) => 
+      dispatch(setFieldProperty(formKey, fieldKey, property, value)),
     toggleSnackbarAndSetText: (open, message, error) =>
       dispatch(toggleSnackbarAndSetText(open, message, error)),
     generalMDMSFetchSuccess: (payload, moduleName, masterArray) =>

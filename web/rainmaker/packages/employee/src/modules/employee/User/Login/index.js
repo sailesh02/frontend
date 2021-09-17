@@ -31,7 +31,8 @@ class Login extends React.Component {
   render(){
     const { bannerUrl, logoUrl ,languages,hasLocalisation } = this.props;
   return (
-    <Banner hideBackButton={false} bannerUrl={bannerUrl} logoUrl={logoUrl}>
+    // <Banner hideBackButton={false} bannerUrl={bannerUrl} logoUrl={logoUrl}>
+    <Banner hideBackButton={false} logoUrl={logoUrl}>
       <LoginFormHOC logoUrl={logoUrl}  languages ={languages} onLanguageChange={this.onLanguageChange} hasLocalisation={hasLocalisation} languageSelected={this.state.languageSelected} />
     </Banner>
   );

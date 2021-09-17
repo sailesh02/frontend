@@ -59,7 +59,7 @@ class App extends Component {
     fetchLocalizationLabel(getLocale() || "en_IN");
 
     // current location
-    fetchCurrentLocation();
+    //fetchCurrentLocation();
     fetchMDMSData(requestBody);
   }
 

@@ -69,7 +69,7 @@ const searchResults = async (dispatch, applicationNo, tenantId) => {
       )
     );
   let sts = getTransformedStatus(get(payload, "MarriageRegistrations[0].status"));
-  const LicenseData = payload.Licenses[0];
+  const LicenseData = payload.MarriageRegistrations[0];
   const fetchFromReceipt = sts !== "pending_payment";
 
 

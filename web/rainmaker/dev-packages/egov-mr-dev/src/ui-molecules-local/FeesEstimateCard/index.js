@@ -117,7 +117,7 @@ function FeesEstimateCard(props) {
               <Typography variant="body2">
                 <LabelContainer
                   labelName="Total Amount"
-                  labelKey="TL_COMMON_TOTAL_AMT"
+                  labelKey="MR_COMMON_TOTAL_AMT"
                 />
               </Typography>
             </Grid>
@@ -141,7 +141,7 @@ function FeesEstimateCard(props) {
         >
           <LabelContainer
             labelName="Total Amount"
-            labelKey="TL_COMMON_TOTAL_AMT"
+            labelKey="MR_COMMON_TOTAL_AMT"
           />
         </Typography>
         <Typography className={totalHeadClassName} align="right">
@@ -151,14 +151,14 @@ function FeesEstimateCard(props) {
         <Typography variant="body2" align="right"  style={{ color: 'green' }}>
           <LabelContainer
             labelName="Paid Successfully"
-            labelKey="TL_COMMON_PAID_SUCCESS_Hello"
+            labelKey="MR_COMMON_PAID_SUCCESS"
           />
         </Typography> ):
          (
           <Typography variant="body2" align="right" style={{ color: 'red' }}>
           <LabelContainer
             labelName="Not Paid"
-            labelKey="TL_COMMON_NOT_PAID"
+            labelKey="MR_COMMON_NOT_PAID"
           />
           </Typography> )
         }

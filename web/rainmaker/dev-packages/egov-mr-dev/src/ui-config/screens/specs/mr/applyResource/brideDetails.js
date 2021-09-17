@@ -29,8 +29,7 @@ export const brideDetails = getCommonCard(
     header: getCommonTitle(
       {
         labelName: "Trade Location Details",
-        //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-        labelKey: "Bride Details"
+        labelKey: "MR_BRIDE_HEADER"
       },
       {
         style: {
@@ -45,16 +44,14 @@ export const brideDetails = getCommonCard(
       brideFName: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Name"
+          labelKey: "MR_NAME_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-         // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Name"
+          labelKey: "MR_NAME_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].firstName",
@@ -102,14 +99,12 @@ export const brideDetails = getCommonCard(
       brideDob: {
         ...getDateField({
           label: { labelName: "To Date",
-          labelKey: "DOB"
-          //labelKey: "TL_NEW_TRADE_DETAILS_TRADE_END_DATE_LABEL"
+          labelKey: "MR_DOB_LABEL"
 
         },
           placeholder: {
             labelName: "Trade License From Date",
-            //labelKey: "TL_TRADE_LICENCE_TO_DATE"
-            labelKey: "DOB"
+            labelKey: "MR_DOB_PLACEHOLDER"
           },
 
           required: true,
@@ -131,15 +126,14 @@ export const brideDetails = getCommonCard(
       brideContact: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Contact"
+          labelKey: "MR_CONTACT_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "Contact"
+          labelKey: "MR_CONTACT_PLACEHOLDER"
         },
         pattern: getPattern("MobileNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.contact",
@@ -148,15 +142,14 @@ export const brideDetails = getCommonCard(
       brideEmail: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Email"
+          labelKey: "MR_EMAIL_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "Email"
+          labelKey: "MR_EMAIL_PLACEHOLDER"
         },
         pattern: getPattern("Email"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.emailAddress",
@@ -166,16 +159,14 @@ export const brideDetails = getCommonCard(
       brideFatherFName: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Father's Name"
+          labelKey: "MR_FATHERNAME_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-         // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Father's Name"
+          labelKey: "MR_FATHERNAME_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].fatherName",
@@ -223,16 +214,14 @@ export const brideDetails = getCommonCard(
       brideMotherFName: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Mother's Name"
+          labelKey: "MR_MOTHERNAME_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-         // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Mother's Name"
+          labelKey: "MR_MOTHERNAME_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].motherName",
@@ -279,15 +268,14 @@ export const brideDetails = getCommonCard(
       brideAddressLine1: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Address"
+          labelKey: "MR_ADDRESS_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "Address"
+          labelKey: "MR_ADDRESS_PLACEHOLDER"
         },
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.addressLine1",
@@ -297,12 +285,11 @@ export const brideDetails = getCommonCard(
         ...getSelectField({
           label: {
             labelName: "City",
-            //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "District"
+            labelKey: "MR_DISTRICT_LABEL"
           },
 
           optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "District" },
+          placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.district",
           required: true,
@@ -313,12 +300,11 @@ export const brideDetails = getCommonCard(
         ...getSelectField({
           label: {
             labelName: "City",
-            //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "State"
+            labelKey: "MR_STATE_LABEL"
           },
 
           optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "State" },
+          placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.state",
           required: true,
@@ -329,12 +315,11 @@ export const brideDetails = getCommonCard(
         ...getSelectField({
           label: {
             labelName: "City",
-            //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "Country"
+            labelKey: "MR_COUNTRY_LABEL"
           },
 
           optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "Country" },
+          placeholder: { labelName: "Select Country", labelKey: "MR_COUNTRY_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.country",
           required: true,
@@ -344,15 +329,14 @@ export const brideDetails = getCommonCard(
       brideAddressPin: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "PIN"
+          labelKey: "MR_PINCODE_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "PIN"
+          labelKey: "MR_PINCODE_PLACEHOLDER"
         },
         required: true,
         //pattern: getPattern("Address"),
@@ -363,12 +347,11 @@ export const brideDetails = getCommonCard(
         ...getSelectField({
           label: {
             labelName: "City",
-            //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "Is Bride Divyang?"
+            labelKey: "MR_ISDIVYANG_LABEL"
           },
 
           optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "Is Bride Divyang?" },
+          placeholder: { labelName: "Select Country", labelKey: "MR_ISDIVYANG_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.yesNoBox",
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].isDivyang",
 

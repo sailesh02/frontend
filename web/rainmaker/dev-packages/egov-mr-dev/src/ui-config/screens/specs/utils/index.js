@@ -385,7 +385,7 @@ export const getFeesEstimateCard = props => {
   const { sourceJsonPath, ...rest } = props;
   return {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-mr",
     componentPath: "EstimateCardContainer",
     props: {
       sourceJsonPath,
@@ -1424,7 +1424,7 @@ export const createEstimateData = async (
   href = {},
   getFromReceipt
 ) => {
-  const workflowCode = get(LicenseData, "workflowCode") ? get(LicenseData, "workflowCode") : "NewTL"
+  const workflowCode = get(LicenseData, "workflowCode") ? get(LicenseData, "workflowCode") : "MR"
   const applicationNo =
     get(LicenseData, "applicationNumber") ||
     getQueryArg(href, "applicationNumber");
@@ -2013,59 +2013,7 @@ export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
       { accessories: [], tradeTypeData: [] }
     );
 
-  // const accessories = getUniqueItemsFromArray(
-  //   processedData.accessories,
-  //   "code"
-  // );
-  // let structureTypes = getUniqueItemsFromArray(
-  //   processedData.tradeTypeData,
-  //   "structureType"
-  // );
-  // structureTypes = commonTransform(
-  //   {
-  //     StructureType: structureTypes.map(item => {
-  //       return { code: item.structureType, active: true };
-  //     })
-  //   },
-  //   "StructureType"
-  // );
-  let licenseTypes = getUniqueItemsFromArray(
-    processedData.tradeTypeData,
-    "licenseType"
-  );
-  licenseTypes = licenseTypes.map(item => {
-    return { code: item.licenseType, active: true };
-  });
-  // dispatch(
-  //   prepareFinalObject(
-  //     "applyScreenMdmsData.common-masters.StructureType",
-  //     structureTypes.StructureType
-  //   )
-  // );
-  // dispatch(
-  //   prepareFinalObject(
-  //     "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
-  //     accessories
-  //   )
-  // );
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.TradeLicense.licenseType",
-      licenseTypes
-    )
-  );
-  // dispatch(
-  //   prepareFinalObject(
-  //     "applyScreenMdmsData.common-masters.StructureTypeTransformed",
-  //     objectToDropdown(structureTypes.StructureType)
-  //   )
-  // );
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.TradeLicense.TradeType",
-      processedData.tradeTypeData
-    )
-  );
+
 };
 
 export const getUniqueItemsFromArray = (data, identifier) => {

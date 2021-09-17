@@ -152,7 +152,7 @@ export const getMdmsData = async (dispatch,state) => {
       moduleDetails: [
         { moduleName:"tenant","masterDetails":[{"name":"tenants"},{"name":"citymodule"}]},
         { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }] },
-        { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
+       // { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
         { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }, { name: "RoadType" },{ name: "PipeSize" }] },
         { moduleName: "ws-services-calculation", masterDetails: [{ name: "PipeSize" }] },
         {
@@ -212,6 +212,13 @@ export const getMdmsData = async (dispatch,state) => {
       payload.MdmsRes['ws-services-masters'].SURFACE = SURFACE;
       payload.MdmsRes['ws-services-masters'].BULKSUPPLY = BULKSUPPLY;
     }
+
+    let wnstenants =
+    payload &&
+    payload.MdmsRes &&
+    payload.MdmsRes.tenant.citymodule.find(item => {
+      if (item.code === "WNS") return true;
+    });
     // payload.MdmsRes['tenants'] = payload.MdmsRes.tenant.tenants
     //related to ownershipcategory
     let OwnerShipCategory = get(
@@ -223,7 +230,7 @@ export const getMdmsData = async (dispatch,state) => {
       payload,
       "MdmsRes.PropertyTax.OwnerType"
     )
-   
+
     let institutions = []
     OwnerShipCategory = OwnerShipCategory.map(category => {
       if (category.code.includes("INDIVIDUAL")) {
@@ -247,6 +254,9 @@ export const getMdmsData = async (dispatch,state) => {
     payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
     payload.MdmsRes['common-masters'].specialOwnerType = specialOwnerType
     payload.MdmsRes['common-masters'].tenants = tenants;
+
+    payload.MdmsRes.tenant.citymodule = wnstenants.tenants;
+
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) { console.log(e); }
 };
@@ -361,9 +371,9 @@ export const getData = async (action, state, dispatch) => {
               ddData.push(option);
               return ddData;
             }, []);
-            dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", ddData));   
+            dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", ddData));
         }
-      } 
+      }
       catch (error) {
         const { message } = error;
         console.log(error);
@@ -379,7 +389,7 @@ export const getData = async (action, state, dispatch) => {
           dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
         }
         return;
-      }  
+      }
     }
     if(tenantId && (actionType && (actionType.toUpperCase() === "EDIT"))){
       let mdmsBody = {
@@ -397,9 +407,9 @@ export const getData = async (action, state, dispatch) => {
           ]
         }
       };
-      
+
       const response = await httpRequest("post", "/egov-mdms-service/v1/_search","", [], mdmsBody);
-      const wardData = 
+      const wardData =
       response && response.MdmsRes['Ward']['Ward'] && response.MdmsRes['Ward']['Ward'].map(ward => {
         return {
           ...ward,
@@ -448,7 +458,7 @@ export const getData = async (action, state, dispatch) => {
                     temporary
                   )
                 );
-              
+
               break;
             case 'PERMANENT' :
                   dispatch(
@@ -469,10 +479,10 @@ export const getData = async (action, state, dispatch) => {
                     temporary
                   )
                 );
-              break;  
+              break;
           }
         }
-      } 
+      }
       else {
         dispatch(
           handleField(
@@ -482,7 +492,7 @@ export const getData = async (action, state, dispatch) => {
             true
           )
         );
-        try { 
+        try {
         payloadWater = await getSearchResults(queryObject)
         // to prefill dropdown data while editing
         if((actionType && (actionType.toUpperCase() === "EDIT")) && payloadWater && payloadWater.WaterConnection && payloadWater.WaterConnection[0].connectionCategory && payloadWater.WaterConnection[0].connectionType){
@@ -538,11 +548,11 @@ export const getData = async (action, state, dispatch) => {
                     nonMeteredTemporory
                   )
                 );
-              break;  
+              break;
           }
         }
        } catch (error) { console.error(error); };
-       
+
         payloadWater.WaterConnection[0].water = true;
         payloadWater.WaterConnection[0].sewerage = false;
         payloadWater.WaterConnection[0].service = "Water";
@@ -578,7 +588,7 @@ export const getData = async (action, state, dispatch) => {
       // }
       // For Modify connection details
       if (isModifyMode() && !isModifyModeAction()) {
-        // this delete for initiate modify connection 
+        // this delete for initiate modify connection
         delete combinedArray[0].id; combinedArray[0].documents = [];
       }
 
@@ -606,9 +616,9 @@ export const getData = async (action, state, dispatch) => {
       dispatch(prepareFinalObject("applyScreenOld", findAndReplace(oldcombinedArray, "null", "NA")));
       dispatch(prepareFinalObject("applyScreenOld.locality",getTranslatedLabel(locality, localizationLabels)))
       dispatch(prepareFinalObject("applyScreenOld.ward",combinedArray ? combinedArray[0].additionalDetails.ward : ''))
-      let applicationType = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
+      let applicationType = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
       state.screenConfiguration.preparedFinalObject.applyScreen && state.screenConfiguration.preparedFinalObject.applyScreen.applicationType || null
-      
+
       //change heading if application is of type ownership transfer
       if(applicationType === "CONNECTION_OWNERSHIP_CHANGE"){
         dispatch(handleField(
@@ -762,11 +772,11 @@ export const getData = async (action, state, dispatch) => {
       if(isOwnerShipTransfer()){
         disableFieldsForOwnerShipTransfer(action)
       }
-   
+
       let docs = get(state, "screenConfiguration.preparedFinalObject");
       await prefillDocuments(docs, "displayDocs", dispatch);
     }
-  } 
+  }
   // else if (propertyID) {
   //   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
   //   getApplyPropertyDetails(queryObject, dispatch, propertyID)
@@ -896,7 +906,7 @@ const screenConfig = {
       dispatch(prepareFinalObject("applyScreen.water", true));
       dispatch(prepareFinalObject("applyScreen.sewerage", false));
     }
-    
+
     const propertyId = getQueryArg(window.location.href, "propertyId");
 
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -976,7 +986,7 @@ let mode = getQueryArg(window.location.href, "mode");
       modifyLink = modeaction1 ? modifyLink + `&modeaction=${modeaction1}` : modifyLink;
       modifyLink = isMode ? modifyLink + `&mode=${isMode}` : modifyLink;
       modifyLink = tenantId ? modifyLink + `&tenantId=${tenantId}` : modifyLink;
-      
+
     } else {
       modifyLink = "/wns/apply"
     }

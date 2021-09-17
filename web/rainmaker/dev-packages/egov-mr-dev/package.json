@@ -1,0 +1,11 @@
+{
+ "name": "egov-mr-dev",
+ "version": "0.0.1",
+ "license": "egov",
+ "private": true,
+ "homepage": "https://egov-micro-dev.egovernments.org/employee-noc/",
+ "proxy": "https://egov-micro-dev.egovernments.org/",
+ "dependencies": {
+   }
+
+}

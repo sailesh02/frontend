@@ -112,16 +112,16 @@ class WorkFlowContainer extends React.Component {
         return "purpose=sendback&status=success";
       case "APPROVE_FOR_CONNECTION":
       case "APPROVE_FOR_DISCONNECTION":
-      case "APPROVE_TO_CLOSE_CONNECTION":    
+      case "APPROVE_TO_CLOSE_CONNECTION":
         return "purpose=approve&status=success";
       case "APPROVE_CONNECTION":
         return "purpose=approve&status=success";
       case "ACTIVATE_CONNECTION":
         return "purpose=activate&status=success";
       case "DISCONNECT_CONNECTION":
-        return "purpose=disconnect&status=success"; 
+        return "purpose=disconnect&status=success";
       case "CLOSE_CONNECTION":
-        return "purpose=closeConnection&status=success";  
+        return "purpose=closeConnection&status=success";
       case "REVOCATE":
         return "purpose=application&status=revocated"
       case "VOID":
@@ -259,7 +259,7 @@ class WorkFlowContainer extends React.Component {
           )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
           return;
         }
-        
+
         if (moduleName == "PT.ASSESSMENT") {
           this.props.setRoute(`/pt-assessment/acknowledgement?${this.getPurposeString(
             label
@@ -426,12 +426,15 @@ class WorkFlowContainer extends React.Component {
         bservice = "PT.MUTATION";
         baseUrl = "pt-mutation";
       }
-    
-    } 
+
+    }
     else if(moduleName == "ASMT"){
       const {dataPath, preparedFinalObject} = this.props
       const propertyId = get(preparedFinalObject, dataPath).propertyId || ""
       return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=editDemandDetails`
+    }else if(moduleName == "MR"){
+      baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "mr-citizen" : "mr";
+      bservice = "MR"
     }
     else if (!baseUrl && !bservice) {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
@@ -525,7 +528,7 @@ class WorkFlowContainer extends React.Component {
       editDemands = true
     }
 
-    if(moduleName === "SWCloseConnection" || moduleName === "SWDisconnection" || moduleName === "WSCloseConnection" || moduleName === "WSDisconnection" || moduleName === "WSReconnection" || moduleName === "SWReconnection" 
+    if(moduleName === "SWCloseConnection" || moduleName === "SWDisconnection" || moduleName === "WSCloseConnection" || moduleName === "WSDisconnection" || moduleName === "WSReconnection" || moduleName === "SWReconnection"
     || moduleName === "ModifySWConnection" || moduleName === "ModifyWSConnection"){
       state.isStateUpdatable = false
     }
@@ -624,10 +627,17 @@ class WorkFlowContainer extends React.Component {
       preparedFinalObject
     } = this.props;
 
+    if(ProcessInstances &&
+      ProcessInstances.length > 0){
+        console.log(ProcessInstances, "Nero P 1")
+      }
     const workflowContract =
       ProcessInstances &&
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
+      if(workflowContract){
+        console.log(workflowContract, "Nero wf 1")
+      }
     let showFooter = true;
     if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" ||moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;

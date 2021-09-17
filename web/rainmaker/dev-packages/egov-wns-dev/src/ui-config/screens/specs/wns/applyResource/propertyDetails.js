@@ -233,7 +233,7 @@ const propertyDetailsNoId = getCommonContainer({
           masterName: "TENANTS"
         },
         jsonPath: "applyScreen.tenantId",
-        sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+        sourceJsonPath: "applyScreenMdmsData.tenant.citymodule",
         labelsFromLocalisation: true,
         required: true,
         disabled:false,
@@ -245,7 +245,7 @@ const propertyDetailsNoId = getCommonContainer({
       data: [],
       required: true,
       jsonPath: "applyScreen.tenantId",
-      sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+      sourceJsonPath: "applyScreenMdmsData.tenant.citymodule",
       gridDefination: {
         xs: 12,
         sm: 6
@@ -291,7 +291,7 @@ const propertyDetailsNoId = getCommonContainer({
                       value: item.code,
                       code: getTranslatedLabel(mohallaCode, localizationLabels),
                     };
-                    
+
                   } else {
                     option = {
                       label: item.name,
@@ -305,7 +305,7 @@ const propertyDetailsNoId = getCommonContainer({
               // dispatch(setFieldProperty(formKey, fieldKey, "dropDownData", ddData));
                 dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", ddData));
             }
-          } 
+          }
           catch (error) {
             const { message } = error;
             console.log(error);
@@ -340,7 +340,7 @@ const propertyDetailsNoId = getCommonContainer({
               }
             };
             const response = await httpRequest("/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
-            const wardData = 
+            const wardData =
             response && response.MdmsRes['Ward']['Ward'] && response.MdmsRes['Ward']['Ward'].map(ward => {
               return {
                 ...ward,
@@ -351,7 +351,7 @@ const propertyDetailsNoId = getCommonContainer({
               }
             })
             dispatch(prepareFinalObject("applyScreenMdmsData.ward",wardData))
-          }      
+          }
         }
       }
     },
@@ -425,7 +425,7 @@ const propertyDetailsNoId = getCommonContainer({
   //           // dispatch(setFieldProperty(formKey, fieldKey, "dropDownData", ddData));
   //             dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", ddData));
   //         }
-  //       } 
+  //       }
   //       catch (error) {
   //         const { message } = error;
   //         console.log(error);
@@ -441,7 +441,7 @@ const propertyDetailsNoId = getCommonContainer({
   //           dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
   //         }
   //         return;
-  //       }      
+  //       }
   //     }
   //   }
   // }),
@@ -500,7 +500,7 @@ const propertyDetailsNoId = getCommonContainer({
   //     xs: 12,
   //     sm: 6
   //   }
-  
+
   // }),
   ward: {
     uiFramework: "custom-containers-local",
@@ -619,7 +619,7 @@ const propertyDetailsNoId = getCommonContainer({
                     nonMeteredTemporory
                   )
                 );
-              break;  
+              break;
           }
         }else{
           switch(action.value){
@@ -632,7 +632,7 @@ const propertyDetailsNoId = getCommonContainer({
                     temporary
                   )
                 );
-            
+
               break;
             case 'PERMANENT' :
                   dispatch(
@@ -653,10 +653,10 @@ const propertyDetailsNoId = getCommonContainer({
                     temporary
                   )
                 );
-              break;  
+              break;
           }
         }
-      
+
       }
   }
   }),
@@ -733,10 +733,10 @@ const propertyDetailsNoId = getCommonContainer({
                     nonMeteredTemporory
                   )
                 );
-              break;  
+              break;
           }
         }
-       
+
       }
   },
     gridDefination: {
@@ -780,7 +780,7 @@ const propertyDetailsNoId = getCommonContainer({
               false
             )
           );
-        } 
+        }
       }
   },
     gridDefination: {
@@ -824,7 +824,7 @@ const propertyDetailsNoId = getCommonContainer({
     type: "array",
     jsonPath: "applyScreen.apartment",
   }
- 
+
 
 });
 

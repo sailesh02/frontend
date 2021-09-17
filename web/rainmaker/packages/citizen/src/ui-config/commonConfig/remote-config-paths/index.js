@@ -5,10 +5,10 @@ const remoteConfigPath = (path, screenKey) => {
     case "tradelicense-citizen":
       config = require(`egov-tradelicence/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
-    // case "mr":
-    // case "mr-citizen":
-    //   config = require(`egov-mr/ui-config/screens/specs/${path}/${screenKey}`).default;
-    //   break;
+    case "mr":
+    case "mr-citizen":
+      config = require(`egov-mr/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
     case "pt-mutation":
       case "pt-common-screens":
           case "pt-assessment":

@@ -71,8 +71,9 @@ class App extends Component {
     };
     // can be combined into one mdms call
     fetchLocalizationLabel(getLocale() || "en_IN");
+    //Commented unwanted call
     // current location
-    fetchCurrentLocation();
+   // fetchCurrentLocation();
     fetchMDMSData(requestBody);
     pathname.indexOf("/otpLogin") > -1 && this.handleSMSLinks();
   };

@@ -46,9 +46,30 @@ const getMultiItem = (billingslabData, classes, style) => {
               lineSpacing: "17px"
             }}
           />
+          {item.rateType && item.rateType == "RATE"?
+          <Label
+          label={` Rate (${item.rate}) X ${item.uomValue} (UOM)`}
+          style={{
+            color: "rgba(0, 0, 0, 0.8700000047683716)",
+            fontSize: "14px",
+            fontWeigt: 400,
+            lineSpacing: "17px"
+          }}
+        />:''}
         </Grid>
         <Grid sm={2}>
+
+          {item.rateType && item.rateType == "RATE"?
           <Label
+          label={ `Rs ${item.rate * item.uomValue}`}
+          style={{
+            color: "rgba(0, 0, 0, 0.8700000047683716)",
+            fontSize: "14px",
+            fontWeigt: 400,
+            lineSpacing: "17px"
+          }}
+        />:
+        <Label
             label={
               labelCategory === "TRADETYPE"
                 ? `Rs ${item.rate}`
@@ -61,6 +82,7 @@ const getMultiItem = (billingslabData, classes, style) => {
               lineSpacing: "17px"
             }}
           />
+        }
         </Grid>
       </Grid>
     );
@@ -348,20 +370,28 @@ const mapStateToProps = (state, ownProps) => {
   );
 
   let tradeUnitData =  [];
+  let tradeTotal = 0;
 if(userSelectedTradeUnitsData && userSelectedTradeUnitsData.length > 0 && tradeUnitDataMasterSelected && tradeUnitDataMasterSelected.length > 0)
-for(let i =0; i<tradeUnitDataMasterSelected.length; i++){
+
     for(let j =0; j<userSelectedTradeUnitsData.length; j++){
+      for(let i =0; i<tradeUnitDataMasterSelected.length; i++){
         if(tradeUnitDataMasterSelected[i].category == userSelectedTradeUnitsData[j].tradeType){
+          if(tradeUnitDataMasterSelected[i].rateType == "RATE"){
+            tradeTotal = tradeTotal + userSelectedTradeUnitsData[j].uomValue*tradeUnitDataMasterSelected[i].rate;
+          }else{
+            tradeTotal = tradeTotal+tradeUnitDataMasterSelected[i].rate;
+          }
+
           tradeUnitData.push({...tradeUnitDataMasterSelected[i], uomValue:userSelectedTradeUnitsData[j].uomValue});
         }
     }
 }
 
-console.log(tradeUnitData, "Nero tradeUnitData")
-  const tradeTotal = get(
-    preparedFinalObject,
-    "LicensesTemp[0].billingSlabData.tradeTotal"
-  );
+console.log(tradeUnitData, "Nero tradeUnitData", tradeTotal);
+  // const tradeTotal = get(
+  //   preparedFinalObject,
+  //   "LicensesTemp[0].billingSlabData.tradeTotal"
+  // );
   const accessoriesTotal = get(
     preparedFinalObject,
     "LicensesTemp[0].billingSlabData.accessoriesTotal"

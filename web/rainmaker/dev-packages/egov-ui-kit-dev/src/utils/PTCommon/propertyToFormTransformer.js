@@ -70,7 +70,7 @@ export const getAllOwnerDetails = (property, isSingleOwner = false) => {
 
 export const getDemandDetails = (propertyRes) => {
   let { Properties } = propertyRes;
-  if(!Properties[0].additionalDetails || (Properties[0].additionalDetails && Properties[0].additionalDetails.hasOwnProperty("isRainwaterHarvesting"))){
+  if(!Properties[0].additionalDetails || (Properties[0].additionalDetails && Properties[0].additionalDetails.hasOwnProperty("isRainwaterHarvesting")) || (Properties[0].additionalDetails && Properties[0].additionalDetails.hasOwnProperty("previousPropertyUuid"))){
     Properties[0].additionalDetails = 
     {
       "holdingTax":'0',

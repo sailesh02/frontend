@@ -5,7 +5,7 @@ import { getOwnerInfo } from "../../common/propertyTax/Property/components/Owner
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
 import { generatePDF, getDocumentsCard, getMultipleItemCard } from "./generatePDF";
 
-export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoForPdf, fileName = "acknowledgement.pdf") => {
+export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoForPdf, fileName = "acknowledgement.pdf",ulbGrade) => {
 
     property.subOwnershipCategory = getFromObject(property, 'propertyDetails[0].subOwnershipCategory', '');
     const unitCard = getUnitInfo(getFromObject(property, "propertyDetails[0].units", []), property);
@@ -54,6 +54,7 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
 
     let pdfData = {
         header: "PT_ACKNOWLEDGEMENT", tenantId: property.tenantId,
+        ulbGrade : ulbGrade,
         applicationNoHeader: 'PT_PROPERRTYID', applicationNoValue: property.propertyId,
         additionalHeader: "PT_APPLICATION_NO", additionalHeaderValue: property.acknowldgementNumber,
         cards: [

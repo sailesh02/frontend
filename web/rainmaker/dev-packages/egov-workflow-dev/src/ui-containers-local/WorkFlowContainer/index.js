@@ -227,7 +227,7 @@ class WorkFlowContainer extends React.Component {
             data = await beforeSubmitHook(data);
           }else{
             data = await beforeSubmitHook(data);
-            data = await getPdfDetails(data,preparedFinalObject)
+            data = await getPdfDetails(data, preparedFinalObject, moduleName)
           }
         } else {
           data = beforeSubmitHook(data);

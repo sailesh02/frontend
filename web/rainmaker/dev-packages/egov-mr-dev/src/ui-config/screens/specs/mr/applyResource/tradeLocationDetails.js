@@ -218,7 +218,7 @@ export const tradeLocationDetails = getCommonCard(
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "MR_MARRIAGEPLACE_LABEL"
+          labelKey: "MR_MARRIAGEPLACE_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "MarriageRegistrations[0].marriagePlace.placeOfMarriage",

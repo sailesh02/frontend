@@ -362,21 +362,29 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations", [])
       )
     );
+    console.log(state.screenConfiguration.preparedFinalObject, "Nero state.screenConfiguration.preparedFinalObject")
     var stateObj = get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations", []);
 
     var appDocuments = stateObj && stateObj[0].applicationDocuments;
 
-    console.log(stateObj, "Nero query Object")
     set(
       queryObject[0],
       "marriageDate",
       convertDateToEpoch(queryObject[0].marriageDate, "dayend")
     );
     //------ removing null from document array ------
-    let documentArray = compact(get(appDocuments, "applicationDocuments"));
-    console.log(documentArray, "Nero documentArray")
+    //let documentArray = compact(get(queryObject[0], "applicationDocuments"));
+    let documentArray = compact(appDocuments);
+
+
     let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");
+
+    if(activeIndex === 4)
+    documents = documents.filter(item => item.fileStoreId);
+    else
     documents = documents.filter(item => item.fileUrl && item.fileName);
+
+
     set(queryObject[0], "applicationDocuments", documents);
     //-----------------------------------------------
     // let documents = get(queryObject[0], "tradeLicenseDetail.applicationDocuments");

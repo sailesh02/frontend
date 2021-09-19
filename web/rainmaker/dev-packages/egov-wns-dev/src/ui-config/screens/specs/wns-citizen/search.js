@@ -99,7 +99,7 @@ export const getMdmsData = async (action, state, dispatch) => {
         );
 
         dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-        payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[10].tenants;
+        payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[11].tenants;
         dispatch(prepareFinalObject("applyScreenMdmsData.tenant", payload.MdmsRes.tenant));
     } catch (e) {
         console.log(e);

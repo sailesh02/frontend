@@ -44,12 +44,24 @@ class PTAcknowledgement extends React.Component {
     process.env.REACT_APP_NAME === "Employee" ? store.dispatch(setRoute("/pt-mutation/propertySearch")) : store.dispatch(setRoute("/property-tax"));
   };
   download() {
-    const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
-    generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, `pt-acknowledgement-${selPropertyDetails.propertyId}.pdf`);
+    const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById,common } = this.props;
+    const { cities } = common;
+    let tenantInfo = cities && cities.find((t) => {
+    if (t.code == selPropertyDetails.tenantId)
+      return t;
+    })
+    let ulbGrade = tenantInfo && tenantInfo.city && tenantInfo.city.ulbGrade;
+    generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, `pt-acknowledgement-${selPropertyDetails.propertyId}.pdf`,ulbGrade);
   }
   print() {
-    const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
-    generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, 'print');
+    const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById,common } = this.props;
+    const { cities } = common;
+    let tenantInfo = cities && cities.find((t) => {
+    if (t.code == selPropertyDetails.tenantId)
+      return t;
+    })
+    let ulbGrade = tenantInfo && tenantInfo.city && tenantInfo.city.ulbGrade;
+    generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, 'print',ulbGrade);
   }
   onAssessPayClick = () => {
     const propertyId = getQueryArg(window.location.href, "propertyId");

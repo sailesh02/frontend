@@ -299,6 +299,16 @@ class Property extends Component {
     const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
     generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, 'print');
   }
+
+  ifUserRoleExists = role => {
+    let userInfo = JSON.parse(getUserInfo());
+    const roles = get(userInfo, "roles");
+    const roleCodes = roles ? roles.map(role => role.code) : [];
+    if (roleCodes.indexOf(role) > -1) {
+      return true;
+    } else return false;
+  };
+
   render() {
     const {
       urls,
@@ -325,6 +335,15 @@ class Property extends Component {
           return false
         }
     })
+    const showUpdateForEmployee = selPropertyDetails && selPropertyDetails.owners && selPropertyDetails.owners.map( (owner) => {
+      if(owner.mobileNumber){
+        return true
+      }else{
+        return false
+      }
+    })
+
+    const isCEMPEmployee = this.ifUserRoleExists('PT_CEMP')
     let urlArray = [];
     let assessmentHistory = [];
     const { pathname } = location;
@@ -356,7 +375,7 @@ class Property extends Component {
         }
         {!!selPropertyDetails && !!selPropertyDetails.owners && !!selPropertyDetails.owners.length && (<div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
           <div className="button-container col-xs-4 property-info-access-btn" style={{ float: "right" }}>
-          {editVisible && editVisible.includes(false) ? 
+          {editVisible && editVisible.includes(false) && process.env.REACT_APP_NAME == "Citizen"? 
           (
             <Button
             onClick={() => this.linkProperty()}
@@ -364,19 +383,19 @@ class Property extends Component {
             primary={true}
             style={{ lineHeight: "auto", minWidth: "45%" }}
           />
-          ) : (<div>
-            <Button
-              label={
-                <Label buttonLabel={true}
-                  label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
-                  color="#fe7a51" />
-              }
-              onClick={() => this.onEditPropertyClick()}
-              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-              buttonStyle={{ border: "1px solid #fe7a51" }}
-              style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
-            />
-            </div>) }
+          ) : showUpdateForEmployee && !showUpdateForEmployee.includes(false) && (process.env.REACT_APP_NAME == "Citizen" || isCEMPEmployee) ? (<div>
+           <Button
+            label={
+              <Label buttonLabel={true}
+                label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
+                color="#fe7a51" />
+            }
+            onClick={() => this.onEditPropertyClick()}
+            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
+            buttonStyle={{ border: "1px solid #fe7a51" }}
+            style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
+          />
+            </div>) : ("") }
           </div>
         </div>)}
         {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />}

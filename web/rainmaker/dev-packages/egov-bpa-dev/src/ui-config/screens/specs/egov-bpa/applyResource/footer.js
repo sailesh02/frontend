@@ -349,6 +349,30 @@ const callBackForNext = async (state, dispatch) => {
     
     let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
     let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
+    let nocTypesFromMDMS = get(
+      state.screenConfiguration.preparedFinalObject,
+      "nocTypes",
+      []
+    )
+
+     // to get activate noc's list form mdms
+     let activatedNocs = nocTypesFromMDMS && nocTypesFromMDMS.length > 0 && nocTypesFromMDMS.filter( noc => {
+      if(noc.isActive){
+        return noc
+      }
+    }) || []
+
+    activatedNocs = activatedNocs && activatedNocs.length > 0 && activatedNocs.map( noc => {
+      return noc.code
+    })
+
+    // check if noc suggested by ecdr is activated in the system
+    requiredNocs = requiredNocs && requiredNocs.filter ( noc => {
+      if(activatedNocs.includes(noc)){
+        return noc
+      }
+    }) || []
+
     let noc = get(state.screenConfiguration.preparedFinalObject,"Noc",[]) 
    
     let nocAlreadyCreated = noc && noc.length > 0 && noc.map( nc => { // to get noc's created during BPA creation

@@ -866,6 +866,16 @@ export const getNocList = async (state,dispatch,filter) => {
 let nocTypes = payload && payload.MdmsRes && payload.MdmsRes.NOC && payload.MdmsRes.NOC.NocType &&
 payload.MdmsRes.NOC.NocType.length > 0 && payload.MdmsRes.NOC.NocType
 
+let activatedNocs = nocTypes && nocTypes.length > 0 && nocTypes.filter( noc => {
+  if(noc.isActive){
+    return noc
+  }
+}) || []
+
+activatedNocs = activatedNocs && activatedNocs.length > 0 && activatedNocs.map( noc => {
+  return noc.code
+}) || []
+
 dispatch(prepareFinalObject("nocTypes", nocTypes));
 // to check already created NOC's
 if(filter){
@@ -877,7 +887,7 @@ if(filter){
   let nocList = []
   if(nocTypes && nocTypes.length > 0){
     nocList = nocTypes.filter ( noc => {
-          if(!generatedNoc.includes(noc.code)){
+          if(!generatedNoc.includes(noc.code) && noc.isActive){
             return noc
           }
       })

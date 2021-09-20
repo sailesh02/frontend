@@ -689,7 +689,6 @@ const checkNoc = (type,data) => {
 
 export const prepareNOCUploadData = async (state, dispatch,filter) => {
 
-
   let documents = await getNocDocuments(state);
   let documentsList = await mapDropdownValues(documents, state);
 
@@ -797,6 +796,30 @@ export const prepareNOCUploadData = async (state, dispatch,filter) => {
   
     let requiredNocsList = scrutinyDetails && scrutinyDetails.planDetail && scrutinyDetails.planDetail.planInformation.requiredNOCs || []
     let nocArray = finalCards
+
+    let nocTypesFromMDMS = get(
+      state.screenConfiguration.preparedFinalObject,
+      "nocTypes",
+      []
+    )
+
+    // to get activate noc's list form mdms
+    let activatedNocs = nocTypesFromMDMS && nocTypesFromMDMS.length > 0 && nocTypesFromMDMS.filter( noc => {
+      if(noc.isActive){
+        return noc
+      }
+    }) || []
+
+    activatedNocs = activatedNocs && activatedNocs.length > 0 && activatedNocs.map( noc => {
+      return noc.code
+    }) || []
+
+    // check if noc suggested by ecdr is activated in the system
+    requiredNocsList = requiredNocsList && requiredNocsList.filter ( noc => {
+      if(activatedNocs.includes(noc)){
+        return noc
+      }
+    }) || []
   
     requiredNocsList && requiredNocsList.length > 0 && nocArray && nocArray.length > 0 && requiredNocsList.map( noc => {
       if(!checkNoc(noc,finalCards)){

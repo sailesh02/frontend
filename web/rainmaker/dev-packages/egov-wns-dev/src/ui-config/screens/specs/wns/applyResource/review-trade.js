@@ -9,6 +9,7 @@ import {
 import { getConnectionDetails } from './../applyResource/task-connectiondetails';
 import { propertyOwnerDetails } from "../applyResource/task-owner-details";
 import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA } from '../../utils';
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const getHeader = label => {
   return {
@@ -291,6 +292,9 @@ export const propertyDetails={
     },
     {
       jsonPath: "WaterConnection[0].locality",
+      localePrefix: {
+        moduleName: getTenantId(), masterName: "REVENUE"
+      },
       callBack: handleNA,
     },
     {
@@ -298,6 +302,9 @@ export const propertyDetails={
     },
     {
       jsonPath: "WaterConnectionOld[0].locality",
+      localePrefix: {
+        moduleName: getTenantId(), masterName: "REVENUE"
+      },
       callBack: handleNA   
     }
 

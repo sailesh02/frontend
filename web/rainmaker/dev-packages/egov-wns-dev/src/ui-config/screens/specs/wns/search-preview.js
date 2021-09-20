@@ -150,11 +150,11 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       applyScreenObject.applicationNo.includes("WS") ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
-      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.locality && applyScreenObject.locality.split('_').length == 4 ? applyScreenObject.locality.split('_')[3] : applyScreenObject.locality));
+      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.locality));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
       if (applyScreenObject.service = serviceConst.SEWERAGE)
       dispatch(prepareFinalObject("SewerageConnection[0]", parsedObject));
-      dispatch(prepareFinalObject("SewerageConnection[0].additionalDetails.locality", applyScreenObject.locality && applyScreenObject.locality.split('_').length == 4 ? applyScreenObject.locality.split('_')[3] : applyScreenObject.locality));
+      dispatch(prepareFinalObject("SewerageConnection[0].additionalDetails.locality", applyScreenObject.locality));
       dispatch(prepareFinalObject("SewerageConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
       let estimate;
       if (processInstanceAppStatus === "CONNECTION_ACTIVATED") {
@@ -661,7 +661,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${payload.WaterConnection[0].additionalDetails.locality
         .toUpperCase()
         .replace(/[._:-\s\/]/g, "_")}`;
-      dispatch(prepareFinalObject("WaterConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("WaterConnection[0].locality",payload.WaterConnection[0].additionalDetails.locality))
       if (get(payload, "WaterConnection[0].property.status", "") !== "ACTIVE") {
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.props.propertyId", get(payload, "WaterConnection[0].property.propertyId", ""));
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.visible", true);
@@ -721,7 +721,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${oldApplicationPayload.WaterConnection[0].additionalDetails.locality
         .toUpperCase()
         .replace(/[._:-\s\/]/g, "_")}`;
-      dispatch(prepareFinalObject("WaterConnectionOld[0].locality",getTranslatedLabel(locality, localizationLabels)))
+      // dispatch(prepareFinalObject("WaterConnectionOld[0].locality",getTranslatedLabel(locality, localizationLabels)))
       }
     }
 
@@ -744,9 +744,9 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${payload.SewerageConnections[0].additionalDetails.locality
         .toUpperCase()
         .replace(/[._:-\s\/]/g, "_")}`;
-      dispatch(prepareFinalObject("SewerageConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("SewerageConnection[0].locality",payload.SewerageConnections[0].additionalDetails.locality))
       dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
-      dispatch(prepareFinalObject("WaterConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("WaterConnection[0].locality",payload.SewerageConnections[0].additionalDetails.locality))
       if (!payload.SewerageConnections[0].connectionHolders || payload.SewerageConnections[0].connectionHolders === 'NA') {
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible", true);

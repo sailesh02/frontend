@@ -368,12 +368,18 @@ const getPropertyDetails = {
             },
             {
               jsonPath: "applyScreen.locality",
+              localePrefix: {
+                moduleName: "", masterName: "REVENUE"
+              },
               callBack: handleLocality,
             },
             {
               labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
             },
             {
+              localePrefix: {
+                moduleName: "", masterName: "REVENUE"
+              },
               jsonPath: "applyScreenOld.locality",
               callBack: handleNA   
             }

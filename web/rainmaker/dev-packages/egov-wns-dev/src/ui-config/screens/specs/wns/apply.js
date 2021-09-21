@@ -325,6 +325,26 @@ export const getData = async (action, state, dispatch) => {
           tenantId.toUpperCase()
         )
       );
+
+      if(isModifyMode()){
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.mohalla.children.label2.children.key.props.localePrefix",
+            "moduleName",
+            tenantId.toUpperCase()
+          )
+        );
+      }
+
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.mohalla.children.value1.children.key.props.localePrefix",
+          "moduleName",
+          tenantId.toUpperCase()
+        )
+      );
       
       const dataFetchConfig = {
         url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",

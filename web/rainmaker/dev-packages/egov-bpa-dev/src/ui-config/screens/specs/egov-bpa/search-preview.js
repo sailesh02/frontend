@@ -37,7 +37,7 @@ import {
   compare
 } from "../utils/index";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
-import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved } from "./searchResource/citizenFooter";
+import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved} from "./searchResource/citizenFooter";
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
@@ -827,6 +827,7 @@ export const beforeSubmitHook = async () => {
   let state = store.getState();
   let bpaDetails = get(state, "screenConfiguration.preparedFinalObject.BPA", {});
   let isNocTrue = get(state, "screenConfiguration.preparedFinalObject.BPA.isNocTrue", false);
+  let isDigitalCertificate = get(state,"screenConfiguration.preparedFinalObject.isCertificateDetailsVisible",false)
   if (!isNocTrue) {
     const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
     let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
@@ -846,14 +847,17 @@ export const beforeSubmitHook = async () => {
           count++;
           if (Noc.length == count) {
             store.dispatch(prepareFinalObject("BPA.isNocTrue", true));
+            // bpaDetails = await getPdfDetails (isDigitalCertificate,bpaDetails,state)
             return bpaDetails;
           }
         }
       }
     } else {
+      // bpaDetails = await getPdfDetails (isDigitalCertificate,bpaDetails,state)
       return bpaDetails;
     } 
   } else {
+    // bpaDetails = await getPdfDetails (isDigitalCertificate,bpaDetails,state)
     return bpaDetails;
   }
 }

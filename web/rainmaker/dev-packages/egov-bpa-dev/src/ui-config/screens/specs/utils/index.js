@@ -5191,6 +5191,11 @@ export const revocationPdfDownload = async (action, state, dispatch, mode = "Dow
   }
 }
 
+export const getFileStore = async(fileKey) => {
+  // get file store from documents and return
+  return "hhhhhhhhhhhhhkssssssssssssssssssssshfjhjhdjhf"
+}
+
 export const permitOrderNoDownload = async (action, state, dispatch, mode = "Download") => {
   let bpaDetails = get(
     state.screenConfiguration.preparedFinalObject, "BPA"
@@ -5220,15 +5225,16 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
   if (window.location.href.includes("oc-bpa") || window.location.href.includes("BPA.NC_OC_SAN_FEE")) {
     permitPfKey = "occupancy-certificate"
   }
-  let res = await httpRequest(
-    "post",
-    `pdf-service/v1/_create?key=${permitPfKey}&tenantId=${bpaDetails.tenantId}`,
-    "",
-    [],
-    { Bpa: [Bpa] }
-  );
+  // let res = await httpRequest(
+  //   "post",
+  //   `pdf-service/v1/_create?key=${permitPfKey}&tenantId=${bpaDetails.tenantId}`,
+  //   "",
+  //   [],
+  //   { Bpa: [Bpa] }
+  // );
 
-  let fileStoreId = res.filestoreIds[0];
+  // let fileStoreId = res.filestoreIds[0];
+  let fileStoreId = getFileStore(permitPfKey)
   let pdfDownload = await httpRequest(
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []

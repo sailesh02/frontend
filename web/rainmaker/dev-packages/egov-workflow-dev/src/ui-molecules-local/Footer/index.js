@@ -4,7 +4,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo,getAccessToken,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import set from "lodash/set";
@@ -16,12 +16,177 @@ import {
 } from "../../ui-utils/commons";
 import { getDownloadItems } from "./downloadItems";
 import "./index.css";
+import { prepareFinalObject } from "../../../../../packages/lib/egov-ui-framework/ui-redux/screen-configuration/actions";
+import axios from 'axios';
+import store from "ui-redux/store";
 
+const authToken = getAccessToken();
+let RequestInfo = {
+  apiId: "Rainmaker",
+  ver: ".01",
+  // ts: getDateInEpoch(),
+  action: "_search",
+  did: "1",
+  key: "",
+  msgId: `20170310130900|${getLocale()}`,
+  requesterId: "",
+  authToken
+};
+let customRequestInfo = JSON.parse(getUserInfo())
+
+// pdf signing @final approval step in BPA and OC
+// to form pdf body w.r.t modules and report type
+  const getPdfBody = (moduleName,preparedFinalObject) => {
+    switch(moduleName){  
+      case 'BPA':
+        const {BPA,scrutinyDetails} = preparedFinalObject
+        let BPAWithScrutiny = {
+          ...BPA,
+          edcrDetails:scrutinyDetails
+        }
+        return {
+          RequestInfo : RequestInfo,
+          "Bpa":[BPAWithScrutiny]
+        }
+      default:
+        return {
+          ...RequestInfo
+        }  
+    }
+  }
+
+  // to get pdf key for calling pdf service
+  const getKey = (moduleName,data) => {
+    let pdfKey = "";
+    switch(moduleName){
+      case 'BPA':
+          pdfKey = "buildingpermit";
+        if (!window.location.href.includes("oc-bpa")) {
+          if (data && data.businessService === "BPA_LOW") {
+            pdfKey = "buildingpermit-low"
+          }
+        } else if (window.location.href.includes("oc-bpa")) {
+          pdfKey = "occupancy-certificate"
+        }
+        if (window.location.href.includes("oc-bpa") || window.location.href.includes("BPA.NC_OC_SAN_FEE")) {
+          pdfKey = "occupancy-certificate"
+        }
+      break; 
+      default:
+        return pdfKey 
+    }
+    return pdfKey
+  }
+
+  // to fetch tenantId from the data
+  const getTenantIdForPdf = (moduleName,data) => {
+    switch(moduleName){
+      case 'BPA':
+        return data.tenantId  
+    }
+  }
+
+  //actual function
+  export const getPdfDetails = async (data,preparedFinalObject,moduleName) => {
+    let {DsInfo} = preparedFinalObject
+    let {token,certificate,password} = DsInfo
+    let body = getPdfBody(moduleName,preparedFinalObject)
+    let key = getKey(moduleName,data) 
+    let tenantId = getTenantIdForPdf(moduleName,data) || getTenantId()
+    store.dispatch(showSpinner())
+    try{
+      let response = await axios.post(`/pdf-service/v1/_createnosave?key=${key}&tenantId=${tenantId}`, body, {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       })
+      
+       if(response){
+        try{
+          RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+          let body =  Object.assign(
+            {},
+            {
+              RequestInfo,
+              "tenantId":getTenantId(),
+              "responseData":null,
+              "file":response.data.fileStoreId,
+              "fileName":key,
+              "tokenDisplayName":token,
+              "certificate" : certificate,
+              "keyId":"CERT_ID",
+              "pdfBytes":response.data,
+              "moduleName":moduleName,
+              "reportName":key,
+              "channelId":"default",
+              "keyStorePassPhrase": password
+            } 
+          );
+
+          let encryptedData = await axios.post("/dsc-services/dsc/_pdfSignInput", body, { // send file store id to get encrypted data
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          })
+          if(encryptedData){
+              try{
+                let body = encryptedData.data.input
+                let responseData = await axios.post("https://localhost.emudhra.com:26769/DSC/PKCSBulkSign", body, { // to get response Data
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+                })
+                if(responseData){
+                try{
+                  RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+                  let body =  Object.assign(
+                    {},
+                      {
+                      RequestInfo,
+                      "tokenDisplayName":null,
+                      "keyStorePassPhrase":null,
+                      "keyId":null,
+                      "channelId":"default",
+                      "file":null,
+                      "fileName":key,
+                      "tenantId":getTenantId(),
+                        responseData:responseData.data.responseData,
+                      }
+                  );
+                  let singedFileStoreId = await axios.post("/dsc-services/dsc/_pdfSign", body, { // to get filestoreId for pdf signing
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                  })
+                  if(singedFileStoreId){
+                    data && data.documents.length > 0 && data.documents.push({
+                      "fileName": key,
+                      "fileStoreId":singedFileStoreId.data.fileStoreId
+                    })
+                    return data
+                  }
+                    }catch(error){
+                      this.props.hideSpinner();
+                      store.dispatch(toggleSnackbar(true, error && error.message || '', "error"));
+                    }
+                }
+                }catch(err){ 
+                  this.props.hideSpinner(); 
+            }
+          }
+        }catch(err){
+          this.props.hideSpinner();
+        }
+      }
+    }catch(err){
+      this.props.hideSpinner();
+      store.dispatch(toggleSnackbar(true, err.message, "error"));
+    }  
+  }
+  
 class Footer extends React.Component {
   state = {
     open: false,
     data: {},
-    employeeList: []
+    employeeList: [],
+    tokensArray:[],
+    certicatesArray :[]
     //responseLength: 0
   };
 
@@ -58,6 +223,133 @@ class Footer extends React.Component {
       menu: getDownloadItems(status, applicationNumber, state).printMenu
     };
   };
+
+  // actual API's
+  getTokenList = () => {
+    this.props.showSpinner();
+    RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+    let body =  Object.assign(
+      {},
+      {
+        RequestInfo,
+        "tenantId":getTenantId(),
+        "responseData":null
+      }
+    );
+
+    axios.post("/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+     })
+      .then(response => { 
+        let body = response.data.input
+        axios.post("https://localhost.emudhra.com:26769/DSC/ListToken", body, { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+         })
+          .then(response => {
+             RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+             let body =  Object.assign(
+               {},
+                {
+                 RequestInfo,
+                 "tenantId":getTenantId(),
+                 "responseData":response.data.responseData
+                }
+             );
+            axios.post("/dsc-services/dsc/_getTokens", body, { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+             })
+              .then(response => {
+                let requiredTokenFormat = response && response.data && response.data.tokens.map (token => {
+                  return {
+                    label : token,
+                    value : token
+                  }
+                }) 
+
+                this.setState({
+                  tokensArray : requiredTokenFormat,
+                })
+                this.props.hideSpinner();
+                this.getCertificateList({target:{value:requiredTokenFormat[0].label}}) 
+              })
+              .catch(error => { 
+                this.props.hideSpinner();
+              });
+          })
+          .catch(error => {
+            this.props.hideSpinner();
+          });
+      })
+      .catch(error => {
+        this.props.hideSpinner();
+      });
+  }
+
+  getCertificateList = (token) => {
+    this.props.showSpinner();
+    RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+    let body =  Object.assign(
+      {},
+      {
+        RequestInfo,
+        "tenantId":getTenantId(),
+        "responseData":null,
+        "tokenDisplayName":token.target.value
+      }
+    );
+
+    axios.post("/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+     })
+      .then(response => {
+        let body = response.data.input
+        axios.post("https://localhost.emudhra.com:26769/DSC/ListCertificate", body, { // to get R1 R2
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+         })
+          .then(response => {
+             RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+             let body =  Object.assign(
+               {},
+                {
+                 RequestInfo,
+                 "tenantId":getTenantId(),
+                  responseData:response.data.responseData,
+                  tokenDisplayName:token.target.name
+                }
+             );
+            axios.post("/dsc-services/dsc/_getCertificate", body, { // to get R1 R2
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+             })
+              .then(response => {
+                let requiredCertificateFormat = response && response.data && response.data.certificates && response.data.certificates.map (certificate => {
+                  return {
+                    label : certificate.commonName,
+                    value : certificate.keyId
+                  }
+                }) 
+                this.setState({
+                  certicatesArray : requiredCertificateFormat,
+                })
+                this.props.hideSpinner();
+              })
+              .catch(error => { 
+                this.props.hideSpinner();
+              });
+          })
+          .catch(error => {
+            this.props.hideSpinner();
+          });
+      })
+      .catch(error => {
+        this.props.hideSpinner();
+      });
+  }
 
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
@@ -137,6 +429,12 @@ class Footer extends React.Component {
         });
     }
 
+    if((item.moduleName === "BPA_OC1" || item.moduleName === "BPA_OC2" || item.moduleName === "BPA_OC3"
+    || item.moduleName === "BPA_OC4" || item.moduleName === "BPA1" || item.moduleName === "BPA2" ||
+    item.moduleName === "BPA3" || item.moduleName === "BPA4") && item.buttonLabel === "APPROVE"){
+      this.getTokenList()
+      store.dispatch(prepareFinalObject("isCertificateDetailsVisible",true))
+    }
     this.setState({ open: true, data: item, employeeList });
   };
 
@@ -241,7 +539,7 @@ class Footer extends React.Component {
       state,
       dispatch
     } = this.props;
-    const { open, data, employeeList } = this.state;
+    const { open, data, employeeList,tokensArray,certicatesArray } = this.state;
     const { isDocRequired } = data;
     const appName = process.env.REACT_APP_NAME;
     const downloadMenu =
@@ -381,6 +679,9 @@ class Footer extends React.Component {
           open={open}
           onClose={this.onClose}
           dialogData={data}
+          tokensArray={tokensArray}
+          certicatesArray={certicatesArray}
+          getCertificateList={this.getCertificateList}
           dropDownData={employeeList}
           handleFieldChange={handleFieldChange}
           onButtonClick={onDialogButtonClick}

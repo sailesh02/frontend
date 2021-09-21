@@ -9,9 +9,12 @@ import {
 import { Dialog, DialogContent } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { withStyles } from "@material-ui/core/styles";
-import { UploadMultipleFiles } from "egov-ui-framework/ui-molecules";
+import { UploadMultipleFiles,TextfieldWithIcon } from "egov-ui-framework/ui-molecules";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
+import store from "ui-redux/store";
+import get from "lodash/get";
+import { prepareFinalObject } from "../../../../../packages/lib/egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const styles = theme => ({
   root: {
@@ -21,6 +24,36 @@ const styles = theme => ({
 });
 
 const fieldConfig = {
+  token: {
+    label: {
+      labelName: "Token",
+      labelKey: "CORE_COMMON_TOKEN_LABEL"
+    },
+    placeholder: {
+      labelName: "Select Token",
+      labelKey: "CORE_COMMON_SELECT_TOKEN_LABEL"
+    }
+  },
+  certificate: {
+    label: {
+      labelName: "Certificate",
+      labelKey: "CORE_COMMON_CERTIFICATE_LABEL"
+    },
+    placeholder: {
+      labelName: "Select Certificate",
+      labelKey: "CORE_COMMON_SELECT_CERTIFICATE_LABEL"
+    }
+  },
+  password: {
+    label: {
+      labelName: "Password",
+      labelKey: "CORE_COMMON_PASSWORD_LABEL"
+    },
+    placeholder: {
+      labelName: "Select assignee Name",
+      labelKey: "CORE_COMMON_PASSWORD_LABEL"
+    }
+  },
   approverName: {
     label: {
       labelName: "Assignee Name",
@@ -92,6 +125,9 @@ class ActionDialog extends React.Component {
       dropDownData,
       handleFieldChange,
       onButtonClick,
+      getCertificateList,
+      tokensArray,
+      certicatesArray,
       dialogData,
       dataPath
     } = this.props;
@@ -103,6 +139,24 @@ class ActionDialog extends React.Component {
       isDocRequired
     } = dialogData;
     const { getButtonLabelName } = this;
+
+    // to handle pdf signing/Digital certificate
+    let isCertificateDetailsVisible = false
+    let tokenPath = ''
+    let certificatePath = ''
+    let passwordPath = ''
+    if(dialogHeader && dialogHeader.labelKey === "WF_APPROVE_APPLICATION" && dataPath === 'BPA' && (moduleName == "BPA1" ||
+    moduleName == 'BPA2' || moduleName === 'BPA3') || moduleName === 'BPA4'){
+      const state = store.getState()
+      let applicationStatus = get(state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
+      state.screenConfiguration.preparedFinalObject, `${dataPath}.status`, "")
+      isCertificateDetailsVisible = dialogHeader && dialogHeader.labelKey === "WF_APPROVE_APPLICATION" && dataPath == "BPA"
+      && (applicationStatus == "APPROVAL_PENDING" || applicationStatus == "APPROVAL_INPROGRESS") ? true : false
+      tokenPath = `DsInfo.token`
+      passwordPath = `DsInfo.password`
+      certificatePath = `DsInfo.certificate`
+    }
+    
     let fullscreen = false;
     const showAssignee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     if (window.innerWidth <= 768) {
@@ -141,6 +195,7 @@ class ActionDialog extends React.Component {
         style={{zIndex:2000}}
       >
         <DialogContent
+          style={isCertificateDetailsVisible ? {height:'400px'} : {}}
           children={
             <Container
               children={
@@ -261,6 +316,84 @@ class ActionDialog extends React.Component {
                       jsonPath={wfDocumentsPath}
                       maxFileSize={5000}
                     />
+                    {isCertificateDetailsVisible && 
+                      <React.Fragment>
+                    <Grid
+                      item
+                      sm="12">
+                      <TextFieldContainer
+                        select={true}
+                        required={true}
+                        style={{ marginRight: "15px" }}
+                        label={fieldConfig.token.label}
+                        placeholder={fieldConfig.token.placeholder}
+                        data={tokensArray}
+                        optionValue="value"
+                        optionLabel="label"
+                        hasLocalization={false}
+                        onChange={e =>{
+                          handleFieldChange(
+                            tokenPath,
+                            e.target.value
+                          )
+                          getCertificateList(e)
+                        }}
+                        jsonPath={tokenPath}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      sm="12">
+                      <TextFieldContainer
+                        required={true}
+                        select={true}
+                        style={{ marginRight: "15px" }}
+                        label={fieldConfig.certificate.label}
+                        placeholder={fieldConfig.certificate.placeholder}
+                        data={certicatesArray}
+                        optionValue="value"
+                        optionLabel="label"
+                        hasLocalization={false}
+                        onChange={e =>{
+                          handleFieldChange(
+                            certificatePath,
+                            e.target.value
+                          )
+                        }}
+                        jsonPath={certificatePath}
+                      />
+                    </Grid>
+
+                     <Grid item
+                    sm={12}>
+                  <LabelContainer style={{
+                      fontSize: '12px',
+                      fontWeight: 500
+                  }}
+                  labelName={"CORE_COMMON_PASSWORD_LABEL"}
+                    labelKey={"CORE_COMMON_PASSWORD_LABEL"} /><span style={{color:'#e54d42'}}>*</span>
+                  </Grid>
+                  <form style={{width:"100%"}} autocomplete="off">
+                  <Grid
+                    item
+                    sm={12}>
+                    <TextfieldWithIcon
+                        type ="password"
+                        style={{ marginRight: "15px" }}
+                        onChange={e =>{
+                          handleFieldChange(
+                            passwordPath,
+                            e.target.value
+                          )
+                        }}
+                        jsonPath={passwordPath}
+                        hasLocalization={false}
+                      />
+                  </Grid>
+                  </form>
+                      </React.Fragment>
+                    }
+                  
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                       <Button
                         variant={"contained"}

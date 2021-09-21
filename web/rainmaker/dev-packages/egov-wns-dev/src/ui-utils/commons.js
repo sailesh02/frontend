@@ -2387,3 +2387,8 @@ export const getOpenSearchResultsForSewerage = async (queryObject, requestBody, 
         console.log(error)
     }
 };
+
+export const getTenantId = () => {
+    let id = getQueryArg(window.location.href, "tenantId");
+    return id 
+}

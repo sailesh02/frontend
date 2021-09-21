@@ -10,11 +10,7 @@ import { getConnectionDetails } from './../applyResource/task-connectiondetails'
 import { propertyOwnerDetails } from "../applyResource/task-owner-details";
 import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA } from '../../utils';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-
-const getTenantId = () => {
-  let id = getQueryArg(window.location.href, "tenantId");
-  return id 
-}
+import {getTenantId} from '../../../../../ui-utils/commons'
 
 const getHeader = label => {
   return {

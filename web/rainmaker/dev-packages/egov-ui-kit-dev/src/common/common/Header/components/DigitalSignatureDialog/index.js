@@ -85,7 +85,7 @@ class DigitalSignatureDialog extends Component {
       }
     );
     
-    axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
+    axios.post("/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
       'Content-Type': 'application/json',
       'Accept': 'application/json'
      })
@@ -106,7 +106,7 @@ class DigitalSignatureDialog extends Component {
                   tokenDisplayName:token
                 }
              );
-            axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getCertificate", body, { // to get R1 R2
+            axios.post("/dsc-services/dsc/_getCertificate", body, { // to get R1 R2
               'Content-Type': 'application/json',
               'Accept': 'application/json'
              })
@@ -151,7 +151,7 @@ class DigitalSignatureDialog extends Component {
       }
     );
     
-    axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
+    axios.post("/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
       'Content-Type': 'application/json',
       'Accept': 'application/json'
      })
@@ -171,7 +171,7 @@ class DigitalSignatureDialog extends Component {
                  "responseData":response.data.responseData
                 }
              );
-            axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_getTokens", body, { // to get tokens
+            axios.post("/dsc-services/dsc/_getTokens", body, { // to get tokens
               'Content-Type': 'application/json',
               'Accept': 'application/json'
              })
@@ -223,14 +223,14 @@ class DigitalSignatureDialog extends Component {
         }
       );
       
-      axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_dataSignInput", body, { // to get R1 R2
+      axios.post("/dsc-services/dsc/_dataSignInput", body, { // to get R1 R2
         'Content-Type': 'application/json',
         'Accept': 'application/json'
        })
         .then(response => {
           this.props.showSpinner();
           let body = response.data.input
-          axios.post("https://localhost.emudhra.com:26769/DSC/PKCSSign", body, { // to get R1 R2
+          axios.post("https://localhost.emudhra.com:26769/DSC/PKCS7Sign", body, { // to get R1 R2
             'Content-Type': 'application/json',
             'Accept': 'application/json'
            })
@@ -249,13 +249,13 @@ class DigitalSignatureDialog extends Component {
                    "responseData":response.data.responseData
                   }
                );
-              axios.post("http://dsc-services.egov:8080/dsc-services/dsc/_dataSign", body, { // to get R1 R2
+              axios.post("/dsc-services/dsc/_dataSign", body, { // to get R1 R2
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
                })
                 .then(response => {
                   this.props.hideSpinner();
-                    if(response && response.result && response.result == "Success"){
+                    if(response && response.data && response.data.result && response.data.result == "Success"){
                       this.props.toggleSnackbarAndSetText(
                           true,
                           {

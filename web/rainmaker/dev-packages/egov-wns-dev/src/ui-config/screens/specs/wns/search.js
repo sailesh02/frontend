@@ -119,7 +119,7 @@ export const getMdmsTenantsData = async (dispatch) => {
           [],
           mdmsBody
       );
-      payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
+      payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[11].tenants;
       dispatch(prepareFinalObject("applyScreenMdmsData.tenant", payload.MdmsRes.tenant));
 
   } catch (e) {

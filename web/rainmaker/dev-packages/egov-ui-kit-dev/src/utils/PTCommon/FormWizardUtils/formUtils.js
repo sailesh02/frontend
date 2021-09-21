@@ -248,7 +248,7 @@ export const formWizardConstants = {
     isFinancialYear: false,
     buttonLabel: 'PT_UPDATE_PROPERTY_BUTTON',
     isEditButton: true,
-    canEditOwner: false,
+    canEditOwner: true,
     isEstimateDetails: false
   },
   [PROPERTY_FORM_PURPOSE.SENDFOREDIT]: {

@@ -14,6 +14,7 @@ import get from "lodash/get";
 import "./index.css";
 import { updateActiveRoute } from "egov-ui-kit/redux/app/actions";
 import { getTenantId, getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import odDefaultLogo from "egov-ui-kit/assets/images/od-default.png";
 
 // get userInfo role
 class Header extends Component {
@@ -197,8 +198,8 @@ if(userInfoError && !sessionExpiredPopupClosedClick){
 }
     const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
     const currentCity = cities.filter((item) => item.code === tenantId);
-    const ulbLogo =
-      currentCity.length > 0 ? get(currentCity[0], "logoId") : "https://digitaldesksujog051120.blob.core.windows.net/assets/Logos/odlogo.png";
+   // const ulbLogo = currentCity.length > 0 ? get(currentCity[0], "logoId") : "https://digitaldesksujog051120.blob.core.windows.net/assets/Logos/odlogo.png";
+   const ulbLogo = odDefaultLogo;
     return (
       <div style={headerStyle}>
         <AppBar

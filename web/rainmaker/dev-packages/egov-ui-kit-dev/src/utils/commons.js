@@ -731,7 +731,7 @@ export const fetchWardDropdown = async (dispatch, queryObj, formKey, fieldKey, s
         }
       };
       const response = await httpRequest("/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
-      const wardData = 
+      const wardData =
       response && response.MdmsRes['Ward']['Ward'] && response.MdmsRes['Ward']['Ward'].map(ward => {
         return {
           ...ward,
@@ -1112,7 +1112,7 @@ export const getModuleName = () => {
     pathName.indexOf("egov-bpa") > -1 || pathName.indexOf("oc-bpa") > -1) { return "rainmaker-bpa,rainmaker-bpareg"; }
   else if (pathName.indexOf("noc") > -1) { return "rainmaker-common-noc"; }
   //else if(pathName.indexOf("egov-dashboard") > -1){ return "rainmaker-dashboard"; } 
-  //else if(pathName.indexOf("egov-mr") > -1){ return "rainmaker-mr"; } 
+  else if(pathName.indexOf("mr") > -1 || pathName.indexOf("mr-citizen") > -1){ return "rainmaker-mr"; } 
   else {
     return "rainmaker-common";
   }
@@ -1169,4 +1169,18 @@ export const getPaymentSearchAPI = (businessService='')=>{
 
 export const getFetchBillAPI = () => {
   return `${FETCHBILL.GET.URL}`
+}
+
+export const getUserSearchedResponse =()=>{
+  const userObject=JSON.parse(localStorage.getItem("citizen.userRequestObject"))||{};
+  return {user:[userObject]};
+}
+
+
+export const getResultUrl = (moduleName,reportName) => {
+  let reportResultUrl = `/report/${moduleName}/${reportName}/_get`;
+  return reportResultUrl;
+}
+export const translate=(locale_text)=> {
+  return locale_text;
 }

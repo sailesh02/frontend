@@ -20,7 +20,7 @@ const mapStateToProps = (state, ownProps) => {
     state.screenConfiguration.preparedFinalObject,    "documentsUploadRedux",
     []
   );
-  let keys = Object.keys(uploadedDocData)
+  let keys = uploadedDocData && Object.keys(uploadedDocData) || []
 
   uploadedDocData = keys.map(key => uploadedDocData[key])
 

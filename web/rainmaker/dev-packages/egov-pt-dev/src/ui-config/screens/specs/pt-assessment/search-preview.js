@@ -15,6 +15,9 @@ import { propertySummary } from "../pt-mutation/summaryResource/propertySummary"
 import { transferorSummaryDetails } from "../pt-mutation/searchPreviewResource/transferorSummary";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
+const demandDetails = value => {
+  return value == null || value == undefined || value == '' ? '0' : value;
+};
 const demandSummary = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",
@@ -41,7 +44,8 @@ const demandSummary = getCommonGrayCard({
         labelKey: "PT_HOLDING_TAX"
       },
       {
-        jsonPath: "Assessment.additionalDetails.holdingTax"
+        jsonPath: "Assessment.additionalDetails.holdingTax",
+        callBack : demandDetails
       }
     ),
     lightTax: getLabelWithValue(
@@ -50,7 +54,8 @@ const demandSummary = getCommonGrayCard({
         labelKey: "PT_LIGHT_TAX"
       },
       {
-        jsonPath: "Assessment.additionalDetails.lightTax"
+        jsonPath: "Assessment.additionalDetails.lightTax",
+        callBack : demandDetails
       }
     ),
     waterTax: getLabelWithValue(
@@ -59,7 +64,8 @@ const demandSummary = getCommonGrayCard({
         labelKey: "PT_WATER_TAX"
       },
       {
-        jsonPath: "Assessment.additionalDetails.waterTax"
+        jsonPath: "Assessment.additionalDetails.waterTax",
+        callBack : demandDetails
       }
     ),
     drainageTax: getLabelWithValue(
@@ -68,7 +74,8 @@ const demandSummary = getCommonGrayCard({
         labelKey: "PT_DRAINAGE_TAX"
       },
       {
-        jsonPath: "Assessment.additionalDetails.drainageTax"
+        jsonPath: "Assessment.additionalDetails.drainageTax",
+        callBack : demandDetails
       }
     ),
     latrineTax: getLabelWithValue(
@@ -77,7 +84,8 @@ const demandSummary = getCommonGrayCard({
         labelKey: "PT_LATRINE_TAX"
       },
       {
-        jsonPath: "Assessment.additionalDetails.latrineTax"
+        jsonPath: "Assessment.additionalDetails.latrineTax",
+        callBack : demandDetails
       }
     ),
     parkingTax: getLabelWithValue(
@@ -86,7 +94,8 @@ const demandSummary = getCommonGrayCard({
         labelKey: "PT_PARKING_TAX"
       },
       {
-        jsonPath: "Assessment.additionalDetails.parkingTax"
+        jsonPath: "Assessment.additionalDetails.parkingTax",
+        callBack : demandDetails
       }
     ),
     solidWasteUserCharges: getLabelWithValue(
@@ -95,7 +104,8 @@ const demandSummary = getCommonGrayCard({
         labelKey: "PT_SOLID_WASTER_USER_CHARGES"
       },
       {
-        jsonPath: "Assessment.additionalDetails.solidWasteUserCharges"
+        jsonPath: "Assessment.additionalDetails.solidWasteUserCharges",
+        callBack : demandDetails
       }
     ),
     ownershipExemption: getLabelWithValue(
@@ -104,7 +114,8 @@ const demandSummary = getCommonGrayCard({
         labelKey: "PT_OWNERSHIP_EXEMPTION"
       },
       {
-        jsonPath: "Assessment.additionalDetails.ownershipExemption"
+        jsonPath: "Assessment.additionalDetails.ownershipExemption",
+        callBack : demandDetails
       }
     ),
     usageExemption: getLabelWithValue(
@@ -113,7 +124,8 @@ const demandSummary = getCommonGrayCard({
         labelKey: "PT_USAGE_EXEMPTION"
       },
       {
-        jsonPath: "Assessment.additionalDetails.usageExemption"
+        jsonPath: "Assessment.additionalDetails.usageExemption",
+        callBack : demandDetails
       }
     ),
     interest: getLabelWithValue(
@@ -122,7 +134,8 @@ const demandSummary = getCommonGrayCard({
         labelKey: "PT_INTEREST"
       },
       {
-        jsonPath: "Assessment.additionalDetails.interest"
+        jsonPath: "Assessment.additionalDetails.interest",
+        callBack : demandDetails
       }
     ),
     penalty: getLabelWithValue(
@@ -131,7 +144,8 @@ const demandSummary = getCommonGrayCard({
         labelKey: "PT_PENALTY"
       },
       {
-        jsonPath: "Assessment.additionalDetails.penalty"
+        jsonPath: "Assessment.additionalDetails.penalty",
+        callBack : demandDetails
       }
     ),
     serviceTax: getLabelWithValue(
@@ -140,7 +154,8 @@ const demandSummary = getCommonGrayCard({
         labelKey: "PT_PROPERTY_SERVICETAX"
       },
       {
-        jsonPath: "Assessment.additionalDetails.serviceTax"
+        jsonPath: "Assessment.additionalDetails.serviceTax",
+        callBack : demandDetails
       }
     ),
     otherDues: getLabelWithValue(
@@ -149,7 +164,8 @@ const demandSummary = getCommonGrayCard({
         labelKey: "PT_PROPERTY_OTHERDUES"
       },
       {
-        jsonPath: "Assessment.additionalDetails.otherDues"
+        jsonPath: "Assessment.additionalDetails.otherDues",
+        callBack : demandDetails
       }
     ),
   })

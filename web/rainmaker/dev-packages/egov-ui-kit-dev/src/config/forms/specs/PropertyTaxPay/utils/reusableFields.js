@@ -637,6 +637,7 @@ export const pincode = {
     floatingLabelText: "PT_PROPERTY_DETAILS_PINCODE",
     hintText: "PT_PROPERTY_DETAILS_PINCODE_PLACEHOLDER",
     numcols: 6,
+    required:true,
     //errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
     errorMessage: "PT_PINCODE_ERROR_MESSAGE",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },

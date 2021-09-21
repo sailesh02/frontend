@@ -32,11 +32,11 @@ export const tradeReviewDetails = getCommonCard({
     labelKey: "MR_SUMMARY_HEADER"
   }),
   estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "TL_PAYMENT_VIEW_BREAKUP",
-    "apply"
-  ),
+  // viewBreakupButton: getDialogButton(
+  //   "VIEW BREAKUP",
+  //   "TL_PAYMENT_VIEW_BREAKUP",
+  //   "apply"
+  // ),
   reviewTradeDetails,
   //brideAddressAndGuardianDetails,
   groomAddressAndGuardianDetails,

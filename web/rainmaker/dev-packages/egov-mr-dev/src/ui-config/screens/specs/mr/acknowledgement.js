@@ -186,16 +186,16 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Submitted Successfully",
-              labelKey: "TL_APPLICATION_SUCCESS_MESSAGE_MAIN"
+              labelKey: "MR_APPLICATION_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName:
                 "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPLICATION_SUCCESS_MESSAGE_SUB"
+              labelKey: "MR_APPLICATION_SUCCESS_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "MR_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -216,7 +216,7 @@ const getAcknowledgementCard = (
     return {
       header: getCommonHeader({
         labelName: `Application for New Trade License`,
-        labelKey: "TL_COMMON_APPLICATION_NEW_LICENSE"
+        labelKey: "MR_COMMON_APPLICATION_NEW_LICENSE"
 
       }),
       applicationSuccessCard: {
@@ -234,16 +234,16 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Submitted Successfully",
-              labelKey: "TL_APPLICATION_RESUBMIT_SUCCESS_MESSAGE_MAIN"
+              labelKey: "MR_APPLICATION_RESUBMIT_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName:
                 "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPLICATION_RESUBMIT_SUCCESS_MESSAGE_SUB"
+              labelKey: "MR_APPLICATION_RESUBMIT_SUCCESS_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "MR_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -263,7 +263,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Payment for New Trade License`,
-          labelKey: "TL_COMMON_PAYMENT_NEW_LICENSE"
+          labelKey: "MR_COMMON_PAYMENT_NEW_LICENSE"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -284,16 +284,16 @@ const getAcknowledgementCard = (
             header: {
               labelName:
                 "Payment is collected successfully, Now you can dowload and issue Trade License Certificate to citizen",
-              labelKey: "TL_CONFIRMATION_MESSAGE_MAIN"
+              labelKey: "MR_CONFIRMATION_MESSAGE_MAIN"
             },
             body: {
               labelName:
                 "A notification regarding Payment Collection has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_CONFIRMATION_MESSAGE_SUB"
+              labelKey: "MR_CONFIRMATION_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Payment Receipt No.",
-              labelKey: "TL_PMT_RCPT_NO"
+              labelKey: "MR_PMT_RCPT_NO"
             },
             number: secondNumber
           })
@@ -312,7 +312,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application`,
-          labelKey: "TL_TRADE_APPLICATION"
+          labelKey: "MR_TRADE_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -332,16 +332,16 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application is Approved Successfully",
-              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_HEAD"
+              labelKey: "MR_APPROVAL_CHECKLIST_MESSAGE_HEAD"
             },
             body: {
               labelName:
                 "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_SUB"
+              labelKey: "MR_APPROVAL_CHECKLIST_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Trade License No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+              labelKey: "MR_HOME_SEARCH_RESULTS_TL_NO_LABEL"
             },
             number: secondNumber
           })
@@ -355,7 +355,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application`,
-          labelKey: "TL_TRADE_APPLICATION"
+          labelKey: "MR_TRADE_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -375,7 +375,7 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application is sent back Successfully",
-              labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_HEAD"
+              labelKey: "MR_SENDBACK_CHECKLIST_MESSAGE_HEAD"
             },
             // body: {
             //   labelName:
@@ -384,7 +384,7 @@ const getAcknowledgementCard = (
             // },
             tailText: {
               labelName: "Trade License No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+              labelKey: "MR_HOME_SEARCH_RESULTS_TL_NO_LABEL"
             },
             number: secondNumber
           })
@@ -398,7 +398,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application`,
-          labelKey: "TL_TRADE_APPLICATION"
+          labelKey: "MR_TRADE_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -418,7 +418,7 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application is sent back to Citizen Successfully",
-              labelKey: "TL_SENDBACK_TOCITIZEN_CHECKLIST_MESSAGE_HEAD"
+              labelKey: "MR_SENDBACK_TOCITIZEN_CHECKLIST_MESSAGE_HEAD"
             },
             // body: {
             //   labelName:
@@ -427,7 +427,7 @@ const getAcknowledgementCard = (
             // },
             tailText: {
               labelName: "Trade License No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+              labelKey: "MR_HOME_SEARCH_RESULTS_TL_NO_LABEL"
             },
             number: secondNumber
           })
@@ -440,7 +440,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application`,
-          labelKey: "TL_TRADE_APPLICATION"
+          labelKey: "MR_TRADE_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -460,12 +460,12 @@ const getAcknowledgementCard = (
             backgroundColor: "#E54D42",
             header: {
               labelName: "Trade License Application Rejected",
-              labelKey: "TL_APPROVAL_REJ_MESSAGE_HEAD"
+              labelKey: "MR_APPROVAL_REJ_MESSAGE_HEAD"
             },
             body: {
               labelName:
                 "A notification regarding Trade License Rejection has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPROVAL_REJ_MESSAGE_SUBHEAD"
+              labelKey: "MR_APPROVAL_REJ_MESSAGE_SUBHEAD"
             }
           })
         }
@@ -477,7 +477,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application`,
-          labelKey: "TL_TRADE_APPLICATION"
+          labelKey: "MR_TRADE_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -497,16 +497,16 @@ const getAcknowledgementCard = (
             backgroundColor: "#E54D42",
             header: {
               labelName: "Trade License Cancelled",
-              labelKey: "TL_TL_CANCELLED_MESSAGE_HEAD"
+              labelKey: "MR_CANCELLED_MESSAGE_HEAD"
             },
             body: {
               labelName:
                 "A notification regarding Trade License cancellation has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_TL_CANCELLED_MESSAGE_SUBHEAD"
+              labelKey: "MR_CANCELLED_MESSAGE_SUBHEAD"
             },
             tailText: {
               labelName: "Trade License No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+              labelKey: "MR_HOME_SEARCH_RESULTS_LABEL"
             },
             number: secondNumber
           })
@@ -519,7 +519,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application`,
-          labelKey: "TL_TRADE_APPLICATION"
+          labelKey: "MR_TRADE_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -539,12 +539,12 @@ const getAcknowledgementCard = (
             backgroundColor: "#E54D42",
             header: {
               labelName: "Payment has failed!",
-              labelKey: "TL_PAYMENT_FAILED"
+              labelKey: "MR_PAYMENT_FAILED"
             },
             body: {
               labelName:
                 "A notification regarding payment failure has been sent to the trade owner and applicant.",
-              labelKey: "TL_PAYMENT_NOTIFICATION"
+              labelKey: "MR_PAYMENT_NOTIFICATION"
             }
           })
         }
@@ -555,7 +555,7 @@ const getAcknowledgementCard = (
     return {
       header: getCommonHeader({
         labelName: `Application for Trade License`,
-        labelKey: "TL_APPLICATION_TRADE_LICENSE"
+        labelKey: "MR_APPLICATION_TRADE_LICENSE"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -566,15 +566,15 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Marked Successfully",
-              labelKey: "TL_MARK_SUCCESS_MESSAGE_MAIN"
+              labelKey: "MR_MARK_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName: "Application has been marked successfully",
-              labelKey: "TL_APPLICATION_MARKED_SUCCESS"
+              labelKey: "MR_APPLICATION_MARKED_SUCCESS"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "MR_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -586,7 +586,7 @@ const getAcknowledgementCard = (
     return {
       header: getCommonHeader({
         labelName: `Application for Trade License`,
-        labelKey: "TL_APPLICATION_TRADE_LICENSE"
+        labelKey: "MR_APPLICATION_TRADE_LICENSE"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -597,16 +597,16 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Forwarded Successfully",
-              labelKey: "TL_FORWARD_SUCCESS_MESSAGE_MAIN"
+              labelKey: "MR_FORWARD_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName:
                 "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPLICATION_FORWARD_SUCCESS"
+              labelKey: "MR_APPLICATION_FORWARD_SUCCESS"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "MR_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })

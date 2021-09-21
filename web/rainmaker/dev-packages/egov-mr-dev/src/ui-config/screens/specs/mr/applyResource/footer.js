@@ -9,6 +9,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import get from "lodash/get";
 import set from "lodash/set";
+import remove from "lodash/remove"
 import some from "lodash/some";
 import { applyTradeLicense, checkValidOwners, getNextFinancialYearForRenewal } from "../../../../../ui-utils/commons";
 import { createEstimateData, downloadCertificateForm, getButtonVisibility, getCommonApplyFooter, getDocList, setMultiOwnerForApply, setValidToFromVisibilityForApply, validateFields, downloadProvisionalCertificateForm } from "../../utils";
@@ -102,18 +103,20 @@ export const callBackForNext = async (state, dispatch) => {
     } else {
       isFormValid = false;
     }
+
+
   }
   if (activeStep === 1) {
     //Bride and Groom Guardian Details
     dispatch(
       prepareFinalObject(
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.groomSideGuardian",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.groomSideGuardian",
         false
       )
     );
     dispatch(
       prepareFinalObject(
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.groomSideGuardian",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.groomSideGuardian",
         true
       )
     );
@@ -121,30 +124,19 @@ export const callBackForNext = async (state, dispatch) => {
   }
   if (activeStep === 2) {
     // Witness Details
-  dispatch(
-      prepareFinalObject(
-        "MarriageRegistrations[0].witness[0].groomSideWitness",
-        false
-      )
-    );
-    dispatch(
-      prepareFinalObject(
-        "MarriageRegistrations[0].witness[1].groomSideWitness",
-        true
-      )
-    );
-    dispatch(
-      prepareFinalObject(
-        "MarriageRegistrations[0].witness[0].title",
-        "MR"
-      )
-    );
-    dispatch(
-      prepareFinalObject(
-        "MarriageRegistrations[0].witness[1].title",
-        "MR"
-      )
-    );
+
+    // dispatch(
+    //   prepareFinalObject(
+    //     "MarriageRegistrations[0].witness[0].title",
+    //     "MR"
+    //   )
+    // );
+    // dispatch(
+    //   prepareFinalObject(
+    //     "MarriageRegistrations[0].witness[1].title",
+    //     "MR"
+    //   )
+    // );
     isFormValid = await applyTradeLicense(state, dispatch, activeStep);
   }
 
@@ -222,7 +214,7 @@ export const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "MarriageRegistrations[0]"
     );
-     isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+    isFormValid = await applyTradeLicense(state, dispatch, activeStep);
     if (isFormValid) {
 
       moveToSuccess(LicenseData, dispatch);
@@ -330,7 +322,7 @@ export const changeStep = (
   ];
   dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
   renderSteps(activeStep, dispatch);
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 };
 
 export const renderSteps = (activeStep, dispatch) => {
@@ -435,6 +427,160 @@ export const getActionDefinationForStepper = path => {
 };
 
 export const callBackForPrevious = (state, dispatch) => {
+  let activeStep = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.div.children.stepper.props.activeStep",
+    0
+  );
+  if (activeStep === 1) {
+    let MarriageRegistrations = get(
+      state.screenConfiguration.preparedFinalObject,
+      "MarriageRegistrations[0]",
+      []
+    );
+    if (MarriageRegistrations && MarriageRegistrations.coupleDetails[0].bride.guardianDetails && !MarriageRegistrations.coupleDetails[0].bride.guardianDetails.id) {
+
+
+
+
+      delete MarriageRegistrations.coupleDetails[0].bride.guardianDetails;
+
+
+
+
+      dispatch(
+        prepareFinalObject("MarriageRegistrations[0]", MarriageRegistrations)
+      );
+
+      let brideGrdnFields = get(
+        state.screenConfiguration.screenConfig.apply,
+        "components.div.children.formwizardSecondStep.children.brideGuardianDetails.children.cardContent.children.brideGuardianDetailsConatiner.children",
+        []
+      );
+      let brideGrdnFieldsKeys = Object.keys(brideGrdnFields);
+
+      let resetBrideGrndFields = [];
+      for (let i = 0; i < brideGrdnFieldsKeys.length; i++) {
+        resetBrideGrndFields.push({
+          path: `components.div.children.formwizardSecondStep.children.brideGuardianDetails.children.cardContent.children.brideGuardianDetailsConatiner.children.${brideGrdnFieldsKeys[i]}.props`,
+          property: "value",
+          value: ""
+        })
+      }
+
+
+      dispatchMultipleFieldChangeAction("apply", resetBrideGrndFields, dispatch);
+    }
+
+    if (MarriageRegistrations && MarriageRegistrations.coupleDetails[0].groom.guardianDetails && !MarriageRegistrations.coupleDetails[0].groom.guardianDetails.id) {
+
+
+
+
+      delete MarriageRegistrations.coupleDetails[0].groom.guardianDetails;
+
+
+
+
+      dispatch(
+        prepareFinalObject("MarriageRegistrations[0]", MarriageRegistrations)
+      );
+
+      let groomGrdnFields = get(
+        state.screenConfiguration.screenConfig.apply,
+        "components.div.children.formwizardSecondStep.children.brideGuardianDetails.children.cardContent.children.groomGuardianDetailsConatiner.children",
+        []
+      );
+      let groomGrdnFieldsKeys = Object.keys(groomGrdnFields);
+
+      let resetGroomGrndFields = [];
+      for (let i = 0; i < groomGrdnFieldsKeys.length; i++) {
+        resetGroomGrndFields.push({
+          path: `components.div.children.formwizardSecondStep.children.brideGuardianDetails.children.cardContent.children.brideGuardianDetailsConatiner.children.${brideGrdnFieldsKeys[i]}.props`,
+          property: "value",
+          value: ""
+        })
+      }
+
+
+      dispatchMultipleFieldChangeAction("apply", resetGroomGrndFields, dispatch);
+    }
+  }
+
+  if (activeStep === 2) {
+    let MarriageRegistrations = get(
+      state.screenConfiguration.preparedFinalObject,
+      "MarriageRegistrations[0]",
+      []
+    );
+    if (MarriageRegistrations && MarriageRegistrations.coupleDetails[0].bride.witness && !MarriageRegistrations.coupleDetails[0].bride.witness.id) {
+
+
+
+
+      delete MarriageRegistrations.coupleDetails[0].bride.witness;
+
+
+
+
+      dispatch(
+        prepareFinalObject("MarriageRegistrations[0]", MarriageRegistrations)
+      );
+
+      let brideWtnesFields = get(
+        state.screenConfiguration.screenConfig.apply,
+        "components.div.children.formwizardThirdStep.children.brideWitnessDetails.children.cardContent.children.witness1DetailsConatiner.children",
+        []
+      );
+      let brideWtnesKeys = Object.keys(brideWtnesFields);
+
+      let resetBrideWtnsFields = [];
+      for (let i = 0; i < brideWtnesKeys.length; i++) {
+        resetBrideWtnsFields.push({
+          path: `components.div.children.formwizardThirdStep.children.brideWitnessDetails.children.cardContent.children.witness1DetailsConatiner.children.${brideWtnesKeys[i]}.props`,
+          property: "value",
+          value: ""
+        })
+      }
+
+
+      dispatchMultipleFieldChangeAction("apply", resetBrideWtnsFields, dispatch);
+    }
+
+    if (MarriageRegistrations && MarriageRegistrations.coupleDetails[0].groom.witness && !MarriageRegistrations.coupleDetails[0].groom.witness.id) {
+
+
+
+
+      delete MarriageRegistrations.coupleDetails[0].groom.witness;
+
+
+
+
+      dispatch(
+        prepareFinalObject("MarriageRegistrations[0]", MarriageRegistrations)
+      );
+
+      let groomWtnsFields = get(
+        state.screenConfiguration.screenConfig.apply,
+        "components.div.children.formwizardThirdStep.children.groomWitnessDetails.children.cardContent.children.witness2DetailsConatiner.children",
+        []
+      );
+      let groomWtnsFieldsKeys = Object.keys(groomWtnsFields);
+
+      let resetGroomWtnsFields = [];
+      for (let i = 0; i < groomWtnsFieldsKeys.length; i++) {
+        resetGroomWtnsFields.push({
+          path: `components.div.children.formwizardThirdStep.children.groomWitnessDetails.children.cardContent.children.witness2DetailsConatiner.children.${groomWtnsFieldsKeys[i]}.props`,
+          property: "value",
+          value: ""
+        })
+      }
+
+
+      dispatchMultipleFieldChangeAction("apply", resetGroomWtnsFields, dispatch);
+    }
+  }
   changeStep(state, dispatch, "previous");
 };
 

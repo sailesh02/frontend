@@ -41,40 +41,53 @@ const getData = async (action, state, dispatch, tenantId) => {
   //   prepareFinalObject("MarriageRegistrations[0].marriagePlace.placeOfMarriage", tenantId)
   // );
 
+
   dispatch(
     prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[0].isGroom",
-      false
-    )
-  );
-  dispatch(
-    prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[1].isGroom",
-      true
-    )
-  );
-  dispatch(
-    prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[0].title",
+      "MarriageRegistrations[0].coupleDetails[0].bride.title",
       "MRs"
     )
   );
   dispatch(
     prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[1].title",
+      "MarriageRegistrations[0].coupleDetails[0].groom.title",
       "MR"
     )
   );
   dispatch(
     prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[0].isDivyang",
+      "MarriageRegistrations[0].coupleDetails[0].bride.isDivyang",
       false
     )
   );
   dispatch(
     prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[1].isDivyang",
+      "MarriageRegistrations[0].coupleDetails[0].groom.isDivyang",
       false
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "MarriageRegistrations[0].coupleDetails[0].bride.tenantId",
+      tenantId
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "MarriageRegistrations[0].coupleDetails[0].groom.tenantId",
+      tenantId
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "MarriageRegistrations[0].coupleDetails[0].bride.isGroom",
+      false
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "MarriageRegistrations[0].coupleDetails[0].groom.isGroom",
+      true
     )
   );
   dispatch(
@@ -227,6 +240,18 @@ const screenConfig = {
 
     //   }
     // }
+
+
+
+        // set(
+        //   action.screenConfig,
+        //   "components.div.children.formwizardSecondStep.children.brideGuardianDetails.children.cardContent.children.brideGuardianDetailsConatiner.children.rltnWithBride.props.value",
+        //   ""
+        // );
+
+
+
+
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     return action;
     }

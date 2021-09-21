@@ -31,7 +31,7 @@ export const brideReviewDetails = {
     },
     {
       jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].firstName",
+        "MarriageRegistrations[0].coupleDetails[0].bride.firstName",
 
     }
   ),
@@ -41,7 +41,7 @@ export const brideReviewDetails = {
       labelKey: "MR_DOB_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[0].dateOfBirth",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.dateOfBirth",
       callBack: convertEpochToDate
     }
   ),
@@ -51,7 +51,7 @@ export const brideReviewDetails = {
       labelKey: "MR_CONTACT_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[0].contact",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.contact",
 
     }
   ),
@@ -61,7 +61,7 @@ export const brideReviewDetails = {
       labelKey: "MR_EMAIL_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[0].emailAddress",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.emailAddress",
 
     }
   ),
@@ -94,7 +94,7 @@ export const brideReviewDetails = {
     },
     {
       jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].fatherName",
+        "MarriageRegistrations[0].coupleDetails[0].bride.fatherName",
 
     }
   ),
@@ -105,7 +105,7 @@ export const brideReviewDetails = {
     },
     {
       jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].motherName",
+        "MarriageRegistrations[0].coupleDetails[0].bride.motherName",
 
     }
   ),
@@ -115,7 +115,7 @@ export const brideReviewDetails = {
       labelKey: "MR_ADDRESS_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.addressLine1",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.addressLine1",
 
     }
   ),
@@ -125,7 +125,7 @@ export const brideReviewDetails = {
       labelKey: "MR_DISTRICT_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.district",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.district",
 
     }
   ),
@@ -135,7 +135,7 @@ export const brideReviewDetails = {
       labelKey: "MR_STATE_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.state",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.state",
 
     }
   ),
@@ -145,7 +145,7 @@ export const brideReviewDetails = {
       labelKey: "MR_COUNTRY_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.country",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.country",
 
     }
   ),
@@ -155,7 +155,7 @@ export const brideReviewDetails = {
       labelKey: "MR_PINCODE_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.pinCode",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.pinCode",
 
     }
   ),
@@ -166,7 +166,7 @@ export const brideReviewDetails = {
     },
     {
       jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].isDivyang",
+        "MarriageRegistrations[0].coupleDetails[0].bride.isDivyang",
 
     }
   )
@@ -194,7 +194,7 @@ export const groomReviewDetails = {
     },
     {
       jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].firstName",
+        "MarriageRegistrations[0].coupleDetails[0].groom.firstName",
 
     }
   ),
@@ -204,7 +204,7 @@ export const groomReviewDetails = {
       labelKey: "MR_DOB_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[1].dateOfBirth",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.dateOfBirth",
       callBack: convertEpochToDate
     }
   ),
@@ -214,7 +214,7 @@ export const groomReviewDetails = {
       labelKey: "MR_CONTACT_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[1].contact",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.contact",
 
     }
   ),
@@ -224,7 +224,7 @@ export const groomReviewDetails = {
       labelKey: "MR_EMAIL_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[1].emailAddress",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.emailAddress",
 
     }
   ),
@@ -235,7 +235,7 @@ export const groomReviewDetails = {
     },
     {
       jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].fatherName",
+        "MarriageRegistrations[0].coupleDetails[0].groom.fatherName",
 
     }
   ),
@@ -246,7 +246,7 @@ export const groomReviewDetails = {
     },
     {
       jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].motherName",
+        "MarriageRegistrations[0].coupleDetails[0].groom.motherName",
 
     }
   ),
@@ -256,7 +256,7 @@ export const groomReviewDetails = {
       labelKey: "MR_ADDRESS_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.addressLine1",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.addressLine1",
 
     }
   ),
@@ -266,7 +266,7 @@ export const groomReviewDetails = {
       labelKey: "MR_DISTRICT_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.district",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.district",
 
     }
   ),
@@ -276,7 +276,7 @@ export const groomReviewDetails = {
       labelKey: "MR_STATE_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.state",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.state",
 
     }
   ),
@@ -286,7 +286,7 @@ export const groomReviewDetails = {
       labelKey: "MR_COUNTRY_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.country",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.country",
 
     }
   ),
@@ -296,7 +296,7 @@ export const groomReviewDetails = {
       labelKey: "MR_PINCODE_LABEL"
     },
     {
-      jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.pinCode",
+      jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.pinCode",
 
     }
   ),
@@ -330,7 +330,7 @@ export const groomReviewDetails = {
     },
     {
       jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].isDivyang",
+        "MarriageRegistrations[0].coupleDetails[0].groom.isDivyang",
 
     }
   )

@@ -53,7 +53,7 @@ export const groomDetails = getCommonCard(
           labelKey: "MR_NAME_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].firstName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.firstName",
         required: true,
       }),
 
@@ -109,7 +109,7 @@ export const groomDetails = getCommonCard(
           required: true,
 
           pattern: getPattern("Date"),
-          jsonPath: "MarriageRegistrations[0].coupleDetails[1].dateOfBirth",
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.dateOfBirth",
 
           props: {
 
@@ -132,10 +132,10 @@ export const groomDetails = getCommonCard(
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "MR_CONTACT_LABEL"
+          labelKey: "MR_CONTACT_PLACEHOLDER"
         },
         pattern: getPattern("MobileNo"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.contact",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.contact",
         required: true,
       }),
       groomEmail: getTextField({
@@ -148,10 +148,10 @@ export const groomDetails = getCommonCard(
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "MR_EMAIL_LABEL"
+          labelKey: "MR_EMAIL_PLACEHOLDER"
         },
         pattern: getPattern("Email"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.emailAddress",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.emailAddress",
         required: true,
       }),
 
@@ -168,7 +168,7 @@ export const groomDetails = getCommonCard(
           labelKey: "MR_FATHERNAME_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].fatherName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.fatherName",
         required: true,
       }),
 
@@ -187,7 +187,7 @@ export const groomDetails = getCommonCard(
           labelKey: "MR_MOTHERNAME_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].motherName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.motherName",
         required: true,
       }),
 
@@ -205,7 +205,7 @@ export const groomDetails = getCommonCard(
           labelKey: "MR_ADDRESS_PLACEHOLDER"
         },
         pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.addressLine1",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.addressLine1",
         required: true,
       }),
 
@@ -219,7 +219,7 @@ export const groomDetails = getCommonCard(
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.district",
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.district",
           required: true,
 
         }),
@@ -234,7 +234,7 @@ export const groomDetails = getCommonCard(
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.state",
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.state",
           required: true,
 
         }),
@@ -250,7 +250,7 @@ export const groomDetails = getCommonCard(
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "MR_COUNTRY_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.country",
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.country",
           required: true,
 
         }),
@@ -270,7 +270,7 @@ export const groomDetails = getCommonCard(
         },
         required: true,
         //pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.pinCode",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.pinCode",
 
       }),
 
@@ -284,7 +284,7 @@ export const groomDetails = getCommonCard(
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "MR_ISDIVYANG_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.yesNoBox",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[1].isDivyang"
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.isDivyang"
         }),
       },
 

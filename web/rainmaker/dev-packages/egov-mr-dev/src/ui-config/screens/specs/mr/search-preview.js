@@ -33,7 +33,7 @@ import {
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { downloadPrintContainer, footerReviewTop } from "./applyResource/footer";
 import { getReviewDocuments } from "./applyResource/review-documents";
-//import { getBrideAddressAndGuardianDetails } from "./applyResource/review-owner";
+import { appointmentDetails } from "./applyResource/appointmentDetails";
 import { getReviewTrade } from "./applyResource/review-trade";
 import { getgroomAddressAndGuardianDetails } from "./applyResource/groom-address-guardian-detail";
 import { getWitnessDetails } from "./applyResource/witness-detail";
@@ -473,16 +473,23 @@ const setActionItems = (action, object) => {
     "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title.roleDefination",
     get(object, "roleDefination")
   );
+
+  // set(
+  //   action,
+  //   "screenConfig.components.div.children.appointmentDetailsFormCard.visible",
+  //   false
+  // );
+
 };
 
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "TL_PAYMENT_VIEW_BREAKUP",
-    "search-preview"
-  ),
+  // viewBreakupButton: getDialogButton(
+  //   "VIEW BREAKUP",
+  //   "MR_PAYMENT_VIEW_BREAKUP",
+  //   "search-preview"
+  // ),
   reviewTradeDetails,
   //BrideAddressAndGuardianDetails,
   groomAddressAndGuardianDetails,
@@ -562,20 +569,32 @@ const screenConfig = {
             beforeSubmitHook:beforeSubmitHook
           }
         },
+        //appointmentDetails: getCommonCard({appointmentDetails}),
+        // appointmentDetailsFormCard: {
+        //   uiFramework: "custom-atoms",
+        //   componentPath: "Form",
+        //   props: {
+        //     id: "appointment_card_form"
+        //   },
+        //   children: {
+        //     apint: getCommonCard({appointmentDetails})
 
+        //   },
+
+        // },
         tradeReviewDetails
       }
     },
-    breakUpDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
-      componentPath: "ViewBreakupContainer",
-      props: {
-        open: false,
-        maxWidth: "md",
-        screenKey: "search-preview"
-      }
-    }
+    // breakUpDialog: {
+    //   uiFramework: "custom-containers-local",
+    //   moduleName: "egov-mr",
+    //   componentPath: "ViewBreakupContainer",
+    //   props: {
+    //     open: false,
+    //     maxWidth: "md",
+    //     screenKey: "search-preview"
+    //   }
+    // }
   }
 };
 

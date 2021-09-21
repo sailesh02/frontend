@@ -35,7 +35,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[0].firstName",
+        "MarriageRegistrations[0].coupleDetails[0].bride.witness.firstName",
 
       }
     ),
@@ -47,7 +47,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[0].address",
+        "MarriageRegistrations[0].coupleDetails[0].bride.witness.address",
 
       }
     ),
@@ -59,7 +59,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[0].district",
+        "MarriageRegistrations[0].coupleDetails[0].bride.witness.district",
 
       }
     ),
@@ -72,7 +72,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[0].state",
+        "MarriageRegistrations[0].coupleDetails[0].bride.witness.state",
 
       }
     ),
@@ -84,7 +84,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[0].country",
+        "MarriageRegistrations[0].coupleDetails[0].bride.witness.country",
 
       }
     ),
@@ -95,7 +95,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[0].pinCode",
+        "MarriageRegistrations[0].coupleDetails[0].bride.witness.pinCode",
 
       }
     ),
@@ -107,7 +107,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[0].contact",
+        "MarriageRegistrations[0].coupleDetails[0].bride.witness.contact",
 
       }
     ),
@@ -138,7 +138,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[1].firstName",
+        "MarriageRegistrations[0].coupleDetails[0].groom.witness.firstName",
 
       }
     ),
@@ -150,7 +150,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[1].address",
+        "MarriageRegistrations[0].coupleDetails[0].groom.witness.address",
 
       }
     ),
@@ -162,7 +162,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[1].district",
+        "MarriageRegistrations[0].coupleDetails[0].groom.witness.district",
 
       }
     ),
@@ -175,7 +175,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[1].state",
+        "MarriageRegistrations[0].coupleDetails[0].groom.witness.state",
 
       }
     ),
@@ -187,7 +187,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[1].country",
+        "MarriageRegistrations[0].coupleDetails[0].groom.witness.country",
 
       }
     ),
@@ -199,7 +199,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[1].pinCode",
+        "MarriageRegistrations[0].coupleDetails[0].groom.witness.pinCode",
 
       }
     ),
@@ -211,7 +211,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].witness[1].contact",
+        "MarriageRegistrations[0].coupleDetails[0].groom.witness.contact",
 
       }
     ),

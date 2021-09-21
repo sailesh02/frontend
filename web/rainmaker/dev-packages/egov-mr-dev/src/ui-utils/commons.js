@@ -142,7 +142,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
       ];
     });
 
-    console.log(uploadedDocuments, "nero uploadedDocuments")
+  console.log(uploadedDocuments, "nero uploadedDocuments")
   dispatch(
     prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", uploadedDocuments)
   );
@@ -379,10 +379,10 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
     let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");
 
-    if(activeIndex === 4)
-    documents = documents.filter(item => item.fileStoreId);
+    if (activeIndex === 4)
+      documents = documents.filter(item => item.fileStoreId);
     else
-    documents = documents.filter(item => item.fileUrl && item.fileName);
+      documents = documents.filter(item => item.fileUrl && item.fileName);
 
 
     set(queryObject[0], "applicationDocuments", documents);
@@ -392,18 +392,29 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     set(queryObject[0], "wfDocuments", documents);
     let coupleDetails = [];
     if (queryObject[0] && queryObject[0].coupleDetails) {
-       coupleDetails = get(
+      coupleDetails = get(
         queryObject[0],
         "coupleDetails",
         []
       );
       for (let i = 0; i < coupleDetails.length; i++) {
-        coupleDetails[i].dateOfBirth = convertDateToEpoch(coupleDetails[i].dateOfBirth, "dayend")
-        if(coupleDetails[i].isDivyang == 'YES'){
-          coupleDetails[i].isDivyang = true;
-        }else{
-          coupleDetails[i].isDivyang = false;
+        if (coupleDetails[i].bride) {
+          coupleDetails[i].bride.dateOfBirth = convertDateToEpoch(coupleDetails[i].bride.dateOfBirth, "dayend")
+          if (coupleDetails[i].bride.isDivyang == 'YES') {
+            coupleDetails[i].bride.isDivyang = true;
+          } else {
+            coupleDetails[i].bride.isDivyang = false;
+          }
         }
+        if (coupleDetails[i].groom) {
+          coupleDetails[i].groom.dateOfBirth = convertDateToEpoch(coupleDetails[i].groom.dateOfBirth, "dayend")
+          if (coupleDetails[i].groom.isDivyang == 'YES') {
+            coupleDetails[i].groom.isDivyang = true;
+          } else {
+            coupleDetails[i].groom.isDivyang = false;
+          }
+        }
+
       }
 
     }
@@ -426,6 +437,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
 
     set(queryObject[0], "workflowCode", "MR");
+    set(queryObject[0], "businessService", "MR");
 
 
     if (queryObject[0].applicationNumber) {
@@ -471,7 +483,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         //   }
         // }
         //dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
-       // set(queryObject[0], "applicationDocuments", renewalDocuments);
+        // set(queryObject[0], "applicationDocuments", renewalDocuments);
 
       }
       set(queryObject[0], "action", action);
@@ -491,7 +503,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       }
       //Renewal flow
 
-       let updatedApplicationNo = "";
+      let updatedApplicationNo = "";
       // let updatedTenant = "";
       // if (isEditRenewal && updateResponse && get(updateResponse, "Licenses[0]")) {
       //   updatedApplicationNo = get(updateResponse.Licenses[0], "applicationNumber");

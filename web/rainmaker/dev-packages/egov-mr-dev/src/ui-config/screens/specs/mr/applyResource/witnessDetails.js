@@ -20,7 +20,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import "./index.css";
 
 
-export const witness1Details = getCommonCard(
+export const brideWitnessDetails = getCommonCard(
   {
     header: getCommonTitle(
       {
@@ -47,7 +47,7 @@ export const witness1Details = getCommonCard(
           labelKey: "MR_NAME_PLACEHOLDER"
         },
         pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].witness[0].firstName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.firstName",
         required: true,
       }),
 
@@ -64,7 +64,7 @@ export const witness1Details = getCommonCard(
           labelKey: "MR_ADDRESS_PLACEHOLDER"
         },
         pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].witness[0].address",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.address",
 
       }),
       witness1District: {
@@ -77,7 +77,7 @@ export const witness1Details = getCommonCard(
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
-          jsonPath: "MarriageRegistrations[0].witness[0].district",
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.district",
           required: true,
 
         }),
@@ -92,7 +92,7 @@ export const witness1Details = getCommonCard(
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
-          jsonPath: "MarriageRegistrations[0].witness[0].state",
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.state",
           required: true,
 
         }),
@@ -108,7 +108,7 @@ export const witness1Details = getCommonCard(
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "MR_COUNTRY_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
-          jsonPath: "MarriageRegistrations[0].witness[0].country",
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.country",
           required: true,
 
         }),
@@ -127,7 +127,7 @@ export const witness1Details = getCommonCard(
         },
         required: true,
         //pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].witness[0].pinCode",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.pinCode",
 
       }),
       witness1Contact: getTextField({
@@ -144,14 +144,14 @@ export const witness1Details = getCommonCard(
         },
         required: true,
         //pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].witness[0].contact",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.contact",
 
       }),
     })
   }
 )
 
-export const witness2Details = getCommonCard(
+export const groomWitnessDetails = getCommonCard(
   {
     header: getCommonTitle(
       {
@@ -178,7 +178,7 @@ export const witness2Details = getCommonCard(
           labelKey: "MR_NAME_PLACEHOLDER"
         },
         pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].witness[1].firstName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.firstName",
         required: true,
       }),
 
@@ -196,7 +196,7 @@ export const witness2Details = getCommonCard(
           labelKey: "MR_ADDRESS_PLACEHOLDER"
         },
         pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].witness[1].address",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.address",
 
       }),
       witness2District: {
@@ -209,7 +209,7 @@ export const witness2Details = getCommonCard(
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_LABEL" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
-          jsonPath: "MarriageRegistrations[0].witness[1].district",
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.district",
           required: true,
 
         }),
@@ -225,7 +225,7 @@ export const witness2Details = getCommonCard(
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
-          jsonPath: "MarriageRegistrations[0].witness[1].state",
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.state",
           required: true,
 
         }),
@@ -240,7 +240,7 @@ export const witness2Details = getCommonCard(
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "MR_COUNTRY_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
-          jsonPath: "MarriageRegistrations[0].witness[1].country",
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.country",
           required: true,
 
         }),
@@ -259,7 +259,7 @@ export const witness2Details = getCommonCard(
         },
         required: true,
         //pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].witness[1].pinCode",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.pinCode",
 
       }),
       witness2Contact: getTextField({
@@ -276,7 +276,7 @@ export const witness2Details = getCommonCard(
         },
         required: true,
         //pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].witness[1].contact",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.contact",
 
       }),
     })
@@ -286,6 +286,6 @@ export const witness2Details = getCommonCard(
 
 export const witnessDetails = {
 
-  witness1Details,
-  witness2Details
+  brideWitnessDetails,
+  groomWitnessDetails
 };

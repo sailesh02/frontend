@@ -57,7 +57,7 @@ export const groomGuardianDetails = getCommonCard(
                 },
                 required: true,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[1].guardianDetails.relationship",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.relationship",
 
             }),
             groomGuardianName: getTextField({
@@ -74,7 +74,7 @@ export const groomGuardianDetails = getCommonCard(
                 },
                 required: true,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[1].guardianDetails.name",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.name",
 
             }),
             groomGrdnAddressLine1: getTextField({
@@ -90,7 +90,7 @@ export const groomGuardianDetails = getCommonCard(
                     labelKey: "MR_ADDRESS_PLACEHOLDER"
                 },
                 pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[1].guardianDetails.addressLine1",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.addressLine1",
                 required: true,
             }),
             groomGrdnDistrict: {
@@ -103,7 +103,7 @@ export const groomGuardianDetails = getCommonCard(
                     optionLabel: "name",
                     placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_PLACEHOLDER" },
                     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
-                    jsonPath: "MarriageRegistrations[0].coupleDetails[1].guardianDetails.district",
+                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.district",
                     required: true,
 
                 }),
@@ -119,7 +119,7 @@ export const groomGuardianDetails = getCommonCard(
                     optionLabel: "name",
                     placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
                     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
-                    jsonPath: "MarriageRegistrations[0].coupleDetails[1].guardianDetails.state",
+                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.state",
                     required: true,
 
                 }),
@@ -135,7 +135,7 @@ export const groomGuardianDetails = getCommonCard(
                     optionLabel: "name",
                     placeholder: { labelName: "Select Country", labelKey: "MR_COUNTRY_PLACEHOLDER" },
                     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
-                    jsonPath: "MarriageRegistrations[0].coupleDetails[1].guardianDetails.country",
+                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.country",
                     required: true,
 
                 }),
@@ -154,7 +154,7 @@ export const groomGuardianDetails = getCommonCard(
                 },
                 required: true,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[1].guardianDetails.pinCode",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.pinCode",
 
             }),
 
@@ -172,7 +172,7 @@ export const groomGuardianDetails = getCommonCard(
                 },
                 required: true,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[1].guardianDetails.contact",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.contact",
 
             }),
             groomGrdnEmail: getTextField({
@@ -189,7 +189,7 @@ export const groomGuardianDetails = getCommonCard(
                 },
                 required: true,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[1].guardianDetails.emailAddress",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.emailAddress",
 
             }),
         })
@@ -224,7 +224,7 @@ export const brideGuardianDetails = getCommonCard(
                 },
                 required: true,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[0].guardianDetails.relationship",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.relationship",
 
             }),
             brideGuardianName: getTextField({
@@ -241,7 +241,7 @@ export const brideGuardianDetails = getCommonCard(
                 },
                 required: true,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[0].guardianDetails.name",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.name",
 
             }),
             brideGrdnAddressLine1: getTextField({
@@ -257,7 +257,7 @@ export const brideGuardianDetails = getCommonCard(
                     labelKey: "MR_ADDRESS_PLACEHOLDER"
                 },
                 pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[0].guardianDetails.addressLine1",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.addressLine1",
                 required: true,
             }),
 
@@ -271,7 +271,7 @@ export const brideGuardianDetails = getCommonCard(
                     optionLabel: "name",
                     placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_PLACEHOLDER" },
                     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
-                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].guardianDetails.district",
+                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.district",
                     required: true,
 
                 }),
@@ -286,7 +286,7 @@ export const brideGuardianDetails = getCommonCard(
                     optionLabel: "name",
                     placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
                     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
-                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].guardianDetails.state",
+                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.state",
                     required: true,
 
                 }),
@@ -303,7 +303,7 @@ export const brideGuardianDetails = getCommonCard(
                     optionLabel: "name",
                     placeholder: { labelName: "Select Country", labelKey: "MR_COUNTRY_PLACEHOLDER" },
                     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
-                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].guardianDetails.country",
+                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.country",
                     required: true,
 
                 }),
@@ -322,7 +322,7 @@ export const brideGuardianDetails = getCommonCard(
                 },
                 required: true,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[0].guardianDetails.pinCode",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.pinCode",
 
             }),
 
@@ -340,7 +340,7 @@ export const brideGuardianDetails = getCommonCard(
                 },
                 required: true,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[0].guardianDetails.contact",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.contact",
 
             }),
             brideGrdnEmail: getTextField({
@@ -357,7 +357,7 @@ export const brideGuardianDetails = getCommonCard(
                 },
                 required: true,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[0].guardianDetails.emailAddress",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.emailAddress",
 
             }),
         })

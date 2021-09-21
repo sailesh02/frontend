@@ -33,7 +33,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.relationship",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.relationship",
 
       }
     ),
@@ -45,7 +45,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.name",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.name",
 
       }
     ),
@@ -57,7 +57,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.addressline1",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.addressLine1",
 
       }
     ),
@@ -69,7 +69,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.district",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.district",
 
       }
     ),
@@ -81,7 +81,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.state",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.state",
 
       }
     ),
@@ -93,7 +93,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.country",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.country",
 
       }
     ),
@@ -104,7 +104,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.pinCode",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.pinCode",
 
       }
     ),
@@ -115,7 +115,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.contact",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.contact",
 
       }
     ),
@@ -126,7 +126,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.emailAddress",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.emailAddress",
 
       }
     ),
@@ -155,7 +155,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.relationship",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.relationship",
 
       }
     ),
@@ -167,7 +167,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.name",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.name",
 
       }
     ),
@@ -179,7 +179,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.addressline1",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.addressLine1",
 
       }
     ),
@@ -190,7 +190,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.district",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.district",
 
       }
     ),
@@ -203,7 +203,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.state",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.state",
 
       }
     ),
@@ -214,7 +214,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.country",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.country",
 
       }
     ),
@@ -225,7 +225,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.pinCode",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.pinCode",
 
       }
     ),
@@ -236,7 +236,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.contact",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.contact",
 
       }
     ),
@@ -247,7 +247,7 @@ import {
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.emailAddress",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.emailAddress",
 
       }
     ),

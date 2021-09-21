@@ -1497,17 +1497,17 @@ export const getPastPaymentsForWater = async (dispatch) => {
     dispatch(toggleSpinner());
     let queryObject = [
         {
-            key: "tenantId",
+            key: "tenantIds",
             value: getTenantIdCommon()
         },
         {
-            key: "businessService",
+            key: "businessServices",
             value: "WS"
         },
         {
-            key: "uuid",
-            value: JSON.parse(getUserInfo()).uuid.toString()
-        },
+            key: "mobileNumber",
+            value: JSON.parse(getUserInfo()).mobileNumber && JSON.parse(getUserInfo()).mobileNumber.toString() || ''
+        }
     ];
     try {
         const response = await httpRequest(
@@ -1536,16 +1536,16 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
     dispatch(toggleSpinner());
     let queryObject = [
         {
-            key: "tenantId",
+            key: "tenantIds",
             value: getTenantIdCommon()
         },
         {
-            key: "businessService",
+            key: "businessServices",
             value: "SW"
         },
         {
-            key: "uuid",
-            value: JSON.parse(getUserInfo()).uuid.toString()
+            key: "mobileNumber",
+            value: JSON.parse(getUserInfo()).mobileNumber && JSON.parse(getUserInfo()).mobileNumber.toString() || ''
         }
     ];
     try {

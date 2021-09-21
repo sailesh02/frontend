@@ -716,12 +716,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       oldApplicationPayload.WaterConnection[0].waterSubSource=waterSource.includes("null") ? "NA" : waterSource.split(".")[1];
       if (oldApplicationPayload.WaterConnection.length > 0) {
         dispatch(prepareFinalObject("WaterConnectionOld", oldApplicationPayload.WaterConnection))
-        let localizationLabels = {}
-        if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${oldApplicationPayload.WaterConnection[0].additionalDetails.locality
-        .toUpperCase()
-        .replace(/[._:-\s\/]/g, "_")}`;
-      // dispatch(prepareFinalObject("WaterConnectionOld[0].locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("WaterConnectionOld[0].locality",oldApplicationPayload.WaterConnection[0].additionalDetails.locality))
       }
     }
 

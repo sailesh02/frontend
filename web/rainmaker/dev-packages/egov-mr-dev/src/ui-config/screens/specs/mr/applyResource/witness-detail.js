@@ -10,7 +10,6 @@ import {
   import { checkValueForNA, convertEpochToDate } from "../../utils";
   import { changeStep } from "./footer";
 
-
   export const witness1Details = {
 
     header: getCommonTitle(

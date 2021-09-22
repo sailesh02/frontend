@@ -4,7 +4,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject, toggleSnackbar, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { generateTLAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateTLAcknowledgement";
+import { generateMRAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateMRAcknowledgement";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import get from "lodash/get";
@@ -84,6 +84,7 @@ export const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
+  const applicationNoInUrl = getQueryArg(window.location.href, "applicationNumber");
   let isFormValid = true;
   let hasFieldToaster = true;
 
@@ -103,8 +104,13 @@ export const callBackForNext = async (state, dispatch) => {
     } else {
       isFormValid = false;
     }
-
-
+    console.log(applicationNoInUrl, "Nero applicationNoInUrl")
+    if(isFormValid){
+    if(!applicationNoInUrl){
+      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.country", "INDIA"));
+      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.country", "INDIA"));
+      }
+    }
   }
   if (activeStep === 1) {
     //Bride and Groom Guardian Details
@@ -120,7 +126,15 @@ export const callBackForNext = async (state, dispatch) => {
         true
       )
     );
+
     isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+    if(isFormValid){
+      if(!applicationNoInUrl){
+        dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.witness.country", "INDIA"));
+        dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.witness.country", "INDIA"));
+        }
+    }
+
   }
   if (activeStep === 2) {
     // Witness Details
@@ -762,7 +776,7 @@ export const footerReview = (
               children: {
                 nextButtonLabel: getLabel({
                   labelName: "RESUBMIT",
-                  labelKey: "TL_RESUBMIT"
+                  labelKey: "MR_RESUBMIT"
                 })
               },
               onClickDefination: {
@@ -772,7 +786,7 @@ export const footerReview = (
               visible: getButtonVisibility(status, "RESUBMIT"),
               roleDefination: {
                 rolePath: "user-info.roles",
-                roles: ["TL_CEMP", "CITIZEN"]
+                roles: ["MR_CEMP", "CITIZEN"]
               }
             },
             editButton: {
@@ -797,7 +811,7 @@ export const footerReview = (
                 },
                 previousButtonLabel: getLabel({
                   labelName: "Edit for Renewal",
-                  labelKey: "TL_RENEWAL_BUTTON_EDIT"
+                  labelKey: "MR_RENEWAL_BUTTON_EDIT"
                 })
               },
               onClickDefination: {
@@ -829,7 +843,7 @@ export const footerReview = (
               children: {
                 nextButtonLabel: getLabel({
                   labelName: "Submit for Renewal",
-                  labelKey: "TL_RENEWAL_BUTTON_SUBMIT"
+                  labelKey: "MR_RENEWAL_BUTTON_SUBMIT"
                 }),
                 nextButtonIcon: {
                   uiFramework: "custom-atoms",
@@ -863,7 +877,7 @@ export const footerReview = (
               children: {
                 submitButtonLabel: getLabel({
                   labelName: "MAKE PAYMENT",
-                  labelKey: "TL_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
+                  labelKey: "MR_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
                 })
               },
               onClickDefination: {
@@ -902,17 +916,13 @@ export const footerReviewTop = (
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
-  let licenseNumber = get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "licenseNumber")
+
   const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
   const receiptKey = get(uiCommonConfig, "receiptKey");
-  const responseLength = get(
-    state.screenConfiguration.preparedFinalObject,
-    `licenseCount`,
-    1
-  );
+
   // let renewalMenu=[];
   let tlCertificateDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    label: { labelName: "TL Certificate", labelKey: "MR_CERTIFICATE" },
     link: () => {
       const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
       downloadCertificateForm(MarriageRegistrations);
@@ -920,7 +930,7 @@ export const footerReviewTop = (
     leftIcon: "book"
   };
   let tlCertificatePrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    label: { labelName: "TL Certificate", labelKey: "MR_CERTIFICATE" },
     link: () => {
       const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
       downloadCertificateForm(MarriageRegistrations, 'print');
@@ -929,7 +939,7 @@ export const footerReviewTop = (
   };
 
   let tlPLDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
+    label: { labelName: "TL Certificate", labelKey: "MR_PL_CERTIFICATE" },
     link: () => {
       const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
       downloadProvisionalCertificateForm(MarriageRegistrations);
@@ -937,7 +947,7 @@ export const footerReviewTop = (
     leftIcon: "book"
   };
   let tlPLPrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
+    label: { labelName: "TL Certificate", labelKey: "MR_PL_CERTIFICATE" },
     link: () => {
       const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
       downloadProvisionalCertificateForm(MarriageRegistrations, 'print');
@@ -947,14 +957,14 @@ export const footerReviewTop = (
 
 
   let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MR_RECEIPT" },
     link: () => {
 
 
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "tenantId") },
-        { key: "businessService", value: 'TL' }
+        { key: "businessService", value: 'MR' }
       ]
       download(receiptQueryString, "download", receiptKey, state);
       // generateReceipt(state, dispatch, "receipt_download");
@@ -962,12 +972,12 @@ export const footerReviewTop = (
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MR_RECEIPT" },
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "tenantId") },
-        { key: "businessService", value: 'TL' }
+        { key: "businessService", value: 'MR' }
       ]
       download(receiptQueryString, "print", receiptKey, state);
       // generateReceipt(state, dispatch, "receipt_print");
@@ -975,63 +985,29 @@ export const footerReviewTop = (
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MR_APPLICATION" },
     link: () => {
       const { MarriageRegistrations, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(MarriageRegistrations[0], "additionalDetails.documents", documents)
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${MarriageRegistrations[0].applicationNumber}`);
+      generateMRAcknowledgement(state.screenConfiguration.preparedFinalObject, `mr-acknowledgement-${MarriageRegistrations[0].applicationNumber}`);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MR_APPLICATION" },
     link: () => {
       const { MarriageRegistrations, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(MarriageRegistrations[0], "additionalDetails.documents", documents)
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
+      generateMRAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
 
     },
     leftIcon: "assignment"
   };
 
-  // switch (status) {
-  //   case "APPROVED":
-  //     downloadMenu = [
-  //       tlCertificateDownloadObject,
-  //       receiptDownloadObject,
-  //       applicationDownloadObject
-  //     ];
-  //     printMenu = [
-  //       tlCertificatePrintObject,
-  //       receiptPrintObject,
-  //       applicationPrintObject
-  //     ];
-  //     break;
-  //   case "APPLIED":
-  //   case "CITIZENACTIONREQUIRED":
-  //   case "FIELDINSPECTION":
-  //   case "PENDINGAPPROVAL":
-  //   case "PENDINGPAYMENT":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   case "pending_approval":
-  //     downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-  //     printMenu = [receiptPrintObject, applicationPrintObject];
-  //     break;
-  //   case "CANCELLED":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   case "REJECTED":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   default:
-  //     break;
-  // }
+console.log(applicationDownloadObject, "Nero applicationDownloadObject")
+console.log(applicationPrintObject, "Nero applicationPrintObject")
   switch (status) {
     case "APPROVED":
       downloadMenu = [
@@ -1046,15 +1022,15 @@ export const footerReviewTop = (
       ];
       break;
     case "PENDINGAPPROVAL":
-    case "FIELDINSPECTION":
+
     case "DOCVERIFICATION":
       downloadMenu = [
-        tlPLDownloadObject,
+        tlCertificateDownloadObject,
         receiptDownloadObject,
         applicationDownloadObject
       ];
       printMenu = [
-        tlPLPrintObject,
+        tlCertificateDownloadObject,
         receiptPrintObject,
         applicationPrintObject
       ];
@@ -1087,11 +1063,11 @@ export const footerReviewTop = (
       children: {
         downloadMenu: {
           uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
+          moduleName: "egov-mr",
           componentPath: "MenuButton",
           props: {
             data: {
-              label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+              label: { labelName: "DOWNLOAD", labelKey: "MR_DOWNLOAD" },
               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
               props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
@@ -1105,7 +1081,7 @@ export const footerReviewTop = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+              label: { labelName: "PRINT", labelKey: "MR_PRINT" },
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
               props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
@@ -1145,7 +1121,7 @@ export const downloadPrintContainer = (
   let downloadMenu = [];
   let printMenu = [];
   let tlCertificateDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    label: { labelName: "TL Certificate", labelKey: "MR_CERTIFICATE" },
     link: () => {
       const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
       downloadCertificateForm(MarriageRegistrations);
@@ -1153,7 +1129,7 @@ export const downloadPrintContainer = (
     leftIcon: "book"
   };
   let tlCertificatePrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    label: { labelName: "TL Certificate", labelKey: "MR_CERTIFICATE" },
     link: () => {
       const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
       downloadCertificateForm(MarriageRegistrations, 'print');
@@ -1163,7 +1139,7 @@ export const downloadPrintContainer = (
 
 
   let tlPLDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
+    label: { labelName: "TL Certificate", labelKey: "MR_PL_CERTIFICATE" },
     link: () => {
       const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
       downloadProvisionalCertificateForm(MarriageRegistrations);
@@ -1171,7 +1147,7 @@ export const downloadPrintContainer = (
     leftIcon: "book"
   };
   let tlPLPrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
+    label: { labelName: "TL Certificate", labelKey: "MR_PL_CERTIFICATE" },
     link: () => {
       const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
       downloadProvisionalCertificateForm(MarriageRegistrations, 'print');
@@ -1181,48 +1157,48 @@ export const downloadPrintContainer = (
 
 
   let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MR_RECEIPT" },
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "tenantId") },
-        { key: "businessService", value: 'TL' }
+        { key: "businessService", value: 'MR' }
       ]
       download(receiptQueryString, "download", receiptKey);
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MR_RECEIPT" },
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0], "tenantId") },
-        { key: "businessService", value: 'TL' }
+        { key: "businessService", value: 'MR' }
       ]
       download(receiptQueryString, "print", receiptKey);
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MR_APPLICATION" },
     link: () => {
       const { MarriageRegistrations, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(MarriageRegistrations[0], "additionalDetails.documents", documents)
       // downloadAcknowledgementForm(MarriageRegistrations);
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${MarriageRegistrations[0].applicationNumber}`);
+      generateMRAcknowledgement(state.screenConfiguration.preparedFinalObject, `mr-acknowledgement-${MarriageRegistrations[0].applicationNumber}`);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MR_APPLICATION" },
     link: () => {
       const { MarriageRegistrations, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(MarriageRegistrations[0], "additionalDetails.documents", documents)
       // downloadAcknowledgementForm(MarriageRegistrations,'print');
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
+      generateMRAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
     },
     leftIcon: "assignment"
   };
@@ -1313,11 +1289,11 @@ export const downloadPrintContainer = (
       children: {
         downloadMenu: {
           uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
+          moduleName: "egov-mr",
           componentPath: "MenuButton",
           props: {
             data: {
-              label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+              label: { labelName: "DOWNLOAD", labelKey: "MR_DOWNLOAD" },
               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
               props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-download-button" },
@@ -1327,11 +1303,11 @@ export const downloadPrintContainer = (
         },
         printMenu: {
           uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
+          moduleName: "egov-mr",
           componentPath: "MenuButton",
           props: {
             data: {
-              label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+              label: { labelName: "PRINT", labelKey: "MR_PRINT" },
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
               props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },

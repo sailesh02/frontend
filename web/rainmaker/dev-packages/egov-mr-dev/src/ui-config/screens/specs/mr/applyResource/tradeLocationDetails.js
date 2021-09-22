@@ -130,7 +130,7 @@ export const tradeLocationDetails = getCommonCard(
 
       tradeLocMohalla: {
         uiFramework: "custom-containers-local",
-        moduleName: "egov-tradelicence",
+        moduleName: "egov-mr",
         componentPath: "AutosuggestContainer",
         jsonPath: "MarriageRegistrations[0].marriagePlace.locality.code",
         required: true,

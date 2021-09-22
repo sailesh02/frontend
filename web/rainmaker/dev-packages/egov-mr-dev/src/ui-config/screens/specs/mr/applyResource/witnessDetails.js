@@ -65,38 +65,73 @@ export const brideWitnessDetails = getCommonCard(
         },
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.address",
+        required: true,
 
       }),
-      witness1District: {
-        ...getSelectField({
-          label: {
-            labelName: "City",
-            labelKey: "MR_DISTRICT_LABEL"
-          },
 
-          optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_PLACEHOLDER" },
-          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.district",
-          required: true,
+      witness1District: getTextField({
+        label: {
+          labelName: "Door/House No.",
+          labelKey: "MR_DISTRICT_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Door/House No.",
+          labelKey: "MR_DISTRICT_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.district",
+        required: true,
+      }),
+      witness1State: getTextField({
+        label: {
+          labelName: "Door/House No.",
+          labelKey: "MR_STATE_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Door/House No.",
+          labelKey: "MR_STATE_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.state",
+        required: true,
+      }),
 
-        }),
-      },
-      witness1State: {
-        ...getSelectField({
-          label: {
-            labelName: "City",
-            labelKey: "MR_STATE_LABEL"
-          },
+      // witness1District: {
+      //   ...getSelectField({
+      //     label: {
+      //       labelName: "City",
+      //       labelKey: "MR_DISTRICT_LABEL"
+      //     },
 
-          optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
-          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.state",
-          required: true,
+      //     optionLabel: "name",
+      //     placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_PLACEHOLDER" },
+      //     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
+      //     jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.district",
+      //     required: true,
 
-        }),
-      },
+      //   }),
+      // },
+      // witness1State: {
+      //   ...getSelectField({
+      //     label: {
+      //       labelName: "City",
+      //       labelKey: "MR_STATE_LABEL"
+      //     },
+
+      //     optionLabel: "name",
+      //     placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
+      //     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
+      //     jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.state",
+      //     required: true,
+
+      //   }),
+      // },
 
       witness1Country: {
         ...getSelectField({
@@ -197,39 +232,74 @@ export const groomWitnessDetails = getCommonCard(
         },
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.address",
-
+        required: true,
       }),
-      witness2District: {
-        ...getSelectField({
-          label: {
-            labelName: "City",
-            labelKey: "MR_DISTRICT_LABEL"
-          },
 
-          optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_LABEL" },
-          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.district",
-          required: true,
+      witness2District: getTextField({
+        label: {
+          labelName: "Door/House No.",
+          labelKey: "MR_DISTRICT_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Door/House No.",
+          labelKey: "MR_DISTRICT_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.district",
+        required: true,
+      }),
+      witness2State: getTextField({
+        label: {
+          labelName: "Door/House No.",
+          labelKey: "MR_STATE_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Door/House No.",
+          labelKey: "MR_STATE_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.state",
+        required: true,
+      }),
 
-        }),
-      },
 
-      witness2State: {
-        ...getSelectField({
-          label: {
-            labelName: "City",
-            labelKey: "MR_STATE_LABEL"
-          },
+      // witness2District: {
+      //   ...getSelectField({
+      //     label: {
+      //       labelName: "City",
+      //       labelKey: "MR_DISTRICT_LABEL"
+      //     },
 
-          optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
-          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.state",
-          required: true,
+      //     optionLabel: "name",
+      //     placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_LABEL" },
+      //     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
+      //     jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.district",
+      //     required: true,
 
-        }),
-      },
+      //   }),
+      // },
+
+      // witness2State: {
+      //   ...getSelectField({
+      //     label: {
+      //       labelName: "City",
+      //       labelKey: "MR_STATE_LABEL"
+      //     },
+
+      //     optionLabel: "name",
+      //     placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
+      //     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
+      //     jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.state",
+      //     required: true,
+
+      //   }),
+      // },
       witness2Country: {
         ...getSelectField({
           label: {

@@ -93,37 +93,72 @@ export const groomGuardianDetails = getCommonCard(
                 jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.addressLine1",
                 required: true,
             }),
-            groomGrdnDistrict: {
-                ...getSelectField({
-                    label: {
-                        labelName: "City",
-                        labelKey: "MR_DISTRICT_LABEL"
-                    },
 
-                    optionLabel: "name",
-                    placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_PLACEHOLDER" },
-                    sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
-                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.district",
-                    required: true,
+            groomGrdnDistrict: getTextField({
+                label: {
+                  labelName: "Door/House No.",
+                  labelKey: "MR_DISTRICT_LABEL"
+                },
+                props:{
+                  className:"applicant-details-error"
+                },
+                placeholder: {
+                  labelName: "Enter Door/House No.",
+                  labelKey: "MR_DISTRICT_PLACEHOLDER"
+                },
+                pattern: getPattern("Address"),
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.district",
+                required: true,
+              }),
+              groomGrdnState: getTextField({
+                label: {
+                  labelName: "Door/House No.",
+                  labelKey: "MR_STATE_LABEL"
+                },
+                props:{
+                  className:"applicant-details-error"
+                },
+                placeholder: {
+                  labelName: "Enter Door/House No.",
+                  labelKey: "MR_STATE_PLACEHOLDER"
+                },
+                pattern: getPattern("Address"),
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.state",
+                required: true,
+              }),
 
-                }),
-            },
 
-            groomGrdnState: {
-                ...getSelectField({
-                    label: {
-                        labelName: "City",
-                        labelKey: "MR_STATE_LABEL"
-                    },
+            // groomGrdnDistrict: {
+            //     ...getSelectField({
+            //         label: {
+            //             labelName: "City",
+            //             labelKey: "MR_DISTRICT_LABEL"
+            //         },
 
-                    optionLabel: "name",
-                    placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
-                    sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
-                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.state",
-                    required: true,
+            //         optionLabel: "name",
+            //         placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_PLACEHOLDER" },
+            //         sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
+            //         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.district",
+            //         required: true,
 
-                }),
-            },
+            //     }),
+            // },
+
+            // groomGrdnState: {
+            //     ...getSelectField({
+            //         label: {
+            //             labelName: "City",
+            //             labelKey: "MR_STATE_LABEL"
+            //         },
+
+            //         optionLabel: "name",
+            //         placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
+            //         sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
+            //         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.state",
+            //         required: true,
+
+            //     }),
+            // },
 
             groomGrdnCountry: {
                 ...getSelectField({
@@ -261,36 +296,69 @@ export const brideGuardianDetails = getCommonCard(
                 required: true,
             }),
 
-            brideGrdnDistrict: {
-                ...getSelectField({
-                    label: {
-                        labelName: "City",
-                        labelKey: "MR_DISTRICT_LABEL"
-                    },
+            brideGrdnDistrict: getTextField({
+                label: {
+                  labelName: "Door/House No.",
+                  labelKey: "MR_DISTRICT_LABEL"
+                },
+                props:{
+                  className:"applicant-details-error"
+                },
+                placeholder: {
+                  labelName: "Enter Door/House No.",
+                  labelKey: "MR_DISTRICT_PLACEHOLDER"
+                },
+                pattern: getPattern("Address"),
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.district",
+                required: true,
+              }),
+              brideGrdnState: getTextField({
+                label: {
+                  labelName: "Door/House No.",
+                  labelKey: "MR_STATE_LABEL"
+                },
+                props:{
+                  className:"applicant-details-error"
+                },
+                placeholder: {
+                  labelName: "Enter Door/House No.",
+                  labelKey: "MR_STATE_PLACEHOLDER"
+                },
+                pattern: getPattern("Address"),
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.state",
+                required: true,
+              }),
 
-                    optionLabel: "name",
-                    placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_PLACEHOLDER" },
-                    sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
-                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.district",
-                    required: true,
+            // brideGrdnDistrict: {
+            //     ...getSelectField({
+            //         label: {
+            //             labelName: "City",
+            //             labelKey: "MR_DISTRICT_LABEL"
+            //         },
 
-                }),
-            },
-            brideGrdnState: {
-                ...getSelectField({
-                    label: {
-                        labelName: "City",
-                        labelKey: "MR_STATE_LABEL"
-                    },
+            //         optionLabel: "name",
+            //         placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_PLACEHOLDER" },
+            //         sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
+            //         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.district",
+            //         required: true,
 
-                    optionLabel: "name",
-                    placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
-                    sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
-                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.state",
-                    required: true,
+            //     }),
+            // },
+            // brideGrdnState: {
+            //     ...getSelectField({
+            //         label: {
+            //             labelName: "City",
+            //             labelKey: "MR_STATE_LABEL"
+            //         },
 
-                }),
-            },
+            //         optionLabel: "name",
+            //         placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
+            //         sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
+            //         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.state",
+            //         required: true,
+
+            //     }),
+            // },
 
 
             brideGrdnCountry: {

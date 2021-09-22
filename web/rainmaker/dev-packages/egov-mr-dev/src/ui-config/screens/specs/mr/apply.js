@@ -21,26 +21,31 @@ import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
 
 
 export const stepsData = [
-  { labelName: "Trade Details",
-//  labelKey: "TL_COMMON_TR_DETAILS",
-labelKey: "Marriage Details",
- },
-  { labelName: "Owner Details",
-  labelKey: "Guardian Details"
-  //labelKey: "TL_COMMON_OWN_DETAILS"
-},
-  { labelName: "Documents",
-  // labelKey: "TL_COMMON_DOCS",
-  labelKey: "Witness Details"
- },
-  { labelName: "Summary",
-  labelKey: "Photo & Docs"
-  //labelKey: "TL_COMMON_SUMMARY"
-},
-{ labelName: "Summary",
-labelKey: "Summary"
-//labelKey: "TL_COMMON_SUMMARY"
-}
+  {
+    labelName: "Trade Details",
+    //  labelKey: "TL_COMMON_TR_DETAILS",
+    labelKey: "Marriage Details",
+  },
+  {
+    labelName: "Owner Details",
+    labelKey: "Guardian Details"
+    //labelKey: "TL_COMMON_OWN_DETAILS"
+  },
+  {
+    labelName: "Documents",
+    // labelKey: "TL_COMMON_DOCS",
+    labelKey: "Witness Details"
+  },
+  {
+    labelName: "Summary",
+    labelKey: "Photo & Docs"
+    //labelKey: "TL_COMMON_SUMMARY"
+  },
+  {
+    labelName: "Summary",
+    labelKey: "Summary"
+    //labelKey: "TL_COMMON_SUMMARY"
+  }
 ];
 export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
@@ -161,14 +166,37 @@ export const getMdmsData = async (action, state, dispatch) => {
     if (localities && localities.length > 0) {
       payload.MdmsRes.tenant.localities = localities;
     }
-    payload.MdmsRes.MarriageRegistration.TlPeriod = [{code: "1", active: true},{code: "2", active: true}, {code: "3", active: true}, {code: "4", active: true}, {code: "5", active: true}];
-    payload.MdmsRes.MarriageRegistration.mrCountry = [{code: "India", active: true},{code: "Country 2", active: true}, {code: "Country 3", active: true}, {code: "Country 4", active: true}, {code: "Country 5", active: true}];
-    payload.MdmsRes.MarriageRegistration.mrState = [{code: "State 1", active: true},{code: "State 2", active: true}, {code: "State 3", active: true}, {code: "State 4", active: true}, {code: "State 5", active: true}];
-    payload.MdmsRes.MarriageRegistration.mrDistrict = [{code: "District 1", active: true},{code: "District 2", active: true}, {code: "District 3", active: true}, {code: "District 4", active: true}, {code: "District 5", active: true}];
-    payload.MdmsRes.MarriageRegistration.yesNoBox = [{code: "No", active: true},{code: "Yes", active: true}];
+   // payload.MdmsRes.MarriageRegistration.TlPeriod = [{ code: "1", active: true }, { code: "2", active: true }, { code: "3", active: true }, { code: "4", active: true }, { code: "5", active: true }];
+    payload.MdmsRes.MarriageRegistration.mrCountry = [
+      { code: "AFGHANISTAN", active: true },
+      { code: "AUSTRALIA", active: true },
+      { code: "BANGLADESH", active: true },
+      { code: "BELGIUM", active: true },
+      { code: "CANADA", active: true },
+      { code: "CHINA", active: true },
+      { code: "ENGLAND", active: true },
+      { code: "FINLAND", active: true },
+      { code: "FRANCE", active: true },
+      { code: "INDIA", active: true },
+      { code: "ITALY", active: true },
+      { code: "MALTA", active: true },
+      { code: "NEPAL", active: true },
+      { code: "NEW ZEALAND", active: true },
+      { code: "PAKISTAN", active: true },
+      { code: "ROMANIA", active: true },
+      { code: "SINGAPORE", active: true },
+      { code: "SPAIN", active: true },
+      { code: "UKRAINE", active: true },
+      { code: "UNITED ARAB EMIRATES", active: true },
+      { code: "UNITEDKINGDOM", active: true },
+      { code: "USA", active: true }
+    ];
+    payload.MdmsRes.MarriageRegistration.mrState = [{ code: "State 1", active: true }, { code: "State 2", active: true }, { code: "State 3", active: true }, { code: "State 4", active: true }, { code: "State 5", active: true }];
+    payload.MdmsRes.MarriageRegistration.mrDistrict = [{ code: "District 1", active: true }, { code: "District 2", active: true }, { code: "District 3", active: true }, { code: "District 4", active: true }, { code: "District 5", active: true }];
+    payload.MdmsRes.MarriageRegistration.yesNoBox = [{ code: "No", active: true }, { code: "Yes", active: true }];
 
 
-   let payload2 = null;
+    let payload2 = null;
     payload2 = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
@@ -317,7 +345,7 @@ export const formwizardThirdStep = {
   props: {
     id: "apply_form3"
   },
-  children:witnessDetails,
+  children: witnessDetails,
   visible: false
 };
 
@@ -327,7 +355,7 @@ export const formwizardFourthStep = {
   props: {
     id: "apply_form4"
   },
-  children:{
+  children: {
     tradeDocumentDetails
   },
 
@@ -377,114 +405,38 @@ const screenConfig = {
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];
       getBoundaryData(action, state, dispatch, queryObj);
-      let props = get(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
-        {}
-      );
-      props.value = tenantId;
-      props.disabled = true;
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
-        props
-      );
-      dispatch(
-        prepareFinalObject(
-          "Licenses[0].tradeLicenseDetail.address.city",
-          tenantId
-        )
-      );
-      const mohallaLocalePrefix = {
-        moduleName: tenantId,
-        masterName: "REVENUE"
-      };
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla.props.localePrefix",
-        mohallaLocalePrefix
-      );
-      //hardcoding license type to permanent
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
-        "PERMANENT"
-      );
-
-      const applyFor = window.localStorage.getItem('licenseType');
-      let legacyLicenseRenewal = window.localStorage.getItem('legacyLicenseRenewal');
-      if(applyFor !== null){
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
-        applyFor
-      );
-
-      dispatch(prepareFinalObject("Licenses[0].licenseType", applyFor));
-      }
-      if(applyFor === "TEMPORARY"){
-        set(
-          action.screenConfig,
-          "components.div.children.headerDiv.children.header.children.header.children.key.props.labelKey",
-          "TL_APPLY_TEMP_TRADELICENSE"
-        );
-
-        set(
-          action.screenConfig,
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate.visible",
-
-            true
-
-        );
-        set(
-          action.screenConfig,
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod.visible",
-
-            false
-
-        );
-        dispatch(prepareFinalObject("Licenses[0].tradeLicensePeriod", null));
-        dispatch(prepareFinalObject("Licenses[0].validTo", null));
+      // let props = get(
+      //   action.screenConfig,
+      //   "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
+      //   {}
+      // );
+      // props.value = tenantId;
+      // props.disabled = true;
+      // set(
+      //   action.screenConfig,
+      //   "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
+      //   props
+      // );
+      // dispatch(
+      //   prepareFinalObject(
+      //     "Licenses[0].tradeLicenseDetail.address.city",
+      //     tenantId
+      //   )
+      // );
+      // const mohallaLocalePrefix = {
+      //   moduleName: tenantId,
+      //   masterName: "REVENUE"
+      // };
+      // set(
+      //   action.screenConfig,
+      //   "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla.props.localePrefix",
+      //   mohallaLocalePrefix
+      // );
 
 
-        }else{
-          set(
-            action.screenConfig,
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate.visible",
 
-              false
 
-          );
-          // set(
-          //   action.screenConfig,
-          //     "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo.visible",
 
-          //     true
-
-          // );
-          set(
-            action.screenConfig,
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod.visible",
-
-              true
-
-          );
-
-          if (!applicationNo) {
-          dispatch(prepareFinalObject("Licenses[0].tradeLicensePeriod", null));
-          dispatch(prepareFinalObject("Licenses[0].validTo", null));
-          if(legacyLicenseRenewal === "true"){
-            set(
-              action.screenConfig,
-                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo.visible",
-
-                true
-
-            );
-
-          }
-          }
-        }
 
     });
 
@@ -521,16 +473,16 @@ const screenConfig = {
         footer
       }
     },
-    breakUpDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
-      componentPath: "ViewBreakupContainer",
-      props: {
-        open: false,
-        maxWidth: "md",
-        screenKey: "apply"
-      }
-    }
+    // breakUpDialog: {
+    //   uiFramework: "custom-containers-local",
+    //   moduleName: "egov-tradelicence",
+    //   componentPath: "ViewBreakupContainer",
+    //   props: {
+    //     open: false,
+    //     maxWidth: "md",
+    //     screenKey: "apply"
+    //   }
+    // }
   }
 };
 

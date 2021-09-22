@@ -83,6 +83,66 @@ const setDocsForEditFlow = async (state, dispatch) => {
     "applyScreenMdmsData.MarriageRegistration.documentObj[0].allowedDocs",
     []
   );
+  let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
+    let applicationDocument = {}
+    applicationDocuments && applicationDocuments.map(appDoc => {
+      if (appDoc.documentType == mdmsDoc.documentType) {
+        applicationDocument = { ...appDoc }
+      }
+    })
+    return applicationDocument;
+  }
+  ).filter(docObj => Object.keys(docObj).length > 0)
+  applicationDocuments = [...orderedApplicationDocuments];
+  dispatch(
+    prepareFinalObject("MarriageRegistrations[0].applicationDocuments", applicationDocuments)
+  );
+
+  let uploadedDocuments = {};
+  let fileStoreIds =
+    applicationDocuments &&
+    applicationDocuments.map(item => item.fileStoreId).join(",");
+  const fileUrlPayload =
+    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+  applicationDocuments &&
+    applicationDocuments.forEach((item, index) => {
+      uploadedDocuments[index] = [
+        {
+          fileName:
+            (fileUrlPayload &&
+              fileUrlPayload[item.fileStoreId] &&
+              decodeURIComponent(
+                getFileUrl(fileUrlPayload[item.fileStoreId])
+                  .split("?")[0]
+                  .split("/")
+                  .pop()
+                  .slice(13)
+              )) ||
+            `Document - ${index + 1}`,
+          fileStoreId: item.fileStoreId,
+          fileUrl: Object.values(fileUrlPayload)[index],
+          documentType: item.documentType,
+          tenantId: item.tenantId,
+          id: item.id
+        }
+      ];
+    });
+  dispatch(
+    prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", uploadedDocuments)
+  );
+};
+const setDocsForEditFlow_backup = async (state, dispatch) => {
+  let applicationDocuments = get(
+    state.screenConfiguration.preparedFinalObject,
+    "MarriageRegistrations[0].applicationDocuments",
+    []
+  );
+  /* To change the order of application documents similar order of mdms order*/
+  const mdmsDocs = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.MarriageRegistration.documentObj[0].allowedDocs",
+    []
+  );
 
   let orderedApplicationDocuments1 = mdmsDocs.map(mdmsDoc => {
     let applicationDocument1 = {}
@@ -206,23 +266,8 @@ export const updatePFOforSearchResults = async (
     );
   }
   if (payload && payload.MarriageRegistrations) {
+    dispatch(prepareFinalObject("MarriageRegistrations[0]", payload.MarriageRegistrations[0]));
 
-    // let ownersInitial = get(payload.Licenses[0], 'tradeLicenseDetail.owners', []);
-    // set(payload.Licenses[0], 'tradeLicenseDetail.owners', ownersInitial.filter(owner => owner.userActive));
-    // dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
-    // dispatch(prepareFinalObject("LicensesTemp[0].oldOwners", [...payload.Licenses[0].tradeLicenseDetail.owners]));
-    // if (payload && payload.Licenses.length > 0 && payload.Licenses[0].tradeLicenseDetail.structureType) {
-    //   const structureTypes = get(payload, 'Licenses[0].tradeLicenseDetail.structureType', '').split('.') || [];
-    //   const structureType = structureTypes && Array.isArray(structureTypes) && structureTypes.length > 0 && structureTypes[0] || 'none';
-    //   const selectedValues = [{
-    //     structureType: structureType,
-    //     structureSubType: get(payload, 'Licenses[0].tradeLicenseDetail.structureType', '') || 'none'
-    //   }]
-    //   dispatch(
-    //     prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues", selectedValues));
-    //   dispatch(
-    //     prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", get(state.screenConfiguration.preparedFinalObject, `applyScreenMdmsData.common-masters.StructureType.${structureType}`, [])));
-    // }
   }
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";

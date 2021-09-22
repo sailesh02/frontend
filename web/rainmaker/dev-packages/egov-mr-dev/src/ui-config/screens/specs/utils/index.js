@@ -664,6 +664,7 @@ export const getMdmsData = async queryObject => {
 };
 
 export const getDetailsFromProperty = async (state, dispatch) => {
+  console.log("Nero getDetailsFromProperty")
   try {
     const propertyId = get(
       state.screenConfiguration.preparedFinalObject,
@@ -1017,10 +1018,10 @@ export const downloadAcknowledgementForm = (Licenses, mode = "download") => {
   }
 }
 
-export const downloadCertificateForm = async (Licenses, mode = 'download') => {
-  let tenantId = get(Licenses[0], "tenantId");
-  let applicationNumber = get(Licenses[0], "applicationNumber")
-  const applicationType = Licenses && Licenses.length > 0 ? get(Licenses[0], "applicationType") : "NEW";
+export const downloadCertificateForm = async (MarriageRegistrations, mode = 'download') => {
+  let tenantId = get(MarriageRegistrations[0], "tenantId");
+  let applicationNumber = get(MarriageRegistrations[0], "applicationNumber")
+  const applicationType = MarriageRegistrations && MarriageRegistrations.length > 0 ? get(MarriageRegistrations[0], "applicationType") : "NEW";
   const queryStr = [
     { key: "key", value: "mrcertificate" },
     { key: "tenantId", value: tenantId ? tenantId.split(".")[0] : commonConfig.tenantId }
@@ -1039,7 +1040,7 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
     }
   ];
   const LicensesPayload = await getSearchResults(queryObject);
-  const updatedLicenses = get(LicensesPayload, "Licenses");
+  const updatedLicenses = get(LicensesPayload, "MarriageRegistrations");
   const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
   if (oldFileStoreId) {
     downloadReceiptFromFilestoreID(oldFileStoreId, mode)

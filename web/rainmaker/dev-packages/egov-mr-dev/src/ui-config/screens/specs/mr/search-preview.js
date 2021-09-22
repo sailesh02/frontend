@@ -4,7 +4,7 @@ import {
 
   getCommonContainer, getCommonGrayCard, getCommonHeader,
 
-  getCommonTitle
+  getCommonTitle, dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -133,18 +133,18 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   dispatch(unMountScreen("search"));
   dispatch(unMountScreen("apply"));
-  loadUlbLogo(tenantId);
+  //loadUlbLogo(tenantId);
 
   //Search details for given application Number
   if (applicationNumber) {
-    !getQueryArg(window.location.href, "edited") &&
-      (await searchResults(action, state, dispatch, applicationNumber));
-
+    // !getQueryArg(window.location.href, "edited") &&
+    //   (await searchResults(action, state, dispatch, applicationNumber));
+      await searchResults(action, state, dispatch, applicationNumber)
     //check for renewal flow
-    const licenseNumber = get(
-      state.screenConfiguration.preparedFinalObject,
-      `MarriageRegistrations[0].licenseNumber`
-    );
+    // const licenseNumber = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   `MarriageRegistrations[0].licenseNumber`
+    // );
     // let queryObjectSearch = [
     //   {
     //     key: "tenantId",
@@ -206,10 +206,6 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           {
             moduleName: "common-masters",
             masterDetails: [{ name: "uiCommonPay", filter: `[?(@.code=="${businessService}")]` }]
-          },
-          {
-            moduleName: "TradeLicense",
-            masterDetails: [{ name: "TradeRenewal" }]
           }
         ]
       }
@@ -223,42 +219,42 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         [],
         mdmsBody
       );
-      dispatch(prepareFinalObject("renewalPeriod", get(payload.MdmsRes, "TradeLicense.TradeRenewal[0].renewalPeriod")));
+      console.log(payload, "Nero payload")
       dispatch(prepareFinalObject("uiCommonConfig", get(payload.MdmsRes, "common-masters.uiCommonPay[0]")));
     } catch (e) {
       console.log(e);
     }
 
-    const statusCont = {
-      word1: {
-        ...getCommonTitle(
-          {
-            jsonPath: "MarriageRegistrations[0].headerSideText.word1"
-          },
-          {
-            style: {
-              marginRight: "10px",
-              color: "rgba(0, 0, 0, 0.6000000238418579)"
-            }
-          }
-        )
-      },
-      word2: {
-        ...getCommonTitle({
-          jsonPath: "MarriageRegistrations[0].headerSideText.word2"
-        })
-      },
-      cancelledLabel: {
-        ...getCommonHeader(
-          {
-            labelName: "Cancelled",
-            labelKey: "TL_COMMON_STATUS_CANC"
-          },
-          { variant: "body1", style: { color: "#E54D42" } }
-        ),
-        visible: false
-      }
-    };
+    // const statusCont = {
+    //   word1: {
+    //     ...getCommonTitle(
+    //       {
+    //         jsonPath: "MarriageRegistrations[0].headerSideText.word1"
+    //       },
+    //       {
+    //         style: {
+    //           marginRight: "10px",
+    //           color: "rgba(0, 0, 0, 0.6000000238418579)"
+    //         }
+    //       }
+    //     )
+    //   },
+    //   word2: {
+    //     ...getCommonTitle({
+    //       jsonPath: "MarriageRegistrations[0].headerSideText.word2"
+    //     })
+    //   },
+    //   cancelledLabel: {
+    //     ...getCommonHeader(
+    //       {
+    //         labelName: "Cancelled",
+    //         labelKey: "TL_COMMON_STATUS_CANC"
+    //       },
+    //       { variant: "body1", style: { color: "#E54D42" } }
+    //     ),
+    //     visible: false
+    //   }
+    // };
 
     const printCont = downloadPrintContainer(
       action,
@@ -275,9 +271,9 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       status,
       applicationNumber,
       tenantId,
-      financialYear
+      "2021"
     );
-
+console.log(CitizenprintCont, "Nero CitizenprintCont")
     if (status !== "INITIATED") {
       process.env.REACT_APP_NAME === "Citizen"
         ? set(
@@ -338,24 +334,15 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     const headerrow = getCommonContainer({
       header: getCommonHeader({
         labelName: "Trade License Application (2018-2019)",
-        labelKey: applicationType === "RENEWAL" ? "TL_TRADE_RENEW_APPLICATION" : "TL_TRADE_APPLICATION"
+        labelKey: "MR_SUMMARY_HEADER"
       }),
       applicationLicence: getCommonContainer({
         applicationNumber: {
           uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
+          moduleName: "egov-mr",
           componentPath: "ApplicationNoContainer",
           props: {
             number: applicationNumber
-          }
-        },
-        licenceNumber: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "licenceNoContainer",
-          visible: licenseNumber ? true : false,
-          props: {
-            number: licenseNumber,
           }
         }
       })
@@ -372,6 +359,20 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
         true
       );
+
+      console.log(status, "Nero Status")
+      if(process.env.REACT_APP_NAME == "Employee" && status == "DOCVERIFICATION"){
+        const actionDefination = [
+          {
+            path: "components.div.children.appointmentDetailsFormCard",
+            property: "visible",
+            value: true
+          }
+
+        ];
+        dispatchMultipleFieldChangeAction("search-preview", actionDefination, dispatch);
+      }
+
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
 
@@ -570,18 +571,18 @@ const screenConfig = {
           }
         },
         //appointmentDetails: getCommonCard({appointmentDetails}),
-        // appointmentDetailsFormCard: {
-        //   uiFramework: "custom-atoms",
-        //   componentPath: "Form",
-        //   props: {
-        //     id: "appointment_card_form"
-        //   },
-        //   children: {
-        //     apint: getCommonCard({appointmentDetails})
+        appointmentDetailsFormCard: {
+          uiFramework: "custom-atoms",
+          componentPath: "Form",
+          props: {
+            id: "appointment_card_form"
+          },
+          children: {
+            apint: getCommonCard({appointmentDetails})
 
-        //   },
-
-        // },
+          },
+          visible: false
+        },
         tradeReviewDetails
       }
     },

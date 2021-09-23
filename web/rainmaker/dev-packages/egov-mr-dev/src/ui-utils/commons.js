@@ -130,6 +130,9 @@ const setDocsForEditFlow = async (state, dispatch) => {
   dispatch(
     prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", uploadedDocuments)
   );
+  // dispatch(
+  //   prepareFinalObject("LicensesTemp[0].applicationDocuments", uploadedDocuments)
+  // );
 };
 const setDocsForEditFlow_backup = async (state, dispatch) => {
   let applicationDocuments = get(
@@ -246,45 +249,19 @@ export const updatePFOforSearchResults = async (
     : {
       MarriageRegistrations: get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations")
     };
-  // const payload = await getSearchResults(queryObject)
-  // getQueryArg(window.location.href, "action") === "edit" &&
-  //   (await setDocsForEditFlow(state, dispatch));
 
-
-
-
-  let userAction = getQueryArg(window.location.href, "action");
-
-  if (userAction == "EDITRENEWAL") {
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeName",
-        "props.disabled",
-        true
-      )
-    );
-  }
   if (payload && payload.MarriageRegistrations) {
     dispatch(prepareFinalObject("MarriageRegistrations[0]", payload.MarriageRegistrations[0]));
 
   }
 
-  const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
-  // if (isEditRenewal) {
-  //   const nextYear = generateNextFinancialYear(state);
-  //   dispatch(
-  //     prepareFinalObject("Licenses[0].financialYear", nextYear));
-  // }
+
 
   setDocsForEditFlow(state, dispatch);
 
   setApplicationNumberBox(state, dispatch);
 
-  //createOwnersBackup(dispatch, payload);
-  // if (payload && payload.Licenses.length > 0) {
-  //   dispatch(prepareFinalObject("Licenses[0].TlPeriod", payload.Licenses[0].tradeLicenseDetail.additionalDetail.licensePeriod));
-  // }
+
 };
 
 export const getBoundaryData = async (
@@ -423,11 +400,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
 
     let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");
-
-    if (activeIndex === 4)
-      documents = documents.filter(item => item.fileStoreId);
-    else
-      documents = documents.filter(item => item.fileUrl && item.fileName);
+console.log(documents, "Nero Document")
+    // if (activeIndex === 4)
+    //   documents = documents.filter(item => item.fileStoreId);
+    // else
+    //   documents = documents.filter(item => item.fileUrl && item.fileName);
 
 
     set(queryObject[0], "applicationDocuments", documents);
@@ -495,17 +472,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       let action = "INITIATE";
       //Code for edit flow
 
-      if (
-        queryObject[0] &&
-        queryObject[0].applicationDocuments
-      ) {
 
-
-        if (getQueryArg(window.location.href, "action") === "edit") {
-        } else if (activeIndex === 1) {
-          set(queryObject[0], "applicationDocuments", null);
-        }
-      }
       console.log(activeIndex, "Nero active step")
       if ((activeIndex === 4 || activeIndex === 1)) {
 
@@ -655,6 +622,7 @@ const setApplicationNumberBox = (state, dispatch) => {
     null
   );
   if (applicationNumber) {
+
     dispatch(
       handleField(
         "apply",

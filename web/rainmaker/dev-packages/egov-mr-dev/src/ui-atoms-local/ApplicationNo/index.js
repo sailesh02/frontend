@@ -5,15 +5,15 @@ import {
 import "./index.css";
 
 function ApplicationNoContainer(props) {
-  
+
   const { number } = props;
   const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL"||getQueryArg(window.location.href,"action") === "DIRECTRENEWAL"
   const isSubmitRenewal = getQueryArg(window.location.href,"purpose") === "EDITRENEWAL"||getQueryArg(window.location.href,"purpose") === "DIRECTRENEWAL"
   if(isEditRenewal ||isSubmitRenewal){
     const licenseNumber=getQueryArg(window.location.href, "licenseNumber") || "";
-  return <div className="application-no-container"><LabelContainer labelName="License No." labelKey ={"TL_LICENSE_NO_CODE"} dynamicArray={[licenseNumber]}/></div>;
-  } 
+  return <div className="application-no-container"><LabelContainer labelName="License No." labelKey ={"MR_LICENSE_NO_CODE"} dynamicArray={[licenseNumber]}/></div>;
+  }
 else
-  return <div className="application-no-container"><LabelContainer labelName="Application No." labelKey ={"TL_APPLICATION_NO_CODE"} dynamicArray={[number]}/></div>;
+  return <div className="application-no-container"><LabelContainer labelName="Application No." labelKey ={"MR_APPLICATION_NO_CODE"} dynamicArray={[number]}/></div>;
 }
 export default ApplicationNoContainer;

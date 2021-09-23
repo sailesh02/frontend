@@ -24,4 +24,9 @@ const TaskStatusComponents = Loadable({
   loading: () => <Loading />
 });
 
-export { Footer, ActionDialog, TaskDialog, TaskStatusComponents };
+const MrTaskStatusComponents = Loadable({
+  loader: () => import("./MrTaskStatusComponents"),
+  loading: () => <Loading />
+});
+
+export { Footer, ActionDialog, TaskDialog, TaskStatusComponents, MrTaskStatusComponents };

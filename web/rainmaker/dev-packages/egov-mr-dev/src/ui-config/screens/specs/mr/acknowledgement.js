@@ -2,7 +2,7 @@ import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
-import { generateTLAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateTLAcknowledgement";
+import { generateMRAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateMRAcknowledgement";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
@@ -85,24 +85,24 @@ const searchResults = async (dispatch, applicationNo, tenantId) => {
 
 const downloadprintMenu = (state, dispatch) => {
   let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MR_APPLICATION" },
     link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const { MarriageRegistrations, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp && LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
+      set(MarriageRegistrations[0], "additionalDetails.documents", documents)
       // downloadAcknowledgementForm(Licenses);
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Licenses[0].applicationNumber}`);
+      generateMRAcknowledgement(state.screenConfiguration.preparedFinalObject, `mr-acknowledgement-${MarriageRegistrations[0].applicationNumber}`);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MR_APPLICATION" },
     link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const { MarriageRegistrations, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp && LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
+      set(MarriageRegistrations[0], "additionalDetails.documents", documents)
       // downloadAcknowledgementForm(Licenses,'print');
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
+      generateMRAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
     },
     leftIcon: "assignment"
   };
@@ -125,10 +125,10 @@ const downloadprintMenu = (state, dispatch) => {
         componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+            label: { labelName: "DOWNLOAD", labelKey: "MR_DOWNLOAD" },
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "mr-download-button" },
             menu: downloadMenu
           }
         }
@@ -138,10 +138,10 @@ const downloadprintMenu = (state, dispatch) => {
         componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+            label: { labelName: "PRINT", labelKey: "MR_PRINT" },
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "mr-print-button" },
             menu: printMenu
           }
         }
@@ -555,7 +555,7 @@ const getAcknowledgementCard = (
     return {
       header: getCommonHeader({
         labelName: `Application for Trade License`,
-        labelKey: "MR_APPLICATION_TRADE_LICENSE"
+        labelKey: "MR_APPLICATION"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -586,7 +586,7 @@ const getAcknowledgementCard = (
     return {
       header: getCommonHeader({
         labelName: `Application for Trade License`,
-        labelKey: "MR_APPLICATION_TRADE_LICENSE"
+        labelKey: "MR_APPLICATION"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",

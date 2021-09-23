@@ -7,6 +7,50 @@ import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon"
 import "../utils/index.css";
 import { getRequiredDocData } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { Icon } from "egov-ui-kit/components";
+const styles = {
+  inputStyle: {
+    color: "white !important",
+    marginTop: "0px",
+    marginLeft: "-10px",
+  },
+  fibreIconStyle: {
+    height: "36px !important",
+    width: "36px !important",
+    margin: 0,
+    position: "relative",
+  },
+  arrowIconStyle: {
+    right: "-10px",
+  },
+  defaultMenuItemStyle: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    marginLeft: 0,
+    padding: 0,
+    paddingLeft: 0,
+  },
+  inputIconStyle: {
+    margin: "0",
+    bottom: "15px",
+    top: "auto",
+    right: "6px",
+  },
+  textFieldStyle: {
+    height: "auto",
+    textIndent: "15px",
+  },
+  inputStyle: {
+    //    color: "white",
+    color: window.innerWidth > 768 ? "white" : "black",
+    bottom: "5px",
+    height: "auto",
+    paddingLeft: "5px",
+    textIndent: "5px",
+    marginTop: 0,
+  },
+};
 const header = getCommonHeader(
   {
     labelName: "Trade License",
@@ -26,7 +70,13 @@ const cardItems = [
       labelKey: "MR_APPLY_MARRIAGEREGISTRATION",
       labelName: "MR_APPLY_MARRIAGEREGISTRATION"
     },
-    icon: <TradeLicenseIcon />,
+  //  icon: <TradeLicenseIcon />,
+    icon: <Icon
+    name={"group-add"}
+    action={"social"}
+    style={styles.fibreIconStyle}
+    className={`service-icon`}
+  />,
 
     route: {
       screenKey: "home",

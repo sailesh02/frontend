@@ -586,14 +586,14 @@ class WorkFlowContainer extends React.Component {
 
     if(ProcessInstances &&
       ProcessInstances.length > 0){
-        console.log(ProcessInstances, "Nero P 1")
+
       }
     const workflowContract =
       ProcessInstances &&
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
       if(workflowContract){
-        console.log(workflowContract, "Nero wf 1")
+
       }
     let showFooter = true;
     if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" ||moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {

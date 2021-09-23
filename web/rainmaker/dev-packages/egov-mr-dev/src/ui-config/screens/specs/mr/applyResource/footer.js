@@ -104,7 +104,7 @@ export const callBackForNext = async (state, dispatch) => {
     } else {
       isFormValid = false;
     }
-    console.log(applicationNoInUrl, "Nero applicationNoInUrl")
+
     if(isFormValid){
     if(!applicationNoInUrl){
       dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.country", "INDIA"));
@@ -214,11 +214,12 @@ export const callBackForNext = async (state, dispatch) => {
       dispatch(
         prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
       );
+      isFormValid = await applyTradeLicense(state, dispatch, activeStep);
     }
 
 
 
-    isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+
 
   }
 
@@ -1006,8 +1007,8 @@ export const footerReviewTop = (
     leftIcon: "assignment"
   };
 
-console.log(applicationDownloadObject, "Nero applicationDownloadObject")
-console.log(applicationPrintObject, "Nero applicationPrintObject")
+//console.log(applicationDownloadObject, "Nero applicationDownloadObject")
+//console.log(applicationPrintObject, "Nero applicationPrintObject")
   switch (status) {
     case "APPROVED":
       downloadMenu = [

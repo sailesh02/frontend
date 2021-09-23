@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent, Grid, Typography, Button } from "@material-ui/core";
 import { Container } from "egov-ui-framework/ui-atoms";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-import { TaskDialog, TaskStatusComponents } from "../../ui-molecules-local";
+import { TaskDialog, TaskStatusComponents, MrTaskStatusComponents } from "../../ui-molecules-local";
 import HistoryIcon from "@material-ui/icons/History";
 import { withStyles } from "@material-ui/core/styles";
 
@@ -40,31 +40,35 @@ class TastStatusContainer extends React.Component {
   };
 
   render() {
-    const { classes, ProcessInstances, moduleName} = this.props;
+    const { classes, ProcessInstances, moduleName } = this.props;
 
     let currentObj =
       ProcessInstances && ProcessInstances[ProcessInstances.length - 1];
-      if(currentObj && currentObj.businessService && currentObj.businessService === "BPA"){
-        let assigness = [];
-          if(currentObj.assignes) {
-            currentObj.assignes.forEach(user => {
-              assigness.push(user.name);
-            });
-            currentObj.assignee={};
-            currentObj.assignee.name = assigness.join(',');
-          }
+    if (currentObj && currentObj.businessService && currentObj.businessService === "BPA") {
+      let assigness = [];
+      if (currentObj.assignes) {
+        currentObj.assignes.forEach(user => {
+          assigness.push(user.name);
+        });
+        currentObj.assignee = {};
+        currentObj.assignee.name = assigness.join(',');
       }
+    }
     let taskLabel = "Task Status";
-    let taskKey   = "TL_TASK_STATUS";
-    if(moduleName === 'NewWS1' || moduleName === 'NewSW1' || moduleName === "SWCloseConnection" ||
-    moduleName === "SWDisconnection" || moduleName === "WSCloseConnection" || moduleName === "WSDisconnection"
-    || moduleName === "SWReconnection" || moduleName === "WSReconnection" || moduleName === "SWOwnershipChange"
-    || moduleName === "WSOwnershipChange"){
-       if(process.env.REACT_APP_NAME === "Citizen"){
-        taskLabel =  "Application Summary";
-        taskKey   =  "WS_COMMON_APPLICATION_SUMMARY_LABEL";
-       }
-     }
+
+    let taskKey = "TL_TASK_STATUS";
+    if (moduleName == "MR") {
+      taskKey = "MR_TASK_STATUS";
+    }
+    if (moduleName === 'NewWS1' || moduleName === 'NewSW1' || moduleName === "SWCloseConnection" ||
+      moduleName === "SWDisconnection" || moduleName === "WSCloseConnection" || moduleName === "WSDisconnection"
+      || moduleName === "SWReconnection" || moduleName === "WSReconnection" || moduleName === "SWOwnershipChange"
+      || moduleName === "WSOwnershipChange") {
+      if (process.env.REACT_APP_NAME === "Citizen") {
+        taskLabel = "Application Summary";
+        taskKey = "WS_COMMON_APPLICATION_SUMMARY_LABEL";
+      }
+    }
     return (
       <div>
         <Card className="">
@@ -94,16 +98,23 @@ class TastStatusContainer extends React.Component {
                         <HistoryIcon className={classes.leftIcon} />
                         <LabelContainer
                           labelName="VIEW HISTORY"
-                          labelKey="TL_VIEW_HISTORY"
+                          labelKey={moduleName == "MR" ? "MR_VIEW_HISTORY": "TL_VIEW_HISTORY" }
                           color="#FE7A51"
                         />
                       </Button>
                     </Grid>
                   </Grid>
-                  <TaskStatusComponents
-                    currentObj={currentObj}
-                    index={ProcessInstances.length - 1}
-                  />
+                  {moduleName == "MR" ?
+                    <MrTaskStatusComponents
+                      currentObj={currentObj}
+                      index={ProcessInstances.length - 1}
+                    />
+                    :
+                    <TaskStatusComponents
+                      currentObj={currentObj}
+                      index={ProcessInstances.length - 1}
+                    />
+                  }
                 </div>
               }
             />

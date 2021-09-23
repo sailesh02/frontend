@@ -23,6 +23,7 @@ isMode = (isMode) ? isMode.toUpperCase() : "";
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 let tenantId = getQueryArg(window.location.href, "tenantId");
+let tenantForLocality = tenantId && tenantId.toUpperCase()
 let action = getQueryArg(window.location.href, "action");
 let modeaction = getQueryArg(window.location.href, "modeaction");
 
@@ -252,6 +253,24 @@ const propertyDetailsNoId = getCommonContainer({
       },
       afterFieldChange:async (action, state, dispatch) => {
         if(action.value){
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.mohalla.props.localePrefix",
+              "moduleName",
+              action.value.toUpperCase()
+            )
+          );
+
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.mohalla.children.value1.children.key.props.localePrefix",
+              "moduleName",
+              action.value.toUpperCase()
+            )
+          );
+          
           const dataFetchConfig = {
             url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
             action: "",
@@ -287,9 +306,9 @@ const propertyDetailsNoId = getCommonContainer({
                       .toUpperCase()
                       .replace(/[._:-\s\/]/g, "_")}`;
                     option = {
-                      label: getTranslatedLabel(mohallaCode, localizationLabels),
-                      value: item.code,
-                      code: getTranslatedLabel(mohallaCode, localizationLabels),
+                      // label: getTranslatedLabel(mohallaCode, localizationLabels),
+                      // value: getTranslatedLabel(mohallaCode, localizationLabels),
+                      code: item.code,
                     };
 
                   } else {
@@ -461,8 +480,12 @@ const propertyDetailsNoId = getCommonContainer({
         labelKey: "PT_PROPERTY_DETAILS_PLACEHOLDER"
       },
       data: [],
-      optionValue: "code",
-      optionLabel: "label",
+      // optionValue: "code",
+      // optionLabel: "label",
+      localePrefix: {
+        moduleName: tenantForLocality,
+        masterName: "REVENUE"
+      },
       jsonPath: "applyScreen.locality",
       sourceJsonPath: "applyScreenMdmsData.mohalla",
       labelsFromLocalisation: true,

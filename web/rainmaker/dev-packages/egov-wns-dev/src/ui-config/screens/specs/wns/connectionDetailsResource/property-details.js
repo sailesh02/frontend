@@ -6,7 +6,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleNA } from '../../utils';
-
+import {getTenantId} from '../../../../../ui-utils/commons'
 import { changeStep } from "../viewBillResource/footer";
 
 const getHeader = label => {
@@ -112,6 +112,9 @@ const propertyDetails= getCommonContainer({
     },
     {
       jsonPath: "WaterConnection[0].locality",
+      localePrefix: {
+        moduleName: getTenantId(), masterName: "REVENUE"
+      },
       callBack: handleNA,
     }
 

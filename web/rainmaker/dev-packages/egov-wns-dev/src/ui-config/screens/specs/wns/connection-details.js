@@ -237,10 +237,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
       let localizationLabels = {}
       if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${sewerageConnection.additionalDetails.locality
-        .toUpperCase()
-        .replace(/[._:-\s\/]/g, "_")}`;
-      dispatch(prepareFinalObject("WaterConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("WaterConnection[0].locality",sewerageConnection.additionalDetails.locality))
       getApplicationNumber(dispatch, payloadData.SewerageConnections);
     }
   } else if (service === serviceConst.WATER) {
@@ -338,10 +335,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       dispatch(prepareFinalObject("WaterConnection[0]", waterConnection));
       let localizationLabels = {}
       if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${waterConnection.additionalDetails.locality
-        .toUpperCase()
-        .replace(/[._:-\s\/]/g, "_")}`;
-      dispatch(prepareFinalObject("WaterConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("WaterConnection[0].locality",waterConnection.additionalDetails.locality))
       getApplicationNumber(dispatch, payloadData.WaterConnection);
     }
   }

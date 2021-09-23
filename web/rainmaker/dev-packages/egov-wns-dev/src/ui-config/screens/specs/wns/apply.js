@@ -317,6 +317,35 @@ export const getData = async (action, state, dispatch) => {
   await getMdmsData(dispatch,state);
   if (applicationNo) {
     if(tenantId && (actionType && (actionType.toUpperCase() === "EDIT"))){
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.mohalla.props.localePrefix",
+          "moduleName",
+          tenantId.toUpperCase()
+        )
+      );
+
+      if(isModifyMode()){
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.mohalla.children.label2.children.key.props.localePrefix",
+            "moduleName",
+            tenantId.toUpperCase()
+          )
+        );
+      }
+
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.mohalla.children.value1.children.key.props.localePrefix",
+          "moduleName",
+          tenantId.toUpperCase()
+        )
+      );
+      
       const dataFetchConfig = {
         url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
         action: "_search",
@@ -352,9 +381,9 @@ export const getData = async (action, state, dispatch) => {
                   .toUpperCase()
                   .replace(/[._:-\s\/]/g, "_")}`;
                 option = {
-                  label: getTranslatedLabel(mohallaCode, localizationLabels),
-                  value: item.code,
-                  code: getTranslatedLabel(mohallaCode, localizationLabels),
+                  // label: getTranslatedLabel(mohallaCode, localizationLabels),
+                  // value: item.code,
+                  code: item.code,
                 };
                 // option = {
                 //   label: item.name,
@@ -607,14 +636,14 @@ export const getData = async (action, state, dispatch) => {
       let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${combinedArray[0].additionalDetails.locality
         .toUpperCase()
         .replace(/[._:-\s\/]/g, "_")}`;
-      dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("applyScreen.locality",combinedArray && combinedArray[0] && combinedArray[0].additionalDetails && combinedArray[0].additionalDetails.locality || ''))
       dispatch(prepareFinalObject("applyScreen.ward",combinedArray ? combinedArray[0].additionalDetails.ward : ''))
 
 
       // For oldvalue display
       let oldcombinedArray = cloneDeep(combinedArray[0]);
       dispatch(prepareFinalObject("applyScreenOld", findAndReplace(oldcombinedArray, "null", "NA")));
-      dispatch(prepareFinalObject("applyScreenOld.locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("applyScreenOld.locality",combinedArray && combinedArray[0] && combinedArray[0].additionalDetails && combinedArray[0].additionalDetails.locality || ''))
       dispatch(prepareFinalObject("applyScreenOld.ward",combinedArray ? combinedArray[0].additionalDetails.ward : ''))
       let applicationType = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
       state.screenConfiguration.preparedFinalObject.applyScreen && state.screenConfiguration.preparedFinalObject.applyScreen.applicationType || null

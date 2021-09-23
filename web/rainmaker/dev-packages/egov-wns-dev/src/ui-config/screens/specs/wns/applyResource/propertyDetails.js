@@ -23,6 +23,7 @@ isMode = (isMode) ? isMode.toUpperCase() : "";
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 let tenantId = getQueryArg(window.location.href, "tenantId");
+let tenantForLocality = tenantId && tenantId.toUpperCase()
 let action = getQueryArg(window.location.href, "action");
 let modeaction = getQueryArg(window.location.href, "modeaction");
 
@@ -233,7 +234,7 @@ const propertyDetailsNoId = getCommonContainer({
           masterName: "TENANTS"
         },
         jsonPath: "applyScreen.tenantId",
-        sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+        sourceJsonPath: "applyScreenMdmsData.tenant.citymodule",
         labelsFromLocalisation: true,
         required: true,
         disabled:false,
@@ -245,13 +246,31 @@ const propertyDetailsNoId = getCommonContainer({
       data: [],
       required: true,
       jsonPath: "applyScreen.tenantId",
-      sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+      sourceJsonPath: "applyScreenMdmsData.tenant.citymodule",
       gridDefination: {
         xs: 12,
         sm: 6
       },
       afterFieldChange:async (action, state, dispatch) => {
         if(action.value){
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.mohalla.props.localePrefix",
+              "moduleName",
+              action.value.toUpperCase()
+            )
+          );
+
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.mohalla.children.value1.children.key.props.localePrefix",
+              "moduleName",
+              action.value.toUpperCase()
+            )
+          );
+          
           const dataFetchConfig = {
             url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
             action: "",
@@ -287,11 +306,11 @@ const propertyDetailsNoId = getCommonContainer({
                       .toUpperCase()
                       .replace(/[._:-\s\/]/g, "_")}`;
                     option = {
-                      label: getTranslatedLabel(mohallaCode, localizationLabels),
-                      value: item.code,
-                      code: getTranslatedLabel(mohallaCode, localizationLabels),
+                      // label: getTranslatedLabel(mohallaCode, localizationLabels),
+                      // value: getTranslatedLabel(mohallaCode, localizationLabels),
+                      code: item.code,
                     };
-                    
+
                   } else {
                     option = {
                       label: item.name,
@@ -305,7 +324,7 @@ const propertyDetailsNoId = getCommonContainer({
               // dispatch(setFieldProperty(formKey, fieldKey, "dropDownData", ddData));
                 dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", ddData));
             }
-          } 
+          }
           catch (error) {
             const { message } = error;
             console.log(error);
@@ -340,7 +359,7 @@ const propertyDetailsNoId = getCommonContainer({
               }
             };
             const response = await httpRequest("/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
-            const wardData = 
+            const wardData =
             response && response.MdmsRes['Ward']['Ward'] && response.MdmsRes['Ward']['Ward'].map(ward => {
               return {
                 ...ward,
@@ -351,7 +370,7 @@ const propertyDetailsNoId = getCommonContainer({
               }
             })
             dispatch(prepareFinalObject("applyScreenMdmsData.ward",wardData))
-          }      
+          }
         }
       }
     },
@@ -425,7 +444,7 @@ const propertyDetailsNoId = getCommonContainer({
   //           // dispatch(setFieldProperty(formKey, fieldKey, "dropDownData", ddData));
   //             dispatch(prepareFinalObject("applyScreenMdmsData.mohalla", ddData));
   //         }
-  //       } 
+  //       }
   //       catch (error) {
   //         const { message } = error;
   //         console.log(error);
@@ -441,7 +460,7 @@ const propertyDetailsNoId = getCommonContainer({
   //           dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
   //         }
   //         return;
-  //       }      
+  //       }
   //     }
   //   }
   // }),
@@ -461,8 +480,12 @@ const propertyDetailsNoId = getCommonContainer({
         labelKey: "PT_PROPERTY_DETAILS_PLACEHOLDER"
       },
       data: [],
-      optionValue: "code",
-      optionLabel: "label",
+      // optionValue: "code",
+      // optionLabel: "label",
+      localePrefix: {
+        moduleName: tenantForLocality,
+        masterName: "REVENUE"
+      },
       jsonPath: "applyScreen.locality",
       sourceJsonPath: "applyScreenMdmsData.mohalla",
       labelsFromLocalisation: true,
@@ -500,7 +523,7 @@ const propertyDetailsNoId = getCommonContainer({
   //     xs: 12,
   //     sm: 6
   //   }
-  
+
   // }),
   ward: {
     uiFramework: "custom-containers-local",
@@ -619,7 +642,7 @@ const propertyDetailsNoId = getCommonContainer({
                     nonMeteredTemporory
                   )
                 );
-              break;  
+              break;
           }
         }else{
           switch(action.value){
@@ -632,7 +655,7 @@ const propertyDetailsNoId = getCommonContainer({
                     temporary
                   )
                 );
-            
+
               break;
             case 'PERMANENT' :
                   dispatch(
@@ -653,10 +676,10 @@ const propertyDetailsNoId = getCommonContainer({
                     temporary
                   )
                 );
-              break;  
+              break;
           }
         }
-      
+
       }
   }
   }),
@@ -733,10 +756,10 @@ const propertyDetailsNoId = getCommonContainer({
                     nonMeteredTemporory
                   )
                 );
-              break;  
+              break;
           }
         }
-       
+
       }
   },
     gridDefination: {
@@ -780,7 +803,7 @@ const propertyDetailsNoId = getCommonContainer({
               false
             )
           );
-        } 
+        }
       }
   },
     gridDefination: {
@@ -824,7 +847,7 @@ const propertyDetailsNoId = getCommonContainer({
     type: "array",
     jsonPath: "applyScreen.apartment",
   }
- 
+
 
 });
 

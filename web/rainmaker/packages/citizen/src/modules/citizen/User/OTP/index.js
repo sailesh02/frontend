@@ -83,7 +83,7 @@ class OTP extends Component {
       timeLeft:60000
     });
   };
-  
+
 
   render() {
     const { phoneNumber, loading, bannerUrl, logoUrl,history } = this.props;
@@ -91,7 +91,7 @@ class OTP extends Component {
    const {timerSwitch,timeLeft}=this.state;
     return (
       <Screen loading={loading} className="force-padding-0">
-        <Banner bannerUrl={bannerUrl} logoUrl={logoUrl}>
+        <Banner logoUrl={logoUrl}>
           <OTPFormHOC resendOTP={resendOTP} phoneNumber={phoneNumber} logoUrl={logoUrl} history={history} timerSwitch={timerSwitch} completed={completed} timeLeft={timeLeft} reset={reset}/>
         </Banner>
       </Screen>

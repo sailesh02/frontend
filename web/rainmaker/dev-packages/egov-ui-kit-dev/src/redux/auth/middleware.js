@@ -32,7 +32,8 @@ const auth = (store) => (next) => (action) => {
         },
       };
       if ((window.location.pathname === "/" || window.location.pathname === "/citizen/" || window.location.pathname === "/employee/inbox")) {
-        store.dispatch(getNotifications(queryObject, requestBody));
+        //Commenting unwanted call
+        //store.dispatch(getNotifications(queryObject, requestBody));
         store.dispatch(getNotificationCount(queryObject, requestBody));
       }
     }

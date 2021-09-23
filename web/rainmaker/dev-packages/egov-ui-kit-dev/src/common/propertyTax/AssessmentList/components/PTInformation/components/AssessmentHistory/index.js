@@ -89,14 +89,14 @@ class AssessmentHistory extends Component {
             : [];
         const reassessAllowed = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
 
-        const assessmentHistoryItems = this.getLatestAssessments(Assessments).map((Assessment) => {
+        const assessmentHistoryItems = this.getLatestAssessments(Assessments).map((Assessment,index) => {
             return (
                 <div>
                     {getFullRow("PT_HISTORY_ASSESSMENT_DATE", Assessment.assessmentDate ? getFormattedDate(Assessment.assessmentDate) : "NA", 12)}
                     {getFullRow("PT_ASSESSMENT_NO", Assessment.assessmentNumber ? Assessment.assessmentNumber : "NA", 12)}
                     {getFullRow("PT_ASSESSMENT_YEAR", Assessment.financialYear ? Assessment.financialYear : "NA", 6)}
 
-                    {!!reassessAllowed && (<div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
+                    {!!reassessAllowed && index == 0 && (<div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div className="assess-history" style={{ float: "right" }}>
                             <Button
                                 label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.REASSESS].parentButton} color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}

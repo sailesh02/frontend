@@ -8,6 +8,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
 import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA,handleLocality,handleConnectionType  } from '../../utils';
+import {isModifyMode,getTenantId} from '../../../../../ui-utils/commons'
 
 
 const getHeader = label => {
@@ -368,12 +369,18 @@ const getPropertyDetails = {
             },
             {
               jsonPath: "applyScreen.locality",
+              localePrefix: {
+                moduleName: "", masterName: "REVENUE"
+              },
               callBack: handleLocality,
             },
             {
               labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
             },
             {
+              localePrefix: {
+                moduleName: isModifyMode() ? getTenantId() : "", masterName: "REVENUE" // prefix with tenantId in case of modify
+              },
               jsonPath: "applyScreenOld.locality",
               callBack: handleNA   
             }

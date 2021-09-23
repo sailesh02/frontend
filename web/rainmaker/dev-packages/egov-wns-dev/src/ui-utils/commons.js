@@ -1029,12 +1029,7 @@ export const applyForWater = async (state, dispatch) => {
                 response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
-                let localizationLabels = {}
-                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-                let locality = `${response.WaterConnection[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.WaterConnection[0].additionalDetails.locality
-                  .toUpperCase()
-                  .replace(/[._:-\s\/]/g, "_")}`;
-                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
+                dispatch(prepareFinalObject("applyScreen.locality",response.WaterConnection[0].additionalDetails.locality))
                 dispatch(prepareFinalObject("modifyAppCreated", true));
             }
             if(mode == "ownershipTransfer"){
@@ -1046,12 +1041,7 @@ export const applyForWater = async (state, dispatch) => {
                 response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
-                let localizationLabels = {}
-                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-                let locality = `${response.WaterConnection[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.WaterConnection[0].additionalDetails.locality
-                  .toUpperCase()
-                  .replace(/[._:-\s\/]/g, "_")}`;
-                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
+                dispatch(prepareFinalObject("applyScreen.locality",response.WaterConnection[0].additionalDetails.locality))
             }
             if (!isModifyMode()) {
                 setApplicationNumberBox(state, dispatch);
@@ -1142,12 +1132,7 @@ export const applyForSewerage = async (state, dispatch) => {
                 response.SewerageConnections[0].ward = response.SewerageConnections[0].additionalDetails.ward ? response.SewerageConnections[0].additionalDetails.ward : '';
                 response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
-                let localizationLabels = {}
-                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-                let locality = `${response.SewerageConnections[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.SewerageConnections[0].additionalDetails.locality
-                  .toUpperCase()
-                  .replace(/[._:-\s\/]/g, "_")}`;
-                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
+                dispatch(prepareFinalObject("applyScreen.locality",response.SewerageConnections[0].additionalDetails.locality))
             }
             if (isModifyMode()) {
                 response.SewerageConnections[0].ward = response.SewerageConnections[0].additionalDetails.ward ? response.SewerageConnections[0].additionalDetails.ward : '';
@@ -1157,12 +1142,7 @@ export const applyForSewerage = async (state, dispatch) => {
                 response.SewerageConnections[0].service = "Sewerage";
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
-                let localizationLabels = {}
-                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-                let locality = `${response.SewerageConnections[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.SewerageConnections[0].additionalDetails.locality
-                  .toUpperCase()
-                  .replace(/[._:-\s\/]/g, "_")}`;
-                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
+                dispatch(prepareFinalObject("applyScreen.locality",response.SewerageConnections[0].additionalDetails.locality))
             }
             if (!isModifyMode()) {
                 setApplicationNumberBox(state, dispatch);
@@ -1497,17 +1477,17 @@ export const getPastPaymentsForWater = async (dispatch) => {
     dispatch(toggleSpinner());
     let queryObject = [
         {
-            key: "tenantId",
+            key: "tenantIds",
             value: getTenantIdCommon()
         },
         {
-            key: "businessService",
+            key: "businessServices",
             value: "WS"
         },
         {
-            key: "uuid",
-            value: JSON.parse(getUserInfo()).uuid.toString()
-        },
+            key: "mobileNumber",
+            value: JSON.parse(getUserInfo()).mobileNumber && JSON.parse(getUserInfo()).mobileNumber.toString() || ''
+        }
     ];
     try {
         const response = await httpRequest(
@@ -1536,16 +1516,16 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
     dispatch(toggleSpinner());
     let queryObject = [
         {
-            key: "tenantId",
+            key: "tenantIds",
             value: getTenantIdCommon()
         },
         {
-            key: "businessService",
+            key: "businessServices",
             value: "SW"
         },
         {
-            key: "uuid",
-            value: JSON.parse(getUserInfo()).uuid.toString()
+            key: "mobileNumber",
+            value: JSON.parse(getUserInfo()).mobileNumber && JSON.parse(getUserInfo()).mobileNumber.toString() || ''
         }
     ];
     try {
@@ -2387,3 +2367,8 @@ export const getOpenSearchResultsForSewerage = async (queryObject, requestBody, 
         console.log(error)
     }
 };
+
+export const getTenantId = () => {
+    let id = getQueryArg(window.location.href, "tenantId");
+    return id 
+}

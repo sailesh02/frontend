@@ -658,6 +658,52 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
+  }else if (purpose === "schedule" && status === "success") {
+    return {
+
+      header: getCommonContainer({
+        Commonheader: getCommonHeader({
+          labelName: `Application for Trade License Renewal`,
+          labelKey: "MR_APPLICATION_SCHEDULE"
+        }),
+        licenseNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-mr",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number: applicationNumber
+          },
+          visible: true
+        }
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Renewed Successfully",
+              labelKey: "MR_SCHEDULE_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+              labelKey: "MR_APPLICATION_SCHEDULE_SUCCESS"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "MR_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+
+
   }
 };
 

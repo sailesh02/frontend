@@ -1047,7 +1047,7 @@ export const downloadCertificateForm = async (MarriageRegistrations, mode = 'dow
   }
   else {
     try {
-      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { MarriageRegistrations }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
           res.filestoreIds[0]
           if (res && res.filestoreIds && res.filestoreIds.length > 0) {

@@ -10,7 +10,7 @@ import {
   getCommonGrayCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { getMapLocator } from "../../utils";
+
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { showHideMapPopup, getDetailsFromProperty } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -70,7 +70,24 @@ export const appointmentDetails = getCommonGrayCard(
         sm: 12,
         md: 6
       }
-    })
+    }),
+    appointmentDesc: getTextField({
+      label: {
+        labelName: "Door/House No.",
+        labelKey: "MR_DESCRIPTION_LABEL"
+      },
+      props:{
+        className:"applicant-details-error"
+      },
+      placeholder: {
+        labelName: "Enter Door/House No.",
+        labelKey: "MR_DESCRIPTION_PLACEHOLDER"
+      },
+
+      jsonPath: "MarriageRegistrations[0].appointmentDesc",
+
+    }),
+
   })
   }
 );

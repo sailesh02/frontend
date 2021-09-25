@@ -36,7 +36,8 @@ import { getReviewDocuments } from "./applyResource/review-documents";
 import { appointmentDetails } from "./applyResource/appointmentDetails";
 import { getReviewTrade } from "./applyResource/review-trade";
 import { getgroomAddressAndGuardianDetails } from "./applyResource/groom-address-guardian-detail";
-import { getWitnessDetails } from "./applyResource/witness-detail";
+import { getWitnessDetails, getAppointmentDetails } from "./applyResource/witness-detail";
+import { orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -139,7 +140,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   if (applicationNumber) {
     // !getQueryArg(window.location.href, "edited") &&
     //   (await searchResults(action, state, dispatch, applicationNumber));
-      await searchResults(action, state, dispatch, applicationNumber)
+    await searchResults(action, state, dispatch, applicationNumber)
     //check for renewal flow
     // const licenseNumber = get(
     //   state.screenConfiguration.preparedFinalObject,
@@ -162,6 +163,36 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       "screenConfiguration.preparedFinalObject.MarriageRegistrations[0].status"
     );
 
+    let appointmentDetails = get(
+      state,
+      "screenConfiguration.preparedFinalObject.MarriageRegistrations[0].appointmentDetails"
+    );
+
+    let appointmentDetailData =  appointmentDetails && appointmentDetails.filter( item => item.active = true)
+    let appointDataDisplay = [];
+    if(appointmentDetailData && appointmentDetailData.length){
+      var startTime = appointmentDetailData[0].startTime;
+      var startDateObj = new Date(startTime);
+      var startDate = startDateObj.getDate() < 10 ? "0" + startDateObj.getDate() : startDateObj.getDate();
+      var startMonth = startDateObj.getMonth() < 10 ? "0" + startDateObj.getMonth() : startDateObj.getMonth();
+      var startHours = startDateObj.getHours() < 10 ? "0" + startDateObj.getHours() : startDateObj.getHours();
+      var startMinutes = startDateObj.getMinutes() < 10 ? "0" + startDateObj.getMinutes() : startDateObj.getMinutes();
+      let startTimeStr = `${startDate}-${startMonth}-${startDateObj.getFullYear()}, ${startHours}:${startMinutes}`;
+
+      var endTime = appointmentDetailData[0].endTime;
+      var endDateObj = new Date(endTime);
+      var endDate = endDateObj.getDate() < 10 ? "0" + endDateObj.getDate() : endDateObj.getDate();
+      var endMonth = endDateObj.getMonth() < 10 ? "0" + endDateObj.getMonth() : endDateObj.getMonth();
+      var endHours = endDateObj.getHours() < 10 ? "0" + endDateObj.getHours() : endDateObj.getHours();
+      var endMinutes = endDateObj.getMinutes() < 10 ? "0" + endDateObj.getMinutes() : endDateObj.getMinutes();
+      let endTimeStr = `${endDate}-${endMonth}-${endDateObj.getFullYear()}, ${endHours}:${endMinutes}`;
+      var description = appointmentDetailData[0].description;
+      appointDataDisplay.push({apntStartTime: startTimeStr, apntEndTime: endTimeStr, apntDesc: description})
+    }
+
+
+
+    dispatch(prepareFinalObject("MarriageRegistrations[0].appointmentDisplayDetails", appointDataDisplay));
     const financialYear = get(
       state,
       "screenConfiguration.preparedFinalObject.MarriageRegistrations[0].financialYear"
@@ -170,23 +201,23 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
     const obj = setStatusBasedValue(status);
-    let appDocuments=get(data, "MarriageRegistrations[0].applicationDocuments",[]);
+    let appDocuments = get(data, "MarriageRegistrations[0].applicationDocuments", []);
     if (appDocuments) {
       let applicationDocs = [];
       appDocuments.forEach(doc => {
-        if(doc.length !== 0) {
+        if (doc.length !== 0) {
           applicationDocs.push(doc);
         }
       })
-      applicationDocs=applicationDocs.filter(document=>document);
+      applicationDocs = applicationDocs.filter(document => document);
 
-      let removedDocs=get(data, "LicensesTemp[0].removedDocs",[]);
-      if(removedDocs.length>0){
-          removedDocs.map(removedDoc=>{
-            applicationDocs=applicationDocs.filter(appDocument=>!(appDocument.documentType===removedDoc.documentType&&appDocument.fileStoreId===removedDoc.fileStoreId))
-          })
+      let removedDocs = get(data, "LicensesTemp[0].removedDocs", []);
+      if (removedDocs.length > 0) {
+        removedDocs.map(removedDoc => {
+          applicationDocs = applicationDocs.filter(appDocument => !(appDocument.documentType === removedDoc.documentType && appDocument.fileStoreId === removedDoc.fileStoreId))
+        })
       }
-      dispatch(prepareFinalObject("MarriageRegistrations[0].applicationDocuments",applicationDocs));
+      dispatch(prepareFinalObject("MarriageRegistrations[0].applicationDocuments", applicationDocs));
       await setDocuments(
         get(state, "screenConfiguration.preparedFinalObject"),
         "MarriageRegistrations[0].applicationDocuments",
@@ -255,38 +286,38 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     //     visible: false
     //   }
     // };
-
-    const printCont = downloadPrintContainer(
-      action,
-      state,
-      dispatch,
-      status,
-      applicationNumber,
-      tenantId
-    );
-    const CitizenprintCont = footerReviewTop(
-      action,
-      state,
-      dispatch,
-      status,
-      applicationNumber,
-      tenantId,
-      "2021"
-    );
-console.log(CitizenprintCont, "Nero CitizenprintCont")
+    let CitizenprintCont = '';
+    let printCont = '';
     if (status !== "INITIATED") {
-      process.env.REACT_APP_NAME === "Citizen"
-        ? set(
+      if (process.env.REACT_APP_NAME === "Citizen") {
+        CitizenprintCont = footerReviewTop(
           action,
-          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-          CitizenprintCont
-        )
-        : set(
-          action,
-          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-          printCont
+          state,
+          dispatch,
+          status,
+          applicationNumber,
+          tenantId,
+          "2021"
         );
+
+
+      } else {
+        printCont = downloadPrintContainer(
+          action,
+          state,
+          dispatch,
+          status,
+          applicationNumber,
+          tenantId
+        );
+
+
+      }
+
     }
+
+
+
 
     // Get approval details based on status and set it in screenconfig
 
@@ -360,22 +391,109 @@ console.log(CitizenprintCont, "Nero CitizenprintCont")
         true
       );
 
-      console.log(status, "Nero Status")
-      if(process.env.REACT_APP_NAME == "Employee" && status == "DOCVERIFICATION"){
-        const actionDefination = [
-          {
-            path: "components.div.children.appointmentDetailsFormCard",
-            property: "visible",
-            value: true
-          }
 
-        ];
-        dispatchMultipleFieldChangeAction("search-preview", actionDefination, dispatch);
-      }
+
 
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
 
+    if (status !== "INITIATED") {
+      process.env.REACT_APP_NAME === "Citizen"
+        ? set(
+          action,
+          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+          CitizenprintCont
+        )
+        : set(
+          action,
+          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+          printCont
+        );
+    }
+    if (process.env.REACT_APP_NAME == "Employee") {
+      let filteredActions = [];
+      //const tenatId = getQueryArg(window.location.href, "tenantId");
+      const queryObject = [
+        { key: "businessIds", value: applicationNumber },
+        { key: "history", value: false },
+        { key: "tenantId", value: tenantId }
+      ];
+      try {
+        const payload = await httpRequest(
+          "post",
+          "egov-workflow-v2/egov-wf/process/_search",
+          "",
+          queryObject
+        );
+        console.log(payload, "Nero payload")
+        if (payload && payload.ProcessInstances.length > 0) {
+          const processInstancest = orderWfProcessInstances(
+            payload.ProcessInstances
+          );
+
+          console.log(processInstancest, "Nero Ordered");
+
+
+          if (processInstancest &&
+            processInstancest.length > 0) {
+            filteredActions = processInstancest && processInstancest[0].nextActions.filter(
+              item => item.action == "SCHEDULE" || "RESCHEDULE"
+            );
+          }
+          console.log(filteredActions, "Nero filteredActions")
+          if (process.env.REACT_APP_NAME == "Employee" && filteredActions && filteredActions.length > 0) {
+            console.log("Nero In sss")
+            const actionDefination = [
+              {
+                path: "components.div.children.appointmentDetailsFormCard",
+                property: "visible",
+                value: true
+              }
+
+            ];
+            dispatchMultipleFieldChangeAction("search-preview", actionDefination, dispatch);
+          }
+
+
+        } else {
+          console.log("Nero Error")
+        }
+      } catch (e) {
+        console.log("Nero Error ggg")
+      }
+    }
+    // let filteredActions = [];
+    //   console.log(data, "Nero data")
+    //   console.log(state, "Nero statesss")
+    //  // let ProcessInstances = get(data, "workflow.ProcessInstances",[]);
+    // //  const workflowData = get(
+    // //   state,
+    // //   "screenConfiguration.preparedFinalObject.workflow"
+    // // );
+    // const workflowData = state && state.screenConfiguration.preparedFinalObject && state.screenConfiguration.preparedFinalObject.workflow;
+    // console.log(workflowData, "Nero workflowData")
+    //  let ProcessInstances = [];
+    //   ProcessInstances = workflowData && workflowData.ProcessInstances;
+    //   console.log(ProcessInstances, "Nero ProcessInstances")
+    //   if(ProcessInstances &&
+    //     ProcessInstances.length > 0){
+    //       filteredActions = get(ProcessInstances[ProcessInstances.length - 1], "nextActions", []).filter(
+    //         item => item.action == "SCHEDULE" || "RESCHEDULE"
+    //       );
+    //     }
+    //     console.log(filteredActions, "Nero filteredActions")
+    //   if(process.env.REACT_APP_NAME == "Employee" && filteredActions && filteredActions.length > 0){
+    //     console.log("Nero In sss")
+    //     const actionDefination = [
+    //       {
+    //         path: "components.div.children.appointmentDetailsFormCard",
+    //         property: "visible",
+    //         value: true
+    //       }
+
+    //     ];
+    //     dispatchMultipleFieldChangeAction("search-preview", actionDefination, dispatch);
+    //   }
   }
 };
 
@@ -451,6 +569,7 @@ const reviewTradeDetails = getReviewTrade(false);
 const reviewDocumentDetails = getReviewDocuments(false, false);
 const groomAddressAndGuardianDetails = getgroomAddressAndGuardianDetails(false);
 const witnessDetails = getWitnessDetails(false);
+const appointMentDetails = getAppointmentDetails(false);
 
 // let approvalDetails = getApprovalDetails(status);
 let title = getCommonTitle({ labelName: titleText });
@@ -495,14 +614,15 @@ export const tradeReviewDetails = getCommonCard({
   //BrideAddressAndGuardianDetails,
   groomAddressAndGuardianDetails,
   witnessDetails,
+  appointMentDetails,
   reviewDocumentDetails
 });
 
-export const beforeSubmitHook =  (MarriageRegistrations=[{}]) => {
+export const beforeSubmitHook = (MarriageRegistrations = [{}]) => {
   let state = store.getState();
 
 
-return MarriageRegistrations;
+  return MarriageRegistrations;
 
 }
 const screenConfig = {
@@ -567,10 +687,12 @@ const screenConfig = {
             dataPath: "MarriageRegistrations",
             moduleName: "MR",
             updateUrl: "/mr-services/v1/_update",
-            beforeSubmitHook:beforeSubmitHook
+            beforeSubmitHook: beforeSubmitHook
           }
         },
         //appointmentDetails: getCommonCard({appointmentDetails}),
+
+        tradeReviewDetails,
         appointmentDetailsFormCard: {
           uiFramework: "custom-atoms",
           componentPath: "Form",
@@ -578,12 +700,11 @@ const screenConfig = {
             id: "appointment_card_form"
           },
           children: {
-            apint: getCommonCard({appointmentDetails})
+            apint: getCommonCard({ appointmentDetails })
 
           },
           visible: false
         },
-        tradeReviewDetails
       }
     },
     // breakUpDialog: {

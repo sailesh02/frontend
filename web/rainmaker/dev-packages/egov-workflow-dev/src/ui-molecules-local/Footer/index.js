@@ -62,8 +62,9 @@ class Footer extends React.Component {
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
     let employeeList = [];
+    if(item.moduleName == "MR")item.showEmployeeList = false;
     if (item.buttonLabel === "ACTIVATE_CONNECTION") {
-      if (item.moduleName === "NewWS1" || item.moduleName === "NewSW1" || item.moduleName === "SWCloseConnection" || 
+      if (item.moduleName === "NewWS1" || item.moduleName === "NewSW1" || item.moduleName === "SWCloseConnection" ||
       item.moduleName === "SWDisconnection" || item.moduleName === "WSCloseConnection" || item.moduleName === "WSDisconnection" ||
       item.moduleName === "WSReconnection" || item.moduleName === "SWReconnection" || item.moduleName === "SWOwnershipChange" || item.moduleName === "WSOwnershipChange"
     ) {
@@ -241,6 +242,7 @@ class Footer extends React.Component {
       state,
       dispatch
     } = this.props;
+
     const { open, data, employeeList } = this.state;
     const { isDocRequired } = data;
     const appName = process.env.REACT_APP_NAME;

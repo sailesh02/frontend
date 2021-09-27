@@ -9,6 +9,9 @@ const tenantId = getQueryArg(window.location.href, "tenantId");
 const businessService = connectionNo.includes("WS") ? "WS" : "SW";
 
 const callDownloadBill = ( mode) => {
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let connectionNo = getQueryArg(window.location.href, "connectionNumber");
+  let businessService = connectionNo.includes("WS") ? "WS" : "SW";
   const val = [
     {
       key: 'consumerCode',

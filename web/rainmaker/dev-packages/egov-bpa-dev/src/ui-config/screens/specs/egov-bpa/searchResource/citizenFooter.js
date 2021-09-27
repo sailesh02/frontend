@@ -2,7 +2,7 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { createUpdateBpaApplication, submitBpaApplication } from "../../../../../ui-utils/commons";
+import { createUpdateBpaApplication, submitBpaApplicationNOC } from "../../../../../ui-utils/commons";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
@@ -217,7 +217,7 @@ export const citizenFooter = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: submitBpaApplication
+      callBack: submitBpaApplicationNOC
     },
     roleDefination: {
       rolePath: "user-info.roles",

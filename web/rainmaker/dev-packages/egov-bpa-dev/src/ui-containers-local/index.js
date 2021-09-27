@@ -19,6 +19,11 @@ const DocumentListContainer = Loadable({
   loading: () => <Loading />
 });
 
+const DocumentListContainerNOC = Loadable({
+  loader: () => import("./DocumentListContainerNOC"),
+  loading: () => <Loading />
+});
+
 const BpaDocumentListContainer = Loadable({
   loader: () => import("./BpaDocumentListContainer"),
   loading: () => <Loading />
@@ -127,6 +132,11 @@ const TextAreaContainer = Loadable({
   loading: () => <Loading />
 });
 
+const TriggerNOCContainer =  Loadable({
+  loader: () => import("./TriggerNOCContainer"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -136,6 +146,7 @@ export {
   EstimateCardContainer,
   AutosuggestContainer,
   DocumentListContainer,
+  DocumentListContainerNOC,
   BpaDocumentListContainer,
   PaymentRedirectPage,
   ViewBreakupContainer,
@@ -151,5 +162,6 @@ export {
   BpaConditionsContainer,
   DownloadFileContainerForFI,
   PreviewContainer,
-  TextAreaContainer
+  TextAreaContainer,
+  TriggerNOCContainer
 };

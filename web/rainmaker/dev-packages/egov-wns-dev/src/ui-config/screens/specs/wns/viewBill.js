@@ -117,6 +117,8 @@ const fetchMDMSForBillPeriod = async(action,state,dispatch) => {
   }
 }
 const searchResults = async (action, state, dispatch, consumerCode) => {
+  let tenantId = getQueryArg(window.location.href, "tenantId")
+  let service = getQueryArg(window.location.href, "service")
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: consumerCode }]
   let queryObjectForConsumptionDetails = [{ key: "tenantId", value: tenantId }, { key: "connectionNos", value: consumerCode }]
   let viewBillTooltip = [], data;

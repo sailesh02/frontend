@@ -219,11 +219,14 @@ class WorkFlowContainer extends React.Component {
     console.log(moduleName, "Nero sss Modle")
     console.log(data, "Nero data 1")
     if (moduleName == "MR") {
+      var appAction = get(data[0], "action", '')
+      if(appAction == "SCHEDULE" || appAction == "RESCHEDULE" ){
       let apntDetails = [];
       var apntDate = get(data[0], "appointmentDate", '');
       let apntTime = get(data[0], "appointmentTime", '');
       let apntDesc = get(data[0], "appointmentDesc", '');
       apntDate = apntDate.split("-");
+      apntTime = apntTime.split(":");
 
 
       var apntDate = new Date(apntDate[0], apntDate[1] - 1, apntDate[2]);
@@ -248,6 +251,7 @@ class WorkFlowContainer extends React.Component {
         "appointmentDetails",
         apntDetails
       );
+    }
     }
 
     console.log(data, "Nero data 2")

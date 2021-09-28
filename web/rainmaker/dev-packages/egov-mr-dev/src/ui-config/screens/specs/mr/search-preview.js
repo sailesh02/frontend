@@ -138,25 +138,25 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
 
   //Search details for given application Number
   if (applicationNumber) {
-    // !getQueryArg(window.location.href, "edited") &&
-    //   (await searchResults(action, state, dispatch, applicationNumber));
-    await searchResults(action, state, dispatch, applicationNumber)
-    //check for renewal flow
-    // const licenseNumber = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   `MarriageRegistrations[0].licenseNumber`
-    // );
-    // let queryObjectSearch = [
-    //   {
-    //     key: "tenantId",
-    //     value: tenantId
-    //   },
-    //   { key: "offset", value: "0" },
-    //   { key: "licenseNumbers", value: licenseNumber }
-    // ];
-    // const payload = await getSearchResults(queryObjectSearch);
-    // const length = payload && payload.MarriageRegistrations.length > 0 ? get(payload, `MarriageRegistrations`, []).length : 0;
-    // dispatch(prepareFinalObject("licenseCount", length));
+    !getQueryArg(window.location.href, "edited") &&
+      (await searchResults(action, state, dispatch, applicationNumber));
+    //await searchResults(action, state, dispatch, applicationNumber)
+    //check for Apply for Correction flow
+    const licenseNumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      `MarriageRegistrations[0].mrNumber`
+    );
+    let queryObjectSearch = [
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      { key: "offset", value: "0" },
+      { key: "licenseNumbers", value: licenseNumber }
+    ];
+    const payload = await getSearchResults(queryObjectSearch);
+    const length = payload && payload.MarriageRegistrations.length > 0 ? get(payload, `MarriageRegistrations`, []).length : 0;
+    dispatch(prepareFinalObject("licenseCount", length));
 
     const status = get(
       state,
@@ -174,7 +174,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       var startTime = appointmentDetailData[0].startTime;
       var startDateObj = new Date(startTime);
       var startDate = startDateObj.getDate() < 10 ? "0" + startDateObj.getDate() : startDateObj.getDate();
-      var startMonth = startDateObj.getMonth() < 10 ? "0" + startDateObj.getMonth() : startDateObj.getMonth();
+      var startMonth = startDateObj.getMonth()+1 < 10 ? "0" + startDateObj.getMonth()+1 : startDateObj.getMonth()+1;
       var startHours = startDateObj.getHours() < 10 ? "0" + startDateObj.getHours() : startDateObj.getHours();
       var startMinutes = startDateObj.getMinutes() < 10 ? "0" + startDateObj.getMinutes() : startDateObj.getMinutes();
       let startTimeStr = `${startDate}-${startMonth}-${startDateObj.getFullYear()}, ${startHours}:${startMinutes}`;
@@ -182,7 +182,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       var endTime = appointmentDetailData[0].endTime;
       var endDateObj = new Date(endTime);
       var endDate = endDateObj.getDate() < 10 ? "0" + endDateObj.getDate() : endDateObj.getDate();
-      var endMonth = endDateObj.getMonth() < 10 ? "0" + endDateObj.getMonth() : endDateObj.getMonth();
+      var endMonth = endDateObj.getMonth()+1 < 10 ? "0" + endDateObj.getMonth()+1 : endDateObj.getMonth()+1;
       var endHours = endDateObj.getHours() < 10 ? "0" + endDateObj.getHours() : endDateObj.getHours();
       var endMinutes = endDateObj.getMinutes() < 10 ? "0" + endDateObj.getMinutes() : endDateObj.getMinutes();
       let endTimeStr = `${endDate}-${endMonth}-${endDateObj.getFullYear()}, ${endHours}:${endMinutes}`;
@@ -437,7 +437,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           if (processInstancest &&
             processInstancest.length > 0) {
             filteredActions = processInstancest && processInstancest[0].nextActions.filter(
-              item => item.action == "SCHEDULE" || "RESCHEDULE"
+              item => item.action == "SCHEDULE" || item.action == "RESCHEDULE"
             );
           }
           console.log(filteredActions, "Nero filteredActions")

@@ -392,9 +392,13 @@ export const brideDetails = getCommonCard(
 
     },
     {
-      style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}
+      style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
     }
     ),
+
+  },
+  {
+    style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
 
   }
 );

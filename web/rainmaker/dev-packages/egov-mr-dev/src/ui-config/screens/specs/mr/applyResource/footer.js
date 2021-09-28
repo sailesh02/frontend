@@ -87,11 +87,61 @@ export const callBackForNext = async (state, dispatch) => {
   const applicationNoInUrl = getQueryArg(window.location.href, "applicationNumber");
   let isFormValid = true;
   let hasFieldToaster = true;
-
-
+  let isBrideDobValid = true;
+  let isGroomDobValid = true;
+  let mrgObj = get(
+    state.screenConfiguration.preparedFinalObject,
+    "MarriageRegistrations"
+  )
+console.log(mrgObj, "Nero mrgObje")
   if (activeStep === 0) {
-
     //Bride and Groom Details
+    if (!applicationNoInUrl) {
+
+      let brideDob = get(
+        mrgObj[0],
+        "coupleDetails[0].bride.dateOfBirth"
+      )
+      let groomDob = get(
+        mrgObj[0],
+        "coupleDetails[0].groom.dateOfBirth"
+      )
+
+      console.log(brideDob, groomDob, "Nero both DOB")
+      const [brideDobYear, brideDobMonth, brideDobDay] = brideDob.split("-");
+      console.log(brideDobDay)
+      const brideDobdate = new Date(`${brideDobMonth}/${brideDobDay}/${brideDobYear}`);
+      const todayDate = new Date();
+      const diffTime = Math.abs(brideDobdate - todayDate);
+      const brideAgeInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+
+      console.log(brideAgeInDays, "Nero BrideDob in days");
+      if (brideAgeInDays < 6570) {
+        isFormValid = isBrideDobValid = false;
+      }
+
+
+      const [groomDobYear, groomDobMonth, groomDobDay] = groomDob.split("-");
+      console.log(groomDobDay)
+      const groomDobdate = new Date(`${groomDobMonth}/${groomDobDay}/${groomDobYear}`);
+
+      const diffTime1 = Math.abs(groomDobdate - todayDate);
+      const groomAgeInDays = Math.ceil(diffTime1 / (1000 * 60 * 60 * 24));
+
+
+      console.log(brideAgeInDays, "Nero BrideDob in days");
+      if (brideAgeInDays < 6570) {
+        isFormValid = isBrideDobValid = false;
+      }
+
+      if (groomAgeInDays < 7665) {
+        isFormValid = isGroomDobValid = false;
+      }
+
+    }
+
+
     await getDocList(state, dispatch);
 
 
@@ -105,10 +155,10 @@ export const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
     }
 
-    if(isFormValid){
-    if(!applicationNoInUrl){
-      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.country", "INDIA"));
-      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.country", "INDIA"));
+    if (isFormValid) {
+      if (!applicationNoInUrl) {
+        dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.country", "INDIA"));
+        dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.country", "INDIA"));
       }
     }
   }
@@ -128,11 +178,11 @@ export const callBackForNext = async (state, dispatch) => {
     );
 
     isFormValid = await applyTradeLicense(state, dispatch, activeStep);
-    if(isFormValid){
-      if(!applicationNoInUrl){
+    if (isFormValid) {
+      if (!applicationNoInUrl) {
         dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.witness.country", "INDIA"));
         dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.witness.country", "INDIA"));
-        }
+      }
     }
 
   }
@@ -248,29 +298,31 @@ export const callBackForNext = async (state, dispatch) => {
       switch (activeStep) {
         case 0:
 
+          if (!isBrideDobValid) {
+            errorMessage = {
+              labelName:
+                "Please fill all mandatory fields for Trade Details, then do next !",
+              labelKey: "ERR_FILL_MR_BRIDE_AGE_NOT_VALID"
+            };
+          } else if (!isGroomDobValid) {
+            errorMessage = {
+              labelName:
+                "Please fill all mandatory fields for Trade Details, then do next !",
+                labelKey: "ERR_FILL_MR_GROOM_AGE_NOT_VALID"
+            };
+          } else {
 
-
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Trade Details, then do next !",
-            labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
-          };
-
+            errorMessage = {
+              labelName:
+                "Please fill all mandatory fields for Trade Details, then do next !",
+              labelKey: "ERR_FILL_MR_MANDATORY_FIELDS"
+            };
+          }
           break;
         case 1:
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Owner Details, then do next !",
-            labelKey: "ERR_FILL_OWNERS_MANDATORY_FIELDS"
-          };
-          break;
+
         case 2:
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Owner Details, then do next !",
-            labelKey: "ERR_FILL_OWNERS_MANDATORY_FIELDS"
-          };
-          break;
+
         case 3:
           errorMessage = {
             labelName: "Please upload all the required documents !",
@@ -1007,8 +1059,8 @@ export const footerReviewTop = (
     leftIcon: "assignment"
   };
 
-//console.log(applicationDownloadObject, "Nero applicationDownloadObject")
-//console.log(applicationPrintObject, "Nero applicationPrintObject")
+  //console.log(applicationDownloadObject, "Nero applicationDownloadObject")
+  //console.log(applicationPrintObject, "Nero applicationPrintObject")
   switch (status) {
     case "APPROVED":
       downloadMenu = [

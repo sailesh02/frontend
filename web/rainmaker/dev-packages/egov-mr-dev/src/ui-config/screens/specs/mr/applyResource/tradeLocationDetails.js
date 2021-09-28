@@ -271,26 +271,13 @@ export const tradeLocationDetails = getCommonCard(
       }),
     },
     {
-      style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}
+      style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
     }
     ),
-    mapsDialog: {
-      componentPath: "Dialog",
-      props: {
-        open: false
-      },
-      children: {
-        dialogContent: {
-          componentPath: "DialogContent",
-          children: {
-            popup: getMapLocator()
-          }
-        }
-      }
-    }
+
   },
   {
-    style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
+    style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
 
   }
 );

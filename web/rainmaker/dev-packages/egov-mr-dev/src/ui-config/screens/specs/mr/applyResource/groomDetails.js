@@ -323,7 +323,7 @@ export const groomDetails = getCommonCard(
 
     },
     {
-      style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}
+      style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
     }
     ),
 

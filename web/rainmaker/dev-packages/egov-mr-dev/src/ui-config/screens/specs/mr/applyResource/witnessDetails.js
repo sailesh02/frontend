@@ -349,7 +349,11 @@ export const groomWitnessDetails = getCommonCard(
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.contact",
 
       }),
-    })
+    },
+    {
+      style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
+    }
+    )
   }
 )
 

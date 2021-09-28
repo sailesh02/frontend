@@ -264,7 +264,7 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Enter Door/House No.",
           labelKey: "MR_PINCODE_PLACEHOLDER"
         },
-        required: true,
+       // required: true,
         //pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].marriagePlace.pinCode",
 

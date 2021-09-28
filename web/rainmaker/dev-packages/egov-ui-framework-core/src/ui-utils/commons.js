@@ -323,7 +323,7 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
       });
     }
   });
-  console.log(processInstances, "Nero Egov")
+
   prepareFinalObject("workflow.ProcessInstances", processInstances);
 };
 

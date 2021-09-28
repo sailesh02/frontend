@@ -93,7 +93,11 @@ export const callBackForNext = async (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "MarriageRegistrations"
   )
-console.log(mrgObj, "Nero mrgObje")
+  const userAction = getQueryArg(
+    window.location.href,
+    "action"
+  );
+  console.log(mrgObj, "Nero mrgObje")
   if (activeStep === 0) {
     //Bride and Groom Details
     let status = get(
@@ -135,9 +139,6 @@ console.log(mrgObj, "Nero mrgObje")
 
 
       console.log(brideAgeInDays, "Nero BrideDob in days");
-      if (brideAgeInDays < 6570) {
-        isFormValid = isBrideDobValid = false;
-      }
 
       if (groomAgeInDays < 7665) {
         isFormValid = isGroomDobValid = false;
@@ -145,8 +146,7 @@ console.log(mrgObj, "Nero mrgObje")
 
     }
 
-    if (applicationNoInUrl && status == "TODO") {
-
+    if (applicationNoInUrl && status == "INITIATED") {
       let brideDob = get(
         mrgObj[0],
         "coupleDetails[0].bride.dateOfBirth"
@@ -155,40 +155,40 @@ console.log(mrgObj, "Nero mrgObje")
         mrgObj[0],
         "coupleDetails[0].groom.dateOfBirth"
       )
+      if (typeof brideDob == "string") {
+        console.log(brideDob, groomDob, "Nero both DOB")
+        const [brideDobYear, brideDobMonth, brideDobDay] = brideDob.split("-");
+        console.log(brideDobDay)
+        const brideDobdate = new Date(`${brideDobMonth}/${brideDobDay}/${brideDobYear}`);
+        const todayDate = new Date();
+        const diffTime = Math.abs(brideDobdate - todayDate);
+        const brideAgeInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-      console.log(brideDob, groomDob, "Nero both DOB")
-      const [brideDobYear, brideDobMonth, brideDobDay] = brideDob.split("-");
-      console.log(brideDobDay)
-      const brideDobdate = new Date(`${brideDobMonth}/${brideDobDay}/${brideDobYear}`);
-      const todayDate = new Date();
-      const diffTime = Math.abs(brideDobdate - todayDate);
-      const brideAgeInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-
-      console.log(brideAgeInDays, "Nero BrideDob in days");
-      if (brideAgeInDays < 6570) {
-        isFormValid = isBrideDobValid = false;
+        console.log(brideAgeInDays, "Nero BrideDob in days");
+        if (brideAgeInDays < 6570) {
+          isFormValid = isBrideDobValid = false;
+        }
       }
+      if (typeof groomDob == "string") {
+        const [groomDobYear, groomDobMonth, groomDobDay] = groomDob.split("-");
+        console.log(groomDobDay)
+        const groomDobdate = new Date(`${groomDobMonth}/${groomDobDay}/${groomDobYear}`);
+
+        const diffTime1 = Math.abs(groomDobdate - todayDate);
+        const groomAgeInDays = Math.ceil(diffTime1 / (1000 * 60 * 60 * 24));
 
 
-      const [groomDobYear, groomDobMonth, groomDobDay] = groomDob.split("-");
-      console.log(groomDobDay)
-      const groomDobdate = new Date(`${groomDobMonth}/${groomDobDay}/${groomDobYear}`);
+        console.log(brideAgeInDays, "Nero BrideDob in days");
 
-      const diffTime1 = Math.abs(groomDobdate - todayDate);
-      const groomAgeInDays = Math.ceil(diffTime1 / (1000 * 60 * 60 * 24));
-
-
-      console.log(brideAgeInDays, "Nero BrideDob in days");
-      if (brideAgeInDays < 6570) {
-        isFormValid = isBrideDobValid = false;
-      }
-
-      if (groomAgeInDays < 7665) {
-        isFormValid = isGroomDobValid = false;
+        if (groomAgeInDays < 7665) {
+          isFormValid = isGroomDobValid = false;
+        }
       }
 
     }
+
+
 
 
     await getDocList(state, dispatch);
@@ -291,6 +291,7 @@ console.log(mrgObj, "Nero mrgObje")
           window.location.href,
           "applicationNumber"
         );
+
         const tenantId = getQueryArg(window.location.href, "tenantId");
 
       }
@@ -305,11 +306,16 @@ console.log(mrgObj, "Nero mrgObje")
             name: item.fileName
           };
         });
-      createEstimateData(
-        LicenseData,
-        "LicensesTemp[0].estimateCardData",
-        dispatch
-      ); //get bill and populate estimate card
+      if (userAction != "CORRECTION") {
+        createEstimateData(
+          LicenseData,
+          "LicensesTemp[0].estimateCardData",
+          dispatch
+        ); //get bill and populate estimate card
+      }
+
+
+
       dispatch(
         prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
       );
@@ -357,7 +363,7 @@ console.log(mrgObj, "Nero mrgObje")
             errorMessage = {
               labelName:
                 "Please fill all mandatory fields for Trade Details, then do next !",
-                labelKey: "ERR_FILL_MR_GROOM_AGE_NOT_VALID"
+              labelKey: "ERR_FILL_MR_GROOM_AGE_NOT_VALID"
             };
           } else {
 

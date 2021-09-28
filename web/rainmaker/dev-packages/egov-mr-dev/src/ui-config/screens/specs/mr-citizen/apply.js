@@ -54,18 +54,18 @@ const getData = async (action, state, dispatch, tenantId) => {
       "MR"
     )
   );
-  dispatch(
-    prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[0].bride.isDivyang",
-      false
-    )
-  );
-  dispatch(
-    prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[0].groom.isDivyang",
-      false
-    )
-  );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "MarriageRegistrations[0].coupleDetails[0].bride.isDivyang",
+  //     false
+  //   )
+  // );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "MarriageRegistrations[0].coupleDetails[0].groom.isDivyang",
+  //     false
+  //   )
+  // );
   dispatch(
     prepareFinalObject(
       "MarriageRegistrations[0].coupleDetails[0].bride.tenantId",
@@ -159,6 +159,8 @@ const screenConfig = {
 
       dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.address.country", "INDIA"));
       dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.address.country", "INDIA"));
+      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.isDivyang", "No"));
+      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.isDivyang", "No"));
       dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
       return action;
     }

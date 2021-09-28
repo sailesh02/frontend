@@ -465,7 +465,14 @@ console.log(documents, "Nero Document")
     if (queryObject[0].applicationNumber) {
 
       //call update
+//call update
+const isCorrection = getQueryArg(window.location.href, "action") === "CORRECTION";
+if (isCorrection) {
 
+  set(queryObject[0], "applicationType", "CORRECTION");
+  set(queryObject[0], "workflowCode", "MRCORRECTION");
+
+}
 
 
 
@@ -477,26 +484,31 @@ console.log(documents, "Nero Document")
       if ((activeIndex === 4 || activeIndex === 1)) {
 
         action = activeIndex === 4 ? "APPLY" : "INITIATE";
-        // let renewalSearchQueryObject = [
-        //   { key: "tenantId", value: queryObject[0].tenantId },
-        //   { key: "applicationNumber", value: queryObject[0].applicationNumber }
-        // ];
-        // const renewalResponse = await getSearchResults(renewalSearchQueryObject);
-        //const renewalDocuments = get(renewalResponse, "Licenses[0].applicationDocuments");
-        // for (let i = 1; i <= documents.length; i++) {
-        //   if (i > renewalDocuments.length) {
-        //     renewalDocuments.push(documents[i - 1])
-        //   }
-        //   else {
-        //     if (!documents[i - 1].hasOwnProperty("id")) {
-        //       renewalDocuments[i - 1].active = false;
-        //       renewalDocuments.push(documents[i - 1])
-        //     }
-        //   }
-        // }
-        //dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
-        // set(queryObject[0], "applicationDocuments", renewalDocuments);
 
+
+      }
+
+      if(isCorrection && activeIndex === 3){
+        let renewalSearchQueryObject = [
+          { key: "tenantId", value: queryObject[0].tenantId },
+          { key: "applicationNumber", value: queryObject[0].applicationNumber }
+        ];
+        const renewalResponse = await getSearchResults(renewalSearchQueryObject);
+        const renewalDocuments = get(renewalResponse, "MarriageRegistrations[0].applicationDocuments");
+        console.log(renewalResponse, "nero renewalResponse")
+        for (let i = 1; i <= documents.length; i++) {
+          if (i > renewalDocuments.length) {
+            renewalDocuments.push(documents[i - 1])
+          }
+          else {
+            if (!documents[i - 1].hasOwnProperty("id")) {
+              renewalDocuments[i - 1].active = false;
+              renewalDocuments.push(documents[i - 1])
+            }
+          }
+        }
+        dispatch(prepareFinalObject("MarriageRegistrations[0].applicationDocuments", renewalDocuments));
+        set(queryObject[0], "applicationDocuments", renewalDocuments);
       }
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
@@ -516,22 +528,22 @@ console.log(documents, "Nero Document")
       //Renewal flow
 
       let updatedApplicationNo = "";
-      // let updatedTenant = "";
-      // if (isEditRenewal && updateResponse && get(updateResponse, "Licenses[0]")) {
-      //   updatedApplicationNo = get(updateResponse.Licenses[0], "applicationNumber");
-      //   updatedTenant = get(updateResponse.Licenses[0], "tenantId");
-      //   const workflowCode = get(updateResponse.Licenses[0], "workflowCode");
-      //   const bsQueryObject = [
-      //     { key: "tenantId", value: tenantId },
-      //     { key: "businessServices", value: workflowCode ? workflowCode : "NewTL" }
-      //   ];
+      let updatedTenant = "";
+      if (isCorrection && updateResponse && get(updateResponse, "MarriageRegistrations[0]")) {
+        updatedApplicationNo = get(updateResponse.MarriageRegistrations[0], "applicationNumber");
+        updatedTenant = get(updateResponse.MarriageRegistrations[0], "tenantId");
+        const workflowCode = get(updateResponse.MarriageRegistrations[0], "workflowCode");
+        const bsQueryObject = [
+          { key: "tenantId", value: tenantId },
+          { key: "businessServices", value: workflowCode ? workflowCode : "MRCORRECTION" }
+        ];
 
-      //   setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
-      // } else {
-      //   updatedApplicationNo = queryObject[0].applicationNumber;
-      //   updatedTenant = queryObject[0].tenantId;
-      // }
-      updatedApplicationNo = queryObject[0].applicationNumber;
+        setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
+      } else {
+        updatedApplicationNo = queryObject[0].applicationNumber;
+        updatedTenant = queryObject[0].tenantId;
+      }
+      //updatedApplicationNo = queryObject[0].applicationNumber;
       let searchQueryObject = [
         { key: "tenantId", value: tenantId },
         { key: "applicationNumber", value: updatedApplicationNo }

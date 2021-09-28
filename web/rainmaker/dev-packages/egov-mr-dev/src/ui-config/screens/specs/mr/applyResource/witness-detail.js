@@ -319,6 +319,59 @@ export const appointmentDetails = {
 
 }
 
+
+export const appointmentDetailsInfo = getCommonGrayCard(
+  {
+    appointmentDetailCard: getCommonContainer({
+    header: getCommonTitle(
+      {
+        labelName: "Trade Location Details",
+        labelKey: "MR_APPOINTMENT_DETAIL_HEADER"
+      },
+      {
+        style: {
+          marginBottom: 18,
+          width: "100%",
+        }
+      }
+    ),
+
+    apntDate: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "MR_APNT_START_TIME_LABEL"
+      },
+      {
+        jsonPath: "MarriageRegistrations[0].appointmentDisplayDetails[0].apntStartTime",
+        callBack: checkValueForNA
+      }
+    ),
+
+    apntTime: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "MR_APNT_END_TIME_LABEL"
+      },
+      {
+        jsonPath: "MarriageRegistrations[0].appointmentDisplayDetails[0].apntEndTime",
+        callBack: checkValueForNA
+      }
+    ),
+
+    apntDesc: getLabelWithValue(
+      {
+        labelName: "Application Type",
+        labelKey: "MR_APNT_DESCRIPTION_LABEL"
+      },
+      {
+        jsonPath: "MarriageRegistrations[0].appointmentDisplayDetails[0].apntDesc",
+        callBack: checkValueForNA
+      }
+    ),
+
+  })
+  }
+);
 export const getAppointmentDetails = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
@@ -359,7 +412,7 @@ export const getAppointmentDetails = (isEditable = true) => {
             },
             buttonLabel: getLabel({
               labelName: "Edit",
-              labelKey: "TL_SUMMARY_EDIT"
+              labelKey: "MR_RESCHEDULE"
             })
           },
           onClickDefination: {

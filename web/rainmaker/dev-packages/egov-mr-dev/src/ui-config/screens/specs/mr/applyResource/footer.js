@@ -96,7 +96,56 @@ export const callBackForNext = async (state, dispatch) => {
 console.log(mrgObj, "Nero mrgObje")
   if (activeStep === 0) {
     //Bride and Groom Details
+    let status = get(
+      mrgObj[0],
+      "status"
+    )
     if (!applicationNoInUrl) {
+
+      let brideDob = get(
+        mrgObj[0],
+        "coupleDetails[0].bride.dateOfBirth"
+      )
+      let groomDob = get(
+        mrgObj[0],
+        "coupleDetails[0].groom.dateOfBirth"
+      )
+
+      console.log(brideDob, groomDob, "Nero both DOB")
+      const [brideDobYear, brideDobMonth, brideDobDay] = brideDob.split("-");
+      console.log(brideDobDay)
+      const brideDobdate = new Date(`${brideDobMonth}/${brideDobDay}/${brideDobYear}`);
+      const todayDate = new Date();
+      const diffTime = Math.abs(brideDobdate - todayDate);
+      const brideAgeInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+
+      console.log(brideAgeInDays, "Nero BrideDob in days");
+      if (brideAgeInDays < 6570) {
+        isFormValid = isBrideDobValid = false;
+      }
+
+
+      const [groomDobYear, groomDobMonth, groomDobDay] = groomDob.split("-");
+      console.log(groomDobDay)
+      const groomDobdate = new Date(`${groomDobMonth}/${groomDobDay}/${groomDobYear}`);
+
+      const diffTime1 = Math.abs(groomDobdate - todayDate);
+      const groomAgeInDays = Math.ceil(diffTime1 / (1000 * 60 * 60 * 24));
+
+
+      console.log(brideAgeInDays, "Nero BrideDob in days");
+      if (brideAgeInDays < 6570) {
+        isFormValid = isBrideDobValid = false;
+      }
+
+      if (groomAgeInDays < 7665) {
+        isFormValid = isGroomDobValid = false;
+      }
+
+    }
+
+    if (applicationNoInUrl && status == "TODO") {
 
       let brideDob = get(
         mrgObj[0],

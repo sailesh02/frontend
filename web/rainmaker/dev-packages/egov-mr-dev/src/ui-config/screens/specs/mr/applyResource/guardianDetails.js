@@ -227,8 +227,16 @@ export const groomGuardianDetails = getCommonCard(
                 jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.emailAddress",
 
             }),
-        })
-    }
+        },
+        {
+            style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
+          }
+        )
+    },
+    {
+        style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
+
+      }
 )
 
 export const brideGuardianDetails = getCommonCard(
@@ -428,8 +436,16 @@ export const brideGuardianDetails = getCommonCard(
                 jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.emailAddress",
 
             }),
-        })
-    }
+        },
+        {
+            style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
+          }
+        )
+    },
+    {
+        style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
+
+      }
 )
 
 

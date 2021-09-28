@@ -58,43 +58,7 @@ export const brideDetails = getCommonCard(
         required: true,
       }),
 
-      // brideMName: getTextField({
-      //   label: {
-      //     labelName: "Door/House No.",
-      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      //     labelKey: "Middle Name"
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Door/House No.",
-      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      //    labelKey: "Middle Name"
-      //   },
-      //   pattern: getPattern("DoorHouseNo"),
-      //   jsonPath: "MarriageRegistrations[0].coupleDetails[0].middleName",
-      //   //required: true,
-      // }),
 
-      // brideLName: getTextField({
-      //   label: {
-      //     labelName: "Door/House No.",
-      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      //     labelKey: "Last Name"
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Door/House No.",
-      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      //    labelKey: "Last Name"
-      //   },
-      //   pattern: getPattern("DoorHouseNo"),
-      //   jsonPath: "MarriageRegistrations[0].coupleDetails[0].lastName",
-
-      // }),
 
       brideDob: {
         ...getDateField({
@@ -111,7 +75,7 @@ export const brideDetails = getCommonCard(
 
           pattern: getPattern("Date"),
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.dateOfBirth",
-
+          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
           props: {
 
             inputProps: {
@@ -138,6 +102,7 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("MobileNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.contact",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
       brideEmail: getTextField({
         label: {
@@ -154,6 +119,7 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("Email"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.emailAddress",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
 
       brideFatherFName: getTextField({
@@ -171,45 +137,10 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.fatherName",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
 
-      // brideFatherMName: getTextField({
-      //   label: {
-      //     labelName: "Door/House No.",
-      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      //     labelKey: "Father's Middle Name"
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Door/House No.",
-      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      //    labelKey: "Father's Middle Name"
-      //   },
-      //   pattern: getPattern("DoorHouseNo"),
-      //   jsonPath: "Licenses[0].tradeLicenseDetail.address.brideFatherMName",
 
-      // }),
-
-      // brideFatherLName: getTextField({
-      //   label: {
-      //     labelName: "Door/House No.",
-      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      //     labelKey: "Father's Last Name"
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Door/House No.",
-      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      //    labelKey: "Father's Last Name"
-      //   },
-      //   pattern: getPattern("DoorHouseNo"),
-      //   jsonPath: "Licenses[0].tradeLicenseDetail.address.brideFatherLName",
-
-      // }),
 
       brideMotherFName: getTextField({
         label: {
@@ -226,45 +157,10 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.motherName",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
 
-      // brideMotherMName: getTextField({
-      //   label: {
-      //     labelName: "Door/House No.",
-      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      //     labelKey: "Mother's Middle Name"
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Door/House No.",
-      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      //    labelKey: "Mother's Middle Name"
-      //   },
-      //   pattern: getPattern("DoorHouseNo"),
-      //   jsonPath: "Licenses[0].tradeLicenseDetail.address.brideMotherMName",
 
-      // }),
-
-      // brideMotherLName: getTextField({
-      //   label: {
-      //     labelName: "Door/House No.",
-      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      //     labelKey: "Mother's Last Name"
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Door/House No.",
-      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      //    labelKey: "Mother's Last Name"
-      //   },
-      //   pattern: getPattern("DoorHouseNo"),
-      //   jsonPath: "MarriageRegistrations[0].coupleDetails[0].motherName",
-
-      // }),
       brideAddressLine1: getTextField({
         label: {
           labelName: "Door/House No.",
@@ -280,6 +176,7 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.addressLine1",
         required: true,
+       // disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
       brideDistrict: getTextField({
         label: {
@@ -296,6 +193,7 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.district",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
       brideState: getTextField({
         label: {
@@ -312,6 +210,7 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.state",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
       // brideDistrict: {
       //   ...getSelectField({
@@ -355,7 +254,7 @@ export const brideDetails = getCommonCard(
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.country",
           required: true,
-
+          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
         }),
       },
       brideAddressPin: getTextField({
@@ -373,6 +272,7 @@ export const brideDetails = getCommonCard(
         required: true,
         //pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.pinCode",
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
 
       }),
       isBrideDisabled: {
@@ -386,19 +286,20 @@ export const brideDetails = getCommonCard(
           placeholder: { labelName: "Select Country", labelKey: "MR_ISDIVYANG_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.yesNoBox",
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.isDivyang",
-
+          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+          required: true,
         }),
       },
 
     },
-    {
-      style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
-    }
+    // {
+    //   style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
+    // }
     ),
 
   },
-  {
-    style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
+  // {
+  //   style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
 
-  }
+  // }
 );

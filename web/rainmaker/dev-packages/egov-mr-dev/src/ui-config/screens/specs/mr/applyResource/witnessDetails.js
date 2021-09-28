@@ -66,6 +66,7 @@ export const brideWitnessDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.address",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
 
       }),
 
@@ -84,6 +85,7 @@ export const brideWitnessDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.district",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
       witness1State: getTextField({
         label: {
@@ -100,6 +102,7 @@ export const brideWitnessDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.state",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
 
       // witness1District: {
@@ -145,7 +148,7 @@ export const brideWitnessDetails = getCommonCard(
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.country",
           required: true,
-
+          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
         }),
       },
       witness1AddressPin: getTextField({
@@ -163,7 +166,7 @@ export const brideWitnessDetails = getCommonCard(
         required: true,
         //pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.pinCode",
-
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
       witness1Contact: getTextField({
         label: {
@@ -180,7 +183,7 @@ export const brideWitnessDetails = getCommonCard(
         required: true,
         //pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.contact",
-
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
     })
   }
@@ -215,6 +218,7 @@ export const groomWitnessDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.firstName",
         required: true,
+
       }),
 
       witness2Address: getTextField({
@@ -233,6 +237,7 @@ export const groomWitnessDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.address",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
 
       witness2District: getTextField({
@@ -250,6 +255,7 @@ export const groomWitnessDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.district",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
       witness2State: getTextField({
         label: {
@@ -266,6 +272,7 @@ export const groomWitnessDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.state",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
 
 
@@ -312,7 +319,7 @@ export const groomWitnessDetails = getCommonCard(
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.country",
           required: true,
-
+          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
         }),
       },
       witness2AddressPin: getTextField({
@@ -330,7 +337,7 @@ export const groomWitnessDetails = getCommonCard(
         required: true,
         //pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.pinCode",
-
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
       witness2Contact: getTextField({
         label: {
@@ -347,11 +354,8 @@ export const groomWitnessDetails = getCommonCard(
         required: true,
         //pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.contact",
-
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
-    },
-    {
-      style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
     }
     )
   }

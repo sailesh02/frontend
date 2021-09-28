@@ -36,7 +36,7 @@ import { getReviewDocuments } from "./applyResource/review-documents";
 import { appointmentDetails } from "./applyResource/appointmentDetails";
 import { getReviewTrade } from "./applyResource/review-trade";
 import { getgroomAddressAndGuardianDetails } from "./applyResource/groom-address-guardian-detail";
-import { getWitnessDetails, getAppointmentDetails } from "./applyResource/witness-detail";
+import { getWitnessDetails, getAppointmentDetails, appointmentDetailsInfo } from "./applyResource/witness-detail";
 import { orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -152,7 +152,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         value: tenantId
       },
       { key: "offset", value: "0" },
-      { key: "licenseNumbers", value: licenseNumber }
+      { key: "mrNumbers", value: licenseNumber }
     ];
     const payload = await getSearchResults(queryObjectSearch);
     const length = payload && payload.MarriageRegistrations.length > 0 ? get(payload, `MarriageRegistrations`, []).length : 0;
@@ -174,7 +174,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       var startTime = appointmentDetailData[0].startTime;
       var startDateObj = new Date(startTime);
       var startDate = startDateObj.getDate() < 10 ? "0" + startDateObj.getDate() : startDateObj.getDate();
-      var startMonth = startDateObj.getMonth()+1 < 10 ? "0" + startDateObj.getMonth()+1 : startDateObj.getMonth()+1;
+      var startMonth = startDateObj.getMonth()+1 < 10 ? `0${startDateObj.getMonth()+1}` : startDateObj.getMonth()+1;
       var startHours = startDateObj.getHours() < 10 ? "0" + startDateObj.getHours() : startDateObj.getHours();
       var startMinutes = startDateObj.getMinutes() < 10 ? "0" + startDateObj.getMinutes() : startDateObj.getMinutes();
       let startTimeStr = `${startDate}-${startMonth}-${startDateObj.getFullYear()}, ${startHours}:${startMinutes}`;
@@ -182,7 +182,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       var endTime = appointmentDetailData[0].endTime;
       var endDateObj = new Date(endTime);
       var endDate = endDateObj.getDate() < 10 ? "0" + endDateObj.getDate() : endDateObj.getDate();
-      var endMonth = endDateObj.getMonth()+1 < 10 ? "0" + endDateObj.getMonth()+1 : endDateObj.getMonth()+1;
+      var endMonth = endDateObj.getMonth()+1 < 10 ? `0${endDateObj.getMonth()+1}` : endDateObj.getMonth()+1;
       var endHours = endDateObj.getHours() < 10 ? "0" + endDateObj.getHours() : endDateObj.getHours();
       var endMinutes = endDateObj.getMinutes() < 10 ? "0" + endDateObj.getMinutes() : endDateObj.getMinutes();
       let endTimeStr = `${endDate}-${endMonth}-${endDateObj.getFullYear()}, ${endHours}:${endMinutes}`;
@@ -410,6 +410,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           printCont
         );
     }
+
+
     if (process.env.REACT_APP_NAME == "Employee") {
       let filteredActions = [];
       //const tenatId = getQueryArg(window.location.href, "tenantId");
@@ -448,10 +450,27 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
                 path: "components.div.children.appointmentDetailsFormCard",
                 property: "visible",
                 value: true
-              }
+              },
+              {
+                path: "components.div.children.appointmentDetailsFormCardInfo",
+                property: "visible",
+                value: false
+              },
+
 
             ];
             dispatchMultipleFieldChangeAction("search-preview", actionDefination, dispatch);
+            // const actionDefination1 = [
+            //   {
+            //     path: "components.div.children.tradeReviewDetails.children.cardContent.children.appointMentDetails",
+            //     property: "visible",
+            //     value: false
+            //   }
+
+            // ];
+
+            // dispatchMultipleFieldChangeAction("search-preview", actionDefination1, dispatch);
+
           }
 
 
@@ -605,16 +624,10 @@ const setActionItems = (action, object) => {
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
-  // viewBreakupButton: getDialogButton(
-  //   "VIEW BREAKUP",
-  //   "MR_PAYMENT_VIEW_BREAKUP",
-  //   "search-preview"
-  // ),
   reviewTradeDetails,
-  //BrideAddressAndGuardianDetails,
   groomAddressAndGuardianDetails,
   witnessDetails,
-  appointMentDetails,
+ // appointMentDetails,
   reviewDocumentDetails
 });
 
@@ -704,6 +717,19 @@ const screenConfig = {
 
           },
           visible: false
+        },
+
+        appointmentDetailsFormCardInfo: {
+          uiFramework: "custom-atoms",
+          componentPath: "Form",
+          props: {
+            id: "appointment_card_form1"
+          },
+          children: {
+            apnt: getCommonCard({appointmentDetailsInfo})
+
+          },
+          visible: true
         },
       }
     },

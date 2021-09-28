@@ -106,11 +106,11 @@ export const groomDetails = getCommonCard(
             labelKey: "MR_DOB_PLACEHOLDER"
           },
 
-          required: true,
+         // required: true,
 
           pattern: getPattern("Date"),
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.dateOfBirth",
-
+          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
           props: {
 
             inputProps: {
@@ -137,6 +137,7 @@ export const groomDetails = getCommonCard(
         pattern: getPattern("MobileNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.contact",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
       groomEmail: getTextField({
         label: {
@@ -153,6 +154,7 @@ export const groomDetails = getCommonCard(
         pattern: getPattern("Email"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.emailAddress",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
 
       groomFatherFName: getTextField({
@@ -170,6 +172,7 @@ export const groomDetails = getCommonCard(
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.fatherName",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
 
 
@@ -189,6 +192,7 @@ export const groomDetails = getCommonCard(
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.motherName",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
 
 
@@ -255,6 +259,7 @@ export const groomDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.district",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
       groomState: getTextField({
         label: {
@@ -271,6 +276,7 @@ export const groomDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.state",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
 
       groomCountry: {
@@ -285,7 +291,7 @@ export const groomDetails = getCommonCard(
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.country",
           required: true,
-
+          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
         }),
       },
 
@@ -304,6 +310,7 @@ export const groomDetails = getCommonCard(
         required: true,
         //pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.pinCode",
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
 
       }),
 
@@ -317,14 +324,14 @@ export const groomDetails = getCommonCard(
           optionLabel: "name",
           placeholder: { labelName: "Select Country", labelKey: "MR_ISDIVYANG_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.yesNoBox",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.isDivyang"
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.isDivyang",
+          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+          required: true,
         }),
       },
 
     },
-    {
-      style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
-    }
+
     ),
 
   }

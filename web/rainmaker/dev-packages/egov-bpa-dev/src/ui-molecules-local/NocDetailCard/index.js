@@ -250,10 +250,10 @@ class NocDetailCard extends Component {
                     </Grid>
                     <Grid item xs={3}>
                       <LinkAtom 
-                        linkDetail = {card.additionalDetails.linkDetails} 
+                        linkDetail = {card && card.additionalDetails && card.additionalDetails.linkDetails ?card.additionalDetails.linkDetails : ''} 
                       />
                     </Grid>
-                    {card.additionalDetails.nocNo ? (
+                    {card && card.additionalDetails && card.additionalDetails.nocNo ? (
                     <Grid item xs={3}>
                       <Typography
                         variant="subtitle1"
@@ -261,9 +261,9 @@ class NocDetailCard extends Component {
                       >
                       Approval Number
                       </Typography>
-                      {card.additionalDetails.nocNo ?
+                      {card && card.additionalDetails && card.additionalDetails.nocNo ?
                       <div style={styles.fontStyle}>
-                        {card.additionalDetails.nocNo}
+                        {card && card.additionalDetails && card.additionalDetails.nocNo}
                       </div>: "NA" }
                     </Grid> ) : ( "" )}
                     </Grid>
@@ -465,4 +465,3 @@ export default withStyles(styles)(
     mapDispatchToProps
   )(NocDetailCard)
 );
-

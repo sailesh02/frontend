@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { DocumentList } from "../../ui-molecules-local";
+import { DocumentListNOC } from "../../ui-molecules-local";
 import { connect } from "react-redux";
 import get from "lodash/get";
 
@@ -14,17 +14,17 @@ const styles = theme => ({
   }
 });
 
-class DocumentListContainer extends Component {
+class DocumentListContainerNOC extends Component {
   render() {
     const { ...rest } = this.props;
-    return <DocumentList {...rest} />;
+    return <DocumentListNOC {...rest} />;
   }
 }
 
 const mapStateToProps = state => {
   let documentsList = get(
     state,
-    "screenConfiguration.preparedFinalObject.BPARegDocumentsContract",
+    "screenConfiguration.preparedFinalObject.documentsContractNOC",
     []
   );
   return { documentsList };
@@ -34,5 +34,5 @@ export default withStyles(styles)(
   connect(
     mapStateToProps,
     null
-  )(DocumentListContainer)
+  )(DocumentListContainerNOC)
 );

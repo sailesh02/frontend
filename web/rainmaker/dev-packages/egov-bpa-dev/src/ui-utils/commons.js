@@ -678,8 +678,16 @@ var tempArray;
 
 };
 
-export const prepareNOCUploadData = async (state, dispatch) => {
+const checkNoc = (type,data) => {
+  let details = data && data.find ( val => {
+    if(val.nocType == type){
+      return true
+    }
+  })
+  return details
+}
 
+export const prepareNOCUploadData = async (state, dispatch,filter) => {
 
   let documents = await getNocDocuments(state);
   let documentsList = await mapDropdownValues(documents, state);
@@ -734,7 +742,7 @@ export const prepareNOCUploadData = async (state, dispatch) => {
       documentsContract.push(tempDoc[key]);
     });
   }
-  dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
+  store.dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
   let Noc = fetchFileDetails(get(
     state.screenConfiguration.preparedFinalObject,
     "Noc",
@@ -744,27 +752,90 @@ export const prepareNOCUploadData = async (state, dispatch) => {
   let finalCards = [];
   documentsContract.length > 0 && documentsContract[0].cards && documentsContract[0].cards.map(docs => {
     Noc && Noc.map(upDocs => {
+      let card = {}
       if (docs.nocType === upDocs.nocType) {
         docs.documents = upDocs.documents;
-        let card = {
-          code: docs.code,
-          name: docs.code,
-          nocType: docs.nocType,
-          dropDownValues: docs.dropDownValues,
-          documentCode: docs.code,
-          documents: upDocs.documents,
-          additionalDetails: docs.additionalDetails,
-          readOnly: false
-        };
+        if(upDocs.nocType == 'NMA_NOC'){
+           card = {
+            code: docs.code,
+            name: docs.code,
+            nocType: docs.nocType,
+            nmaDetails : upDocs.additionalDetails,
+            dropDownValues: docs.dropDownValues,
+            documentCode: docs.code,
+            documents: upDocs.documents,
+            additionalDetails: docs.additionalDetails,
+            readOnly: false
+          }
+        }
+        else{
+          card = {
+            code: docs.code,
+            name: docs.code,
+            nocType: docs.nocType,
+            dropDownValues: docs.dropDownValues,
+            documentCode: docs.code,
+            documents: upDocs.documents,
+            additionalDetails: docs.additionalDetails,
+            readOnly: false
+          };
+        }
         finalCards.push(card);
       }
     })
   })
-  dispatch(prepareFinalObject("nocFinalCardsforPreview", finalCards));
-  dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
+  store.dispatch(prepareFinalObject("nocFinalCardsforPreview", finalCards));
+  store.dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
+
+  if(finalCards && finalCards.length > 0){
+    const scrutinyDetails = get(
+      state.screenConfiguration.preparedFinalObject,
+      'scrutinyDetails',
+      []
+    );
+  
+    let requiredNocsList = scrutinyDetails && scrutinyDetails.planDetail && scrutinyDetails.planDetail.planInformation.requiredNOCs || []
+    let nocArray = finalCards
+
+    let nocTypesFromMDMS = get(
+      state.screenConfiguration.preparedFinalObject,
+      "nocTypes",
+      []
+    )
+
+    // to get activate noc's list form mdms
+    let activatedNocs = nocTypesFromMDMS && nocTypesFromMDMS.length > 0 && nocTypesFromMDMS.filter( noc => {
+      if(noc.isActive){
+        return noc
+      }
+    }) || []
+
+    activatedNocs = activatedNocs && activatedNocs.length > 0 && activatedNocs.map( noc => {
+      return noc.code
+    }) || []
+
+    // check if noc suggested by ecdr is activated in the system
+    requiredNocsList = requiredNocsList && requiredNocsList.filter ( noc => {
+      if(activatedNocs.includes(noc)){
+        return noc
+      }
+    }) || []
+  
+    requiredNocsList && requiredNocsList.length > 0 && nocArray && nocArray.length > 0 && requiredNocsList.map( noc => {
+      if(!checkNoc(noc,finalCards)){
+        nocArray.push(
+          {
+            name : null,
+            nocType : noc,
+            code : null
+          }
+        ) 
+      }
+    })
+    store.dispatch(prepareFinalObject("requiredNocToTrigger", nocArray));
+  }
 
 };
-
 /**
  * This method will be called to get teh noc documents matched with noctyps and applicationType
  */
@@ -1423,12 +1494,74 @@ const updateNocApplication = async (state, dispatch, bpaAction) => {
   }
 };
 
+// update NOC for BPA only
+const updateNocApplicationBPA = async (state, dispatch, bpaAction) => {
+  const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
+  if (Noc.length > 0) {
+    let count = 0;
+    for (let data = 0; data < Noc.length; data++) {
+      let response = await httpRequest(
+        "post",
+        "/noc-services/v1/noc/_update",
+        "",
+        [],
+        { Noc: Noc[data] }
+      );
+      if (get(response, "ResponseInfo.status") == "successful") {
+        count++;
+        if (Noc.length == count) {
+          return "successful"
+        }
+      }
+    }
+  }else{
+    return "successful";
+  }
+};
+
 export const submitBpaApplication = async (state, dispatch) => {
   const bpaAction = "APPLY";
   let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
 
   if (isDeclared) {
     let nocRespose = await nocapplicationUpdate(state);
+    let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
+    const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    if (get(response, "status", "") === "success") {
+      let status = get(state, "screenConfiguration.preparedFinalObject.BPA.status");
+      if (status === "DOC_VERIFICATION_INPROGRESS") {
+        const acknowledgementUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true"
+            ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+            : `/egov-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        dispatch(setRoute(acknowledgementUrl));
+      } else {
+        const acknowledgementUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true"
+            ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+            : `/egov-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        dispatch(setRoute(acknowledgementUrl));
+      }
+
+    }
+  }
+  else {
+    let errorMessage = {
+      labelName: "Please confirm the declaration!",
+      labelKey: "BPA_DECLARATION_COMMON_LABEL"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+  }
+};
+
+// to submit BPA application with NOC update API (NOC update to fetch documents from NOC search preview)
+export const submitBpaApplicationNOC = async (state, dispatch) => {
+  const bpaAction = "APPLY";
+  let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
+
+  if (isDeclared) {
+    let nocRespose = await nocapplicationUpdateBPA(state);
     let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
     const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
     const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -1473,6 +1606,23 @@ export const updateBpaApplication = async (state, dispatch) => {
     dispatch(setRoute(acknowledgementUrl));
   }
 };
+
+// noc update should not take documents from preview
+export const updateBpaApplicationNOC = async (state, dispatch) => {
+  const bpaAction = "SEND_TO_CITIZEN";
+  let nocRespose = await updateNocApplicationBPA(state, dispatch, "INITIATE");
+  let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
+  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  if (get(response, "status", "") === "success" && nocRespose == "successful") {
+    const acknowledgementUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
+  }
+};
+
 export const updateOcBpaApplication = async (state, dispatch) => {
   const bpaAction = "SEND_TO_CITIZEN";
   let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
@@ -1690,13 +1840,43 @@ export const submitOCBpaApplication = async (state, dispatch) => {
     }
   }
 };
-export const getNocSearchResults = async (queryObject, dispatch) => {
+export const getNocSearchResults = async (queryObject, dispatch,displayNoc) => {
   try {
     const response = await httpRequest(
       "post",
       "/noc-services/v1/noc/_search",
       "",
       queryObject
+    );
+    if(displayNoc){
+      store.dispatch(prepareFinalObject("Noc", response.Noc));
+
+    }
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+
+export const createNoc = async (payload) => {
+  let customRequestInfo = JSON.parse(getUserInfo())
+  try {
+    const response = await httpRequest(
+      "post",
+      "/noc-services/v1/noc/_create",
+      "",
+      [],
+      { Noc: payload },
+      [],
+      {userInfo :customRequestInfo }
+      
     );
     return response;
   } catch (error) {
@@ -1710,6 +1890,131 @@ export const getNocSearchResults = async (queryObject, dispatch) => {
     throw error;
   }
 };
+
+export const updateNoc = async (payload) => {
+  let customRequestInfo = JSON.parse(getUserInfo())
+  try {
+    const response = await httpRequest(
+      "post",
+      "/noc-services/v1/noc/_update",
+      "",
+      [],
+      { Noc: payload },
+      [],
+      {userInfo :customRequestInfo }
+    );
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+
+export const validateThirdPartyDetails = (thirdPartyDetails) => {
+  if (thirdPartyDetails == null || Object.keys(thirdPartyDetails).length === 0) {
+    return false
+  }else if(thirdPartyDetails && thirdPartyDetails.thirdPartNOC && Object.keys(thirdPartyDetails.thirdPartNOC).length === 0 ){
+    return false
+  } 
+  else if (thirdPartyDetails && thirdPartyDetails.thirdPartNOC) {
+    let valid = [];
+      if (
+          thirdPartyDetails.thirdPartNOC.hasOwnProperty("NameOfTheNearestMonumentOrSite") && 
+          thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("MonumentName") && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['MonumentName'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['MonumentName'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("State") && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['State'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['State'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("District") && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['District'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['District'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("Taluk") &&
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Taluk'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Taluk'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.hasOwnProperty("Locality") &&
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Locality'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['NameOfTheNearestMonumentOrSite']['Locality'] !== "" && 
+              
+          thirdPartyDetails.thirdPartNOC.hasOwnProperty("DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument") && 
+          thirdPartyDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.hasOwnProperty("DistanceFromTheMainMonument") &&
+          thirdPartyDetails.thirdPartNOC['DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument']['DistanceFromTheMainMonument'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument']['DistanceFromTheMainMonument'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.hasOwnProperty("DistanceFromTheProtectedBoundaryWall") &&
+          thirdPartyDetails.thirdPartNOC['DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument']['DistanceFromTheProtectedBoundaryWall'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument']['DistanceFromTheProtectedBoundaryWall'] !== "" &&
+
+          thirdPartyDetails.thirdPartNOC.hasOwnProperty("ApproximateDateOfCommencementOfWorks") &&
+          thirdPartyDetails.thirdPartNOC['ApproximateDateOfCommencementOfWorks'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['ApproximateDateOfCommencementOfWorks'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.hasOwnProperty("ApproximateDurationOfCommencementOfWorks") &&
+          thirdPartyDetails.thirdPartNOC['ApproximateDurationOfCommencementOfWorks'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['ApproximateDurationOfCommencementOfWorks'] !== "" &&
+
+          thirdPartyDetails.thirdPartNOC.hasOwnProperty("MaximumHeightOfExistingModernBuildingInCloseVicinityOf") && 
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("NearTheMonument") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['NearTheMonument'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['NearTheMonument'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("NearTheSiteConstructionRelatedActivity") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['NearTheSiteConstructionRelatedActivity'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['NearTheSiteConstructionRelatedActivity'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("WhetherMonumentIsLocatedWithinLimitOf") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['WhetherMonumentIsLocatedWithinLimitOf'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['WhetherMonumentIsLocatedWithinLimitOf'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage'] !== "" && 
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("StatusOfModernConstructions") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['StatusOfModernConstructions'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['StatusOfModernConstructions'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction'] !== "" &&
+          thirdPartyDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.hasOwnProperty("OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea") &&
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea'] !== "" && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['TermAndCondition'] !== undefined && 
+          thirdPartyDetails.thirdPartNOC['MaximumHeightOfExistingModernBuildingInCloseVicinityOf']['TermAndCondition'] !== false
+      ) { valid.push(1) } else { valid.push(0) }
+      if (valid.includes(0)) { return false; } else { return true; }
+  }
+}
+
+export const getWorkflowCode = (noc,mode) => {
+  switch(mode){
+    case 'offline':
+      return noc[0].offlineWF
+    case 'online':
+      return noc[0].onlineWF
+    case 'third-party':
+      return noc[0].thirdPartyWF
+    default :
+      return ''      
+  }
+}
+export const getAdditionalDetails = (nocType,preparedFinalObject) => {
+  
+  let nocTypes = get(preparedFinalObject, "nocTypes", []);
+  let requiredNoc = nocTypes && nocTypes.length > 0 && nocTypes.filter( noc => {
+    if(noc.code == nocType ){
+      return noc
+    }
+  })
+
+  let mode = requiredNoc && requiredNoc.length > 0 && requiredNoc[0].mode || ""
+  let workflowCode = getWorkflowCode(requiredNoc,mode)
+  return {
+    mode : mode,
+    workflowCode : workflowCode
+  }
+}
+
 export const nocapplicationUpdate = (state) => {
   const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
   let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
@@ -1734,6 +2039,32 @@ export const nocapplicationUpdate = (state) => {
     }
   }
 }
+
+export const nocapplicationUpdateBPA = (state) => {
+  const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
+  let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.requiredNocToTrigger", []);
+  if (Noc.length > 0) {
+    let count = 0;
+    for (let data = 0; data < Noc.length; data++) {
+      // let documents = nocDocuments[data].documents;
+      // set(Noc[data], "documents", documents);
+      let response = httpRequest(
+        "post",
+        "/noc-services/v1/noc/_update",
+        "",
+        [],
+        { Noc: Noc[data] }
+      );
+      if (get(response, "ResponseInfo.status") == "successful") {
+        count++;
+        if (Noc.length == count) {
+          return "successful"
+        }
+      }
+    }
+  }
+}
+
 
 export const getStakeHolderRoles = () => {
   let roles = [

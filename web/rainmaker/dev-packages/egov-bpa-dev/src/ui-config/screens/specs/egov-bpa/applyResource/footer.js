@@ -12,9 +12,10 @@ import {
   createUpdateBpaApplication,
   prepareDocumentsUploadData,
   prepareNOCUploadData,
-  submitBpaApplication,
-  updateBpaApplication,
-  getNocSearchResults
+  submitBpaApplicationNOC,
+  updateBpaApplicationNOC,
+  getNocSearchResults,
+  validateThirdPartyDetails
 } from "../../../../../ui-utils/commons";
 import { prepareNocFinalCards, compare, checkOwnerAndArchitectMobileNo } from "../../../specs/utils/index";
 import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -345,63 +346,139 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 3) {
-    const documentsFormat = Object.values(
-      get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
-    );
+    
+    let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
+    let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
+    let nocTypesFromMDMS = get(
+      state.screenConfiguration.preparedFinalObject,
+      "nocTypes",
+      []
+    )
 
-    let validateDocumentField = false;
+     // to get activate noc's list form mdms
+     let activatedNocs = nocTypesFromMDMS && nocTypesFromMDMS.length > 0 && nocTypesFromMDMS.filter( noc => {
+      if(noc.isActive){
+        return noc
+      }
+    }) || []
 
-    if (documentsFormat && documentsFormat.length) {
-      for (let i = 0; i < documentsFormat.length; i++) {
-        let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-        let isDocumentTypeRequired = get(
-          documentsFormat[i],
-          "isDocumentTypeRequired"
-        );
+    activatedNocs = activatedNocs && activatedNocs.length > 0 && activatedNocs.map( noc => {
+      return noc.code
+    })
 
-        let documents = get(documentsFormat[i], "documents");
-        if (isDocumentRequired) {
-          if (documents && documents.length > 0) {
-            if (isDocumentTypeRequired) {
-              if (get(documentsFormat[i], "dropDownValues.value")) {
-                validateDocumentField = true;
+    // check if noc suggested by ecdr is activated in the system
+    requiredNocs = requiredNocs && requiredNocs.filter ( noc => {
+      if(activatedNocs.includes(noc)){
+        return noc
+      }
+    }) || []
+
+    let noc = get(state.screenConfiguration.preparedFinalObject,"Noc",[]) 
+   
+    let nocAlreadyCreated = noc && noc.length > 0 && noc.map( nc => { // to get noc's created during BPA creation
+      return nc.nocType
+    })
+    let isValid = true
+    // add required nocs and already created noc's
+    let mergedNocs = requiredNocs
+    nocAlreadyCreated && nocAlreadyCreated.length > 0 && nocAlreadyCreated.map( noc => {
+      if(!mergedNocs.includes(noc)){
+        mergedNocs.push(noc)
+      }
+    })
+
+    // to check NMA noc details if NMA NOC is required
+    if(requiredNocs && requiredNocs.length > 0 && requiredNocs.includes("NMA_NOC")){
+      let NMANoc = noc && noc.length > 0 && noc.filter( noc => {
+        if(noc.nocType == "NMA_NOC"){
+          return noc
+        }
+      })
+      if(NMANoc && NMANoc.length > 0 && !validateThirdPartyDetails(NMANoc[0].additionalDetails)){
+        isValid = false
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "ERR_FILL_NMA_NOC_DETAILS",
+              labelKey: "ERR_FILL_NMA_NOC_DETAILS",
+            },
+            "warning"
+          )
+        )
+        return
+      }else{
+       isValid = true
+      }
+    }
+
+    // to check if all required NOC's are triggered
+    if((noc.length == mergedNocs.length) && isValid){
+      const documentsFormat = Object.values(
+        get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
+      );
+  
+      let validateDocumentField = false;
+  
+      if (documentsFormat && documentsFormat.length) {
+        for (let i = 0; i < documentsFormat.length; i++) {
+          let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+          let isDocumentTypeRequired = get(
+            documentsFormat[i],
+            "isDocumentTypeRequired"
+          );
+  
+          let documents = get(documentsFormat[i], "documents");
+          if (isDocumentRequired) {
+            if (documents && documents.length > 0) {
+              if (isDocumentTypeRequired) {
+                if (get(documentsFormat[i], "dropDownValues.value")) {
+                  validateDocumentField = true;
+                } else {
+                  dispatch(
+                    toggleSnackbar(
+                      true,
+                      { labelName: "Please select type of Document!", labelKey: "BPA_FOOTER_SELECT_DOC_TYPE" },
+                      "warning"
+                    )
+                  );
+                  validateDocumentField = false;
+                  break;
+                }
               } else {
-                dispatch(
-                  toggleSnackbar(
-                    true,
-                    { labelName: "Please select type of Document!", labelKey: "BPA_FOOTER_SELECT_DOC_TYPE" },
-                    "warning"
-                  )
-                );
-                validateDocumentField = false;
-                break;
+                validateDocumentField = true;
               }
             } else {
-              validateDocumentField = true;
+              dispatch(
+                toggleSnackbar(
+                  true,
+                  { labelName: "Please uplaod mandatory documents!", labelKey: "BPA_FOOTER_UPLOAD_MANDATORY_DOC" },
+                  "warning"
+                )
+              );
+              validateDocumentField = false;
+              break;
             }
           } else {
-            dispatch(
-              toggleSnackbar(
-                true,
-                { labelName: "Please uplaod mandatory documents!", labelKey: "BPA_FOOTER_UPLOAD_MANDATORY_DOC" },
-                "warning"
-              )
-            );
-            validateDocumentField = false;
-            break;
+            validateDocumentField = true;
           }
-        } else {
-          validateDocumentField = true;
         }
-      }
-      if (!validateDocumentField) {
-      isFormValid = false;
-      hasFieldToaster = true;
+        if (!validateDocumentField) {
+        isFormValid = false;
+        hasFieldToaster = true;
+        } else {
+          getSummaryRequiredDetails(state, dispatch);
+        }
       } else {
         getSummaryRequiredDetails(state, dispatch);
       }
-    } else {
-      getSummaryRequiredDetails(state, dispatch);
+    }else{
+      let errorMessage = {
+        labelName: "Please trigger all required noc's",
+        labelKey: "ERR_TRIGGER_REQUIRED_NOCS_TOAST"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      return
     }
   }
 
@@ -413,13 +490,13 @@ const callBackForNext = async (state, dispatch) => {
         // dispatch(prepareFinalObject("BPA.owners[0].ownerType", "NONE"));
       }
       if (activeStep === 3) {
-        let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
-        if(nocData && nocData.length > 0) {
-          nocData.map(items => {
-            if(!items.readOnly) items.readOnly = items.readOnly ? false : true;
-          })
-          dispatch(prepareFinalObject("nocForPreview", nocData));
-        }
+          let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
+          if(nocData && nocData.length > 0) {
+            nocData.map(items => {
+              if(!items.readOnly) items.readOnly = items.readOnly ? false : true;
+            })
+            dispatch(prepareFinalObject("nocForPreview", nocData));
+          }
       }
       if (activeStep === 2) {
         let checkingOwner = get(
@@ -839,7 +916,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: submitBpaApplication
+      callBack: submitBpaApplicationNOC
     },
     roleDefination: {
       rolePath: "user-info.roles",
@@ -873,7 +950,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: updateBpaApplication
+      callBack: updateBpaApplicationNOC
     },
     // roleDefination: {
     //   rolePath: "user-info.roles",

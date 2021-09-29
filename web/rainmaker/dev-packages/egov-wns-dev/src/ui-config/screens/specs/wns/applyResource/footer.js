@@ -438,7 +438,6 @@ const callBackForNext = async (state, dispatch) => {
         hasFieldToaster = false;
       }
     } else {
-      debugger
       let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
       if(validateMeterDetails(applyScreenObject)){
         isFormValid = true;

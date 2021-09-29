@@ -825,7 +825,6 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
 };
 
 const parserFunction = (obj) => {
-  debugger
   let parsedObject = {
     roadCuttingArea: parseInt(obj.roadCuttingArea),
     meterInstallationDate: convertDateToEpoch(obj.meterInstallationDate),

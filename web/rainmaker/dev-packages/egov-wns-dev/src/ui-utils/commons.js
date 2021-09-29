@@ -553,7 +553,6 @@ export const validationsForExecutionData = (applyScreenObject) => {
 
 export const validateMeterDetails = (applyScreenObject) => {
     let connectionType = applyScreenObject && applyScreenObject.connectionType
-    debugger
     let rValue = true;
     if (rValue && connectionType && connectionType == 'Metered'){
         if( applyScreenObject.hasOwnProperty("additionalDetails") && 

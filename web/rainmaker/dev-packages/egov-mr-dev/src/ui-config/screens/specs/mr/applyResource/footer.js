@@ -320,6 +320,22 @@ export const callBackForNext = async (state, dispatch) => {
         prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
       );
       isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+
+      if (userAction == "CORRECTION") {
+
+        const actionDefination = [
+
+          {
+            path: "components.div.children.formwizardFifthStep.children.tradeReviewDetails.children.cardContent.children.estimate",
+            property: "visible",
+            value: false
+          },
+
+
+        ];
+        dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
+      }
+
     }
 
 
@@ -1310,38 +1326,7 @@ export const downloadPrintContainer = (
     },
     leftIcon: "assignment"
   };
-  // switch (status) {
-  //   case "APPROVED":
-  //     downloadMenu = [
-  //       tlCertificateDownloadObject,
-  //       receiptDownloadObject,
-  //       applicationDownloadObject
-  //     ];
-  //     printMenu = [
-  //       tlCertificatePrintObject,
-  //       receiptPrintObject,
-  //       applicationPrintObject
-  //     ];
-  //     break;
-  //   case "APPLIED":
-  //   case "CITIZENACTIONREQUIRED":
-  //   case "FIELDINSPECTION":
-  //   case "PENDINGAPPROVAL":
-  //   case "PENDINGPAYMENT":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   case "CANCELLED":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   case "REJECTED":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   default:
-  //     break;
-  // }
+
   switch (status) {
     case "APPROVED":
       downloadMenu = [

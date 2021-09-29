@@ -181,7 +181,7 @@ export const brideWitnessDetails = getCommonCard(
           labelKey: "MR_CONTACT_PLACEHOLDER"
         },
         required: true,
-        //pattern: getPattern("Address"),
+        pattern: getPattern("MobileNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.contact",
         disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
@@ -352,7 +352,7 @@ export const groomWitnessDetails = getCommonCard(
           labelKey: "MR_CONTACT_PLACEHOLDER"
         },
         required: true,
-        //pattern: getPattern("Address"),
+        pattern: getPattern("Email"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.contact",
         disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),

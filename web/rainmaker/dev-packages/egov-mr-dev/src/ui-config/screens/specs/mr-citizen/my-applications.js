@@ -43,6 +43,15 @@ const screenConfig = {
                 jsonPath: "status",
                 prefix: "WF_MR_"
               },
+
+              {
+                label: "MR_APPLICATION_TYPE",
+                jsonPath: "applicationType"
+              },
+              {
+                label: "MR_REGISTRATION_NO",
+                jsonPath: "mrNumber"
+              },
               {
                 label: "MR_GROOM_NAME",
                 jsonPath: "coupleDetails[0].groom.firstName"

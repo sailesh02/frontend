@@ -163,18 +163,22 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       "screenConfiguration.preparedFinalObject.MarriageRegistrations[0].status"
     );
 
+
     let appointmentDetails = get(
       state,
       "screenConfiguration.preparedFinalObject.MarriageRegistrations[0].appointmentDetails"
     );
 
-    let appointmentDetailData =  appointmentDetails && appointmentDetails.filter( item => item.active = true)
+    let appointmentDetailData = appointmentDetails && appointmentDetails.filter(item => item.active = true)
     let appointDataDisplay = [];
-    if(appointmentDetailData && appointmentDetailData.length){
+    let appointmentDate = '';
+    let appointmentTime = '';
+    let appointmentDesc = '';
+    if (appointmentDetailData && appointmentDetailData.length) {
       var startTime = appointmentDetailData[0].startTime;
       var startDateObj = new Date(startTime);
       var startDate = startDateObj.getDate() < 10 ? "0" + startDateObj.getDate() : startDateObj.getDate();
-      var startMonth = startDateObj.getMonth()+1 < 10 ? `0${startDateObj.getMonth()+1}` : startDateObj.getMonth()+1;
+      var startMonth = startDateObj.getMonth() + 1 < 10 ? `0${startDateObj.getMonth() + 1}` : startDateObj.getMonth() + 1;
       var startHours = startDateObj.getHours() < 10 ? "0" + startDateObj.getHours() : startDateObj.getHours();
       var startMinutes = startDateObj.getMinutes() < 10 ? "0" + startDateObj.getMinutes() : startDateObj.getMinutes();
       let startTimeStr = `${startDate}-${startMonth}-${startDateObj.getFullYear()}, ${startHours}:${startMinutes}`;
@@ -182,21 +186,25 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       var endTime = appointmentDetailData[0].endTime;
       var endDateObj = new Date(endTime);
       var endDate = endDateObj.getDate() < 10 ? "0" + endDateObj.getDate() : endDateObj.getDate();
-      var endMonth = endDateObj.getMonth()+1 < 10 ? `0${endDateObj.getMonth()+1}` : endDateObj.getMonth()+1;
+      var endMonth = endDateObj.getMonth() + 1 < 10 ? `0${endDateObj.getMonth() + 1}` : endDateObj.getMonth() + 1;
       var endHours = endDateObj.getHours() < 10 ? "0" + endDateObj.getHours() : endDateObj.getHours();
       var endMinutes = endDateObj.getMinutes() < 10 ? "0" + endDateObj.getMinutes() : endDateObj.getMinutes();
       let endTimeStr = `${endDate}-${endMonth}-${endDateObj.getFullYear()}, ${endHours}:${endMinutes}`;
       var description = appointmentDetailData[0].description;
-      appointDataDisplay.push({apntStartTime: startTimeStr, apntEndTime: endTimeStr, apntDesc: description})
+      appointDataDisplay.push({ apntStartTime: startTimeStr, apntEndTime: endTimeStr, apntDesc: description })
+      //appointDataForForm.push({apntStartTime: appointmentDetailData[0].startTime, apntEndTime: appointmentDetailData[0].endTime, apntDesc: description})
+      appointmentTime = `${startDateObj.getHours()}:${startDateObj.getMinutes()}`;
+      appointmentDate = appointmentDetailData[0].startTime;
+      appointmentDesc = description;
     }
 
 
 
     dispatch(prepareFinalObject("MarriageRegistrations[0].appointmentDisplayDetails", appointDataDisplay));
-    const financialYear = get(
-      state,
-      "screenConfiguration.preparedFinalObject.MarriageRegistrations[0].financialYear"
-    );
+    dispatch(prepareFinalObject("MarriageRegistrations[0].appointmentDate", appointmentDate));
+    dispatch(prepareFinalObject("MarriageRegistrations[0].appointmentTime", appointmentTime));
+    dispatch(prepareFinalObject("MarriageRegistrations[0].appointmentDesc", appointmentDesc));
+
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
@@ -256,36 +264,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       console.log(e);
     }
 
-    // const statusCont = {
-    //   word1: {
-    //     ...getCommonTitle(
-    //       {
-    //         jsonPath: "MarriageRegistrations[0].headerSideText.word1"
-    //       },
-    //       {
-    //         style: {
-    //           marginRight: "10px",
-    //           color: "rgba(0, 0, 0, 0.6000000238418579)"
-    //         }
-    //       }
-    //     )
-    //   },
-    //   word2: {
-    //     ...getCommonTitle({
-    //       jsonPath: "MarriageRegistrations[0].headerSideText.word2"
-    //     })
-    //   },
-    //   cancelledLabel: {
-    //     ...getCommonHeader(
-    //       {
-    //         labelName: "Cancelled",
-    //         labelKey: "TL_COMMON_STATUS_CANC"
-    //       },
-    //       { variant: "body1", style: { color: "#E54D42" } }
-    //     ),
-    //     visible: false
-    //   }
-    // };
+
     let CitizenprintCont = '';
     let printCont = '';
     if (status !== "INITIATED") {
@@ -460,16 +439,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
 
             ];
             dispatchMultipleFieldChangeAction("search-preview", actionDefination, dispatch);
-            // const actionDefination1 = [
-            //   {
-            //     path: "components.div.children.tradeReviewDetails.children.cardContent.children.appointMentDetails",
-            //     property: "visible",
-            //     value: false
-            //   }
 
-            // ];
-
-            // dispatchMultipleFieldChangeAction("search-preview", actionDefination1, dispatch);
 
           }
 
@@ -481,38 +451,61 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         console.log("Nero Error ggg")
       }
     }
-    // let filteredActions = [];
-    //   console.log(data, "Nero data")
-    //   console.log(state, "Nero statesss")
-    //  // let ProcessInstances = get(data, "workflow.ProcessInstances",[]);
-    // //  const workflowData = get(
-    // //   state,
-    // //   "screenConfiguration.preparedFinalObject.workflow"
-    // // );
-    // const workflowData = state && state.screenConfiguration.preparedFinalObject && state.screenConfiguration.preparedFinalObject.workflow;
-    // console.log(workflowData, "Nero workflowData")
-    //  let ProcessInstances = [];
-    //   ProcessInstances = workflowData && workflowData.ProcessInstances;
-    //   console.log(ProcessInstances, "Nero ProcessInstances")
-    //   if(ProcessInstances &&
-    //     ProcessInstances.length > 0){
-    //       filteredActions = get(ProcessInstances[ProcessInstances.length - 1], "nextActions", []).filter(
-    //         item => item.action == "SCHEDULE" || "RESCHEDULE"
-    //       );
-    //     }
-    //     console.log(filteredActions, "Nero filteredActions")
-    //   if(process.env.REACT_APP_NAME == "Employee" && filteredActions && filteredActions.length > 0){
-    //     console.log("Nero In sss")
-    //     const actionDefination = [
-    //       {
-    //         path: "components.div.children.appointmentDetailsFormCard",
-    //         property: "visible",
-    //         value: true
-    //       }
 
-    //     ];
-    //     dispatchMultipleFieldChangeAction("search-preview", actionDefination, dispatch);
-    //   }
+
+    if (appointmentDetails && appointmentDetails.length > 0) {
+
+
+      const actionDefination1 = [
+        {
+          path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.appointmentDetailCard.children.appointmentDesc.props",
+          property: "disabled",
+          value: true
+        },
+        {
+          path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.appointmentDetailCard.children.appointmentdate.props",
+          property: "disabled",
+          value: true
+        },
+        {
+          path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.appointmentDetailCard.children.appointmenttime.props",
+          property: "disabled",
+          value: true
+        },
+        {
+          path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.headerDiv.children.editSection",
+          property: "visible",
+          value: true
+        }
+
+      ];
+
+      dispatchMultipleFieldChangeAction("search-preview", actionDefination1, dispatch);
+
+
+    }
+
+    if (applicationType == "CORRECTION") {
+      console.log("in section nero")
+
+      const estimateCardAction = [
+        {
+          path: "components.div.children.tradeReviewDetails.children.cardContent.children.estimate",
+          property: "visible",
+          value: false
+        },
+        {
+          path: "components.div.children.appointmentDetailsFormCardInfo",
+          property: "visible",
+          value: false
+        }
+
+
+      ];
+
+      dispatchMultipleFieldChangeAction("search-preview", estimateCardAction, dispatch);
+    }
+
   }
 };
 
@@ -613,11 +606,6 @@ const setActionItems = (action, object) => {
     get(object, "roleDefination")
   );
 
-  // set(
-  //   action,
-  //   "screenConfig.components.div.children.appointmentDetailsFormCard.visible",
-  //   false
-  // );
 
 };
 
@@ -627,7 +615,7 @@ export const tradeReviewDetails = getCommonCard({
   reviewTradeDetails,
   groomAddressAndGuardianDetails,
   witnessDetails,
- // appointMentDetails,
+  // appointMentDetails,
   reviewDocumentDetails
 });
 
@@ -726,7 +714,7 @@ const screenConfig = {
             id: "appointment_card_form1"
           },
           children: {
-            apnt: getCommonCard({appointmentDetailsInfo})
+            apnt: getCommonCard({ appointmentDetailsInfo })
 
           },
           visible: true

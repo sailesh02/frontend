@@ -36,6 +36,8 @@ const connectionType = getQueryArg(window.location.href, "connectionType")
         rainwaterHarvestingFacility: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC" }, { jsonPath: "WaterConnection[0].property.additionalDetails.isRainwaterHarvesting" }),
         waterSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SOURCE" }, { jsonPath: "WaterConnection[0].waterSource" }),
         waterSubSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" }, { jsonPath: "WaterConnection[0].waterSubSource" }),
+        meterMake: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_METER_MAKE" }, { jsonPath: "WaterConnection[0].additionalDetails.meterMake" }),
+        meterReadingRatio: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_METER_RATIO" }, { jsonPath: "WaterConnection[0].additionalDetails.meterReadingRatio" }),
         editSection: {
           componentPath: "Button",
           props: { color: "primary", style: { margin: "-16px" } },

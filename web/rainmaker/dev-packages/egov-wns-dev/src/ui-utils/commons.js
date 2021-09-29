@@ -1686,13 +1686,12 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
                         { key: "key", value: "ws-consolidatedacknowlegment" },
                         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
                     ]
-
                     // payloadReceiptDetails.WaterConnection = await getPropertyObj(payloadReceiptDetails.WaterConnection);
-                    if (payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting !== undefined && payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting !== null) {
-                        if (payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting === true) {
-                            payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting = 'SCORE_YES'
+                    if (payloadReceiptDetails.WaterConnection && payloadReceiptDetails.WaterConnection[0] && payloadReceiptDetails.WaterConnection[0].additionalDetails && payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting !== undefined && payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting !== null) {
+                        if (payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting === true) {
+                            payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting = 'SCORE_YES'
                         } else {
-                            payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting = 'SCORE_NO'
+                            payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting = 'SCORE_NO'
                         }
                     }
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })

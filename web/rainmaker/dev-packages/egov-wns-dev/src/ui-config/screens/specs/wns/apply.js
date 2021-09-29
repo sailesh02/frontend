@@ -735,7 +735,7 @@ export const getData = async (action, state, dispatch) => {
         dispatch(
           handleField(
             "apply",
-            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterRatio`,
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
             "visible",
             false
           )
@@ -751,7 +751,7 @@ export const getData = async (action, state, dispatch) => {
         dispatch(
           handleField(
             "apply",
-            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterRatio`,
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
             "visible",
             false
           )

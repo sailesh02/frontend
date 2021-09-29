@@ -46,6 +46,14 @@ const parserFunction = (data) => {
               queryObject.additionalDetails.detailsProvidedBy !== undefined &&
               queryObject.additionalDetails.detailsProvidedBy !== null
           ) ? queryObject.additionalDetails.detailsProvidedBy : "",
+          meterMake:(
+            obj.additionalDetails !== undefined &&
+            obj.additionalDetails.meterMake !== undefined
+          ) ? (obj.additionalDetails.meterMake) : "",
+          meterReadingRatio: (
+            obj.additionalDetails !== undefined &&
+            obj.additionalDetails.meterReadingRatio !== undefined
+          ) ? (obj.additionalDetails.meterReadingRatio) : "",
       }
   }
   queryObject = { ...queryObject, ...parsedObject }

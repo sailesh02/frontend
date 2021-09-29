@@ -337,6 +337,38 @@ export const reviewInitialMeterReading = getLabelWithValueForModifiedLabel(
   }
 );
 
+export const reviewMeterMake = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Meter Make",
+    labelKey: "WS_ADDN_DETAILS_METER_MAKE"
+  },
+  { jsonPath: "applyScreen.additionalDetails.meterMake",
+    callBack: handleNA },
+  {
+    labelKey: "WS_ADDN_DETAILS_METER_MAKE"
+  },
+  {
+    jsonPath: "applyScreenOld.additionalDetails.meterMake",
+    callBack: handleNA
+  }
+);
+
+export const reviewMeterRatio = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Initial Meter Reading",
+    labelKey: "WS_ADDN_DETAILS_METER_RATIO"
+  },
+  { jsonPath: "applyScreen.additionalDetails.meterReadingRatio",
+    callBack: handleNA },
+  {
+    labelKey: "WS_ADDN_DETAILS_METER_RATIO"
+  },
+  {
+    jsonPath: "applyScreenOld.additionalDetails.meterReadingRatio",
+    callBack: handleNA
+  }
+);
+
 export const reviewOwner = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
@@ -462,5 +494,7 @@ const activationDetails = getCommonContainer({
   reviewConnectionExecutionDate,
   reviewMeterId,
   reviewMeterInstallationDate,
-  reviewInitialMeterReading
+  reviewInitialMeterReading,
+  reviewMeterMake,
+  reviewMeterRatio
 });

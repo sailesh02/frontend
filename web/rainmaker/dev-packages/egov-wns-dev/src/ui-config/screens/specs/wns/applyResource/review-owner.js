@@ -265,8 +265,31 @@ export const activateDetailsMeter={
       },
       { jsonPath: "WaterConnectionOld[0].additionalDetails.initialMeterReading",
       callBack: handleNA }
+  ),
+  reviewMeterMake : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Meter Make",
+      labelKey: "WS_ADDN_DETAILS_METER_MAKE"
+    },
+    { jsonPath: "WaterConnection[0].additionalDetails.meterMake",
+      callBack: handleNA }, {
+        labelKey: "Meter Make"
+      },
+      { jsonPath: "WaterConnectionOld[0].additionalDetails.meterMake",
+      callBack: handleNA }
+  ),
+  reviewMeterRatio : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Meter Ratio",
+      labelKey: "WS_ADDN_DETAILS_METER_RATIO"
+    },
+    { jsonPath: "WaterConnection[0].additionalDetails.meterReadingRatio",
+      callBack: handleNA }, {
+        labelKey: "WS_ADDN_DETAILS_METER_RATIO"
+      },
+      { jsonPath: "WaterConnectionOld[0].additionalDetails.meterReadingRatio",
+      callBack: handleNA }
   )
-
 }
 export const activateDetailsNonMeter={
   reviewConnectionExecutionDate : getLabelWithValueForModifiedLabel(

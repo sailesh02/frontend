@@ -409,9 +409,9 @@ export const additionDetails = getCommonCard({
         jsonPath: "applyScreen.additionalDetails.meterMake",
         props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
       }),
-      meterRatio: getSelectField({
+      meterReadingRatio: getSelectField({
         label: {
-          labelName: "Meter Ration",
+          labelName: "Meter Ratio",
           labelKey: "WS_ADDN_DETAILS_METER_RATIO"
         },
         placeholder: {
@@ -470,6 +470,22 @@ const showHideFeilds = (dispatch, value) => {
   dispatch(
     handleField(
       "apply",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
       `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate`,
       "visible",
       value
@@ -494,6 +510,22 @@ const showHideFeilds = (dispatch, value) => {
   dispatch(
     handleField(
       "apply",
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate`,
       "visible",
       value
@@ -511,6 +543,22 @@ const showHideFeilds = (dispatch, value) => {
     handleField(
       "apply",
       "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio",
       "visible",
       value
     )

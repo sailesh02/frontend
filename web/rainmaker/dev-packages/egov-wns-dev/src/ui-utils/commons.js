@@ -551,6 +551,26 @@ export const validationsForExecutionData = (applyScreenObject) => {
     }else{return false}
 }
 
+export const validateMeterDetails = (applyScreenObject) => {
+    let connectionType = applyScreenObject && applyScreenObject.connectionType
+    debugger
+    let rValue = true;
+    if (rValue && connectionType && connectionType == 'Metered'){
+        if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("meterMake") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("meterReadingRatio") && 
+        applyScreenObject.additionalDetails["meterMake"] !== undefined && 
+        applyScreenObject.additionalDetails["meterMake"] !== "" &&
+        applyScreenObject.additionalDetails["meterReadingRatio"] !== undefined && 
+        applyScreenObject.additionalDetails["meterReadingRatio"] !== ""){
+            return true
+        }else{return false}
+    }
+    else{
+    return true
+    }
+}
+
 export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {
     let propertyObject = findAndReplace(applyScreenObject, "NA", null);
     if (

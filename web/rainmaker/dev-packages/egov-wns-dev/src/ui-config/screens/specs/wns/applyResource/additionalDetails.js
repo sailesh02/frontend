@@ -392,7 +392,42 @@ export const additionDetails = getCommonCard({
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.additionalDetails.initialMeterReading",
         props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
-      })
+      }),
+      meterMake : getTextField({
+        label: {
+          labelKey: "WS_ADDN_DETAILS_METER_MAKE"
+        },
+        placeholder: {
+          labelKey: "WS_ADDN_DETAILS_MAKE_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: true,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "applyScreen.additionalDetails.meterMake",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
+      }),
+      meterRatio: getSelectField({
+        label: {
+          labelName: "Meter Ration",
+          labelKey: "WS_ADDN_DETAILS_METER_RATIO"
+        },
+        placeholder: {
+          labelName: "Select Meter Ratio",
+          labelKey: "WS_ADDN_DETAILS_METER_RATIO_PLACEHOLDER"
+        },
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        required: true,
+        jsonPath: "applyScreen.additionalDetails.meterReadingRatio",
+        data: [{ code: "1.1" }, { code: "1.5" },{ code: "1.10" }, { code: "1.100" }],
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"},
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        }
+      }),
     })
   }),
   modificationsEffectiveFrom : getCommonGrayCard({

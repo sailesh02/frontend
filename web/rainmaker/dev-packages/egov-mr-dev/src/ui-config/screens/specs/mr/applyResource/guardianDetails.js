@@ -206,7 +206,7 @@ export const groomGuardianDetails = getCommonCard(
                     labelKey: "MR_CONTACT_PLACEHOLDER"
                 },
                 required: true,
-                //pattern: getPattern("Address"),
+                pattern: getPattern("MobileNo"),
                 jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.contact",
 
             }),
@@ -223,7 +223,7 @@ export const groomGuardianDetails = getCommonCard(
                     labelKey: "MR_EMAIL_PLACEHOLDER"
                 },
                 required: true,
-                //pattern: getPattern("Address"),
+                pattern: getPattern("Email"),
                 jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.emailAddress",
 
             }),
@@ -415,7 +415,7 @@ export const brideGuardianDetails = getCommonCard(
                     labelKey: "MR_CONTACT_PLACEHOLDER"
                 },
                 required: true,
-                //pattern: getPattern("Address"),
+                pattern: getPattern("MobileNo"),
                 jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.contact",
 
             }),
@@ -432,7 +432,7 @@ export const brideGuardianDetails = getCommonCard(
                     labelKey: "MR_EMAIL_PLACEHOLDER"
                 },
                 required: true,
-                //pattern: getPattern("Address"),
+                pattern: getPattern("Email"),
                 jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.emailAddress",
 
             }),

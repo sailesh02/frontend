@@ -162,8 +162,13 @@ class SingleApplication extends React.Component {
       switch (item.status) {
         case "INITIATED":
 
+          if(item.applicationType=="CORRECTION"){
+            setRoute(`/mr-citizen/apply?applicationNumber=${item.applicationNumber}&licenseNumber=${item.mrNumber}&action=CORRECTION&tenantId=${item.tenantId}`);
+          }else{
 
             setRoute(`/mr-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+          }
+
 
           break;
         default:

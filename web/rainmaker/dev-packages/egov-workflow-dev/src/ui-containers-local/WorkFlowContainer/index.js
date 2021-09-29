@@ -217,39 +217,88 @@ class WorkFlowContainer extends React.Component {
     console.log(moduleName, "Nero sss Modle")
     console.log(data, "Nero data 1")
     if (moduleName == "MR") {
-      var appAction = get(data[0], "action", '')
-      if(appAction == "SCHEDULE" || appAction == "RESCHEDULE" ){
       let apntDetails = [];
-      var apntDate = get(data[0], "appointmentDate", '');
-      let apntTime = get(data[0], "appointmentTime", '');
-      let apntDesc = get(data[0], "appointmentDesc", '');
-      apntDate = apntDate.split("-");
-      apntTime = apntTime.split(":");
-
-
-      var apntDate = new Date(apntDate[0], apntDate[1] - 1, apntDate[2]);
-      apntDate.setHours(apntDate.getHours() + parseInt(apntTime[0]));
-      apntDate.setMinutes(apntDate.getMinutes() + apntTime[1]);
-
-      console.log(apntDate.getDate())
-      console.log(apntDate.getTime());
-      console.log(apntDate.getTime() + 3600000);
-
-
-      apntDetails.push({
-
-        "tenantId": tenant,
-        "startTime": apntDate.getTime(),
-        "endTime": apntDate.getTime() + 3600000,
-        "description": apntDesc
-      })
-      //data[0].appointmentDetails = apntDetails;
-      set(
+      let appointmentDetails = get(
         data[0],
         "appointmentDetails",
-        apntDetails
+        []
       );
-    }
+      var appAction = get(data[0], "action", '')
+      if (appAction == "RESCHEDULE" && appointmentDetails && appointmentDetails.length > 0) {
+
+
+        for (let i = 0; i < appointmentDetails.length; i++) {
+          apntDetails.push({ ...appointmentDetails[i], active: false });
+        }
+
+
+        var apntDate = get(data[0], "appointmentDate", '');
+        let apntTime = get(data[0], "appointmentTime", '');
+        let apntDesc = get(data[0], "appointmentDesc", '');
+        apntDate = apntDate.split("-");
+        apntTime = apntTime.split(":");
+
+
+        var apntDate = new Date(apntDate[0], apntDate[1] - 1, apntDate[2]);
+        apntDate.setHours(apntDate.getHours() + parseInt(apntTime[0]));
+        apntDate.setMinutes(apntDate.getMinutes() + apntTime[1]);
+
+        console.log(apntDate.getDate(), "In reschedle")
+        console.log(apntDate.getTime());
+        console.log(apntDate.getTime() + 3600000);
+
+
+        apntDetails.push({
+
+          "tenantId": tenant,
+          "startTime": apntDate.getTime(),
+          "endTime": apntDate.getTime() + 3600000,
+          "description": apntDesc,
+          "active": true
+        })
+        //data[0].appointmentDetails = apntDetails;
+        set(
+          data[0],
+          "appointmentDetails",
+          apntDetails
+        );
+
+      } else if (appAction == "SCHEDULE") {
+
+        var apntDate = get(data[0], "appointmentDate", '');
+        let apntTime = get(data[0], "appointmentTime", '');
+        let apntDesc = get(data[0], "appointmentDesc", '');
+        apntDate = apntDate.split("-");
+        apntTime = apntTime.split(":");
+
+
+        var apntDate = new Date(apntDate[0], apntDate[1] - 1, apntDate[2]);
+        apntDate.setHours(apntDate.getHours() + parseInt(apntTime[0]));
+        apntDate.setMinutes(apntDate.getMinutes() + apntTime[1]);
+
+        console.log(apntDate.getDate())
+        console.log(apntDate.getTime());
+        console.log(apntDate.getTime() + 3600000);
+
+
+        apntDetails.push({
+
+          "tenantId": tenant,
+          "startTime": apntDate.getTime(),
+          "endTime": apntDate.getTime() + 3600000,
+          "description": apntDesc
+        })
+        //data[0].appointmentDetails = apntDetails;
+        set(
+          data[0],
+          "appointmentDetails",
+          apntDetails
+        );
+      }
+
+
+
+
     }
 
     console.log(data, "Nero data 2")

@@ -7,7 +7,10 @@ import {
   getPattern,
   getDateField,
   getTimeField,
-  getCommonGrayCard
+  getCommonGrayCard,
+  getCommonSubHeader,
+  getLabel,
+  dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { httpRequest } from "../../../../../ui-utils/api";
 
@@ -15,24 +18,99 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { showHideMapPopup, getDetailsFromProperty } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
 import "./index.css";
 
+export const changeStep = (state, dispatch) => {
+console.log(state, "Nero ssss")
+const actionDefination1 = [
+              {
+                path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.appointmentDetailCard.children.appointmentDesc.props",
+                property: "disabled",
+                value: false
+              },
+              {
+                path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.appointmentDetailCard.children.appointmentdate.props",
+                property: "disabled",
+                value: false
+              },
+              {
+                path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.appointmentDetailCard.children.appointmenttime.props",
+                property: "disabled",
+                value: false
+              }
+
+            ];
+
+            dispatchMultipleFieldChangeAction("search-preview", actionDefination1, dispatch);
+}
 
 export const appointmentDetails = getCommonGrayCard(
   {
-    appointmentDetailCard: getCommonContainer({
-    header: getCommonTitle(
-      {
-        labelName: "Trade Location Details",
-        labelKey: "MR_APPOINTMENT_HEADER"
+    headerDiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      props: {
+        style: { marginBottom: "10px" }
       },
-      {
-        style: {
-          marginBottom: 18,
-          width: "100%",
+      children: {
+        header: {
+          gridDefination: {
+            xs: 12,
+            sm: 10
+          },
+          ...getCommonSubHeader({
+            labelName: "Trade Details",
+            labelKey: "MR_APPOINTMENT_DETAIL_HEADER"
+          })
+        },
+        editSection: {
+          componentPath: "Button",
+          props: {
+            color: "primary"
+          },
+          //visible: getQueryArg(window.location.href, "status") === "PENDINGAPPROVAL"? true:false,
+          visible: false,
+          gridDefination: {
+            xs: 12,
+            sm: 2,
+            align: "right"
+          },
+          children: {
+            editIcon: {
+              uiFramework: "custom-atoms",
+              componentPath: "Icon",
+              props: {
+                iconName: "edit"
+              }
+            },
+            buttonLabel: getLabel({
+              labelName: "Edit",
+              labelKey: "MR_RESCHEDULE"
+            })
+          },
+          onClickDefination: {
+            action: "condition",
+            callBack: (state, dispatch) => {
+              changeStep(state, dispatch, "", 0);
+            }
+          }
         }
       }
-    ),
+    },
+    appointmentDetailCard: getCommonContainer({
+    // header: getCommonTitle(
+    //   {
+    //     labelName: "Trade Location Details",
+    //     labelKey: "MR_APPOINTMENT_HEADER"
+    //   },
+    //   {
+    //     style: {
+    //       marginBottom: 18,
+    //       width: "100%",
+    //     }
+    //   }
+    // ),
 
     appointmentdate: getDateField({
       label: {
@@ -44,6 +122,7 @@ export const appointmentDetails = getCommonGrayCard(
 
       },
       jsonPath: "MarriageRegistrations[0].appointmentDate",
+     // disabled:getQueryArg(window.location.href, "status") === "PENDINGAPPROVAL"? true:false,
       required : true,
       gridDefination: {
         xs: 12,
@@ -63,6 +142,7 @@ export const appointmentDetails = getCommonGrayCard(
         style: { marginBottom: 10, paddingRight: 80 },
       },
       jsonPath: "MarriageRegistrations[0].appointmentTime",
+     // disabled:getQueryArg(window.location.href, "status") === "PENDINGAPPROVAL"? true:false,
       required : true,
       defaultValue: "00:00",
       gridDefination: {
@@ -83,7 +163,7 @@ export const appointmentDetails = getCommonGrayCard(
         labelName: "Enter Door/House No.",
         labelKey: "MR_DESCRIPTION_PLACEHOLDER"
       },
-
+     // disabled:getQueryArg(window.location.href, "status") === "PENDINGAPPROVAL"? true:false,
       jsonPath: "MarriageRegistrations[0].appointmentDesc",
 
     }),

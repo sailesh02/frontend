@@ -23,6 +23,9 @@ import {
 import { getAllDataFromBillingSlab } from "../utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import {
+  dispatchMultipleFieldChangeAction
+} from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const getData = async (action, state, dispatch, tenantId) => {
   await getMdmsData(action, state, dispatch);
@@ -96,6 +99,18 @@ const getData = async (action, state, dispatch, tenantId) => {
       "NEW"
     )
   );
+  if (process.env.REACT_APP_NAME == "Citizen") {
+    const hidePrimaryOwnerSection = [
+      {
+        path: "components.div.children.formwizardFirstStep.children.primaryOwnerDetails",
+        property: "visible",
+        value: false
+      }
+
+
+    ];
+    dispatchMultipleFieldChangeAction("apply", hidePrimaryOwnerSection, dispatch);
+  }
 
 };
 const updateSearchResults = async (
@@ -151,7 +166,7 @@ const screenConfig = {
       updateSearchResults(action, state, dispatch, applicationNo, tenantId);
 
       //dispatch(prepareFinalObject("DynamicMdms.TradeLicense.tradeUnits.MdmsJson", null));
-      return action;
+
     } else {
 
       getData(action, state, dispatch, tenantId);
@@ -162,8 +177,9 @@ const screenConfig = {
       dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.isDivyang", "No"));
       dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.isDivyang", "No"));
       dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-      return action;
+
     }
+    return action;
   },
   components: {
     div: {

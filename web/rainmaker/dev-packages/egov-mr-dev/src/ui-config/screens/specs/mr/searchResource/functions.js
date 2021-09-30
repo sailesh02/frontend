@@ -101,28 +101,26 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
-    disableFieldAndShowSpinner('search',"components.div.children.tradeLicenseApplication.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);   
+    disableFieldAndShowSpinner('search',"components.div.children.tradeLicenseApplication.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
     const response = await getSearchResults(queryObject);
-    
-    
+
+
     try {
-      
-      let data = response.Licenses.map(item => ({
-        ['TL_COMMON_TABLE_COL_APP_NO']:
+
+      let data = response.MarriageRegistrations.map(item => ({
+        ['MR_COMMON_TABLE_COL_APP_NO']:
           item.applicationNumber || "-",
-        ['TL_COMMON_TABLE_COL_LIC_NO']: item.licenseNumber || "-",
-        ['TL_COMMON_TABLE_COL_TRD_NAME']: item.tradeName || "-",
-        ['TL_COMMON_TABLE_COL_OWN_NAME']:
-          item.tradeLicenseDetail.owners[0].name || "-",
-        ['TL_COMMON_TABLE_COL_APP_DATE']:
+        ['MR_COMMON_TABLE_COL_LIC_NO']: item.mrNumber || "-",
+        ['MR_COMMON_TABLE_COL_GROOM_NAME']: item.coupleDetails[0].bride.firstName || "-",
+        ['MR_COMMON_TABLE_COL_BRIDE_NAME']: item.coupleDetails[0].groom.firstName || "-",
+        ['MR_COMMON_TABLE_COL_APP_DATE']:
           convertEpochToDate(item.applicationDate) || "-",
-          ['TL_COMMON_TABLE_COL_FIN_YEAR']:
-          item.financialYear || "-",
-          ['TL_COMMON_TABLE_COL_APP_TYPE']:
-          `TL_TYPE_${item.applicationType}`  || "NEW",
-        ['TL_COMMON_TABLE_COL_STATUS']: item.status || "-",
+
+          ['MR_COMMON_TABLE_COL_APP_TYPE']:
+          `MR_TYPE_${item.applicationType}`  || "NEW",
+        ['MR_COMMON_TABLE_COL_STATUS']: item.status || "-",
         ["TENANT_ID"]: item.tenantId,
-        ["TL_COMMON_TABLE_COL_STATUS"]: item.status || "-"
+        ["MR_COMMON_TABLE_COL_STATUS"]: item.status || "-"
       }));
       enableFieldAndHideSpinner('search',"components.div.children.tradeLicenseApplication.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
       dispatch(
@@ -138,7 +136,7 @@ export const searchApiCall = async (state, dispatch) => {
           "search",
           "components.div.children.searchResults",
           "props.rows",
-          response.Licenses.length
+          response.MarriageRegistrations.length
         )
       );
       showHideTable(true, dispatch);

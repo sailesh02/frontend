@@ -24,6 +24,51 @@ const getCurrentDate = () => {
   today = yyyy + '-' + mm + '-' + dd;
   return today;
 }
+export const primaryOwnerDetails = getCommonCard(
+  {
+    header: getCommonTitle(
+      {
+        labelName: "Trade Location Details",
+        labelKey: "MR_PRIMARYOWNER_HEADER"
+      },
+      {
+        style: {
+          marginBottom: 18
+        }
+      }
+    ),
+    genderRadioGroup: {
+      uiFramework: "custom-containers",
+      componentPath: "RadioGroupContainer",
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
+      jsonPath: "MarriageRegistrations[0].primaryOwner",
+      props: {
+        label: { name: "MR_PRIMARYOWNER_HEADER", key: "MR_PRIMARYOWNER_HEADER" },
+        className: "applicant-details-error",
+        buttons: [
+          {
+            labelName: "Bride",
+            labelKey: "MR_BRIDE_LABEL",
+            value: "BRIDE"
+          },
+          {
+            labelName: "Groom",
+            labelKey: "MR_GROOM_LABEL",
+            value: "GROOM"
+          }
+        ],
+        jsonPath: "MarriageRegistrations[0].primaryOwner",
+        required: true,
+        errorMessage: "Required",
+      },
+      required: true,
+      type: "array"
+    },
+
+  })
 export const brideDetails = getCommonCard(
   {
     header: getCommonTitle(
@@ -46,8 +91,8 @@ export const brideDetails = getCommonCard(
           labelName: "Door/House No.",
           labelKey: "MR_NAME_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
@@ -56,16 +101,18 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.firstName",
         required: true,
+        errorMessage: "Required",
       }),
 
 
 
       brideDob: {
         ...getDateField({
-          label: { labelName: "To Date",
-          labelKey: "MR_DOB_LABEL"
+          label: {
+            labelName: "To Date",
+            labelKey: "MR_DOB_LABEL"
 
-        },
+          },
           placeholder: {
             labelName: "Trade License From Date",
             labelKey: "MR_DOB_PLACEHOLDER"
@@ -75,7 +122,7 @@ export const brideDetails = getCommonCard(
 
           pattern: getPattern("Date"),
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.dateOfBirth",
-          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+          disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
           props: {
 
             inputProps: {
@@ -92,8 +139,8 @@ export const brideDetails = getCommonCard(
           labelName: "Door/House No.",
           labelKey: "MR_CONTACT_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
@@ -102,15 +149,15 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("MobileNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.contact",
         required: true,
-        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
       }),
       brideEmail: getTextField({
         label: {
           labelName: "Door/House No.",
           labelKey: "MR_EMAIL_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
@@ -119,7 +166,7 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("Email"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.emailAddress",
         required: true,
-        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
       }),
 
       brideFatherFName: getTextField({
@@ -127,8 +174,8 @@ export const brideDetails = getCommonCard(
           labelName: "Door/House No.",
           labelKey: "MR_FATHERNAME_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
@@ -137,7 +184,7 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.fatherName",
         required: true,
-        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
       }),
 
 
@@ -147,8 +194,8 @@ export const brideDetails = getCommonCard(
           labelName: "Door/House No.",
           labelKey: "MR_MOTHERNAME_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
@@ -157,7 +204,7 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.motherName",
         required: true,
-        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
       }),
 
 
@@ -166,8 +213,8 @@ export const brideDetails = getCommonCard(
           labelName: "Door/House No.",
           labelKey: "MR_ADDRESS_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
@@ -176,15 +223,15 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.addressLine1",
         required: true,
-       // disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+        // disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
       brideDistrict: getTextField({
         label: {
           labelName: "Door/House No.",
           labelKey: "MR_DISTRICT_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
@@ -193,15 +240,15 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.district",
         required: true,
-        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
       }),
       brideState: getTextField({
         label: {
           labelName: "Door/House No.",
           labelKey: "MR_STATE_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
@@ -210,7 +257,7 @@ export const brideDetails = getCommonCard(
         pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.state",
         required: true,
-        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
       }),
       // brideDistrict: {
       //   ...getSelectField({
@@ -254,7 +301,7 @@ export const brideDetails = getCommonCard(
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.country",
           required: true,
-          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+          disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
         }),
       },
       brideAddressPin: getTextField({
@@ -262,8 +309,8 @@ export const brideDetails = getCommonCard(
           labelName: "Door/House No.",
           labelKey: "MR_PINCODE_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
@@ -272,7 +319,7 @@ export const brideDetails = getCommonCard(
         required: true,
         //pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.pinCode",
-        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
 
       }),
       isBrideDisabled: {
@@ -286,15 +333,15 @@ export const brideDetails = getCommonCard(
           placeholder: { labelName: "Select Country", labelKey: "MR_ISDIVYANG_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.yesNoBox",
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.isDivyang",
-          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+          disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
           required: true,
         }),
       },
 
     },
-    // {
-    //   style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
-    // }
+      // {
+      //   style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
+      // }
     ),
 
   },

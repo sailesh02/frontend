@@ -34,8 +34,18 @@ const screenConfig = {
             contents: [
 
               {
+                label: "MR_APPLICATION_TYPE",
+                jsonPath: "applicationType"
+              },
+
+              {
                 label: "TL_COMMON_TABLE_COL_APP_NO",
                 jsonPath: "applicationNumber"
+              },
+
+              {
+                label: "MR_REGISTRATION_NO",
+                jsonPath: "mrNumber"
               },
 
               {
@@ -44,14 +54,6 @@ const screenConfig = {
                 prefix: "WF_MR_"
               },
 
-              {
-                label: "MR_APPLICATION_TYPE",
-                jsonPath: "applicationType"
-              },
-              {
-                label: "MR_REGISTRATION_NO",
-                jsonPath: "mrNumber"
-              },
               {
                 label: "MR_GROOM_NAME",
                 jsonPath: "coupleDetails[0].groom.firstName"

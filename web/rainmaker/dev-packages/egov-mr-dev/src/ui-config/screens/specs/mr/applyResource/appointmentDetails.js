@@ -21,8 +21,8 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 import "./index.css";
 
-export const changeStep = (state, dispatch) => {
-console.log(state, "Nero ssss")
+export const enableCard = (state, dispatch) => {
+
 const actionDefination1 = [
               {
                 path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.appointmentDetailCard.children.appointmentDesc.props",
@@ -92,7 +92,7 @@ export const appointmentDetails = getCommonGrayCard(
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch) => {
-              changeStep(state, dispatch, "", 0);
+              enableCard(state, dispatch, "", 0);
             }
           }
         }

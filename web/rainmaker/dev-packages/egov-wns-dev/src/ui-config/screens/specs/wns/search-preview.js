@@ -246,8 +246,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         true
       );
     } else {
-      let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
-      if(applyScreenObject && applyScreenObject.applicationNo.includes("WS")){
+      let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+      if(applicationNumber && applicationNumber.includes("WS")){
         set(
           action.screenConfig,
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",

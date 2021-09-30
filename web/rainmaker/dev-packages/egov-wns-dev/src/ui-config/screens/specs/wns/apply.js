@@ -203,7 +203,6 @@ export const getMdmsData = async (dispatch,state) => {
           })
         }
       })
-    
       let isActiveMeterRatio = payload.MdmsRes && payload.MdmsRes["ws-services-masters"] &&
        payload.MdmsRes["ws-services-masters"]["MeterReadingRatio"] &&
        payload.MdmsRes["ws-services-masters"]["MeterReadingRatio"].filter( ratio => {
@@ -803,13 +802,24 @@ export const getData = async (action, state, dispatch) => {
           )
         );
       }
-      if(data.connectionType === 'Non Metered' && !data.water){
+      let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+      if(data.connectionType === 'Non Metered' && applicationNumber && !applicationNumber.includes('WS')){
         dispatch(
           handleField(
             "apply",
             `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter`,
             "visible",
             true
+          )
+        );
+      }
+      if(applicationNumber.includes('WS')){
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter`,
+            "visible",
+            false
           )
         );
       }

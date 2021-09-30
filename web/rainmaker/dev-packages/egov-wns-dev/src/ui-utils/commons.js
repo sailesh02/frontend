@@ -1486,10 +1486,11 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
 }
 
 export const getMeterReadingData = async (dispatch) => {
+    let tenantId = getQueryArg(window.location.href, "tenantId")
     let queryObject = [
         {
             key: "tenantId",
-            value: getTenantIdCommon()
+            value: tenantId
         },
         {
             key: "connectionNos",

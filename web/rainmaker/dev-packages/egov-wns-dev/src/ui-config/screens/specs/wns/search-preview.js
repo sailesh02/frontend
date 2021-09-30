@@ -246,6 +246,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         true
       );
     } else {
+      let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       if(applyScreenObject.applicationNo.includes("WS")){
         set(
           action.screenConfig,

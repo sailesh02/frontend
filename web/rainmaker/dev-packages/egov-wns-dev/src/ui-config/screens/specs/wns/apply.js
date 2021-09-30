@@ -153,7 +153,7 @@ export const getMdmsData = async (dispatch,state) => {
         { moduleName:"tenant","masterDetails":[{"name":"tenants"},{"name":"citymodule"}]},
         { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }] },
        // { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
-        { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }, { name: "RoadType" },{ name: "PipeSize" }] },
+        { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }, { name: "RoadType" },{ name: "PipeSize" },{name : "PipeDiameter"}] },
         { moduleName: "ws-services-calculation", masterDetails: [{ name: "PipeSize" }] },
         {
           moduleName: "ws-services-masters", masterDetails: [
@@ -161,7 +161,8 @@ export const getMdmsData = async (dispatch,state) => {
             { name: "ModifyConnectionDocuments" },
             { name: "waterSource" },
             { name: "connectionType" },
-            { name: "PropertySearch" }
+            { name: "PropertySearch" },
+            { name: "MeterReadingRatio"}
           ]
         },
         { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" },{name: "OwnerType"}]}
@@ -202,6 +203,59 @@ export const getMdmsData = async (dispatch,state) => {
           })
         }
       })
+      // payload.MdmsRes["ws-services-masters"]["MeterReadingRatio"] = [
+      //   {
+      //     id:'1',
+      //     code :'1.1',
+      //     active:true
+      //   },
+      //   {
+      //     id:'1',
+      //     code :'1.5',
+      //     active:false
+      //   }
+      // ]
+
+      // payload.MdmsRes["sw-services-calculation"]["PipeDiameter"] = [
+      //   {
+      //     id:'1',
+      //     code :4,
+      //     active:true
+      //   },
+      //   {
+      //     id:'2',
+      //     code :6,
+      //     active:false
+      //   },
+      //   {
+      //     id:'2',
+      //     code :8,
+      //     active:true
+      //   }
+      // ]
+
+      let isActiveMeterRatio = payload.MdmsRes && payload.MdmsRes["ws-services-masters"]["MeterReadingRatio"].filter( ratio => {
+        return ratio.active
+      }) || []
+      let fileteredMeterReadingRatio = isActiveMeterRatio && isActiveMeterRatio.map(ratio => {
+        return {
+          code :ratio.code,
+          label : ratio.label
+        }
+      }) || []
+
+      let isActiveDiameter = payload.MdmsRes && payload.MdmsRes["sw-services-calculation"]["PipeDiameter"].filter( ratio => {
+        return ratio.active
+      }) || []
+      let fileteredDiameter = isActiveDiameter && isActiveDiameter.map(ratio => {
+        return {
+          code :ratio.code,
+          label : ratio.label
+        }
+      }) || []
+
+      payload.MdmsRes["sw-services-calculation"].fileteredDiameter = fileteredDiameter
+      payload.MdmsRes["ws-services-masters"].fileteredMeterReadingRatio = fileteredMeterReadingRatio
       let filtered = waterSource.reduce((filtered, item) => {
         if (!filtered.some(filteredItem => JSON.stringify(filteredItem.code) == JSON.stringify(item.code)))
           filtered.push(item)

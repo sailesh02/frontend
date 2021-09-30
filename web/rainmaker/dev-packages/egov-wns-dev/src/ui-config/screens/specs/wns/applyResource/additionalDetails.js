@@ -345,8 +345,9 @@ export const additionDetails = getCommonCard({
       }),
       diameter: getSelectField({
         label: { labelKey: "WS_CONN_DETAIL_DIAMETER" },
-        data : [{code : '4'},{code : '6'},{code : '8'}],
-        // sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.diameter",
+        sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.fileteredDiameter",
+        optionValue: "code",
+        optionLabel: "label",
         placeholder: { labelKey: "WS_CONN_DETAIL_DIAMETER_PLACEHOLDER" },
         required: true,
         props: {disabled: process.env.REACT_APP_NAME === "Citizen"},
@@ -430,8 +431,10 @@ export const additionDetails = getCommonCard({
         },
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         required: true,
+        sourceJsonPath: "applyScreenMdmsData.ws-services-masters.fileteredMeterReadingRatio",
         jsonPath: "applyScreen.additionalDetails.meterReadingRatio",
-        data: [{ code: "1.1" }, { code: "1.5" },{ code: "1.10" }, { code: "1.100" }],
+        optionValue: "code",
+        optionLabel: "label",
         props: {disabled: process.env.REACT_APP_NAME === "Citizen"},
         gridDefination: {
           xs: 12,

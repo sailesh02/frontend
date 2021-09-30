@@ -173,6 +173,13 @@ export const toggleSewerage = (onFieldChange, value) => {
 
   onFieldChange(
     "apply",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter",
+    "visible",
+    value
+  );
+
+  onFieldChange(
+    "apply",
     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewConnectionType",
     "props.value",
     "Non Metered"

@@ -237,10 +237,20 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
       set(
         action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+        false
+      );
+      set(
+        action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio.visible",
         true
       );
     } else {
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+        true
+      );
       set(
         action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterId.visible",

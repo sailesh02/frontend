@@ -203,36 +203,36 @@ export const getMdmsData = async (dispatch,state) => {
           })
         }
       })
-      // payload.MdmsRes["ws-services-masters"]["MeterReadingRatio"] = [
-      //   {
-      //     id:'1',
-      //     code :'1.1',
-      //     active:true
-      //   },
-      //   {
-      //     id:'1',
-      //     code :'1.5',
-      //     active:false
-      //   }
-      // ]
+      payload.MdmsRes["ws-services-masters"]["MeterReadingRatio"] = [
+        {
+          id:'1',
+          code :'1.1',
+          active:true
+        },
+        {
+          id:'1',
+          code :'1.5',
+          active:false
+        }
+      ]
 
-      // payload.MdmsRes["sw-services-calculation"]["PipeDiameter"] = [
-      //   {
-      //     id:'1',
-      //     code :4,
-      //     active:true
-      //   },
-      //   {
-      //     id:'2',
-      //     code :6,
-      //     active:false
-      //   },
-      //   {
-      //     id:'2',
-      //     code :8,
-      //     active:true
-      //   }
-      // ]
+      payload.MdmsRes["sw-services-calculation"]["PipeDiameter"] = [
+        {
+          id:'1',
+          code :4,
+          active:true
+        },
+        {
+          id:'2',
+          code :6,
+          active:false
+        },
+        {
+          id:'2',
+          code :8,
+          active:true
+        }
+      ]
 
       let isActiveMeterRatio = payload.MdmsRes && payload.MdmsRes["ws-services-masters"]["MeterReadingRatio"].filter( ratio => {
         return ratio.active
@@ -814,6 +814,16 @@ export const getData = async (action, state, dispatch) => {
           handleField(
             "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+            "visible",
+            false
+          )
+        );
+      }
+      if(data.connectionType == 'Metered'){
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter`,
             "visible",
             false
           )

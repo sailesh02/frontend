@@ -850,6 +850,10 @@ const parserFunction = (obj) => {
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.meterReadingRatio !== undefined
       ) ? (obj.additionalDetails.meterReadingRatio) : "",
+      diameter: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.diameter !== undefined
+      ) ? (obj.additionalDetails.diameter) : "",
     },
     dateEffectiveFrom: convertDateToEpoch(obj.dateEffectiveFrom),
     noOfTaps: parseInt(obj.noOfTaps),

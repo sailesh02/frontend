@@ -226,6 +226,22 @@ export const activateDetailsMeter={
       callBack: convertEpochToDateAndHandleNA
     }
   ),
+  reviewDiameter : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Diameter",
+      labelKey: "WS_CONN_DETAIL_DIAMETER"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.diameter",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_CONN_DETAIL_DIAMETER"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.diameter",
+      callBack: handleNA
+    }
+  ),
   reviewMeterId : getLabelWithValueForModifiedLabel(
     {
       labelName: "Meter ID",
@@ -307,7 +323,23 @@ export const activateDetailsNonMeter={
       jsonPath: "WaterConnectionOld[0].connectionExecutionDate",
       callBack: convertEpochToDateAndHandleNA
     }
-  ) 
+  ),
+  reviewDiameter : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Diameter",
+      labelKey: "WS_CONN_DETAIL_DIAMETER"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.diameter",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_CONN_DETAIL_DIAMETER"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.diameter",
+      callBack: handleNA
+    }
+  ),
 }
 const activationDetails = getCommonContainer(activateDetailsMeter);
 

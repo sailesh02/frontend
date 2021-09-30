@@ -343,6 +343,16 @@ export const additionDetails = getCommonCard({
         jsonPath: "applyScreen.connectionExecutionDate",
         props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
       }),
+      diameter: getSelectField({
+        label: { labelKey: "WS_CONN_DETAIL_DIAMETER" },
+        data : [{code : '4'},{code : '6'},{code : '8'}],
+        // sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.diameter",
+        placeholder: { labelKey: "WS_CONN_DETAIL_DIAMETER_PLACEHOLDER" },
+        required: true,
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"},
+        gridDefination: { xs: 12, sm: 6 },
+        jsonPath: "applyScreen.additionalDetails.diameter"
+      }),
       meterID: getTextField({
         label: {
           labelKey: "WS_SERV_DETAIL_METER_ID"

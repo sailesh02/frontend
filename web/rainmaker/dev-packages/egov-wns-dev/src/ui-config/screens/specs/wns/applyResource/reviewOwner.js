@@ -287,6 +287,23 @@ export const reviewConnectionExecutionDate = getLabelWithValueForModifiedLabel(
     callBack: convertEpochToDateAndHandleNA
   }
 );
+export const reviewDiameter = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Diameter",
+    labelKey: "WS_CONN_DETAIL_DIAMETER"
+  },
+  {
+    jsonPath: "applyScreen.additionalDetails.diameter",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_CONN_DETAIL_DIAMETER"
+  },
+  {
+    jsonPath: "applyScreenOld.additionalDetails.diameter",
+    callBack: handleNA
+  }
+);
 export const reviewMeterId = getLabelWithValueForModifiedLabel(
   {
     labelName: "Meter ID",
@@ -493,6 +510,7 @@ const roadCuttingCharges = {
 const activationDetails = getCommonContainer({
   reviewConnectionExecutionDate,
   reviewMeterId,
+  reviewDiameter,
   reviewMeterInstallationDate,
   reviewInitialMeterReading,
   reviewMeterMake,

@@ -564,6 +564,13 @@ export const validateMeterDetails = (applyScreenObject) => {
         applyScreenObject.additionalDetails["meterReadingRatio"] !== ""){
             return true
         }else{return false}
+    }else if(rValue && connectionType && connectionType == 'Non Metered'){
+        if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("diameter") && 
+        applyScreenObject.additionalDetails["diameter"] !== undefined && 
+        applyScreenObject.additionalDetails["diameter"] !== ""){
+          return true
+        }else{return false}  
     }
     else{
     return true
@@ -690,6 +697,10 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.meterReadingRatio !== undefined
               ) ? (queryObject.additionalDetails.meterReadingRatio) : "",
+            diameter: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.diameter !== undefined
+            ) ? (queryObject.additionalDetails.diameter) : "",
         }
     }
     queryObject = { ...queryObject, ...parsedObject }

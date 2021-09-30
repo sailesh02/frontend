@@ -51,6 +51,10 @@ const parserFunction = (data) => {
               queryObject.additionalDetails !== undefined &&
               queryObject.additionalDetails.meterReadingRatio !== undefined
             ) ? (queryObject.additionalDetails.meterReadingRatio) : "",
+            diameter: (
+              queryObject.additionalDetails !== undefined &&
+              queryObject.additionalDetails.diameter !== undefined
+            ) ? (queryObject.additionalDetails.diameter) : "",
         }
     }
     queryObject = { ...queryObject, ...parsedObject }

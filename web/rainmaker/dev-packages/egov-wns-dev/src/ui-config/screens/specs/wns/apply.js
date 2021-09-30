@@ -38,7 +38,7 @@ import { reviewModificationsEffective } from "./applyResource/reviewModification
 import { reviewOwner } from "./applyResource/reviewOwner";
 import './index.css'
 import { fetchDropdownData, getTranslatedLabel } from "egov-ui-kit/utils/commons";
-import {volumetricPermanent, volumetricTemporary, meteredPermanent, meteredTemporary, nonMeteredPermanent, nonMeteredTemporory,
+import { meteredPermanent, meteredTemporary, nonMeteredPermanent, nonMeteredTemporory,
   temporary, permanent} from './applyResource/propertyDetails'
 
 let mode = getQueryArg(window.location.href, "mode");
@@ -218,8 +218,8 @@ export const getMdmsData = async (dispatch,state) => {
       }) || []
       let fileteredDiameter = isActiveDiameter && isActiveDiameter.map(ratio => {
         return {
-          code :ratio.code,
-          label : ratio.label
+          code :ratio.size,
+          label : ratio.size
         }
       }) || []
 
@@ -559,17 +559,7 @@ export const getData = async (action, state, dispatch) => {
                     meteredTemporary
                   )
                 );
-              }else if(payloadWater.WaterConnection[0].connectionType == "Volumetric"){
-                dispatch(
-                  handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-                    "data",
-                    volumetricTemporary
-                  )
-                );
-              }
-              else{
+              }else{
                 dispatch(
                   handleField(
                     "apply",
@@ -590,17 +580,7 @@ export const getData = async (action, state, dispatch) => {
                       meteredPermanent
                     )
                   );
-                }else if(payloadWater.WaterConnection[0].connectionType == "Volumetric"){
-                  dispatch(
-                    handleField(
-                      "apply",
-                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-                      "data",
-                      volumetricPermanent
-                    )
-                  );
-                }
-                else{
+                }else{
                   dispatch(
                     handleField(
                       "apply",

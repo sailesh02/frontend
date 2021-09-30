@@ -29,8 +29,6 @@ let modeaction = getQueryArg(window.location.href, "modeaction");
 
 let mode = getQueryArg(window.location.href, "mode");
 
-export const volumetricPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"},{code:"BPL"},{code:"ASSOCIATION"}]
-export const volumetricTemporary = [{code:"WSFCB"},{code: "DOMESTIC"}]
 export const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"},{code:"BPL"},{code:"ASSOCIATION"}]
 export const meteredTemporary = [{code:"WSFCB"},{code: "DOMESTIC"}]
 export const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL"},
@@ -604,17 +602,7 @@ const propertyDetailsNoId = getCommonContainer({
                     meteredTemporary
                   )
                 );
-              }else if(meteredNonMetered == "Volumetric"){
-                dispatch(
-                  handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-                    "data",
-                    volumetricTemporary
-                  )
-                );
-              }
-              else{
+              }else{
                 dispatch(
                   handleField(
                     "apply",
@@ -633,15 +621,6 @@ const propertyDetailsNoId = getCommonContainer({
                       "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
                       "data",
                       meteredPermanent
-                    )
-                  );
-                }else if(meteredNonMetered == "Volumetric"){
-                  dispatch(
-                    handleField(
-                      "apply",
-                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-                      "data",
-                      volumetricPermanent
                     )
                   );
                 }else{
@@ -720,7 +699,7 @@ const propertyDetailsNoId = getCommonContainer({
       moduleName: "WS",
       masterName: "PROPTYPE"
     },
-    data: [{ code: "Metered",name:'Metered' }, { code: "Non Metered",name:'Non Metered' },{ code: "Volumetric",name:'Volumetric' }],
+    data: [{ code: "Metered",name:'Metered' }, { code: "Non Metered",name:'Non Metered' }],
     afterFieldChange: (action, state, dispatch) => {
       const edit = getQueryArg(window.location.href, "action");
 
@@ -803,27 +782,6 @@ const propertyDetailsNoId = getCommonContainer({
                       "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
                       "data",
                       nonMeteredPermanent
-                    )
-                  );
-                }
-              break;
-            case 'Volumetric':
-                if(connectionCategory == "TEMPORARY"){
-                  dispatch(
-                    handleField(
-                      "apply",
-                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-                      "data",
-                      volumetricTemporary
-                    )
-                  );
-                }else{
-                  dispatch(
-                    handleField(
-                      "apply",
-                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
-                      "data",
-                      volumetricPermanent
                     )
                   );
                 }

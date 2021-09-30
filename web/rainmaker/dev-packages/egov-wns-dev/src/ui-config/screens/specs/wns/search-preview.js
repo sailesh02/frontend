@@ -149,6 +149,13 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       applyScreenObject.applicationNo.includes("WS") ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
+      if(applyScreenObject && applyScreenObject.applicationNo.includes("WS")){
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", false);
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
+      }else{
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", true);
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", false);
+      }
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.locality));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));

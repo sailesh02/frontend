@@ -29,15 +29,18 @@ let modeaction = getQueryArg(window.location.href, "modeaction");
 
 let mode = getQueryArg(window.location.href, "mode");
 
-
-const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"}]
-const meteredTemporary = [{code:"TWSFC"}]
-const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL"},{code:"ROADSIDEEATERS"},
+export const volumetricPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"},{code:"BPL"},{code:"ASSOCIATION"}]
+export const volumetricTemporary = [{code:"WSFCB"},{code: "DOMESTIC"}]
+export const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"},{code:"BPL"},{code:"ASSOCIATION"}]
+export const meteredTemporary = [{code:"WSFCB"},{code: "DOMESTIC"}]
+export const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL"},
 {code:"SPMA"}]
-const nonMeteredTemporory = [{code:"DOMESTIC"}]
-const temporary = [{code: "DOMESTIC"}, {code:"TWSFC"}]
-const permanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"TWSFC"},
-, {code:"BPL"},{code:"ROADSIDEEATERS"}, {code:"SPMA"} ]
+export const nonMeteredTemporory = [{code:"WSFCB"},{code:"BPL"},{code:"ROADSIDEEATERS"},{code:"SPMA"}]
+
+export const temporary = [{code: "DOMESTIC"}, {code:"WSFCB"},{code:"BPL"},{code:"ROADSIDEEATERS"},{code:"SPMA"}]
+export const permanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},
+, {code:"BPL"},{code:"ASSOCIATION"}, {code:"SPMA"} ]
+
 let modifyLink;
 if(isMode==="MODIFY"){
   modifyLink=`/wns/apply?`;
@@ -601,7 +604,17 @@ const propertyDetailsNoId = getCommonContainer({
                     meteredTemporary
                   )
                 );
-              }else{
+              }else if(meteredNonMetered == "Volumetric"){
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    volumetricTemporary
+                  )
+                );
+              }
+              else{
                 dispatch(
                   handleField(
                     "apply",
@@ -620,6 +633,15 @@ const propertyDetailsNoId = getCommonContainer({
                       "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
                       "data",
                       meteredPermanent
+                    )
+                  );
+                }else if(meteredNonMetered == "Volumetric"){
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                      "data",
+                      volumetricPermanent
                     )
                   );
                 }else{
@@ -698,7 +720,7 @@ const propertyDetailsNoId = getCommonContainer({
       moduleName: "WS",
       masterName: "PROPTYPE"
     },
-    data: [{ code: "Metered",name:'Metered' }, { code: "Non Metered",name:'Non Metered' }],
+    data: [{ code: "Metered",name:'Metered' }, { code: "Non Metered",name:'Non Metered' },{ code: "Volumetric",name:'Volumetric' }],
     afterFieldChange: (action, state, dispatch) => {
       const edit = getQueryArg(window.location.href, "action");
 
@@ -785,6 +807,27 @@ const propertyDetailsNoId = getCommonContainer({
                   );
                 }
               break;
+            case 'Volumetric':
+                if(connectionCategory == "TEMPORARY"){
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                      "data",
+                      volumetricTemporary
+                    )
+                  );
+                }else{
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                      "data",
+                      volumetricPermanent
+                    )
+                  );
+                }
+              break;
             default:
                 dispatch(
                   handleField(
@@ -823,7 +866,7 @@ const propertyDetailsNoId = getCommonContainer({
     },
     afterFieldChange: (action, state, dispatch) => {
       if(action.value){
-        if(action.value == 'DOMESTIC'){
+        if(action.value == 'DOMESTIC' || action.value == 'COMMERCIAL'){
           dispatch(
             handleField(
               "apply",

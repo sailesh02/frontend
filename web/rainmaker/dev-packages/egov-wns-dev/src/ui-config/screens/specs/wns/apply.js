@@ -38,14 +38,9 @@ import { reviewModificationsEffective } from "./applyResource/reviewModification
 import { reviewOwner } from "./applyResource/reviewOwner";
 import './index.css'
 import { fetchDropdownData, getTranslatedLabel } from "egov-ui-kit/utils/commons";
-const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"}]
-const meteredTemporary = [{code:"TWSFC"}]
-const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL"},{code:"ROADSIDEEATERS"},
-{code:"SPMA"}]
-const nonMeteredTemporory = [{code:"DOMESTIC"}]
-const temporary = [{code: "DOMESTIC"}, {code:"TWSFC"}]
-const permanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"TWSFC"},
-, {code:"BPL"},{code:"ROADSIDEEATERS"}, {code:"SPMA"} ]
+import {volumetricPermanent, volumetricTemporary, meteredPermanent, meteredTemporary, nonMeteredPermanent, nonMeteredTemporory,
+  temporary, permanent} from './applyResource/propertyDetails'
+
 let mode = getQueryArg(window.location.href, "mode");
 let isMode = isModifyMode();
 export const stepperData = () => {
@@ -564,7 +559,17 @@ export const getData = async (action, state, dispatch) => {
                     meteredTemporary
                   )
                 );
-              }else{
+              }else if(payloadWater.WaterConnection[0].connectionType == "Volumetric"){
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                    "data",
+                    volumetricTemporary
+                  )
+                );
+              }
+              else{
                 dispatch(
                   handleField(
                     "apply",
@@ -585,7 +590,17 @@ export const getData = async (action, state, dispatch) => {
                       meteredPermanent
                     )
                   );
-                }else{
+                }else if(payloadWater.WaterConnection[0].connectionType == "Volumetric"){
+                  dispatch(
+                    handleField(
+                      "apply",
+                      "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                      "data",
+                      volumetricPermanent
+                    )
+                  );
+                }
+                else{
                   dispatch(
                     handleField(
                       "apply",

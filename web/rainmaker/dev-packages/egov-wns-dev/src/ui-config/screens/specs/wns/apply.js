@@ -203,6 +203,7 @@ export const getMdmsData = async (dispatch,state) => {
           })
         }
       })
+    
       let isActiveMeterRatio = payload.MdmsRes && payload.MdmsRes["ws-services-masters"] &&
        payload.MdmsRes["ws-services-masters"]["MeterReadingRatio"] &&
        payload.MdmsRes["ws-services-masters"]["MeterReadingRatio"].filter( ratio => {
@@ -813,7 +814,7 @@ export const getData = async (action, state, dispatch) => {
           )
         );
       }
-      if(applicationNumber.includes('WS')){
+      if(applicationNumber && applicationNumber.includes('WS')){
         dispatch(
           handleField(
             "apply",

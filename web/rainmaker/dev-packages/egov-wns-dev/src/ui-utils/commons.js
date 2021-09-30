@@ -553,6 +553,7 @@ export const validationsForExecutionData = (applyScreenObject) => {
 
 export const validateMeterDetails = (applyScreenObject) => {
     let connectionType = applyScreenObject && applyScreenObject.connectionType
+    let water = applyScreenObject && applyScreenObject.water
     let rValue = true;
     if (rValue && connectionType && connectionType == 'Metered'){
         if( applyScreenObject.hasOwnProperty("additionalDetails") && 
@@ -564,7 +565,7 @@ export const validateMeterDetails = (applyScreenObject) => {
         applyScreenObject.additionalDetails["meterReadingRatio"] !== ""){
             return true
         }else{return false}
-    }else if(rValue && connectionType && connectionType == 'Non Metered'){
+    }else if(rValue && connectionType && connectionType == 'Non Metered' && !water){
         if( applyScreenObject.hasOwnProperty("additionalDetails") && 
         applyScreenObject.additionalDetails.hasOwnProperty("diameter") && 
         applyScreenObject.additionalDetails["diameter"] !== undefined && 

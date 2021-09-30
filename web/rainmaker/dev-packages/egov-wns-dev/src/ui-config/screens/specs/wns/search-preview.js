@@ -246,11 +246,19 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         true
       );
     } else {
-      set(
-        action.screenConfig,
-        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
-        true
-      );
+      if(applyScreenObject.applicationNo.includes("WS")){
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+          false
+        );
+      }else{
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+          true
+        );
+      }
       set(
         action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterId.visible",
@@ -676,6 +684,11 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
   let viewBillTooltip = [], estimate, payload = [];
   if (service === serviceConst.WATER || applicationNumber.includes('WS')) {
+    set(
+      action.screenConfig,
+      "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+      false
+    );
     payload = [];
     payload = await getSearchResults(queryObjForSearch);
     set(payload, 'WaterConnection[0].service', service);

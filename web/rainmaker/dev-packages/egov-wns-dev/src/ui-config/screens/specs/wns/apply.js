@@ -803,6 +803,16 @@ export const getData = async (action, state, dispatch) => {
           )
         );
       }
+      if(data.connectionType === 'Non Metered' && !data.water){
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter`,
+            "visible",
+            true
+          )
+        );
+      }
       if (data.additionalDetails !== undefined && data.additionalDetails.detailsProvidedBy !== undefined) {
         if (data.additionalDetails.detailsProvidedBy === "Self") {
           dispatch(

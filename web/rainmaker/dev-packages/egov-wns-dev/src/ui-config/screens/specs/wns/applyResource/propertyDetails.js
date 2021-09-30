@@ -700,7 +700,45 @@ const propertyDetailsNoId = getCommonContainer({
     },
     data: [{ code: "Metered",name:'Metered' }, { code: "Non Metered",name:'Non Metered' }],
     afterFieldChange: (action, state, dispatch) => {
+      const edit = getQueryArg(window.location.href, "action");
+
       if(action){
+        if(action.value == 'Metered' && edit == 'edit'){
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+              "visible",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
+              "visible",
+              true
+            )
+          );
+        }
+        if(action.value == 'Non Metered' && edit == 'edit'){
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+              "visible",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
+              "visible",
+              false
+            )
+          );
+        }
         const connectionCategory = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionCategory", "")
         const water = get(state.screenConfiguration.preparedFinalObject,"applyScreen.water",false)
         if(water){

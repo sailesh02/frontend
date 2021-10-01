@@ -212,9 +212,9 @@ export const getMdmsData = async (dispatch,state) => {
         }
       }) || []
 
-      let isActiveDiameter = payload.MdmsRes && payload.MdmsRes["sw-services-calculation"]["PipeDiameter"] && 
+      let isActiveDiameter = payload.MdmsRes && payload.MdmsRes["sw-services-calculation"] && 
        payload.MdmsRes["sw-services-calculation"]["PipeDiameter"].filter( ratio => {
-        return ratio.active
+        return ratio.isActive
       }) || []
       let fileteredDiameter = isActiveDiameter && isActiveDiameter.map(ratio => {
         return {

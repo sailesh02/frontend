@@ -14,6 +14,7 @@ import some from "lodash/some";
 import { applyTradeLicense, checkValidOwners, getNextFinancialYearForRenewal } from "../../../../../ui-utils/commons";
 import { createEstimateData, downloadCertificateForm, getButtonVisibility, getCommonApplyFooter, getDocList, setMultiOwnerForApply, setValidToFromVisibilityForApply, validateFields, downloadProvisionalCertificateForm } from "../../utils";
 import "./index.css";
+import { brideAddressDetails } from "./brideAddress";
 
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
@@ -98,97 +99,137 @@ export const callBackForNext = async (state, dispatch) => {
     "action"
   );
   console.log(mrgObj, "Nero mrgObje")
+  if (activeStep === 10) {
+    const isBrideDetailsValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.brideDetails.children.cardContent.children.brideDetailsConatiner.children",
+      state,
+      dispatch
+    );
+    if (!isBrideDetailsValid) {
+      isFormValid = false;
+    }
+
+  }
   if (activeStep === 0) {
     //Bride and Groom Details
-    let status = get(
-      mrgObj[0],
-      "status"
-    )
-    if (!applicationNoInUrl) {
-
-      let brideDob = get(
-        mrgObj[0],
-        "coupleDetails[0].bride.dateOfBirth"
-      )
-      let groomDob = get(
-        mrgObj[0],
-        "coupleDetails[0].groom.dateOfBirth"
-      )
-
-      console.log(brideDob, groomDob, "Nero both DOB")
-      const [brideDobYear, brideDobMonth, brideDobDay] = brideDob.split("-");
-      console.log(brideDobDay)
-      const brideDobdate = new Date(`${brideDobMonth}/${brideDobDay}/${brideDobYear}`);
-      const todayDate = new Date();
-      const diffTime = Math.abs(brideDobdate - todayDate);
-      const brideAgeInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
 
-      console.log(brideAgeInDays, "Nero BrideDob in days");
-      if (brideAgeInDays < 6570) {
-        isFormValid = isBrideDobValid = false;
-      }
+    const isBrideDetailsValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.brideDetails.children.cardContent.children.brideDetailsConatiner.children",
+      state,
+      dispatch
+    );
+    const isGroomDetailsValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.groomDetails.children.cardContent.children.groomDetailsConatiner.children",
+      state,
+      dispatch
+    );
 
+    const isLocationDetailsValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children",
+      state,
+      dispatch
+    );
 
-      const [groomDobYear, groomDobMonth, groomDobDay] = groomDob.split("-");
-      console.log(groomDobDay)
-      const groomDobdate = new Date(`${groomDobMonth}/${groomDobDay}/${groomDobYear}`);
-
-      const diffTime1 = Math.abs(groomDobdate - todayDate);
-      const groomAgeInDays = Math.ceil(diffTime1 / (1000 * 60 * 60 * 24));
-
-
-      console.log(brideAgeInDays, "Nero BrideDob in days");
-
-      if (groomAgeInDays < 7665) {
-        isFormValid = isGroomDobValid = false;
-      }
-
+    if (!isBrideDetailsValid || !isGroomDetailsValid || !isLocationDetailsValid) {
+      isFormValid = false;
     }
 
-    if (applicationNoInUrl && status == "INITIATED") {
-      let brideDob = get(
+    if (isFormValid) {
+      let status = get(
         mrgObj[0],
-        "coupleDetails[0].bride.dateOfBirth"
+        "status"
       )
-      let groomDob = get(
-        mrgObj[0],
-        "coupleDetails[0].groom.dateOfBirth"
-      )
-      if (typeof brideDob == "string") {
+      if (!applicationNoInUrl) {
+
+        let brideDob = get(
+          mrgObj[0],
+          "coupleDetails[0].bride.dateOfBirth"
+        )
+        let groomDob = get(
+          mrgObj[0],
+          "coupleDetails[0].groom.dateOfBirth"
+        )
+
         console.log(brideDob, groomDob, "Nero both DOB")
-        const [brideDobYear, brideDobMonth, brideDobDay] = brideDob.split("-");
-        console.log(brideDobDay)
-        const brideDobdate = new Date(`${brideDobMonth}/${brideDobDay}/${brideDobYear}`);
         const todayDate = new Date();
-        const diffTime = Math.abs(brideDobdate - todayDate);
-        const brideAgeInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (brideDob) {
+          const [brideDobYear, brideDobMonth, brideDobDay] = brideDob.split("-");
+          console.log(brideDobDay)
+          const brideDobdate = new Date(`${brideDobMonth}/${brideDobDay}/${brideDobYear}`);
+
+          const diffTime = Math.abs(brideDobdate - todayDate);
+          const brideAgeInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
 
-        console.log(brideAgeInDays, "Nero BrideDob in days");
-        if (brideAgeInDays < 6570) {
-          isFormValid = isBrideDobValid = false;
+
+          if (brideAgeInDays < 6570) {
+            isFormValid = isBrideDobValid = false;
+          }
+
         }
+
+        if (groomDob) {
+          const [groomDobYear, groomDobMonth, groomDobDay] = groomDob.split("-");
+          console.log(groomDobDay)
+          const groomDobdate = new Date(`${groomDobMonth}/${groomDobDay}/${groomDobYear}`);
+
+          const diffTime1 = Math.abs(groomDobdate - todayDate);
+          const groomAgeInDays = Math.ceil(diffTime1 / (1000 * 60 * 60 * 24));
+
+
+
+
+          if (groomAgeInDays < 7665) {
+            isFormValid = isGroomDobValid = false;
+          }
+        }
+
       }
-      if (typeof groomDob == "string") {
-        const [groomDobYear, groomDobMonth, groomDobDay] = groomDob.split("-");
-        console.log(groomDobDay)
-        const groomDobdate = new Date(`${groomDobMonth}/${groomDobDay}/${groomDobYear}`);
 
-        const diffTime1 = Math.abs(groomDobdate - todayDate);
-        const groomAgeInDays = Math.ceil(diffTime1 / (1000 * 60 * 60 * 24));
+      if (applicationNoInUrl && status == "INITIATED") {
+        let brideDob = get(
+          mrgObj[0],
+          "coupleDetails[0].bride.dateOfBirth"
+        )
+        let groomDob = get(
+          mrgObj[0],
+          "coupleDetails[0].groom.dateOfBirth"
+        )
+        if (typeof brideDob == "string") {
+
+          const [brideDobYear, brideDobMonth, brideDobDay] = brideDob.split("-");
+          console.log(brideDobDay)
+          const brideDobdate = new Date(`${brideDobMonth}/${brideDobDay}/${brideDobYear}`);
+          const todayDate = new Date();
+          const diffTime = Math.abs(brideDobdate - todayDate);
+          const brideAgeInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
 
-        console.log(brideAgeInDays, "Nero BrideDob in days");
 
-        if (groomAgeInDays < 7665) {
-          isFormValid = isGroomDobValid = false;
+          if (brideAgeInDays < 6570) {
+            isFormValid = isBrideDobValid = false;
+          }
         }
+        if (typeof groomDob == "string") {
+          const [groomDobYear, groomDobMonth, groomDobDay] = groomDob.split("-");
+
+          const groomDobdate = new Date(`${groomDobMonth}/${groomDobDay}/${groomDobYear}`);
+
+          const diffTime1 = Math.abs(groomDobdate - todayDate);
+          const groomAgeInDays = Math.ceil(diffTime1 / (1000 * 60 * 60 * 24));
+
+
+
+
+          if (groomAgeInDays < 7665) {
+            isFormValid = isGroomDobValid = false;
+          }
+        }
+
       }
 
     }
-
-
 
 
     await getDocList(state, dispatch);
@@ -213,44 +254,76 @@ export const callBackForNext = async (state, dispatch) => {
   }
   if (activeStep === 1) {
     //Bride and Groom Guardian Details
-    dispatch(
-      prepareFinalObject(
-        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.groomSideGuardian",
-        false
-      )
-    );
-    dispatch(
-      prepareFinalObject(
-        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.groomSideGuardian",
-        true
-      )
+
+    const isBrideGrdnDetailsValid = validateFields(
+      "components.div.children.formwizardSecondStep.children.brideGuardianDetails.children.cardContent.children.brideGuardianDetailsConatiner.children",
+      state,
+      dispatch
     );
 
-    isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+    const isGroomGrdnDetailsValid = validateFields(
+      "components.div.children.formwizardSecondStep.children.groomGuardianDetails.children.cardContent.children.groomGuardianDetailsConatiner.children",
+      state,
+      dispatch
+    );
+
+    if (!isBrideGrdnDetailsValid || !isGroomGrdnDetailsValid) {
+      isFormValid = false;
+    }
     if (isFormValid) {
-      if (!applicationNoInUrl) {
-        dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.witness.country", "INDIA"));
-        dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.witness.country", "INDIA"));
+      // dispatch(
+      //   prepareFinalObject(
+      //     "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.groomSideGuardian",
+      //     false
+      //   )
+      // );
+      // dispatch(
+      //   prepareFinalObject(
+      //     "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.groomSideGuardian",
+      //     true
+      //   )
+      // );
+
+      isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+      if (isFormValid) {
+        if (!applicationNoInUrl) {
+          dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.witness.country", "INDIA"));
+          dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.witness.country", "INDIA"));
+        }
+        if (!isFormValid) {
+          hasFieldToaster = false;
+        }
+      }
+    }
+  }
+  if (activeStep === 2) {
+    //Witness Details
+
+    const isBrideWtnsDetailsValid = validateFields(
+      "components.div.children.formwizardThirdStep.children.brideWitnessDetails.children.cardContent.children.witness1DetailsConatiner.children",
+      state,
+      dispatch
+    );
+
+    const isGroomWtnsDetailsValid = validateFields(
+      "components.div.children.formwizardThirdStep.children.groomWitnessDetails.children.cardContent.children.witness2DetailsConatiner.children",
+      state,
+      dispatch
+    );
+
+    if (!isBrideWtnsDetailsValid || !isGroomWtnsDetailsValid) {
+      isFormValid = false;
+    }
+
+
+
+    if (isFormValid) {
+      isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+      if (!isFormValid) {
+        hasFieldToaster = false;
       }
     }
 
-  }
-  if (activeStep === 2) {
-    // Witness Details
-
-    // dispatch(
-    //   prepareFinalObject(
-    //     "MarriageRegistrations[0].witness[0].title",
-    //     "MR"
-    //   )
-    // );
-    // dispatch(
-    //   prepareFinalObject(
-    //     "MarriageRegistrations[0].witness[1].title",
-    //     "MR"
-    //   )
-    // );
-    isFormValid = await applyTradeLicense(state, dispatch, activeStep);
   }
 
 
@@ -358,13 +431,14 @@ export const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep !== 4) {
+    console.log(isFormValid, hasFieldToaster, "Nero errror")
     if (isFormValid) {
       changeStep(state, dispatch);
     } else if (hasFieldToaster) {
       let errorMessage = {
         labelName:
           "Please fill all mandatory fields and upload the documents !",
-        labelKey: "ERR_FILL_MANDATORY_FIELDS_UPLOAD_DOCS"
+        labelKey: "ERR_FILL_MR_MANDATORY_FIELDS"
       };
       switch (activeStep) {
         case 0:
@@ -386,14 +460,24 @@ export const callBackForNext = async (state, dispatch) => {
             errorMessage = {
               labelName:
                 "Please fill all mandatory fields for Trade Details, then do next !",
-              labelKey: "ERR_FILL_MR_MANDATORY_FIELDS"
+              labelKey: "ERR_FILL_MARRIAGE_DETAIL_MANDATORY_FIELDS"
             };
           }
           break;
         case 1:
-
+          errorMessage = {
+            labelName:
+              "Please fill all mandatory fields for Trade Details, then do next !",
+            labelKey: "ERR_FILL_GUARDIAN_DETAIL_MANDATORY_FIELDS"
+          };
+          break;
         case 2:
-
+          errorMessage = {
+            labelName:
+              "Please fill all mandatory fields for Trade Details, then do next !",
+            labelKey: "ERR_FILL_WITNESS_DETAIL_MANDATORY_FIELDS"
+          };
+          break;
         case 3:
           errorMessage = {
             labelName: "Please upload all the required documents !",

@@ -312,7 +312,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application`,
-          labelKey: "MR_TRADE_APPLICATION"
+          labelKey: "MR_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -355,7 +355,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application`,
-          labelKey: "MR_TRADE_APPLICATION"
+          labelKey: "MR_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -398,7 +398,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application`,
-          labelKey: "MR_TRADE_APPLICATION"
+          labelKey: "MR_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -440,7 +440,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application`,
-          labelKey: "MR_TRADE_APPLICATION"
+          labelKey: "MR_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -477,7 +477,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application`,
-          labelKey: "MR_TRADE_APPLICATION"
+          labelKey: "MR_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -519,7 +519,7 @@ const getAcknowledgementCard = (
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application`,
-          labelKey: "MR_TRADE_APPLICATION"
+          labelKey: "MR_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",

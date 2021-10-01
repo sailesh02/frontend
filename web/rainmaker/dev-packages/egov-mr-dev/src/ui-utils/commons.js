@@ -284,7 +284,7 @@ export const getBoundaryData = async (
       process.env.REACT_APP_NAME === "Employee"
         ? get(
           state.screenConfiguration.preparedFinalObject,
-          "Licenses[0].tradeLicenseDetail.address.city"
+          "MarriageRegistrations[0].tenantId"
         )
         : getQueryArg(window.location.href, "tenantId");
 
@@ -327,13 +327,13 @@ export const getBoundaryData = async (
         data.find(item => {
           return item.code == code;
         });
-      if (messageObject)
-        dispatch(
-          prepareFinalObject(
-            "Licenses[0].tradeLicenseDetail.address.locality.name",
-            messageObject.name
-          )
-        );
+      // if (messageObject)
+      //   dispatch(
+      //     prepareFinalObject(
+      //       "Licenses[0].tradeLicenseDetail.address.locality.name",
+      //       messageObject.name
+      //     )
+      //   );
     }
   } catch (e) {
     console.log(e);
@@ -400,7 +400,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
 
     let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");
-console.log(documents, "Nero Document")
+    console.log(documents, "Nero Document")
     // if (activeIndex === 4)
     //   documents = documents.filter(item => item.fileStoreId);
     // else
@@ -465,14 +465,14 @@ console.log(documents, "Nero Document")
     if (queryObject[0].applicationNumber) {
 
       //call update
-//call update
-const isCorrection = getQueryArg(window.location.href, "action") === "CORRECTION";
-if (isCorrection) {
+      //call update
+      const isCorrection = getQueryArg(window.location.href, "action") === "CORRECTION";
+      if (isCorrection) {
 
-  set(queryObject[0], "applicationType", "CORRECTION");
-  set(queryObject[0], "workflowCode", "MRCORRECTION");
+        set(queryObject[0], "applicationType", "CORRECTION");
+        set(queryObject[0], "workflowCode", "MRCORRECTION");
 
-}
+      }
 
 
 
@@ -488,7 +488,7 @@ if (isCorrection) {
 
       }
 
-      if(isCorrection && activeIndex === 3){
+      if (isCorrection && activeIndex === 3) {
         let renewalSearchQueryObject = [
           { key: "tenantId", value: queryObject[0].tenantId },
           { key: "applicationNumber", value: queryObject[0].applicationNumber }
@@ -559,7 +559,22 @@ if (isCorrection) {
 
 
     } else {
+      if (process.env.REACT_APP_NAME == "Employee") {
 
+        let primaryOwner = get(
+          queryObject[0],
+          "primaryOwner",
+          ''
+        );
+        if (primaryOwner == "GROOM") {
+          set(queryObject[0], "coupleDetails[0].bride.isPrimaryOwner", false);
+          set(queryObject[0], "coupleDetails[0].groom.isPrimaryOwner", true);
+        } else {
+          set(queryObject[0], "coupleDetails[0].bride.isPrimaryOwner", true);
+          set(queryObject[0], "coupleDetails[0].groom.isPrimaryOwner", false);
+        }
+
+      }
       set(queryObject[0], "action", "INITIATE");
       const response = await httpRequest(
         "post",

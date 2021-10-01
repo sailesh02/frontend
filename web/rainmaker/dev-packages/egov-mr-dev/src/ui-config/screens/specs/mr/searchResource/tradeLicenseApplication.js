@@ -14,21 +14,21 @@ import { searchApiCall } from "./functions";
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search Trade License Application",
-    labelKey: "TL_HOME_SEARCH_RESULTS_HEADING"
+    labelKey: "MR_HOME_SEARCH_RESULTS_HEADING"
   }),
   subParagraph: getCommonParagraph({
     labelName: "Provide at least one parameter to search for an application",
-    labelKey: "TL_HOME_SEARCH_RESULTS_DESC"
+    labelKey: "MR_HOME_SEARCH_RESULTS_DESC"
   }),
   appTradeAndMobNumContainer: getCommonContainer({
     applicationNo: getTextField({
       label: {
         labelName: "Application No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+        labelKey: "MR_HOME_SEARCH_RESULTS_APP_NO_LABEL"
       },
       placeholder: {
         labelName: "Enter Application No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+        labelKey: "MR_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -43,11 +43,11 @@ export const tradeLicenseApplication = getCommonCard({
     tradeLicenseNo: getTextField({
       label: {
         labelName: "Trade License No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+        labelKey: "MR_HOME_SEARCH_RESULTS_MR_NO_LABEL"
       },
       placeholder: {
         labelName: "Enter Trade License No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
+        labelKey: "MR_HOME_SEARCH_RESULTS_MR_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -61,11 +61,11 @@ export const tradeLicenseApplication = getCommonCard({
     ownerMobNo: getTextField({
       label: {
         labelName: "Owner Mobile No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
+        labelKey: "MR_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
       },
       placeholder: {
         labelName: "Enter your mobile No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
+        labelKey: "MR_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -84,7 +84,7 @@ export const tradeLicenseApplication = getCommonCard({
   applicationTypeAndToFromDateContainer: getCommonContainer({
     applicationType: {
         uiFramework: "custom-containers-local",
-        moduleName: "egov-tradelicence",
+        moduleName: "egov-mr",
         componentPath: "AutosuggestContainer",
         jsonPath:
           "searchScreen.applicationType",
@@ -102,11 +102,11 @@ export const tradeLicenseApplication = getCommonCard({
           sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
           label: {
             labelName: "Application Type",
-            labelKey: "TL_APPLICATION_TYPE_LABEL"
+            labelKey: "MR_APPLICATION_TYPE_LABEL"
           },
           placeholder: {
             labelName: "Select Application Type",
-            labelKey: "TL_APPLICATION_TYPE_PLACEHOLDER"
+            labelKey: "MR_APPLICATION_TYPE_PLACEHOLDER"
           },
           localePrefix: {
             moduleName: "TradeLicense",
@@ -121,10 +121,10 @@ export const tradeLicenseApplication = getCommonCard({
         }
     },
     fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
+      label: { labelName: "From Date", labelKey: "MR_COMMON_FROM_DATE_LABEL" },
       placeholder: {
         labelName: "Select From Date",
-        labelKey: "TL_FROM_DATE_PLACEHOLDER"
+        labelKey: "MR_FROM_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.fromDate",
       gridDefination: {
@@ -137,10 +137,10 @@ export const tradeLicenseApplication = getCommonCard({
     }),
 
     toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "TL_COMMON_TO_DATE_LABEL" },
+      label: { labelName: "To Date", labelKey: "MR_COMMON_TO_DATE_LABEL" },
       placeholder: {
         labelName: "Select to Date",
-        labelKey: "TL_COMMON_TO_DATE_PLACEHOLDER"
+        labelKey: "MR_COMMON_TO_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.toDate",
       gridDefination: {
@@ -155,21 +155,21 @@ export const tradeLicenseApplication = getCommonCard({
   appStatusContainer: getCommonContainer({
     applicationNo: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
+      moduleName: "egov-mr",
       componentPath: "AutosuggestContainer",
       props: {
         label: {
           labelName: "Application status",
-          labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
+          labelKey: "MR_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
         },
         placeholder: {
           labelName: "Select Application Status",
-          labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
+          labelKey: "MR_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
         },
         required: false,
         localePrefix: {
           moduleName: "WF",
-          masterName: "NEWTL"
+          masterName: "MR"
         },
         className: "autocomplete-dropdown",
         labelsFromLocalisation: true,
@@ -179,31 +179,40 @@ export const tradeLicenseApplication = getCommonCard({
             code : "INITIATED"
           },
           {
-            code : "APPLIED"
+            code : "PENDINGPAYMENT"
           },
           {
-            code : "FIELDINSPECTION"
+            code : "DOCVERIFICATION"
+          },
+          {
+            code : "CITIZENACTIONPENDINGATDOCVERIFICATION"
+          },
+          {
+            code : "REJECTED"
+          },
+          {
+            code : "PENDINGSCHEDULE"
+          },
+          {
+            code : "BACKFROMSHEDULETODOCVERIFIER"
           },
           {
             code : "PENDINGAPPROVAL"
           },
           {
-            code : "PENDINGPAYMENT"
+            code : "BACKFROMAPPROVALTODOCVERIFIER"
+          },
+          {
+            code : "CITIZENACTIONPENDINGATSCHEDULE"
+          },
+          {
+            code : "CITIZENACTIONPENDINGATAPPROVER"
           },
           {
             code : "APPROVED"
           },
           {
-            code : "CITIZENACTIONREQUIRED"
-          },     
-          {
-            code : "EXPIRED"
-          },
-          {
             code : "CANCELLED"
-          },
-          {
-            code : "REJECTED"
           }
         ],
       },
@@ -215,7 +224,7 @@ export const tradeLicenseApplication = getCommonCard({
     },
 
   }),
-  
+
 
   button: getCommonContainer({
     // firstCont: {
@@ -249,7 +258,7 @@ export const tradeLicenseApplication = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Search",
-            labelKey: "TL_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+            labelKey: "MR_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
           })
         },
         onClickDefination: {

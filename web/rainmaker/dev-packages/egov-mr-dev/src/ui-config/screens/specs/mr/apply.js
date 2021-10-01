@@ -10,7 +10,7 @@ import { getBoundaryData, updatePFOforSearchResults } from "../../../../ui-utils
 import { getAllDataFromBillingSlab, getCurrentFinancialYear, pageResetAndChange } from "../utils";
 import { documentList } from "./applyResource/documentList";
 import { footer } from "./applyResource/footer";
-import { brideDetails } from "./applyResource/brideDetails";
+import { brideDetails, primaryOwnerDetails } from "./applyResource/brideDetails";
 import { groomDetails } from "./applyResource/groomDetails";
 import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
 import { brideAddress } from "./applyResource/brideAddress";
@@ -18,7 +18,9 @@ import { groomAddress } from "./applyResource/groomAddress";
 import { witnessDetails } from "./applyResource/witnessDetails";
 import { guardianDetails } from "./applyResource/guardianDetails";
 import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
-
+import {
+  dispatchMultipleFieldChangeAction
+} from "egov-ui-framework/ui-config/screens/specs/utils";
 
 export const stepsData = [
   {
@@ -166,7 +168,7 @@ export const getMdmsData = async (action, state, dispatch) => {
     if (localities && localities.length > 0) {
       payload.MdmsRes.tenant.localities = localities;
     }
-   // payload.MdmsRes.MarriageRegistration.TlPeriod = [{ code: "1", active: true }, { code: "2", active: true }, { code: "3", active: true }, { code: "4", active: true }, { code: "5", active: true }];
+    // payload.MdmsRes.MarriageRegistration.TlPeriod = [{ code: "1", active: true }, { code: "2", active: true }, { code: "3", active: true }, { code: "4", active: true }, { code: "5", active: true }];
     payload.MdmsRes.MarriageRegistration.mrCountry = [
       { code: "AFGHANISTAN", active: true },
       { code: "AUSTRALIA", active: true },
@@ -229,29 +231,24 @@ export const getData = async (action, state, dispatch) => {
   const queryValue = getQueryArg(window.location.href, "applicationNumber");
   const tenantId = getQueryArg(window.location.href, "tenantId");
 
-  const applicationNo = queryValue
-    ? queryValue
-    : get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].oldLicenseNumber",
-      null
-    );
+  const applicationNo = queryValue;
+
   await getMdmsData(action, state, dispatch);
-  await getAllDataFromBillingSlab(getTenantId(), dispatch);
+  //await getAllDataFromBillingSlab(getTenantId(), dispatch);
 
 
   if (applicationNo) {
     //Edit/Update Flow ----
     const applicationType = get(
       state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+      "MarriageRegistrations[0].applicationType",
       null
     );
     const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
 
     if (getQueryArg(window.location.href, "action") !== "edit" && !isEditRenewal) {
       dispatch(
-        prepareFinalObject("Licenses", [
+        prepareFinalObject("MarriageRegistrations", [
           {
             licenseType: "PERMANENT",
             oldLicenseNumber: queryValue ? "" : applicationNo,
@@ -270,17 +267,17 @@ export const getData = async (action, state, dispatch) => {
     if (!queryValue) {
       const oldApplicationNo = get(
         state.screenConfiguration.preparedFinalObject,
-        "Licenses[0].applicationNumber",
+        "MarriageRegistrations[0].applicationNumber",
         null
       );
       dispatch(
-        prepareFinalObject("Licenses[0].oldLicenseNumber", oldApplicationNo)
+        prepareFinalObject("MarriageRegistrations[0].oldLicenseNumber", oldApplicationNo)
       );
       if (oldApplicationNo !== null) {
-        dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
+        dispatch(prepareFinalObject("MarriageRegistrations[0].financialYear", ""));
         dispatch(
           prepareFinalObject(
-            "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+            "MarriageRegistrations[0].tradeLicenseDetail.additionalDetail.applicationType",
             "APPLICATIONTYPE.RENEWAL"
           )
         );
@@ -302,7 +299,7 @@ export const getData = async (action, state, dispatch) => {
         );
       }
 
-      dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
+      dispatch(prepareFinalObject("MarriageRegistrations[0].applicationNumber", ""));
       dispatch(
         handleField(
           "apply",
@@ -312,6 +309,69 @@ export const getData = async (action, state, dispatch) => {
         )
       );
     }
+
+
+    const hidePrimaryOwnerSection = [
+      {
+        path: "components.div.children.formwizardFirstStep.children.primaryOwnerDetails",
+        property: "visible",
+        value: false
+      }
+
+
+    ];
+    dispatchMultipleFieldChangeAction("apply", hidePrimaryOwnerSection, dispatch);
+
+  } else {
+    dispatch(
+      prepareFinalObject(
+        "MarriageRegistrations[0].coupleDetails[0].bride.title",
+        "MRs"
+      )
+    );
+    dispatch(
+      prepareFinalObject(
+        "MarriageRegistrations[0].coupleDetails[0].groom.title",
+        "MR"
+      )
+    );
+
+    dispatch(
+      prepareFinalObject(
+        "MarriageRegistrations[0].coupleDetails[0].bride.tenantId",
+        tenantId
+      )
+    );
+    dispatch(
+      prepareFinalObject(
+        "MarriageRegistrations[0].coupleDetails[0].groom.tenantId",
+        tenantId
+      )
+    );
+    dispatch(
+      prepareFinalObject(
+        "MarriageRegistrations[0].coupleDetails[0].bride.isGroom",
+        false
+      )
+    );
+    dispatch(
+      prepareFinalObject(
+        "MarriageRegistrations[0].coupleDetails[0].groom.isGroom",
+        true
+      )
+    );
+    dispatch(
+      prepareFinalObject(
+        "MarriageRegistrations[0].applicationType",
+        "NEW"
+      )
+    );
+    dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.address.country", "INDIA"));
+    dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.address.country", "INDIA"));
+    dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.isDivyang", "No"));
+    dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.isDivyang", "No"));
+
+
   }
 };
 
@@ -323,6 +383,7 @@ export const formwizardFirstStep = {
   },
   children: {
     tradeLocationDetails,
+    primaryOwnerDetails,
     brideDetails,
     groomDetails
 
@@ -395,7 +456,9 @@ const screenConfig = {
     // let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
     dispatch(unMountScreen("search"));
     dispatch(unMountScreen("search-preview"));
-    const tenantId = getTenantId();
+   // const tenantId = getTenantId();
+   const tenantId = getQueryArg(window.location.href, "tenantId");
+
     const URL = window.location.href
     const URLsplit = URL.split("/")
     if (URLsplit[URLsplit.length - 1] == "apply") {
@@ -405,33 +468,41 @@ const screenConfig = {
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];
       getBoundaryData(action, state, dispatch, queryObj);
-      // let props = get(
-      //   action.screenConfig,
-      //   "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
-      //   {}
-      // );
-      // props.value = tenantId;
-      // props.disabled = true;
-      // set(
-      //   action.screenConfig,
-      //   "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
-      //   props
-      // );
+
       // dispatch(
       //   prepareFinalObject(
-      //     "Licenses[0].tradeLicenseDetail.address.city",
+      //     "MarriageRegistrations[0].tenantId",
       //     tenantId
       //   )
       // );
-      // const mohallaLocalePrefix = {
-      //   moduleName: tenantId,
-      //   masterName: "REVENUE"
-      // };
-      // set(
-      //   action.screenConfig,
-      //   "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla.props.localePrefix",
-      //   mohallaLocalePrefix
-      // );
+      //"components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity"
+      let props = get(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
+        {}
+      );
+      props.value = tenantId;
+      props.disabled = true;
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
+        props
+      );
+      dispatch(
+        prepareFinalObject(
+          "MarriageRegistrations[0].tenantId",
+          tenantId
+        )
+      );
+      const mohallaLocalePrefix = {
+        moduleName: tenantId,
+        masterName: "REVENUE"
+      };
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla.props.localePrefix",
+        mohallaLocalePrefix
+      );
 
 
 
@@ -439,6 +510,61 @@ const screenConfig = {
 
 
     });
+    if (applicationNo) {
+
+    } else {
+
+
+
+
+      dispatch(
+        prepareFinalObject(
+          "MarriageRegistrations[0].coupleDetails[0].bride.title",
+          "MRs"
+        )
+      );
+      dispatch(
+        prepareFinalObject(
+          "MarriageRegistrations[0].coupleDetails[0].groom.title",
+          "MR"
+        )
+      );
+
+      dispatch(
+        prepareFinalObject(
+          "MarriageRegistrations[0].coupleDetails[0].bride.tenantId",
+          tenantId
+        )
+      );
+      dispatch(
+        prepareFinalObject(
+          "MarriageRegistrations[0].coupleDetails[0].groom.tenantId",
+          tenantId
+        )
+      );
+      dispatch(
+        prepareFinalObject(
+          "MarriageRegistrations[0].coupleDetails[0].bride.isGroom",
+          false
+        )
+      );
+      dispatch(
+        prepareFinalObject(
+          "MarriageRegistrations[0].coupleDetails[0].groom.isGroom",
+          true
+        )
+      );
+      dispatch(
+        prepareFinalObject(
+          "MarriageRegistrations[0].applicationType",
+          "NEW"
+        )
+      );
+      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.address.country", "INDIA"));
+      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.address.country", "INDIA"));
+      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.isDivyang", "No"));
+      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.isDivyang", "No"));
+    }
 
     return action;
   },

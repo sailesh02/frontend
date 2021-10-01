@@ -106,7 +106,7 @@ export const groomDetails = getCommonCard(
             labelKey: "MR_DOB_PLACEHOLDER"
           },
 
-         // required: true,
+          required: true,
 
           pattern: getPattern("Date"),
           jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.dateOfBirth",

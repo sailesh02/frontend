@@ -12,7 +12,7 @@ export const searchResults = {
     columns: [
       {
         labelName: "Application No",
-        labelKey: "TL_COMMON_TABLE_COL_APP_NO",
+        labelKey: "MR_COMMON_TABLE_COL_APP_NO",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta) => (
@@ -21,28 +21,26 @@ export const searchResults = {
         }
       },
       {
-        labelName: "License No",
-        labelKey: "TL_COMMON_TABLE_COL_LIC_NO"
+        labelName: "Reg No",
+        labelKey: "MR_COMMON_TABLE_COL_LIC_NO"
       },
       {
-        labelName: "Trade Name",
-        labelKey: "TL_COMMON_TABLE_COL_TRD_NAME"
+        labelName: "Groom Name",
+        labelKey: "MR_COMMON_TABLE_COL_GROOM_NAME"
       },
       {
-        labelName: "Owner Name",
-        labelKey: "TL_COMMON_TABLE_COL_OWN_NAME"
+        labelName: "Bride Name",
+        labelKey: "MR_COMMON_TABLE_COL_BRIDE_NAME"
       },
+
       {
         labelName: "Application Date",
-        labelKey: "TL_COMMON_TABLE_COL_APP_DATE"
+        labelKey: "MR_COMMON_TABLE_COL_APP_DATE"
       },
-      {
-        labelName: "Financial Year",
-        labelKey: "TL_COMMON_TABLE_COL_FIN_YEAR"
-      },
+
       {
         labelName: "Application Type",
-        labelKey: "TL_COMMON_TABLE_COL_APP_TYPE",
+        labelKey: "MR_COMMON_TABLE_COL_APP_TYPE",
         options: {
           filter: false,
           customBodyRender: value => (
@@ -54,7 +52,7 @@ export const searchResults = {
       },
       {
         labelName: "Status",
-        labelKey: "TL_COMMON_TABLE_COL_STATUS",
+        labelKey: "MR_COMMON_TABLE_COL_STATUS",
         options: {
           filter: false,
           customBodyRender: value => (
@@ -77,7 +75,7 @@ export const searchResults = {
       },
       {
         labelName: "Status",
-        labelKey: "TL_COMMON_TABLE_COL_STATUS",
+        labelKey: "MR_COMMON_TABLE_COL_STATUS",
         options: {
           display: false
         }
@@ -86,7 +84,7 @@ export const searchResults = {
     ],
     title: {
       labelName: "Search Results for Trade License Applications",
-      labelKey: "TL_HOME_SEARCH_RESULTS_TABLE_HEADING"
+      labelKey: "MR_HOME_SEARCH_RESULTS_TABLE_HEADING"
     },
     rows: "",
     options: {

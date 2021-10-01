@@ -158,6 +158,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }
       if(parsedObject && parsedObject.noOfFlats && parseInt(parsedObject.noOfFlats) && parseInt(parsedObject.noOfFlats) > 0){
         dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'));
+      }else{
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No')); 
       }
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.locality));
@@ -168,6 +170,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       dispatch(prepareFinalObject("SewerageConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
       if(parsedObject && parsedObject.noOfFlats && parseInt(parsedObject.noOfFlats) && parseInt(parsedObject.noOfFlats) > 0){
         dispatch(prepareFinalObject("SewerageConnection[0].apartment", 'Yes'));
+      }else{
+        dispatch(prepareFinalObject("SewerageConnection[0].apartment", 'No')); 
       }
       let estimate;
       if (processInstanceAppStatus === "CONNECTION_ACTIVATED") {
@@ -715,6 +719,8 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
       if(payload && payload.WaterConnection[0].noOfFlats && parseInt(payload.WaterConnection[0].noOfFlats) && parseInt(payload.WaterConnection[0].noOfFlats) > 0){
         dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'));
+      }else{
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No')); 
       }
       let localizationLabels = {}
       if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
@@ -780,6 +786,8 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       }
       if(oldApplicationPayload && oldApplicationPayload.WaterConnection[0].noOfFlats && parseInt(oldApplicationPayload.WaterConnection[0].noOfFlats) && parseInt(oldApplicationPayload.WaterConnection[0].noOfFlats) > 0){
         dispatch(prepareFinalObject("WaterConnectionOld[0].apartment", 'Yes'));
+      }else{
+        dispatch(prepareFinalObject("WaterConnectionOld[0].apartment", 'No')); 
       }
     }
 
@@ -807,6 +815,9 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       if(payload && payload.SewerageConnections && payload.SewerageConnections[0].noOfFlats && parseInt(payload.SewerageConnections[0].noOfFlats) && parseInt(payload.SewerageConnections[0].noOfFlats) > 0){
         dispatch(prepareFinalObject("SewerageConnections[0].apartment", 'Yes'));
         dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'));
+      }else{
+        dispatch(prepareFinalObject("SewerageConnections[0].apartment", 'No'));
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No')); 
       }
       dispatch(prepareFinalObject("WaterConnection[0].locality",payload.SewerageConnections[0].additionalDetails.locality))
       if (!payload.SewerageConnections[0].connectionHolders || payload.SewerageConnections[0].connectionHolders === 'NA') {
@@ -830,6 +841,9 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
         if(oldApplicationPayload && oldApplicationPayload.SewerageConnections && oldApplicationPayload.SewerageConnections[0].noOfFlats && parseInt(oldApplicationPayload.SewerageConnections[0].noOfFlats) && parseInt(oldApplicationPayload.SewerageConnections[0].noOfFlats) > 0){
           dispatch(prepareFinalObject("SewerageConnectionOld[0].apartment", 'Yes'));
           dispatch(prepareFinalObject("WaterConnectionOld[0].apartment", 'Yes'));
+        }else{
+          dispatch(prepareFinalObject("SewerageConnectionOld[0].apartment", 'No'));
+          dispatch(prepareFinalObject("WaterConnectionOld[0].apartment", 'No'));
         }
       }
     }

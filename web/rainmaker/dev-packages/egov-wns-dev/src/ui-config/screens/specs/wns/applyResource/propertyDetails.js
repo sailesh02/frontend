@@ -29,15 +29,16 @@ let modeaction = getQueryArg(window.location.href, "modeaction");
 
 let mode = getQueryArg(window.location.href, "mode");
 
-
-const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"}]
-const meteredTemporary = [{code:"TWSFC"}]
-const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL"},{code:"ROADSIDEEATERS"},
+export const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"},{code:"BPL"},{code:"ASSOCIATION"}]
+export const meteredTemporary = [{code:"WSFCB"},{code: "DOMESTIC"}]
+export const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL"},
 {code:"SPMA"}]
-const nonMeteredTemporory = [{code:"DOMESTIC"}]
-const temporary = [{code: "DOMESTIC"}, {code:"TWSFC"}]
-const permanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"TWSFC"},
-, {code:"BPL"},{code:"ROADSIDEEATERS"}, {code:"SPMA"} ]
+export const nonMeteredTemporory = [{code:"WSFCB"},{code:"BPL"},{code:"ROADSIDEEATERS"},{code:"SPMA"}]
+
+export const temporary = [{code: "DOMESTIC"}, {code:"WSFCB"},{code:"BPL"},{code:"ROADSIDEEATERS"},{code:"SPMA"}]
+export const permanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},
+, {code:"BPL"},{code:"ASSOCIATION"}, {code:"SPMA"} ]
+
 let modifyLink;
 if(isMode==="MODIFY"){
   modifyLink=`/wns/apply?`;
@@ -700,7 +701,45 @@ const propertyDetailsNoId = getCommonContainer({
     },
     data: [{ code: "Metered",name:'Metered' }, { code: "Non Metered",name:'Non Metered' }],
     afterFieldChange: (action, state, dispatch) => {
+      const edit = getQueryArg(window.location.href, "action");
+
       if(action){
+        if(action.value == 'Metered' && edit == 'edit'){
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+              "visible",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
+              "visible",
+              true
+            )
+          );
+        }
+        if(action.value == 'Non Metered' && edit == 'edit'){
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+              "visible",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
+              "visible",
+              false
+            )
+          );
+        }
         const connectionCategory = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionCategory", "")
         const water = get(state.screenConfiguration.preparedFinalObject,"applyScreen.water",false)
         if(water){
@@ -785,7 +824,7 @@ const propertyDetailsNoId = getCommonContainer({
     },
     afterFieldChange: (action, state, dispatch) => {
       if(action.value){
-        if(action.value == 'DOMESTIC'){
+        if(action.value == 'DOMESTIC' || action.value == 'COMMERCIAL'){
           dispatch(
             handleField(
               "apply",

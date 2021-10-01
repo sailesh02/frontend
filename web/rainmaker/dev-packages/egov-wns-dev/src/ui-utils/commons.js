@@ -551,6 +551,33 @@ export const validationsForExecutionData = (applyScreenObject) => {
     }else{return false}
 }
 
+export const validateMeterDetails = (applyScreenObject) => {
+    let connectionType = applyScreenObject && applyScreenObject.connectionType
+    let water = applyScreenObject && applyScreenObject.water
+    let rValue = true;
+    if (rValue && connectionType && connectionType == 'Metered'){
+        if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("meterMake") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("meterReadingRatio") && 
+        applyScreenObject.additionalDetails["meterMake"] !== undefined && 
+        applyScreenObject.additionalDetails["meterMake"] !== "" &&
+        applyScreenObject.additionalDetails["meterReadingRatio"] !== undefined && 
+        applyScreenObject.additionalDetails["meterReadingRatio"] !== ""){
+            return true
+        }else{return false}
+    }else if(rValue && connectionType && connectionType == 'Non Metered' && !water){
+        if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("diameter") && 
+        applyScreenObject.additionalDetails["diameter"] !== undefined && 
+        applyScreenObject.additionalDetails["diameter"] !== ""){
+          return true
+        }else{return false}  
+    }
+    else{
+    return true
+    }
+}
+
 export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {
     let propertyObject = findAndReplace(applyScreenObject, "NA", null);
     if (
@@ -663,6 +690,18 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails.detailsProvidedBy !== undefined &&
                 queryObject.additionalDetails.detailsProvidedBy !== null
             ) ? queryObject.additionalDetails.detailsProvidedBy : "",
+            meterMake:(
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.meterMake !== undefined
+              ) ? (queryObject.additionalDetails.meterMake) : "",
+            meterReadingRatio: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.meterReadingRatio !== undefined
+              ) ? (queryObject.additionalDetails.meterReadingRatio) : "",
+            diameter: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.diameter !== undefined
+            ) ? (queryObject.additionalDetails.diameter) : "",
         }
     }
     queryObject = { ...queryObject, ...parsedObject }
@@ -1447,10 +1486,11 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
 }
 
 export const getMeterReadingData = async (dispatch) => {
+    let tenantId = getQueryArg(window.location.href, "tenantId")
     let queryObject = [
         {
             key: "tenantId",
-            value: getTenantIdCommon()
+            value: tenantId
         },
         {
             key: "connectionNos",

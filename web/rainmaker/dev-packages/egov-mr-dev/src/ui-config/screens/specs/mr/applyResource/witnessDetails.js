@@ -352,7 +352,7 @@ export const groomWitnessDetails = getCommonCard(
           labelKey: "MR_CONTACT_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Email"),
+        pattern: getPattern("MobileNo"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.contact",
         disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),

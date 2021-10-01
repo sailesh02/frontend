@@ -156,6 +156,9 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", true);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", false);
       }
+      if(parsedObject && parsedObject.noOfFlats && parseInt(parsedObject.noOfFlats) && parseInt(parsedObject.noOfFlats) > 0){
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'));
+      }
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.locality));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
@@ -163,6 +166,9 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       dispatch(prepareFinalObject("SewerageConnection[0]", parsedObject));
       dispatch(prepareFinalObject("SewerageConnection[0].additionalDetails.locality", applyScreenObject.locality));
       dispatch(prepareFinalObject("SewerageConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
+      if(parsedObject && parsedObject.noOfFlats && parseInt(parsedObject.noOfFlats) && parseInt(parsedObject.noOfFlats) > 0){
+        dispatch(prepareFinalObject("SewerageConnection[0].apartment", 'Yes'));
+      }
       let estimate;
       if (processInstanceAppStatus === "CONNECTION_ACTIVATED") {
         let connectionNumber = parsedObject.connectionNo;
@@ -707,6 +713,9 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
+      if(payload && payload.WaterConnection[0].noOfFlats && parseInt(payload.WaterConnection[0].noOfFlats) && parseInt(payload.WaterConnection[0].noOfFlats) > 0){
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'));
+      }
       let localizationLabels = {}
       if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
       let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${payload.WaterConnection[0].additionalDetails.locality
@@ -769,6 +778,9 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
         dispatch(prepareFinalObject("WaterConnectionOld", oldApplicationPayload.WaterConnection))
       dispatch(prepareFinalObject("WaterConnectionOld[0].locality",oldApplicationPayload.WaterConnection[0].additionalDetails.locality))
       }
+      if(oldApplicationPayload && oldApplicationPayload.WaterConnection[0].noOfFlats && parseInt(oldApplicationPayload.WaterConnection[0].noOfFlats) && parseInt(oldApplicationPayload.WaterConnection[0].noOfFlats) > 0){
+        dispatch(prepareFinalObject("WaterConnectionOld[0].apartment", 'Yes'));
+      }
     }
 
 
@@ -792,6 +804,9 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
         .replace(/[._:-\s\/]/g, "_")}`;
       dispatch(prepareFinalObject("SewerageConnection[0].locality",payload.SewerageConnections[0].additionalDetails.locality))
       dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
+      if(payload && payload.SewerageConnections && payload.SewerageConnections[0].noOfFlats && parseInt(payload.SewerageConnections[0].noOfFlats) && parseInt(payload.SewerageConnections[0].noOfFlats) > 0){
+        dispatch(prepareFinalObject("SewerageConnections[0].apartment", 'Yes'));
+      }
       dispatch(prepareFinalObject("WaterConnection[0].locality",payload.SewerageConnections[0].additionalDetails.locality))
       if (!payload.SewerageConnections[0].connectionHolders || payload.SewerageConnections[0].connectionHolders === 'NA') {
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", false);
@@ -810,6 +825,10 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
              if (oldApplicationPayload.SewerageConnections.length > 0) {
           dispatch(prepareFinalObject("SewerageConnectionOld[0]", oldApplicationPayload.SewerageConnections[0]))
           dispatch(prepareFinalObject("WaterConnectionOld[0]",oldApplicationPayload.SewerageConnections[0]));
+        }
+        if(oldApplicationPayload && oldApplicationPayload.SewerageConnections && oldApplicationPayload.SewerageConnections[0].noOfFlats && parseInt(oldApplicationPayload.SewerageConnections[0].noOfFlats) && parseInt(oldApplicationPayload.SewerageConnections[0].noOfFlats) > 0){
+          dispatch(prepareFinalObject("SewerageConnectionOld[0].apartment", 'Yes'));
+          dispatch(prepareFinalObject("WaterConnectionOld[0].apartment", 'Yes'));
         }
       }
     }

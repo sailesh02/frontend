@@ -706,6 +706,32 @@ export const getData = async (action, state, dispatch) => {
         );
       }
       let data = get(state.screenConfiguration.preparedFinalObject, "applyScreen")
+      let noOfFlats = get(state.screenConfiguration.preparedFinalObject && state.screenConfiguration.preparedFinalObject.applyScreen, "noOfFlats")
+      if(noOfFlats && parseInt(noOfFlats) > 0){
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.apartment",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.apartment",
+            "isChecked",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.noOfFlats",
+          "visible",
+          true
+        ));
+      }
       if (data.connectionType !== "Metered") {
         dispatch(
           handleField(

@@ -806,6 +806,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
       if(payload && payload.SewerageConnections && payload.SewerageConnections[0].noOfFlats && parseInt(payload.SewerageConnections[0].noOfFlats) && parseInt(payload.SewerageConnections[0].noOfFlats) > 0){
         dispatch(prepareFinalObject("SewerageConnections[0].apartment", 'Yes'));
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'));
       }
       dispatch(prepareFinalObject("WaterConnection[0].locality",payload.SewerageConnections[0].additionalDetails.locality))
       if (!payload.SewerageConnections[0].connectionHolders || payload.SewerageConnections[0].connectionHolders === 'NA') {

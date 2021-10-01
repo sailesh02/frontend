@@ -833,6 +833,13 @@ const propertyDetailsNoId = getCommonContainer({
               true
             )
           );
+          dispatch(
+            handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.noOfFlats",
+            "visible",
+            true
+          ));
         }else{
           dispatch(
             handleField(
@@ -842,6 +849,13 @@ const propertyDetailsNoId = getCommonContainer({
               false
             )
           );
+          dispatch(
+            handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.noOfFlats",
+            "visible",
+            false
+          ));
         }
       }
   },
@@ -880,7 +894,7 @@ const propertyDetailsNoId = getCommonContainer({
       },
       jsonPath: "applyScreen.apartment",
       required: false,
-      isChecked: false,
+      isChecked: true,
       isApartment:true
     },
     type: "array",

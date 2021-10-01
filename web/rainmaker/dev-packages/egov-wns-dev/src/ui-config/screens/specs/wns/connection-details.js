@@ -233,8 +233,12 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
       dispatch(prepareFinalObject("isAmendmentInWorkflow", amendments&&Array.isArray(amendments)&&amendments.length==0?true:false));
-
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
+      if(sewerageConnection && sewerageConnection[0] && sewerageConnection[0].noOfFlats && parseInt(sewerageConnection[0].noOfFlats) > 0){
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'))
+      }else{
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No'))
+      }
       let localizationLabels = {}
       if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
       dispatch(prepareFinalObject("WaterConnection[0].locality",sewerageConnection.additionalDetails.locality))
@@ -331,8 +335,13 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
       dispatch(prepareFinalObject("isAmendmentInWorkflow", amendments&&Array.isArray(amendments)&&amendments.length==0?true:false));
-      showHideConnectionHolder(dispatch, waterConnection.connectionHolders);
+      showHideConnectionHolder(dispatch, waterConnection.connectionHolders);     
       dispatch(prepareFinalObject("WaterConnection[0]", waterConnection));
+      if(waterConnection && waterConnection && waterConnection.noOfFlats && parseInt(waterConnection.noOfFlats) > 0){
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'))
+      }else{
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No'))
+      }
       let localizationLabels = {}
       if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
       dispatch(prepareFinalObject("WaterConnection[0].locality",waterConnection.additionalDetails.locality))

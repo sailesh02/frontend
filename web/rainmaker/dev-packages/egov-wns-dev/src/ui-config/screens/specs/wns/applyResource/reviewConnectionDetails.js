@@ -482,7 +482,7 @@ const getPropertyDetails = {
             },
             {
               jsonPath: "applyScreen.apartment",
-              callBack: handleNA
+              // callBack: handleNA
              
             },
             {
@@ -490,7 +490,7 @@ const getPropertyDetails = {
             },
             {
               jsonPath: "applyScreenOld.apartment",
-              callBack: handleNA 
+              // callBack: handleNA 
             }
 
           )

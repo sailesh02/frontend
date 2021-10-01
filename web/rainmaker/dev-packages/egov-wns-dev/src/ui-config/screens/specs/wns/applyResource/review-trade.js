@@ -406,7 +406,7 @@ export const propertyDetails={
     },
     {
       jsonPath: "WaterConnection[0].apartment",
-      callBack: handleNA
+      // callBack: handleNA
      
     },
     {
@@ -414,7 +414,7 @@ export const propertyDetails={
     },
     {
       jsonPath: "WaterConnectionOld[0].apartment",
-      callBack: handleNA 
+      // callBack: handleNA 
     }
 
   )

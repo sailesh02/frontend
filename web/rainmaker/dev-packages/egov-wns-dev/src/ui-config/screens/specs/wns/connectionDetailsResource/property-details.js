@@ -179,7 +179,7 @@ const propertyDetails= getCommonContainer({
     },
     {
       jsonPath: "WaterConnection[0].apartment",
-      callBack: handleNA
+      // callBack: handleNA
      
     }
 

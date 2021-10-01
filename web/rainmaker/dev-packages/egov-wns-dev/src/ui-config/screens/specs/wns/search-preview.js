@@ -149,6 +149,13 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       applyScreenObject.applicationNo.includes("WS") ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
+      if(applyScreenObject && applyScreenObject.applicationNo.includes("WS")){
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", false);
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
+      }else{
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", true);
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", false);
+      }
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.locality));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
@@ -223,7 +230,36 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading.visible",
         true
       );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio.visible",
+        true
+      );
     } else {
+      let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+      if(applicationNumber && applicationNumber.includes("WS")){
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+          false
+        );
+      }else{
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+          true
+        );
+      }
       set(
         action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterId.visible",
@@ -237,6 +273,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       set(
         action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio.visible",
         false
       );
     }
@@ -639,6 +685,11 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
   let viewBillTooltip = [], estimate, payload = [];
   if (service === serviceConst.WATER || applicationNumber.includes('WS')) {
+    set(
+      action.screenConfig,
+      "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+      false
+    );
     payload = [];
     payload = await getSearchResults(queryObjForSearch);
     set(payload, 'WaterConnection[0].service', service);
@@ -822,6 +873,18 @@ const parserFunction = (obj) => {
         obj.additionalDetails.detailsProvidedBy !== undefined &&
         obj.additionalDetails.detailsProvidedBy !== null
       ) ? obj.additionalDetails.detailsProvidedBy : "",
+      meterMake:(
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.meterMake !== undefined
+      ) ? (obj.additionalDetails.meterMake) : "",
+      meterReadingRatio: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.meterReadingRatio !== undefined
+      ) ? (obj.additionalDetails.meterReadingRatio) : "",
+      diameter: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.diameter !== undefined
+      ) ? (obj.additionalDetails.diameter) : "",
     },
     dateEffectiveFrom: convertDateToEpoch(obj.dateEffectiveFrom),
     noOfTaps: parseInt(obj.noOfTaps),

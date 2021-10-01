@@ -38,14 +38,9 @@ import { reviewModificationsEffective } from "./applyResource/reviewModification
 import { reviewOwner } from "./applyResource/reviewOwner";
 import './index.css'
 import { fetchDropdownData, getTranslatedLabel } from "egov-ui-kit/utils/commons";
-const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"}]
-const meteredTemporary = [{code:"TWSFC"}]
-const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL"},{code:"ROADSIDEEATERS"},
-{code:"SPMA"}]
-const nonMeteredTemporory = [{code:"DOMESTIC"}]
-const temporary = [{code: "DOMESTIC"}, {code:"TWSFC"}]
-const permanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"TWSFC"},
-, {code:"BPL"},{code:"ROADSIDEEATERS"}, {code:"SPMA"} ]
+import { meteredPermanent, meteredTemporary, nonMeteredPermanent, nonMeteredTemporory,
+  temporary, permanent} from './applyResource/propertyDetails'
+
 let mode = getQueryArg(window.location.href, "mode");
 let isMode = isModifyMode();
 export const stepperData = () => {
@@ -153,7 +148,7 @@ export const getMdmsData = async (dispatch,state) => {
         { moduleName:"tenant","masterDetails":[{"name":"tenants"},{"name":"citymodule"}]},
         { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }] },
        // { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
-        { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }, { name: "RoadType" },{ name: "PipeSize" }] },
+        { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }, { name: "RoadType" },{ name: "PipeSize" },{name : "PipeDiameter"}] },
         { moduleName: "ws-services-calculation", masterDetails: [{ name: "PipeSize" }] },
         {
           moduleName: "ws-services-masters", masterDetails: [
@@ -161,7 +156,8 @@ export const getMdmsData = async (dispatch,state) => {
             { name: "ModifyConnectionDocuments" },
             { name: "waterSource" },
             { name: "connectionType" },
-            { name: "PropertySearch" }
+            { name: "PropertySearch" },
+            { name: "MeterReadingRatio"}
           ]
         },
         { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" },{name: "OwnerType"}]}
@@ -202,6 +198,33 @@ export const getMdmsData = async (dispatch,state) => {
           })
         }
       })
+    
+      let isActiveMeterRatio = payload.MdmsRes && payload.MdmsRes["ws-services-masters"] &&
+       payload.MdmsRes["ws-services-masters"]["MeterReadingRatio"] &&
+       payload.MdmsRes["ws-services-masters"]["MeterReadingRatio"].filter( ratio => {
+        return ratio.active
+      }) || []
+
+      let fileteredMeterReadingRatio = isActiveMeterRatio && isActiveMeterRatio.map(ratio => {
+        return {
+          code :ratio.code,
+          label : ratio.label
+        }
+      }) || []
+
+      let isActiveDiameter = payload.MdmsRes && payload.MdmsRes["sw-services-calculation"] && 
+       payload.MdmsRes["sw-services-calculation"]["PipeDiameter"].filter( ratio => {
+        return ratio.isActive
+      }) || []
+      let fileteredDiameter = isActiveDiameter && isActiveDiameter.map(ratio => {
+        return {
+          code :ratio.size,
+          label : ratio.size
+        }
+      }) || []
+
+      payload.MdmsRes["sw-services-calculation"].fileteredDiameter = fileteredDiameter
+      payload.MdmsRes["ws-services-masters"].fileteredMeterReadingRatio = fileteredMeterReadingRatio
       let filtered = waterSource.reduce((filtered, item) => {
         if (!filtered.some(filteredItem => JSON.stringify(filteredItem.code) == JSON.stringify(item.code)))
           filtered.push(item)
@@ -728,6 +751,69 @@ export const getData = async (action, state, dispatch) => {
           handleField(
             "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID`,
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+            "visible",
+            false
+          )
+        );
+      }
+      if(data.connectionType == 'Metered'){
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter`,
+            "visible",
+            false
+          )
+        );
+      }
+      let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+      if(data.connectionType === 'Non Metered' && applicationNumber && !applicationNumber.includes('WS')){
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter`,
+            "visible",
+            true
+          )
+        );
+      }
+      if(applicationNumber && applicationNumber.includes('WS')){
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter`,
             "visible",
             false
           )

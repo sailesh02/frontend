@@ -343,6 +343,17 @@ export const additionDetails = getCommonCard({
         jsonPath: "applyScreen.connectionExecutionDate",
         props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
       }),
+      diameter: getSelectField({
+        label: { labelKey: "WS_CONN_DETAIL_DIAMETER" },
+        sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.fileteredDiameter",
+        optionValue: "code",
+        optionLabel: "label",
+        placeholder: { labelKey: "WS_CONN_DETAIL_DIAMETER_PLACEHOLDER" },
+        required: true,
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"},
+        gridDefination: { xs: 12, sm: 6 },
+        jsonPath: "applyScreen.additionalDetails.diameter"
+      }),
       meterID: getTextField({
         label: {
           labelKey: "WS_SERV_DETAIL_METER_ID"
@@ -392,7 +403,44 @@ export const additionDetails = getCommonCard({
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.additionalDetails.initialMeterReading",
         props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
-      })
+      }),
+      meterMake : getTextField({
+        label: {
+          labelKey: "WS_ADDN_DETAILS_METER_MAKE"
+        },
+        placeholder: {
+          labelKey: "WS_ADDN_DETAILS_MAKE_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: true,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "applyScreen.additionalDetails.meterMake",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
+      }),
+      meterReadingRatio: getSelectField({
+        label: {
+          labelName: "Meter Ratio",
+          labelKey: "WS_ADDN_DETAILS_METER_RATIO"
+        },
+        placeholder: {
+          labelName: "Select Meter Ratio",
+          labelKey: "WS_ADDN_DETAILS_METER_RATIO_PLACEHOLDER"
+        },
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        required: true,
+        sourceJsonPath: "applyScreenMdmsData.ws-services-masters.fileteredMeterReadingRatio",
+        jsonPath: "applyScreen.additionalDetails.meterReadingRatio",
+        optionValue: "code",
+        optionLabel: "label",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"},
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        }
+      }),
     })
   }),
   modificationsEffectiveFrom : getCommonGrayCard({
@@ -435,6 +483,22 @@ const showHideFeilds = (dispatch, value) => {
   dispatch(
     handleField(
       "apply",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
       `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate`,
       "visible",
       value
@@ -459,6 +523,22 @@ const showHideFeilds = (dispatch, value) => {
   dispatch(
     handleField(
       "apply",
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate`,
       "visible",
       value
@@ -476,6 +556,22 @@ const showHideFeilds = (dispatch, value) => {
     handleField(
       "apply",
       "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio",
       "visible",
       value
     )

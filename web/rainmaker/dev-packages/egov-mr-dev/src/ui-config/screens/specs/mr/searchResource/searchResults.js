@@ -22,7 +22,7 @@ export const searchResults = {
       },
       {
         labelName: "Reg No",
-        labelKey: "MR_COMMON_TABLE_COL_LIC_NO"
+        labelKey: "MR_COMMON_TABLE_COL_REG_NO"
       },
       {
         labelName: "Groom Name",

@@ -39,7 +39,7 @@ const screenConfig = {
               },
 
               {
-                label: "TL_COMMON_TABLE_COL_APP_NO",
+                label: "MR_COMMON_TABLE_COL_APP_NO",
                 jsonPath: "applicationNumber"
               },
 
@@ -49,7 +49,7 @@ const screenConfig = {
               },
 
               {
-                label: "TL_COMMON_TABLE_COL_STATUS",
+                label: "MR_COMMON_TABLE_COL_STATUS",
                 jsonPath: "status",
                 prefix: "WF_MR_"
               },

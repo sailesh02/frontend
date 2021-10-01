@@ -110,7 +110,7 @@ export const searchApiCall = async (state, dispatch) => {
       let data = response.MarriageRegistrations.map(item => ({
         ['MR_COMMON_TABLE_COL_APP_NO']:
           item.applicationNumber || "-",
-        ['MR_COMMON_TABLE_COL_LIC_NO']: item.mrNumber || "-",
+        ['MR_COMMON_TABLE_COL_REG_NO']: item.mrNumber || "-",
         ['MR_COMMON_TABLE_COL_GROOM_NAME']: item.coupleDetails[0].bride.firstName || "-",
         ['MR_COMMON_TABLE_COL_BRIDE_NAME']: item.coupleDetails[0].groom.firstName || "-",
         ['MR_COMMON_TABLE_COL_APP_DATE']:

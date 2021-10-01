@@ -46,7 +46,7 @@ export const primaryOwnerDetails = getCommonCard(
       },
       jsonPath: "MarriageRegistrations[0].primaryOwner",
       props: {
-        label: { name: "MR_PRIMARYOWNER_HEADER", key: "MR_PRIMARYOWNER_HEADER" },
+        label: { name: "MR_PRIMARYOWNER_DESC", key: "MR_PRIMARYOWNER_DESC" },
         className: "applicant-details-error",
         buttons: [
           {

@@ -90,6 +90,7 @@ export const callBackForNext = async (state, dispatch) => {
   let hasFieldToaster = true;
   let isBrideDobValid = true;
   let isGroomDobValid = true;
+  let isMrgDateInFutue = true;
   let mrgObj = get(
     state.screenConfiguration.preparedFinalObject,
     "MarriageRegistrations"
@@ -99,17 +100,7 @@ export const callBackForNext = async (state, dispatch) => {
     "action"
   );
   console.log(mrgObj, "Nero mrgObje")
-  if (activeStep === 10) {
-    const isBrideDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.brideDetails.children.cardContent.children.brideDetailsConatiner.children",
-      state,
-      dispatch
-    );
-    if (!isBrideDetailsValid) {
-      isFormValid = false;
-    }
 
-  }
   if (activeStep === 0) {
     //Bride and Groom Details
 
@@ -140,6 +131,7 @@ export const callBackForNext = async (state, dispatch) => {
         mrgObj[0],
         "status"
       )
+      const todayDate = new Date();
       if (!applicationNoInUrl) {
 
         let brideDob = get(
@@ -150,10 +142,22 @@ export const callBackForNext = async (state, dispatch) => {
           mrgObj[0],
           "coupleDetails[0].groom.dateOfBirth"
         )
+        let marriageDate = get(
+          mrgObj[0],
+          "marriageDate"
+        )
 
         console.log(brideDob, groomDob, "Nero both DOB")
-        const todayDate = new Date();
-        if (brideDob) {
+
+
+        if (marriageDate) {
+          const mrgDateObj = new Date(marriageDate);
+          if (mrgDateObj > todayDate) {
+            isFormValid = isMrgDateInFutue = false;
+          }
+        }
+
+        if (brideDob && typeof brideDob == "string") {
           const [brideDobYear, brideDobMonth, brideDobDay] = brideDob.split("-");
           console.log(brideDobDay)
           const brideDobdate = new Date(`${brideDobMonth}/${brideDobDay}/${brideDobYear}`);
@@ -169,7 +173,7 @@ export const callBackForNext = async (state, dispatch) => {
 
         }
 
-        if (groomDob) {
+        if (groomDob && typeof groomDob == "string") {
           const [groomDobYear, groomDobMonth, groomDobDay] = groomDob.split("-");
           console.log(groomDobDay)
           const groomDobdate = new Date(`${groomDobMonth}/${groomDobDay}/${groomDobYear}`);
@@ -201,7 +205,7 @@ export const callBackForNext = async (state, dispatch) => {
           const [brideDobYear, brideDobMonth, brideDobDay] = brideDob.split("-");
           console.log(brideDobDay)
           const brideDobdate = new Date(`${brideDobMonth}/${brideDobDay}/${brideDobYear}`);
-          const todayDate = new Date();
+
           const diffTime = Math.abs(brideDobdate - todayDate);
           const brideAgeInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -454,6 +458,12 @@ export const callBackForNext = async (state, dispatch) => {
               labelName:
                 "Please fill all mandatory fields for Trade Details, then do next !",
               labelKey: "ERR_FILL_MR_GROOM_AGE_NOT_VALID"
+            };
+          } else if (!isMrgDateInFutue) {
+            errorMessage = {
+              labelName:
+                "Please fill all mandatory fields for Trade Details, then do next !",
+              labelKey: "ERR_FILL_MR_MRGDATE_NOT_VALID"
             };
           } else {
 

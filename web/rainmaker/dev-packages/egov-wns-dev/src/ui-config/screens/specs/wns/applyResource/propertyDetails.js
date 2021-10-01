@@ -825,6 +825,7 @@ const propertyDetailsNoId = getCommonContainer({
     afterFieldChange: (action, state, dispatch) => {
       if(action.value){
         if(action.value == 'DOMESTIC' || action.value == 'COMMERCIAL'){
+          dispatch(prepareFinalObject("applyScreen.apartment", 'Yes')); 
           dispatch(
             handleField(
               "apply",
@@ -841,6 +842,7 @@ const propertyDetailsNoId = getCommonContainer({
             true
           ));
         }else{
+          dispatch(prepareFinalObject("applyScreen.apartment", 'No')); 
           dispatch(
             handleField(
               "apply",

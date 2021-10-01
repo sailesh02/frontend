@@ -1686,13 +1686,12 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
                         { key: "key", value: "ws-consolidatedacknowlegment" },
                         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
                     ]
-
                     // payloadReceiptDetails.WaterConnection = await getPropertyObj(payloadReceiptDetails.WaterConnection);
-                    if (payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting !== undefined && payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting !== null) {
-                        if (payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting === true) {
-                            payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting = 'SCORE_YES'
+                    if (payloadReceiptDetails.WaterConnection && payloadReceiptDetails.WaterConnection[0] && payloadReceiptDetails.WaterConnection[0].additionalDetails && payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting !== undefined && payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting !== null) {
+                        if (payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting === true) {
+                            payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting = 'SCORE_YES'
                         } else {
-                            payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting = 'SCORE_NO'
+                            payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting = 'SCORE_NO'
                         }
                     }
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
@@ -2009,13 +2008,13 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
     if (wnsConnection[0].service === serviceConst.WATER) {
 
         // for Estimate api 
-        if (wnsConnection[0].property && wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
-            if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_YES') {
-                wnsConnection[0].property.rainWaterHarvesting = true
-            } else if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_NO') {
-                wnsConnection[0].property.rainWaterHarvesting = false
-            }
-        }
+        // if (wnsConnection[0].property && wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
+        //     if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_YES') {
+        //         wnsConnection[0].property.rainWaterHarvesting = true
+        //     } else if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_NO') {
+        //         wnsConnection[0].property.rainWaterHarvesting = false
+        //     }
+        // }
         apiUrl = "ws-calculator/waterCalculator/_estimate";
         appService = "ws-applicationwater";
         queryObjectForEst = [{
@@ -2089,7 +2088,7 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
         if (type === 'sanctionLetter') {
             const slaDetails = await httpRequest(
                 "post",
-                `egov-workflow-v2/egov-wf/businessservice/_search?tenantId=${wnsConnection[0].property.tenantId}&businessService=WS`,
+                `egov-workflow-v2/egov-wf/businessservice/_search?tenantId=${wnsConnection[0].tenantId}&businessService=WS`,
                 "_search"
             );
 
@@ -2115,17 +2114,17 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
 
 
         if (type === 'application') {
-            if (wnsConnection[0].property && wnsConnection[0].property.units && wnsConnection[0].property.units.length > 0 && wnsConnection[0].property.units[0].usageCategory) {
-                wnsConnection[0].property.propertySubUsageType = wnsConnection[0].property.units[0].usageCategory;
-            }
+            // if (wnsConnection[0].property && wnsConnection[0].property.units && wnsConnection[0].property.units.length > 0 && wnsConnection[0].property.units[0].usageCategory) {
+            //     wnsConnection[0].property.propertySubUsageType = wnsConnection[0].property.units[0].usageCategory;
+            // }
             if (wnsConnection[0].service === serviceConst.WATER) {
-                if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
-                    if (wnsConnection[0].property.rainWaterHarvesting === true) {
-                        wnsConnection[0].property.rainWaterHarvesting = 'SCORE_YES'
-                    } else {
-                        wnsConnection[0].property.rainWaterHarvesting = 'SCORE_NO'
-                    }
-                }
+                // if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
+                //     if (wnsConnection[0].property.rainWaterHarvesting === true) {
+                //         wnsConnection[0].property.rainWaterHarvesting = 'SCORE_YES'
+                //     } else {
+                //         wnsConnection[0].property.rainWaterHarvesting = 'SCORE_NO'
+                //     }
+                // }
                 obj = {
                     WaterConnection: wnsConnection
                 }

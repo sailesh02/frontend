@@ -9,6 +9,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import get from "lodash/get";
 import { toggleConnHolderDetails,toggleFlatDetails } from "../CheckboxContainer/toggleFeilds"
+import store from "ui-redux/store";
 
 const styles = {
   root: {
@@ -78,8 +79,10 @@ class CheckboxLabels extends React.Component {
     const isChecked = event.target.checked;
     if(isApartment){
       if (isChecked) {
+        store.dispatch(prepareFinalObject("applyScreen.apartment", 'Yes')); 
         toggleFlatDetails(onFieldChange, true);
       } else {
+        store.dispatch(prepareFinalObject("applyScreen.apartment", 'No')); 
         toggleFlatDetails(onFieldChange, false);
       }
     }else{

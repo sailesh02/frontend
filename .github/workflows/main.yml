@@ -2,7 +2,7 @@ name: A workflow to build egov frontend
 on: 
  push:
     branches:
-      - feature/additionalFields-meter
+      - feature/dropdwon-mdms
 jobs:
   build:
     name: Build citizen

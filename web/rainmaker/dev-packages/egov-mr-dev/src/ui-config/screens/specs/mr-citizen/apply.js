@@ -18,7 +18,8 @@ import {
   formwizardFourthStep,
   formwizardFifthStep,
   stepper,
-  getMdmsData
+  getMdmsData,
+  setDataForApplication
 } from "../mr/apply";
 import { getAllDataFromBillingSlab } from "../utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
@@ -40,9 +41,6 @@ const getData = async (action, state, dispatch, tenantId) => {
       tenantId
     )
   );
-  // dispatch(
-  //   prepareFinalObject("MarriageRegistrations[0].marriagePlace.placeOfMarriage", tenantId)
-  // );
 
 
   dispatch(
@@ -57,18 +55,7 @@ const getData = async (action, state, dispatch, tenantId) => {
       "MR"
     )
   );
-  // dispatch(
-  //   prepareFinalObject(
-  //     "MarriageRegistrations[0].coupleDetails[0].bride.isDivyang",
-  //     false
-  //   )
-  // );
-  // dispatch(
-  //   prepareFinalObject(
-  //     "MarriageRegistrations[0].coupleDetails[0].groom.isDivyang",
-  //     false
-  //   )
-  // );
+
   dispatch(
     prepareFinalObject(
       "MarriageRegistrations[0].coupleDetails[0].bride.tenantId",
@@ -152,6 +139,8 @@ const updateSearchResults = async (
         false
       )
     );
+  }else{
+    setDataForApplication(action, state, dispatch);
   }
 };
 const screenConfig = {

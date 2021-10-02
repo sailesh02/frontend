@@ -422,18 +422,23 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       for (let i = 0; i < coupleDetails.length; i++) {
         if (coupleDetails[i].bride) {
           coupleDetails[i].bride.dateOfBirth = convertDateToEpoch(coupleDetails[i].bride.dateOfBirth, "dayend")
-          if (coupleDetails[i].bride.isDivyang == 'YES') {
-            coupleDetails[i].bride.isDivyang = true;
-          } else {
-            coupleDetails[i].bride.isDivyang = false;
+          if (typeof coupleDetails[i].bride.isDivyang == "string") {
+            if (coupleDetails[i].bride.isDivyang == 'Yes') {
+              coupleDetails[i].bride.isDivyang = true;
+            } else {
+              coupleDetails[i].bride.isDivyang = false;
+            }
+
           }
         }
         if (coupleDetails[i].groom) {
           coupleDetails[i].groom.dateOfBirth = convertDateToEpoch(coupleDetails[i].groom.dateOfBirth, "dayend")
-          if (coupleDetails[i].groom.isDivyang == 'YES') {
-            coupleDetails[i].groom.isDivyang = true;
-          } else {
-            coupleDetails[i].groom.isDivyang = false;
+          if (typeof coupleDetails[i].groom.isDivyang == "string") {
+            if (coupleDetails[i].groom.isDivyang == 'Yes') {
+              coupleDetails[i].groom.isDivyang = true;
+            } else {
+              coupleDetails[i].groom.isDivyang = false;
+            }
           }
         }
 

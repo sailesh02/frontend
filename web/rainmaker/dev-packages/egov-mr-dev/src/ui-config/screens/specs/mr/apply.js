@@ -227,6 +227,20 @@ export const getMdmsData = async (action, state, dispatch) => {
   }
 };
 
+export const setDataForApplication = async (action, state, dispatch) => {
+  const mrgObj = get(
+    state.screenConfiguration.preparedFinalObject,
+    "MarriageRegistrations",
+    []
+  );
+
+  const isBrideDivyang = get(mrgObj[0], "coupleDetail[0].bride.isDivyang");
+  const isGroomDivyang = get(mrgObj[0], "coupleDetail[0].groom.isDivyang");
+  dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.isDivyang", isBrideDivyang? "Yes": "No"));
+  dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.isDivyang", isGroomDivyang? "Yes": "No"));
+
+}
+
 export const getData = async (action, state, dispatch) => {
   const queryValue = getQueryArg(window.location.href, "applicationNumber");
   const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -321,7 +335,7 @@ export const getData = async (action, state, dispatch) => {
 
     ];
     dispatchMultipleFieldChangeAction("apply", hidePrimaryOwnerSection, dispatch);
-
+    setDataForApplication(action, state, dispatch);
   } else {
     dispatch(
       prepareFinalObject(
@@ -368,11 +382,7 @@ export const getData = async (action, state, dispatch) => {
     );
     dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.address.country", "INDIA"));
     dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.address.country", "INDIA"));
-    dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.isDivyang", "No"));
-    dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.isDivyang", "No"));
-
-
-  }
+    }
 };
 
 export const formwizardFirstStep = {
@@ -562,8 +572,7 @@ const screenConfig = {
       );
       dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.address.country", "INDIA"));
       dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.address.country", "INDIA"));
-      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.isDivyang", "No"));
-      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.isDivyang", "No"));
+
     }
 
     return action;

@@ -51,6 +51,7 @@ export const getConnectionDetails = () => {
             }),
             items: [],
             hasAddItem: false,
+            moduleName : 'WNS',
             isReviewPage: true,
             sourceJsonPath: "WaterConnection[0]",
             prefixSourceJsonPath:

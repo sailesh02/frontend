@@ -499,6 +499,7 @@ const roadCuttingCharges = {
     }),
     items: [],
     hasAddItem: false,
+    moduleName : 'WNS',
     isReviewPage: true,
     sourceJsonPath: "applyScreen.roadCuttingInfo",
     prefixSourceJsonPath: "children",

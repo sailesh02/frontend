@@ -170,6 +170,7 @@ export const getOwnerDetails = (isEditable = true) => {
         }),
         items: [],
         hasAddItem: false,
+        moduleName : 'WNS',
         sourceJsonPath: "WaterConnection[0].property.owners",
         prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
         afterPrefixJsonPath: "children.value.children.key"
@@ -402,6 +403,7 @@ export const connHolderDetailsSummary = () => {
         }),
         items: [],
         hasAddItem: false,
+        moduleName : 'WNS',
         sourceJsonPath: "WaterConnection[0].connectionHolders",
         prefixSourceJsonPath: "children.cardContent.children.connHoldDetail.children",
         afterPrefixJsonPath: "children.value.children.key"
@@ -451,6 +453,7 @@ export const connHolderDetailsSameAsOwnerSummary = () => {
         }),
         items: [],
         hasAddItem: false,
+        moduleName : 'WNS',
         sourceJsonPath: "WaterConnection[0].sameAsPropertyAddress",
         prefixSourceJsonPath: "children.cardContent.children.sameAsOwnerDetails.children",
         afterPrefixJsonPath: "children.value.children.key"

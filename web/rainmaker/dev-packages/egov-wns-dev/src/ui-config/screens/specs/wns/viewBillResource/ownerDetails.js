@@ -54,6 +54,7 @@ export const getOwner = () => {
 
                 items: [],
                 hasAddItem: false,
+                moduleName : 'WNS',
                 sourceJsonPath: "WaterConnection[0].property.owners",
                 prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
                 afterPrefixJsonPath: "children.value.children.key"

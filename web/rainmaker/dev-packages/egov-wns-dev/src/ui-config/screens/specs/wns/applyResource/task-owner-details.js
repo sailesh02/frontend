@@ -139,6 +139,7 @@ export const propertyOwnerDetails = () => {
                 }),
                 items: [],
                 hasAddItem: false,
+                moduleName : 'WNS',
                 sourceJsonPath: "WaterConnection[0].property.owners",
                 prefixSourceJsonPath: "children.cardContent.children.scheama.children",
                 afterPrefixJsonPath: "children.value.children.key"

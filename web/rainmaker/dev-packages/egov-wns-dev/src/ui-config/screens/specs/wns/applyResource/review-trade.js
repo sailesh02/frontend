@@ -185,6 +185,7 @@ const propertyLocationDetails = {
 
     items: [],
     hasAddItem: false,
+    moduleName : 'WNS',
     isReviewPage: true,
     sourceJsonPath: "WaterConnection[0].property.address",
     prefixSourceJsonPath:
@@ -498,6 +499,7 @@ const getPropertyDetails = {
     }),
     items: [],
     hasAddItem: false,
+    moduleName : 'WNS',
     isReviewPage: true,
     sourceJsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits",
     prefixSourceJsonPath:
@@ -627,6 +629,7 @@ const ownerDetails = {
 
         items: [],
         hasAddItem: false,
+        moduleName : 'WNS',
         isReviewPage: true,
         sourceJsonPath: "WaterConnection[0].property.owners",
         prefixSourceJsonPath:
@@ -727,6 +730,7 @@ const taskConnHolderDetailsSummary = () => {
       }),
       items: [],
       hasAddItem: false,
+      moduleName : 'WNS',
       sourceJsonPath: "WaterConnection[0].connectionHolders",
       prefixSourceJsonPath: "children.cardContent.children.connHoldDetail.children",
       afterPrefixJsonPath: "children.value.children.key"
@@ -757,6 +761,7 @@ const connHolderDetailsSameAsOwnerSummary = () => {
       }),
       items: [],
       hasAddItem: false,
+      moduleName : 'WNS',
       sourceJsonPath: "WaterConnection[0].connectionHolders[0].sameAsPropertyAddress",
       prefixSourceJsonPath: "children.cardContent.children.sameAsOwnerDetails.children",
       afterPrefixJsonPath: "children.value.children.key"

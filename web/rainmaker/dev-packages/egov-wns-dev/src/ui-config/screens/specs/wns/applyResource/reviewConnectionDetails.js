@@ -187,6 +187,7 @@ const propertyLocationDetails = {
 
     items: [],
     hasAddItem: false,
+    moduleName : 'WNS',
     isReviewPage: true,
     sourceJsonPath: "applyScreen.property.address",
     prefixSourceJsonPath:
@@ -498,6 +499,7 @@ const getPropertyDetails = {
     }),
     items: [],
     hasAddItem: false,
+    moduleName : 'WNS',
     isReviewPage: true,
     sourceJsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits",
     prefixSourceJsonPath:
@@ -760,6 +762,7 @@ const propertyOwnerDetails = () => {
       }),
       items: [],
       hasAddItem: false,
+      moduleName : 'WNS',
       sourceJsonPath: "applyScreen.property.owners",
       prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
       afterPrefixJsonPath: "children.value.children.key"
@@ -970,6 +973,7 @@ const connHolderDetailsSummary = () => {
       }),
       items: [],
       hasAddItem: false,
+      moduleName : 'WNS',
       sourceJsonPath: "applyScreen.connectionHolders",
       prefixSourceJsonPath: "children.cardContent.children.connHoldDetail.children",
       afterPrefixJsonPath: "children.value.children.key"
@@ -1001,6 +1005,7 @@ const connHolderDetailsSameAsOwnerSummary = () => {
       }),
       items: [],
       hasAddItem: false,
+      moduleName : 'WNS',
       sourceJsonPath: "connectionHolders[0].sameAsPropertyAddress",
       prefixSourceJsonPath: "children.cardContent.children.sameAsOwnerDetails.children",
       afterPrefixJsonPath: "children.value.children.key"

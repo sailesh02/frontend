@@ -274,6 +274,7 @@ export const getOwnerDetails = (isEditable = true) => {
         }),
         items: [],
         hasAddItem: false,
+        moduleName : 'WNS',
         sourceJsonPath: "applyScreen.property.owners",
         prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
         afterPrefixJsonPath: "children.value.children.key"

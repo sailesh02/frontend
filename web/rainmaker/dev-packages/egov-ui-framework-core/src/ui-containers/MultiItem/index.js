@@ -215,6 +215,7 @@ class MultiItem extends React.Component {
       onComponentClick,
       hasAddItem,
       screenKey,
+      moduleName,
       isReviewPage,
       disableDeleteIfKeyExists,
       preparedFinalObject,
@@ -264,7 +265,7 @@ class MultiItem extends React.Component {
               );
             }
           })}
-        {hasAddItem !== false && (
+        {hasAddItem !== false && moduleName !='WNS' && (
           <Container style={{ marginTop: "8px" }}>
             <Item xs={12} align="right">
               <Button onClick={e => addItem()} color="primary" className="sss">

@@ -201,6 +201,7 @@ export const roadCuttingCharges = {
     scheama: getCommonContainer(roadDetails),
     items: [],
     hasAddItem: false,
+    moduleName : 'WNS',
     isReviewPage: true,
     sourceJsonPath: "WaterConnection[0].roadCuttingInfo",
     prefixSourceJsonPath: "children",

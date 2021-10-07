@@ -4,6 +4,10 @@ import {
     getCommonContainer,
     getLabelWithValue,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
+let tenantId = getQueryArg(window.location.href, "tenantId");
+let localityPrefix = tenantId && tenantId.toUpperCase()
 
 export const getProperty = () => {
     return getCommonGrayCard({
@@ -32,6 +36,10 @@ export const getProperty = () => {
                     labelKey: "WS_PROP_DETAIL_CITY"
                 },
                 {
+                    localePrefix: {
+                        moduleName: "TENANT",
+                        masterName: "TENANTS"
+                    },
                     jsonPath: "WaterConnection[0].tenantId"
                 }
             ),
@@ -61,10 +69,14 @@ export const getProperty = () => {
             // ),
             propertyMohalla: getLabelWithValue(
                 {
-                    labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
+                    labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL",
                 },
                 {
-                    jsonPath: "WaterConnection[0].locality"
+                    localePrefix: {
+                        moduleName: localityPrefix,
+                        masterName: "REVENUE"
+                      },
+                    jsonPath: "WaterConnection[0].additionalDetails.locality"
                 }
             ),
             // propertyPincode: getLabelWithValue(

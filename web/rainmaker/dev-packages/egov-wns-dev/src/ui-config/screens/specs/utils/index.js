@@ -277,12 +277,23 @@ export const handleNA = params => {
   } else { return "NA"; }
 }
 
-export const handleConnectionDetails = params => {
-  params = params == NaN ? null : params
-  console.log(params)
+export const handleConnectionDetails = (params) => {
+  params = isNaN(params) ? null : params
   if (params !== undefined && params !== null && params !== "" && params!==0 && params !== NaN) {
     return params;
   } else { return "NA"; }
+}
+
+// since field is non mandatory for sewerage and not applicable for water
+export const handlePipeSizeProposed = (params) => {
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
+  let isWater = applicationNumber && applicationNumber.includes('WS') ? true : false
+  if(isWater){
+    return 'NA'
+  }else{
+    return params
+  }
+
 }
 
 export const handleLocality = params => {

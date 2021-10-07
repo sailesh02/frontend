@@ -246,6 +246,19 @@ export const convertEpochToDateAndHandleNA = dateEpoch => {
   } else { return "NA"; }
 }
 
+export const convertEpochToDateAndHandleBlank = dateEpoch => {
+  if (
+    dateEpoch !== undefined &&
+    dateEpoch !== null &&
+    dateEpoch !== "" &&
+    dateEpoch !== "NA" &&
+    dateEpoch !== 0
+  ) {
+    let convertedToDate = convertEpochToDate(dateEpoch);
+    return convertedToDate;
+  } else { return ""; }
+}
+
 export const handlePropertySubUsageType = params => {
   params = handleNA(params);
   if (params !== "NA" && params.split(".").length > 1) {

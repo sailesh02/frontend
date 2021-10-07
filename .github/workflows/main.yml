@@ -2,7 +2,7 @@ name: A workflow to build egov frontend
 on: 
  push:
     branches:
-      - feature/wns-issues-uat
+      - wns-issue-uat-fields
 jobs:
   build:
     name: Build citizen

@@ -20,18 +20,7 @@ import { prepareFinalObject } from "../../../../../packages/lib/egov-ui-framewor
 import axios from 'axios';
 import store from "ui-redux/store";
 
-const authToken = getAccessToken();
-let RequestInfo = {
-  apiId: "Rainmaker",
-  ver: ".01",
-  // ts: getDateInEpoch(),
-  action: "_search",
-  did: "1",
-  key: "",
-  msgId: `20170310130900|${getLocale()}`,
-  requesterId: "",
-  authToken
-};
+let RequestInfo = {};
 let customRequestInfo = JSON.parse(getUserInfo())
 
 // pdf signing @final approval step in BPA and OC
@@ -224,10 +213,31 @@ class Footer extends React.Component {
     };
   };
 
+  getRequestInfo = () => {
+    const authToken = getAccessToken();
+    let RequestInfo = {
+      apiId: "Rainmaker",
+      ver: ".01",
+      // ts: getDateInEpoch(),
+      action: "_search",
+      did: "1",
+      key: "",
+      msgId: `20170310130900|${getLocale()}`,
+      requesterId: "",
+      authToken
+    };
+    return RequestInfo
+  }
+
+  getCustomRequestInfo = () => {
+    return JSON.parse(getUserInfo())
+  }
+
   // actual API's
   getTokenList = () => {
     this.props.showSpinner();
-    RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+    let requestInfo = this.getRequestInfo()
+    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};     
     let body =  Object.assign(
       {},
       {
@@ -248,8 +258,8 @@ class Footer extends React.Component {
           'Accept': 'application/json'
          })
           .then(response => {
-             RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-             let body =  Object.assign(
+            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};              
+            let body =  Object.assign(
                {},
                 {
                  RequestInfo,
@@ -290,7 +300,8 @@ class Footer extends React.Component {
 
   getCertificateList = (token) => {
     this.props.showSpinner();
-    RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+    let requestInfo = this.getRequestInfo()
+    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()}; 
     let body =  Object.assign(
       {},
       {
@@ -312,8 +323,8 @@ class Footer extends React.Component {
           'Accept': 'application/json'
          })
           .then(response => {
-             RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-             let body =  Object.assign(
+            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};              
+            let body =  Object.assign(
                {},
                 {
                  RequestInfo,

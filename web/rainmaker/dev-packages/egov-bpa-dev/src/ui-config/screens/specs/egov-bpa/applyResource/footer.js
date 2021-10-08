@@ -364,11 +364,11 @@ const callBackForNext = async (state, dispatch) => {
 
     activatedNocs = activatedNocs && activatedNocs.length > 0 && activatedNocs.map( noc => {
       return noc.code
-    })
+    }) || []
 
     // check if noc suggested by ecdr is activated in the system
     requiredNocs = requiredNocs && requiredNocs.filter ( noc => {
-      if(activatedNocs.includes(noc)){
+      if(activatedNocs && activatedNocs.includes(noc)){
         return noc
       }
     }) || []
@@ -382,7 +382,7 @@ const callBackForNext = async (state, dispatch) => {
     // add required nocs and already created noc's
     let mergedNocs = requiredNocs
     nocAlreadyCreated && nocAlreadyCreated.length > 0 && nocAlreadyCreated.map( noc => {
-      if(!mergedNocs.includes(noc)){
+      if(mergedNocs && !mergedNocs.includes(noc)){
         mergedNocs.push(noc)
       }
     })

@@ -708,6 +708,7 @@ export const getData = async (action, state, dispatch) => {
       let data = get(state.screenConfiguration.preparedFinalObject, "applyScreen")
       let noOfFlats = get(state.screenConfiguration.preparedFinalObject && state.screenConfiguration.preparedFinalObject.applyScreen, "noOfFlats")
       if(noOfFlats && parseInt(noOfFlats) > 0){
+        dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));
         dispatch(
           handleField(
             "apply",
@@ -731,6 +732,8 @@ export const getData = async (action, state, dispatch) => {
           "visible",
           true
         ));
+      }else{
+        dispatch(prepareFinalObject("applyScreen.apartment", 'No'));
       }
       if (data.connectionType !== "Metered") {
         dispatch(

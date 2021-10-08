@@ -1,6 +1,7 @@
 import set from "lodash/set";
 import { isModifyMode } from "./../../ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 export const toggleWater = (onFieldChange, value) => {
   // set('search-preview', "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", value);
@@ -487,7 +488,7 @@ export const toggleSewerageFeilds = (action, value) => {
 export const toggleWaterFeilds = (action, value) => {
   let isMode = isModifyMode();
   let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
-
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   if(process.env.REACT_APP_NAME !== "Citizen"){
     set(
       action.screenConfig,
@@ -495,6 +496,15 @@ export const toggleWaterFeilds = (action, value) => {
       false
     );
   }
+
+  if(process.env.REACT_APP_NAME !== "Citizen" && isModifyMode() && applicationNumber && applicationNumber.includes('SW')){
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible`,
+      true
+    );
+  }
+
   // set('search-preview', "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForSW.visible", false);
   // set('search-preview', "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", value);
   set(

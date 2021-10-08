@@ -100,7 +100,7 @@ class CheckboxLabels extends React.Component {
   };
 
   render() {
-    const { classes, content, label, isApartment } = this.props;
+    const { classes, content, label, isApartment, disabled } = this.props;
     let isChecked = (this.state.checkedG === null)?this.props.isChecked:this.state.checkedG;
     return (
       <FormGroup row>
@@ -108,6 +108,7 @@ class CheckboxLabels extends React.Component {
           classes={{ label: "checkbox-label" }}
           control={
             <Checkbox
+              disabled = {disabled}
               checked={isChecked}
               onChange={this.handleChange("checkedG")}
               value={isChecked}

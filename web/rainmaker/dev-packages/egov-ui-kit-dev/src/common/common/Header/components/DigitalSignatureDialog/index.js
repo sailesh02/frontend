@@ -21,18 +21,9 @@ import { getLocale, getTenantId,getAccessToken, getUserInfo } from "egov-ui-kit/
 import axios from 'axios';
 
 const passwordPattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
-const authToken = getAccessToken();
-let RequestInfo = {
-  apiId: "Rainmaker",
-  ver: ".01",
-  // ts: getDateInEpoch(),
-  action: "_search",
-  did: "1",
-  key: "",
-  msgId: `20170310130900|${getLocale()}`,
-  requesterId: "",
-  authToken
-};
+// const authToken = getAccessToken();
+let RequestInfo = {};
+
 let customRequestInfo = JSON.parse(getUserInfo())
 class DigitalSignatureDialog extends Component {
   state = {
@@ -65,9 +56,30 @@ class DigitalSignatureDialog extends Component {
     })
   }
 
+  getRequestInfo = () => {
+    const authToken = getAccessToken();
+    let RequestInfo = {
+      apiId: "Rainmaker",
+      ver: ".01",
+      // ts: getDateInEpoch(),
+      action: "_search",
+      did: "1",
+      key: "",
+      msgId: `20170310130900|${getLocale()}`,
+      requesterId: "",
+      authToken
+    };
+    return RequestInfo
+  }
+
+  getCustomRequestInfo = () => {
+    return JSON.parse(getUserInfo())
+  }
+
   getCertificateList = (token) => {
     this.props.showSpinner();
-    RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+    let requestInfo = this.getRequestInfo()
+    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()}; 
     let body =  Object.assign(
       {},
       {
@@ -89,8 +101,8 @@ class DigitalSignatureDialog extends Component {
           'Accept': 'application/json'
          })
           .then(response => {
-             RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-             let body =  Object.assign(
+            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};              
+            let body =  Object.assign(
                {},
                 {
                  RequestInfo,
@@ -134,7 +146,8 @@ class DigitalSignatureDialog extends Component {
 
   getTokenList = () => {
     this.props.showSpinner();
-    RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+    let requestInfo = this.getRequestInfo()
+    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};    
     let body =  Object.assign(
       {},
       {
@@ -155,8 +168,8 @@ class DigitalSignatureDialog extends Component {
           'Accept': 'application/json'
          })
           .then(response => {
-             RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-             let body =  Object.assign(
+            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};                 
+            let body =  Object.assign(
                {},
                 {
                  RequestInfo,
@@ -210,7 +223,8 @@ class DigitalSignatureDialog extends Component {
     this.state.selectedCeritificate && this.state.selectedCeritificate != " " &&
     this.state.password && this.state.password != " " && this.state.password.match(passwordPattern)){
       this.props.showSpinner();
-      RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+      let requestInfo = this.getRequestInfo()
+      RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};      
       let body =  Object.assign(
         {},
         {
@@ -237,8 +251,9 @@ class DigitalSignatureDialog extends Component {
            })
             .then(response => {
               this.props.showSpinner();
-               RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-               let body =  Object.assign(
+              let requestInfo = this.getRequestInfo()
+              RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};                
+              let body =  Object.assign(
                  {},
                   {
                    RequestInfo,

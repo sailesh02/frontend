@@ -163,8 +163,8 @@ const screenConfig = {
 
       dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.address.country", "INDIA"));
       dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.address.country", "INDIA"));
-      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.isDivyang", "No"));
-      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.isDivyang", "No"));
+      // dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.isDivyang", "No"));
+      // dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.isDivyang", "No"));
       dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 
     }

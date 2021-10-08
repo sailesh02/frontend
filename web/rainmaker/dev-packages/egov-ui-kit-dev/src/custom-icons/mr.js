@@ -1,16 +1,10 @@
 import React from "react";
-import SvgIcon from "@material-ui/core/SvgIcon";
-//import "../index.css";
-class TradeLicenseIcon extends React.Component {
-  render() {
-    const { classes } = this.props;
-    return (
-      <SvgIcon
-        viewBox="0 0 512 512"
-        color="primary"
-        className="module-page-icon"
-      >
-    <g>
+import SvgIcon from "material-ui/SvgIcon";
+
+const CityOutline = (props) => {
+  return (
+    <SvgIcon className="custom-icon" x="0px" y="0px" style="enable-background:new 0 0 512 512;" viewBox="0 0 512 512" {...props}>
+     <g>
 	<path d="M260,218.4c-3.3,1.2-6.5,3.4-9.8,3.4C170.7,222,91.3,222,11.9,222c-8.3,0-10.1-1.6-9.8-9.7c0.6-16.2-0.5-32.8,2.6-48.6
 		c6.5-33.6,36.8-57.1,70.9-57.2c1.1,0,2.3,0.2,4,0.4c0,36.2,0,72.4,0,108.9c34.4,0,68.1,0,102.6,0c0-36.9,0-73.8,0-110.4
 		c10.2-3.7,18.2,2,26.5,4.8c26.2,8.8,42.5,27.1,49.2,54c0.6,2.6,1.5,5.1,2.2,7.7C260,187.4,260,202.9,260,218.4z"/>
@@ -31,9 +25,8 @@ class TradeLicenseIcon extends React.Component {
 		C136.8,147.9,120.4,147.3,103.3,147.3z M102.4,135.8c9.8,0,19.5,0.1,29.2-0.1c2.9-0.1,4-2,3.9-5.1c-0.1-3.5-1.7-4.2-4.7-4.1
 		c-7.3,0.1-14.7,0.2-22,0C103.4,126.3,101.2,128.6,102.4,135.8z"/>
 </g>
-      </SvgIcon>
-    );
-  }
-}
+    </SvgIcon>
+  );
+};
 
-export default TradeLicenseIcon;
+export default CityOutline;

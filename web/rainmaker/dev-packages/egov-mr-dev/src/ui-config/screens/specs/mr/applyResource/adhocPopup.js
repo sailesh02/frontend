@@ -19,12 +19,12 @@ import set from "lodash/set";
 
 const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   const TLRequestBody = cloneDeep(
-    get(state.screenConfiguration.preparedFinalObject, "Licenses")
+    get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations")
   );
   set(TLRequestBody[0], "action", "ADHOC");
   const TLpayload = await httpRequest(
     "post",
-    "/tl-services/v1/_update",
+    "/mr-services/v1/_update",
     "",
     [],
     { Licenses: TLRequestBody }

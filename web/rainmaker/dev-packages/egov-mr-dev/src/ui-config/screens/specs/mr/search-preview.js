@@ -4,7 +4,7 @@ import {
 
   getCommonContainer, getCommonGrayCard, getCommonHeader,
 
-  getCommonTitle
+  getCommonTitle, dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -33,10 +33,11 @@ import {
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { downloadPrintContainer, footerReviewTop } from "./applyResource/footer";
 import { getReviewDocuments } from "./applyResource/review-documents";
-//import { getBrideAddressAndGuardianDetails } from "./applyResource/review-owner";
+import { appointmentDetails } from "./applyResource/appointmentDetails";
 import { getReviewTrade } from "./applyResource/review-trade";
 import { getgroomAddressAndGuardianDetails } from "./applyResource/groom-address-guardian-detail";
-import { getWitnessDetails } from "./applyResource/witness-detail";
+import { getWitnessDetails, getAppointmentDetails, appointmentDetailsInfo } from "./applyResource/witness-detail";
+import { orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -133,17 +134,17 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   dispatch(unMountScreen("search"));
   dispatch(unMountScreen("apply"));
-  loadUlbLogo(tenantId);
+  //loadUlbLogo(tenantId);
 
   //Search details for given application Number
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&
       (await searchResults(action, state, dispatch, applicationNumber));
-
-    //check for renewal flow
+    //await searchResults(action, state, dispatch, applicationNumber)
+    //check for Apply for Correction flow
     const licenseNumber = get(
       state.screenConfiguration.preparedFinalObject,
-      `MarriageRegistrations[0].licenseNumber`
+      `MarriageRegistrations[0].mrNumber`
     );
     let queryObjectSearch = [
       {
@@ -151,7 +152,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         value: tenantId
       },
       { key: "offset", value: "0" },
-      { key: "licenseNumbers", value: licenseNumber }
+      { key: "mrNumbers", value: licenseNumber }
     ];
     const payload = await getSearchResults(queryObjectSearch);
     const length = payload && payload.MarriageRegistrations.length > 0 ? get(payload, `MarriageRegistrations`, []).length : 0;
@@ -162,31 +163,70 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       "screenConfiguration.preparedFinalObject.MarriageRegistrations[0].status"
     );
 
-    const financialYear = get(
+
+    let appointmentDetails = get(
       state,
-      "screenConfiguration.preparedFinalObject.MarriageRegistrations[0].financialYear"
+      "screenConfiguration.preparedFinalObject.MarriageRegistrations[0].appointmentDetails"
     );
+
+    let appointmentDetailData = appointmentDetails && appointmentDetails.filter(item => item.active = true)
+    let appointDataDisplay = [];
+    let appointmentDate = '';
+    let appointmentTime = '';
+    let appointmentDesc = '';
+    if (appointmentDetailData && appointmentDetailData.length) {
+      var startTime = appointmentDetailData[0].startTime;
+      var startDateObj = new Date(startTime);
+      var startDate = startDateObj.getDate() < 10 ? "0" + startDateObj.getDate() : startDateObj.getDate();
+      var startMonth = startDateObj.getMonth() + 1 < 10 ? `0${startDateObj.getMonth() + 1}` : startDateObj.getMonth() + 1;
+      var startHours = startDateObj.getHours() < 10 ? "0" + startDateObj.getHours() : startDateObj.getHours();
+      var startMinutes = startDateObj.getMinutes() < 10 ? "0" + startDateObj.getMinutes() : startDateObj.getMinutes();
+      let startTimeStr = `${startDate}-${startMonth}-${startDateObj.getFullYear()}, ${startHours}:${startMinutes}`;
+
+      var endTime = appointmentDetailData[0].endTime;
+      var endDateObj = new Date(endTime);
+      var endDate = endDateObj.getDate() < 10 ? "0" + endDateObj.getDate() : endDateObj.getDate();
+      var endMonth = endDateObj.getMonth() + 1 < 10 ? `0${endDateObj.getMonth() + 1}` : endDateObj.getMonth() + 1;
+      var endHours = endDateObj.getHours() < 10 ? "0" + endDateObj.getHours() : endDateObj.getHours();
+      var endMinutes = endDateObj.getMinutes() < 10 ? "0" + endDateObj.getMinutes() : endDateObj.getMinutes();
+      let endTimeStr = `${endDate}-${endMonth}-${endDateObj.getFullYear()}, ${endHours}:${endMinutes}`;
+      var description = appointmentDetailData[0].description;
+      appointDataDisplay.push({ apntStartTime: startTimeStr, apntEndTime: endTimeStr, apntDesc: description })
+      //appointDataForForm.push({apntStartTime: appointmentDetailData[0].startTime, apntEndTime: appointmentDetailData[0].endTime, apntDesc: description})
+      //appointmentTime = `${startDateObj.getHours()}:${startDateObj.getMinutes()}`;
+      appointmentTime = `${startHours}:${startMinutes}`;
+      appointmentDate = appointmentDetailData[0].startTime;
+      appointmentDesc = description;
+    }
+
+
+
+    dispatch(prepareFinalObject("MarriageRegistrations[0].appointmentDisplayDetails", appointDataDisplay));
+    dispatch(prepareFinalObject("MarriageRegistrations[0].appointmentDate", appointmentDate));
+    dispatch(prepareFinalObject("MarriageRegistrations[0].appointmentTime", appointmentTime));
+    dispatch(prepareFinalObject("MarriageRegistrations[0].appointmentDesc", appointmentDesc));
+
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
     const obj = setStatusBasedValue(status);
-    let appDocuments=get(data, "MarriageRegistrations[0].applicationDocuments",[]);
+    let appDocuments = get(data, "MarriageRegistrations[0].applicationDocuments", []);
     if (appDocuments) {
       let applicationDocs = [];
       appDocuments.forEach(doc => {
-        if(doc.length !== 0) {
+        if (doc.length !== 0) {
           applicationDocs.push(doc);
         }
       })
-      applicationDocs=applicationDocs.filter(document=>document);
+      applicationDocs = applicationDocs.filter(document => document);
 
-      let removedDocs=get(data, "LicensesTemp[0].removedDocs",[]);
-      if(removedDocs.length>0){
-          removedDocs.map(removedDoc=>{
-            applicationDocs=applicationDocs.filter(appDocument=>!(appDocument.documentType===removedDoc.documentType&&appDocument.fileStoreId===removedDoc.fileStoreId))
-          })
+      let removedDocs = get(data, "LicensesTemp[0].removedDocs", []);
+      if (removedDocs.length > 0) {
+        removedDocs.map(removedDoc => {
+          applicationDocs = applicationDocs.filter(appDocument => !(appDocument.documentType === removedDoc.documentType && appDocument.fileStoreId === removedDoc.fileStoreId))
+        })
       }
-      dispatch(prepareFinalObject("MarriageRegistrations[0].applicationDocuments",applicationDocs));
+      dispatch(prepareFinalObject("MarriageRegistrations[0].applicationDocuments", applicationDocs));
       await setDocuments(
         get(state, "screenConfiguration.preparedFinalObject"),
         "MarriageRegistrations[0].applicationDocuments",
@@ -206,10 +246,6 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           {
             moduleName: "common-masters",
             masterDetails: [{ name: "uiCommonPay", filter: `[?(@.code=="${businessService}")]` }]
-          },
-          {
-            moduleName: "TradeLicense",
-            masterDetails: [{ name: "TradeRenewal" }]
           }
         ]
       }
@@ -223,74 +259,45 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         [],
         mdmsBody
       );
-      dispatch(prepareFinalObject("renewalPeriod", get(payload.MdmsRes, "TradeLicense.TradeRenewal[0].renewalPeriod")));
+      console.log(payload, "Nero payload")
       dispatch(prepareFinalObject("uiCommonConfig", get(payload.MdmsRes, "common-masters.uiCommonPay[0]")));
     } catch (e) {
       console.log(e);
     }
 
-    const statusCont = {
-      word1: {
-        ...getCommonTitle(
-          {
-            jsonPath: "MarriageRegistrations[0].headerSideText.word1"
-          },
-          {
-            style: {
-              marginRight: "10px",
-              color: "rgba(0, 0, 0, 0.6000000238418579)"
-            }
-          }
-        )
-      },
-      word2: {
-        ...getCommonTitle({
-          jsonPath: "MarriageRegistrations[0].headerSideText.word2"
-        })
-      },
-      cancelledLabel: {
-        ...getCommonHeader(
-          {
-            labelName: "Cancelled",
-            labelKey: "TL_COMMON_STATUS_CANC"
-          },
-          { variant: "body1", style: { color: "#E54D42" } }
-        ),
-        visible: false
-      }
-    };
 
-    const printCont = downloadPrintContainer(
-      action,
-      state,
-      dispatch,
-      status,
-      applicationNumber,
-      tenantId
-    );
-    const CitizenprintCont = footerReviewTop(
-      action,
-      state,
-      dispatch,
-      status,
-      applicationNumber,
-      tenantId,
-      financialYear
-    );
-
+    let CitizenprintCont = '';
+    let printCont = '';
     if (status !== "INITIATED") {
-      process.env.REACT_APP_NAME === "Citizen"
-        ? set(
+      if (process.env.REACT_APP_NAME === "Citizen") {
+        CitizenprintCont = footerReviewTop(
           action,
-          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-          CitizenprintCont
-        )
-        : set(
-          action,
-          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-          printCont
+          state,
+          dispatch,
+          status,
+          applicationNumber,
+          tenantId,
+          "2021"
         );
+
+
+      } else {
+        printCont = downloadPrintContainer(
+          action,
+          state,
+          dispatch,
+          status,
+          applicationNumber,
+          tenantId
+        );
+
+
+      }
+
     }
+
+
+
 
     // Get approval details based on status and set it in screenconfig
 
@@ -338,24 +345,15 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     const headerrow = getCommonContainer({
       header: getCommonHeader({
         labelName: "Trade License Application (2018-2019)",
-        labelKey: applicationType === "RENEWAL" ? "TL_TRADE_RENEW_APPLICATION" : "TL_TRADE_APPLICATION"
+        labelKey: "MR_SUMMARY_HEADER"
       }),
       applicationLicence: getCommonContainer({
         applicationNumber: {
           uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
+          moduleName: "egov-mr",
           componentPath: "ApplicationNoContainer",
           props: {
             number: applicationNumber
-          }
-        },
-        licenceNumber: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "licenceNoContainer",
-          visible: licenseNumber ? true : false,
-          props: {
-            number: licenseNumber,
           }
         }
       })
@@ -372,8 +370,142 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
         true
       );
+
+
+
+
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
+
+    if (status !== "INITIATED") {
+      process.env.REACT_APP_NAME === "Citizen"
+        ? set(
+          action,
+          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+          CitizenprintCont
+        )
+        : set(
+          action,
+          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+          printCont
+        );
+    }
+
+
+    if (process.env.REACT_APP_NAME == "Employee") {
+      let filteredActions = [];
+      //const tenatId = getQueryArg(window.location.href, "tenantId");
+      const queryObject = [
+        { key: "businessIds", value: applicationNumber },
+        { key: "history", value: false },
+        { key: "tenantId", value: tenantId }
+      ];
+      try {
+        const payload = await httpRequest(
+          "post",
+          "egov-workflow-v2/egov-wf/process/_search",
+          "",
+          queryObject
+        );
+        console.log(payload, "Nero payload")
+        if (payload && payload.ProcessInstances.length > 0) {
+          const processInstancest = orderWfProcessInstances(
+            payload.ProcessInstances
+          );
+
+          console.log(processInstancest, "Nero Ordered");
+
+
+          if (processInstancest &&
+            processInstancest.length > 0) {
+            filteredActions = processInstancest && processInstancest[0].nextActions.filter(
+              item => item.action == "SCHEDULE" || item.action == "RESCHEDULE"
+            );
+          }
+          console.log(filteredActions, "Nero filteredActions")
+          if (process.env.REACT_APP_NAME == "Employee" && filteredActions && filteredActions.length > 0) {
+            console.log("Nero In sss")
+            const actionDefination = [
+              {
+                path: "components.div.children.appointmentDetailsFormCard",
+                property: "visible",
+                value: true
+              },
+              {
+                path: "components.div.children.appointmentDetailsFormCardInfo",
+                property: "visible",
+                value: false
+              },
+
+
+            ];
+            dispatchMultipleFieldChangeAction("search-preview", actionDefination, dispatch);
+
+
+          }
+
+
+        } else {
+          console.log("Nero Error")
+        }
+      } catch (e) {
+        console.log("Nero Error ggg")
+      }
+    }
+
+
+    if (appointmentDetails && appointmentDetails.length > 0) {
+
+
+      const actionDefination1 = [
+        {
+          path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.appointmentDetailCard.children.appointmentDesc.props",
+          property: "disabled",
+          value: true
+        },
+        {
+          path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.appointmentDetailCard.children.appointmentdate.props",
+          property: "disabled",
+          value: true
+        },
+        {
+          path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.appointmentDetailCard.children.appointmenttime.props",
+          property: "disabled",
+          value: true
+        },
+        {
+          path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.headerDiv.children.editSection",
+          property: "visible",
+          value: true
+        }
+
+      ];
+
+      dispatchMultipleFieldChangeAction("search-preview", actionDefination1, dispatch);
+
+
+    }
+
+    if (applicationType == "CORRECTION") {
+      console.log("in section nero")
+
+      const estimateCardAction = [
+        {
+          path: "components.div.children.tradeReviewDetails.children.cardContent.children.estimate",
+          property: "visible",
+          value: false
+        },
+        {
+          path: "components.div.children.appointmentDetailsFormCardInfo",
+          property: "visible",
+          value: false
+        }
+
+
+      ];
+
+      dispatchMultipleFieldChangeAction("search-preview", estimateCardAction, dispatch);
+    }
 
   }
 };
@@ -450,6 +582,7 @@ const reviewTradeDetails = getReviewTrade(false);
 const reviewDocumentDetails = getReviewDocuments(false, false);
 const groomAddressAndGuardianDetails = getgroomAddressAndGuardianDetails(false);
 const witnessDetails = getWitnessDetails(false);
+const appointMentDetails = getAppointmentDetails(false);
 
 // let approvalDetails = getApprovalDetails(status);
 let title = getCommonTitle({ labelName: titleText });
@@ -473,28 +606,25 @@ const setActionItems = (action, object) => {
     "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title.roleDefination",
     get(object, "roleDefination")
   );
+
+
 };
 
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "TL_PAYMENT_VIEW_BREAKUP",
-    "search-preview"
-  ),
   reviewTradeDetails,
-  //BrideAddressAndGuardianDetails,
   groomAddressAndGuardianDetails,
   witnessDetails,
+  // appointMentDetails,
   reviewDocumentDetails
 });
 
-export const beforeSubmitHook =  (MarriageRegistrations=[{}]) => {
+export const beforeSubmitHook = (MarriageRegistrations = [{}]) => {
   let state = store.getState();
 
 
-return MarriageRegistrations;
+  return MarriageRegistrations;
 
 }
 const screenConfig = {
@@ -559,23 +689,49 @@ const screenConfig = {
             dataPath: "MarriageRegistrations",
             moduleName: "MR",
             updateUrl: "/mr-services/v1/_update",
-            beforeSubmitHook:beforeSubmitHook
+            beforeSubmitHook: beforeSubmitHook
           }
         },
+        //appointmentDetails: getCommonCard({appointmentDetails}),
 
-        tradeReviewDetails
+        tradeReviewDetails,
+        appointmentDetailsFormCard: {
+          uiFramework: "custom-atoms",
+          componentPath: "Form",
+          props: {
+            id: "appointment_card_form"
+          },
+          children: {
+            apint: getCommonCard({ appointmentDetails })
+
+          },
+          visible: false
+        },
+
+        appointmentDetailsFormCardInfo: {
+          uiFramework: "custom-atoms",
+          componentPath: "Form",
+          props: {
+            id: "appointment_card_form1"
+          },
+          children: {
+            apnt: getCommonCard({ appointmentDetailsInfo })
+
+          },
+          visible: true
+        },
       }
     },
-    breakUpDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
-      componentPath: "ViewBreakupContainer",
-      props: {
-        open: false,
-        maxWidth: "md",
-        screenKey: "search-preview"
-      }
-    }
+    // breakUpDialog: {
+    //   uiFramework: "custom-containers-local",
+    //   moduleName: "egov-mr",
+    //   componentPath: "ViewBreakupContainer",
+    //   props: {
+    //     open: false,
+    //     maxWidth: "md",
+    //     screenKey: "search-preview"
+    //   }
+    // }
   }
 };
 

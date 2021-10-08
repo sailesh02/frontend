@@ -18,15 +18,19 @@ import {
   formwizardFourthStep,
   formwizardFifthStep,
   stepper,
-  getMdmsData
+  getMdmsData,
+  setDataForApplication
 } from "../mr/apply";
 import { getAllDataFromBillingSlab } from "../utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import {
+  dispatchMultipleFieldChangeAction
+} from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const getData = async (action, state, dispatch, tenantId) => {
   await getMdmsData(action, state, dispatch);
-  await getAllDataFromBillingSlab(tenantId, dispatch);
+  //await getAllDataFromBillingSlab(tenantId, dispatch);
   await getBoundaryData(action, state, dispatch, [
     { key: "tenantId", value: tenantId }
   ]);
@@ -37,44 +41,43 @@ const getData = async (action, state, dispatch, tenantId) => {
       tenantId
     )
   );
-  // dispatch(
-  //   prepareFinalObject("MarriageRegistrations[0].marriagePlace.placeOfMarriage", tenantId)
-  // );
+
 
   dispatch(
     prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[0].isGroom",
-      false
-    )
-  );
-  dispatch(
-    prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[1].isGroom",
-      true
-    )
-  );
-  dispatch(
-    prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[0].title",
+      "MarriageRegistrations[0].coupleDetails[0].bride.title",
       "MRs"
     )
   );
   dispatch(
     prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[1].title",
+      "MarriageRegistrations[0].coupleDetails[0].groom.title",
       "MR"
     )
   );
+
   dispatch(
     prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[0].isDivyang",
+      "MarriageRegistrations[0].coupleDetails[0].bride.tenantId",
+      tenantId
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "MarriageRegistrations[0].coupleDetails[0].groom.tenantId",
+      tenantId
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "MarriageRegistrations[0].coupleDetails[0].bride.isGroom",
       false
     )
   );
   dispatch(
     prepareFinalObject(
-      "MarriageRegistrations[0].coupleDetails[1].isDivyang",
-      false
+      "MarriageRegistrations[0].coupleDetails[0].groom.isGroom",
+      true
     )
   );
   dispatch(
@@ -83,6 +86,19 @@ const getData = async (action, state, dispatch, tenantId) => {
       "NEW"
     )
   );
+  if (process.env.REACT_APP_NAME == "Citizen") {
+    const hidePrimaryOwnerSection = [
+      {
+        path: "components.div.children.formwizardFirstStep.children.primaryOwnerDetails",
+        property: "visible",
+        value: false
+      }
+
+
+    ];
+    dispatchMultipleFieldChangeAction("apply", hidePrimaryOwnerSection, dispatch);
+  }
+
 };
 const updateSearchResults = async (
   action,
@@ -123,6 +139,8 @@ const updateSearchResults = async (
         false
       )
     );
+  }else{
+    setDataForApplication(action, state, dispatch);
   }
 };
 const screenConfig = {
@@ -131,104 +149,26 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const queryValue = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    const applicationNo = queryValue
-      ? queryValue
-      : get(
-          state.screenConfiguration.preparedFinalObject,
-          "Licenses[0].oldLicenseNumber",
-          null
-        );
+    const applicationNo = queryValue;
+
     if (applicationNo) {
       updateSearchResults(action, state, dispatch, applicationNo, tenantId);
 
-      dispatch(prepareFinalObject("DynamicMdms.TradeLicense.tradeUnits.MdmsJson", null));
+      //dispatch(prepareFinalObject("DynamicMdms.TradeLicense.tradeUnits.MdmsJson", null));
+
     } else {
 
-       getData(action, state, dispatch, tenantId);
-
-    //   const applyFor = window.localStorage.getItem('licenseType');
-    //   let legacyLicenseRenewal = window.localStorage.getItem('legacyLicenseRenewal');
-
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
-    //     applyFor
-    //   );
-
-    //   dispatch(prepareFinalObject("Licenses[0].licenseType", applyFor));
-
-    //   if(applyFor === "TEMPORARY"){
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.headerDiv.children.header.children.header.children.key.props.labelKey",
-    //     "TL_APPLY_TEMP_TRADELICENSE"
-    //   );
-
-    //   set(
-    //     action.screenConfig,
-    //       "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate.visible",
-
-    //       true
-
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //       "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod.visible",
-
-    //       false
-
-    //   );
-    //   dispatch(prepareFinalObject("Licenses[0].tradeLicensePeriod", null));
-    //   dispatch(prepareFinalObject("Licenses[0].validTo", null));
+      getData(action, state, dispatch, tenantId);
 
 
-    //   }else{
-    //     set(
-    //       action.screenConfig,
-    //         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate.visible",
+      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.address.country", "INDIA"));
+      dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.address.country", "INDIA"));
+      // dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.isDivyang", "No"));
+      // dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.isDivyang", "No"));
+      dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 
-    //         false
-
-    //     );
-
-    //     set(
-    //       action.screenConfig,
-    //         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicensePeriod.visible",
-
-    //         true
-
-    //     );
-
-    //     if(legacyLicenseRenewal === "true"){
-
-    //       set(
-    //         action.screenConfig,
-    //           "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo.visible",
-
-    //           true
-
-    //       );
-    //       // set(
-    //       //   action.screenConfig,
-    //       //     "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo.required",
-
-    //       //     true
-
-    //       // );
-    //       set(
-    //         action.screenConfig,
-    //         "components.div.children.headerDiv.children.header.children.header.children.key.props.labelKey",
-    //         "TL_APPLY_RENEW_LEGACY_TRADELICENSE"
-    //       );
-    //     }
-    //     dispatch(prepareFinalObject("Licenses[0].tradeLicensePeriod", null));
-    //     dispatch(prepareFinalObject("Licenses[0].validTo", null));
-
-    //   }
-    // }
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    return action;
     }
+    return action;
   },
   components: {
     div: {
@@ -260,16 +200,16 @@ const screenConfig = {
         footer
       }
     },
-    breakUpDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
-      componentPath: "ViewBreakupContainer",
-      props: {
-        open: false,
-        maxWidth: "md",
-        screenKey: "apply"
-      }
-    }
+    // breakUpDialog: {
+    //   uiFramework: "custom-containers-local",
+    //   moduleName: "egov-tradelicence",
+    //   componentPath: "ViewBreakupContainer",
+    //   props: {
+    //     open: false,
+    //     maxWidth: "md",
+    //     screenKey: "apply"
+    //   }
+    // }
   }
 };
 

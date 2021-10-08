@@ -24,13 +24,57 @@ const getCurrentDate = () => {
   today = yyyy + '-' + mm + '-' + dd;
   return today;
 }
+export const primaryOwnerDetails = getCommonCard(
+  {
+    header: getCommonTitle(
+      {
+        labelName: "Trade Location Details",
+        labelKey: "MR_PRIMARYOWNER_HEADER"
+      },
+      {
+        style: {
+          marginBottom: 18
+        }
+      }
+    ),
+    genderRadioGroup: {
+      uiFramework: "custom-containers",
+      componentPath: "RadioGroupContainer",
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
+      jsonPath: "MarriageRegistrations[0].primaryOwner",
+      props: {
+        label: { name: "MR_PRIMARYOWNER_DESC", key: "MR_PRIMARYOWNER_DESC" },
+        className: "applicant-details-error",
+        buttons: [
+          {
+            labelName: "Bride",
+            labelKey: "MR_BRIDE_LABEL",
+            value: "BRIDE"
+          },
+          {
+            labelName: "Groom",
+            labelKey: "MR_GROOM_LABEL",
+            value: "GROOM"
+          }
+        ],
+        jsonPath: "MarriageRegistrations[0].primaryOwner",
+        required: true,
+        errorMessage: "Required",
+      },
+      required: true,
+      type: "array"
+    },
+
+  })
 export const brideDetails = getCommonCard(
   {
     header: getCommonTitle(
       {
         labelName: "Trade Location Details",
-        //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-        labelKey: "Bride Details"
+        labelKey: "MR_BRIDE_HEADER"
       },
       {
         style: {
@@ -45,78 +89,40 @@ export const brideDetails = getCommonCard(
       brideFName: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Name"
+          labelKey: "MR_NAME_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-         // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Name"
+          labelKey: "MR_NAME_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[0].firstName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.firstName",
         required: true,
+        errorMessage: "Required",
       }),
 
-      // brideMName: getTextField({
-      //   label: {
-      //     labelName: "Door/House No.",
-      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      //     labelKey: "Middle Name"
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Door/House No.",
-      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      //    labelKey: "Middle Name"
-      //   },
-      //   pattern: getPattern("DoorHouseNo"),
-      //   jsonPath: "MarriageRegistrations[0].coupleDetails[0].middleName",
-      //   //required: true,
-      // }),
 
-      // brideLName: getTextField({
-      //   label: {
-      //     labelName: "Door/House No.",
-      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      //     labelKey: "Last Name"
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Door/House No.",
-      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      //    labelKey: "Last Name"
-      //   },
-      //   pattern: getPattern("DoorHouseNo"),
-      //   jsonPath: "MarriageRegistrations[0].coupleDetails[0].lastName",
-
-      // }),
 
       brideDob: {
         ...getDateField({
-          label: { labelName: "To Date",
-          labelKey: "DOB"
-          //labelKey: "TL_NEW_TRADE_DETAILS_TRADE_END_DATE_LABEL"
+          label: {
+            labelName: "To Date",
+            labelKey: "MR_DOB_LABEL"
 
-        },
+          },
           placeholder: {
             labelName: "Trade License From Date",
-            //labelKey: "TL_TRADE_LICENCE_TO_DATE"
-            labelKey: "DOB"
+            labelKey: "MR_DOB_PLACEHOLDER"
           },
 
           required: true,
 
           pattern: getPattern("Date"),
-          jsonPath: "MarriageRegistrations[0].coupleDetails[0].dateOfBirth",
-
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.dateOfBirth",
+          disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
           props: {
 
             inputProps: {
@@ -131,255 +137,216 @@ export const brideDetails = getCommonCard(
       brideContact: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Contact"
+          labelKey: "MR_CONTACT_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "Contact"
+          labelKey: "MR_CONTACT_PLACEHOLDER"
         },
         pattern: getPattern("MobileNo"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.contact",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.contact",
         required: true,
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
       }),
       brideEmail: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Email"
+          labelKey: "MR_EMAIL_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "Email"
+          labelKey: "MR_EMAIL_PLACEHOLDER"
         },
         pattern: getPattern("Email"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.emailAddress",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.emailAddress",
         required: true,
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
       }),
 
       brideFatherFName: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Father's Name"
+          labelKey: "MR_FATHERNAME_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-         // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Father's Name"
+          labelKey: "MR_FATHERNAME_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[0].fatherName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.fatherName",
         required: true,
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
       }),
 
-      // brideFatherMName: getTextField({
-      //   label: {
-      //     labelName: "Door/House No.",
-      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      //     labelKey: "Father's Middle Name"
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Door/House No.",
-      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      //    labelKey: "Father's Middle Name"
-      //   },
-      //   pattern: getPattern("DoorHouseNo"),
-      //   jsonPath: "Licenses[0].tradeLicenseDetail.address.brideFatherMName",
 
-      // }),
-
-      // brideFatherLName: getTextField({
-      //   label: {
-      //     labelName: "Door/House No.",
-      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      //     labelKey: "Father's Last Name"
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Door/House No.",
-      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      //    labelKey: "Father's Last Name"
-      //   },
-      //   pattern: getPattern("DoorHouseNo"),
-      //   jsonPath: "Licenses[0].tradeLicenseDetail.address.brideFatherLName",
-
-      // }),
 
       brideMotherFName: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Mother's Name"
+          labelKey: "MR_MOTHERNAME_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-         // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Mother's Name"
+          labelKey: "MR_MOTHERNAME_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[0].motherName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.motherName",
         required: true,
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
       }),
 
-      // brideMotherMName: getTextField({
-      //   label: {
-      //     labelName: "Door/House No.",
-      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      //     labelKey: "Mother's Middle Name"
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Door/House No.",
-      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      //    labelKey: "Mother's Middle Name"
-      //   },
-      //   pattern: getPattern("DoorHouseNo"),
-      //   jsonPath: "Licenses[0].tradeLicenseDetail.address.brideMotherMName",
 
-      // }),
-
-      // brideMotherLName: getTextField({
-      //   label: {
-      //     labelName: "Door/House No.",
-      //     //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      //     labelKey: "Mother's Last Name"
-      //   },
-      //   props:{
-      //     className:"applicant-details-error"
-      //   },
-      //   placeholder: {
-      //     labelName: "Enter Door/House No.",
-      //    // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      //    labelKey: "Mother's Last Name"
-      //   },
-      //   pattern: getPattern("DoorHouseNo"),
-      //   jsonPath: "MarriageRegistrations[0].coupleDetails[0].motherName",
-
-      // }),
       brideAddressLine1: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Address"
+          labelKey: "MR_ADDRESS_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "Address"
+          labelKey: "MR_ADDRESS_PLACEHOLDER"
         },
         pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.addressLine1",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.addressLine1",
         required: true,
+        // disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
-      brideDistrict: {
-        ...getSelectField({
-          label: {
-            labelName: "City",
-            //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "District"
-          },
+      brideDistrict: getTextField({
+        label: {
+          labelName: "Door/House No.",
+          labelKey: "MR_DISTRICT_LABEL"
+        },
+        props: {
+          className: "applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Door/House No.",
+          labelKey: "MR_DISTRICT_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.district",
+        required: true,
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
+      }),
+      brideState: getTextField({
+        label: {
+          labelName: "Door/House No.",
+          labelKey: "MR_STATE_LABEL"
+        },
+        props: {
+          className: "applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Door/House No.",
+          labelKey: "MR_STATE_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.state",
+        required: true,
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
+      }),
+      // brideDistrict: {
+      //   ...getSelectField({
+      //     label: {
+      //       labelName: "City",
+      //       labelKey: "MR_DISTRICT_LABEL"
+      //     },
 
-          optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "District" },
-          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.district",
-          required: true,
+      //     optionLabel: "name",
+      //     placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_PLACEHOLDER" },
+      //     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
+      //     jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.district",
+      //     required: true,
 
-        }),
-      },
-      brideState: {
-        ...getSelectField({
-          label: {
-            labelName: "City",
-            //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "State"
-          },
+      //   }),
+      // },
+      // brideState: {
+      //   ...getSelectField({
+      //     label: {
+      //       labelName: "City",
+      //       labelKey: "MR_STATE_LABEL"
+      //     },
 
-          optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "State" },
-          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.state",
-          required: true,
+      //     optionLabel: "name",
+      //     placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
+      //     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
+      //     jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.state",
+      //     required: true,
 
-        }),
-      },
+      //   }),
+      // },
       brideCountry: {
         ...getSelectField({
           label: {
             labelName: "City",
-            //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "Country"
+            labelKey: "MR_COUNTRY_LABEL"
           },
 
           optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "Country" },
+          placeholder: { labelName: "Select Country", labelKey: "MR_COUNTRY_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.country",
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.country",
           required: true,
-
+          disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
         }),
       },
       brideAddressPin: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "PIN"
+          labelKey: "MR_PINCODE_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "PIN"
+          labelKey: "MR_PINCODE_PLACEHOLDER"
         },
         required: true,
         //pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[0].coupleAddress.pinCode",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.pinCode",
+        disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
 
       }),
       isBrideDisabled: {
         ...getSelectField({
           label: {
             labelName: "City",
-            //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "Is Bride Divyang?"
+            labelKey: "MR_ISDIVYANG_LABEL"
           },
 
           optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "Is Bride Divyang?" },
+          placeholder: { labelName: "Select Country", labelKey: "MR_ISDIVYANG_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.yesNoBox",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[0].isDivyang",
-
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.isDivyang",
+          disabled: getQueryArg(window.location.href, "action") === "CORRECTION" ? true : false,
+          required: true,
         }),
       },
 
     },
-    {
-      style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}
-    }
+      // {
+      //   style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
+      // }
     ),
 
-  }
+  },
+  // {
+  //   style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
+
+  // }
 );

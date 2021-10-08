@@ -162,8 +162,13 @@ class SingleApplication extends React.Component {
       switch (item.status) {
         case "INITIATED":
 
+          if(item.applicationType=="CORRECTION"){
+            setRoute(`/mr-citizen/apply?applicationNumber=${item.applicationNumber}&licenseNumber=${item.mrNumber}&action=CORRECTION&tenantId=${item.tenantId}`);
+          }else{
 
             setRoute(`/mr-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+          }
+
 
           break;
         default:
@@ -285,8 +290,9 @@ class SingleApplication extends React.Component {
                       const url = this.onCardClick(item);
                       // setRoute(url);
                     }}>
+                      {moduleName === "MR" ?
                       <Label
-                        labelKey={(item.status === "APPROVED" || item.status === "EXPIRED") && moduleName === "TL" && item.licenseType === "PERMANENT"? "TL_VIEW_DETAILS_RENEWAL" : "TL_VIEW_DETAILS"}
+                        labelKey={item.status === "APPROVED" ? "MR_VIEW_DETAILS_CORRECTION" : "MR_VIEW_DETAILS"}
                         textTransform={"uppercase"}
                         style={{
                           color: "#fe7a51",
@@ -294,6 +300,16 @@ class SingleApplication extends React.Component {
                           textTransform: "uppercase"
                         }}
                       />
+
+                      :<Label
+                        labelKey={(item.status === "APPROVED" || item.status === "EXPIRED") && moduleName === "TL" && item.licenseType === "PERMANENT"? "TL_VIEW_DETAILS_RENEWAL" : "TL_VIEW_DETAILS"}
+                        textTransform={"uppercase"}
+                        style={{
+                          color: "#fe7a51",
+                          fontSize: 14,
+                          textTransform: "uppercase"
+                        }}
+                      />}
                     </div>
                     {/* </Link> */}
                   </div>

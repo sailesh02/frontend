@@ -4,7 +4,7 @@ import { checkValueForNA, convertEpochToDate } from "../utils";
 const header = getCommonHeader(
   {
     labelName: "My Applications",
-    labelKey: "TL_MY_APPLICATIONS_HEADER"
+    labelKey: "MR_MY_APPLICATIONS_HEADER"
   },
   {
     classes: {
@@ -34,22 +34,33 @@ const screenConfig = {
             contents: [
 
               {
-                label: "TL_COMMON_TABLE_COL_APP_NO",
+                label: "MR_APPLICATION_TYPE",
+                jsonPath: "applicationType"
+              },
+
+              {
+                label: "MR_COMMON_TABLE_COL_APP_NO",
                 jsonPath: "applicationNumber"
               },
 
               {
-                label: "TL_COMMON_TABLE_COL_STATUS",
-                jsonPath: "status",
-                prefix: "WF_NEWTL_"
+                label: "MR_REGISTRATION_NO",
+                jsonPath: "mrNumber"
               },
+
+              {
+                label: "MR_COMMON_TABLE_COL_STATUS",
+                jsonPath: "status",
+                prefix: "WF_MR_"
+              },
+
               {
                 label: "MR_GROOM_NAME",
-                jsonPath: "coupleDetails[1].firstName"
+                jsonPath: "coupleDetails[0].groom.firstName"
               },
               {
                 label: "MR_BRIDE_NAME",
-                jsonPath: "coupleDetails[0].firstName"
+                jsonPath: "coupleDetails[0].bride.firstName"
               }
             ],
             moduleName: "MR",

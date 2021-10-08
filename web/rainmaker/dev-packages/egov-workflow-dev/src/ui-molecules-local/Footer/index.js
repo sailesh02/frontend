@@ -62,8 +62,9 @@ class Footer extends React.Component {
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
     let employeeList = [];
+    if(item.moduleName == "MR")item.showEmployeeList = false;
     if (item.buttonLabel === "ACTIVATE_CONNECTION") {
-      if (item.moduleName === "NewWS1" || item.moduleName === "NewSW1" || item.moduleName === "SWCloseConnection" || 
+      if (item.moduleName === "NewWS1" || item.moduleName === "NewSW1" || item.moduleName === "SWCloseConnection" ||
       item.moduleName === "SWDisconnection" || item.moduleName === "WSCloseConnection" || item.moduleName === "WSDisconnection" ||
       item.moduleName === "WSReconnection" || item.moduleName === "SWReconnection" || item.moduleName === "SWOwnershipChange" || item.moduleName === "WSOwnershipChange"
     ) {
@@ -241,6 +242,7 @@ class Footer extends React.Component {
       state,
       dispatch
     } = this.props;
+
     const { open, data, employeeList } = this.state;
     const { isDocRequired } = data;
     const appName = process.env.REACT_APP_NAME;
@@ -344,6 +346,93 @@ class Footer extends React.Component {
 
           downloadMenu && downloadMenu.push(editButton);
          // downloadMenu && downloadMenu.push(submitButton);
+        }
+
+
+
+
+      }
+    }
+
+    if (moduleName === "MR") {
+      const status = get(
+        state.screenConfiguration.preparedFinalObject,
+        `MarriageRegistrations[0].status`
+      );
+      const applicationType = get(
+        state.screenConfiguration.preparedFinalObject,
+        `MarriageRegistrations[0].applicationType`
+      );
+      const applicationNumber = get(
+        state.screenConfiguration.preparedFinalObject,
+        `MarriageRegistrations[0].applicationNumber`
+      );
+      const tenantId = get(
+        state.screenConfiguration.preparedFinalObject,
+        `MarriageRegistrations[0].tenantId`
+      );
+      // const financialYear = get(
+      //   state.screenConfiguration.preparedFinalObject,
+      //   `Licenses[0].financialYear`
+      // );
+      const licenseNumber = get(
+        state.screenConfiguration.preparedFinalObject,
+        `MarriageRegistrations[0].mrNumber`
+      );
+      const responseLength = get(
+        state.screenConfiguration.preparedFinalObject,
+        `licenseCount`,
+        1
+      );
+
+      // const rolearray =
+      //   getUserInfo() &&
+      //   JSON.parse(getUserInfo()).roles.filter(item => {
+      //     if (
+      //       (item.code == "TL_CEMP" && item.tenantId === tenantId) ||
+      //       item.code == "CITIZEN"
+      //     )
+      //       return true;
+      //   });
+      // const rolecheck = rolearray.length > 0 ? true : false;
+      // const validTo = get(
+      //   state.screenConfiguration.preparedFinalObject,
+      //   `Licenses[0].validTo`
+      // );
+      // const currentDate = Date.now();
+      // const duration = validTo - currentDate;
+      // const renewalPeriod = get(
+      //   state.screenConfiguration.preparedFinalObject,
+      //   `renewalPeriod`
+      // );
+
+      if (status === "APPROVED") {
+        const editButton = {
+          label: "Edit",
+          labelKey: "WF_MR_CORRECTION_SUBMIT_BUTTON",
+          link: () => {
+            const baseURL =
+              process.env.REACT_APP_NAME === "Citizen"
+                ? "/mr-citizen/apply"
+                : "/mr/apply";
+            this.props.setRoute(
+              `${baseURL}?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=CORRECTION`
+            );
+          }
+        };
+
+
+        if (responseLength > 1) {
+          if (applicationType !== "NEW") {
+            downloadMenu && downloadMenu.push(editButton);
+
+          }
+
+        }
+        else if (responseLength === 1) {
+
+          downloadMenu && downloadMenu.push(editButton);
+
         }
 
 

@@ -114,22 +114,23 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  switch (rowData[7]) {
+
+  switch (rowData[6]) {
     case "INITIATED":
-      if(rowData[6]=="TL_TYPE_RENEWAL"){
-        routeTo(`apply?applicationNumber=${rowData[0]}&licenseNumber=${rowData[1]}&action=EDITRENEWAL&tenantId=${
-          rowData[8]
+      if(rowData[5]=="MR_TYPE_CORRECTION"){
+        routeTo(`apply?applicationNumber=${rowData[0]}&mrNumber=${rowData[1]}&action=CORRECTION&tenantId=${
+          rowData[7]
           }`);
       }else{
         routeTo(`apply?applicationNumber=${rowData[0]}&tenantId=${
-          rowData[8]
+          rowData[7]
           }`);
       }
       break;
     default:
       routeTo(`search-preview?applicationNumber=${
         rowData[0]
-        }&tenantId=${rowData[8]}`);
+        }&tenantId=${rowData[7]}`);
       break;
   }
 };

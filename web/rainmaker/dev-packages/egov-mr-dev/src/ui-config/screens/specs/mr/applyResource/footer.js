@@ -253,6 +253,9 @@ export const callBackForNext = async (state, dispatch) => {
       if (!applicationNoInUrl) {
         dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.country", "INDIA"));
         dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.country", "INDIA"));
+      }else if(applicationNoInUrl && mrgObj && mrgObj[0].coupleDetails && !mrgObj[0].coupleDetails[0].bride.guardianDetails){
+        dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.country", "INDIA"));
+        dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.country", "INDIA"));
       }
     }
   }
@@ -291,6 +294,9 @@ export const callBackForNext = async (state, dispatch) => {
       isFormValid = await applyTradeLicense(state, dispatch, activeStep);
       if (isFormValid) {
         if (!applicationNoInUrl) {
+          dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.witness.country", "INDIA"));
+          dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.witness.country", "INDIA"));
+        }else if(applicationNoInUrl && mrgObj && mrgObj[0].coupleDetails && !mrgObj[0].coupleDetails[0].bride.witness){
           dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.witness.country", "INDIA"));
           dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.witness.country", "INDIA"));
         }

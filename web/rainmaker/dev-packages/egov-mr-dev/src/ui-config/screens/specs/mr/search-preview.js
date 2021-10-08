@@ -193,7 +193,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       var description = appointmentDetailData[0].description;
       appointDataDisplay.push({ apntStartTime: startTimeStr, apntEndTime: endTimeStr, apntDesc: description })
       //appointDataForForm.push({apntStartTime: appointmentDetailData[0].startTime, apntEndTime: appointmentDetailData[0].endTime, apntDesc: description})
-      appointmentTime = `${startDateObj.getHours()}:${startDateObj.getMinutes()}`;
+      //appointmentTime = `${startDateObj.getHours()}:${startDateObj.getMinutes()}`;
+      appointmentTime = `${startHours}:${startMinutes}`;
       appointmentDate = appointmentDetailData[0].startTime;
       appointmentDesc = description;
     }

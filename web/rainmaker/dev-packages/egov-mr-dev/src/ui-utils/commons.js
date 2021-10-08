@@ -549,16 +549,19 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         updatedTenant = queryObject[0].tenantId;
       }
       //updatedApplicationNo = queryObject[0].applicationNumber;
-      let searchQueryObject = [
-        { key: "tenantId", value: tenantId },
-        { key: "applicationNumber", value: updatedApplicationNo }
-      ];
-      let searchResponse = await getSearchResults(searchQueryObject);
-      if (isEditFlow) {
-        searchResponse = { MarriageRegistrations: queryObject };
-      } else {
-        dispatch(prepareFinalObject("MarriageRegistrations", searchResponse.MarriageRegistrations));
-      }
+      // let searchQueryObject = [
+      //   { key: "tenantId", value: tenantId },
+      //   { key: "applicationNumber", value: updatedApplicationNo }
+      // ];
+      // let searchResponse = await getSearchResults(searchQueryObject);
+      // if (isEditFlow) {
+      //   searchResponse = { MarriageRegistrations: queryObject };
+      // } else {
+      //   dispatch(prepareFinalObject("MarriageRegistrations", searchResponse.MarriageRegistrations));
+      // }
+
+      let mrgObjfromUpdateres = get(updateResponse, "MarriageRegistrations");
+      dispatch(prepareFinalObject("MarriageRegistrations", mrgObjfromUpdateres));
       enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
       enableField('apply', "components.div.children.footer.children.payButton", dispatch);
 

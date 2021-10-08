@@ -892,6 +892,7 @@ const propertyDetailsNoId = getCommonContainer({
         name: "Apartment",
         key: "WS_COMMON_APARTMENT",
       },
+      disabled:false,
       jsonPath: "applyScreen.apartment",
       required: false,
       isChecked: true,

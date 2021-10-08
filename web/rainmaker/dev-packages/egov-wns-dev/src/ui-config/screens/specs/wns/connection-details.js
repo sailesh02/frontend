@@ -234,7 +234,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
       dispatch(prepareFinalObject("isAmendmentInWorkflow", amendments&&Array.isArray(amendments)&&amendments.length==0?true:false));
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
-      if(sewerageConnection && sewerageConnection[0] && sewerageConnection[0].noOfFlats && parseInt(sewerageConnection[0].noOfFlats) > 0){
+      if(sewerageConnection && sewerageConnection && sewerageConnection.noOfFlats && parseInt(sewerageConnection.noOfFlats) > 0){
         dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'))
       }else{
         dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No'))

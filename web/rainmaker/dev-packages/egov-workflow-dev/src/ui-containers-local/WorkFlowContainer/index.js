@@ -465,7 +465,7 @@ class WorkFlowContainer extends React.Component {
       businessId = propertyId
     }
     else if (moduleName === "PT.CREATE" || moduleName === "PT.LEGACY") {
-      return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
+      return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId || this.props.propertyIdForEditRedirect} &tenantId=${tenant}&mode=WORKFLOWEDIT`
     } else if (moduleName === "PT.MUTATION") {
       if (process.env.REACT_APP_NAME === "Employee" && action == "EDIT_DEMAND") {
         let { Property } = preparedFinalObject

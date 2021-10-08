@@ -326,6 +326,9 @@ class ApplicationPreview extends Component {
     this.props.screenConfiguration.preparedFinalObject.Properties.length > 0 &&
     this.props.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || properties && properties.additionalDetails || {}
     const applicationType = this.getApplicationType();
+    let propertyIdForEditRedirect = this.props.screenConfiguration &&
+    this.props.screenConfiguration.preparedFinalObject &&
+    this.props.screenConfiguration.preparedFinalObject.Property && this.props.screenConfiguration.preparedFinalObject.Property.propertyId
     const applicationDownloadObject = {
       label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
       link: () => {
@@ -375,6 +378,7 @@ class ApplicationPreview extends Component {
           <div>
             <WorkFlowContainer dataPath={applicationType.dataPath}
               moduleName={applicationType.moduleName}
+              propertyIdForEditRedirect = {propertyIdForEditRedirect}
               updateUrl={applicationType.updateUrl}></WorkFlowContainer>
             <Card
               textChildren={

@@ -331,6 +331,7 @@ import {
           name: "connection holder details",
           key: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS",
         },
+        disabled:false,
         jsonPath: "connectionHolders[0].sameAsPropertyAddress",
         required: false,
         isChecked: true

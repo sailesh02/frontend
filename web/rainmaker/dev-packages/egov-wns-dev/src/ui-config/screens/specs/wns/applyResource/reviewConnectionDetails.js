@@ -8,6 +8,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
 import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA,handleLocality,handleConnectionType  } from '../../utils';
+import {isModifyMode,getTenantId} from '../../../../../ui-utils/commons'
 
 
 const getHeader = label => {
@@ -186,6 +187,7 @@ const propertyLocationDetails = {
 
     items: [],
     hasAddItem: false,
+    moduleName : 'WNS',
     isReviewPage: true,
     sourceJsonPath: "applyScreen.property.address",
     prefixSourceJsonPath:
@@ -368,12 +370,18 @@ const getPropertyDetails = {
             },
             {
               jsonPath: "applyScreen.locality",
+              localePrefix: {
+                moduleName: "", masterName: "REVENUE"
+              },
               callBack: handleLocality,
             },
             {
               labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
             },
             {
+              localePrefix: {
+                moduleName: isModifyMode() ? getTenantId() : "", masterName: "REVENUE" // prefix with tenantId in case of modify
+              },
               jsonPath: "applyScreenOld.locality",
               callBack: handleNA   
             }
@@ -475,7 +483,7 @@ const getPropertyDetails = {
             },
             {
               jsonPath: "applyScreen.apartment",
-              callBack: handleNA
+              // callBack: handleNA
              
             },
             {
@@ -483,7 +491,7 @@ const getPropertyDetails = {
             },
             {
               jsonPath: "applyScreenOld.apartment",
-              callBack: handleNA 
+              // callBack: handleNA 
             }
 
           )
@@ -491,6 +499,7 @@ const getPropertyDetails = {
     }),
     items: [],
     hasAddItem: false,
+    moduleName : 'WNS',
     isReviewPage: true,
     sourceJsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits",
     prefixSourceJsonPath:
@@ -753,6 +762,7 @@ const propertyOwnerDetails = () => {
       }),
       items: [],
       hasAddItem: false,
+      moduleName : 'WNS',
       sourceJsonPath: "applyScreen.property.owners",
       prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
       afterPrefixJsonPath: "children.value.children.key"
@@ -802,11 +812,11 @@ export const taskPipeSizeProposed = getLabelWithValueForModifiedLabel(
   {
     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
   },
-  { jsonPath: "applyScreen.pipeSize", callBack: handleNA },
+  { jsonPath: "applyScreen.pipeSize" },
   {
     labelKey: "WS_OLD_LABEL_NAME"
   },
-  { jsonPath: "applyScreenOld.pipeSize", callBack: handleNA },
+  { jsonPath: "applyScreenOld.pipeSize" },
 )
 
 export const taskNoOfClosets = getLabelWithValueForModifiedLabel(
@@ -963,6 +973,7 @@ const connHolderDetailsSummary = () => {
       }),
       items: [],
       hasAddItem: false,
+      moduleName : 'WNS',
       sourceJsonPath: "applyScreen.connectionHolders",
       prefixSourceJsonPath: "children.cardContent.children.connHoldDetail.children",
       afterPrefixJsonPath: "children.value.children.key"
@@ -994,6 +1005,7 @@ const connHolderDetailsSameAsOwnerSummary = () => {
       }),
       items: [],
       hasAddItem: false,
+      moduleName : 'WNS',
       sourceJsonPath: "connectionHolders[0].sameAsPropertyAddress",
       prefixSourceJsonPath: "children.cardContent.children.sameAsOwnerDetails.children",
       afterPrefixJsonPath: "children.value.children.key"

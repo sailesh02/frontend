@@ -127,7 +127,13 @@ class WorkFlowContainer extends React.Component {
       case "VOID":
         return "purpose=application&status=voided"
       case "REOPEN":
+          return "purpose=reopen&status=success";
+      case "OPEN":  
         return "purpose=reopen&status=success";
+      case "SCHEDULE":
+        return "purpose=schedule&status=success";
+      case "RESCHEDULE":
+        return "purpose=reschedule&status=success";
     }
   };
 
@@ -148,7 +154,7 @@ class WorkFlowContainer extends React.Component {
     console.log(updateUrl, moduleName, dataPath)
     if (moduleName === "NewTL") {
       if (getQueryArg(window.location.href, "edited")) {
-        console.log(data, "nero data 1")
+
         const removedDocs = get(
           preparedFinalObject,
           "LicensesTemp[0].removedDocs",
@@ -213,7 +219,94 @@ class WorkFlowContainer extends React.Component {
       data.workflow.businessService = "BS.AMENDMENT";
       data.workflow.moduleName = "BS";
     }
+    console.log(moduleName, "Nero sss Modle")
+    console.log(data, "Nero data 1")
+    if (moduleName == "MR") {
+      let apntDetails = [];
+      let appointmentDetails = get(
+        data[0],
+        "appointmentDetails",
+        []
+      );
+      var appAction = get(data[0], "action", '')
+      if (appAction == "RESCHEDULE" && appointmentDetails && appointmentDetails.length > 0) {
 
+
+        for (let i = 0; i < appointmentDetails.length; i++) {
+          apntDetails.push({ ...appointmentDetails[i], active: false });
+        }
+
+
+        var apntDate = get(data[0], "appointmentDate", '');
+        let apntTime = get(data[0], "appointmentTime", '');
+        let apntDesc = get(data[0], "appointmentDesc", '');
+        apntDate = apntDate.split("-");
+        apntTime = apntTime.split(":");
+
+
+        var apntDate = new Date(apntDate[0], apntDate[1] - 1, apntDate[2]);
+        apntDate.setHours(apntDate.getHours() + parseInt(apntTime[0]));
+        apntDate.setMinutes(apntDate.getMinutes() + apntTime[1]);
+
+        console.log(apntDate.getDate(), "In reschedle")
+        console.log(apntDate.getTime());
+        console.log(apntDate.getTime() + 3600000);
+
+
+        apntDetails.push({
+
+          "tenantId": tenant,
+          "startTime": apntDate.getTime(),
+          "endTime": apntDate.getTime() + 3600000,
+          "description": apntDesc,
+          "active": true
+        })
+        //data[0].appointmentDetails = apntDetails;
+        set(
+          data[0],
+          "appointmentDetails",
+          apntDetails
+        );
+
+      } else if (appAction == "SCHEDULE") {
+
+        var apntDate = get(data[0], "appointmentDate", '');
+        let apntTime = get(data[0], "appointmentTime", '');
+        let apntDesc = get(data[0], "appointmentDesc", '');
+        apntDate = apntDate.split("-");
+        apntTime = apntTime.split(":");
+
+
+        var apntDate = new Date(apntDate[0], apntDate[1] - 1, apntDate[2]);
+        apntDate.setHours(apntDate.getHours() + parseInt(apntTime[0]));
+        apntDate.setMinutes(apntDate.getMinutes() + apntTime[1]);
+
+        console.log(apntDate.getDate())
+        console.log(apntDate.getTime());
+        console.log(apntDate.getTime() + 3600000);
+
+
+        apntDetails.push({
+
+          "tenantId": tenant,
+          "startTime": apntDate.getTime(),
+          "endTime": apntDate.getTime() + 3600000,
+          "description": apntDesc
+        })
+        //data[0].appointmentDetails = apntDetails;
+        set(
+          data[0],
+          "appointmentDetails",
+          apntDetails
+        );
+      }
+
+
+
+
+    }
+
+    console.log(data, "Nero data 2")
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -222,7 +315,6 @@ class WorkFlowContainer extends React.Component {
     try {
       if (beforeSubmitHook) {
         if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4"|| moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
-          debugger
           if(!isDsInfo){
             data = await beforeSubmitHook(data);
           }else{
@@ -309,6 +401,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   createWorkFLow = async (label, isDocRequired) => {
+
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     const {isCertificateDetailsVisible} = preparedFinalObject
     let data = {};
@@ -395,44 +488,44 @@ class WorkFlowContainer extends React.Component {
     if (moduleName === "FIRENOC") {
       baseUrl = "fire-noc";
       bservice = "FIRENOC";
-    } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2"|| moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+    } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
       baseUrl = "egov-bpa";
-      if (moduleName === "BPA" || moduleName === "BPA_LOW"|| moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+      if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
         bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
       } //else if (moduleName === "BPA_OC") {
       else {
         bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_OC_APP_FEE" : "BPA.NC_OC_SAN_FEE");
       } //else {
-        //bservice = "BPA.LOW_RISK_PERMIT_FEE"
+      //bservice = "BPA.LOW_RISK_PERMIT_FEE"
       //}
     } else if (moduleName === "PT") {
       bservice = "PT"
-    }else if(moduleName === "PT.ASSESSMENT") {
-      const {dataPath, preparedFinalObject} = this.props
+    } else if (moduleName === "PT.ASSESSMENT") {
+      const { dataPath, preparedFinalObject } = this.props
       const propertyId = get(preparedFinalObject, dataPath).propertyId || ""
       bservice = "PT"
       businessId = propertyId
     }
     else if (moduleName === "PT.CREATE" || moduleName === "PT.LEGACY") {
-      return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
+      return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId || this.props.propertyIdForEditRedirect} &tenantId=${tenant}&mode=WORKFLOWEDIT`
     } else if (moduleName === "PT.MUTATION") {
-      if(process.env.REACT_APP_NAME === "Employee" && action == "EDIT_DEMAND"){
-        let {Property} = preparedFinalObject
+      if (process.env.REACT_APP_NAME === "Employee" && action == "EDIT_DEMAND") {
+        let { Property } = preparedFinalObject
         let acknowldgementNumber = Property.acknowldgementNumber
         baseUrl = "pt-mutation";
         bservice = "PT.MUTATION";
         return `/pt-mutation/apply?applicationNumber=${acknowldgementNumber}&tenantId=${tenant}&demandDetails=true`
-      }else{
+      } else {
         bservice = "PT.MUTATION";
         baseUrl = "pt-mutation";
       }
 
     }
-    else if(moduleName == "ASMT"){
-      const {dataPath, preparedFinalObject} = this.props
+    else if (moduleName == "ASMT") {
+      const { dataPath, preparedFinalObject } = this.props
       const propertyId = get(preparedFinalObject, dataPath).propertyId || ""
       return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=editDemandDetails`
-    }else if(moduleName == "MR"){
+    } else if (moduleName == "MR") {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "mr-citizen" : "mr";
       bservice = "MR"
     }
@@ -524,12 +617,13 @@ class WorkFlowContainer extends React.Component {
     let editAction = {};
 
     //hardcoded edit demand button for adding demand details
-    if((moduleName == "PT.CREATE" || moduleName == "PT.MUTATION" || moduleName == "ASMT") && (applicationState == "DOCVERIFIED" || applicationState == "PENDING_FIELD_INSPECTION")){
+    if ((moduleName == "PT.CREATE" || moduleName == "PT.MUTATION" || moduleName == "ASMT") && (applicationState == "DOCVERIFIED" || applicationState == "PENDING_FIELD_INSPECTION")) {
       editDemands = true
     }
 
+
     if(moduleName === "SWCloseConnection" || moduleName === "SWDisconnection" || moduleName === "WSCloseConnection" || moduleName === "WSDisconnection" || moduleName === "WSReconnection" || moduleName === "SWReconnection"
-    || moduleName === "ModifySWConnection" || moduleName === "ModifyWSConnection"){
+    || moduleName === "ModifySWConnection" || moduleName === "ModifyWSConnection" || moduleName === "SWOwnershipChange" || moduleName === "WSOwnershipChange"){
       state.isStateUpdatable = false
     }
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
@@ -539,18 +633,18 @@ class WorkFlowContainer extends React.Component {
         moduleName: moduleName,
         tenantId: state.tenantId,
         isLast: true,
-        buttonUrl: (this.props.editredirect) ? this.props.editredirect : this.getRedirectUrl("EDIT", businessId, moduleName,applicationState)
+        buttonUrl: (this.props.editredirect) ? this.props.editredirect : this.getRedirectUrl("EDIT", businessId, moduleName, applicationState)
       };
     }
 
     //hardcoded edit demand button for adding demand details
-    if(editDemands && actions.length > 0 && roleIndex > -1){
+    if (editDemands && actions.length > 0 && roleIndex > -1) {
       editAction = {
         buttonLabel: "EDIT_DEMANDS",
         moduleName: moduleName,
         tenantId: state.tenantId,
         isLast: true,
-        buttonUrl: this.getRedirectUrl("EDIT_DEMAND", businessId, moduleName,applicationState)
+        buttonUrl: this.getRedirectUrl("EDIT_DEMAND", businessId, moduleName, applicationState)
       };
     }
 
@@ -589,7 +683,7 @@ class WorkFlowContainer extends React.Component {
         dialogHeader: getHeaderName(item.action),
         showEmployeeList: (businessService === "NewWS1" || businessService === "ModifyWSConnection" || businessService === "ModifySWConnection" || businessService === "NewSW1" || businessService === "SWCloseConnection" || businessService === "SWOwnershipChange" || businessService == "WSOwnershipChange" || businessService === "SWDisconnection" || businessService === "WSCloseConnection" || businessService === "WSDisconnection" || businessService === "SWReconnection" || businessService === "WSReconnection") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_CONNECTION" && item.action !== "APPROVE_FOR_CONNECTION" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
         roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
-        isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
+        isDocRequired: moduleName == "MR" ? false : checkIfDocumentRequired(item.nextState, businessService)
       };
     });
     actions = actions.filter(item => item.buttonLabel !== 'INITIATE');
@@ -627,29 +721,29 @@ class WorkFlowContainer extends React.Component {
       preparedFinalObject
     } = this.props;
 
-    if(ProcessInstances &&
-      ProcessInstances.length > 0){
-        console.log(ProcessInstances, "Nero P 1")
-      }
+    if (ProcessInstances &&
+      ProcessInstances.length > 0) {
+
+    }
     const workflowContract =
       ProcessInstances &&
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
-      if(workflowContract){
-        console.log(workflowContract, "Nero wf 1")
-      }
+    if (workflowContract) {
+
+    }
     let showFooter = true;
-    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" ||moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     }
     if ((moduleName === 'Noc') && window.location.href.includes("isFromBPA=true")) {
       showFooter = false
     }
-    if(moduleName === "NewTL"){
+    if (moduleName === "NewTL") {
       let Lic = get(preparedFinalObject, "Licenses");
 
-      if(Lic && Lic.length > 0){
-        if(Lic[0].licenseType === "TEMPORARY" && (Lic[0].status === "APPROVED" || Lic[0].status === "EXPIRED")){
+      if (Lic && Lic.length > 0) {
+        if (Lic[0].licenseType === "TEMPORARY" && (Lic[0].status === "APPROVED" || Lic[0].status === "EXPIRED")) {
           showFooter = false
         }
       }

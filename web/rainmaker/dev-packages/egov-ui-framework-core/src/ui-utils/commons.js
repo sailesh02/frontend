@@ -323,6 +323,7 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
       });
     }
   });
+
   prepareFinalObject("workflow.ProcessInstances", processInstances);
 };
 
@@ -740,6 +741,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
 };
 
 const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
+  console.log(moduleName, "Nero moduleName")
   const tenant = getTenantId();
   switch (moduleName) {
     case "FireNoc":
@@ -766,6 +768,26 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
         const applyUrl = process.env.REACT_APP_NAME === "Citizen" ? `/wns/apply` : `/wns/apply`
         dispatch(setRoute(applyUrl));
       };
+      case 'MarriageRegistration':
+        if (closePopUp) {
+          return (state, dispatch) => {
+
+
+            dispatch(prepareFinalObject("MarriageRegistrations", []));
+            dispatch(prepareFinalObject("LicensesTemp", []));
+            dispatch(prepareFinalObject("DynamicMdms", {}));
+
+            let applyUrl = '';
+
+               applyUrl = `/mr/apply?tenantId=${tenant}`;
+
+
+            dispatch(
+              handleField("search", "components.adhocDialog", "props.open", false)
+            );
+            dispatch(setRoute(applyUrl));
+          };
+        }
     case 'TradeLicense':
       if (closePopUp) {
         return (state, dispatch) => {

@@ -28,8 +28,7 @@ export const groomDetails = getCommonCard(
     header: getCommonTitle(
       {
         labelName: "Trade Location Details",
-        //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-        labelKey: "Groom Details"
+        labelKey: "MR_GROOM_HEADER"
       },
       {
         style: {
@@ -44,19 +43,17 @@ export const groomDetails = getCommonCard(
       groomFName: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Name"
+          labelKey: "MR_NAME_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-         // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Name"
+          labelKey: "MR_NAME_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].firstName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.firstName",
         required: true,
       }),
 
@@ -100,21 +97,20 @@ export const groomDetails = getCommonCard(
       groomDob: {
         ...getDateField({
           label: { labelName: "To Date",
-          labelKey: "DOB"
-          //labelKey: "TL_NEW_TRADE_DETAILS_TRADE_END_DATE_LABEL"
+
+          labelKey: "MR_DOB_LABEL"
 
         },
           placeholder: {
             labelName: "Trade License From Date",
-            //labelKey: "TL_TRADE_LICENCE_TO_DATE"
-            labelKey: "DOB"
+            labelKey: "MR_DOB_PLACEHOLDER"
           },
 
           required: true,
 
           pattern: getPattern("Date"),
-          jsonPath: "MarriageRegistrations[0].coupleDetails[1].dateOfBirth",
-
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.dateOfBirth",
+          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
           props: {
 
             inputProps: {
@@ -129,55 +125,54 @@ export const groomDetails = getCommonCard(
       groomContact: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Contact"
+          labelKey: "MR_CONTACT_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "Contact"
+          labelKey: "MR_CONTACT_PLACEHOLDER"
         },
         pattern: getPattern("MobileNo"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.contact",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.contact",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
       groomEmail: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Email"
+          labelKey: "MR_EMAIL_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "Email"
+          labelKey: "MR_EMAIL_PLACEHOLDER"
         },
         pattern: getPattern("Email"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.emailAddress",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.emailAddress",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
 
       groomFatherFName: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Father's Name"
+          labelKey: "MR_FATHERNAME_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-         // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Father's Name"
+          labelKey: "MR_FATHERNAME_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].fatherName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.fatherName",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
 
 
@@ -185,107 +180,137 @@ export const groomDetails = getCommonCard(
       groomMotherFName: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Mother's Name"
+          labelKey: "MR_MOTHERNAME_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-         // labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-         labelKey: "Mother's Name"
+          labelKey: "MR_MOTHERNAME_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].motherName",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.motherName",
         required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
       }),
 
 
       groomAddress: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Address"
+          labelKey: "MR_ADDRESS_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "Address"
+          labelKey: "MR_ADDRESS_PLACEHOLDER"
         },
         pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.addressLine1",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.addressLine1",
         required: true,
       }),
 
-      groomDistrict: {
-        ...getSelectField({
-          label: {
-            labelName: "City",
-            //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "District"
-          },
+      // groomDistrict: {
+      //   ...getSelectField({
+      //     label: {
+      //       labelName: "City",
+      //       labelKey: "MR_DISTRICT_LABEL"
+      //     },
 
-          optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "District" },
-          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.district",
-          required: true,
+      //     optionLabel: "name",
+      //     placeholder: { labelName: "Select Country", labelKey: "MR_DISTRICT_PLACEHOLDER" },
+      //     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrDistrict",
+      //     jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.district",
+      //     required: true,
 
-        }),
-      },
-      groomState: {
-        ...getSelectField({
-          label: {
-            labelName: "City",
-            //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "State"
-          },
+      //   }),
+      // },
+      // groomState: {
+      //   ...getSelectField({
+      //     label: {
+      //       labelName: "City",
+      //       labelKey: "MR_STATE_LABEL"
+      //     },
 
-          optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "State" },
-          sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.state",
-          required: true,
+      //     optionLabel: "name",
+      //     placeholder: { labelName: "Select Country", labelKey: "MR_STATE_PLACEHOLDER" },
+      //     sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrState",
+      //     jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.state",
+      //     required: true,
 
-        }),
-      },
+      //   }),
+      // },
+
+      groomDistrict: getTextField({
+        label: {
+          labelName: "Door/House No.",
+          labelKey: "MR_DISTRICT_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Door/House No.",
+          labelKey: "MR_DISTRICT_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.district",
+        required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+      }),
+      groomState: getTextField({
+        label: {
+          labelName: "Door/House No.",
+          labelKey: "MR_STATE_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Door/House No.",
+          labelKey: "MR_STATE_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.state",
+        required: true,
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+      }),
 
       groomCountry: {
         ...getSelectField({
           label: {
             labelName: "City",
-            //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "Country"
+            labelKey: "MR_COUNTRY_LABEL"
           },
 
           optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "Country" },
+          placeholder: { labelName: "Select Country", labelKey: "MR_COUNTRY_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.mrCountry",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.country",
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.country",
           required: true,
-
+          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
         }),
       },
 
       groomAddressPin: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "PIN"
+          labelKey: "MR_PINCODE_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "PIN"
+          labelKey: "MR_PINCODE_PLACEHOLDER"
         },
         required: true,
         //pattern: getPattern("Address"),
-        jsonPath: "MarriageRegistrations[0].coupleDetails[1].coupleAddress.pinCode",
+        jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.address.pinCode",
+        disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
 
       }),
 
@@ -293,21 +318,20 @@ export const groomDetails = getCommonCard(
         ...getSelectField({
           label: {
             labelName: "City",
-            //labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-            labelKey: "Is Groom Divyang?"
+            labelKey: "MR_ISDIVYANG_LABEL"
           },
 
           optionLabel: "name",
-          placeholder: { labelName: "Select Country", labelKey: "Is Groom Divyang?" },
+          placeholder: { labelName: "Select Country", labelKey: "MR_ISDIVYANG_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.yesNoBox",
-          jsonPath: "MarriageRegistrations[0].coupleDetails[1].isDivyang"
+          jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.isDivyang",
+          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
+          required: true,
         }),
       },
 
     },
-    {
-      style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}
-    }
+
     ),
 
   }

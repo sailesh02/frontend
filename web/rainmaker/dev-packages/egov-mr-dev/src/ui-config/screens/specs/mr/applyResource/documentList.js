@@ -5,7 +5,7 @@ export const documentList = {
   props: {
     buttonLabel: {
       labelName: "UPLOAD FILE",
-      labelKey: "TL_BUTTON_UPLOAD FILE"
+      labelKey: "MR_BUTTON_UPLOAD_FILE"
     },
     inputProps : [
       {

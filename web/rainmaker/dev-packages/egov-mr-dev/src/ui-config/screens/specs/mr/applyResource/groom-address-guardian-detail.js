@@ -16,8 +16,7 @@ import {
     header: getCommonTitle(
       {
         labelName: "Trade Location Details",
-        //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-        labelKey: "Groom Guardian Details"
+        labelKey: "MR_GROOM_GUARDIAN_HEADER"
       },
       {
         style: {
@@ -30,11 +29,11 @@ import {
     rltnWithgroom: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Relationship"
+        labelKey: "MR_GROOMGUARDIAN_RELATION_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.relationship",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.relationship",
 
       }
     ),
@@ -42,11 +41,11 @@ import {
     groomGuardianName: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Name"
+        labelKey: "MR_NAME_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.name",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.name",
 
       }
     ),
@@ -54,11 +53,11 @@ import {
     groomGrdnAddressLine1: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Address"
+        labelKey: "MR_ADDRESS_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.addressline1",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.addressLine1",
 
       }
     ),
@@ -66,11 +65,11 @@ import {
     groomGrdnDistrict: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "District"
+        labelKey: "MR_DISTRICT_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.district",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.district",
 
       }
     ),
@@ -78,11 +77,11 @@ import {
     groomGrdnState: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "State"
+        labelKey: "MR_STATE_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.state",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.state",
 
       }
     ),
@@ -90,44 +89,44 @@ import {
     groomGrdnCountry: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Country"
+        labelKey: "MR_COUNTRY_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.country",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.country",
 
       }
     ),
     groomGrdnAddressPin: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "PIN"
+        labelKey: "MR_PINCODE_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.pinCode",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.pinCode",
 
       }
     ),
     groomGrdnContact: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Contact"
+        labelKey: "MR_CONTACT_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.contact",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.contact",
 
       }
     ),
     groomGrdnEmail: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Email"
+        labelKey: "MR_EMAIL_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[1].guardianDetails.emailAddress",
+        "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.emailAddress",
 
       }
     ),
@@ -139,8 +138,7 @@ import {
     header: getCommonTitle(
       {
         labelName: "Trade Location Details",
-        //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-        labelKey: "Bride Guardian Details"
+        labelKey: "MR_BRIDE_GUARDIAN_HEADER"
       },
       {
         style: {
@@ -153,11 +151,11 @@ import {
     rltnWithBride: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Relationship"
+        labelKey: "MR_BRIDEGUARDIAN_RELATION_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.relationship",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.relationship",
 
       }
     ),
@@ -165,11 +163,11 @@ import {
     brideGuardianName: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Name"
+        labelKey: "MR_NAME_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.name",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.name",
 
       }
     ),
@@ -177,22 +175,22 @@ import {
     brideGrdnAddressLine1: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Address"
+        labelKey: "MR_ADDRESS_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.addressline1",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.addressLine1",
 
       }
     ),
     brideGrdnDistrict: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "District"
+        labelKey: "MR_DISTRICT_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.district",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.district",
 
       }
     ),
@@ -201,55 +199,55 @@ import {
     brideGrdnState: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "State"
+        labelKey: "MR_STATE_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.state",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.state",
 
       }
     ),
     brideGrdnCountry: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Country"
+        labelKey: "MR_COUNTRY_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.country",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.country",
 
       }
     ),
     brideGrdnAddressPin: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Pincode"
+        labelKey: "MR_PINCODE_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.pinCode",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.pinCode",
 
       }
     ),
     brideGrdnContact: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Contact"
+        labelKey: "MR_CONTACT_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.contact",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.contact",
 
       }
     ),
     brideGrdnEmail: getLabelWithValue(
       {
         labelName: "Application Type",
-        labelKey: "Email"
+        labelKey: "MR_EMAIL_LABEL"
       },
       {
         jsonPath:
-        "MarriageRegistrations[0].coupleDetails[0].guardianDetails.emailAddress",
+        "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.emailAddress",
 
       }
     ),
@@ -350,7 +348,7 @@ import {
             },
             ...getCommonSubHeader({
               labelName: "Trade Details",
-              labelKey: "Guardian Details"
+              labelKey: "MR_GUARDIAN_DETAIL_HEADER"
             })
           },
           editSection: {
@@ -374,7 +372,7 @@ import {
               },
               buttonLabel: getLabel({
                 labelName: "Edit",
-                labelKey: "TL_SUMMARY_EDIT"
+                labelKey: "MR_SUMMARY_EDIT"
               })
             },
             onClickDefination: {

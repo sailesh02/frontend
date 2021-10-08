@@ -551,6 +551,33 @@ export const validationsForExecutionData = (applyScreenObject) => {
     }else{return false}
 }
 
+export const validateMeterDetails = (applyScreenObject) => {
+    let connectionType = applyScreenObject && applyScreenObject.connectionType
+    let water = applyScreenObject && applyScreenObject.water
+    let rValue = true;
+    if (rValue && connectionType && connectionType == 'Metered'){
+        if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("meterMake") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("meterReadingRatio") && 
+        applyScreenObject.additionalDetails["meterMake"] !== undefined && 
+        applyScreenObject.additionalDetails["meterMake"] !== "" &&
+        applyScreenObject.additionalDetails["meterReadingRatio"] !== undefined && 
+        applyScreenObject.additionalDetails["meterReadingRatio"] !== ""){
+            return true
+        }else{return false}
+    }else if(rValue && connectionType && connectionType == 'Non Metered' && !water){
+        if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("diameter") && 
+        applyScreenObject.additionalDetails["diameter"] !== undefined && 
+        applyScreenObject.additionalDetails["diameter"] !== ""){
+          return true
+        }else{return false}  
+    }
+    else{
+    return true
+    }
+}
+
 export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {
     let propertyObject = findAndReplace(applyScreenObject, "NA", null);
     if (
@@ -663,6 +690,18 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails.detailsProvidedBy !== undefined &&
                 queryObject.additionalDetails.detailsProvidedBy !== null
             ) ? queryObject.additionalDetails.detailsProvidedBy : "",
+            meterMake:(
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.meterMake !== undefined
+              ) ? (queryObject.additionalDetails.meterMake) : "",
+            meterReadingRatio: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.meterReadingRatio !== undefined
+              ) ? (queryObject.additionalDetails.meterReadingRatio) : "",
+            diameter: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.diameter !== undefined
+            ) ? (queryObject.additionalDetails.diameter) : "",
         }
     }
     queryObject = { ...queryObject, ...parsedObject }
@@ -1029,13 +1068,14 @@ export const applyForWater = async (state, dispatch) => {
                 response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
-                let localizationLabels = {}
-                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-                let locality = `${response.WaterConnection[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.WaterConnection[0].additionalDetails.locality
-                  .toUpperCase()
-                  .replace(/[._:-\s\/]/g, "_")}`;
-                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
+                dispatch(prepareFinalObject("applyScreen.locality",response.WaterConnection[0].additionalDetails.locality))
                 dispatch(prepareFinalObject("modifyAppCreated", true));
+                if(response && response.WaterConnection && response.WaterConnection[0] && response.WaterConnection[0].noOfFlats &&
+                parseInt(response.waterConnection[0].noOfFlats) > 0){
+                    dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));
+                }else{
+                    dispatch(prepareFinalObject("applyScreen.apartment", 'No'));
+                }
             }
             if(mode == "ownershipTransfer"){
                 response.WaterConnection[0].water = true;
@@ -1046,12 +1086,13 @@ export const applyForWater = async (state, dispatch) => {
                 response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
-                let localizationLabels = {}
-                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-                let locality = `${response.WaterConnection[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.WaterConnection[0].additionalDetails.locality
-                  .toUpperCase()
-                  .replace(/[._:-\s\/]/g, "_")}`;
-                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
+                dispatch(prepareFinalObject("applyScreen.locality",response.WaterConnection[0].additionalDetails.locality))
+                if(response && response.WaterConnection && response.WaterConnection[0] && response.WaterConnection[0].noOfFlats &&
+                parseInt(response.waterConnection[0].noOfFlats) > 0){
+                    dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));
+                }else{
+                    dispatch(prepareFinalObject("applyScreen.apartment", 'No'));
+                }
             }
             if (!isModifyMode()) {
                 setApplicationNumberBox(state, dispatch);
@@ -1142,12 +1183,13 @@ export const applyForSewerage = async (state, dispatch) => {
                 response.SewerageConnections[0].ward = response.SewerageConnections[0].additionalDetails.ward ? response.SewerageConnections[0].additionalDetails.ward : '';
                 response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
-                let localizationLabels = {}
-                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-                let locality = `${response.SewerageConnections[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.SewerageConnections[0].additionalDetails.locality
-                  .toUpperCase()
-                  .replace(/[._:-\s\/]/g, "_")}`;
-                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
+                dispatch(prepareFinalObject("applyScreen.locality",response.SewerageConnections[0].additionalDetails.locality))
+                if(response && response.SewerageConnections && response.SewerageConnections[0] && response.SewerageConnections[0].noOfFlats &&
+                    parseInt(response.SewerageConnections[0].noOfFlats) > 0){
+                        dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));
+                }else{
+                    dispatch(prepareFinalObject("applyScreen.apartment", 'No'));
+                }
             }
             if (isModifyMode()) {
                 response.SewerageConnections[0].ward = response.SewerageConnections[0].additionalDetails.ward ? response.SewerageConnections[0].additionalDetails.ward : '';
@@ -1157,12 +1199,13 @@ export const applyForSewerage = async (state, dispatch) => {
                 response.SewerageConnections[0].service = "Sewerage";
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
-                let localizationLabels = {}
-                if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-                let locality = `${response.SewerageConnections[0].tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${response.SewerageConnections[0].additionalDetails.locality
-                  .toUpperCase()
-                  .replace(/[._:-\s\/]/g, "_")}`;
-                dispatch(prepareFinalObject("applyScreen.locality",getTranslatedLabel(locality, localizationLabels)))
+                dispatch(prepareFinalObject("applyScreen.locality",response.SewerageConnections[0].additionalDetails.locality))
+                if(response && response.SewerageConnections && response.SewerageConnections[0] && response.SewerageConnections[0].noOfFlats &&
+                    parseInt(response.SewerageConnections[0].noOfFlats) > 0){
+                    dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));
+                }else{
+                    dispatch(prepareFinalObject("applyScreen.apartment", 'No'));
+                }
             }
             if (!isModifyMode()) {
                 setApplicationNumberBox(state, dispatch);
@@ -1467,10 +1510,11 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
 }
 
 export const getMeterReadingData = async (dispatch) => {
+    let tenantId = getQueryArg(window.location.href, "tenantId")
     let queryObject = [
         {
             key: "tenantId",
-            value: getTenantIdCommon()
+            value: tenantId
         },
         {
             key: "connectionNos",
@@ -1497,17 +1541,17 @@ export const getPastPaymentsForWater = async (dispatch) => {
     dispatch(toggleSpinner());
     let queryObject = [
         {
-            key: "tenantId",
+            key: "tenantIds",
             value: getTenantIdCommon()
         },
         {
-            key: "businessService",
+            key: "businessServices",
             value: "WS"
         },
         {
-            key: "uuid",
-            value: JSON.parse(getUserInfo()).uuid.toString()
-        },
+            key: "mobileNumber",
+            value: JSON.parse(getUserInfo()).mobileNumber && JSON.parse(getUserInfo()).mobileNumber.toString() || ''
+        }
     ];
     try {
         const response = await httpRequest(
@@ -1536,16 +1580,16 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
     dispatch(toggleSpinner());
     let queryObject = [
         {
-            key: "tenantId",
+            key: "tenantIds",
             value: getTenantIdCommon()
         },
         {
-            key: "businessService",
+            key: "businessServices",
             value: "SW"
         },
         {
-            key: "uuid",
-            value: JSON.parse(getUserInfo()).uuid.toString()
+            key: "mobileNumber",
+            value: JSON.parse(getUserInfo()).mobileNumber && JSON.parse(getUserInfo()).mobileNumber.toString() || ''
         }
     ];
     try {
@@ -1706,13 +1750,12 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
                         { key: "key", value: "ws-consolidatedacknowlegment" },
                         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
                     ]
-
                     // payloadReceiptDetails.WaterConnection = await getPropertyObj(payloadReceiptDetails.WaterConnection);
-                    if (payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting !== undefined && payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting !== null) {
-                        if (payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting === true) {
-                            payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting = 'SCORE_YES'
+                    if (payloadReceiptDetails.WaterConnection && payloadReceiptDetails.WaterConnection[0] && payloadReceiptDetails.WaterConnection[0].additionalDetails && payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting !== undefined && payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting !== null) {
+                        if (payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting === true) {
+                            payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting = 'SCORE_YES'
                         } else {
-                            payloadReceiptDetails.WaterConnection[0].property.additionalDetails.isRainwaterHarvesting = 'SCORE_NO'
+                            payloadReceiptDetails.WaterConnection[0].additionalDetails.isRainwaterHarvesting = 'SCORE_NO'
                         }
                     }
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
@@ -2029,13 +2072,13 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
     if (wnsConnection[0].service === serviceConst.WATER) {
 
         // for Estimate api 
-        if (wnsConnection[0].property && wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
-            if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_YES') {
-                wnsConnection[0].property.rainWaterHarvesting = true
-            } else if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_NO') {
-                wnsConnection[0].property.rainWaterHarvesting = false
-            }
-        }
+        // if (wnsConnection[0].property && wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
+        //     if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_YES') {
+        //         wnsConnection[0].property.rainWaterHarvesting = true
+        //     } else if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_NO') {
+        //         wnsConnection[0].property.rainWaterHarvesting = false
+        //     }
+        // }
         apiUrl = "ws-calculator/waterCalculator/_estimate";
         appService = "ws-applicationwater";
         queryObjectForEst = [{
@@ -2109,7 +2152,7 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
         if (type === 'sanctionLetter') {
             const slaDetails = await httpRequest(
                 "post",
-                `egov-workflow-v2/egov-wf/businessservice/_search?tenantId=${wnsConnection[0].property.tenantId}&businessService=WS`,
+                `egov-workflow-v2/egov-wf/businessservice/_search?tenantId=${wnsConnection[0].tenantId}&businessService=WS`,
                 "_search"
             );
 
@@ -2135,17 +2178,17 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
 
 
         if (type === 'application') {
-            if (wnsConnection[0].property && wnsConnection[0].property.units && wnsConnection[0].property.units.length > 0 && wnsConnection[0].property.units[0].usageCategory) {
-                wnsConnection[0].property.propertySubUsageType = wnsConnection[0].property.units[0].usageCategory;
-            }
+            // if (wnsConnection[0].property && wnsConnection[0].property.units && wnsConnection[0].property.units.length > 0 && wnsConnection[0].property.units[0].usageCategory) {
+            //     wnsConnection[0].property.propertySubUsageType = wnsConnection[0].property.units[0].usageCategory;
+            // }
             if (wnsConnection[0].service === serviceConst.WATER) {
-                if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
-                    if (wnsConnection[0].property.rainWaterHarvesting === true) {
-                        wnsConnection[0].property.rainWaterHarvesting = 'SCORE_YES'
-                    } else {
-                        wnsConnection[0].property.rainWaterHarvesting = 'SCORE_NO'
-                    }
-                }
+                // if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
+                //     if (wnsConnection[0].property.rainWaterHarvesting === true) {
+                //         wnsConnection[0].property.rainWaterHarvesting = 'SCORE_YES'
+                //     } else {
+                //         wnsConnection[0].property.rainWaterHarvesting = 'SCORE_NO'
+                //     }
+                // }
                 obj = {
                     WaterConnection: wnsConnection
                 }
@@ -2387,3 +2430,8 @@ export const getOpenSearchResultsForSewerage = async (queryObject, requestBody, 
         console.log(error)
     }
 };
+
+export const getTenantId = () => {
+    let id = getQueryArg(window.location.href, "tenantId");
+    return id 
+}

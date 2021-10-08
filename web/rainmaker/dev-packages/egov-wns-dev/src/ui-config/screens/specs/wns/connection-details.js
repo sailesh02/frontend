@@ -233,14 +233,15 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
       dispatch(prepareFinalObject("isAmendmentInWorkflow", amendments&&Array.isArray(amendments)&&amendments.length==0?true:false));
-
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
+      if(sewerageConnection && sewerageConnection && sewerageConnection.noOfFlats && parseInt(sewerageConnection.noOfFlats) > 0){
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'))
+      }else{
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No'))
+      }
       let localizationLabels = {}
       if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${sewerageConnection.additionalDetails.locality
-        .toUpperCase()
-        .replace(/[._:-\s\/]/g, "_")}`;
-      dispatch(prepareFinalObject("WaterConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("WaterConnection[0].locality",sewerageConnection.additionalDetails.locality))
       getApplicationNumber(dispatch, payloadData.SewerageConnections);
     }
   } else if (service === serviceConst.WATER) {
@@ -334,14 +335,16 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
       dispatch(prepareFinalObject("isAmendmentInWorkflow", amendments&&Array.isArray(amendments)&&amendments.length==0?true:false));
-      showHideConnectionHolder(dispatch, waterConnection.connectionHolders);
+      showHideConnectionHolder(dispatch, waterConnection.connectionHolders);     
       dispatch(prepareFinalObject("WaterConnection[0]", waterConnection));
+      if(waterConnection && waterConnection && waterConnection.noOfFlats && parseInt(waterConnection.noOfFlats) > 0){
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'))
+      }else{
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No'))
+      }
       let localizationLabels = {}
       if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${waterConnection.additionalDetails.locality
-        .toUpperCase()
-        .replace(/[._:-\s\/]/g, "_")}`;
-      dispatch(prepareFinalObject("WaterConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("WaterConnection[0].locality",waterConnection.additionalDetails.locality))
       getApplicationNumber(dispatch, payloadData.WaterConnection);
     }
   }

@@ -385,7 +385,7 @@ export const getFeesEstimateCard = props => {
   const { sourceJsonPath, ...rest } = props;
   return {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-mr",
     componentPath: "EstimateCardContainer",
     props: {
       sourceJsonPath,
@@ -478,7 +478,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-services/v1/_search",
+      "/mr-services/v1/_search",
       "",
       queryObject
     );
@@ -664,6 +664,7 @@ export const getMdmsData = async queryObject => {
 };
 
 export const getDetailsFromProperty = async (state, dispatch) => {
+  console.log("Nero getDetailsFromProperty")
   try {
     const propertyId = get(
       state.screenConfiguration.preparedFinalObject,
@@ -1017,10 +1018,10 @@ export const downloadAcknowledgementForm = (Licenses, mode = "download") => {
   }
 }
 
-export const downloadCertificateForm = async (Licenses, mode = 'download') => {
-  let tenantId = get(Licenses[0], "tenantId");
-  let applicationNumber = get(Licenses[0], "applicationNumber")
-  const applicationType = Licenses && Licenses.length > 0 ? get(Licenses[0], "applicationType") : "NEW";
+export const downloadCertificateForm = async (MarriageRegistrations, mode = 'download') => {
+  let tenantId = get(MarriageRegistrations[0], "tenantId");
+  let applicationNumber = get(MarriageRegistrations[0], "applicationNumber")
+  const applicationType = MarriageRegistrations && MarriageRegistrations.length > 0 ? get(MarriageRegistrations[0], "applicationType") : "NEW";
   const queryStr = [
     { key: "key", value: "mrcertificate" },
     { key: "tenantId", value: tenantId ? tenantId.split(".")[0] : commonConfig.tenantId }
@@ -1039,14 +1040,14 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
     }
   ];
   const LicensesPayload = await getSearchResults(queryObject);
-  const updatedLicenses = get(LicensesPayload, "Licenses");
+  const updatedLicenses = get(LicensesPayload, "MarriageRegistrations");
   const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
   if (oldFileStoreId) {
     downloadReceiptFromFilestoreID(oldFileStoreId, mode)
   }
   else {
     try {
-      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { MarriageRegistrations }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
           res.filestoreIds[0]
           if (res && res.filestoreIds && res.filestoreIds.length > 0) {
@@ -1424,7 +1425,7 @@ export const createEstimateData = async (
   href = {},
   getFromReceipt
 ) => {
-  const workflowCode = get(LicenseData, "workflowCode") ? get(LicenseData, "workflowCode") : "NewTL"
+  const workflowCode = get(LicenseData, "workflowCode") ? get(LicenseData, "workflowCode") : "MR"
   const applicationNo =
     get(LicenseData, "applicationNumber") ||
     getQueryArg(href, "applicationNumber");
@@ -2013,59 +2014,7 @@ export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
       { accessories: [], tradeTypeData: [] }
     );
 
-  // const accessories = getUniqueItemsFromArray(
-  //   processedData.accessories,
-  //   "code"
-  // );
-  // let structureTypes = getUniqueItemsFromArray(
-  //   processedData.tradeTypeData,
-  //   "structureType"
-  // );
-  // structureTypes = commonTransform(
-  //   {
-  //     StructureType: structureTypes.map(item => {
-  //       return { code: item.structureType, active: true };
-  //     })
-  //   },
-  //   "StructureType"
-  // );
-  let licenseTypes = getUniqueItemsFromArray(
-    processedData.tradeTypeData,
-    "licenseType"
-  );
-  licenseTypes = licenseTypes.map(item => {
-    return { code: item.licenseType, active: true };
-  });
-  // dispatch(
-  //   prepareFinalObject(
-  //     "applyScreenMdmsData.common-masters.StructureType",
-  //     structureTypes.StructureType
-  //   )
-  // );
-  // dispatch(
-  //   prepareFinalObject(
-  //     "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
-  //     accessories
-  //   )
-  // );
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.TradeLicense.licenseType",
-      licenseTypes
-    )
-  );
-  // dispatch(
-  //   prepareFinalObject(
-  //     "applyScreenMdmsData.common-masters.StructureTypeTransformed",
-  //     objectToDropdown(structureTypes.StructureType)
-  //   )
-  // );
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.TradeLicense.TradeType",
-      processedData.tradeTypeData
-    )
-  );
+
 };
 
 export const getUniqueItemsFromArray = (data, identifier) => {

@@ -20,7 +20,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { edcrHttpRequest, httpRequest } from "../../../../ui-utils/api";
-import { getAppSearchResults, getNocSearchResults, prepareNOCUploadData, nocapplicationUpdate, getStakeHolderRoles } from "../../../../ui-utils/commons";
+import { getAppSearchResults, getNocSearchResults, prepareNOCUploadData, nocapplicationUpdateBPA, getStakeHolderRoles } from "../../../../ui-utils/commons";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { permitConditions } from "../egov-bpa/summaryResource/permitConditions";
@@ -46,7 +46,7 @@ import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary
 import { fieldSummary } from "./summaryResource/fieldSummary";
 import { previewSummary } from "./summaryResource/previewSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
-import { nocDetailsSearch } from "./noc";
+import { nocDetailsSearchBPA} from "./noc";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
@@ -499,7 +499,8 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
               name: "DocumentTypeMapping"
             },
           ]
-        }
+        },
+
       ]
     }
   };
@@ -534,6 +535,7 @@ const setSearchResponse = async (
     },
     { key: "sourceRefId", value: applicationNumber }
   ], state);
+  
   dispatch(prepareFinalObject("Noc", payload.Noc));
   payload.Noc.sort(compare);
   // await prepareNOCUploadData(state, dispatch);
@@ -579,6 +581,7 @@ const setSearchResponse = async (
       )
     );
   }
+
   if (get(response, "BPA[0].status") == "APPROVED" && ifUserRoleExists("CITIZEN")) {
 
 
@@ -744,6 +747,8 @@ const setSearchResponse = async (
       applicationNumber
     )
   );
+  
+  getNocList(state,dispatch,true)
 
   // Set Institution/Applicant info card visibility
   if (
@@ -820,8 +825,90 @@ const setSearchResponse = async (
       }
     }
   }
-
+  //only architech can add noc
+  if(ifUserRoleExists("BPA_ARCHITECT")){
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.nocDetailsApply.children.cardContent.children.headerDiv.children.header.children.addNocButton",
+        "visible",
+        true
+      )
+    );
+  }
 };
+
+export const getNocList = async (state,dispatch,filter) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [
+        {
+          "moduleName": "NOC",
+          "masterDetails": [
+              {
+                  "name": "NocType"
+              }
+          ]
+        }    
+      ]
+    }
+  };
+
+  let payload = await httpRequest(
+    "post",
+    "/egov-mdms-service/v1/_search",
+    "_search",
+    [],
+    mdmsBody
+  );
+
+let nocTypes = payload && payload.MdmsRes && payload.MdmsRes.NOC && payload.MdmsRes.NOC.NocType &&
+payload.MdmsRes.NOC.NocType.length > 0 && payload.MdmsRes.NOC.NocType
+
+let activatedNocs = nocTypes && nocTypes.length > 0 && nocTypes.filter( noc => {
+  if(noc.isActive){
+    return noc
+  }
+}) || []
+
+activatedNocs = activatedNocs && activatedNocs.length > 0 && activatedNocs.map( noc => {
+  return noc.code
+}) || []
+
+dispatch(prepareFinalObject("nocTypes", nocTypes));
+// to check already created NOC's
+if(filter){
+  const Noc = get(state.screenConfiguration.preparedFinalObject, "Noc", []);
+  let generatedNoc = Noc.map( noc => {
+      return noc.nocType
+  })
+  
+  let nocList = []
+  if(nocTypes && nocTypes.length > 0){
+    nocList = nocTypes.filter ( noc => {
+          if(!generatedNoc.includes(noc.code) && noc.isActive){
+            return noc
+          }
+      })
+    }
+  
+  nocList = nocList && nocList.length > 0 && nocList.map ( noc => {
+    return {
+      label : noc.code,
+      value : noc.code
+    }
+  })
+
+  dispatch(handleField(
+    "search-preview",
+    "components.div.children.triggerNocContainer.props",
+    "nocList",
+    nocList
+  ))
+  dispatch(prepareFinalObject("newNocList", nocList));
+}
+}
 
 export const beforeSubmitHook = async () => {
   let state = store.getState();
@@ -899,6 +986,7 @@ const screenConfig = {
     //}
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
+    // prepareDocumentsUploadData(state,dispatch);
 
 
     // Hide edit buttons
@@ -968,6 +1056,9 @@ const screenConfig = {
       "components.div.children.body.children.cardContent.children.nocDetailsApply.visible",
       false
     );
+
+    dispatch(prepareFinalObject("nocDocumentsDetailsRedux", {}));
+
     return action;
   },
   components: {
@@ -1069,11 +1160,22 @@ const screenConfig = {
           applicantSummary: applicantSummary,
           additionalDocsInformation: additionalDocsInformation,
           previewSummary: previewSummary,
-          nocDetailsApply: nocDetailsSearch,
+          nocDetailsApply: nocDetailsSearchBPA,
           declarationSummary: declarationSummary,
           permitConditions: permitConditions,
           permitListSummary: permitListSummary
         }),
+        triggerNocContainer :{
+          uiFramework: "custom-containers-local",
+          componentPath: "TriggerNOCContainer",
+          moduleName: "egov-bpa",
+          visible: true,
+          props: {
+            open:false,
+            nocType:''
+          }
+        },
+      
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
     }

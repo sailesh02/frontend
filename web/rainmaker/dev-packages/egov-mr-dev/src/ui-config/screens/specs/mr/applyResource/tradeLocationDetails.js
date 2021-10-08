@@ -29,8 +29,7 @@ export const tradeLocationDetails = getCommonCard(
     header: getCommonTitle(
       {
         labelName: "Trade Location Details",
-        //labelKey: "TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS"
-        labelKey: "Marriage Details"
+        labelKey: "MR_DETAILS_HEADER"
       },
       {
         style: {
@@ -44,14 +43,14 @@ export const tradeLocationDetails = getCommonCard(
         ...getSelectField({
           label: {
             labelName: "City",
-            labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+            labelKey: "MR_CITY_LABEL"
           },
           localePrefix: {
             moduleName: "TENANT",
             masterName: "TENANTS"
           },
           optionLabel: "name",
-          placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
+          placeholder: { labelName: "Select City", labelKey: "MR_CITY_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
           jsonPath: "MarriageRegistrations[0].tenantId",
           required: true,
@@ -131,7 +130,7 @@ export const tradeLocationDetails = getCommonCard(
 
       tradeLocMohalla: {
         uiFramework: "custom-containers-local",
-        moduleName: "egov-tradelicence",
+        moduleName: "egov-mr",
         componentPath: "AutosuggestContainer",
         jsonPath: "MarriageRegistrations[0].marriagePlace.locality.code",
         required: true,
@@ -142,11 +141,11 @@ export const tradeLocationDetails = getCommonCard(
           },
           label: {
             labelName: "Mohalla",
-            labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
+            labelKey: "MR_MOHALLA_LABEL"
           },
           placeholder: {
             labelName: "Select Mohalla",
-            labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_PLACEHOLDER"
+            labelKey: "MR_MOHALLA_PLACEHOLDER"
           },
           jsonPath: "MarriageRegistrations[0].marriagePlace.locality.code",
           sourceJsonPath: "applyScreenMdmsData.tenant.localities",
@@ -194,11 +193,11 @@ export const tradeLocationDetails = getCommonCard(
         ...getSelectField({
           label: {
             labelName: "Ward",
-            labelKey: "TL_NEW_TRADE_DETAILS_WARD_LABEL"
+            labelKey: "MR_WARD_LABEL"
           },
 
           optionLabel: "name",
-          placeholder: { labelName: "Select Ward", labelKey: "TL_SELECT_WARD" },
+          placeholder: { labelName: "Select Ward", labelKey: "MR_WARD_PLACEHOLDER" },
           sourceJsonPath: "applyScreenMdmsData.MarriageRegistration.Ward.Ward",
           jsonPath: "MarriageRegistrations[0].marriagePlace.ward",
           required: true,
@@ -212,15 +211,14 @@ export const tradeLocationDetails = getCommonCard(
       tradeLocDoorHouseNo: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "Place of Marriage"
+          labelKey: "MR_MARRIAGEPLACE_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
+          labelKey: "MR_MARRIAGEPLACE_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "MarriageRegistrations[0].marriagePlace.placeOfMarriage",
@@ -230,14 +228,12 @@ export const tradeLocationDetails = getCommonCard(
       tradeToDate: {
         ...getDateField({
           label: { labelName: "Marriage Date",
-          labelKey: "Marriage date"
-          //labelKey: "TL_NEW_TRADE_DETAILS_TRADE_END_DATE_LABEL"
+          labelKey: "MR_MARRIAGEDATE_LABEL"
 
         },
           placeholder: {
             labelName: "Trade License From Date",
-            //labelKey: "TL_TRADE_LICENCE_TO_DATE"
-            labelKey: "Marriage date"
+            labelKey: "MR_MARRIAGEDATE_PLACEHOLDER"
           },
 
           required: true,
@@ -259,43 +255,29 @@ export const tradeLocationDetails = getCommonCard(
       mrgPlaceAddressPin: getTextField({
         label: {
           labelName: "Door/House No.",
-          //labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-          labelKey: "PIN"
+          labelKey: "MR_PINCODE_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "PIN"
+          labelKey: "MR_PINCODE_PLACEHOLDER"
         },
-        required: true,
+       // required: true,
         //pattern: getPattern("Address"),
         jsonPath: "MarriageRegistrations[0].marriagePlace.pinCode",
 
       }),
     },
     {
-      style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}
+      style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
     }
     ),
-    mapsDialog: {
-      componentPath: "Dialog",
-      props: {
-        open: false
-      },
-      children: {
-        dialogContent: {
-          componentPath: "DialogContent",
-          children: {
-            popup: getMapLocator()
-          }
-        }
-      }
-    }
+
   },
   {
-    style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
+    style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
 
   }
 );

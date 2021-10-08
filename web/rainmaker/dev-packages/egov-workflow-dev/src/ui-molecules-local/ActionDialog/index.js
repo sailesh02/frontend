@@ -118,7 +118,7 @@ class ActionDialog extends React.Component {
   };
 
   render() {
-        
+
     let {
       open,
       onClose,
@@ -185,7 +185,7 @@ class ActionDialog extends React.Component {
     } else {
       wfDocumentsPath = `${dataPath}.wfDocuments`
     }
-   
+
     return (
       <Dialog
         fullScreen={fullscreen}
@@ -284,10 +284,11 @@ class ActionDialog extends React.Component {
                       }}
                     >
                       <div className="rainmaker-displayInline">
+                      {moduleName != "MR" ?
                         <LabelContainer
                           labelName="Supporting Documents"
                           labelKey="WF_APPROVAL_UPLOAD_HEAD"
-                        />
+                        />: ''}
                         {isDocRequired && (
                           <span style={{ marginLeft: 5, color: "red" }}>*</span>
                         )}
@@ -302,11 +303,13 @@ class ActionDialog extends React.Component {
                         lineHeight: "20px"
                       }}
                     >
+                      {moduleName != "MR" ?
                       <LabelContainer
                         labelName="Only .jpg and .pdf files. 5MB max file size."
                         labelKey="WF_APPROVAL_UPLOAD_SUBHEAD"
-                      />
+                      />: ""}
                     </div>
+                    {moduleName != "MR" ?
                     <UploadMultipleFiles
                       maxFiles={4}
                       inputProps={{
@@ -315,8 +318,8 @@ class ActionDialog extends React.Component {
                       buttonLabel={{ labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON" }}
                       jsonPath={wfDocumentsPath}
                       maxFileSize={5000}
-                    />
-                    {isCertificateDetailsVisible && 
+                    />:""}
+                     {isCertificateDetailsVisible && 
                       <React.Fragment>
                     <Grid
                       item
@@ -393,7 +396,6 @@ class ActionDialog extends React.Component {
                   </form>
                       </React.Fragment>
                     }
-                  
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                       <Button
                         variant={"contained"}

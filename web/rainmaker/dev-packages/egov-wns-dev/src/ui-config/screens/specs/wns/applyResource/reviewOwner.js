@@ -287,6 +287,23 @@ export const reviewConnectionExecutionDate = getLabelWithValueForModifiedLabel(
     callBack: convertEpochToDateAndHandleNA
   }
 );
+export const reviewDiameter = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Diameter",
+    labelKey: "WS_CONN_DETAIL_DIAMETER"
+  },
+  {
+    jsonPath: "applyScreen.additionalDetails.diameter",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_CONN_DETAIL_DIAMETER"
+  },
+  {
+    jsonPath: "applyScreenOld.additionalDetails.diameter",
+    callBack: handleNA
+  }
+);
 export const reviewMeterId = getLabelWithValueForModifiedLabel(
   {
     labelName: "Meter ID",
@@ -333,6 +350,38 @@ export const reviewInitialMeterReading = getLabelWithValueForModifiedLabel(
   },
   {
     jsonPath: "applyScreenOld.additionalDetails.initialMeterReading",
+    callBack: handleNA
+  }
+);
+
+export const reviewMeterMake = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Meter Make",
+    labelKey: "WS_ADDN_DETAILS_METER_MAKE"
+  },
+  { jsonPath: "applyScreen.additionalDetails.meterMake",
+    callBack: handleNA },
+  {
+    labelKey: "WS_ADDN_DETAILS_METER_MAKE"
+  },
+  {
+    jsonPath: "applyScreenOld.additionalDetails.meterMake",
+    callBack: handleNA
+  }
+);
+
+export const reviewMeterRatio = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Initial Meter Reading",
+    labelKey: "WS_ADDN_DETAILS_METER_RATIO"
+  },
+  { jsonPath: "applyScreen.additionalDetails.meterReadingRatio",
+    callBack: handleNA },
+  {
+    labelKey: "WS_ADDN_DETAILS_METER_RATIO"
+  },
+  {
+    jsonPath: "applyScreenOld.additionalDetails.meterReadingRatio",
     callBack: handleNA
   }
 );
@@ -450,6 +499,7 @@ const roadCuttingCharges = {
     }),
     items: [],
     hasAddItem: false,
+    moduleName : 'WNS',
     isReviewPage: true,
     sourceJsonPath: "applyScreen.roadCuttingInfo",
     prefixSourceJsonPath: "children",
@@ -461,6 +511,9 @@ const roadCuttingCharges = {
 const activationDetails = getCommonContainer({
   reviewConnectionExecutionDate,
   reviewMeterId,
+  reviewDiameter,
   reviewMeterInstallationDate,
-  reviewInitialMeterReading
+  reviewInitialMeterReading,
+  reviewMeterMake,
+  reviewMeterRatio
 });

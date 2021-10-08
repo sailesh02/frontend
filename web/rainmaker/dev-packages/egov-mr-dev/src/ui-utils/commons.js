@@ -80,7 +80,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
   /* To change the order of application documents similar order of mdms order*/
   const mdmsDocs = get(
     state.screenConfiguration.preparedFinalObject,
-    "applyScreenMdmsData.TradeLicense.documentObj[0].allowedDocs",
+    "applyScreenMdmsData.MarriageRegistration.documentObj[0].allowedDocs",
     []
   );
   let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
@@ -130,6 +130,85 @@ const setDocsForEditFlow = async (state, dispatch) => {
   dispatch(
     prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", uploadedDocuments)
   );
+  // dispatch(
+  //   prepareFinalObject("LicensesTemp[0].applicationDocuments", uploadedDocuments)
+  // );
+};
+const setDocsForEditFlow_backup = async (state, dispatch) => {
+  let applicationDocuments = get(
+    state.screenConfiguration.preparedFinalObject,
+    "MarriageRegistrations[0].applicationDocuments",
+    []
+  );
+  /* To change the order of application documents similar order of mdms order*/
+  const mdmsDocs = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.MarriageRegistration.documentObj[0].allowedDocs",
+    []
+  );
+
+  let orderedApplicationDocuments1 = mdmsDocs.map(mdmsDoc => {
+    let applicationDocument1 = {}
+    applicationDocuments1 && applicationDocuments1.map(appDoc => {
+      if (appDoc.documentType == mdmsDoc.documentType) {
+        applicationDocument1 = { ...appDoc }
+      }
+    })
+    return applicationDocument1;
+  }
+  );
+
+  let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
+    let applicationDocument = {}
+    applicationDocuments && applicationDocuments.map(appDoc => {
+      if (appDoc.documentType == mdmsDoc.documentType) {
+        applicationDocument = { ...appDoc }
+      }
+    })
+    return applicationDocument;
+  }
+  ).filter(docObj => Object.keys(docObj).length > 0)
+
+  applicationDocuments = [...orderedApplicationDocuments];
+
+  dispatch(
+    prepareFinalObject("MarriageRegistrations[0].applicationDocuments", applicationDocuments)
+  );
+
+  let uploadedDocuments = {};
+  let fileStoreIds =
+    applicationDocuments &&
+    applicationDocuments.map(item => item.fileStoreId).join(",");
+  const fileUrlPayload =
+    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+  applicationDocuments &&
+    applicationDocuments.forEach((item, index) => {
+      uploadedDocuments[index] = [
+        {
+          fileName:
+            (fileUrlPayload &&
+              fileUrlPayload[item.fileStoreId] &&
+              decodeURIComponent(
+                getFileUrl(fileUrlPayload[item.fileStoreId])
+                  .split("?")[0]
+                  .split("/")
+                  .pop()
+                  .slice(13)
+              )) ||
+            `Document - ${index + 1}`,
+          fileStoreId: item.fileStoreId,
+          fileUrl: Object.values(fileUrlPayload)[index],
+          documentType: item.documentType,
+          tenantId: item.tenantId,
+          id: item.id
+        }
+      ];
+    });
+
+  console.log(uploadedDocuments, "nero uploadedDocuments")
+  dispatch(
+    prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", uploadedDocuments)
+  );
 };
 
 const generateNextFinancialYear = state => {
@@ -168,62 +247,21 @@ export const updatePFOforSearchResults = async (
   const payload = !isPreviouslyEdited
     ? await getSearchResults(queryObject)
     : {
-      Licenses: get(state.screenConfiguration.preparedFinalObject, "Licenses")
+      MarriageRegistrations: get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations")
     };
-  // const payload = await getSearchResults(queryObject)
-  // getQueryArg(window.location.href, "action") === "edit" &&
-  //   (await setDocsForEditFlow(state, dispatch));
 
+  if (payload && payload.MarriageRegistrations) {
+    dispatch(prepareFinalObject("MarriageRegistrations[0]", payload.MarriageRegistrations[0]));
 
-
-
-  let userAction = getQueryArg(window.location.href, "action");
-
-  if (userAction == "EDITRENEWAL") {
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeName",
-        "props.disabled",
-        true
-      )
-    );
-  }
-  if (payload && payload.Licenses) {
-
-    // let ownersInitial = get(payload.Licenses[0], 'tradeLicenseDetail.owners', []);
-    // set(payload.Licenses[0], 'tradeLicenseDetail.owners', ownersInitial.filter(owner => owner.userActive));
-    // dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
-    // dispatch(prepareFinalObject("LicensesTemp[0].oldOwners", [...payload.Licenses[0].tradeLicenseDetail.owners]));
-    // if (payload && payload.Licenses.length > 0 && payload.Licenses[0].tradeLicenseDetail.structureType) {
-    //   const structureTypes = get(payload, 'Licenses[0].tradeLicenseDetail.structureType', '').split('.') || [];
-    //   const structureType = structureTypes && Array.isArray(structureTypes) && structureTypes.length > 0 && structureTypes[0] || 'none';
-    //   const selectedValues = [{
-    //     structureType: structureType,
-    //     structureSubType: get(payload, 'Licenses[0].tradeLicenseDetail.structureType', '') || 'none'
-    //   }]
-    //   dispatch(
-    //     prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues", selectedValues));
-    //   dispatch(
-    //     prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", get(state.screenConfiguration.preparedFinalObject, `applyScreenMdmsData.common-masters.StructureType.${structureType}`, [])));
-    // }
   }
 
-  const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
-  // if (isEditRenewal) {
-  //   const nextYear = generateNextFinancialYear(state);
-  //   dispatch(
-  //     prepareFinalObject("Licenses[0].financialYear", nextYear));
-  // }
+
 
   setDocsForEditFlow(state, dispatch);
 
   setApplicationNumberBox(state, dispatch);
 
-  createOwnersBackup(dispatch, payload);
-  if (payload && payload.Licenses.length > 0) {
-    dispatch(prepareFinalObject("Licenses[0].TlPeriod", payload.Licenses[0].tradeLicenseDetail.additionalDetail.licensePeriod));
-  }
+
 };
 
 export const getBoundaryData = async (
@@ -246,7 +284,7 @@ export const getBoundaryData = async (
       process.env.REACT_APP_NAME === "Employee"
         ? get(
           state.screenConfiguration.preparedFinalObject,
-          "Licenses[0].tradeLicenseDetail.address.city"
+          "MarriageRegistrations[0].tenantId"
         )
         : getQueryArg(window.location.href, "tenantId");
 
@@ -289,13 +327,13 @@ export const getBoundaryData = async (
         data.find(item => {
           return item.code == code;
         });
-      if (messageObject)
-        dispatch(
-          prepareFinalObject(
-            "Licenses[0].tradeLicenseDetail.address.locality.name",
-            messageObject.name
-          )
-        );
+      // if (messageObject)
+      //   dispatch(
+      //     prepareFinalObject(
+      //       "Licenses[0].tradeLicenseDetail.address.locality.name",
+      //       messageObject.name
+      //     )
+      //   );
     }
   } catch (e) {
     console.log(e);
@@ -340,22 +378,35 @@ const getMultipleOwners = owners => {
 
 export const applyTradeLicense = async (state, dispatch, activeIndex) => {
   try {
+
     let queryObject = JSON.parse(
       JSON.stringify(
         get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations", [])
       )
     );
+    console.log(state.screenConfiguration.preparedFinalObject, "Nero state.screenConfiguration.preparedFinalObject")
+    var stateObj = get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations", []);
 
-    console.log(queryObject, "Nero query Object")
+    var appDocuments = stateObj && stateObj[0].applicationDocuments;
+
     set(
       queryObject[0],
       "marriageDate",
       convertDateToEpoch(queryObject[0].marriageDate, "dayend")
     );
     //------ removing null from document array ------
-    let documentArray = compact(get(queryObject[0], "applicationDocuments"));
+    //let documentArray = compact(get(queryObject[0], "applicationDocuments"));
+    let documentArray = compact(appDocuments);
+
+
     let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");
-    documents = documents.filter(item => item.fileUrl && item.fileName);
+    console.log(documents, "Nero Document")
+    // if (activeIndex === 4)
+    //   documents = documents.filter(item => item.fileStoreId);
+    // else
+    //   documents = documents.filter(item => item.fileUrl && item.fileName);
+
+
     set(queryObject[0], "applicationDocuments", documents);
     //-----------------------------------------------
     // let documents = get(queryObject[0], "tradeLicenseDetail.applicationDocuments");
@@ -363,18 +414,34 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     set(queryObject[0], "wfDocuments", documents);
     let coupleDetails = [];
     if (queryObject[0] && queryObject[0].coupleDetails) {
-       coupleDetails = get(
+      coupleDetails = get(
         queryObject[0],
         "coupleDetails",
         []
       );
       for (let i = 0; i < coupleDetails.length; i++) {
-        coupleDetails[i].dateOfBirth = convertDateToEpoch(coupleDetails[i].dateOfBirth, "dayend")
-        if(coupleDetails[i].isDivyang == 'YES'){
-          coupleDetails[i].isDivyang = true;
-        }else{
-          coupleDetails[i].isDivyang = false;
+        if (coupleDetails[i].bride) {
+          coupleDetails[i].bride.dateOfBirth = convertDateToEpoch(coupleDetails[i].bride.dateOfBirth, "dayend")
+          if (typeof coupleDetails[i].bride.isDivyang == "string") {
+            if (coupleDetails[i].bride.isDivyang == 'Yes') {
+              coupleDetails[i].bride.isDivyang = true;
+            } else {
+              coupleDetails[i].bride.isDivyang = false;
+            }
+
+          }
         }
+        if (coupleDetails[i].groom) {
+          coupleDetails[i].groom.dateOfBirth = convertDateToEpoch(coupleDetails[i].groom.dateOfBirth, "dayend")
+          if (typeof coupleDetails[i].groom.isDivyang == "string") {
+            if (coupleDetails[i].groom.isDivyang == 'Yes') {
+              coupleDetails[i].groom.isDivyang = true;
+            } else {
+              coupleDetails[i].groom.isDivyang = false;
+            }
+          }
+        }
+
       }
 
     }
@@ -393,68 +460,60 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
     disableField('apply', "components.div.children.footer.children.payButton", dispatch);
 
-    if (process.env.REACT_APP_NAME === "Citizen" && queryObject[0].workflowCode === "NewTL") {
-      // let currentFinancialYr = getCurrentFinancialYear();
-      // //Changing the format of FY
-      // let fY1 = currentFinancialYr.split("-")[1];
-      // fY1 = fY1.substring(2, 4);
-      // currentFinancialYr = currentFinancialYr.split("-")[0] + "-" + fY1;
-      // set(queryObject[0], "financialYear", currentFinancialYr);
 
-
-      //setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
-
-    }
 
 
     set(queryObject[0], "workflowCode", "MR");
+    set(queryObject[0], "businessService", "MR");
 
 
     if (queryObject[0].applicationNumber) {
 
       //call update
+      //call update
+      const isCorrection = getQueryArg(window.location.href, "action") === "CORRECTION";
+      if (isCorrection) {
 
+        set(queryObject[0], "applicationType", "CORRECTION");
+        set(queryObject[0], "workflowCode", "MRCORRECTION");
+
+      }
 
 
 
       let action = "INITIATE";
       //Code for edit flow
 
-      if (
-        queryObject[0] &&
-        queryObject[0].applicationDocuments
-      ) {
+
+      console.log(activeIndex, "Nero active step")
+      if ((activeIndex === 4 || activeIndex === 1)) {
+
+        action = activeIndex === 4 ? "APPLY" : "INITIATE";
 
 
-        if (getQueryArg(window.location.href, "action") === "edit") {
-        } else if (activeIndex === 1) {
-          set(queryObject[0], "applicationDocuments", null);
-        } else action = "APPLY";
       }
 
-      if ((activeIndex === 4 || activeIndex === 1)) {
-        console.log("Nero 4")
-        action = activeIndex === 4 ? "APPLY" : "INITIATE";
-        // let renewalSearchQueryObject = [
-        //   { key: "tenantId", value: queryObject[0].tenantId },
-        //   { key: "applicationNumber", value: queryObject[0].applicationNumber }
-        // ];
-        // const renewalResponse = await getSearchResults(renewalSearchQueryObject);
-        //const renewalDocuments = get(renewalResponse, "Licenses[0].applicationDocuments");
-        // for (let i = 1; i <= documents.length; i++) {
-        //   if (i > renewalDocuments.length) {
-        //     renewalDocuments.push(documents[i - 1])
-        //   }
-        //   else {
-        //     if (!documents[i - 1].hasOwnProperty("id")) {
-        //       renewalDocuments[i - 1].active = false;
-        //       renewalDocuments.push(documents[i - 1])
-        //     }
-        //   }
-        // }
-        //dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
-       // set(queryObject[0], "applicationDocuments", renewalDocuments);
-
+      if (isCorrection && activeIndex === 3) {
+        let renewalSearchQueryObject = [
+          { key: "tenantId", value: queryObject[0].tenantId },
+          { key: "applicationNumber", value: queryObject[0].applicationNumber }
+        ];
+        const renewalResponse = await getSearchResults(renewalSearchQueryObject);
+        const renewalDocuments = get(renewalResponse, "MarriageRegistrations[0].applicationDocuments");
+        console.log(renewalResponse, "nero renewalResponse")
+        for (let i = 1; i <= documents.length; i++) {
+          if (i > renewalDocuments.length) {
+            renewalDocuments.push(documents[i - 1])
+          }
+          else {
+            if (!documents[i - 1].hasOwnProperty("id")) {
+              renewalDocuments[i - 1].active = false;
+              renewalDocuments.push(documents[i - 1])
+            }
+          }
+        }
+        dispatch(prepareFinalObject("MarriageRegistrations[0].applicationDocuments", renewalDocuments));
+        set(queryObject[0], "applicationDocuments", renewalDocuments);
       }
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
@@ -473,39 +532,57 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       }
       //Renewal flow
 
-       let updatedApplicationNo = "";
-      // let updatedTenant = "";
-      // if (isEditRenewal && updateResponse && get(updateResponse, "Licenses[0]")) {
-      //   updatedApplicationNo = get(updateResponse.Licenses[0], "applicationNumber");
-      //   updatedTenant = get(updateResponse.Licenses[0], "tenantId");
-      //   const workflowCode = get(updateResponse.Licenses[0], "workflowCode");
-      //   const bsQueryObject = [
-      //     { key: "tenantId", value: tenantId },
-      //     { key: "businessServices", value: workflowCode ? workflowCode : "NewTL" }
-      //   ];
+      let updatedApplicationNo = "";
+      let updatedTenant = "";
+      if (isCorrection && updateResponse && get(updateResponse, "MarriageRegistrations[0]")) {
+        updatedApplicationNo = get(updateResponse.MarriageRegistrations[0], "applicationNumber");
+        updatedTenant = get(updateResponse.MarriageRegistrations[0], "tenantId");
+        const workflowCode = get(updateResponse.MarriageRegistrations[0], "workflowCode");
+        const bsQueryObject = [
+          { key: "tenantId", value: tenantId },
+          { key: "businessServices", value: workflowCode ? workflowCode : "MRCORRECTION" }
+        ];
 
-      //   setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
-      // } else {
-      //   updatedApplicationNo = queryObject[0].applicationNumber;
-      //   updatedTenant = queryObject[0].tenantId;
-      // }
-      updatedApplicationNo = queryObject[0].applicationNumber;
-      let searchQueryObject = [
-        { key: "tenantId", value: tenantId },
-        { key: "applicationNumber", value: updatedApplicationNo }
-      ];
-      let searchResponse = await getSearchResults(searchQueryObject);
-      if (isEditFlow) {
-        searchResponse = { MarriageRegistrations: queryObject };
+        setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
       } else {
-        dispatch(prepareFinalObject("MarriageRegistrations", searchResponse.MarriageRegistrations));
+        updatedApplicationNo = queryObject[0].applicationNumber;
+        updatedTenant = queryObject[0].tenantId;
       }
+      //updatedApplicationNo = queryObject[0].applicationNumber;
+      // let searchQueryObject = [
+      //   { key: "tenantId", value: tenantId },
+      //   { key: "applicationNumber", value: updatedApplicationNo }
+      // ];
+      // let searchResponse = await getSearchResults(searchQueryObject);
+      // if (isEditFlow) {
+      //   searchResponse = { MarriageRegistrations: queryObject };
+      // } else {
+      //   dispatch(prepareFinalObject("MarriageRegistrations", searchResponse.MarriageRegistrations));
+      // }
+
+      let mrgObjfromUpdateres = get(updateResponse, "MarriageRegistrations");
+      dispatch(prepareFinalObject("MarriageRegistrations", mrgObjfromUpdateres));
       enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
       enableField('apply', "components.div.children.footer.children.payButton", dispatch);
 
 
     } else {
+      if (process.env.REACT_APP_NAME == "Employee") {
 
+        let primaryOwner = get(
+          queryObject[0],
+          "primaryOwner",
+          ''
+        );
+        if (primaryOwner == "GROOM") {
+          set(queryObject[0], "coupleDetails[0].bride.isPrimaryOwner", false);
+          set(queryObject[0], "coupleDetails[0].groom.isPrimaryOwner", true);
+        } else {
+          set(queryObject[0], "coupleDetails[0].bride.isPrimaryOwner", true);
+          set(queryObject[0], "coupleDetails[0].groom.isPrimaryOwner", false);
+        }
+
+      }
       set(queryObject[0], "action", "INITIATE");
       const response = await httpRequest(
         "post",
@@ -576,10 +653,11 @@ export const isFileValid = (file, acceptedFiles) => {
 const setApplicationNumberBox = (state, dispatch) => {
   let applicationNumber = get(
     state,
-    "screenConfiguration.preparedFinalObject.Licenses[0].applicationNumber",
+    "screenConfiguration.preparedFinalObject.MarriageRegistrations[0].applicationNumber",
     null
   );
   if (applicationNumber) {
+
     dispatch(
       handleField(
         "apply",

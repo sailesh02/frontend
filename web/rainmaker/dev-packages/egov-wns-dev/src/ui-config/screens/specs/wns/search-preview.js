@@ -149,13 +149,30 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       applyScreenObject.applicationNo.includes("WS") ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
+      if(applyScreenObject && applyScreenObject.applicationNo.includes("WS")){
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", false);
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
+      }else{
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", true);
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", false);
+      }
+      if(parsedObject && parsedObject.noOfFlats && parseInt(parsedObject.noOfFlats) && parseInt(parsedObject.noOfFlats) > 0){
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'));
+      }else{
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No')); 
+      }
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
-      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.locality && applyScreenObject.locality.split('_').length == 4 ? applyScreenObject.locality.split('_')[3] : applyScreenObject.locality));
+      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.locality));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
       if (applyScreenObject.service = serviceConst.SEWERAGE)
       dispatch(prepareFinalObject("SewerageConnection[0]", parsedObject));
-      dispatch(prepareFinalObject("SewerageConnection[0].additionalDetails.locality", applyScreenObject.locality && applyScreenObject.locality.split('_').length == 4 ? applyScreenObject.locality.split('_')[3] : applyScreenObject.locality));
+      dispatch(prepareFinalObject("SewerageConnection[0].additionalDetails.locality", applyScreenObject.locality));
       dispatch(prepareFinalObject("SewerageConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
+      if(parsedObject && parsedObject.noOfFlats && parseInt(parsedObject.noOfFlats) && parseInt(parsedObject.noOfFlats) > 0){
+        dispatch(prepareFinalObject("SewerageConnection[0].apartment", 'Yes'));
+      }else{
+        dispatch(prepareFinalObject("SewerageConnection[0].apartment", 'No')); 
+      }
       let estimate;
       if (processInstanceAppStatus === "CONNECTION_ACTIVATED") {
         let connectionNumber = parsedObject.connectionNo;
@@ -223,7 +240,87 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading.visible",
         true
       );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio.visible",
+        true
+      );
     } else {
+      let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+      if(applicationNumber && applicationNumber.includes("WS")){
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterId.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterInstallationDate.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio.visible",
+          true
+        );
+
+      }else{
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterId.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterInstallationDate.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+          true
+        );
+      }
       set(
         action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterId.visible",
@@ -237,6 +334,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       set(
         action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio.visible",
         false
       );
     }
@@ -639,6 +746,11 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
   let viewBillTooltip = [], estimate, payload = [];
   if (service === serviceConst.WATER || applicationNumber.includes('WS')) {
+    set(
+      action.screenConfig,
+      "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+      false
+    );
     payload = [];
     payload = await getSearchResults(queryObjForSearch);
     set(payload, 'WaterConnection[0].service', service);
@@ -656,12 +768,17 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
+      if(payload && payload.WaterConnection[0].noOfFlats && parseInt(payload.WaterConnection[0].noOfFlats) && parseInt(payload.WaterConnection[0].noOfFlats) > 0){
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'));
+      }else{
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No')); 
+      }
       let localizationLabels = {}
       if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
       let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${payload.WaterConnection[0].additionalDetails.locality
         .toUpperCase()
         .replace(/[._:-\s\/]/g, "_")}`;
-      dispatch(prepareFinalObject("WaterConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("WaterConnection[0].locality",payload.WaterConnection[0].additionalDetails.locality))
       if (get(payload, "WaterConnection[0].property.status", "") !== "ACTIVE") {
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.props.propertyId", get(payload, "WaterConnection[0].property.propertyId", ""));
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.visible", true);
@@ -716,12 +833,12 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       oldApplicationPayload.WaterConnection[0].waterSubSource=waterSource.includes("null") ? "NA" : waterSource.split(".")[1];
       if (oldApplicationPayload.WaterConnection.length > 0) {
         dispatch(prepareFinalObject("WaterConnectionOld", oldApplicationPayload.WaterConnection))
-        let localizationLabels = {}
-        if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
-      let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${oldApplicationPayload.WaterConnection[0].additionalDetails.locality
-        .toUpperCase()
-        .replace(/[._:-\s\/]/g, "_")}`;
-      dispatch(prepareFinalObject("WaterConnectionOld[0].locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("WaterConnectionOld[0].locality",oldApplicationPayload.WaterConnection[0].additionalDetails.locality))
+      }
+      if(oldApplicationPayload && oldApplicationPayload.WaterConnection[0].noOfFlats && parseInt(oldApplicationPayload.WaterConnection[0].noOfFlats) && parseInt(oldApplicationPayload.WaterConnection[0].noOfFlats) > 0){
+        dispatch(prepareFinalObject("WaterConnectionOld[0].apartment", 'Yes'));
+      }else{
+        dispatch(prepareFinalObject("WaterConnectionOld[0].apartment", 'No')); 
       }
     }
 
@@ -744,9 +861,16 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${payload.SewerageConnections[0].additionalDetails.locality
         .toUpperCase()
         .replace(/[._:-\s\/]/g, "_")}`;
-      dispatch(prepareFinalObject("SewerageConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
+      dispatch(prepareFinalObject("SewerageConnection[0].locality",payload.SewerageConnections[0].additionalDetails.locality))
       dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
-      dispatch(prepareFinalObject("WaterConnection[0].locality",getTranslatedLabel(locality, localizationLabels)))
+      if(payload && payload.SewerageConnections && payload.SewerageConnections[0].noOfFlats && parseInt(payload.SewerageConnections[0].noOfFlats) && parseInt(payload.SewerageConnections[0].noOfFlats) > 0){
+        dispatch(prepareFinalObject("SewerageConnections[0].apartment", 'Yes'));
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'Yes'));
+      }else{
+        dispatch(prepareFinalObject("SewerageConnections[0].apartment", 'No'));
+        dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No')); 
+      }
+      dispatch(prepareFinalObject("WaterConnection[0].locality",payload.SewerageConnections[0].additionalDetails.locality))
       if (!payload.SewerageConnections[0].connectionHolders || payload.SewerageConnections[0].connectionHolders === 'NA') {
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible", true);
@@ -761,9 +885,22 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
         oldApplicationPayload.SewerageConnections = oldApplicationPayload.SewerageConnections.filter(row => {
           return row.applicationType !== "MODIFY_SEWERAGE_CONNECTION"
         })
-             if (oldApplicationPayload.SewerageConnections.length > 0) {
+        if (oldApplicationPayload.SewerageConnections.length > 0) {
           dispatch(prepareFinalObject("SewerageConnectionOld[0]", oldApplicationPayload.SewerageConnections[0]))
           dispatch(prepareFinalObject("WaterConnectionOld[0]",oldApplicationPayload.SewerageConnections[0]));
+          dispatch(prepareFinalObject("WaterConnectionOld[0].locality",oldApplicationPayload.SewerageConnections && 
+          oldApplicationPayload.SewerageConnections[0] && oldApplicationPayload.SewerageConnections[0].additionalDetails && 
+          oldApplicationPayload.SewerageConnections[0].additionalDetails.locality))
+          dispatch(prepareFinalObject("SewerageConnectionOld[0].locality",oldApplicationPayload.SewerageConnections && 
+          oldApplicationPayload.SewerageConnections[0] && oldApplicationPayload.SewerageConnections[0].additionalDetails && 
+          oldApplicationPayload.SewerageConnections[0].additionalDetails.locality))
+        }
+        if(oldApplicationPayload && oldApplicationPayload.SewerageConnections && oldApplicationPayload.SewerageConnections[0].noOfFlats && parseInt(oldApplicationPayload.SewerageConnections[0].noOfFlats) && parseInt(oldApplicationPayload.SewerageConnections[0].noOfFlats) > 0){
+          dispatch(prepareFinalObject("SewerageConnectionOld[0].apartment", 'Yes'));
+          dispatch(prepareFinalObject("WaterConnectionOld[0].apartment", 'Yes'));
+        }else{
+          dispatch(prepareFinalObject("SewerageConnectionOld[0].apartment", 'No'));
+          dispatch(prepareFinalObject("WaterConnectionOld[0].apartment", 'No'));
         }
       }
     }
@@ -827,6 +964,18 @@ const parserFunction = (obj) => {
         obj.additionalDetails.detailsProvidedBy !== undefined &&
         obj.additionalDetails.detailsProvidedBy !== null
       ) ? obj.additionalDetails.detailsProvidedBy : "",
+      meterMake:(
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.meterMake !== undefined
+      ) ? (obj.additionalDetails.meterMake) : "",
+      meterReadingRatio: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.meterReadingRatio !== undefined
+      ) ? (obj.additionalDetails.meterReadingRatio) : "",
+      diameter: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.diameter !== undefined
+      ) ? (obj.additionalDetails.diameter) : "",
     },
     dateEffectiveFrom: convertDateToEpoch(obj.dateEffectiveFrom),
     noOfTaps: parseInt(obj.noOfTaps),

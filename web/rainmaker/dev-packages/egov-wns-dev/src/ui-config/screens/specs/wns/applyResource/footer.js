@@ -23,7 +23,7 @@ import {
   pushTheDocsUploadedToRedux,
   serviceConst,
   showHideFieldsFirstStep, validateConnHolderDetails, validateFeildsForBothWaterAndSewerage,
-  validateFeildsForSewerage, validateFeildsForWater, isEditAction, validationsForExecutionData
+  validateFeildsForSewerage, validateFeildsForWater, isEditAction, validationsForExecutionData, validateMeterDetails
 } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
@@ -66,7 +66,8 @@ const moveToReview = (state, dispatch) => {
   let validateDocumentField = false;
 
   for (let i = 0; i < documentsFormat.length; i++) {
-    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+    // let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+    let isDocumentRequired = false
     let isDocumentTypeRequired = get(documentsFormat[i], "isDocumentTypeRequired");
 
     if (isDocumentRequired) {
@@ -438,6 +439,21 @@ const callBackForNext = async (state, dispatch) => {
         hasFieldToaster = false;
       }
     } else {
+      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+      if(validateMeterDetails(applyScreenObject)){
+        isFormValid = true;
+        hasFieldToaster = false;
+      }else{
+        isFormValid = false;
+        hasFieldToaster = true;
+        let errorMessage = {
+          labelName:
+            "ERR_FILL_MANDATORY_FIELDS",
+          labelKey: "ERR_FILL_MANDATORY_FIELDS"
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        return
+      }
       let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
       if(roadCuttingInfo && roadCuttingInfo != 'NA' && roadCuttingInfo.length > 0) {
         for (let i = 0; i < roadCuttingInfo.length; i++) {

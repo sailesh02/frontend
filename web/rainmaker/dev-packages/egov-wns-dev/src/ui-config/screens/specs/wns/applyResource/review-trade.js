@@ -9,6 +9,8 @@ import {
 import { getConnectionDetails } from './../applyResource/task-connectiondetails';
 import { propertyOwnerDetails } from "../applyResource/task-owner-details";
 import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA } from '../../utils';
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import {getTenantId} from '../../../../../ui-utils/commons'
 
 const getHeader = label => {
   return {
@@ -183,6 +185,7 @@ const propertyLocationDetails = {
 
     items: [],
     hasAddItem: false,
+    moduleName : 'WNS',
     isReviewPage: true,
     sourceJsonPath: "WaterConnection[0].property.address",
     prefixSourceJsonPath:
@@ -291,6 +294,9 @@ export const propertyDetails={
     },
     {
       jsonPath: "WaterConnection[0].locality",
+      localePrefix: {
+        moduleName: getTenantId(), masterName: "REVENUE"
+      },
       callBack: handleNA,
     },
     {
@@ -298,6 +304,9 @@ export const propertyDetails={
     },
     {
       jsonPath: "WaterConnectionOld[0].locality",
+      localePrefix: {
+        moduleName: getTenantId(), masterName: "REVENUE"
+      },
       callBack: handleNA   
     }
 
@@ -398,7 +407,7 @@ export const propertyDetails={
     },
     {
       jsonPath: "WaterConnection[0].apartment",
-      callBack: handleNA
+      // callBack: handleNA
      
     },
     {
@@ -406,7 +415,7 @@ export const propertyDetails={
     },
     {
       jsonPath: "WaterConnectionOld[0].apartment",
-      callBack: handleNA 
+      // callBack: handleNA 
     }
 
   )
@@ -490,6 +499,7 @@ const getPropertyDetails = {
     }),
     items: [],
     hasAddItem: false,
+    moduleName : 'WNS',
     isReviewPage: true,
     sourceJsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits",
     prefixSourceJsonPath:
@@ -619,6 +629,7 @@ const ownerDetails = {
 
         items: [],
         hasAddItem: false,
+        moduleName : 'WNS',
         isReviewPage: true,
         sourceJsonPath: "WaterConnection[0].property.owners",
         prefixSourceJsonPath:
@@ -719,6 +730,7 @@ const taskConnHolderDetailsSummary = () => {
       }),
       items: [],
       hasAddItem: false,
+      moduleName : 'WNS',
       sourceJsonPath: "WaterConnection[0].connectionHolders",
       prefixSourceJsonPath: "children.cardContent.children.connHoldDetail.children",
       afterPrefixJsonPath: "children.value.children.key"
@@ -749,6 +761,7 @@ const connHolderDetailsSameAsOwnerSummary = () => {
       }),
       items: [],
       hasAddItem: false,
+      moduleName : 'WNS',
       sourceJsonPath: "WaterConnection[0].connectionHolders[0].sameAsPropertyAddress",
       prefixSourceJsonPath: "children.cardContent.children.sameAsOwnerDetails.children",
       afterPrefixJsonPath: "children.value.children.key"

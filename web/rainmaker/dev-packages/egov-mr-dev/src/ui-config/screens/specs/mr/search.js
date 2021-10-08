@@ -24,7 +24,7 @@ const getMdmsData = async (dispatch) => {
       tenantId: getTenantId(),
       moduleDetails: [
         {
-          moduleName: "TradeLicense",
+          moduleName: "MarriageRegistration",
           masterDetails: [
             { name: "ApplicationType" }
           ]
@@ -43,7 +43,7 @@ const getMdmsData = async (dispatch) => {
     );
     let types = [];
     if (payload && payload.MdmsRes) {
-      types = get(payload.MdmsRes, "TradeLicense.ApplicationType").map((item, index) => {
+      types = get(payload.MdmsRes, "MarriageRegistration.ApplicationType").map((item, index) => {
         return {
           code: item.code.split(".")[1]
         }
@@ -71,7 +71,7 @@ const getMdmsData = async (dispatch) => {
 
 const header = getCommonHeader({
   labelName: "Trade License",
-  labelKey: "TL_COMMON_TL"
+  labelKey: "ACTION_TEST_MARRIAGE_REGISTRATION"
 });
 const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",
@@ -86,26 +86,12 @@ const tradeLicenseSearchAndResult = {
     getMdmsData(dispatch);
     const moduleDetails = [
       {
-        moduleName: 'TradeLicense',
+        moduleName: 'MarriageRegistration',
         masterDetails: [{ name: 'Documents' }]
       }
     ];
     getRequiredDocData(action, dispatch, moduleDetails, true);
-  //  console.log(action.screenConfig, "Nero action.screenConfig")
-    // set(
-    //   action.screenConfig,
-    //   "search.components.div.children.headerDiv.children.tradeLicenseType.props.value",
-    //   ''
-    // );
-//console.log("Nero hss")
-    // dispatch(
-    //   handleField(
-    //     "search",
-    //     `components.div.children.headerDiv.children.tradeLicenseType`,
-    //     "props.value",
-    //     ''
-    //   )
-    // );
+
     return action;
   },
   components: {
@@ -129,153 +115,55 @@ const tradeLicenseSearchAndResult = {
               },
               ...header
             },
-            tradeLicenseType: {
-              ...getSelectField({
-                label: {
-                  labelName: "License Type",
-                  labelKey: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
-                },
-                placeholder: {
-                  labelName: "Select License Type",
-                  labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_PLACEHOLDER"
-                },
-                required: true,
-                jsonPath: "EmpApplyAppsFor",
-                // localePrefix: {
-                //   moduleName: "TRADELICENSE",
-                //   masterName: "LICENSETYPE"
-                // },
-
-                props: {
-
-                  //value: "PERMANENT",
-                  className: "tl-trade-type"
-                },
-                sourceJsonPath: "applyScreenMdmsData.searchScreen.EmpApplyAppsFor"
-              }),
-              afterFieldChange: (action, state, dispatch) => {
-
-              let licenceType = "PERMANENT";
-              if(action.value === "TL_HOME_SEARCH_RESULTS_NEW_TEMP_APP_BUTTON"){
-                licenceType = "TEMPORARY";
-                }
-                  showHideAdhocPopup(state, dispatch, 'search');
-                  dispatch(prepareFinalObject("Licenses", [{ licenseType: licenceType }]));
-                  dispatch(prepareFinalObject("LicensesTemp", []));
-                  window.localStorage.setItem('licenseType', licenceType);
-                  if(action.value === "TL_HOME_SEARCH_RESULTS_LEGACY_TL_RENEW_APP_BUTTON"){
-                    window.localStorage.setItem('legacyLicenseRenewal', true);
-                  }else{
-                    window.localStorage.setItem('legacyLicenseRenewal', false);
-                  }
-
+            newApplicationButton: {
+              componentPath: "Button",
+              gridDefination: {
+                xs: 12,
+                sm: 6,
+                align: "right"
               },
-              roleDefination: {
-                rolePath: "user-info.roles",
-                path: "mr/search"
-                //path: "tradelicence/search?action=showRequiredDocuments"
-              }
-            },
-            // newApplicationButton: {
-            //   componentPath: "Button",
-            //   gridDefination: {
-            //     xs: 12,
-            //     sm: 6,
-            //     align: "right"
-            //   },
-            //   visible: enableButton,
-            //   props: {
-            //     variant: "contained",
-            //     color: "primary",
-            //     style: {
-            //       color: "white",
-            //       borderRadius: "2px",
-            //       width: "250px",
-            //       height: "48px"
-            //     }
-            //   },
-            //   children: {
-            //     plusIconInsideButton: {
-            //       uiFramework: "custom-atoms",
-            //       componentPath: "Icon",
-            //       props: {
-            //         iconName: "add",
-            //         style: {
-            //           fontSize: "24px"
-            //         }
-            //       }
-            //     },
-            //     buttonLabel: getLabel({
-            //       labelName: "NEW APPLICATION",
-            //       labelKey: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
-            //     })
-            //   },
-            //   onClickDefination: {
-            //     action: "condition",
-            //     callBack: (state, dispatch) => {
+              visible: enableButton,
+              props: {
+                variant: "contained",
+                color: "primary",
+                style: {
+                  color: "white",
+                  borderRadius: "2px",
+                  width: "250px",
+                  height: "48px"
+                }
+              },
+              children: {
+                plusIconInsideButton: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "add",
+                    style: {
+                      fontSize: "24px"
+                    }
+                  }
+                },
+                buttonLabel: getLabel({
+                  labelName: "NEW APPLICATION",
+                  labelKey: "MR_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: (state, dispatch) => {
 
-            //       showHideAdhocPopup(state, dispatch, 'search');
-            //       dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
-            //       dispatch(prepareFinalObject("LicensesTemp", []));
-            //       window.localStorage.setItem('licenseType', "PERMANENT");
-            //      // dispatch(prepareFinalObject("tlApplyFor", [{ licenseType: "PERMANENT" }]));
-            //     }
-            //   },
-            //   roleDefination: {
-            //     rolePath: "user-info.roles",
-            //     path: "tradelicence/search?action=showRequiredDocuments"
-            //   }
-            // },
-            // newTempApplicationButton: {
-            //   componentPath: "Button",
-            //   gridDefination: {
-            //     xs: 12,
-            //     sm: 6,
-            //     align: "right"
-            //   },
-            //   visible: enableButton,
-            //   props: {
-            //     variant: "contained",
-            //     color: "primary",
-            //     style: {
-            //       color: "white",
-            //       borderRadius: "2px",
-            //       width: "250px",
-            //       height: "48px"
-            //     }
-            //   },
-            //   children: {
-            //     plusIconInsideButton: {
-            //       uiFramework: "custom-atoms",
-            //       componentPath: "Icon",
-            //       props: {
-            //         iconName: "add",
-            //         style: {
-            //           fontSize: "24px"
-            //         }
-            //       }
-            //     },
-            //     buttonLabel: getLabel({
-            //       labelName: "NEW TEMP APPLICATION",
-            //       labelKey: "TL_HOME_SEARCH_RESULTS_NEW_TEMP_APP_BUTTON"
-            //     })
-            //   },
-            //   onClickDefination: {
-            //     action: "condition",
-            //     callBack: (state, dispatch) => {
+                  showHideAdhocPopup(state, dispatch, 'search');
+                  dispatch(prepareFinalObject("MarriageRegistrations", []));
+                  dispatch(prepareFinalObject("LicensesTemp", []));
+                }
+              },
+              // roleDefination: {
+              //   rolePath: "user-info.roles",
+              //   path: "mr/search"
+              // }
+            }
 
-            //       showHideAdhocPopup(state, dispatch, 'search');
-            //       dispatch(prepareFinalObject("Licenses", [{ licenseType: "TEMPORARY" }]));
-            //       dispatch(prepareFinalObject("LicensesTemp", []));
-            //       window.localStorage.setItem('licenseType', "TEMPORARY");
-            //      // dispatch(prepareFinalObject("tlApplyFor", [{ licenseType: "TEMPORARY" }]));
-            //     }
-            //   },
-            //   roleDefination: {
-            //     rolePath: "user-info.roles",
-            //     path: "tradelicence/search?action=showRequiredDocuments"
-            //   }
-            // }
           }
         },
         pendingApprovals,

@@ -6,7 +6,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { serviceConst } from "../../../../../ui-utils/commons";
-import { handleConnectionDetails,handleService } from "../../utils"
+import { handleConnectionDetails,handleService, handlePipeSizeProposed } from "../../utils"
 
 const service = getQueryArg(window.location.href, "service")
 const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -51,6 +51,7 @@ export const getConnectionDetails = () => {
             }),
             items: [],
             hasAddItem: false,
+            moduleName : 'WNS',
             isReviewPage: true,
             sourceJsonPath: "WaterConnection[0]",
             prefixSourceJsonPath:
@@ -198,11 +199,11 @@ export const connectionDetailsBoth = {
             labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
         },
         { jsonPath: "SewerageConnection[0].pipeSize",
-        callBack: handleConnectionDetails, },  {
+        callBack: handlePipeSizeProposed, },  {
             labelKey: "WS_OLD_LABEL_NAME"
           },
           { jsonPath: "SewerageConnectionOld[0].pipeSize",
-          callBack: handleConnectionDetails, }) 
+          callBack: handlePipeSizeProposed, }) 
 }
 
 // const connectionDetails=(applicationNumber!==null&&applicationNumber!==undefined)?(applicationNumber.includes("WS"))?connectionDetailsWater:connectionDetailsSewerage:"";

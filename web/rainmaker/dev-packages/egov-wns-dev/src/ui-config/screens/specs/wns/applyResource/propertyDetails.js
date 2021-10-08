@@ -23,20 +23,22 @@ isMode = (isMode) ? isMode.toUpperCase() : "";
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 let tenantId = getQueryArg(window.location.href, "tenantId");
+let tenantForLocality = tenantId && tenantId.toUpperCase()
 let action = getQueryArg(window.location.href, "action");
 let modeaction = getQueryArg(window.location.href, "modeaction");
 
 let mode = getQueryArg(window.location.href, "mode");
 
-
-const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"}]
-const meteredTemporary = [{code:"TWSFC"}]
-const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL"},{code:"ROADSIDEEATERS"},
+export const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"},{code:"BPL"},{code:"ASSOCIATION"}]
+export const meteredTemporary = [{code:"WSFCB"},{code: "DOMESTIC"}]
+export const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL"},
 {code:"SPMA"}]
-const nonMeteredTemporory = [{code:"DOMESTIC"}]
-const temporary = [{code: "DOMESTIC"}, {code:"TWSFC"}]
-const permanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"TWSFC"},
-, {code:"BPL"},{code:"ROADSIDEEATERS"}, {code:"SPMA"} ]
+export const nonMeteredTemporory = [{code:"WSFCB"},{code:"BPL"},{code:"ROADSIDEEATERS"},{code:"SPMA"}]
+
+export const temporary = [{code: "DOMESTIC"}, {code:"WSFCB"},{code:"BPL"},{code:"ROADSIDEEATERS"},{code:"SPMA"}]
+export const permanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},
+, {code:"BPL"},{code:"ASSOCIATION"}, {code:"SPMA"} ]
+
 let modifyLink;
 if(isMode==="MODIFY"){
   modifyLink=`/wns/apply?`;
@@ -252,6 +254,24 @@ const propertyDetailsNoId = getCommonContainer({
       },
       afterFieldChange:async (action, state, dispatch) => {
         if(action.value){
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.mohalla.props.localePrefix",
+              "moduleName",
+              action.value.toUpperCase()
+            )
+          );
+
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewOne.props.scheama.children.cardContent.children.getPropertyDetailsContainer.children.mohalla.children.value1.children.key.props.localePrefix",
+              "moduleName",
+              action.value.toUpperCase()
+            )
+          );
+          
           const dataFetchConfig = {
             url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
             action: "",
@@ -287,9 +307,9 @@ const propertyDetailsNoId = getCommonContainer({
                       .toUpperCase()
                       .replace(/[._:-\s\/]/g, "_")}`;
                     option = {
-                      label: getTranslatedLabel(mohallaCode, localizationLabels),
-                      value: item.code,
-                      code: getTranslatedLabel(mohallaCode, localizationLabels),
+                      // label: getTranslatedLabel(mohallaCode, localizationLabels),
+                      // value: getTranslatedLabel(mohallaCode, localizationLabels),
+                      code: item.code,
                     };
 
                   } else {
@@ -461,8 +481,12 @@ const propertyDetailsNoId = getCommonContainer({
         labelKey: "PT_PROPERTY_DETAILS_PLACEHOLDER"
       },
       data: [],
-      optionValue: "code",
-      optionLabel: "label",
+      // optionValue: "code",
+      // optionLabel: "label",
+      localePrefix: {
+        moduleName: tenantForLocality,
+        masterName: "REVENUE"
+      },
       jsonPath: "applyScreen.locality",
       sourceJsonPath: "applyScreenMdmsData.mohalla",
       labelsFromLocalisation: true,
@@ -677,7 +701,45 @@ const propertyDetailsNoId = getCommonContainer({
     },
     data: [{ code: "Metered",name:'Metered' }, { code: "Non Metered",name:'Non Metered' }],
     afterFieldChange: (action, state, dispatch) => {
+      const edit = getQueryArg(window.location.href, "action");
+
       if(action){
+        if(action.value == 'Metered' && edit == 'edit'){
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+              "visible",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
+              "visible",
+              true
+            )
+          );
+        }
+        if(action.value == 'Non Metered' && edit == 'edit'){
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+              "visible",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
+              "visible",
+              false
+            )
+          );
+        }
         const connectionCategory = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionCategory", "")
         const water = get(state.screenConfiguration.preparedFinalObject,"applyScreen.water",false)
         if(water){
@@ -762,7 +824,7 @@ const propertyDetailsNoId = getCommonContainer({
     },
     afterFieldChange: (action, state, dispatch) => {
       if(action.value){
-        if(action.value == 'DOMESTIC'){
+        if(action.value == 'DOMESTIC' || action.value == 'COMMERCIAL'){
           dispatch(
             handleField(
               "apply",
@@ -771,6 +833,13 @@ const propertyDetailsNoId = getCommonContainer({
               true
             )
           );
+          dispatch(
+            handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.noOfFlats",
+            "visible",
+            true
+          ));
         }else{
           dispatch(
             handleField(
@@ -780,6 +849,13 @@ const propertyDetailsNoId = getCommonContainer({
               false
             )
           );
+          dispatch(
+            handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.noOfFlats",
+            "visible",
+            false
+          ));
         }
       }
   },
@@ -816,9 +892,10 @@ const propertyDetailsNoId = getCommonContainer({
         name: "Apartment",
         key: "WS_COMMON_APARTMENT",
       },
+      disabled:false,
       jsonPath: "applyScreen.apartment",
       required: false,
-      isChecked: false,
+      isChecked: true,
       isApartment:true
     },
     type: "array",

@@ -19,6 +19,11 @@ const DocumentList = Loadable({
   loading: () => <Loading />
 });
 
+const DocumentListNOC = Loadable({
+  loader: () => import("./DocumentListNOC"),
+  loading: () => <Loading />
+});
+
 const BpaDocumentList = Loadable({
   loader: () => import("./BpaDocumentList"),
   loading: () => <Loading />
@@ -122,6 +127,14 @@ const MultiDownloadCard = Loadable({
   loader: () => import("./NocDocDetailCard"),
   loading: () => <Loading />
  });
+ const NocDetailCardBPA = Loadable({
+  loader: () => import("./NocDetailCardBPA"),
+  loading: () => <Loading />
+ });
+ const NocDocDetailCardBPA = Loadable({
+  loader: () => import("./NocDocDetailCardBPA"),
+  loading: () => <Loading />
+ });
  const NocData = Loadable({
   loader: () => import("./NocData"),
   loading: () => <Loading />
@@ -145,6 +158,7 @@ export {
   Tooltip,
   CustomTab,
   DocumentList,
+  DocumentListNOC,
   BpaDocumentList,
   MapLocator,
   FeesEstimateCard,
@@ -164,7 +178,9 @@ export {
   UploadCard,
   ComparisionLink,
   NocDetailCard,
+  NocDetailCardBPA,
   NocDocDetailCard,
+  NocDocDetailCardBPA,
   NocData,
   BPAHowItWorks,
   TrainingTutorials,

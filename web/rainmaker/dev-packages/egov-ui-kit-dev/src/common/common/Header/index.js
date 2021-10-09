@@ -252,7 +252,7 @@ if(userInfoError && !sessionExpiredPopupClosedClick){
           title={"CORE_COMMON_LOGOUT"}
           body={"CORE_LOGOUTPOPUP_CONFIRM"}
         />
-        {openDigitalSignaturePopup && <DigitalSignatureDialog
+        {openDigitalSignaturePopup && process.env.REACT_APP_NAME !== "Citizen" && <DigitalSignatureDialog
           openDigitalSignaturePopup={openDigitalSignaturePopup}
           closeDigitalSignatureDialog={_closeDigitalSignatureDialog}
           okText={"CORE_SIGNATURE_SUBMIT"}

@@ -118,7 +118,7 @@ class DigitalSignatureDialog extends Component {
               .then(response => {
               
                 let requiredCertificateFormat = response && response.data && response.data.certificates &&
-                response.certificates.map (certificate => {
+                response.data.certificates.map (certificate => {
                   return {
                     label : certificate.commonName,
                     value : certificate.keyId
@@ -182,30 +182,35 @@ class DigitalSignatureDialog extends Component {
               'Accept': 'application/json'
              })
               .then(response => { 
-                let requiredTokenFormat = response && response.data && response.data.tokens && response.tokens.map (token => {
+                let requiredTokenFormat = response && response.data && response.data.tokens && response.data.tokens.map (token => {
                   return {
                     label : token,
                     value : token
                   }
                 }) 
                 this.props.hideSpinner();
-
+                debugger
                 if(requiredTokenFormat && requiredTokenFormat.length > 0){
                   this.setState({
                     tokensArray : requiredTokenFormat,
-                    selectedToken : requiredTokenFormat[0].label
+                    // selectedToken : requiredTokenFormat[0].label
                   })
                 }
               })
               .catch(error => { 
+                console.log(error)
                 this.props.hideSpinner();
               });
           })
           .catch(error => { 
+            console.log(error)
+
             this.props.hideSpinner();
           });
       })
       .catch(error => {
+        console.log(error)
+
         this.props.hideSpinner();
       });
   }

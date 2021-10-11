@@ -21,7 +21,7 @@ import {
   getMdmsData,
   setDataForApplication
 } from "../mr/apply";
-import { getAllDataFromBillingSlab } from "../utils";
+
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import {

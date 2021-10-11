@@ -15,6 +15,7 @@ import {
     updateOwnerShipEdit
 } from "../../utils";
 import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
@@ -43,21 +44,68 @@ export const groomGuardianDetails = getCommonCard(
             }
         ),
         groomGuardianDetailsConatiner: getCommonContainer({
-            rltnWithgroom: getTextField({
+            relationshipWithGuardian: {
+                ...getSelectField({
+                    label: {
+                        labelName: "Relationship with Guardian",
+                        labelKey: "MR_GROOMGUARDIAN_RELATION_LABEL"
+                    },
+                    placeholder: {
+                        labelName: "Select Relationship with Guardian",
+                        labelKey: "MR_GROOMGUARDIAN_RELATION_PLACEHOLDER"
+                    },
+                    required: true,
+                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.relationship",
+                    // data: [{ code: "FATHER" }, { code: "HUSBAND" },{code : 'MOTHER'},{code : "BROTHER"},{code : "SISTER"},
+                    // {code : "GRANDFATHER"},{code : "GRANDMOTHER"},{code : "FATHERINLAW"},{code : "MOTHERINLAW"}],
+                    data: [{ code: "FATHER" }, { code: "HUSBAND" }, { code: 'OTHER' }],
+
+                    //sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+                    // gridDefination: {
+                    //     xs: 12,
+                    //     sm: 6
+                    // }
+                }),
+                afterFieldChange: (action, state, dispatch) => {
+                    
+                    if (action.value == "OTHER") {
+                        dispatch(
+                            handleField(
+                                "apply",
+                                "components.div.children.formwizardSecondStep.children.groomGuardianDetails.children.cardContent.children.groomGuardianDetailsConatiner.children.otherRltnWithgroom",
+                                "visible",
+                                true
+                            )
+                        );
+                    } else {
+                        dispatch(
+                            handleField(
+                                "apply",
+                                "components.div.children.formwizardSecondStep.children.groomGuardianDetails.children.cardContent.children.groomGuardianDetailsConatiner.children.otherRltnWithgroom",
+                                "visible",
+                                false
+                            )
+                        );
+                    }
+                    //"components.div.children.formwizardSecondStep.children.groomGuardianDetails.children.cardContent.children.groomGuardianDetailsConatiner.children.rltnWithgroom"
+                }
+            },
+            otherRltnWithgroom: getTextField({
                 label: {
                     labelName: "Door/House No.",
-                    labelKey: "MR_GROOMGUARDIAN_RELATION_LABEL"
+                    labelKey: "MR_GROOMGUARDIAN_OTHER_RELATION_LABEL"
                 },
                 props: {
                     className: "applicant-details-error"
                 },
                 placeholder: {
                     labelName: "Enter Door/House No.",
-                    labelKey: "MR_GROOMGUARDIAN_RELATION_PLACEHOLDER"
+                    labelKey: "MR_GROOMGUARDIAN_OTHER_RELATION_PLACEHOLDER"
                 },
                 required: true,
+                visible: false,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.relationship",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.otherRelationship",
 
             }),
             groomGuardianName: getTextField({
@@ -96,36 +144,36 @@ export const groomGuardianDetails = getCommonCard(
 
             groomGrdnDistrict: getTextField({
                 label: {
-                  labelName: "Door/House No.",
-                  labelKey: "MR_DISTRICT_LABEL"
+                    labelName: "Door/House No.",
+                    labelKey: "MR_DISTRICT_LABEL"
                 },
-                props:{
-                  className:"applicant-details-error"
+                props: {
+                    className: "applicant-details-error"
                 },
                 placeholder: {
-                  labelName: "Enter Door/House No.",
-                  labelKey: "MR_DISTRICT_PLACEHOLDER"
+                    labelName: "Enter Door/House No.",
+                    labelKey: "MR_DISTRICT_PLACEHOLDER"
                 },
                 pattern: getPattern("Address"),
                 jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.district",
                 required: true,
-              }),
-              groomGrdnState: getTextField({
+            }),
+            groomGrdnState: getTextField({
                 label: {
-                  labelName: "Door/House No.",
-                  labelKey: "MR_STATE_LABEL"
+                    labelName: "Door/House No.",
+                    labelKey: "MR_STATE_LABEL"
                 },
-                props:{
-                  className:"applicant-details-error"
+                props: {
+                    className: "applicant-details-error"
                 },
                 placeholder: {
-                  labelName: "Enter Door/House No.",
-                  labelKey: "MR_STATE_PLACEHOLDER"
+                    labelName: "Enter Door/House No.",
+                    labelKey: "MR_STATE_PLACEHOLDER"
                 },
                 pattern: getPattern("Address"),
                 jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.state",
                 required: true,
-              }),
+            }),
 
 
             // groomGrdnDistrict: {
@@ -228,15 +276,15 @@ export const groomGuardianDetails = getCommonCard(
 
             }),
         },
-        {
-            style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
-          }
+            {
+                style: getQueryArg(window.location.href, "action") === "CORRECTION" ? { "pointer-events": "none" } : {}
+            }
         )
     },
     {
-        style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
+        style: getQueryArg(window.location.href, "action") === "CORRECTION" ? { "cursor": "not-allowed", overflow: "visible" } : { overflow: "visible" }
 
-      }
+    }
 )
 
 export const brideGuardianDetails = getCommonCard(
@@ -253,21 +301,68 @@ export const brideGuardianDetails = getCommonCard(
             }
         ),
         brideGuardianDetailsConatiner: getCommonContainer({
-            rltnWithBride: getTextField({
+            relationshipWithGuardian: {
+                ...getSelectField({
+                    label: {
+                        labelName: "Relationship with Guardian",
+                        labelKey: "MR_BRIDEGUARDIAN_RELATION_LABEL"
+                    },
+                    placeholder: {
+                        labelName: "Select Relationship with Guardian",
+                        labelKey: "MR_BRIDEGUARDIAN_RELATION_PLACEHOLDER"
+                    },
+                    required: true,
+                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.relationship",
+                    // data: [{ code: "FATHER" }, { code: "HUSBAND" },{code : 'MOTHER'},{code : "BROTHER"},{code : "SISTER"},
+                    // {code : "GRANDFATHER"},{code : "GRANDMOTHER"},{code : "FATHERINLAW"},{code : "MOTHERINLAW"}],
+                    data: [{ code: "FATHER" }, { code: "HUSBAND" }, { code: 'OTHER' }],
+
+                    //sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+                    // gridDefination: {
+                    //     xs: 12,
+                    //     sm: 6
+                    // }
+                }),
+                afterFieldChange: (action, state, dispatch) => {
+                    
+                    if (action.value == "OTHER") {
+                        dispatch(
+                            handleField(
+                                "apply",
+                                "components.div.children.formwizardSecondStep.children.brideGuardianDetails.children.cardContent.children.brideGuardianDetailsConatiner.children.otherRltnWithBride",
+                                "visible",
+                                true
+                            )
+                        );
+                    } else {
+                        dispatch(
+                            handleField(
+                                "apply",
+                                "components.div.children.formwizardSecondStep.children.brideGuardianDetails.children.cardContent.children.brideGuardianDetailsConatiner.children.otherRltnWithBride",
+                                "visible",
+                                false
+                            )
+                        );
+                    }
+                    //"components.div.children.formwizardSecondStep.children.groomGuardianDetails.children.cardContent.children.groomGuardianDetailsConatiner.children.rltnWithgroom"
+                }
+            },
+            otherRltnWithBride: getTextField({
                 label: {
                     labelName: "Door/House No.",
-                    labelKey: "MR_BRIDEGUARDIAN_RELATION_LABEL"
+                    labelKey: "MR_BRIDEGUARDIAN_OTHER_RELATION_LABEL"
                 },
                 props: {
                     className: "applicant-details-error"
                 },
                 placeholder: {
                     labelName: "Enter Door/House No.",
-                    labelKey: "MR_BRIDEGUARDIAN_RELATION_PLACEHOLDER"
+                    labelKey: "MR_BRIDEGUARDIAN_OTHER_RELATION_PLACEHOLDER"
                 },
                 required: true,
+                visible: false,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.relationship",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.otherRelationship",
 
             }),
             brideGuardianName: getTextField({
@@ -306,36 +401,36 @@ export const brideGuardianDetails = getCommonCard(
 
             brideGrdnDistrict: getTextField({
                 label: {
-                  labelName: "Door/House No.",
-                  labelKey: "MR_DISTRICT_LABEL"
+                    labelName: "Door/House No.",
+                    labelKey: "MR_DISTRICT_LABEL"
                 },
-                props:{
-                  className:"applicant-details-error"
+                props: {
+                    className: "applicant-details-error"
                 },
                 placeholder: {
-                  labelName: "Enter Door/House No.",
-                  labelKey: "MR_DISTRICT_PLACEHOLDER"
+                    labelName: "Enter Door/House No.",
+                    labelKey: "MR_DISTRICT_PLACEHOLDER"
                 },
                 pattern: getPattern("Address"),
                 jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.district",
                 required: true,
-              }),
-              brideGrdnState: getTextField({
+            }),
+            brideGrdnState: getTextField({
                 label: {
-                  labelName: "Door/House No.",
-                  labelKey: "MR_STATE_LABEL"
+                    labelName: "Door/House No.",
+                    labelKey: "MR_STATE_LABEL"
                 },
-                props:{
-                  className:"applicant-details-error"
+                props: {
+                    className: "applicant-details-error"
                 },
                 placeholder: {
-                  labelName: "Enter Door/House No.",
-                  labelKey: "MR_STATE_PLACEHOLDER"
+                    labelName: "Enter Door/House No.",
+                    labelKey: "MR_STATE_PLACEHOLDER"
                 },
                 pattern: getPattern("Address"),
                 jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.state",
                 required: true,
-              }),
+            }),
 
             // brideGrdnDistrict: {
             //     ...getSelectField({
@@ -437,15 +532,15 @@ export const brideGuardianDetails = getCommonCard(
 
             }),
         },
-        {
-            style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
-          }
+            {
+                style: getQueryArg(window.location.href, "action") === "CORRECTION" ? { "pointer-events": "none" } : {}
+            }
         )
     },
     {
-        style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
+        style: getQueryArg(window.location.href, "action") === "CORRECTION" ? { "cursor": "not-allowed", overflow: "visible" } : { overflow: "visible" }
 
-      }
+    }
 )
 
 

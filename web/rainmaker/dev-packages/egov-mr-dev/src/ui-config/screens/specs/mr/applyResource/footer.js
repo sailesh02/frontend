@@ -232,6 +232,31 @@ export const callBackForNext = async (state, dispatch) => {
         }
 
       }
+console.log(isFormValid, "Nero form valid")
+      // const brideGrndRelationShip = get(mrgObj[0], "coupleDetails[0].bride.guardianDetails.relationship");
+      // const groomGrndRelationShip = get(mrgObj[0], "coupleDetails[0].groom.guardianDetails.relationship");
+      // console.log(brideGrndRelationShip, "Nero REl footer")
+      // if (groomGrndRelationShip == "OTHERS") {
+
+      //   dispatch(
+      //     handleField(
+      //       "apply",
+      //       "components.div.children.formwizardSecondStep.children.groomGuardianDetails.children.cardContent.children.groomGuardianDetailsConatiner.children.otherRltnWithgroom",
+      //       "visible",
+      //       true
+      //     )
+      //   );
+      // }
+      // if (brideGrndRelationShip == "OTHERS") {
+      //   dispatch(
+      //     handleField(
+      //       "apply",
+      //       "components.div.children.formwizardSecondStep.children.brideGuardianDetails.children.cardContent.children.brideGuardianDetailsConatiner.children.otherRltnWithBride",
+      //       "visible",
+      //       true
+      //     )
+      //   );
+      // }
 
     }
 
@@ -253,7 +278,7 @@ export const callBackForNext = async (state, dispatch) => {
       if (!applicationNoInUrl) {
         dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.country", "INDIA"));
         dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.country", "INDIA"));
-      }else if(applicationNoInUrl && mrgObj && mrgObj[0].coupleDetails && !mrgObj[0].coupleDetails[0].bride.guardianDetails){
+      } else if (applicationNoInUrl && mrgObj && mrgObj[0].coupleDetails && !mrgObj[0].coupleDetails[0].bride.guardianDetails) {
         dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.country", "INDIA"));
         dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.country", "INDIA"));
       }
@@ -296,7 +321,7 @@ export const callBackForNext = async (state, dispatch) => {
         if (!applicationNoInUrl) {
           dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.witness.country", "INDIA"));
           dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.witness.country", "INDIA"));
-        }else if(applicationNoInUrl && mrgObj && mrgObj[0].coupleDetails && !mrgObj[0].coupleDetails[0].bride.witness){
+        } else if (applicationNoInUrl && mrgObj && mrgObj[0].coupleDetails && !mrgObj[0].coupleDetails[0].bride.witness) {
           dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.witness.country", "INDIA"));
           dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.witness.country", "INDIA"));
         }

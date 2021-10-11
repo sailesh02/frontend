@@ -158,10 +158,10 @@ const tradeLicenseSearchAndResult = {
                   dispatch(prepareFinalObject("LicensesTemp", []));
                 }
               },
-              // roleDefination: {
-              //   rolePath: "user-info.roles",
-              //   path: "mr/search"
-              // }
+              roleDefination: {
+                rolePath: "user-info.roles",
+                roles: ["MR_CEMP"]
+              }
             }
 
           }

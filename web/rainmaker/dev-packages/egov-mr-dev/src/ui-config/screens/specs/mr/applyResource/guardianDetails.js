@@ -58,7 +58,7 @@ export const groomGuardianDetails = getCommonCard(
                     jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.relationship",
                     // data: [{ code: "FATHER" }, { code: "HUSBAND" },{code : 'MOTHER'},{code : "BROTHER"},{code : "SISTER"},
                     // {code : "GRANDFATHER"},{code : "GRANDMOTHER"},{code : "FATHERINLAW"},{code : "MOTHERINLAW"}],
-                    data: [{ code: "FATHER" }, { code: "HUSBAND" }, { code: 'OTHER' }],
+                    data: [{ code: "FATHER" }, { code: "MOTHER" }, { code: 'OTHERS' }],
 
                     //sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
                     // gridDefination: {
@@ -68,7 +68,7 @@ export const groomGuardianDetails = getCommonCard(
                 }),
                 afterFieldChange: (action, state, dispatch) => {
                     
-                    if (action.value == "OTHER") {
+                    if (action.value == "OTHERS") {
                         dispatch(
                             handleField(
                                 "apply",
@@ -93,19 +93,19 @@ export const groomGuardianDetails = getCommonCard(
             otherRltnWithgroom: getTextField({
                 label: {
                     labelName: "Door/House No.",
-                    labelKey: "MR_GROOMGUARDIAN_OTHER_RELATION_LABEL"
+                    labelKey: "MR_GROOMGUARDIAN_RELATION_DESC_LABEL"
                 },
                 props: {
                     className: "applicant-details-error"
                 },
                 placeholder: {
                     labelName: "Enter Door/House No.",
-                    labelKey: "MR_GROOMGUARDIAN_OTHER_RELATION_PLACEHOLDER"
+                    labelKey: "MR_GROOMGUARDIAN_RELATION_DESC_PLACEHOLDER"
                 },
                 required: true,
                 visible: false,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.otherRelationship",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.relationshipDesc",
 
             }),
             groomGuardianName: getTextField({
@@ -312,10 +312,10 @@ export const brideGuardianDetails = getCommonCard(
                         labelKey: "MR_BRIDEGUARDIAN_RELATION_PLACEHOLDER"
                     },
                     required: true,
-                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.relationship",
+                    jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.relationship",
                     // data: [{ code: "FATHER" }, { code: "HUSBAND" },{code : 'MOTHER'},{code : "BROTHER"},{code : "SISTER"},
                     // {code : "GRANDFATHER"},{code : "GRANDMOTHER"},{code : "FATHERINLAW"},{code : "MOTHERINLAW"}],
-                    data: [{ code: "FATHER" }, { code: "HUSBAND" }, { code: 'OTHER' }],
+                    data: [{ code: "FATHER" }, { code: "MOTHER" }, { code: 'OTHERS' }],
 
                     //sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
                     // gridDefination: {
@@ -325,7 +325,7 @@ export const brideGuardianDetails = getCommonCard(
                 }),
                 afterFieldChange: (action, state, dispatch) => {
                     
-                    if (action.value == "OTHER") {
+                    if (action.value == "OTHERS") {
                         dispatch(
                             handleField(
                                 "apply",
@@ -350,19 +350,19 @@ export const brideGuardianDetails = getCommonCard(
             otherRltnWithBride: getTextField({
                 label: {
                     labelName: "Door/House No.",
-                    labelKey: "MR_BRIDEGUARDIAN_OTHER_RELATION_LABEL"
+                    labelKey: "MR_BRIDEGUARDIAN_RELATION_DESC_LABEL"
                 },
                 props: {
                     className: "applicant-details-error"
                 },
                 placeholder: {
                     labelName: "Enter Door/House No.",
-                    labelKey: "MR_BRIDEGUARDIAN_OTHER_RELATION_PLACEHOLDER"
+                    labelKey: "MR_BRIDEGUARDIAN_RELATION_DESC_PLACEHOLDER"
                 },
                 required: true,
                 visible: false,
                 //pattern: getPattern("Address"),
-                jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.otherRelationship",
+                jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.relationshipDesc",
 
             }),
             brideGuardianName: getTextField({

@@ -711,15 +711,7 @@ const parserFunction = (state) => {
               isInstallmentApplicable: (
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.isInstallmentApplicable !== undefined
-              ) ? (queryObject.additionalDetails.isInstallmentApplicable) : "",
-              isLabourFeeApplicable: (
-                queryObject.additionalDetails !== undefined &&
-                queryObject.additionalDetails.isLabourFeeApplicable !== undefined
-              ) ? (queryObject.additionalDetails.isLabourFeeApplicable) : "",
-              isInstallmentApplicable: (
-                queryObject.additionalDetails !== undefined &&
-                queryObject.additionalDetails.isInstallmentApplicable !== undefined
-              ) ? (queryObject.additionalDetails.isInstallmentApplicable) : "",
+              ) ? (queryObject.additionalDetails.isInstallmentApplicable) : ""
         }
     }
     queryObject = { ...queryObject, ...parsedObject }

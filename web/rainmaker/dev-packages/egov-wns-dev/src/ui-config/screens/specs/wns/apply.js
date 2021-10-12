@@ -654,6 +654,7 @@ export const getData = async (action, state, dispatch) => {
 
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
       dispatch(prepareFinalObject("applyScreen.usageCategory",combinedArray ? combinedArray[0].usageCategory : ''))
+      dispatch(prepareFinalObject("applyScreen.additionalDetails.isInstallmentApplicable","N"))
       let localizationLabels = {};
       if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
       let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${combinedArray[0].additionalDetails.locality
@@ -747,6 +748,22 @@ export const getData = async (action, state, dispatch) => {
         dispatch(
           handleField(
             "apply",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
             `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate`,
             "visible",
             false
@@ -764,6 +781,22 @@ export const getData = async (action, state, dispatch) => {
           handleField(
             "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading`,
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
             "visible",
             false
           )
@@ -818,6 +851,26 @@ export const getData = async (action, state, dispatch) => {
         );
       }
       if(data.connectionType == 'Metered'){
+        let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+        if(applicationNumber && applicationNumber.includes('WS') && data && data.additionalDetails && data.additionalDetails.isLabourFeeApplicable && data.additionalDetails.isLabourFeeApplicable === 'Y'){
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+              "visible",
+              true
+            )
+          );
+        }else{
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+              "visible",
+              false
+            )
+          );
+        }
         dispatch(
           handleField(
             "apply",

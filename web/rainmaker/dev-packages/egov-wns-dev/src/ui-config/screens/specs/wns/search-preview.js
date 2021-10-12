@@ -227,6 +227,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     if (connectionType === "Metered") {
       set(
         action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment.visible",
+        true
+      );
+      set(
+        action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterId.visible",
         true
       );
@@ -243,6 +253,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       set(
         action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge.visible",
         true
       );
       set(
@@ -285,6 +305,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         );
         set(
           action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment.visible",
+          true
+        );
+        set(
+          action.screenConfig,
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio.visible",
           true
         );
@@ -308,6 +338,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         set(
           action.screenConfig,
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment.visible",
+          false
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge.visible",
           false
         );
         set(
@@ -339,6 +379,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       set(
         action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge.visible",
         false
       );
       set(
@@ -976,6 +1026,14 @@ const parserFunction = (obj) => {
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.diameter !== undefined
       ) ? (obj.additionalDetails.diameter) : "",
+      isLabourFeeApplicable: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.isLabourFeeApplicable !== undefined
+      ) ? (obj.additionalDetails.isLabourFeeApplicable) : "",
+      isInstallmentApplicable: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.isInstallmentApplicable !== undefined
+      ) ? (obj.additionalDetails.isInstallmentApplicable) : "",
     },
     dateEffectiveFrom: convertDateToEpoch(obj.dateEffectiveFrom),
     noOfTaps: parseInt(obj.noOfTaps),

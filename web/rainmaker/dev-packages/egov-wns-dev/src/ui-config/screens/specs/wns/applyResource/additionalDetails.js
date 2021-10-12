@@ -458,42 +458,84 @@ export const additionDetails = getCommonCard({
         required: true,
         props: {disabled: process.env.REACT_APP_NAME === "Citizen"},
         gridDefination: { xs: 6, sm: 6 },
-        jsonPath: "applyScreen.additionalDetails.isLabourFeeApplicable"
-      }),
-    }),
-    isInstallmentApplicable: {
-      uiFramework: "custom-containers",
-      componentPath: "RadioGroupContainer",
-      gridDefination: {
-        xs: 6,
-        sm: 6
-      },
-      jsonPath: "applyScreen.additionalDetails.isInstallmentApplicable",
-      props: {
-        value:'N',
-        label: { name: "WS_FULL_PAYMENT_OR_INSTALLMENT", key: "WS_FULL_PAYMENT_OR_INSTALLMENT" },
-        className: "applicant-details-error",
-        buttons: [
-          {
-            disabled:true,
-            labelName: "Male",
-            labelKey: "WS_FULL_PAYMENT",
-            value: "N"
-          },
-          {
-            disabled:true,
-            labelName: "FEMALE",
-            labelKey: "WS_INSTALLMENT",
-            value: "Y"
+        jsonPath: "applyScreen.additionalDetails.isLabourFeeApplicable",
+        afterFieldChange: async (action, state, dispatch) => {
+          if(process.env.REACT_APP_NAME !== "Citizen") {
+            let connectionType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
+            if (connectionType === undefined || connectionType != "Non Metered" || connectionType == "Metered") {
+              if(action && action.value && action.value === 'Y'){
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+                    "visible",
+                    true
+                  )
+                );
+                dispatch(prepareFinalObject(
+                  "applyScreen.additionalDetails.isInstallmentApplicable","N"
+                ))
+              }else{
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+                    "visible",
+                    false
+                  )
+                );
+                dispatch(prepareFinalObject(
+                  "applyScreen.additionalDetails.isInstallmentApplicable","N"
+                ))
+              }
+            }
+            else {
+              dispatch(
+                handleField(
+                  "apply",
+                  `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+                  "visible",
+                  false
+                )
+              );
+            }
           }
-        ],
+        }
+      }),
+      isInstallmentApplicable: {
+        uiFramework: "custom-containers",
+        componentPath: "RadioGroupContainer",
+        gridDefination: {
+          xs: 6,
+          sm: 6
+        },
         jsonPath: "applyScreen.additionalDetails.isInstallmentApplicable",
+        props: {
+          value:'N',
+          label: { name: "WS_FULL_PAYMENT_OR_INSTALLMENT", key: "WS_FULL_PAYMENT_OR_INSTALLMENT" },
+          className: "applicant-details-error",
+          buttons: [
+            {
+              disabled:true,
+              labelName: "Male",
+              labelKey: "WS_FULL_PAYMENT",
+              value: "N"
+            },
+            {
+              disabled:true,
+              labelName: "FEMALE",
+              labelKey: "WS_INSTALLMENT",
+              value: "Y"
+            }
+          ],
+          jsonPath: "applyScreen.additionalDetails.isInstallmentApplicable",
+          required: true,
+          errorMessage: "Required",
+        },
         required: true,
-        errorMessage: "Required",
-      },
-      required: true,
-      type: "array"
-    },
+        type: "array"
+      }
+    })
   }),
 
   modificationsEffectiveFrom : getCommonGrayCard({
@@ -525,6 +567,22 @@ export const additionDetails = getCommonCard({
 
 const showHideFeilds = (dispatch, value) => {
   let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep'; 
+  dispatch(
+    handleField(
+      "apply",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+      "visible",
+      value
+    )
+  );
   dispatch(
     handleField(
       "apply",
@@ -561,6 +619,22 @@ const showHideFeilds = (dispatch, value) => {
     handleField(
       "apply",
       `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID`,
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
       "visible",
       value
     )
@@ -617,6 +691,22 @@ const showHideFeilds = (dispatch, value) => {
     handleField(
       "apply",
       "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge",
       "visible",
       value
     )

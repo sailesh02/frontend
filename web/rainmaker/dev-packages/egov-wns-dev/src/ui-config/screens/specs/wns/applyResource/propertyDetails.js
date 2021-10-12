@@ -708,6 +708,22 @@ const propertyDetailsNoId = getCommonContainer({
           dispatch(
             handleField(
               "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
+              "visible",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+              "visible",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
               `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
               "visible",
               true
@@ -723,6 +739,22 @@ const propertyDetailsNoId = getCommonContainer({
           );
         }
         if(action.value == 'Non Metered' && edit == 'edit'){
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
+              "visible",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+              "visible",
+              false
+            )
+          );
           dispatch(
             handleField(
               "apply",

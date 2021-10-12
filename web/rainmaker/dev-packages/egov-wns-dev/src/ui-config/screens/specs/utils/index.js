@@ -290,6 +290,45 @@ export const handleNA = params => {
   } else { return "NA"; }
 }
 
+export const handleInstallementorFullPayment = params => {
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
+  let state = store.getState();
+  let laborCharge = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
+  state.screenConfiguration.preparedFinalObject.WaterConnection && state.screenConfiguration.preparedFinalObject.WaterConnection[0] &&
+  state.screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails &&
+  state.screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.isLabourFeeApplicable && 
+  state.screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.isLabourFeeApplicable === 'Y' ? true :false
+  if(params === 'Y'){
+    return 'Installment'
+  }else if(params === 'N'){
+    if(laborCharge){
+      return 'NA'
+    }else{
+      return 'Full Payment'
+    }
+  }else if(applicationNumber && applicationNumber.includes('SW')){
+    return "NA"
+  }
+  else{
+    return ''
+  }
+}
+
+export const handleLaborCharge = params => {
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
+  if(params == 'Y'){
+    return 'Yes'
+  }
+  else if(params == 'N'){
+    return 'No'
+  }else if(applicationNumber && applicationNumber.includes('SW')){
+    return "NA"
+  }
+  else{
+    return ''
+  }
+}
+
 export const handleConnectionDetails = (params) => {
   params = isNaN(params) ? null : params
   if (params !== undefined && params !== null && params !== "" && params!==0 && params !== NaN) {

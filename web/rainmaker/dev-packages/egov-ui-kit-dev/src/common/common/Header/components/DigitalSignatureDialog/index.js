@@ -189,7 +189,6 @@ class DigitalSignatureDialog extends Component {
                   }
                 }) 
                 this.props.hideSpinner();
-                debugger
                 if(requiredTokenFormat && requiredTokenFormat.length > 0){
                   this.setState({
                     tokensArray : requiredTokenFormat,
@@ -220,6 +219,14 @@ class DigitalSignatureDialog extends Component {
       selectedToken:e.target.value
     })
     this.getCertificateList(e.target.value)
+  }
+
+  resetForm = () => {
+    this.setState({
+      selectedToken : '',
+      selectedCeritificate:'',
+      password:''
+    })
   }
 
   // generate digital signature
@@ -471,7 +478,7 @@ class DigitalSignatureDialog extends Component {
                   <Button
                     variant={"contained"}
                     color={"primary"}
-                    onClick={this.resetMessage}
+                    onClick={this.resetForm}
                     style={{
                       marginRight:'4px'
                     }}

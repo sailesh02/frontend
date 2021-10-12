@@ -161,6 +161,21 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }else{
         dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No')); 
       }
+      if(parsedObject && parsedObject.connectionType && parsedObject.connectionType === 'Metered'){
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          true
+        ));
+      }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          false
+        ));
+      }
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.locality));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
@@ -172,6 +187,21 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         dispatch(prepareFinalObject("SewerageConnection[0].apartment", 'Yes'));
       }else{
         dispatch(prepareFinalObject("SewerageConnection[0].apartment", 'No')); 
+      }
+      if(parsedObject && parsedObject.connectionType && parsedObject.connectionType === 'Metered'){
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          true
+        ));
+      }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          false
+        ));
       }
       let estimate;
       if (processInstanceAppStatus === "CONNECTION_ACTIVATED") {
@@ -823,6 +853,21 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       }else{
         dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No')); 
       }
+      if(payload && payload.WaterConnection && payload.WaterConnection[0].connectionType === 'Metered'){
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          true
+        ));
+      }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          false
+        ));
+      }
       let localizationLabels = {}
       if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
       let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${payload.WaterConnection[0].additionalDetails.locality
@@ -890,6 +935,21 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       }else{
         dispatch(prepareFinalObject("WaterConnectionOld[0].apartment", 'No')); 
       }
+      if(oldApplicationPayload && oldApplicationPayload.WaterConnection && oldApplicationPayload.WaterConnection[0].connectionType === 'Metered'){
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          true
+        ));
+      }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          false
+        ));
+      }
     }
 
 
@@ -919,6 +979,21 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       }else{
         dispatch(prepareFinalObject("SewerageConnections[0].apartment", 'No'));
         dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No')); 
+      }
+      if(payload && payload.SewerageConnections && payload.SewerageConnections[0].connectionType === 'Metered'){
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          true
+        ));
+      }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          false
+        ));
       }
       dispatch(prepareFinalObject("WaterConnection[0].locality",payload.SewerageConnections[0].additionalDetails.locality))
       if (!payload.SewerageConnections[0].connectionHolders || payload.SewerageConnections[0].connectionHolders === 'NA') {
@@ -951,6 +1026,21 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
         }else{
           dispatch(prepareFinalObject("SewerageConnectionOld[0].apartment", 'No'));
           dispatch(prepareFinalObject("WaterConnectionOld[0].apartment", 'No'));
+        }
+        if(oldApplicationPayload && oldApplicationPayload.SewerageConnections && oldApplicationPayload.SewerageConnections[0].connectionType === 'Metered'){
+          dispatch(handleField(
+            "search-preview",
+            "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+            "visible",
+            true
+          ));
+        }else{
+          dispatch(handleField(
+            "search-preview",
+            "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+            "visible",
+            false
+          ));
         }
       }
     }

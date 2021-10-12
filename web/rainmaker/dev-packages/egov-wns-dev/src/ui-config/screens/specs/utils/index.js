@@ -302,9 +302,9 @@ export const handleInstallementorFullPayment = params => {
     return 'Installment'
   }else if(params === 'N'){
     if(laborCharge){
-      return 'NA'
-    }else{
       return 'Full Payment'
+    }else{
+      return 'NA'
     }
   }else if(applicationNumber && applicationNumber.includes('SW')){
     return "NA"

@@ -740,6 +740,14 @@ export const getData = async (action, state, dispatch) => {
         dispatch(
           handleField(
             "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
             `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading`,
             "visible",
             false
@@ -862,6 +870,14 @@ export const getData = async (action, state, dispatch) => {
             )
           );
         }else{
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
+              "visible",
+              false
+            )
+          );
           dispatch(
             handleField(
               "apply",

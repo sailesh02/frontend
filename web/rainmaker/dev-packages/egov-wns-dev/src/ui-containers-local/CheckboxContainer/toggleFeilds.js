@@ -172,6 +172,12 @@ export const toggleWater = (onFieldChange, value) => {
   );
   onFieldChange(
     "apply",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment",
     "visible",
     value

@@ -873,14 +873,6 @@ export const getData = async (action, state, dispatch) => {
           dispatch(
             handleField(
               "apply",
-              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
-              "visible",
-              false
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
               `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
               "visible",
               false

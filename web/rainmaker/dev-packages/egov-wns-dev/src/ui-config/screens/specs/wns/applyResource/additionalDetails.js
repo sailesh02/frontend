@@ -443,6 +443,59 @@ export const additionDetails = getCommonCard({
       }),
     })
   }),
+  
+  paymentDetailsContainer : getCommonGrayCard({
+    subHeader: getCommonTitle({
+      labelKey: "WS_PAYMENT_DETAILS"
+    }),
+    activeDetails: getCommonContainer({
+      isLabourFeeApplicable: getSelectField({
+        label: { labelKey: "WS_LABOUR_FEE" },
+        data: [{code:'Y',label:'Yes'},{code:'N',label:'No'}],
+        optionValue: "code",
+        optionLabel: "label",
+        placeholder: { labelKey: "WS_LABOUR_FEE_PLACEHOLDER" },
+        required: true,
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"},
+        gridDefination: { xs: 6, sm: 6 },
+        jsonPath: "applyScreen.additionalDetails.isLabourFeeApplicable"
+      }),
+    }),
+    isInstallmentApplicable: {
+      uiFramework: "custom-containers",
+      componentPath: "RadioGroupContainer",
+      gridDefination: {
+        xs: 6,
+        sm: 6
+      },
+      jsonPath: "applyScreen.additionalDetails.isInstallmentApplicable",
+      props: {
+        value:'N',
+        label: { name: "WS_FULL_PAYMENT_OR_INSTALLMENT", key: "WS_FULL_PAYMENT_OR_INSTALLMENT" },
+        className: "applicant-details-error",
+        buttons: [
+          {
+            disabled:true,
+            labelName: "Male",
+            labelKey: "WS_FULL_PAYMENT",
+            value: "N"
+          },
+          {
+            disabled:true,
+            labelName: "FEMALE",
+            labelKey: "WS_INSTALLMENT",
+            value: "Y"
+          }
+        ],
+        jsonPath: "applyScreen.additionalDetails.isInstallmentApplicable",
+        required: true,
+        errorMessage: "Required",
+      },
+      required: true,
+      type: "array"
+    },
+  }),
+
   modificationsEffectiveFrom : getCommonGrayCard({
     subHeader: getCommonTitle({
       labelKey: "WS_MODIFICATIONS_EFFECTIVE_FROM"

@@ -462,7 +462,7 @@ export const additionDetails = getCommonCard({
         afterFieldChange: async (action, state, dispatch) => {
           if(process.env.REACT_APP_NAME !== "Citizen") {
             let connectionType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
-            if (connectionType === undefined || connectionType != "Non Metered" || connectionType == "Metered") {
+            if (connectionType === undefined || connectionType == "Non Metered" || connectionType == "Metered") {
               if(action && action.value && action.value === 'Y'){
                 dispatch(
                   handleField(

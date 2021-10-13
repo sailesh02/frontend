@@ -742,7 +742,7 @@ export const getData = async (action, state, dispatch) => {
             "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
             "visible",
-            false
+            data && data.applicationNo && data.applicationNo.includes('WS') ? true : false
           )
         );
         dispatch(
@@ -753,14 +753,25 @@ export const getData = async (action, state, dispatch) => {
             false
           )
         );
-        dispatch(
-          handleField(
-            "apply",
-            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
-            "visible",
-            false
-          )
-        );
+        let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+        if(applicationNumber && applicationNumber.includes('SW')){
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
+              "visible",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
+              "visible",
+              false
+            )
+          );
+        }
         dispatch(
           handleField(
             "apply",
@@ -793,14 +804,7 @@ export const getData = async (action, state, dispatch) => {
             false
           )
         );
-        dispatch(
-          handleField(
-            "apply",
-            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
-            "visible",
-            false
-          )
-        );
+      
         dispatch(
           handleField(
             "apply",

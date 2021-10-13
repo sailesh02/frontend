@@ -307,7 +307,6 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     } else {
       let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-      debugger
       if(applicationNumber && applicationNumber.includes("WS")){
         set(
           action.screenConfig,

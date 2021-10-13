@@ -71,6 +71,27 @@ export const getSearchResults = async queryObject => {
   }
 };
 
+export const getSearchResultsForTradeSearch = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/tl-calculator/billingslab/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    enableFieldAndHideSpinner('tradesearch', "components.div.children.tradeSearchForm.children.cardContent.children.button.children.buttonContainer.children.searchButton", store.dispatch);
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
+
 const setDocsForEditFlow = async (state, dispatch) => {
   let applicationDocuments = get(
     state.screenConfiguration.preparedFinalObject,

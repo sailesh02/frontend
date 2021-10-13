@@ -284,6 +284,11 @@ const mapStateToProps = state => {
   const { screenConfig, preparedFinalObject } = screenConfiguration;
   let hasAddItem = true;
   let Licenses = get(preparedFinalObject, "Licenses", null);
+  let screenConfigKeys = Object.keys(screenConfig);
+  if(screenConfigKeys && screenConfigKeys.length > 0 && screenConfigKeys[0] == "tradesearch"){
+    hasAddItem = false;
+  }
+
   if(Licenses){
 
   let tlStatus = get(Licenses[0], 'status', "");

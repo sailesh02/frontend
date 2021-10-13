@@ -562,7 +562,9 @@ export const validateMeterDetails = (applyScreenObject) => {
         applyScreenObject.additionalDetails["meterMake"] !== undefined && 
         applyScreenObject.additionalDetails["meterMake"] !== "" &&
         applyScreenObject.additionalDetails["meterReadingRatio"] !== undefined && 
-        applyScreenObject.additionalDetails["meterReadingRatio"] !== ""){
+        applyScreenObject.additionalDetails["meterReadingRatio"] !== "" && 
+        applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== undefined && 
+        applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== ""){
             return true
         }else{return false}
     }else if(rValue && connectionType && connectionType == 'Non Metered' && !water){
@@ -702,6 +704,14 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.diameter !== undefined
             ) ? (queryObject.additionalDetails.diameter) : "",
+            isLabourFeeApplicable: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.isLabourFeeApplicable !== undefined
+              ) ? (queryObject.additionalDetails.isLabourFeeApplicable) : "",
+              isInstallmentApplicable: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.isInstallmentApplicable !== undefined
+              ) ? (queryObject.additionalDetails.isInstallmentApplicable) : ""
         }
     }
     queryObject = { ...queryObject, ...parsedObject }

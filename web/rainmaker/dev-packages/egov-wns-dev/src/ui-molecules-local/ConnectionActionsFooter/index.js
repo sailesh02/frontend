@@ -55,6 +55,14 @@ const parserFunction = (data) => {
               queryObject.additionalDetails !== undefined &&
               queryObject.additionalDetails.diameter !== undefined
             ) ? (queryObject.additionalDetails.diameter) : "",
+            isLabourFeeApplicable: (
+              queryObject.additionalDetails !== undefined &&
+              queryObject.additionalDetails.isLabourFeeApplicable !== undefined
+            ) ? (queryObject.additionalDetails.isLabourFeeApplicable) : "",
+            isInstallmentApplicable: (
+              queryObject.additionalDetails !== undefined &&
+              queryObject.additionalDetails.isInstallmentApplicable !== undefined
+            ) ? (queryObject.additionalDetails.isInstallmentApplicable) : ""
         }
     }
     queryObject = { ...queryObject, ...parsedObject }

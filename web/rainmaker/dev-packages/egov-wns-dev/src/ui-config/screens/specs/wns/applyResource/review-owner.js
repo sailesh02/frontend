@@ -7,7 +7,7 @@ import {
   getLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { convertEpochToDateAndHandleNA, handleNA,handleRoadType, convertEpochToDateAndHandleBlank } from "../../utils";
+import { convertEpochToDateAndHandleNA, handleNA, handleLaborCharge, handleInstallementorFullPayment, handleRoadType, convertEpochToDateAndHandleBlank } from "../../utils";
 import { serviceConst } from "../../../../../ui-utils/commons";
 const getHeader = label => {
   return {
@@ -39,6 +39,10 @@ const roadCuttingChargesHeader = getHeader({
 const activationDetailsHeader = getHeader({
   labelKey: "WS_ACTIVATION_DETAILS"
 });
+
+const paymentDetailsHeader = getHeader({
+  labelKey:"WS_PAYMENT_DETAILS"
+})
 
 export const getReviewOwner = (isEditable = true) => {
   return getCommonGrayCard({
@@ -103,7 +107,10 @@ export const getReviewOwner = (isEditable = true) => {
     // viewNine: roadCuttingChargesHeader,
     // viewTen: roadCuttingCharges,
     viewEleven: activationDetailsHeader,
-    viewTwelve: activationDetails
+    viewTwelve: activationDetails,
+    viewThirdTeen : paymentDetailsHeader,
+    viewFourTeen : paymentDetails
+
   })
 };
 
@@ -320,6 +327,37 @@ export const activateDetailsMeter={
      }
   )
 }
+
+export const paymentDetailsMeter = {
+  reviewLaborCharge : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "WS_LABOUR_FEE",
+      labelKey: "WS_LABOUR_FEE"
+    },
+    { jsonPath: "WaterConnection[0].additionalDetails.isLabourFeeApplicable",
+      callBack: handleLaborCharge
+    }, {
+        labelKey: "WS_OLD_LABEL_NAME"
+      },
+      { jsonPath: "WaterConnectionOld[0].additionalDetails.isLabourFeeApplicable",
+      callBack: handleLaborCharge 
+    }
+  ),
+  reviewInstallment : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "WS_FULL_PAYMENT_OR_INSTALLMENT",
+      labelKey: "WS_FULL_PAYMENT_OR_INSTALLMENT"
+    },
+    { jsonPath: "WaterConnection[0].additionalDetails.isInstallmentApplicable",
+      callBack: handleInstallementorFullPayment 
+    }, {
+        labelKey: "WS_OLD_LABEL_NAME"
+      },
+      { jsonPath: "WaterConnectionOld[0].additionalDetails.isInstallmentApplicable",
+      callBack: handleInstallementorFullPayment 
+    }
+  ),
+}
 export const activateDetailsNonMeter={
   reviewConnectionExecutionDate : getLabelWithValueForModifiedLabel(
     {
@@ -356,7 +394,7 @@ export const activateDetailsNonMeter={
 }
 const activationDetails = getCommonContainer(activateDetailsMeter);
 
-
+const paymentDetails = getCommonContainer(paymentDetailsMeter)
 
 export const connectionWater={
   reviewConnectionType : getLabelWithValueForModifiedLabel(

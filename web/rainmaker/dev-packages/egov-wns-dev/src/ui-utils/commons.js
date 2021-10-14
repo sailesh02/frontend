@@ -503,9 +503,6 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
     //     }
     // }
     if (rValue &&
-        applyScreenObject.hasOwnProperty("water") &&
-        applyScreenObject["water"] !== undefined &&
-        applyScreenObject["water"] !== "" &&
         applyScreenObject.hasOwnProperty("sewerage") &&
         applyScreenObject["sewerage"] !== undefined &&
         applyScreenObject["sewerage"] !== "" &&
@@ -1097,6 +1094,7 @@ export const applyForWater = async (state, dispatch) => {
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("applyScreen.locality",response.WaterConnection[0].additionalDetails.locality))
+                dispatch(prepareFinalObject("ownershipTransferCreated", true));
                 if(response && response.WaterConnection && response.WaterConnection[0] && response.WaterConnection[0].noOfFlats &&
                 parseInt(response.waterConnection[0].noOfFlats) > 0){
                     dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));
@@ -1194,6 +1192,7 @@ export const applyForSewerage = async (state, dispatch) => {
                 response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
                 dispatch(prepareFinalObject("applyScreen.locality",response.SewerageConnections[0].additionalDetails.locality))
+                dispatch(prepareFinalObject("ownershipTransferCreated", true));
                 if(response && response.SewerageConnections && response.SewerageConnections[0] && response.SewerageConnections[0].noOfFlats &&
                     parseInt(response.SewerageConnections[0].noOfFlats) > 0){
                         dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));

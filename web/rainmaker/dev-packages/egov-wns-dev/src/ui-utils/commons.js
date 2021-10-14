@@ -503,9 +503,6 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
     //     }
     // }
     if (rValue &&
-        applyScreenObject.hasOwnProperty("water") &&
-        applyScreenObject["water"] !== undefined &&
-        applyScreenObject["water"] !== "" &&
         applyScreenObject.hasOwnProperty("sewerage") &&
         applyScreenObject["sewerage"] !== undefined &&
         applyScreenObject["sewerage"] !== "" &&

@@ -1922,7 +1922,6 @@ export const getExpiryDate = (billingPeriodMDMS,currentDemand,filter) => {
 }
 
 export const downloadBill = (receiptQueryString, mode,state,dispatch) => {
-    debugger
     let currentDemand = get(state.screenConfiguration.preparedFinalObject, "currentDemand", {});
     let bPeriodMDMS = get(state.screenConfiguration.preparedFinalObject, "billingPeriodMDMS", {});
     const FETCHBILL = {

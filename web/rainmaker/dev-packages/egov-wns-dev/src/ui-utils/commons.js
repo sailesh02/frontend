@@ -1,6 +1,6 @@
 import commonConfig from "config/common.js";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner, hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner, hideSpinner, showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { disableField, enableField, getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -147,6 +147,7 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
 
 export const getSearchResultsSW = async (queryObject, filter = false) => {
     try {
+        store.dispatch(showSpinner())
         const response = await httpRequest(
             "post",
             "/sw-services/swc/_search",
@@ -154,6 +155,7 @@ export const getSearchResultsSW = async (queryObject, filter = false) => {
             queryObject
         );
         if (response.SewerageConnections && response.SewerageConnections.length == 0) {
+            store.dispatch(hideSpinner())
             return response;
         }
         let currentTime = new Date().getTime();
@@ -162,16 +164,18 @@ export const getSearchResultsSW = async (queryObject, filter = false) => {
             response.SewerageConnections = response.SewerageConnections.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
         }
         let result = findAndReplace(response, null, "NA");
+        store.dispatch(hideSpinner())
         // result.SewerageConnections = await getPropertyObj(result.SewerageConnections);
         return result;
     } catch (error) {
+        store.dispatch(hideSpinner())
         console.log(error)
     }
 };
 
 export const getSearchResults = async (queryObject, filter = false) => {
     try {
-        store.dispatch(toggleSpinner())
+        store.dispatch(showSpinner())
         const response = await httpRequest(
             "post",
             "/ws-services/wc/_search",

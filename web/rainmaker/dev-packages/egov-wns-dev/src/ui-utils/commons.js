@@ -1,6 +1,6 @@
 import commonConfig from "config/common.js";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner, hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { disableField, enableField, getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -171,6 +171,7 @@ export const getSearchResultsSW = async (queryObject, filter = false) => {
 
 export const getSearchResults = async (queryObject, filter = false) => {
     try {
+        store.dispatch(toggleSpinner())
         const response = await httpRequest(
             "post",
             "/ws-services/wc/_search",
@@ -178,6 +179,7 @@ export const getSearchResults = async (queryObject, filter = false) => {
             queryObject
         );
         if (response.WaterConnection && response.WaterConnection.length == 0) {
+            store.dispatch(hideSpinner())
             return response;
         }
         let currentTime = new Date().getTime();
@@ -193,8 +195,11 @@ export const getSearchResults = async (queryObject, filter = false) => {
         result.WaterConnection[0].waterSource = waterSource;
         result.WaterConnection[0].waterSubSource = waterSubSource;
         // result.WaterConnection = await getPropertyObj(result.WaterConnection);
+        store.dispatch(hideSpinner())
         return result;
-    } catch (error) { console.log(error) }
+    } catch (error) { 
+        store.dispatch(hideSpinner())
+        console.log(error) }
 };
 
 export const getSearchResultsForSewerage = async (queryObject, dispatch, filter = false) => {
@@ -996,6 +1001,7 @@ export const applyForWater = async (state, dispatch) => {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = waterId ? "UPDATE" : "CREATE";
     try {
+        dispatch(toggleSpinner());
         // const tenantId = commonConfig.tenantId
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tenantId");
         let response;
@@ -1038,6 +1044,7 @@ export const applyForWater = async (state, dispatch) => {
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
+            dispatch(hideSpinner())
         } else {
             disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             disableField('apply', "components.div.children.footer.children.payButton", dispatch);
@@ -1105,9 +1112,11 @@ export const applyForWater = async (state, dispatch) => {
             if (!isModifyMode()) {
                 setApplicationNumberBox(state, dispatch);
             }
+            dispatch(hideSpinner())
         }
         return true;
     } catch (error) {
+        dispatch(hideSpinner())
         enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
         enableField('apply', "components.div.children.footer.children.payButton", dispatch);
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
@@ -1122,6 +1131,7 @@ export const applyForSewerage = async (state, dispatch) => {
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let method = sewerId ? "UPDATE" : "CREATE";
     try {
+        dispatch(toggleSpinner())
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tenantId");
         // const tenantId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].property.tenantId");
         let response;
@@ -1159,6 +1169,7 @@ export const applyForSewerage = async (state, dispatch) => {
             dispatch(prepareFinalObject("SewerageConnection", searchResponse.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
+            dispatch(hideSpinner())
         } else {
             disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             disableField('apply', "components.div.children.footer.children.payButton", dispatch);
@@ -1219,6 +1230,7 @@ export const applyForSewerage = async (state, dispatch) => {
             if (!isModifyMode()) {
                 setApplicationNumberBox(state, dispatch);
             }
+            dispatch(hideSpinner())
         }
         return true;
     } catch (error) {
@@ -1237,6 +1249,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     if (waterId && sewerId) { method = "UPDATE" } else { method = "CREATE" };
     try {
+        dispatch(toggleSpinner())
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tenantId");
         // const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
         let response;
@@ -1306,6 +1319,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
+            dispatch(hideSpinner())
         } else {
             disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             disableField('apply', "components.div.children.footer.children.payButton", dispatch);
@@ -1324,12 +1338,14 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
+            dispatch(hideSpinner())
         }
         if (!isModifyMode()) {
             setApplicationNumberBox(state, dispatch);
         }
         return true;
     } catch (error) {
+        dispatch(hideSpinner())
         enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
         enableField('apply', "components.div.children.footer.children.payButton", dispatch);
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));

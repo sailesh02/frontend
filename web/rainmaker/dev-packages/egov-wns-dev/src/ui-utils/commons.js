@@ -1891,7 +1891,7 @@ const getMonth = (toPeriod) => {
 
 const getYear = (fromYear,month) => {
     let year = parseInt(fromYear)
-    if(month == 12 || month == '12'){
+    if(parseInt(month) == 12){
         return year + 1
     }else{
         return year
@@ -1901,15 +1901,15 @@ const getYear = (fromYear,month) => {
 export const getExpiryDate = (billingPeriodMDMS,currentDemand,filter) => {
     const service = getQueryArg(window.location.href, "service");
     let toPeriod = convertEpochToDate(currentDemand && currentDemand.toPeriod)
-    let month = getMonth(toPeriod)
-    month = month && (month == 12 || month == '12') ? 1 : month + 1
+    let monthValue = getMonth(toPeriod)
+    let month = monthValue && (monthValue == 12 || monthValue == '12') ? '01' : monthValue + 1
     let date,year,fromFY
     if(service && service === 'WATER'){
         let rebate = billingPeriodMDMS && billingPeriodMDMS["ws-services-calculation"] && 
         billingPeriodMDMS["ws-services-calculation"].Rebate && billingPeriodMDMS["ws-services-calculation"].Rebate[0]
         date = rebate && rebate.endingDay || ''
         fromFY = rebate && rebate.fromFY && rebate.fromFY.split('-')[0] || []
-        year = getYear(fromFY,month)
+        year = getYear(fromFY,monthValue)
         return filter ? `${year}-${month}-${date}` : `${date}/${month}/${year}`
     }else{
         let rebate = billingPeriodMDMS && billingPeriodMDMS["sw-services-calculation"] && 

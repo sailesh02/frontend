@@ -1,6 +1,6 @@
 import { getCommonHeader, getCommonCard, getCommonGrayCard, getCommonContainer, getCommonSubHeader, convertEpochToDate, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 // import get from "lodash/get";
-import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS, getConsumptionDetails, billingPeriodMDMS, serviceConst } from "../../../../ui-utils/commons";
+import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS, getConsumptionDetails, billingPeriodMDMS,getExpiryDate, serviceConst } from "../../../../ui-utils/commons";
 import set from "lodash/set";
 import get from "lodash/get";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -48,14 +48,15 @@ const processBills = async (state, data, viewBillTooltip, dispatch) => {
         }
         if (viewBillTooltip.length >= data.Bill[0].billDetails.length) {          
           let bPeriodMDMS = get(state.screenConfiguration.preparedFinalObject, "billingPeriodMDMS", {});
-          let expiryDemandDate = billingPeriodMDMS(bills.toPeriod,bPeriodMDMS,service);
+          // let expiryDemandDate = billingPeriodMDMS(bills.toPeriod,bPeriodMDMS,service);
+          let sortedBills = viewBillTooltip.sort((a, b) => b.toPeriod - a.toPeriod);
+          let currentDemand=sortedBills[0];
+          let expiryDemandDate = getExpiryDate(bPeriodMDMS,currentDemand)
           let dataArray = [{
             total: data.Bill[0].totalAmount,
             expiryDate: expiryDemandDate
           }]
-          let sortedBills = viewBillTooltip.sort((a, b) => b.toPeriod - a.toPeriod);
           let forward = 0;
-          let currentDemand=sortedBills[0];
           if (data.Bill[0].totalAmount < 0) {
             sortedBills.forEach(e => {
               e.bill.forEach(cur => {
@@ -105,7 +106,12 @@ const fetchMDMSForBillPeriod = async(action,state,dispatch) => {
         "tenantId": tenantId,
           "moduleDetails": [            
             { "moduleName": "ws-services-masters", "masterDetails": [{ "name": "billingPeriod" }]},
-            { "moduleName": "sw-services-calculation", "masterDetails": [{ "name": "billingPeriod" }]}
+            { "moduleName": "sw-services-calculation", "masterDetails": [{ "name": "billingPeriod" },{
+              "name":"Rebate"
+            }]},
+            { "moduleName": "ws-services-calculation", "masterDetails": [{
+              "name":"Rebate"
+            }]}
           ]
         }
     }

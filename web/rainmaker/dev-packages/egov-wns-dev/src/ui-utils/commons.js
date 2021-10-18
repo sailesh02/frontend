@@ -7,7 +7,7 @@ import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUt
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
-import { convertDateToEpoch, getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import { convertDateToEpoch, convertEpochToDate, getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 
 export const serviceConst = {
@@ -1881,6 +1881,44 @@ export const billingPeriodMDMS = (toPeriod, payloadbillingPeriod, service) => {
         });
     }
     return toPeriod + demandExipryDate;
+}
+
+const getMonth = (toPeriod) => {
+    let day = toPeriod && toPeriod.split('/')
+    day = day && day.length > 1 && day[1]
+    return parseInt(day)
+}
+
+const getYear = (fromYear,month) => {
+    let year = parseInt(fromYear)
+    if(month == 12 || month == '12'){
+        return year + 1
+    }else{
+        return year
+    }
+}
+
+export const getExpiryDate = (billingPeriodMDMS,currentDemand) => {
+    const service = getQueryArg(window.location.href, "service");
+    let toPeriod = convertEpochToDate(currentDemand && currentDemand.toPeriod)
+    let month = getMonth(toPeriod)
+    month = month && (month == 12 || month == '12') ? 1 : month + 1
+    let date,year,fromFY
+    if(service && service === 'WATER'){
+        let rebate = billingPeriodMDMS && billingPeriodMDMS["ws-services-calculation"] && 
+        billingPeriodMDMS["ws-services-calculation"].Rebate && billingPeriodMDMS["ws-services-calculation"].Rebate[0]
+        date = rebate && rebate.endingDay || ''
+        fromFY = rebate && rebate.fromFY && rebate.fromFY.split('-')[0] || []
+        year = getYear(fromFY,month)
+        return `${date}/${month}/${year}`
+    }else{
+        let rebate = billingPeriodMDMS && billingPeriodMDMS["sw-services-calculation"] && 
+        billingPeriodMDMS["sw-services-calculation"].Rebate && billingPeriodMDMS["sw-services-calculation"].Rebate[0]
+        date = rebate && rebate.endingDay || ''
+        fromFY = rebate && rebate.fromFY && rebate.fromFY.split('-')[0] || []  
+        year = getYear(fromFY,month)     
+        return `${date}/${month}/${year}`
+    }
 }
 
 export const downloadBill = (receiptQueryString, mode) => {

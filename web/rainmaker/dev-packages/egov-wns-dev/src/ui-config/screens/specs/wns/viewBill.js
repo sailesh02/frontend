@@ -51,6 +51,7 @@ const processBills = async (state, data, viewBillTooltip, dispatch) => {
           // let expiryDemandDate = billingPeriodMDMS(bills.toPeriod,bPeriodMDMS,service);
           let sortedBills = viewBillTooltip.sort((a, b) => b.toPeriod - a.toPeriod);
           let currentDemand=sortedBills[0];
+          dispatch(prepareFinalObject('currentDemand',currentDemand))
           let expiryDemandDate = getExpiryDate(bPeriodMDMS,currentDemand)
           let dataArray = [{
             total: data.Bill[0].totalAmount,

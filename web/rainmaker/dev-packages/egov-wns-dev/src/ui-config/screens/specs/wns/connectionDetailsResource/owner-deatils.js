@@ -288,14 +288,17 @@ export const connectionHolderDetails={
 };
 
 export const onClickOwnerShipTransfer = async (state, dispatch) => {
-  let applicationNo = state.screenConfiguration.preparedFinalObject.WaterConnection[0].applicationNo
+  let applicationNo = state && state.screenConfiguration && 
+  state.screenConfiguration.preparedFinalObject && state.screenConfiguration.preparedFinalObject.WaterConnection && 
+  state.screenConfiguration.preparedFinalObject.WaterConnection[0] && 
+  state.screenConfiguration.preparedFinalObject.WaterConnection[0].applicationNo || ""
   let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
   const service = getQueryArg(window.location.href, "service");
   const tenantId = getQueryArg(window.location.href, "tenantId");
  
     let due
     let fetchBillQueryObj = []
-    if(applicationNo.includes('SW')){
+    if(applicationNo && applicationNo.includes('SW')){
       fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "SW" }]
     }else{
       fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "WS" }]

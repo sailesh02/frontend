@@ -239,10 +239,10 @@ export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
             "_search", [],
             requestBody
         );
-        dispatch(toggleSpinner());
+        dispatch(hideSpinner());
         return findAndReplace(response, null, "NA");
     } catch (error) {
-        dispatch(toggleSpinner());
+        dispatch(hideSpinner());
         store.dispatch(
             toggleSnackbar(
                 true, { labelName: error.message, labelCode: error.message },
@@ -1770,6 +1770,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
     switch (service) {
         case serviceConst.WATER:
             try {
+                store.dispatch(toggleSpinner())
                 httpRequest("post", FETCHCONNECTIONDETAILS.GET.URL, FETCHCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then(async (payloadReceiptDetails) => {
                     const queryStr = [
                         { key: "key", value: "ws-consolidatedacknowlegment" },
@@ -1785,16 +1786,19 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
                     }
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
+                            store.dispatch(hideSpinner())
                             downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
                         });
                 })
 
             } catch (exception) {
+                store.dispatch(hideSpinner())
                 alert('Some Error Occured while downloading!');
             }
             break;
         case serviceConst.SEWERAGE:
             try {
+                store.dispatch(toggleSpinner())
                 httpRequest("post", FETCHSWCONNECTIONDETAILS.GET.URL, FETCHSWCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then(async (payloadReceiptDetails) => {
                     const queryStr = [
                         { key: "key", value: "ws-consolidatedsewerageconnection" },
@@ -1803,11 +1807,13 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
                     // payloadReceiptDetails.SewerageConnections = await getPropertyObj(payloadReceiptDetails.SewerageConnections);
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { SewerageConnections: payloadReceiptDetails.SewerageConnections }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
+                            store.dispatch(hideSpinner())
                             downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
                         });
                 })
 
             } catch (exception) {
+                store.dispatch(hideSpinner())
                 alert('Some Error Occured while downloading!');
             }
             break;

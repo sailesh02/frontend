@@ -1238,6 +1238,7 @@ export const applyForSewerage = async (state, dispatch) => {
         }
         return true;
     } catch (error) {
+        dispatch(hideSpinner())
         enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
         enableField('apply', "components.div.children.footer.children.payButton", dispatch);
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));

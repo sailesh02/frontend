@@ -5192,6 +5192,77 @@ export const getFileStore = async(fileKey) => {
   return "hhhhhhhhhhhhhkssssssssssssssssssssshfjhjhdjhf"
 }
 
+// old code
+// export const permitOrderNoDownload = async (action, state, dispatch, mode = "Download") => {
+//   let bpaDetails = get(
+//     state.screenConfiguration.preparedFinalObject, "BPA"
+//   );
+
+//   let currentDate = new Date();
+//   set(bpaDetails, "additionalDetails.runDate", convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate()));
+
+//   let payload = await edcrHttpRequest(
+//     "post",
+//     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+//     bpaDetails.edcrNumber +
+//     "&tenantId=" + bpaDetails.tenantId, "search", []
+//   );
+//   let detailsOfBpa = bpaDetails;
+//   bpaDetails.edcrDetail = payload.edcrDetail;
+//   let Bpa = bpaDetails;
+//   let permitPfKey = "buildingpermit";
+
+//   if (!window.location.href.includes("oc-bpa")) {
+//     if (bpaDetails && bpaDetails.businessService === "BPA_LOW") {
+//       permitPfKey = "buildingpermit-low"
+//     }
+//   } else if (window.location.href.includes("oc-bpa")) {
+//     permitPfKey = "occupancy-certificate"
+//   }
+//   if (window.location.href.includes("oc-bpa") || window.location.href.includes("BPA.NC_OC_SAN_FEE")) {
+//     permitPfKey = "occupancy-certificate"
+//   }
+//   let res = await httpRequest(
+//     "post",
+//     `pdf-service/v1/_create?key=${permitPfKey}&tenantId=${bpaDetails.tenantId}`,
+//     "",
+//     [],
+//     { Bpa: [Bpa] }
+//   );
+
+//   let fileStoreId = res.filestoreIds[0];
+//   let pdfDownload = await httpRequest(
+//     "get",
+//     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []
+//   );
+//   if (mode && mode === "Download") {
+//     window.open(pdfDownload[fileStoreId]);
+//   }
+//   else {
+//     printPdf(pdfDownload[fileStoreId]);
+//   }
+
+
+//   let data = wrapRequestBody({ BPA: detailsOfBpa });
+//   axios({
+//     url: '/bpa-services/v1/bpa/_permitorderedcr',
+//     method: 'POST',
+//     responseType: 'blob', data
+//     // important
+//   }).then((response) => {
+//     const url = window.URL.createObjectURL(new Blob([response.data]));
+//     const link = document.createElement('a');
+//     link.href = url;
+//     link.setAttribute('download', 'permitorderedcr.pdf');
+//     document.body.appendChild(link);
+//     if (mode && mode === "Download") {
+//       link.click();
+//     } else {
+//       printPdf(link);
+//     }
+//   });
+// }
+
 export const permitOrderNoDownload = async (action, state, dispatch, mode = "Download") => {
   let bpaDetails = get(
     state.screenConfiguration.preparedFinalObject, "BPA"

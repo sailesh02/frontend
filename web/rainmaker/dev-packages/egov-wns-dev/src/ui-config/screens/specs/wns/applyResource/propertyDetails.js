@@ -708,6 +708,22 @@ const propertyDetailsNoId = getCommonContainer({
           dispatch(
             handleField(
               "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
+              "visible",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+              "visible",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
               `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
               "visible",
               true
@@ -722,6 +738,7 @@ const propertyDetailsNoId = getCommonContainer({
             )
           );
         }
+        let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
         if(action.value == 'Non Metered' && edit == 'edit'){
           dispatch(
             handleField(
@@ -735,6 +752,25 @@ const propertyDetailsNoId = getCommonContainer({
             handleField(
               "apply",
               `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
+              "visible",
+              false
+            )
+          );
+        }
+
+        if(action.value == 'Non Metered' && applicationNumber && applicationNumber.includes('SW')){
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
+              "visible",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
               "visible",
               false
             )

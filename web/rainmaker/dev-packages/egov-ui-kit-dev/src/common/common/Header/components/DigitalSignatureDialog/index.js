@@ -37,17 +37,17 @@ class DigitalSignatureDialog extends Component {
   }
 
   setPassword = (e) => {
-    if(e.target.value.match(passwordPattern)){
+    // if(e.target.value.match(passwordPattern)){
       this.setState({
         password : e.target.value,
         passwordErr:false
       })
-    }else{
-      this.setState({
-        password : e.target.value,
-        passwordErr:true
-      })
-    }
+    // }else{
+    //   this.setState({
+    //     password : e.target.value,
+    //     passwordErr:true
+    //   })
+    // }
   }
 
   onChangeCertificate = (e) => {
@@ -233,7 +233,7 @@ class DigitalSignatureDialog extends Component {
   saveDetails = () => {
     if(this.state.selectedToken && this.state.selectedToken != " " && 
     this.state.selectedCeritificate && this.state.selectedCeritificate != " " &&
-    this.state.password && this.state.password != " " && this.state.password.match(passwordPattern)){
+    this.state.password && this.state.password != " "){
       this.props.showSpinner();
       let requestInfo = this.getRequestInfo()
       RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};      
@@ -250,14 +250,14 @@ class DigitalSignatureDialog extends Component {
         }
       );
       
-      axios.post("/dsc-services/dsc/_dataSignInput", body, { // to get R1 R2
+      axios.post("/dsc-services/dsc/_dataSignInput", body, {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
        })
         .then(response => {
           this.props.showSpinner();
           let body = response.data.input
-          axios.post("https://localhost.emudhra.com:26769/DSC/PKCS7Sign", body, { // to get R1 R2
+          axios.post("https://localhost.emudhra.com:26769/DSC/PKCSSign", body, { 
             'Content-Type': 'application/json',
             'Accept': 'application/json'
            })
@@ -303,7 +303,7 @@ class DigitalSignatureDialog extends Component {
                         "error"
                     );
                     }
-                    this.props.showSpinner();
+                    this.props.hideSpinner();
                 })
                 .catch(error => {
                   this.props.toggleSnackbarAndSetText(

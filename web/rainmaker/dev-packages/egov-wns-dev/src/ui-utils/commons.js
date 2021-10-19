@@ -7,7 +7,7 @@ import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUt
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
-import { convertDateToEpoch, getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import { convertDateToEpoch, convertEpochToDate, getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 
 export const serviceConst = {
@@ -1909,7 +1909,47 @@ export const billingPeriodMDMS = (toPeriod, payloadbillingPeriod, service) => {
     return toPeriod + demandExipryDate;
 }
 
-export const downloadBill = (receiptQueryString, mode) => {
+const getMonth = (toPeriod) => {
+    let day = toPeriod && toPeriod.split('/')
+    day = day && day.length > 1 && day[1]
+    return parseInt(day)
+}
+
+const getYear = (fromYear,month) => {
+    let year = parseInt(fromYear)
+    if(parseInt(month) == 12){
+        return year + 1
+    }else{
+        return year
+    }
+}
+
+export const getExpiryDate = (billingPeriodMDMS,currentDemand,filter) => {
+    const service = getQueryArg(window.location.href, "service");
+    let toPeriod = convertEpochToDate(currentDemand && currentDemand.toPeriod)
+    let monthValue = getMonth(toPeriod)
+    let month = monthValue && (monthValue == 12 || monthValue == '12') ? '01' : monthValue + 1
+    let date,year,fromFY
+    if(service && service === 'WATER'){
+        let rebate = billingPeriodMDMS && billingPeriodMDMS["ws-services-calculation"] && 
+        billingPeriodMDMS["ws-services-calculation"].Rebate && billingPeriodMDMS["ws-services-calculation"].Rebate[0]
+        date = rebate && rebate.endingDay || ''
+        fromFY = rebate && rebate.fromFY && rebate.fromFY.split('-')[0] || []
+        year = getYear(fromFY,monthValue)
+        return filter ? `${year}-${month}-${date}` : `${date}/${month}/${year}`
+    }else{
+        let rebate = billingPeriodMDMS && billingPeriodMDMS["sw-services-calculation"] && 
+        billingPeriodMDMS["sw-services-calculation"].Rebate && billingPeriodMDMS["sw-services-calculation"].Rebate[0]
+        date = rebate && rebate.endingDay || ''
+        fromFY = rebate && rebate.fromFY && rebate.fromFY.split('-')[0] || []  
+        year = getYear(fromFY,month)     
+        return filter ? `${year}-${month}-${date}` : `${date}/${month}/${year}`
+    }
+}
+
+export const downloadBill = (receiptQueryString, mode,state,dispatch) => {
+    let currentDemand = get(state.screenConfiguration.preparedFinalObject, "currentDemand", {});
+    let bPeriodMDMS = get(state.screenConfiguration.preparedFinalObject, "billingPeriodMDMS", {});
     const FETCHBILL = {
         GET: {
             URL: "/billing-service/bill/v2/_fetchbill",
@@ -1999,9 +2039,11 @@ export const downloadBill = (receiptQueryString, mode) => {
                         payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod !== null) {
                         payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod.forEach(obj => {
                             if (obj.connectionType === 'Metered' && getQueryArg(window.location.href, "connectionType") === "Metered") {
-                                payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
+                                payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = convertDateToEpoch(getExpiryDate(bPeriodMDMS,currentDemand,true))
+                                // payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
                             } else if (obj.connectionType === 'Non Metered' && getQueryArg(window.location.href, "connectionType") === "Non Metered") {
-                                payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
+                                payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = convertDateToEpoch(getExpiryDate(bPeriodMDMS,currentDemand,true))
+                                // payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
                             }
                         });
                     }
@@ -2012,7 +2054,8 @@ export const downloadBill = (receiptQueryString, mode) => {
                         payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod !== null) {
                         payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod.forEach(obj => {
                             if (obj.connectionType === 'Non Metered') {
-                                payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
+                                payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = convertDateToEpoch(getExpiryDate(bPeriodMDMS,currentDemand,true))
+                                // payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
                             }
                         });
                     }

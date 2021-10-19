@@ -65,7 +65,9 @@ function FeesEstimateCard(props) {
     if (estimate !== null && estimate !== undefined && estimate.fees !== undefined && estimate.fees !== null && estimate.fees.length > 0) {
         if (estimate.fees[0].data !== null && estimate.fees[0].data !== undefined && estimate.fees[0].data.length > 0) {
             totalAmount = estimate.fees[0].data[0].total;
-            dueDate = convertEpochToDate(estimate.fees[0].data[0].expiryDate);
+            // dueDate = convertEpochToDate(estimate.fees[0].data[0].expiryDate);
+            dueDate = (estimate.fees[0].data[0].expiryDate);
+
         }
         if (estimate.fees[0].description !== undefined && estimate.fees[0].description !== null) {
             sortedArray = estimate.fees[0].description.bill;

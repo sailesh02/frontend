@@ -1934,7 +1934,7 @@ export const downloadBill = (receiptQueryString, mode) => {
     }
 
     try {
-
+        store.dispatch(showSpinner())
         httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
             const queryStr = [
                 { key: "key", value: "ws-bill" },
@@ -2016,15 +2016,16 @@ export const downloadBill = (receiptQueryString, mode) => {
                             }
                         });
                     }
-
                     httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: payloadReceiptDetails.Bill }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
                             downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
+                            store.dispatch(hideSpinner())
                         });
                 })
             })
         })
     } catch (exception) {
+        store.dispatch(hideSpinner())
         alert('Some Error Occured while downloading Bill!');
     }
 }

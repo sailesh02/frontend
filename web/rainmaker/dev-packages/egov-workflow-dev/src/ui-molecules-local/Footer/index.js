@@ -146,7 +146,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                   if(singedFileStoreId){
                     data && data.documents.length > 0 && data.documents.push({
                       "fileName": key,
-                      "fileStoreId":singedFileStoreId.data.fileStoreId
+                      "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                     })
                     return data
                   }
@@ -283,7 +283,7 @@ class Footer extends React.Component {
                   tokensArray : requiredTokenFormat,
                 })
                 this.props.hideSpinner();
-                this.getCertificateList({target:{value:requiredTokenFormat[0].label}}) 
+                // this.getCertificateList({target:{value:requiredTokenFormat[0].label}}) 
               })
               .catch(error => { 
                 this.props.hideSpinner();

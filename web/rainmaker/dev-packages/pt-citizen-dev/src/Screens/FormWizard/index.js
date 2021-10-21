@@ -1401,7 +1401,7 @@ class FormWizard extends Component {
 
   onTabClick = index => {
     const { formValidIndexArray, selected, propertyUUID } = this.state;
-    const { location } = this.props;
+    const { location, preparedFinalObject } = this.props;
     let { search } = location;
     let currentUUID = get(JSON.parse(getUserInfo()), "uuid");
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
@@ -1421,6 +1421,12 @@ class FormWizard extends Component {
       this.props.setFieldProperty("ownerInfo", "ownerName", "disabled", true);
       this.props.setFieldProperty("ownerInfo", "ownerMobile", "disabled", true);
     }
+
+    if(isUpdate && preparedFinalObject && preparedFinalObject.Properties && 
+      preparedFinalObject.Properties[0] && 
+      preparedFinalObject.Properties[0].oldPropertyId){
+        this.props.setFieldProperty("propertyAddress","oldPID","disabled",true)
+      }
 
   };
   
@@ -1645,7 +1651,8 @@ const mapStateToProps = state => {
     propertiesEdited,
     requiredDocCount,
     Assessments,
-    propertyAdditionalDetails
+    propertyAdditionalDetails,
+    preparedFinalObject
   };
 };
 

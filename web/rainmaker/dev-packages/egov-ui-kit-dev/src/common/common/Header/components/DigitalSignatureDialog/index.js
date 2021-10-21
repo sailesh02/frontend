@@ -229,6 +229,97 @@ class DigitalSignatureDialog extends Component {
     })
   }
 
+  getSuccessMsg = (responseString) => {
+    let responseCode = responseString && responseString.split('^') && responseString.split('^')[0] || ''
+    switch(responseCode){
+      case 'success':
+        return {
+          labelKey:'Digital Signature registration successfully completed.',
+          labelName:'Digital Signature registration successfully completed.',
+          type: "success"
+        }  
+      case 'exception':
+        return {
+          labelKey:'Issue in Digital Signature registration, please contact System Administrator.',
+          labelName:'Issue in Digital Signature registration, please contact System Administrator.',
+          type: "warning"
+        }
+      case 'e7002' :
+        return {
+          labelKey:'Digital Signature for the user is already registered.',
+          labelName:'Digital Signature for the user is already registered.',
+          type: "warning"
+        }
+      case 'e7003':
+        return {
+          labelKey:'Selected Digital Signature Certificate is already registered with another user.',
+          labelName:'Selected Digital Signature Certificate is already registered with another user.',
+          type: "warning"
+        }
+      case 'e7004':
+        return {
+          labelKey:'Issue in Digital Signature registration (e7004), please contact System Administrator.',
+          labelName:'Issue in Digital Signature registration (e7004), please contact System Administrator.',
+          type: "error"
+        }
+      case 'e70011':
+        return {
+          labelKey:'Issue in Digital Signature registration (e70011), please contact System Administrator.',
+          labelName:'Issue in Digital Signature registration (e70011), please contact System Administrator.',
+          type: "error"
+        }
+      case 'e70012':
+        return {
+          labelKey:'Issue in Digital Signature registration (e70012), please contact System Administrator.',
+          labelName:'Issue in Digital Signature registration (e70012), please contact System Administrator.',
+          type: "error"
+        }
+      case 'e7007':
+        return {
+          labelKey:'Digital Signature registration failed as selected Certificate is expired.',
+          labelName:'Digital Signature registration failed as selected Certificate is expired.',
+          type: "warning"
+        }
+      case 'e7008':
+        return {
+          labelKey:'Issue in Digital Signature registration (e7008), please contact System Administrator.',
+          labelName:'Issue in Digital Signature registration (e7008), please contact System Administrator.',
+          type: "error"
+        }
+      case 'e70010':
+        return {
+          labelKey:'Issue in Digital Signature registration (e70010), please contact System Administrator.',
+          labelName:'Issue in Digital Signature registration (e70010), please contact System Administrator.',
+          type: "error"
+        } 
+      case 'e7009':
+        return {
+          labelKey:'Issue in Digital Signature registration (e7009), please contact System Administrator.',
+          labelName:'Issue in Digital Signature registration (e7009), please contact System Administrator.',
+          type: "error"
+        } 
+      case 'e7001':
+        return {
+          labelKey:'Issue in Digital Signature registration (e7001), please contact System Administrator.',
+          labelName:'Issue in Digital Signature registration (e7001), please contact System Administrator.',
+          type: "error"
+        }
+      case 'e7025':
+        return {
+          labelKey:'Issue in Digital Signature registration (e7025), please contact System Administrator.',
+          labelName:'Issue in Digital Signature registration (e7025), please contact System Administrator.',
+          type: "error"
+        }
+      default :
+        return {
+          labelKey:'ERR_DIGITAL_SIGNATURE_SUCCESS_MSG',
+          labelName:'ERR_DIGITAL_SIGNATURE_SUCCESS_MSG',
+          type: "error"
+        }  
+        
+    }
+
+  }
   // generate digital signature
   saveDetails = () => {
     if(this.state.selectedToken && this.state.selectedToken != " " && 
@@ -282,15 +373,16 @@ class DigitalSignatureDialog extends Component {
                 'Accept': 'application/json'
                })
                 .then(response => {
-                  this.props.hideSpinner();
-                    if(response && response.data && response.data.result && response.data.result == "Success"){
+                  this.props.hideSpinner()
+                    if(response && response.data && response.data.responseString){
+                      let succesMsg = this.getSuccessMsg(response.data.responseString)
                       this.props.toggleSnackbarAndSetText(
                           true,
                           {
-                            labelName: "CORE_COMMON_SIGNATURE_SUCCESS_MSG",
-                            labelKey: "CORE_COMMON_SIGNATURE_SUCCESS_MSG"
+                            labelName: succesMsg.labelName,
+                            labelKey: succesMsg.labelKey
                           },
-                          "success"
+                          succesMsg.type
                       );
                       this.props.closeDigitalSignatureDialog()
                     }else{

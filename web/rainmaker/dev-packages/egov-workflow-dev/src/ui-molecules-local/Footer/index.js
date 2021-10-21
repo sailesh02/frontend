@@ -102,7 +102,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
               "fileName":key,
               "tokenDisplayName":token,
               "certificate" : certificate,
-              "keyId":"CERT_ID",
+              "keyId":certificate,
               "pdfBytes":response.data,
               "moduleName":moduleName,
               "reportName":key,

@@ -234,79 +234,79 @@ class DigitalSignatureDialog extends Component {
     switch(responseCode){
       case 'success':
         return {
-          labelKey:'Digital Signature registration successfully completed.',
+          labelKey:'DIGITAL_SIGNATURE_REGISTRATION_SUCCESS_MSG',
           labelName:'Digital Signature registration successfully completed.',
           type: "success"
         }  
       case 'exception':
         return {
-          labelKey:'Issue in Digital Signature registration, please contact System Administrator.',
+          labelKey:'DIGITAL_SIGNATURE_REGISTRATION_EXCEPTION_MSG',
           labelName:'Issue in Digital Signature registration, please contact System Administrator.',
           type: "warning"
         }
       case 'e7002' :
         return {
-          labelKey:'Digital Signature for the user is already registered.',
+          labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E7002_MSG',
           labelName:'Digital Signature for the user is already registered.',
           type: "warning"
         }
       case 'e7003':
         return {
-          labelKey:'Selected Digital Signature Certificate is already registered with another user.',
+          labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E7003_MSG',
           labelName:'Selected Digital Signature Certificate is already registered with another user.',
           type: "warning"
         }
       case 'e7004':
         return {
-          labelKey:'Issue in Digital Signature registration (e7004), please contact System Administrator.',
+          labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E7004_MSG',
           labelName:'Issue in Digital Signature registration (e7004), please contact System Administrator.',
           type: "error"
         }
       case 'e70011':
         return {
-          labelKey:'Issue in Digital Signature registration (e70011), please contact System Administrator.',
+          labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E70011_MSG',
           labelName:'Issue in Digital Signature registration (e70011), please contact System Administrator.',
           type: "error"
         }
       case 'e70012':
         return {
-          labelKey:'Issue in Digital Signature registration (e70012), please contact System Administrator.',
+          labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E70012_MSG',
           labelName:'Issue in Digital Signature registration (e70012), please contact System Administrator.',
           type: "error"
         }
       case 'e7007':
         return {
-          labelKey:'Digital Signature registration failed as selected Certificate is expired.',
+          labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E7007_MSG',
           labelName:'Digital Signature registration failed as selected Certificate is expired.',
           type: "warning"
         }
       case 'e7008':
         return {
-          labelKey:'Issue in Digital Signature registration (e7008), please contact System Administrator.',
+          labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E7008_MSG',
           labelName:'Issue in Digital Signature registration (e7008), please contact System Administrator.',
           type: "error"
         }
       case 'e70010':
         return {
-          labelKey:'Issue in Digital Signature registration (e70010), please contact System Administrator.',
+          labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E70010_MSG',
           labelName:'Issue in Digital Signature registration (e70010), please contact System Administrator.',
           type: "error"
         } 
       case 'e7009':
         return {
-          labelKey:'Issue in Digital Signature registration (e7009), please contact System Administrator.',
+          labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E7009_MSG',
           labelName:'Issue in Digital Signature registration (e7009), please contact System Administrator.',
           type: "error"
         } 
       case 'e7001':
         return {
-          labelKey:'Issue in Digital Signature registration (e7001), please contact System Administrator.',
+          labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E7001_MSG',
           labelName:'Issue in Digital Signature registration (e7001), please contact System Administrator.',
           type: "error"
         }
       case 'e7025':
         return {
-          labelKey:'Issue in Digital Signature registration (e7025), please contact System Administrator.',
+          labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E7025_MSG',
           labelName:'Issue in Digital Signature registration (e7025), please contact System Administrator.',
           type: "error"
         }

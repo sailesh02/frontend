@@ -7,7 +7,7 @@ import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUt
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
-import { convertDateToEpoch, convertEpochToDate, getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import { convertDateToEpoch, convertEpochToDate, getTranslatedLabel, convertDateTimeToEpoch,getTodaysDateInYMD } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 
 export const serviceConst = {
@@ -1038,6 +1038,9 @@ export const applyForWater = async (state, dispatch) => {
             queryObjectForUpdate.noOfFlats = queryObjectForUpdate.noOfFlats && queryObjectForUpdate.noOfFlats != "" ? queryObjectForUpdate.noOfFlats : 0
             if(mode === "ownershipTransfer"){
                 queryObjectForUpdate.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+                if(process.env.REACT_APP_NAME !== "Citizen" && queryObjectForUpdate){
+                    queryObjectForUpdate.dateEffectiveFrom = convertDateToEpoch(getTodaysDateInYMD())
+                }
             }
             if(isModifyMode()){
                 queryObjectForUpdate.applicationType = "MODIFY_WATER_CONNECTION"
@@ -1067,6 +1070,9 @@ export const applyForWater = async (state, dispatch) => {
             queryObject.pipeSize = 0
             if(mode === "ownershipTransfer"){
                 queryObject.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+                if(process.env.REACT_APP_NAME !== "Citizen" && queryObject){
+                    queryObject.dateEffectiveFrom = convertDateToEpoch(getTodaysDateInYMD())
+                }
             }
             if(isModifyMode()){
                 queryObject.applicationType = "MODIFY_WATER_CONNECTION"
@@ -1162,6 +1168,9 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObjectForUpdate.property = null
             if(isOwnerShipTransfer()){
                 queryObjectForUpdate.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+                if(process.env.REACT_APP_NAME !== "Citizen" && queryObjectForUpdate){
+                    queryObjectForUpdate.dateEffectiveFrom = convertDateToEpoch(getTodaysDateInYMD())
+                }
             }
             if(isModifyMode()){
                 queryObjectForUpdate.applicationType = "MODIFY_SEWERAGE_CONNECTION"
@@ -1190,6 +1199,9 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObject.property = null;
             if(isOwnerShipTransfer()){
                 queryObject.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+                if(process.env.REACT_APP_NAME !== "Citizen" && queryObject){
+                    queryObject.dateEffectiveFrom = convertDateToEpoch(getTodaysDateInYMD())
+                }
             }
             if(isModifyMode()){
                 queryObject.applicationType = "MODIFY_SEWERAGE_CONNECTION"

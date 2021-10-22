@@ -1,13 +1,13 @@
 import commonConfig from "config/common.js";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner, hideSpinner, showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { disableField, enableField, getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
-import { convertDateToEpoch, convertEpochToDate, getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import { convertDateToEpoch, convertEpochToDate, getTranslatedLabel, convertDateTimeToEpoch,getTodaysDateInYMD } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 
 export const serviceConst = {
@@ -147,6 +147,7 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
 
 export const getSearchResultsSW = async (queryObject, filter = false) => {
     try {
+        store.dispatch(showSpinner())
         const response = await httpRequest(
             "post",
             "/sw-services/swc/_search",
@@ -154,6 +155,7 @@ export const getSearchResultsSW = async (queryObject, filter = false) => {
             queryObject
         );
         if (response.SewerageConnections && response.SewerageConnections.length == 0) {
+            store.dispatch(hideSpinner())
             return response;
         }
         let currentTime = new Date().getTime();
@@ -162,15 +164,18 @@ export const getSearchResultsSW = async (queryObject, filter = false) => {
             response.SewerageConnections = response.SewerageConnections.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
         }
         let result = findAndReplace(response, null, "NA");
+        store.dispatch(hideSpinner())
         // result.SewerageConnections = await getPropertyObj(result.SewerageConnections);
         return result;
     } catch (error) {
+        store.dispatch(hideSpinner())
         console.log(error)
     }
 };
 
 export const getSearchResults = async (queryObject, filter = false) => {
     try {
+        store.dispatch(showSpinner())
         const response = await httpRequest(
             "post",
             "/ws-services/wc/_search",
@@ -178,6 +183,7 @@ export const getSearchResults = async (queryObject, filter = false) => {
             queryObject
         );
         if (response.WaterConnection && response.WaterConnection.length == 0) {
+            store.dispatch(hideSpinner())
             return response;
         }
         let currentTime = new Date().getTime();
@@ -193,8 +199,11 @@ export const getSearchResults = async (queryObject, filter = false) => {
         result.WaterConnection[0].waterSource = waterSource;
         result.WaterConnection[0].waterSubSource = waterSubSource;
         // result.WaterConnection = await getPropertyObj(result.WaterConnection);
+        store.dispatch(hideSpinner())
         return result;
-    } catch (error) { console.log(error) }
+    } catch (error) { 
+        store.dispatch(hideSpinner())
+        console.log(error) }
 };
 
 export const getSearchResultsForSewerage = async (queryObject, dispatch, filter = false) => {
@@ -234,10 +243,10 @@ export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
             "_search", [],
             requestBody
         );
-        dispatch(toggleSpinner());
+        dispatch(hideSpinner());
         return findAndReplace(response, null, "NA");
     } catch (error) {
-        dispatch(toggleSpinner());
+        dispatch(hideSpinner());
         store.dispatch(
             toggleSnackbar(
                 true, { labelName: error.message, labelCode: error.message },
@@ -996,6 +1005,7 @@ export const applyForWater = async (state, dispatch) => {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = waterId ? "UPDATE" : "CREATE";
     try {
+        dispatch(toggleSpinner());
         // const tenantId = commonConfig.tenantId
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tenantId");
         let response;
@@ -1028,6 +1038,9 @@ export const applyForWater = async (state, dispatch) => {
             queryObjectForUpdate.noOfFlats = queryObjectForUpdate.noOfFlats && queryObjectForUpdate.noOfFlats != "" ? queryObjectForUpdate.noOfFlats : 0
             if(mode === "ownershipTransfer"){
                 queryObjectForUpdate.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+                if(process.env.REACT_APP_NAME !== "Citizen" && queryObjectForUpdate){
+                    queryObjectForUpdate.dateEffectiveFrom = convertDateToEpoch(getTodaysDateInYMD())
+                }
             }
             if(isModifyMode()){
                 queryObjectForUpdate.applicationType = "MODIFY_WATER_CONNECTION"
@@ -1038,6 +1051,7 @@ export const applyForWater = async (state, dispatch) => {
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
+            dispatch(hideSpinner())
         } else {
             disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             disableField('apply', "components.div.children.footer.children.payButton", dispatch);
@@ -1056,6 +1070,9 @@ export const applyForWater = async (state, dispatch) => {
             queryObject.pipeSize = 0
             if(mode === "ownershipTransfer"){
                 queryObject.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+                if(process.env.REACT_APP_NAME !== "Citizen" && queryObject){
+                    queryObject.dateEffectiveFrom = convertDateToEpoch(getTodaysDateInYMD())
+                }
             }
             if(isModifyMode()){
                 queryObject.applicationType = "MODIFY_WATER_CONNECTION"
@@ -1105,9 +1122,11 @@ export const applyForWater = async (state, dispatch) => {
             if (!isModifyMode()) {
                 setApplicationNumberBox(state, dispatch);
             }
+            dispatch(hideSpinner())
         }
         return true;
     } catch (error) {
+        dispatch(hideSpinner())
         enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
         enableField('apply', "components.div.children.footer.children.payButton", dispatch);
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
@@ -1122,6 +1141,7 @@ export const applyForSewerage = async (state, dispatch) => {
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let method = sewerId ? "UPDATE" : "CREATE";
     try {
+        dispatch(toggleSpinner())
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tenantId");
         // const tenantId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].property.tenantId");
         let response;
@@ -1148,6 +1168,9 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObjectForUpdate.property = null
             if(isOwnerShipTransfer()){
                 queryObjectForUpdate.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+                if(process.env.REACT_APP_NAME !== "Citizen" && queryObjectForUpdate){
+                    queryObjectForUpdate.dateEffectiveFrom = convertDateToEpoch(getTodaysDateInYMD())
+                }
             }
             if(isModifyMode()){
                 queryObjectForUpdate.applicationType = "MODIFY_SEWERAGE_CONNECTION"
@@ -1159,6 +1182,7 @@ export const applyForSewerage = async (state, dispatch) => {
             dispatch(prepareFinalObject("SewerageConnection", searchResponse.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
+            dispatch(hideSpinner())
         } else {
             disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             disableField('apply', "components.div.children.footer.children.payButton", dispatch);
@@ -1175,6 +1199,9 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObject.property = null;
             if(isOwnerShipTransfer()){
                 queryObject.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
+                if(process.env.REACT_APP_NAME !== "Citizen" && queryObject){
+                    queryObject.dateEffectiveFrom = convertDateToEpoch(getTodaysDateInYMD())
+                }
             }
             if(isModifyMode()){
                 queryObject.applicationType = "MODIFY_SEWERAGE_CONNECTION"
@@ -1219,9 +1246,11 @@ export const applyForSewerage = async (state, dispatch) => {
             if (!isModifyMode()) {
                 setApplicationNumberBox(state, dispatch);
             }
+            dispatch(hideSpinner())
         }
         return true;
     } catch (error) {
+        dispatch(hideSpinner())
         enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
         enableField('apply', "components.div.children.footer.children.payButton", dispatch);
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
@@ -1237,6 +1266,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     if (waterId && sewerId) { method = "UPDATE" } else { method = "CREATE" };
     try {
+        dispatch(toggleSpinner())
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tenantId");
         // const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
         let response;
@@ -1306,6 +1336,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
+            dispatch(hideSpinner())
         } else {
             disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             disableField('apply', "components.div.children.footer.children.payButton", dispatch);
@@ -1324,12 +1355,14 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
+            dispatch(hideSpinner())
         }
         if (!isModifyMode()) {
             setApplicationNumberBox(state, dispatch);
         }
         return true;
     } catch (error) {
+        dispatch(hideSpinner())
         enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
         enableField('apply', "components.div.children.footer.children.payButton", dispatch);
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
@@ -1754,6 +1787,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
     switch (service) {
         case serviceConst.WATER:
             try {
+                store.dispatch(toggleSpinner())
                 httpRequest("post", FETCHCONNECTIONDETAILS.GET.URL, FETCHCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then(async (payloadReceiptDetails) => {
                     const queryStr = [
                         { key: "key", value: "ws-consolidatedacknowlegment" },
@@ -1769,16 +1803,19 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
                     }
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
+                            store.dispatch(hideSpinner())
                             downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
                         });
                 })
 
             } catch (exception) {
+                store.dispatch(hideSpinner())
                 alert('Some Error Occured while downloading!');
             }
             break;
         case serviceConst.SEWERAGE:
             try {
+                store.dispatch(toggleSpinner())
                 httpRequest("post", FETCHSWCONNECTIONDETAILS.GET.URL, FETCHSWCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then(async (payloadReceiptDetails) => {
                     const queryStr = [
                         { key: "key", value: "ws-consolidatedsewerageconnection" },
@@ -1787,11 +1824,13 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
                     // payloadReceiptDetails.SewerageConnections = await getPropertyObj(payloadReceiptDetails.SewerageConnections);
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { SewerageConnections: payloadReceiptDetails.SewerageConnections }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
+                            store.dispatch(hideSpinner())
                             downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
                         });
                 })
 
             } catch (exception) {
+                store.dispatch(hideSpinner())
                 alert('Some Error Occured while downloading!');
             }
             break;
@@ -1948,7 +1987,7 @@ export const downloadBill = (receiptQueryString, mode,state,dispatch) => {
     }
 
     try {
-
+        store.dispatch(showSpinner())
         httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
             const queryStr = [
                 { key: "key", value: "ws-bill" },
@@ -2033,15 +2072,16 @@ export const downloadBill = (receiptQueryString, mode,state,dispatch) => {
                             }
                         });
                     }
-
                     httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: payloadReceiptDetails.Bill }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
                             downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
+                            store.dispatch(hideSpinner())
                         });
                 })
             })
         })
     } catch (exception) {
+        store.dispatch(hideSpinner())
         alert('Some Error Occured while downloading Bill!');
     }
 }

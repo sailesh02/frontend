@@ -17,6 +17,8 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
+import store from "ui-redux/store";
+import { toggleSpinner,hideSpinner, showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -191,7 +193,9 @@ class DocumentList extends Component {
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
     const { prepareFinalObject, documentsUploadRedux } = this.props;
+    store.dispatch(showSpinner())
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
+    store.dispatch(hideSpinner())
     prepareFinalObject("documentsUploadRedux", {
       ...documentsUploadRedux,
       [uploadedDocIndex]: {

@@ -16,7 +16,7 @@ import { getSearchResultsSW, getSearchResults, getWaterSource } from "../../ui-u
 import set from "lodash/set";
 import { convertDateToEpoch } from "../../ui-config/screens/specs/utils";
 import ConfirmationDialog from "../ConfirmationDialog";
-import { toggleSpinner,hideSpinner } from "../../../../../packages/lib/egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSpinner,hideSpinner, showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { ifUserRoleExists } from "../../ui-config/screens/specs/utils";
 
@@ -82,14 +82,17 @@ return obj
 
 const fetchBill = async(queryObject) => {
 try {
+  store.dispatch(showSpinner())
   const response = await httpRequest(
       "post",
       "/billing-service/bill/v2/_fetchbill",
       "_fetchBill",
       queryObject
   );
+  store.dispatch(hideSpinner())
   return findAndReplace(response, null, "NA");
 } catch (error) {
+  store.dispatch(hideSpinner())
   console.log(error)
 }
 }

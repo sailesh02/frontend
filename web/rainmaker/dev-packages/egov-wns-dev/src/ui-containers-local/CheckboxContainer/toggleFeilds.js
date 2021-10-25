@@ -5,6 +5,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 export const toggleWater = (onFieldChange, value) => {
   // set('search-preview', "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", value);
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 
   let isMode = isModifyMode();
   let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
@@ -74,6 +75,15 @@ export const toggleWater = (onFieldChange, value) => {
     "visible",
     value
   );
+  if(!applicationNumber && process.env.REACT_APP_NAME != 'Citizen'){
+    onFieldChange(
+      "apply",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
+      "visible",
+      value
+    );
+  }
+
   onFieldChange(
     "apply",
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
@@ -413,17 +423,7 @@ export const togglePropertyFeilds = (action, value) => {
 
 export const toggleSewerageFeilds = (action, value) => {
   let isMode = isModifyMode();
-  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
-
-  // when creating application from employee side
-  if(!applicationNumber && process.env.REACT_APP_NAME != 'Citizen'){
-    set(
-      action.screenConfig,
-      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.visible",
-      false
-    );
-  }
   // set('search-preview', "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForSW.visible", value);
   // set('search-preview', "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", true);
   set(
@@ -537,14 +537,6 @@ export const toggleWaterFeilds = (action, value) => {
     );
   }
 
-  if(!applicationNumber && process.env.REACT_APP_NAME != 'Citizen'){
-    set(
-      action.screenConfig,
-      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.visible",
-      true
-    );
-  }
-
   if(process.env.REACT_APP_NAME !== "Citizen" && isModifyMode() && applicationNumber && applicationNumber.includes('SW')){
     set(
       action.screenConfig,
@@ -615,6 +607,13 @@ export const toggleWaterFeilds = (action, value) => {
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate.visible`,
     value
   );
+  if(!applicationNumber && process.env.REACT_APP_NAME != 'Citizen'){
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.visible`,
+      value
+    );
+  }
   if (!value) {
     set(
       action.screenConfig,
@@ -671,6 +670,7 @@ export const toggleWaterFeilds = (action, value) => {
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio.visible`,
       value
     );
+   
     set(
       action.screenConfig,
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable.visible`,
@@ -681,6 +681,14 @@ export const toggleWaterFeilds = (action, value) => {
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable.visible`,
       value
     );
+
+    if(!applicationNumber && process.env.REACT_APP_NAME != 'Citizen'){
+      set(
+        action.screenConfig,
+        `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.visible`,
+        value
+      );
+    }
   }
   // set(
   //   action.screenConfig,

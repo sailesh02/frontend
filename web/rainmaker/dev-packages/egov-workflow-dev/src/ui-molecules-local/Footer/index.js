@@ -133,6 +133,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                       "keyId":null,
                       "channelId":"ch1",
                       "file":null,
+                      "moduleName":moduleName,
                       "fileName":key,
                       "tenantId":getTenantId(),
                         responseData:responseData.data.responseData,

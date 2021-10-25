@@ -84,7 +84,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
     let tenantId = getTenantIdForPdf(moduleName,data) || getTenantId()
     store.dispatch(showSpinner())
     try{
-      let response = await axios.post(`/pdf-service/v1/_createnosave?key=${key}&tenantId=${tenantId}`, body, {
+      let response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantId}`, body, {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
        })
@@ -98,15 +98,14 @@ let customRequestInfo = JSON.parse(getUserInfo())
               RequestInfo,
               "tenantId":getTenantId(),
               "responseData":null,
-              "file":response.data.fileStoreId,
+              "file":response.data && response.data.filestoreIds && response.data.filestoreIds[0],
               "fileName":key,
               "tokenDisplayName":token,
               "certificate" : certificate,
               "keyId":certificate,
-              "pdfBytes":response.data,
               "moduleName":moduleName,
               "reportName":key,
-              "channelId":"default",
+              "channelId":"ch1",
               "keyStorePassPhrase": password
             } 
           );
@@ -132,7 +131,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                       "tokenDisplayName":null,
                       "keyStorePassPhrase":null,
                       "keyId":null,
-                      "channelId":"default",
+                      "channelId":"ch1",
                       "file":null,
                       "fileName":key,
                       "tenantId":getTenantId(),

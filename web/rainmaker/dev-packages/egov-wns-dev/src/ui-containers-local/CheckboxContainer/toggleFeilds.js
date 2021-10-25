@@ -537,6 +537,14 @@ export const toggleWaterFeilds = (action, value) => {
     );
   }
 
+  if(!applicationNumber && process.env.REACT_APP_NAME != 'Citizen'){
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.visible",
+      true
+    );
+  }
+
   if(process.env.REACT_APP_NAME !== "Citizen" && isModifyMode() && applicationNumber && applicationNumber.includes('SW')){
     set(
       action.screenConfig,

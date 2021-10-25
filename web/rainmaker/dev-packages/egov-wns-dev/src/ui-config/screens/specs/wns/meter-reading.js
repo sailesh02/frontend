@@ -2,7 +2,7 @@ import { getMeterReadingData } from "../../../../ui-utils/commons"
 import { getCommonHeader, getLabel, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCommonCard, getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, toggleSpinner, showSpinner, hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { meterReadingEditable } from "./meterReading/meterReadingEditable";
 import { getMdmsDataForMeterStatus,APPLICATIONSTATE } from "../../../../ui-utils/commons"
@@ -14,7 +14,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { sortpayloadDataObj } from './connection-details'
 
 const addMeterReading = async (state, dispatch) => {
-    dispatch(toggleSpinner());
+    dispatch(showSpinner());
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const connectionNos = getQueryArg(window.location.href, "connectionNos");
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNos },{ key: "searchType",value:"CONNECTION"}];
@@ -43,7 +43,7 @@ const addMeterReading = async (state, dispatch) => {
 
         if(payloadData.WaterConnection && (payloadData.WaterConnection[0].applicationStatus == "CONNECTION_DISCONNECTED" 
         || payloadData.WaterConnection[0].applicationStatus == "CONNECTION_CLOSED")){
-            dispatch(toggleSpinner());
+            dispatch(hideSpinner());
             dispatch(
                 toggleSnackbar(
                     true,
@@ -57,7 +57,7 @@ const addMeterReading = async (state, dispatch) => {
             return;
         }
         else if(!isApplicationApproved){
-            dispatch(toggleSpinner());
+            dispatch(hideSpinner());
             dispatch(
                 toggleSnackbar(
                     true,
@@ -77,7 +77,7 @@ const addMeterReading = async (state, dispatch) => {
         }
 
     }  
-    dispatch(toggleSpinner());
+    dispatch(hideSpinner());
 };
 
 const setAutopopulatedvalues = async (state, dispatch) => {

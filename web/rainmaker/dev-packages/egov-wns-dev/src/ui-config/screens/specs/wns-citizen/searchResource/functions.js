@@ -2,7 +2,7 @@ import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, fetchBill, getSearchResultsForSewerage, serviceConst } from "../../../../../ui-utils/commons";
 import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar, showSpinner, hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { httpRequest } from "../../../../../ui-utils";
 
@@ -58,6 +58,7 @@ export const searchApiCall = async (state, dispatch) => {
     let sewerageNonMeteredDemandExpiryDate = 0;
     let payloadbillingPeriod
     try {
+      dispatch(showSpinner())
       try {
         // Get the MDMS data for billingPeriod
         let mdmsBody = {
@@ -72,7 +73,10 @@ export const searchApiCall = async (state, dispatch) => {
         //Read metered & non-metered demand expiry date and assign value.
         payloadbillingPeriod = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
         
-      } catch (err) { console.log(err) }
+      } catch (err) { 
+        console.log(err) 
+        dispatch(hideSpinner())
+      }
       queryObject.push({ key: "searchType", value: "CONNECTION" });
       let getSearchResult = await getSearchResults(queryObject)
       let getSearchResultForSewerage = await getSearchResultsForSewerage(queryObject, dispatch)
@@ -114,8 +118,9 @@ export const searchApiCall = async (state, dispatch) => {
               }
             }); 
           }
-
+          dispatch(showSpinner())
           let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
+          dispatch(hideSpinner())
           billResults && billResults.Bill &&Array.isArray(billResults.Bill)&&billResults.Bill.length>0 ? billResults.Bill.map(bill => {
             let updatedDueDate = 0;
             if(element.service === serviceConst.WATER) {
@@ -153,7 +158,8 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
       showResults(finalArray, dispatch, tenantId)
-    } catch (err) { console.log(error) }
+    } catch (err) { console.log(error) 
+      dispatch(hideSpinner())}
   }
 }
 const showHideTable = (booleanHideOrShow, dispatch) => {
@@ -184,4 +190,5 @@ const showResults = (connections, dispatch, tenantId) => {
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchResults", "props.rows", connections.length));
   showHideTable(true, dispatch);
+  dispatch(hideSpinner())
 }

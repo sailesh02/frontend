@@ -706,6 +706,14 @@ const propertyDetailsNoId = getCommonContainer({
 
       // only while creating application from employee side
       if(process.env.REACT_APP_NAME != "Citizen" && !applicationNumber){
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+            "visible",
+            false
+          )
+        );
         if(action && action.value == 'Non Metered'){
           dispatch(
             handleField(

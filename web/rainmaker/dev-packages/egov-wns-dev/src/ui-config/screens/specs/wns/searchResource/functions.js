@@ -1,11 +1,14 @@
-import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar, showSpinner, hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { fetchBill, findAndReplace, getSearchResults, getSearchResultsForSewerage, getWorkFlowData, serviceConst } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
 import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection, getTextToLocalMapping } from "../../utils/index";
 import { httpRequest } from "../../../../../ui-utils";
+import store from "ui-redux/store";
+
 export const searchApiCall = async (state, dispatch) => {
+  store.dispatch(showSpinner())
   showHideApplicationTable(false, dispatch);
   showHideConnectionTable(false, dispatch);
   let getCurrentTab = get(state.screenConfiguration.preparedFinalObject, "currentTab");
@@ -13,9 +16,11 @@ export const searchApiCall = async (state, dispatch) => {
   if (currentSearchTab === "SEARCH_CONNECTION") {
     resetFieldsForApplication(state, dispatch);
     await renderSearchConnectionTable(state, dispatch);
+    store.dispatch(hideSpinner())
   } else {
     resetFieldsForConnection(state, dispatch);
     await renderSearchApplicationTable(state, dispatch);
+    store.dispatch(hideSpinner())
   }
 }
 
@@ -194,6 +199,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
       }
     }
     try { 
+      store.dispatch(showSpinner())
       let getSearchResult, getSearchResultForSewerage;
       if (searchScreenObject.applicationType && searchScreenObject.applicationType.toLowerCase().includes('water')) {
         getSearchResult = getSearchResults(queryObject)

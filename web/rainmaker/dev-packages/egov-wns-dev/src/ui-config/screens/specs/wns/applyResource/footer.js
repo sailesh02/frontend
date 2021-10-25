@@ -702,7 +702,7 @@ export const changeStep = (
         activeStep = 2;
       }
     } else if ((process.env.REACT_APP_NAME === "Citizen" && activeStep === 3 && !isModifyMode()) ||
-      process.env.REACT_APP_NAME !== "Citizen" && isOwnerShipTransfer()) {
+      process.env.REACT_APP_NAME !== "Citizen" && isOwnerShipTransfer() && activeStep === 3) {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 2;
     } else {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;

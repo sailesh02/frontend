@@ -290,6 +290,16 @@ export const handleNA = params => {
   } else { return "NA"; }
 }
 
+export const handleApartment = params => {
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
+  if(params == undefined || params == null && params == "" || params == 0 || 
+  (process.env.REACT_APP_NAME != 'Citizen' && !applicationNumber)){
+    return 'No'
+  }else{
+    return params
+  }
+}
+
 export const handleInstallementorFullPayment = params => {
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
   let state = store.getState();

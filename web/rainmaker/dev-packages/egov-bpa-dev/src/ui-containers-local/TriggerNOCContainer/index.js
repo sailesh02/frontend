@@ -511,6 +511,30 @@ class TriggerNOCContainer extends Component {
             labelName={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelName}
             labelKey={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
             <TextFieldContainer
+              select ={true}
+              data={[{
+                "code":'Municipal Corporation',
+                "label":"Municipal Corporation"
+              },
+              {
+                "code":'Municipalities',
+                "label":"Municipalities"
+              },
+              {
+                "code":'Nagar Panchayat',
+                "label":"Nagar Panchayat"
+              },
+              {
+                "code":'Village Panchayat',
+                "label":"Village Panchayat"
+              },
+              {
+                "code":'Other',
+                "label":"Other"
+              }]}
+              optionValue="code"
+              optionLabel="label"
+              
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.placeholder}
               jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf`}

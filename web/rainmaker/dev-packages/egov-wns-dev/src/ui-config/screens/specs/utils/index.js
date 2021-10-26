@@ -312,7 +312,7 @@ export const handleInstallementorFullPayment = params => {
     if(params === 'Y'){
       return 'Installment'
     }else if(params === 'N'){
-      if(laborCharge){
+      if(laborChargeApply){
         return 'Full Payment'
       }else{
         return 'NA'

@@ -460,6 +460,30 @@ export const additionDetails = getCommonCard({
         gridDefination: { xs: 6, sm: 6 },
         jsonPath: "applyScreen.additionalDetails.isLabourFeeApplicable",
         afterFieldChange: async (action, state, dispatch) => {
+          let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+          if(process.env.REACT_APP_NAME != 'Citizen' && !applicationNumber){
+            dispatch(
+              handleField(
+              "apply",
+              "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge",
+              "visible",
+              true
+            ));
+            dispatch(
+              handleField(
+              "apply",
+              "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+              "visible",
+              true
+            ));
+            dispatch(
+              handleField(
+              "apply",
+              "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment",
+              "visible",
+              true
+            ));
+          }
           if(process.env.REACT_APP_NAME !== "Citizen") {
             let connectionType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
             if (connectionType === undefined || connectionType == "Non Metered" || connectionType == "Metered") {

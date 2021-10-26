@@ -303,25 +303,43 @@ export const handleApartment = params => {
 export const handleInstallementorFullPayment = params => {
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
   let state = store.getState();
-  let laborCharge = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
-  state.screenConfiguration.preparedFinalObject.WaterConnection && state.screenConfiguration.preparedFinalObject.WaterConnection[0] &&
-  state.screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails &&
-  state.screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.isLabourFeeApplicable && 
-  state.screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.isLabourFeeApplicable === 'Y' ? true :false
-  if(params === 'Y'){
-    return 'Installment'
-  }else if(params === 'N'){
-    if(laborCharge){
-      return 'Full Payment'
-    }else{
-      return 'NA'
+  if(!applicationNumber && process.env.REACT_APP_NAME != 'Citizen'){
+    let laborChargeApply = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
+    state.screenConfiguration.preparedFinalObject.applyScreen &&
+    state.screenConfiguration.preparedFinalObject.applyScreen.additionalDetails &&
+    state.screenConfiguration.preparedFinalObject.applyScreen.additionalDetails.isLabourFeeApplicable && 
+    state.screenConfiguration.preparedFinalObject.applyScreen.additionalDetails.isLabourFeeApplicable === 'Y' ? true :false
+    if(params === 'Y'){
+      return 'Installment'
+    }else if(params === 'N'){
+      if(laborCharge){
+        return 'Full Payment'
+      }else{
+        return 'NA'
+      }
     }
-  }else if(applicationNumber && applicationNumber.includes('SW')){
-    return "NA"
+  }else{
+    let laborCharge = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
+    state.screenConfiguration.preparedFinalObject.WaterConnection && state.screenConfiguration.preparedFinalObject.WaterConnection[0] &&
+    state.screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails &&
+    state.screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.isLabourFeeApplicable && 
+    state.screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.isLabourFeeApplicable === 'Y' ? true :false
+    if(params === 'Y'){
+      return 'Installment'
+    }else if(params === 'N'){
+      if(laborCharge){
+        return 'Full Payment'
+      }else{
+        return 'NA'
+      }
+    }else if(applicationNumber && applicationNumber.includes('SW')){
+      return "NA"
+    }
+    else{
+      return ''
+    }
   }
-  else{
-    return ''
-  }
+  
 }
 
 export const handleLaborCharge = params => {

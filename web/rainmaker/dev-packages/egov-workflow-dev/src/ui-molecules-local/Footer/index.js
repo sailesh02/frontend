@@ -2,6 +2,7 @@ import { Container, Item } from "egov-ui-framework/ui-atoms";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
 import { getTenantId, getUserInfo,getAccessToken,getLocale } from "egov-ui-kit/utils/localStorageUtils";
@@ -150,24 +151,31 @@ let customRequestInfo = JSON.parse(getUserInfo())
                     })
                     return data
                   }else{
-                    this.props.hideSpinner();
-                    return store.dispatch(toggleSnackbar(true, 'Authentication Failure', "error"));
+                    store.dispatch(hideSpinner());
+                    store.dispatch(toggleSnackbarAndSetText(
+                      true,
+                      {
+                        labelName: "Authentication Failure!",
+                        labelKey: 'Authentication Failure'
+                      },
+                      "error"
+                    ));
                   }
                     }catch(error){
-                      this.props.hideSpinner();
+                      store.dispatch(hideSpinner());
                       store.dispatch(toggleSnackbar(true, error && error.message || '', "error"));
                     }
                 }
                 }catch(err){ 
-                  this.props.hideSpinner(); 
+                  store.dispatch(hideSpinner()); 
             }
           }
         }catch(err){
-          this.props.hideSpinner();
+          store.dispatch(hideSpinner());
         }
       }
     }catch(err){
-      this.props.hideSpinner();
+      store.dispatch(hideSpinner());
       store.dispatch(toggleSnackbar(true, err.message, "error"));
     }  
   }
@@ -806,7 +814,10 @@ const mapDispatchToProps = dispatch => {
     showSpinner: () =>
       dispatch(showSpinner()),
     hideSpinner: () =>
-      dispatch(hideSpinner())
+      dispatch(hideSpinner()),
+    toggleSnackbarAndSetText: (open, message, variant) => {
+        dispatch(toggleSnackbarAndSetText(open, message, variant));
+      }
   };
 };
 

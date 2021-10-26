@@ -75,7 +75,8 @@ export const toggleWater = (onFieldChange, value) => {
     "visible",
     value
   );
-  if(!applicationNumber && process.env.REACT_APP_NAME != 'Citizen'){
+  if((!applicationNumber && process.env.REACT_APP_NAME != 'Citizen') || (window && window.location && window.location.pathname &&
+    window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen')){
     onFieldChange(
       "apply",
       `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
@@ -607,7 +608,8 @@ export const toggleWaterFeilds = (action, value) => {
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate.visible`,
     value
   );
-  if(!applicationNumber && process.env.REACT_APP_NAME != 'Citizen'){
+  if((!applicationNumber && process.env.REACT_APP_NAME != 'Citizen') || (window && window.location && window.location.pathname &&
+    window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen')){
     set(
       action.screenConfig,
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.visible`,
@@ -682,7 +684,8 @@ export const toggleWaterFeilds = (action, value) => {
       value
     );
 
-    if(!applicationNumber && process.env.REACT_APP_NAME != 'Citizen'){
+    if((!applicationNumber && process.env.REACT_APP_NAME != 'Citizen') || (window && window.location && window.location.pathname &&
+      window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen')){
       set(
         action.screenConfig,
         `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.visible`,

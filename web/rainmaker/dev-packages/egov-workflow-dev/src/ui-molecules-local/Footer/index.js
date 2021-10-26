@@ -143,12 +143,15 @@ let customRequestInfo = JSON.parse(getUserInfo())
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                   })
-                  if(singedFileStoreId){
+                  if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && singedFileStoreId.data.responseString == 'Authentication Successfull'){
                     data && data.documents.length > 0 && data.documents.push({
                       "fileName": key,
                       "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                     })
                     return data
+                  }else{
+                    this.props.hideSpinner();
+                    return store.dispatch(toggleSnackbar(true, 'Authentication Failure', "error"));
                   }
                     }catch(error){
                       this.props.hideSpinner();

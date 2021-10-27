@@ -329,17 +329,9 @@ class WorkFlowContainer extends React.Component {
         }
       }
       console.log(data, "nero data")
-      // if(isDsInfo && (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4"|| moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4')){
-      //   payload = await httpRequest("post", updateUrl, "", [], {
-      //     [dataPath]: data,
-      //     "DsInfo":isDsInfo
-      //   });
-      // }else{
-        debugger
         payload = await httpRequest("post", updateUrl, "", [], {
           [dataPath]: data
         });
-      // }
       this.setState({
         open: false
       });

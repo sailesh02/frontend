@@ -76,7 +76,7 @@ export const toggleWater = (onFieldChange, value) => {
     value
   );
   if((!applicationNumber && process.env.REACT_APP_NAME != 'Citizen') || (window && window.location && window.location.pathname &&
-    window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen')){
+    window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen') && !isModifyMode()){
     onFieldChange(
       "apply",
       `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
@@ -177,7 +177,7 @@ export const toggleWater = (onFieldChange, value) => {
   );
 
   if((!applicationNumber && process.env.REACT_APP_NAME != "Citizen") || (window && window.location && window.location.pathname &&
-    window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen')){
+    window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen') && !isModifyMode()){
     onFieldChange(
       "apply",
       "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
@@ -625,7 +625,7 @@ export const toggleWaterFeilds = (action, value) => {
     value
   );
   if((!applicationNumber && process.env.REACT_APP_NAME != 'Citizen') || (window && window.location && window.location.pathname &&
-    window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen')){
+    window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen') && !isModifyMode()){
     set(
       action.screenConfig,
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.visible`,
@@ -701,7 +701,7 @@ export const toggleWaterFeilds = (action, value) => {
     );
 
     if((!applicationNumber && process.env.REACT_APP_NAME != 'Citizen') || (window && window.location && window.location.pathname &&
-      window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen')){
+      window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen') && !isModifyMode()){
       set(
         action.screenConfig,
         `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.visible`,

@@ -10,6 +10,10 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     // propertyDetails.reviewPropertyType.localiseValue = true;
     // propertyDetails.reviewPropertyType.localiseValue = true;
     propertyDetails.reviewPropertyUsageType.localiseValue = true;
+    propertyDetails.city.localiseValue = true;
+    propertyDetails.mohalla.localiseValue = true;
+    propertyDetails.connectionCategory.localiseValue = true;
+    propertyDetails.connectionType.localiseValue = true;
     // propertyDetails.reviewPropertySubUsageType.localiseValue = true;
     roadDetails.reviewRoadType.localiseValue = true;
     propertyOwnerDetail.gender.localiseValue = true;

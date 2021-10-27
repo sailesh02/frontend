@@ -142,8 +142,24 @@ class Property extends Component {
     }
   };
   onEditPropertyClick = () => {
+    const userInfo = JSON.parse(getUserInfo());
     const { latestPropertyDetails, propertyId, tenantId, selPropertyDetails } = this.props;
     const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
+    const owners = selPropertyDetails && selPropertyDetails.owners || []
+    
+    const isSameOwner = owners && owners.some( ele => {
+      return ele.mobileNumber == userInfo.mobileNumber
+    }) || false
+
+    // restrict citizen from editing the property of another owner
+    if(process.env.REACT_APP_NAME == 'Citizen' && !isSameOwner){
+      this.props.toggleSnackbarAndSetText(
+        true,
+        { labelName: "ERROR_PROPERTY_BELONG_TO_ANOTHER_OWNER", labelKey: "ERROR_PROPERTY_BELONG_TO_ANOTHER_OWNER" },
+        "error"
+      );
+      return 
+    }
     if (selPropertyDetails.status != "ACTIVE") {
       this.props.toggleSnackbarAndSetText(
         true,

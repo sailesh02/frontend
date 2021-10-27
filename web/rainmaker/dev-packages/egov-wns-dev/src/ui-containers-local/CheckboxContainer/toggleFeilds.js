@@ -175,9 +175,25 @@ export const toggleWater = (onFieldChange, value) => {
     "visible",
     value
   );
+
+  if((!applicationNumber && process.env.REACT_APP_NAME != "Citizen") || (window && window.location && window.location.pathname &&
+    window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen')){
+    onFieldChange(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+      "visible",
+      value
+    );
+  }
   onFieldChange(
     "apply",
     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
     "visible",
     value
   );

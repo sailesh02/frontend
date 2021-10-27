@@ -133,6 +133,13 @@ const onRowClick = rowData => {
   }
 };
 
+const onRowClickForUpdate = rowData => {
+  console.log(rowData, "Nero rowData")
+  
+  window.location.href = `traderateadd?purpose=billingslabrate&tenantId=${rowData[2]}&licenseType=${rowData[3]}&applicationType=${rowData[10]}&tradeType=${rowData[4]}&licenseType=${rowData[3]}&type=${rowData[9]}&uom=${rowData[5]}&from=${rowData[7]}&to=${rowData[8]}`;
+  //routeTo(`traderateadd?purpose=billingslabrate&tenantId=${rowData[2]}&licenseType=${rowData[3]}&applicationType=${rowData[10]}&tradeType=${rowData[4]}&licenseType=${rowData[3]}&type=${rowData[9]}&uom=${rowData[5]}&from=${rowData[7]}&to=${rowData[8]}`);
+};
+
 
 export const tradeSearchResults = {
   uiFramework: "custom-molecules",
@@ -140,7 +147,24 @@ export const tradeSearchResults = {
   visible: false,
   props: {
     columns: [
-
+      {
+        labelName: "Application No",
+        labelKey: "TL_COMMON_TABLE_COL_ACTION",
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta) => (
+            <a href="javascript:void(0)" onClick={() => onRowClickForUpdate(tableMeta.rowData)}>{value}</a>
+          )
+        }
+      },
+      {
+        labelName: "Tenant Id",
+        labelKey: "TL_COMMON_TABLE_COL_RECORD_ID",
+        options:{
+          display:false
+        }
+      },
+      
       {
         labelName: "Tenant Id",
         labelKey: "TL_COMMON_TABLE_COL_TENANT_ID",

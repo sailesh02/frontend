@@ -30,9 +30,10 @@ class DynamicMdmsContainer extends Component {
       
       await getMdmsJson(state, dispatch, reqObj);
       this.triggerCallback(null, null, null);
-      if (getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL" || getQueryArg(window.location.href, "applicationNumber") != null) {
+      if (getQueryArg(window.location.href, "purpose") == "billingslabrate" || getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL" || getQueryArg(window.location.href, "applicationNumber") != null) {
         callBackEdit(state, dispatch);
       } else {
+        
         dropdownFields && dropdownFields.forEach((entry, i) => {
           if (entry.defaultValue) {
             let componentJSONPath = `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${entry.key}`;

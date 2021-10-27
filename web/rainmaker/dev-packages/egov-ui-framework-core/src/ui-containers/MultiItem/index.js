@@ -285,7 +285,7 @@ const mapStateToProps = state => {
   let hasAddItem = true;
   let Licenses = get(preparedFinalObject, "Licenses", null);
   let screenConfigKeys = Object.keys(screenConfig);
-  if(screenConfigKeys && screenConfigKeys.length > 0 && screenConfigKeys[0] == "tradesearch"){
+  if(screenConfigKeys && screenConfigKeys.length > 0 && screenConfigKeys[0] == "tradesearch" || screenConfigKeys && screenConfigKeys.length > 0 && screenConfigKeys[0] == "traderateadd"){
     hasAddItem = false;
   }
 

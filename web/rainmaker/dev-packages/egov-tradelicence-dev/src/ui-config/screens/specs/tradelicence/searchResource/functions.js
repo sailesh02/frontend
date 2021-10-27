@@ -236,7 +236,12 @@ export const searchApiCallForTradeSearch = async (state, dispatch) => {
 
     try {
       console.log(response, "Nero Responsess")
-      let data = response.billingSlab.map(item => ({
+      let data = response && response.billingSlab && response.billingSlab.map(item => ({
+        
+        ['TL_COMMON_TABLE_COL_ACTION']:
+          "Edit",
+          ['TL_COMMON_TABLE_COL_RECORD_ID']:
+          item.id || "-",  
         ['TL_COMMON_TABLE_COL_TENANT_ID']:
           item.tenantId || "-",
         ['TL_COMMON_TABLE_COL_LICENSE_TYPE']:
@@ -276,6 +281,7 @@ export const searchApiCallForTradeSearch = async (state, dispatch) => {
       );
       showHideTradeSearchTable(true, dispatch);
     } catch (error) {
+      console.log(error, "Nero Error")
       dispatch(toggleSnackbar(true, error.message, "error"));
       console.log(error);
     }

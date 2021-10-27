@@ -13,7 +13,19 @@ import { pendingApprovals } from "./searchResource/pendingApprovals";
 // import { progressStatus } from "./searchResource/progressStatus";
 import { tradeSearchResults } from "./searchResource/searchResults";
 import { tradeSearchForm } from "./searchResource/tradesearchform";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
+
+export const showHideCityPickerPopup = (state, dispatch, screenKey) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig[screenKey],
+    "components.cityPickerDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField(screenKey, "components.cityPickerDialog", "props.open", !toggle)
+  );
+};
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -76,7 +88,7 @@ const getMdmsData = async (dispatch) => {
     );
 
 
-    let EmpApplyAppsFor = [{code: "TL_APPLY_TRADELICENSE", active: true},{code: "TL_APPLY_TEMP_TRADELICENSE", active: true}, {code: "TL_RENEW_LEGACY_LICENSE", active: true}]
+    let EmpApplyAppsFor = [{code: "PERMANENT", active: true},{code: "TEMPORARY", active: true}]
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.searchScreen.tlType",
@@ -133,7 +145,58 @@ const tradeLicenseSearchAndResult = {
               },
               ...header
             },
-            
+            newApplicationButton: {
+              componentPath: "Button",
+              gridDefination: {
+                xs: 12,
+                sm: 6,
+                align: "right"
+              },
+              visible: enableButton,
+              props: {
+                variant: "contained",
+                color: "primary",
+                style: {
+                  color: "white",
+                  borderRadius: "2px",
+                  width: "250px",
+                  height: "48px"
+                }
+              },
+              children: {
+                plusIconInsideButton: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "add",
+                    style: {
+                      fontSize: "24px"
+                    }
+                  }
+                },
+                buttonLabel: getLabel({
+                  labelName: "NEW APPLICATION",
+                  labelKey: "TL_HOME_TRADE_SEARCH_RESULTS_NEW_TRADE_RATE"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: (state, dispatch) => {
+                  dispatch(
+                    setRoute(
+                      `/tradelicence/traderateadd`
+                    )
+                  );
+                 // showHideCityPickerPopup(state, dispatch, 'tradesearch');
+                 // dispatch(prepareFinalObject("MarriageRegistrations", []));
+                  //dispatch(prepareFinalObject("LicensesTemp", []));
+                }
+              },
+              roleDefination: {
+                rolePath: "user-info.roles",
+                roles: ["TL_CEMP"]
+              }
+            }
           }
         },
        // pendingApprovals,
@@ -142,6 +205,7 @@ const tradeLicenseSearchAndResult = {
         tradeSearchResults
       }
     },
+    
     adhocDialog: {
       uiFramework: 'custom-containers',
       componentPath: 'DialogContainer',

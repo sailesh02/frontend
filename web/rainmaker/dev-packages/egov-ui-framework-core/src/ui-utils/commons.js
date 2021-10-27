@@ -848,7 +848,7 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
 
 
   if (moduleName === "TradeLicense") {
-    if (screenName == "tradeSearchPage") {
+    if (screenName == "tradeSearchPage" || screenName == "tradeRateAddPage") {
 
       mdmsBody = {
         MdmsCriteria: {

@@ -118,6 +118,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
           if(encryptedData){
               try{
                 let body = encryptedData.data.input
+                let tempFilePath = encryptedData.data.input && encryptedData.data.input.tempFilePath || ''
                 let responseData = await axios.post("https://localhost.emudhra.com:26769/DSC/PKCSBulkSign", body, { // to get response Data
                   'Content-Type': 'application/json',
                   'Accept': 'application/json'
@@ -136,6 +137,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                       "file":null,
                       "moduleName":moduleName,
                       "fileName":key,
+                      "tempFilePath":tempFilePath,
                       "tenantId":getTenantId(),
                         responseData:responseData.data.responseData,
                       }
@@ -144,7 +146,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                   })
-                  if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && singedFileStoreId.data.responseString == 'Authentication Successfull'){
+                  if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && singedFileStoreId.data.responseString == 'Success'){
                     data && data.documents.length > 0 && data.documents.push({
                       "fileName": key,
                       "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
@@ -152,14 +154,26 @@ let customRequestInfo = JSON.parse(getUserInfo())
                     return data
                   }else{
                     store.dispatch(hideSpinner());
-                    store.dispatch(toggleSnackbarAndSetText(
-                      true,
-                      {
-                        labelName: "Authentication Failure!",
-                        labelKey: 'Authentication Failure'
-                      },
-                      "error"
-                    ));
+                    let errorCode = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.responseString 
+                    if(errorCode == 'Authentication Failure'){
+                      store.dispatch(toggleSnackbarAndSetText(
+                        true,
+                        {
+                          labelName: "Authentication Failure!",
+                          labelKey: 'Authentication Failure'
+                        },
+                        "error"
+                      ));
+                    }else{
+                      store.dispatch(toggleSnackbarAndSetText(
+                        true,
+                        {
+                          labelName: "Issue during Digital Signature of the report (Error Code). Please contact system Administrator",
+                          labelKey: `Issue during Digital Signature of the report (${errorCode}). Please contact system Administrator`
+                        },
+                        "error"
+                      ));
+                    }
                   }
                     }catch(error){
                       store.dispatch(hideSpinner());

@@ -7,7 +7,7 @@ import {
   getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
-import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA,handleLocality,handleConnectionType  } from '../../utils';
+import { convertEpochToDateAndHandleNA, handleApartment, handlePropertySubUsageType, handleNA,handleLocality,handleConnectionType  } from '../../utils';
 import {isModifyMode,getTenantId} from '../../../../../ui-utils/commons'
 
 
@@ -483,7 +483,7 @@ const getPropertyDetails = {
             },
             {
               jsonPath: "applyScreen.apartment",
-              // callBack: handleNA
+              callBack: handleApartment
              
             },
             {
@@ -491,7 +491,7 @@ const getPropertyDetails = {
             },
             {
               jsonPath: "applyScreenOld.apartment",
-              // callBack: handleNA 
+              callBack: handleApartment 
             }
 
           )

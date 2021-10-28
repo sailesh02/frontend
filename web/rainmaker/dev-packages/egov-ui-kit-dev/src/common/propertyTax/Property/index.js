@@ -324,6 +324,7 @@ class Property extends Component {
       loading
     } = this.props;
 
+    let userInfo = JSON.parse(getUserInfo());
     console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",new Date(1623153780253))
     const { closeYearRangeDialogue } = this;
     const { closeEditMobileDialog } = this;
@@ -343,7 +344,15 @@ class Property extends Component {
       }
     })
 
+    let owners = selPropertyDetails && selPropertyDetails.owners || []
     const isCEMPEmployee = this.ifUserRoleExists('PT_CEMP')
+
+    // to check if owner belongs to the same property
+    const isSameOwner = owners && owners.some( ele => {
+      return ele.mobileNumber == userInfo.mobileNumber
+    }) || false
+
+    const isAuthorizedCitizen = ((process.env.REACT_APP_NAME != 'Citizen') || (process.env.REACT_APP_NAME == 'Citizen' && isSameOwner)) ? true : false
     let urlArray = [];
     let assessmentHistory = [];
     const { pathname } = location;
@@ -383,7 +392,7 @@ class Property extends Component {
             primary={true}
             style={{ lineHeight: "auto", minWidth: "45%" }}
           />
-          ) : showUpdateForEmployee && !showUpdateForEmployee.includes(false) && (process.env.REACT_APP_NAME == "Citizen" || isCEMPEmployee) ? (<div>
+          ) : showUpdateForEmployee && !showUpdateForEmployee.includes(false) && (process.env.REACT_APP_NAME == "Citizen" || isCEMPEmployee) && isAuthorizedCitizen ? (<div>
            <Button
             label={
               <Label buttonLabel={true}

@@ -336,7 +336,7 @@ class DigitalSignatureDialog extends Component {
           "tokenDisplayName":this.state.selectedToken,
           "keyStorePassPhrase":this.state.password,
           "keyId":this.state.selectedCeritificate,
-          "channelId":"ch1",
+          "channelId":"ch4",
           responseData:null
         }
       );
@@ -364,7 +364,7 @@ class DigitalSignatureDialog extends Component {
                    "tokenDisplayName":this.state.selectedToken,
                    "keyStorePassPhrase":this.state.password,
                    "keyId":this.state.selectedCeritificate,
-                   "channelId":"ch1",
+                   "channelId":"ch4",
                    "responseData":response.data.responseData
                   }
                );

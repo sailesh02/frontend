@@ -106,7 +106,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
               "keyId":certificate,
               "moduleName":moduleName,
               "reportName":key,
-              "channelId":"ch1",
+              "channelId":"ch4",
               "keyStorePassPhrase": password
             } 
           );
@@ -133,7 +133,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                       "tokenDisplayName":null,
                       "keyStorePassPhrase":null,
                       "keyId":null,
-                      "channelId":"ch1",
+                      "channelId":"ch4",
                       "file":null,
                       "moduleName":moduleName,
                       "fileName":key,
@@ -146,7 +146,8 @@ let customRequestInfo = JSON.parse(getUserInfo())
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                   })
-                  if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && singedFileStoreId.data.responseString == 'Success'){
+                  if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && (singedFileStoreId.data.responseString && 
+                  (singedFileStoreId.data.responseString.includes('success') || singedFileStoreId.data.responseString.includes('Success')))){
                     data && data.documents.length > 0 && data.documents.push({
                       "fileName": key,
                       "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId

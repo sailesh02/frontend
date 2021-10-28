@@ -1,5 +1,5 @@
 import { download } from "egov-common/ui-utils/commons";
-import { dispatchMultipleFieldChangeAction, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { dispatchMultipleFieldChangeAction, getLabel, getLabelWithValue, getCommonGrayCard, getCommonContainer, getCommonCard, getCommonTitle, getCommonSubHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject, toggleSnackbar, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
@@ -11,8 +11,148 @@ import get from "lodash/get";
 import set from "lodash/set";
 import some from "lodash/some";
 import { addUpdateBillSlab, checkValidOwners, getNextFinancialYearForRenewal } from "../../../../../ui-utils/commons";
-import { createEstimateData, downloadCertificateForm, getButtonVisibility, getCommonApplyFooter, getDocList, setMultiOwnerForApply, setValidToFromVisibilityForApply, validateFields, downloadProvisionalCertificateForm } from "../../utils";
+import { createEstimateData, downloadCertificateForm, getButtonVisibility, getCommonApplyFooter, getDocList, setMultiOwnerForApply, setValidToFromVisibilityForApply, validateFields, downloadProvisionalCertificateForm, checkValueForNA } from "../../utils";
 
+
+export const billingSlabReviewDetails = {
+  reviewCity: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+    },
+    {
+      jsonPath:
+        "billingSlab[0].tenantId",
+      // localePrefix: {
+      //   moduleName: "TradeLicense",
+      //   masterName: "ApplicationType"
+      // },
+    }
+  ),
+
+  reviewApplicationType: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "TL_APPLICATION_TYPE"
+    },
+    {
+      jsonPath:
+        "billingSlab[0].applicationType",
+      localePrefix: {
+        moduleName: "TradeLicense",
+        masterName: "ApplicationType"
+      },
+    }
+  ),
+  reviewLicenceType: getLabelWithValue(
+    {
+      labelName: "Licence Type",
+      labelKey: "TL_COMMON_TABLE_COL_LICENSE_TYPE"
+    },
+    {
+      jsonPath: "billingSlab[0].licenseType",
+      localePrefix: {
+        moduleName: "TRADELICENSE",
+        masterName: "LICENSETYPE"
+      },
+    }
+  ),
+  reviewTradeType: getLabelWithValue(
+    {
+      labelName: "Trade Type",
+      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL"
+    },
+    {
+      jsonPath: "billingSlab[0].tradeType",
+      localePrefix: {
+        moduleName: "TRADELICENSE",
+        masterName: "TRADETYPE"
+      },
+      callBack: value => {
+        return value ? value.split(".")[0] : "NA";
+      }
+    }
+  ),
+  reviewTradeSubtype: getLabelWithValue(
+    {
+      labelName: "Trade Sub-Type",
+      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
+    },
+    {
+      jsonPath: "billingSlab[0].tradeType",
+      localePrefix: {
+        moduleName: "TRADELICENSE",
+        masterName: "TRADETYPE"
+      },
+      callBack: checkValueForNA
+    }
+  ),
+
+  reviewTradeUOM: getLabelWithValue(
+    {
+      labelName: "UOM (Unit of Measurement)",
+      labelKey: "TL_NEW_TRADE_DETAILS_UOM_LABEL"
+    },
+    { jsonPath: "billingSlab[0].uom", callBack: checkValueForNA }
+  ),
+  reviewRateType: getLabelWithValue(
+    {
+      labelName: "UOM (Unit of Measurement)",
+      labelKey: "Rate Type"
+    },
+    { jsonPath: "billingSlab[0].type", callBack: checkValueForNA }
+  ),
+  reviewFromUom: getLabelWithValue(
+    {
+      labelName: "UOM (Unit of Measurement)",
+      labelKey: "Rate Type"
+    },
+    { jsonPath: "billingSlab[0].fromUom", callBack: checkValueForNA }
+  ),
+  reviewToUom: getLabelWithValue(
+    {
+      labelName: "UOM (Unit of Measurement)",
+      labelKey: "Rate Type"
+    },
+    { jsonPath: "billingSlab[0].toUom", callBack: checkValueForNA }
+  ),
+  reviewTradeRate: getLabelWithValue(
+    {
+      labelName: "UOM Value",
+      labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL"
+    },
+    { jsonPath: "billingSlab[0].rate", callBack: checkValueForNA }
+  )
+
+}
+
+
+export const getBillingSlabReviewDetails = (isEditable = true) => {
+  return getCommonGrayCard({
+    headerDiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      props: {
+        style: { marginBottom: "10px" }
+      },
+      children: {
+        header: {
+          gridDefination: {
+            xs: 12,
+            sm: 10
+          },
+          ...getCommonSubHeader({
+            labelName: "Trade Details",
+            labelKey: "Billing Slab Summary"
+          })
+        },
+
+      }
+    },
+    viewOne: getCommonContainer(billingSlabReviewDetails),
+
+  });
+};
 
 const moveToSuccess = (dispatch) => {
   // const applicationNo = get(LicenseData, "applicationNumber");
@@ -29,20 +169,28 @@ const moveToSuccess = (dispatch) => {
 
 
 export const callBackForNext = async (state, dispatch) => {
+
+  let activeStep = get(
+    state.screenConfiguration.screenConfig["traderateadd"],
+    "components.div.children.stepper.props.activeStep",
+    0
+  );
+
+  console.log(activeStep, "Nero active step")
   var isFormValid = true;
   let queryObject = JSON.parse(
     JSON.stringify(
       get(state.screenConfiguration.preparedFinalObject, "billingSlab", [])
     )
   );
-  
-const isCityDetailValid = validateFields(
-  "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children",
-  state,
-  dispatch,
-  "traderateadd"
-);
-console.log(isCityDetailValid, "Nero City valied")
+
+  const isCityDetailValid = validateFields(
+    "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children",
+    state,
+    dispatch,
+    "traderateadd"
+  );
+  console.log(isCityDetailValid, "Nero City valied")
   // const isTradeLocationValid = validateFields(
   //   "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children",
   //   state,
@@ -59,7 +207,7 @@ console.log(isCityDetailValid, "Nero City valied")
   );
   let isTradeUnitValid = true;
   //"components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer"
-console.log(tradeUnits, "Nero trade Units")
+  console.log(tradeUnits, "Nero trade Units")
   for (var j = 0; j < tradeUnits.length; j++) {
     if (
 
@@ -78,21 +226,25 @@ console.log(tradeUnits, "Nero trade Units")
   }
 
   console.log(queryObject, "Nero query boss")
-  if (isFormValid) {
-    isFormValid = await addUpdateBillSlab(state, dispatch);
+  if (activeStep !== 2) {
     if (isFormValid) {
-      moveToSuccess(dispatch);
+      changeStep(state, dispatch);
+      if (activeStep == 1) {
+        isFormValid = await addUpdateBillSlab(state, dispatch);
+        if (isFormValid) {
+          moveToSuccess(dispatch);
+        }
+      }
+    } else {
+      let errorMessage = {
+        labelName:
+          "Please fill all mandatory fields and upload the documents !",
+        labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
-  }else{
-    let errorMessage = {
-      labelName:
-        "Please fill all mandatory fields and upload the documents !",
-      labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
-    };
-    dispatch(toggleSnackbar(true, errorMessage, "warning"));
-  }
-  
 
+  }
 };
 
 export const changeStep = (
@@ -102,18 +254,14 @@ export const changeStep = (
   defaultActiveStep = -1
 ) => {
   let activeStep = get(
-    state.screenConfiguration.screenConfig["apply"],
+    state.screenConfiguration.screenConfig["traderateadd"],
     "components.div.children.stepper.props.activeStep",
     0
   );
   if (defaultActiveStep === -1) {
-    if (activeStep === 2 && mode === "next") {
-      const isDocsUploaded = get(
-        state.screenConfiguration.preparedFinalObject,
-        "LicensesTemp[0].reviewDocData",
-        null
-      );
-      activeStep = isDocsUploaded ? 3 : 2;
+    if (activeStep === 1 && mode === "next") {
+
+      //activeStep = isDocsUploaded ? 1 : 0;
     } else {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
     }
@@ -122,8 +270,8 @@ export const changeStep = (
   }
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
-  const isNextButtonVisible = activeStep < 3 ? true : false;
-  const isPayButtonVisible = activeStep === 3 ? true : false;
+  const isNextButtonVisible = activeStep < 1 ? true : false;
+  const isPayButtonVisible = activeStep === 1 ? true : false;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -146,7 +294,7 @@ export const changeStep = (
       value: isPayButtonVisible
     }
   ];
-  dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
+  dispatchMultipleFieldChangeAction("traderateadd", actionDefination, dispatch);
   renderSteps(activeStep, dispatch);
 };
 
@@ -154,36 +302,19 @@ export const renderSteps = (activeStep, dispatch) => {
   switch (activeStep) {
     case 0:
       dispatchMultipleFieldChangeAction(
-        "apply",
+        "traderateadd",
         getActionDefinationForStepper(
           "components.div.children.formwizardFirstStep"
         ),
         dispatch
       );
       break;
-    case 1:
-      dispatchMultipleFieldChangeAction(
-        "apply",
-        getActionDefinationForStepper(
-          "components.div.children.formwizardSecondStep"
-        ),
-        dispatch
-      );
-      break;
-    case 2:
-      dispatchMultipleFieldChangeAction(
-        "apply",
-        getActionDefinationForStepper(
-          "components.div.children.formwizardThirdStep"
-        ),
-        dispatch
-      );
-      break;
+
     default:
       dispatchMultipleFieldChangeAction(
-        "apply",
+        "traderateadd",
         getActionDefinationForStepper(
-          "components.div.children.formwizardFourthStep"
+          "components.div.children.formwizardSecondStep"
         ),
         dispatch
       );
@@ -199,16 +330,6 @@ export const getActionDefinationForStepper = path => {
     },
     {
       path: "components.div.children.formwizardSecondStep",
-      property: "visible",
-      value: false
-    },
-    {
-      path: "components.div.children.formwizardThirdStep",
-      property: "visible",
-      value: false
-    },
-    {
-      path: "components.div.children.formwizardFourthStep",
       property: "visible",
       value: false
     }
@@ -233,8 +354,68 @@ export const callBackForPrevious = (state, dispatch) => {
 };
 
 export const footer = getCommonApplyFooter({
-
+  previousButton: {
+    componentPath: "Button",
+    props: {
+      variant: "outlined",
+      color: "primary",
+      style: {
+        minWidth: "180px",
+        height: "48px",
+        marginRight: "16px",
+        borderRadius: "inherit"
+      }
+    },
+    children: {
+      previousButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_left"
+        }
+      },
+      previousButtonLabel: getLabel({
+        labelName: "Previous Step",
+        labelKey: "TL_COMMON_BUTTON_PREV_STEP"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: callBackForPrevious
+    },
+    visible: false
+  },
   nextButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "180px",
+        height: "48px",
+        marginRight: "45px",
+        borderRadius: "inherit"
+      }
+    },
+    children: {
+      submitButtonLabel: getLabel({
+        labelName: "Submit",
+        labelKey: "TL_COMMON_BUTTON_NEXT"
+      }),
+      submitButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: callBackForNext
+    },
+  },
+  payButton: {
     componentPath: "Button",
     props: {
       variant: "contained",
@@ -263,644 +444,13 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: callBackForNext
     },
-  },
+    visible: false
+  }
 
 });
 
 
 
 
-export const footerReview = (
-  action,
-  state,
-  dispatch,
-  status,
-  applicationNumber,
-  tenantId,
-  financialYear
-) => {
-  /** MenuButton data based on status */
-  let licenseNumber = get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
-  const responseLength = get(
-    state.screenConfiguration.preparedFinalObject,
-    `licenseCount`,
-    1
-  );
-
-  return getCommonApplyFooter({
-    container: {
-      uiFramework: "custom-atoms",
-      componentPath: "Container",
-      children: {
-        rightdiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          props: {
-
-            style: {
-              float: "right",
-              display: "flex"
-            }
-          },
-          children: {
-
-            resubmitButton: {
-              componentPath: "Button",
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  minWidth: "180px",
-                  height: "48px",
-                  marginRight: "45px"
-                }
-              },
-              children: {
-                nextButtonLabel: getLabel({
-                  labelName: "RESUBMIT",
-                  labelKey: "TL_RESUBMIT"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: openPopup
-              },
-              visible: getButtonVisibility(status, "RESUBMIT"),
-              roleDefination: {
-                rolePath: "user-info.roles",
-                roles: ["TL_CEMP", "CITIZEN"]
-              }
-            },
-            editButton: {
-              componentPath: "Button",
-              props: {
-                variant: "outlined",
-                color: "primary",
-                style: {
-                  minWidth: "180px",
-                  height: "48px",
-                  marginRight: "16px",
-                  borderRadius: "inherit"
-                }
-              },
-              children: {
-                previousButtonIcon: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "keyboard_arrow_left"
-                  }
-                },
-                previousButtonLabel: getLabel({
-                  labelName: "Edit for Renewal",
-                  labelKey: "TL_RENEWAL_BUTTON_EDIT"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: () => {
-                  dispatch(
-                    setRoute(
-                      // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
-                      `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
-                    )
-                  );
-                },
-
-              },
-              visible: (getButtonVisibility(status, "APPROVED") || getButtonVisibility(status, "EXPIRED")) && (responseLength === 1),
-            },
-            submitButton: {
-              componentPath: "Button",
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  minWidth: "180px",
-                  height: "48px",
-                  marginRight: "45px",
-                  borderRadius: "inherit"
-                }
-              },
-              children: {
-                nextButtonLabel: getLabel({
-                  labelName: "Submit for Renewal",
-                  labelKey: "TL_RENEWAL_BUTTON_SUBMIT"
-                }),
-                nextButtonIcon: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "keyboard_arrow_right"
-                  }
-                }
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: () => {
-                  renewTradelicence(financialYear, state, dispatch);
-                },
-
-              },
-              visible: (getButtonVisibility(status, "APPROVED") || getButtonVisibility(status, "EXPIRED")) && (responseLength === 1),
-            },
-            makePayment: {
-              componentPath: "Button",
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  minWidth: "180px",
-                  height: "48px",
-                  marginRight: "45px",
-                  borderRadius: "inherit"
-                }
-              },
-              children: {
-                submitButtonLabel: getLabel({
-                  labelName: "MAKE PAYMENT",
-                  labelKey: "TL_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: () => {
-                  dispatch(
-                    setRoute(
-                      `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
-                    )
-                  );
-                },
-
-              },
-              visible: process.env.REACT_APP_NAME === "Citizen" && getButtonVisibility(status, "PENDINGPAYMENT") ? true : false
-            }
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 12
-          }
-        },
-      }
-    }
-  });
-};
-export const footerReviewTop = (
-  action,
-  state,
-  dispatch,
-  status,
-  applicationNumber,
-  tenantId,
-  financialYear
-) => {
-
-  /** MenuButton data based on status */
-  let downloadMenu = [];
-  let printMenu = [];
-  let licenseNumber = get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
-  const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
-  const receiptKey = get(uiCommonConfig, "receiptKey");
-  const responseLength = get(
-    state.screenConfiguration.preparedFinalObject,
-    `licenseCount`,
-    1
-  );
-  // let renewalMenu=[];
-  let tlCertificateDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
-    link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses);
-    },
-    leftIcon: "book"
-  };
-  let tlCertificatePrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
-    link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses, 'print');
-    },
-    leftIcon: "book"
-  };
-
-  let tlPLDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
-    link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadProvisionalCertificateForm(Licenses);
-    },
-    leftIcon: "book"
-  };
-  let tlPLPrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
-    link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadProvisionalCertificateForm(Licenses, 'print');
-    },
-    leftIcon: "book"
-  };
 
 
-  let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
-    link: () => {
-
-
-      const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "businessService", value: 'TL' }
-      ]
-      download(receiptQueryString, "download", receiptKey, state);
-      // generateReceipt(state, dispatch, "receipt_download");
-    },
-    leftIcon: "receipt"
-  };
-  let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
-    link: () => {
-      const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "businessService", value: 'TL' }
-      ]
-      download(receiptQueryString, "print", receiptKey, state);
-      // generateReceipt(state, dispatch, "receipt_print");
-    },
-    leftIcon: "receipt"
-  };
-  let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
-    link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-      const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Licenses[0].applicationNumber}`);
-    },
-    leftIcon: "assignment"
-  };
-  let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
-    link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-      const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
-
-    },
-    leftIcon: "assignment"
-  };
-
-  // switch (status) {
-  //   case "APPROVED":
-  //     downloadMenu = [
-  //       tlCertificateDownloadObject,
-  //       receiptDownloadObject,
-  //       applicationDownloadObject
-  //     ];
-  //     printMenu = [
-  //       tlCertificatePrintObject,
-  //       receiptPrintObject,
-  //       applicationPrintObject
-  //     ];
-  //     break;
-  //   case "APPLIED":
-  //   case "CITIZENACTIONREQUIRED":
-  //   case "FIELDINSPECTION":
-  //   case "PENDINGAPPROVAL":
-  //   case "PENDINGPAYMENT":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   case "pending_approval":
-  //     downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-  //     printMenu = [receiptPrintObject, applicationPrintObject];
-  //     break;
-  //   case "CANCELLED":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   case "REJECTED":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   default:
-  //     break;
-  // }
-  switch (status) {
-    case "APPROVED":
-      downloadMenu = [
-        tlCertificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        tlCertificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
-      break;
-    case "PENDINGAPPROVAL":
-    case "FIELDINSPECTION":
-    case "DOCVERIFICATION":
-      downloadMenu = [
-        tlPLDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        tlPLPrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
-      break;
-    case "APPLIED":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    case "CANCELLED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    case "REJECTED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    default:
-      break;
-  }
-  /** END */
-
-  return {
-    rightdiv: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      props: {
-        style: { textAlign: "right", display: "flex" }
-      },
-      children: {
-        downloadMenu: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "MenuButton",
-          props: {
-            data: {
-              label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
-              leftIcon: "cloud_download",
-              rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
-              menu: downloadMenu
-            }
-          }
-        },
-        printMenu: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "MenuButton",
-          props: {
-            data: {
-              label: { labelName: "PRINT", labelKey: "TL_PRINT" },
-              leftIcon: "print",
-              rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
-              menu: printMenu
-            }
-          }
-        }
-
-      },
-      // gridDefination: {
-      //   xs: 12,
-      //   sm: 6
-      // }
-    }
-  }
-
-};
-
-export const openPopup = (state, dispatch) => {
-  dispatch(
-    prepareFinalObject("ResubmitAction", true)
-  );
-}
-
-export const downloadPrintContainer = (
-  action,
-  state,
-  dispatch,
-  status,
-  applicationNumber,
-  tenantId
-) => {
-
-  /** MenuButton data based on status */
-  const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
-  const receiptKey = get(uiCommonConfig, "receiptKey");
-  let downloadMenu = [];
-  let printMenu = [];
-  let tlCertificateDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
-    link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses);
-    },
-    leftIcon: "book"
-  };
-  let tlCertificatePrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
-    link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses, 'print');
-    },
-    leftIcon: "book"
-  };
-
-
-  let tlPLDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
-    link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadProvisionalCertificateForm(Licenses);
-    },
-    leftIcon: "book"
-  };
-  let tlPLPrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
-    link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadProvisionalCertificateForm(Licenses, 'print');
-    },
-    leftIcon: "book"
-  };
-
-
-  let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
-    link: () => {
-      const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "businessService", value: 'TL' }
-      ]
-      download(receiptQueryString, "download", receiptKey);
-    },
-    leftIcon: "receipt"
-  };
-  let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
-    link: () => {
-      const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
-        { key: "businessService", value: 'TL' }
-      ]
-      download(receiptQueryString, "print", receiptKey);
-    },
-    leftIcon: "receipt"
-  };
-  let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
-    link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-      const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
-      // downloadAcknowledgementForm(Licenses);
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Licenses[0].applicationNumber}`);
-    },
-    leftIcon: "assignment"
-  };
-  let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
-    link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-      const documents = LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
-      // downloadAcknowledgementForm(Licenses,'print');
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
-    },
-    leftIcon: "assignment"
-  };
-  // switch (status) {
-  //   case "APPROVED":
-  //     downloadMenu = [
-  //       tlCertificateDownloadObject,
-  //       receiptDownloadObject,
-  //       applicationDownloadObject
-  //     ];
-  //     printMenu = [
-  //       tlCertificatePrintObject,
-  //       receiptPrintObject,
-  //       applicationPrintObject
-  //     ];
-  //     break;
-  //   case "APPLIED":
-  //   case "CITIZENACTIONREQUIRED":
-  //   case "FIELDINSPECTION":
-  //   case "PENDINGAPPROVAL":
-  //   case "PENDINGPAYMENT":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   case "CANCELLED":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   case "REJECTED":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   default:
-  //     break;
-  // }
-  switch (status) {
-    case "APPROVED":
-      downloadMenu = [
-        tlCertificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        tlCertificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
-      break;
-    case "PENDINGAPPROVAL":
-    case "FIELDINSPECTION":
-    case "DOCVERIFICATION":
-      downloadMenu = [
-        tlPLDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        tlPLPrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
-      break;
-    case "APPLIED":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    case "CANCELLED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    case "REJECTED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    default:
-      break;
-  }
-  /** END */
-
-  return {
-    rightdiv: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      props: {
-        style: { textAlign: "right", display: "flex" }
-      },
-      children: {
-        downloadMenu: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "MenuButton",
-          props: {
-            data: {
-              label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
-              leftIcon: "cloud_download",
-              rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-download-button" },
-              menu: downloadMenu
-            }
-          }
-        },
-        printMenu: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "MenuButton",
-          props: {
-            data: {
-              label: { labelName: "PRINT", labelKey: "TL_PRINT" },
-              leftIcon: "print",
-              rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
-              menu: printMenu
-            }
-          }
-        }
-
-      },
-      // gridDefination: {
-      //   xs: 12,
-      //   sm: 6
-      // }
-    }
-  }
-};

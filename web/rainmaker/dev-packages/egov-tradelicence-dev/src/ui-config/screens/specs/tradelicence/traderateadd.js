@@ -9,7 +9,13 @@ import { httpRequest } from "../../../../ui-utils";
 import { getBoundaryData, updatePFOforSearchResults } from "../../../../ui-utils/commons";
 import { getAllDataFromBillingSlab, getCurrentFinancialYear, pageResetAndChange, updateMdmsDropDownsForBillingSlab } from "../utils";
 import { documentList } from "./applyResource/documentList";
-import { footer } from "./applyResourceTradeRateAdd/footer";
+import { footer, getBillingSlabReviewDetails } from "./applyResourceTradeRateAdd/footer";
+
+import {
+  
+  formwizardFourthStep,
+  
+} from "../tradelicence/apply";
 
 
 const tradeTypeChange = (reqObj) => {
@@ -85,7 +91,7 @@ const tradeUnitCard = {
               rootBlockSub: 'tradeUnits',
               filter: "[?(@.type=='TL')]",
               screenName: "tradeRateAddPage",
-             callBackEdit: updateMdmsDropDownsForBillingSlab,
+              callBackEdit: updateMdmsDropDownsForBillingSlab,
               //isDependency : "DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType"
             }
           },
@@ -218,11 +224,12 @@ const tradeUnitCard = {
   type: "array"
 };
 
+
 export const tradeDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Trade Details",
-      labelKey: "TL_NEW_TRADE_DETAILS_PROV_DET_HEADER"
+      labelKey: "New Billing Slab"
     },
     {
       style: {
@@ -311,14 +318,12 @@ export const tradeDetails = getCommonCard({
   },
 
   ),
-  tradeUnitCard,
-  //accessoriesCard
+  tradeUnitCard
 });
 
 export const stepsData = [
   { labelName: "Trade Details", labelKey: "TL_COMMON_TR_DETAILS" },
-  { labelName: "Owner Details", labelKey: "TL_COMMON_OWN_DETAILS" },
-  { labelName: "Documents", labelKey: "TL_COMMON_DOCS" },
+  
   { labelName: "Summary", labelKey: "TL_COMMON_SUMMARY" }
 ];
 export const stepper = getStepperObject(
@@ -360,7 +365,7 @@ export const getBillingSlabData = async (action, state, dispatch) => {
   let uom = getQueryArg(window.location.href, "uom");
   let from = getQueryArg(window.location.href, "from");
   let to = getQueryArg(window.location.href, "to");
-  
+
   try {
 
     let queryObject = [
@@ -405,9 +410,9 @@ export const getBillingSlabData = async (action, state, dispatch) => {
       queryObject
     );
 
-console.log(payload, "Nero Payload h")
-//return payload.billingSlab[0];
-dispatch(prepareFinalObject("billingSlab[0]", payload.billingSlab[0]));
+    console.log(payload, "Nero Payload h")
+    //return payload.billingSlab[0];
+    dispatch(prepareFinalObject("billingSlab[0]", payload.billingSlab[0]));
   } catch (e) {
     console.log(e);
   }
@@ -534,6 +539,28 @@ export const formwizardFirstStep = {
 };
 
 
+const billingSlabReviewDetails = getBillingSlabReviewDetails();
+export const billingSlabReview = getCommonCard({
+  header: getCommonTitle({
+    labelName: "Please review your Application and Submit",
+    labelKey: "Billing Slab Summary"
+  }),
+  
+  billingSlabReviewDetails,
+  
+});
+
+export const formwizardSecondStep = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form2"
+  },
+  children: {
+  billingSlabReview
+  },
+  visible: false
+};
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -580,9 +607,9 @@ const screenConfig = {
             }
           }
         },
-
+        stepper,
         formwizardFirstStep,
-
+        formwizardSecondStep,
         footer
       }
     },

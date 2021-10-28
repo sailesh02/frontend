@@ -312,8 +312,8 @@ class DigitalSignatureDialog extends Component {
         }
       default :
         return {
-          labelKey:'ERR_DIGITAL_SIGNATURE_SUCCESS_MSG',
-          labelName:'ERR_DIGITAL_SIGNATURE_SUCCESS_MSG',
+          labelKey:'ERR_DIGITAL_SIGNATURE_FAILURE_MSG',
+          labelName:'ERR_DIGITAL_SIGNATURE_FAILURE_MSG',
           type: "error"
         }  
         

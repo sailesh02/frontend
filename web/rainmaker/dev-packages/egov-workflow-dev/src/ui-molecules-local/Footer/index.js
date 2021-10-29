@@ -149,7 +149,10 @@ let customRequestInfo = JSON.parse(getUserInfo())
                   if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && (singedFileStoreId.data.responseString && 
                   (singedFileStoreId.data.responseString.includes('success') || singedFileStoreId.data.responseString.includes('Success')))){
                     data && data.documents.length > 0 && data.documents.push({
+                      "additionalDetails": {"uploadedBy": "Employee"},
+                      "documentType": key,
                       "fileName": key,
+                      "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
                       "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                     })
                     return data

@@ -7,7 +7,7 @@ import {
   getDivider,
   getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDateAndHandleNA, handleNA, handleRoadType } from '../../utils';
+import { convertEpochToDateAndHandleNA, handleNA, handleLaborCharge, handleInstallementorFullPayment, handleRoadType } from '../../utils';
 import { changeStep } from "./footer";
 
 const getHeader = label => {
@@ -37,9 +37,47 @@ const roadCuttingChargesHeader = getHeader({
   labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
 });
 
+const paymentDetailsHeader = getHeader({
+  labelKey:"WS_PAYMENT_DETAILS"
+})
+
 const activationDetailsHeader = getHeader({
   labelKey: "WS_ACTIVATION_DETAILS"
 });
+
+export const paymentDetailsMeter = {
+  reviewLaborCharge : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "WS_LABOUR_FEE",
+      labelKey: "WS_LABOUR_FEE"
+    },
+    { jsonPath: "applyScreen.additionalDetails.isLabourFeeApplicable",
+      callBack: handleLaborCharge
+    }, {
+        labelKey: "WS_OLD_LABEL_NAME"
+      },
+      { jsonPath: "applyScreenOld.additionalDetails.isLabourFeeApplicable",
+      callBack: handleLaborCharge 
+    }
+  ),
+  reviewInstallment : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "WS_FULL_PAYMENT_OR_INSTALLMENT",
+      labelKey: "WS_FULL_PAYMENT_OR_INSTALLMENT"
+    },
+    { jsonPath: "applyScreen.additionalDetails.isInstallmentApplicable",
+      callBack: handleInstallementorFullPayment 
+    }, {
+        labelKey: "WS_OLD_LABEL_NAME"
+      },
+      { jsonPath: "applyScreenOld.additionalDetails.isInstallmentApplicable",
+      callBack: handleInstallementorFullPayment 
+    }
+  ),
+}
+
+export const paymentDetails = getCommonContainer(paymentDetailsMeter)
+
 
 export const reviewConnectionType = getLabelWithValueForModifiedLabel(
   {
@@ -447,7 +485,10 @@ export const reviewOwner = (isEditable = true) => {
     // viewNine: roadCuttingChargesHeader,
     // viewTen: roadCuttingCharges,
     viewEleven: activationDetailsHeader,
-    viewTwelve: activationDetails
+    viewTwelve: activationDetails,
+    viewThirdTeen : paymentDetailsHeader,
+    viewFourTeen : paymentDetails
+
   })
 };
 

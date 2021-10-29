@@ -561,7 +561,7 @@ export const validateMeterDetails = (applyScreenObject) => {
     let connectionType = applyScreenObject && applyScreenObject.connectionType
     let water = applyScreenObject && applyScreenObject.water
     let rValue = true;
-    if (rValue && connectionType && connectionType == 'Metered'){
+    if (rValue && connectionType && connectionType == 'Metered' && water){
         if( applyScreenObject.hasOwnProperty("additionalDetails") && 
         applyScreenObject.additionalDetails.hasOwnProperty("meterMake") && 
         applyScreenObject.additionalDetails.hasOwnProperty("meterReadingRatio") && 

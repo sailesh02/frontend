@@ -1108,6 +1108,17 @@ const screenConfig = {
     });
     let applicationNo = getQueryArg(window.location.href, "applicationNumber");
 
+    // while applying from employee
+    if(process.env.REACT_APP_NAME != 'citizen' && !applicationNo){
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+          "visible",
+          false
+        )
+      );
+    }
     if(applicationNo && applicationNo.includes('SW')) {
       dispatch(prepareFinalObject("applyScreen.water", false));
       dispatch(prepareFinalObject("applyScreen.sewerage", true));

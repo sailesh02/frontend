@@ -252,9 +252,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }
     }
 
-
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
-    if (connectionType === "Metered") {
+    if (connectionType === "Metered" && applicationNumber && applicationNumber.includes('WS')) {
       set(
         action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge.visible",

@@ -145,14 +145,16 @@ class ActionDialog extends React.Component {
     let tokenPath = ''
     let certificatePath = ''
     let passwordPath = ''
-    if(dialogHeader && dialogHeader.labelKey === "WF_APPROVE_APPLICATION" && (dataPath === 'BPA' || dataPath === "Licenses") && (moduleName == "BPA1" ||
-    moduleName == 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4' || moduleName === "NewTL" )){
+    if(dialogHeader && dialogHeader.labelKey === "WF_APPROVE_APPLICATION" && (dataPath === 'BPA' || dataPath === "Licenses" || dataPath === "MarriageRegistrations") && (moduleName == "BPA1" ||
+    moduleName == 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4' || moduleName === "NewTL" || moduleName === "MR" )){
       const state = store.getState()
       let applicationStatus = dataPath == 'BPA' ? get(state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
       state.screenConfiguration.preparedFinalObject, `${dataPath}.status`, "") : dataPath == 'Licenses' ? 
       get(state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
-        state.screenConfiguration.preparedFinalObject, `Licenses[0].status`, "") : ''
-      isCertificateDetailsVisible = dialogHeader && dialogHeader.labelKey === "WF_APPROVE_APPLICATION" && (dataPath == "BPA" || dataPath == 'Licenses')
+        state.screenConfiguration.preparedFinalObject, `Licenses[0].status`, "") : dataPath == 'MarriageRegistrations' ? 
+        get(state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
+          state.screenConfiguration.preparedFinalObject, `MarriageRegistrations[0].status`, "") : ''
+      isCertificateDetailsVisible = dialogHeader && dialogHeader.labelKey === "WF_APPROVE_APPLICATION" && (dataPath == "BPA" || dataPath == 'Licenses' || dataPath === "MarriageRegistrations")
       && (applicationStatus == "APPROVAL_PENDING" || applicationStatus == "APPROVAL_INPROGRESS" || applicationStatus == "PENDINGAPPROVAL") ? true : false
       tokenPath = `DsInfo.token`
       passwordPath = `DsInfo.password`

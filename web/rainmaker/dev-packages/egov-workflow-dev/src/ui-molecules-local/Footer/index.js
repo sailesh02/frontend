@@ -44,6 +44,12 @@ let customRequestInfo = JSON.parse(getUserInfo())
           RequestInfo : RequestInfo,
           "Licenses":Licenses
         }
+      case 'MR':
+          const {MarriageRegistrations} = preparedFinalObject  
+        return {
+          RequestInfo : RequestInfo,
+          "MarriageRegistrations":MarriageRegistrations
+        }
       default:
         return {
           ...RequestInfo
@@ -72,6 +78,9 @@ let customRequestInfo = JSON.parse(getUserInfo())
       case 'NewTL':
         pdfKey = applicationType && applicationType == "RENEWAL" ? "tlrenewalcertificate" : "tlcertificate"
         break;
+      case 'MR':
+       pdfKey = 'mrcertificate'  
+       break;
       default:
         return pdfKey 
     }
@@ -84,7 +93,9 @@ let customRequestInfo = JSON.parse(getUserInfo())
       case 'BPA':
         return data.tenantId 
       case 'NewTL':
-        return data[0].tenantId  
+        return data[0].tenantId 
+      case 'MR':
+        return data[0].tenantId   
     }
   }
 
@@ -171,7 +182,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                       })
                       return data
                     }else if(moduleName == 'NewTL'){
-                      if(data && data.length > 0 && data[0].tradeLicenseDetail && data[0].tradeLicenseDetail.verificationDocuments && data[0].tradeLicenseDetail.verificationDocuments > 0){
+                      if(data && data.length > 0 && data[0].tradeLicenseDetail && data[0].tradeLicenseDetail.verificationDocuments && data[0].tradeLicenseDetail.verificationDocuments.length > 0){
                         data[0].tradeLicenseDetail.verificationDocuments.push({
                           "additionalDetails": {"uploadedBy": "Employee"},
                           "documentType": key,
@@ -181,6 +192,26 @@ let customRequestInfo = JSON.parse(getUserInfo())
                         })
                       }else{
                         data[0].tradeLicenseDetail["verificationDocuments"] = [{
+                          "additionalDetails": {"uploadedBy": "Employee"},
+                          "documentType": key,
+                          "fileName": key,
+                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                        }]
+                      }
+                      return data
+                    }
+                    else if(moduleName == 'MR'){
+                      if(data && data.length > 0 && data[0].verificationDocuments && data[0].verificationDocuments.length > 0){
+                        data[0].verificationDocuments.push({
+                          "additionalDetails": {"uploadedBy": "Employee"},
+                          "documentType": key,
+                          "fileName": key,
+                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                        })
+                      }else{
+                        data[0]["verificationDocuments"] = [{
                           "additionalDetails": {"uploadedBy": "Employee"},
                           "documentType": key,
                           "fileName": key,
@@ -508,7 +539,7 @@ class Footer extends React.Component {
 
     if((item.moduleName === "BPA_OC1" || item.moduleName === "BPA_OC2" || item.moduleName === "BPA_OC3"
     || item.moduleName === "BPA_OC4" || item.moduleName === "BPA1" || item.moduleName === "BPA2" ||
-    item.moduleName === "BPA3" || item.moduleName === "BPA4" || item.moduleName == 'NewTL') && item.buttonLabel === "APPROVE"){
+    item.moduleName === "BPA3" || item.moduleName === "BPA4" || item.moduleName == 'NewTL' || item.moduleName == "MR") && item.buttonLabel === "APPROVE"){
       this.getTokenList()
       store.dispatch(prepareFinalObject("isCertificateDetailsVisible",true))
     }

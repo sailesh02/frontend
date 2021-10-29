@@ -38,6 +38,12 @@ let customRequestInfo = JSON.parse(getUserInfo())
           RequestInfo : RequestInfo,
           "Bpa":[BPAWithScrutiny]
         }
+      case 'NewTL':
+        const {Licenses} = preparedFinalObject  
+        return {
+          RequestInfo : RequestInfo,
+          "Licenses":Licenses
+        }
       default:
         return {
           ...RequestInfo
@@ -47,6 +53,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
 
   // to get pdf key for calling pdf service
   const getKey = (moduleName,data) => {
+    let applicationType = moduleName && moduleName == 'NewTL' ? data[0].applicationType : ''
     let pdfKey = "";
     switch(moduleName){
       case 'BPA':
@@ -62,6 +69,9 @@ let customRequestInfo = JSON.parse(getUserInfo())
           pdfKey = "occupancy-certificate"
         }
       break; 
+      case 'NewTL':
+        pdfKey = applicationType && applicationType == "RENEWAL" ? "tlrenewalcertificate" : "tlcertificate"
+        break;
       default:
         return pdfKey 
     }
@@ -72,12 +82,15 @@ let customRequestInfo = JSON.parse(getUserInfo())
   const getTenantIdForPdf = (moduleName,data) => {
     switch(moduleName){
       case 'BPA':
-        return data.tenantId  
+        return data.tenantId 
+      case 'NewTL':
+        return data[0].tenantId  
     }
   }
 
   //actual function
   export const getPdfDetails = async (data,preparedFinalObject,moduleName) => {
+    debugger
     let {DsInfo} = preparedFinalObject
     let {token,certificate,password} = DsInfo
     let body = getPdfBody(moduleName,preparedFinalObject)
@@ -148,14 +161,37 @@ let customRequestInfo = JSON.parse(getUserInfo())
                   })
                   if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && (singedFileStoreId.data.responseString && 
                   (singedFileStoreId.data.responseString.includes('success') || singedFileStoreId.data.responseString.includes('Success')))){
-                    data && data.documents.length > 0 && data.documents.push({
-                      "additionalDetails": {"uploadedBy": "Employee"},
-                      "documentType": key,
-                      "fileName": key,
-                      "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                      "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                    })
-                    return data
+                    if(moduleName == 'BPA'){
+                      data && data.documents.length > 0 && data.documents.push({
+                        "additionalDetails": {"uploadedBy": "Employee"},
+                        "documentType": key,
+                        "fileName": key,
+                        "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                        "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                      })
+                      return data
+                    }else if(moduleName == 'NewTL'){
+                      if(data && data.length > 0 && data[0].tradeLicenseDetail && data[0].tradeLicenseDetail.verificationDocuments && data[0].tradeLicenseDetail.verificationDocuments > 0){
+                        data[0].tradeLicenseDetail.verificationDocuments.push({
+                          "additionalDetails": {"uploadedBy": "Employee"},
+                          "documentType": key,
+                          "fileName": key,
+                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                        })
+                      }else{
+                        data[0].tradeLicenseDetail["verificationDocuments"] = [{
+                          "additionalDetails": {"uploadedBy": "Employee"},
+                          "documentType": key,
+                          "fileName": key,
+                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                        }]
+                      }
+                      return data
+                    }
+                    store.dispatch(hideSpinner());
+                    
                   }else{
                     store.dispatch(hideSpinner());
                     let errorCode = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.responseString 
@@ -472,7 +508,7 @@ class Footer extends React.Component {
 
     if((item.moduleName === "BPA_OC1" || item.moduleName === "BPA_OC2" || item.moduleName === "BPA_OC3"
     || item.moduleName === "BPA_OC4" || item.moduleName === "BPA1" || item.moduleName === "BPA2" ||
-    item.moduleName === "BPA3" || item.moduleName === "BPA4") && item.buttonLabel === "APPROVE"){
+    item.moduleName === "BPA3" || item.moduleName === "BPA4" || item.moduleName == 'NewTL') && item.buttonLabel === "APPROVE"){
       this.getTokenList()
       store.dispatch(prepareFinalObject("isCertificateDetailsVisible",true))
     }

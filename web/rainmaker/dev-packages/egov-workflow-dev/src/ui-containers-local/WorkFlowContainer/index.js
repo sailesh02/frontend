@@ -324,7 +324,13 @@ class WorkFlowContainer extends React.Component {
               return
             }
           }
-        } else {
+        }else if(moduleName == 'NewTL' && isDsInfo){
+          data = await getPdfDetails(data, preparedFinalObject, moduleName)
+          if(!data){
+            return
+          }
+        }
+        else {
           data = beforeSubmitHook(data);
         }
       }

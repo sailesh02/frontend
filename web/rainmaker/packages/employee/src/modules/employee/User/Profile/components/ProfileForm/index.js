@@ -5,9 +5,10 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { ProfileSection } from "modules/common";
 import "./index.css";
 
-const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic }) => {
+const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic, onClickRegister}) => {
   const fields = form.fields || {};
   const submit = form.submit;
+  const register = form.register;
   return (
     <div>
       <div className="profile-card-container">
@@ -24,6 +25,9 @@ const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic }
                 <Label className="change-password-label-style" label={"CORE_COMMON_CHANGE_PASSWORD"} color="#f89a3f" />
               </div>
             </Link>
+            <div style={{ marginTop: "24px", marginBottom: "24px" }}>
+              <Button className="change-password-label-style" {...register} onClick = {onClickRegister} primary={true}/>              
+            </div>
           </div>
         </div>
       </div>

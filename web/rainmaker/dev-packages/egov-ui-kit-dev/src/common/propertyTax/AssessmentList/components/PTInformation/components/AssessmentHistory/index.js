@@ -87,7 +87,14 @@ class AssessmentHistory extends Component {
                 return role.code;
             })
             : [];
-        const reassessAllowed = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
+            
+        // to check if owner belongs to the same property
+        let owners = this.props && this.props.selPropertyDetails && this.props.selPropertyDetails.owners || []        
+        const isSameOwner = owners && owners.some( ele => {
+          return ele.mobileNumber == userInfo.mobileNumber
+        }) || false  
+        
+        const reassessAllowed = (roleCodes.includes("CITIZEN") && isSameOwner) || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
 
         const assessmentHistoryItems = this.getLatestAssessments(Assessments).map((Assessment,index) => {
             return (

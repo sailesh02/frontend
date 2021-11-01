@@ -35,11 +35,6 @@ const formConfig = {
     id: "profile-save-action",
     type: "submit",
   },
-  register: {
-    label: "CS_DIGITAL_SIGNATURE_REGISTRATION",
-    id: "profile-save-action",
-    type: "submit",
-  },
   toast: getLocaleLabels("PROFILE_UPDATED","PROFILE_UPDATED"),
   saveUrl: "/user/profile/_update",
 };

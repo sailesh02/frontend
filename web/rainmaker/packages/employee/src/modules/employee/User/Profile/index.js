@@ -7,7 +7,7 @@ import ProfileForm from "./components/ProfileForm";
 import { Screen } from "modules/common";
 import img from "egov-ui-kit/assets/images/download.png";
 import "./index.css";
-import { DigitalSignatureDialog } from 'egov-ui-kit/common/common/Header/components/DigitalSignatureDialog'
+import DigitalSignatureDialog from 'egov-ui-kit/common/common/Header/components/DigitalSignatureDialog/index'
 const formKey = "profileEmployee";
 const ProfileFormHOC = formHoc({ formKey })(ProfileForm);
 
@@ -41,6 +41,7 @@ class Profile extends Component {
   }
 
   onClickRegister = () => {
+    debugger
     this.setState({
       openDigitalSignaturePopup : true
     })

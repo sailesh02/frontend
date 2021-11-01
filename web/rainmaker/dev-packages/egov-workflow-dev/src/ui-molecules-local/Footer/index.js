@@ -231,7 +231,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                       return data
                     }
                     else if(moduleName == 'MR'){
-                      if(data && data.length > 0 && data[0].marriagePlace && data[0].marriagePlace.additionalDetail && data[0].marriagePlace.additionalDetail.signedPdfDetails){
+                      if(data && data.length > 0 && data[0].marriagePlace && data[0].marriagePlace.additionalDetail && data[0].marriagePlace.additionalDetail.signedPdfDetails && data[0].workflowCode != "MRCORRECTION"){
                         data[0].marriagePlace.additionalDetail.signedPdfDetails.push({
                           "additionalDetails": {"uploadedBy": "Employee"},
                           "documentType": key,
@@ -579,7 +579,7 @@ class Footer extends React.Component {
 
     if((item.moduleName === "BPA_OC1" || item.moduleName === "BPA_OC2" || item.moduleName === "BPA_OC3"
     || item.moduleName === "BPA_OC4" || item.moduleName === "BPA1" || item.moduleName === "BPA2" ||
-    item.moduleName === "BPA3" || item.moduleName === "BPA4" || item.moduleName == 'NewTL' || item.moduleName == "MR") && item.buttonLabel === "APPROVE"){
+    item.moduleName === "BPA3" || item.moduleName === "BPA4" || item.moduleName == 'NewTL' || item.moduleName == "MR" || item.moduleName == "MRCORRECTION") && item.buttonLabel === "APPROVE"){
       this.getTokenList()
       store.dispatch(prepareFinalObject("isCertificateDetailsVisible",true))
     }

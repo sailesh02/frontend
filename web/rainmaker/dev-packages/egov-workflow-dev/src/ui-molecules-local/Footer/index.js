@@ -170,6 +170,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                   })
+
                   if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && (singedFileStoreId.data.responseString && 
                   (singedFileStoreId.data.responseString.includes('success') || singedFileStoreId.data.responseString.includes('Success')))){
                     if(moduleName == 'BPA'){
@@ -193,7 +194,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                       return data
                     }else if(moduleName == 'NewTL'){
                       if(data && data.length > 0 && data[0].tradeLicenseDetail && data[0].tradeLicenseDetail.additionalDetail && data[0].tradeLicenseDetail.additionalDetail.signedPdfDetails){
-                        data[0].tradeLicenseDetail.additionalDetails.signedPdfDetails.push({
+                        data[0].tradeLicenseDetail.additionalDetail.signedPdfDetails.push({
                           "additionalDetails": {"uploadedBy": "Employee"},
                           "documentType": key,
                           "fileName": key,
@@ -201,7 +202,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                           "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                         })
                       }else{
-                        data[0].tradeLicenseDetail.additionalDetails["signedPdfDetails"] = [{
+                        data[0].tradeLicenseDetail.additionalDetail["signedPdfDetails"] = [{
                           "additionalDetails": {"uploadedBy": "Employee"},
                           "documentType": key,
                           "fileName": key,
@@ -213,7 +214,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                     }
                     else if(moduleName == 'MR'){
                       if(data && data.length > 0 && data[0].marriagePlace && data[0].marriagePlace.additionalDetail && data[0].marriagePlace.additionalDetail.signedPdfDetails){
-                        data[0].marriagePlace.additionalDetails.signedPdfDetails.push({
+                        data[0].marriagePlace.additionalDetail.signedPdfDetails.push({
                           "additionalDetails": {"uploadedBy": "Employee"},
                           "documentType": key,
                           "fileName": key,
@@ -221,7 +222,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                           "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                         })
                       }else{
-                        data[0].marriagePlace.additionalDetails["signedPdfDetails"] = [{
+                        data[0].marriagePlace.additionalDetail["signedPdfDetails"] = [{
                           "additionalDetails": {"uploadedBy": "Employee"},
                           "documentType": key,
                           "fileName": key,

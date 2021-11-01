@@ -329,7 +329,8 @@ class WorkFlowContainer extends React.Component {
           if(!data){
             return
           }
-        }else if(moduleName == 'MR' && isDsInfo){
+        }
+        else if(moduleName == 'MR' && isDsInfo){
           data = await getPdfDetails(data, preparedFinalObject, moduleName)
           if(!data){
             return

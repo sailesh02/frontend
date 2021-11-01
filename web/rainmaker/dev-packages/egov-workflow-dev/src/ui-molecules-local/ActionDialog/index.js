@@ -148,7 +148,7 @@ class ActionDialog extends React.Component {
     if(dialogHeader && dialogHeader.labelKey === "WF_APPROVE_APPLICATION" && (dataPath === 'BPA' || dataPath === "Licenses" || dataPath === "MarriageRegistrations") && (moduleName == "BPA1" ||
     moduleName == 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4' || moduleName == 'BPA_OC1' ||  moduleName == 'BPA_OC2' ||  moduleName == 'BPA_OC3' ||  moduleName == 'BPA_OC4' || 
     moduleName == 'BPA_OC' ||
-    moduleName === "NewTL" || moduleName === "MR" || moduleName == "MRCORRECTION")){
+    moduleName === "NewTL" || moduleName == "EDITRENEWAL" || moduleName === "MR" || moduleName == "MRCORRECTION")){
       const state = store.getState()
       let applicationStatus = dataPath == 'BPA' ? get(state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
       state.screenConfiguration.preparedFinalObject, `${dataPath}.status`, "") : dataPath == 'Licenses' ? 

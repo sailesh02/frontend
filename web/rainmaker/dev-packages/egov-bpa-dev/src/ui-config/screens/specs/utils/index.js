@@ -5189,9 +5189,7 @@ export const revocationPdfDownload = async (action, state, dispatch, mode = "Dow
 
 // get file store id based on pdf type
 const getFileStore = (fileKey,documents) => {
-  // let updatedDocuments = documents
   let fileStoreId;
-  // updatedDocuments[1].documentType = fileKey
   let requiredDocument = documents && documents.length > 0 && documents.filter( doc => {
     return doc.documentType == fileKey
   })
@@ -5232,7 +5230,7 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
  
   let fileStoreId
   let fileStoreIdFromDocs
-  fileStoreIdFromDocs = getFileStore(permitPfKey, bpaDetails && bpaDetails.documents)
+  fileStoreIdFromDocs = getFileStore(permitPfKey, bpaDetails && bpaDetails.additionalDetails && bpaDetails.additionalDetails.signedPdfDetails || [])
   if(!fileStoreIdFromDocs){
      let res = await httpRequest(
     "post",

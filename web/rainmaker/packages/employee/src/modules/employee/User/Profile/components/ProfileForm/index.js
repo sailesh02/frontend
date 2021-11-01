@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, TextField } from "components";
+import { TextField } from "components";
+import Button from '@material-ui/core/Button';
 import Label from "egov-ui-kit/utils/translationNode";
 import { ProfileSection } from "modules/common";
 import "./index.css";
@@ -26,14 +27,14 @@ const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic, 
               </Link>
             </div>
             <div className ="col-xs-6 col-sm-6 col-md-6 col-lg-8" style = {{ align:'right',marginTop: "24px", marginBottom: "24px" }}>
-              <Button variant ='outlined' label = "DIGITAL SIGNATURE REGISTRATION" onClick = {onClickRegister} primary={true}/>              
+              <Button variant ='text' onClick = {onClickRegister} primary={true} style={{color :"#f89a3f"}}>DIGITAL SIGNATURE REGISTRATION</Button>              
             </div>
           </div>
         </div>
       </div>
 
       <div className="responsive-action-button-cont">
-        <Button className="responsive-action-button" {...submit} primary={true} fullWidth={true} />
+        <Button variant ='contained' className="responsive-action-button" style={{backgroundColor :"rgb(254, 122, 81)",color:'rgb(255, 255, 255)'}} {...submit} primary={true} fullWidth={true}>Save</Button>
       </div>
     </div>
   );

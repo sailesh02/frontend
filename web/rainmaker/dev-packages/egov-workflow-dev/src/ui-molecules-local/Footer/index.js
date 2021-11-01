@@ -173,17 +173,8 @@ let customRequestInfo = JSON.parse(getUserInfo())
                   if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && (singedFileStoreId.data.responseString && 
                   (singedFileStoreId.data.responseString.includes('success') || singedFileStoreId.data.responseString.includes('Success')))){
                     if(moduleName == 'BPA'){
-                      data && data.documents.length > 0 && data.documents.push({
-                        "additionalDetails": {"uploadedBy": "Employee"},
-                        "documentType": key,
-                        "fileName": key,
-                        "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                        "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                      })
-                      return data
-                    }else if(moduleName == 'NewTL'){
-                      if(data && data.length > 0 && data[0].tradeLicenseDetail && data[0].tradeLicenseDetail.verificationDocuments && data[0].tradeLicenseDetail.verificationDocuments.length > 0){
-                        data[0].tradeLicenseDetail.verificationDocuments.push({
+                      if(data && data.additionalDetails && data.additionalDetails.signedPdfDetails){
+                        data && data.additionalDetails && data.additionalDetails.signedPdfDetails.push({
                           "additionalDetails": {"uploadedBy": "Employee"},
                           "documentType": key,
                           "fileName": key,
@@ -191,7 +182,26 @@ let customRequestInfo = JSON.parse(getUserInfo())
                           "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                         })
                       }else{
-                        data[0].tradeLicenseDetail["verificationDocuments"] = [{
+                        data.additionalDetails["signedPdfDetails"] = [{
+                          "additionalDetails": {"uploadedBy": "Employee"},
+                          "documentType": key,
+                          "fileName": key,
+                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                        }]
+                      }
+                      return data
+                    }else if(moduleName == 'NewTL'){
+                      if(data && data.length > 0 && data[0].tradeLicenseDetail && data[0].tradeLicenseDetail.additionalDetail && data[0].tradeLicenseDetail.additionalDetail.signedPdfDetails){
+                        data[0].tradeLicenseDetail.additionalDetails.signedPdfDetails.push({
+                          "additionalDetails": {"uploadedBy": "Employee"},
+                          "documentType": key,
+                          "fileName": key,
+                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                        })
+                      }else{
+                        data[0].tradeLicenseDetail.additionalDetails["signedPdfDetails"] = [{
                           "additionalDetails": {"uploadedBy": "Employee"},
                           "documentType": key,
                           "fileName": key,
@@ -202,8 +212,8 @@ let customRequestInfo = JSON.parse(getUserInfo())
                       return data
                     }
                     else if(moduleName == 'MR'){
-                      if(data && data.length > 0 && data[0].verificationDocuments && data[0].verificationDocuments.length > 0){
-                        data[0].verificationDocuments.push({
+                      if(data && data.length > 0 && data[0].marriagePlace && data[0].marriagePlace.additionalDetail && data[0].marriagePlace.additionalDetail.signedPdfDetails){
+                        data[0].marriagePlace.additionalDetails.signedPdfDetails.push({
                           "additionalDetails": {"uploadedBy": "Employee"},
                           "documentType": key,
                           "fileName": key,
@@ -211,7 +221,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                           "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                         })
                       }else{
-                        data[0]["verificationDocuments"] = [{
+                        data[0].marriagePlace.additionalDetails["signedPdfDetails"] = [{
                           "additionalDetails": {"uploadedBy": "Employee"},
                           "documentType": key,
                           "fileName": key,
@@ -219,6 +229,8 @@ let customRequestInfo = JSON.parse(getUserInfo())
                           "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                         }]
                       }
+                      return data
+                    }else{
                       return data
                     }
                     store.dispatch(hideSpinner());

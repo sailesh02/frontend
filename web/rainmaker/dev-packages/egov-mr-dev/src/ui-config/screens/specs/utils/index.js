@@ -1051,8 +1051,8 @@ export const downloadCertificateForm = async (MarriageRegistrations, mode = 'dow
   ];
   const LicensesPayload = await getSearchResults(queryObject);
   const updatedLicenses = get(LicensesPayload, "MarriageRegistrations");
-  const oldFileStoreId = get(updatedLicenses[0], "fileStoreId") || getFileStore("mrcertificate", LicensesPayload && LicensesPayload.MarriageRegistrations && LicensesPayload.MarriageRegistrations.length > 0 && 
-  LicensesPayload.MarriageRegistrations[0].verificationDocuments && LicensesPayload.MarriageRegistrations[0].verificationDocuments || [])
+  const oldFileStoreId = get(updatedLicenses[0], "fileStoreId") || getFileStore("mrcertificate", LicensesPayload && LicensesPayload.MarriageRegistrations && LicensesPayload.MarriageRegistrations.length > 0 && LicensesPayload.MarriageRegistrations[0].marriagePlace && LicensesPayload.MarriageRegistrations[0].marriagePlace.additionalDetail && 
+  LicensesPayload.MarriageRegistrations[0].marriagePlace.additionalDetail.signedPdfDetails|| [])
   if (oldFileStoreId) {
     downloadReceiptFromFilestoreID(oldFileStoreId, mode)
   }

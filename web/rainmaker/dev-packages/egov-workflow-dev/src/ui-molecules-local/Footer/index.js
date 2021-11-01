@@ -182,6 +182,15 @@ let customRequestInfo = JSON.parse(getUserInfo())
                           "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
                           "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                         })
+                      }else if(!data.additionalDetails){
+                        data.additionalDetails = {}
+                        data.additionalDetails["signedPdfDetails"] = [{
+                          "additionalDetails": {"uploadedBy": "Employee"},
+                          "documentType": key,
+                          "fileName": key,
+                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                        }]
                       }else{
                         data.additionalDetails["signedPdfDetails"] = [{
                           "additionalDetails": {"uploadedBy": "Employee"},
@@ -201,6 +210,15 @@ let customRequestInfo = JSON.parse(getUserInfo())
                           "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
                           "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                         })
+                      }else if(data && data[0] && !data[0].tradeLicenseDetail.additionalDetail){
+                        data[0].tradeLicenseDetail.additionalDetail = {}
+                        data[0].tradeLicenseDetail.additionalDetail["signedPdfDetails"] = [{
+                          "additionalDetails": {"uploadedBy": "Employee"},
+                          "documentType": key,
+                          "fileName": key,
+                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                        }]
                       }else{
                         data[0].tradeLicenseDetail.additionalDetail["signedPdfDetails"] = [{
                           "additionalDetails": {"uploadedBy": "Employee"},
@@ -221,6 +239,15 @@ let customRequestInfo = JSON.parse(getUserInfo())
                           "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
                           "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                         })
+                      }else if(data && data[0] && !data[0].marriagePlace.additionalDetail){
+                         data[0].marriagePlace.additionalDetail = {}
+                         data[0].marriagePlace.additionalDetail["signedPdfDetails"] = [{
+                          "additionalDetails": {"uploadedBy": "Employee"},
+                          "documentType": key,
+                          "fileName": key,
+                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                        }]
                       }else{
                         data[0].marriagePlace.additionalDetail["signedPdfDetails"] = [{
                           "additionalDetails": {"uploadedBy": "Employee"},
@@ -228,7 +255,7 @@ let customRequestInfo = JSON.parse(getUserInfo())
                           "fileName": key,
                           "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
                           "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                        }]
+                        }] 
                       }
                       return data
                     }else{

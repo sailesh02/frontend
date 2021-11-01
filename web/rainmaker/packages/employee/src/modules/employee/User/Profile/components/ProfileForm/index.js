@@ -34,7 +34,7 @@ const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic, 
       </div>
 
       <div className="responsive-action-button-cont">
-        <Button variant ='contained' className="responsive-action-button" style={{backgroundColor :"rgb(254, 122, 81)",color:'rgb(255, 255, 255)'}} {...submit} primary={true} fullWidth={true}>Save</Button>
+        <Button variant ='contained' className="responsive-action-button" style={{backgroundColor :"rgb(254, 122, 81)",color:'rgb(255, 255, 255)',lineHeight:'32px'}} {...submit} primary={true} fullWidth={true}>Save</Button>
       </div>
     </div>
   );

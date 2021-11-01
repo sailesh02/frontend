@@ -41,7 +41,6 @@ class Profile extends Component {
   }
 
   onClickRegister = () => {
-    debugger
     this.setState({
       openDigitalSignaturePopup : true
     })

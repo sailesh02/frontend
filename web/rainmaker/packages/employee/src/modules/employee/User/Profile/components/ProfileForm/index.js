@@ -21,13 +21,13 @@ const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic, 
             <TextField {...fields.name} onChange={(e, value) => handleFieldChange("name", value)} />
             <TextField {...fields.phonenumber} />
             <TextField {...fields.email} onChange={(e, value) => handleFieldChange("email", value)} />
-            <div className ="col-xs-6 col-sm-6 col-md-6 col-lg-4" style = {{ marginTop: "24px", marginBottom: "24px" }}>
+            <div className ="col-xs-6 col-sm-6 col-md-6 col-lg-4" style = {{ marginTop: "24px", marginBottom: "14px" }}>
               <Link to="/user/change-password">
                 <Label className="change-password-label-style" label={"CORE_COMMON_CHANGE_PASSWORD"} color="#f89a3f" />
               </Link>
             </div>
-            <div className ="col-xs-6 col-sm-6 col-md-6 col-lg-8" style = {{ align:'right',marginTop: "24px", marginBottom: "24px" }}>
-              <Button variant ='text' onClick = {onClickRegister} primary={true} style={{color :"#f89a3f"}}>DIGITAL SIGNATURE REGISTRATION</Button>              
+            <div className ="col-xs-6 col-sm-6 col-md-6 col-lg-8" style = {{marginTop: "22px" }}>
+              <Button className="change-password-label-style" variant ='text' onClick = {onClickRegister} primary={true} style={{color :"#f89a3f"}}>DIGITAL SIGNATURE REGISTRATION</Button>              
             </div>
           </div>
         </div>

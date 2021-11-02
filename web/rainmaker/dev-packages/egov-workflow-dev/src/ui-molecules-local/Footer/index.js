@@ -101,15 +101,15 @@ let customRequestInfo = JSON.parse(getUserInfo())
 
   //actual function
   export const getPdfDetails = async (data,preparedFinalObject,moduleName) => {
-    debugger
     let {DsInfo} = preparedFinalObject
     let {token,certificate,password} = DsInfo
     let body = getPdfBody(moduleName,preparedFinalObject)
     let key = getKey(moduleName,data) 
     let tenantId = getTenantIdForPdf(moduleName,data) || getTenantId()
+    let tenantIdCityCode = tenantId && tenantId.split(".")[0]
     store.dispatch(showSpinner())
     try{
-      let response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantId}`, body, {
+      let response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantIdCityCode}`, body, {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
        })

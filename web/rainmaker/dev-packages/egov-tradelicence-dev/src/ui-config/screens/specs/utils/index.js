@@ -2431,7 +2431,7 @@ export const updateMdmsDropDownsForBillingSlab = async ( state, dispatch ) => {
     queryObject
   );
 
-
+  dispatch(prepareFinalObject("billingSlab[0]", payload.billingSlab[0]));
 const tradeSubTypes = payload.billingSlab;
 console.log(tradeSubTypes.length, "Nero Length")
   if (tradeSubTypes && tradeSubTypes.length > 0) {

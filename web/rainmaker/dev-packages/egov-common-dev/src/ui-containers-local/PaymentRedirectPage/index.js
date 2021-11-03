@@ -7,7 +7,42 @@ import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Label from "egov-ui-framework/ui-containers/LabelContainer";
 
+const style = {
+  container: {
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+    
+    zIndex: 9998,
+    left: 0,
+    top: 166
+  },
+  
+  refresh: {
+
+    position: "absolute",
+    zIndex: 9999,
+   // margin: "auto",
+    top: 8,
+    bottom: 0,
+    left: 438,
+    right: 0,
+    transform: "none",
+    color: "#FE7A51"
+  },
+  plzwaitmsg: {
+  left: 500,
+  position: "absolute",
+  top: 14,
+  color: "#FE7A51",
+  width: "360px",
+  fontWeight: "bold"
+  }
+
+};
 class PaymentRedirect extends Component {
   getBusinessServiceMdmsData = async (tenantId) => {
     const { prepareFinalObject } = this.props
@@ -104,7 +139,20 @@ class PaymentRedirect extends Component {
     }
   };
   render() {
-    return <div />;
+    return (
+      <div
+        id="loading-indicator"
+        style={style.container}
+      >
+  
+  
+          <CircularProgress style={style.refresh} size={50} />
+          <div style={style.plzwaitmsg}><Label
+                  labelKey="Your payment is being processed. Please do not close this window or click the Back button on your browser..."
+  
+                /></div>
+      </div>
+    );
   }
 }
 

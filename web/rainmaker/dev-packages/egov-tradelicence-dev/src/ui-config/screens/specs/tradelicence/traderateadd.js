@@ -579,7 +579,7 @@ const screenConfig = {
       const queryObj = [{ key: "tenantId", value: tenantId }];
       // getBoundaryData(action, state, dispatch, queryObj);
 
-      getBillingSlabData(action, state, dispatch, billingSlabRecId, tenantId)
+    //  getBillingSlabData(action, state, dispatch, billingSlabRecId, tenantId)
 
     });
 

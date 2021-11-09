@@ -27,7 +27,7 @@ let RequestInfo = {};
 
 let customRequestInfo = JSON.parse(getUserInfo())
 
-const getPdfBody = (moduleName,tenantId,applicationNumber) => {
+const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
   let queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNumber }
@@ -60,8 +60,8 @@ const getPdfBody = (moduleName,tenantId,applicationNumber) => {
   }
 }
 
-const getKey = (data) => {
-  let applicationType = moduleName && moduleName == 'NewTL' ? data[0].applicationType : ''
+const getKey = (data,moduleName) => {
+  let applicationType = moduleName && moduleName == 'NewTL' ? data && data.Licenses && data.Licenses[0].applicationType : ''
   let pdfKey = "";
   switch(moduleName){
     case 'BPA':
@@ -394,8 +394,8 @@ class SignPdfContainer extends Component {
     if(this.state.selectedToken && this.state.selectedToken != " " && 
     this.state.selectedCeritificate && this.state.selectedCeritificate != " " &&
     this.state.password && this.state.password != " "){
-      let body = getPdfBody(moduleName,tenantId,applicationNumber)
-      let key = getKey(moduleName,body) 
+      let body = await getPdfBody(moduleName,tenantId,applicationNumber)
+      let key = getKey(body,moduleName) 
       let tenantIdCityCode = tenantId && tenantId.split(".")[0]
       store.dispatch(showSpinner())
       try{
@@ -528,7 +528,7 @@ class SignPdfContainer extends Component {
                     }
                       }catch(error){
                         store.dispatch(hideSpinner());
-                        store.dispatch(toggleSnackbar(true, error && error.message || '', "error"));
+                        store.dispatch(toggleSnackbarAndSetText(true, error && error.message || '', "error"));
                       }
                   }
                   }catch(err){ 
@@ -541,7 +541,7 @@ class SignPdfContainer extends Component {
         }
       }catch(err){
         store.dispatch(hideSpinner());
-        store.dispatch(toggleSnackbar(true, err.message, "error"));
+        store.dispatch(toggleSnackbarAndSetText(true, err.message, "error"));
       }  
     }else{
         this.props.toggleSnackbarAndSetText(
@@ -568,6 +568,7 @@ class SignPdfContainer extends Component {
         [dataPath]: data
       });
     }
+    this.props.closePdfSigningPopup
   }
 
   componentDidMount = () => {

@@ -187,7 +187,7 @@ export const getPendingDigitallySignedApplications = async (state,dispatch) => {
     dispatch(
       handleField(
         "search",
-        "components.div.children.searchDigitalSignatureResults",
+        "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
         "props.data",
         data
       )
@@ -195,7 +195,7 @@ export const getPendingDigitallySignedApplications = async (state,dispatch) => {
     dispatch(
       handleField(
         "search",
-        "components.div.children.searchDigitalSignatureResults",
+        "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
         "props.rows",
         response.dscDetails && response.dscDetails.length
       )
@@ -224,9 +224,10 @@ const showHideDigitalSingedApplicationsTable = (value, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.searchDigitalSignatureResults",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
       "visible",
       value
     )
   );
+  
 }

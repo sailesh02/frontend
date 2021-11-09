@@ -161,6 +161,16 @@ class MultiItem extends React.Component {
       getPendingDigitallySignedApplications(state,dispatch)
       // getData and hide other search Results
     }
+    if(isDigitalSignature && tabIndex == 0){
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
+          "visible",
+          false
+        )
+      );
+    }
     this.onTabChange(tabIndex, dispatch, state);
     this.setState({ tabIndex });
   };

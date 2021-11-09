@@ -1,6 +1,7 @@
 import { getBreak, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
 import React from "react";
 import { tradeLicenseApplication, digitalSignatureApplication } from "./tradeLicenseApplication";
+import {searchDigitalSignatureResults} from "../searchResource/searchResults"
 
 export const pendingApprovals = {
   uiFramework: "custom-atoms",
@@ -99,7 +100,7 @@ export const showSearches = getCommonContainer({
         },
         {
           tabButton: { labelName: "SEARCH APPLICATIONS", labelKey: "TL_SEARCH_PENDING_DIGITALLY_SIGNED" },
-          tabContent: { digitalSignatureApplication }
+          tabContent: { searchDigitalSignatureResults }
         }
       ],
       tabIndex : 0,

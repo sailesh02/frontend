@@ -283,7 +283,7 @@ const tradeLicenseSearchAndResult = {
         // tradeLicenseApplication,
         breakAfterSearch: getBreak(),
         searchResults,
-        searchDigitalSignatureResults
+        // searchDigitalSignatureResults
       }
     },
     adhocDialog: {

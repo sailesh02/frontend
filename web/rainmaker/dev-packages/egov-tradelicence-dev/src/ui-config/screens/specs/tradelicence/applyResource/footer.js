@@ -936,7 +936,12 @@ export const footerReviewTop = (
   tenantId,
   financialYear
 ) => {
-
+  let dscDetails = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject
+  && state.screenConfiguration.preparedFinalObject.Licenses && state.screenConfiguration.preparedFinalObject.Licenses.length > 0 &&
+  state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail && 
+  state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.dscDetails
+  let isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
+  dscDetails[0].documentId ? true : false
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
@@ -1072,16 +1077,28 @@ export const footerReviewTop = (
   // }
   switch (status) {
     case "APPROVED":
-      downloadMenu = [
-        tlCertificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        tlCertificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
+      if(isCeritificateGenerated){
+        downloadMenu = [
+          tlCertificateDownloadObject,
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [
+          tlCertificatePrintObject,
+          receiptPrintObject,
+          applicationPrintObject
+        ];
+      }else{
+        downloadMenu = [
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [
+          receiptPrintObject,
+          applicationPrintObject
+        ];
+      }
+ 
       break;
     case "PENDINGAPPROVAL":
     case "FIELDINSPECTION":
@@ -1178,6 +1195,12 @@ export const downloadPrintContainer = (
 ) => {
 
   /** MenuButton data based on status */
+  const dscDetails = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject
+  && state.screenConfiguration.preparedFinalObject.Licenses && state.screenConfiguration.preparedFinalObject.Licenses.length > 0 &&
+  state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail && 
+  state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.dscDetails
+  const isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
+  dscDetails[0].documentId ? true : false
   const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
   const receiptKey = get(uiCommonConfig, "receiptKey");
   let downloadMenu = [];
@@ -1298,16 +1321,28 @@ export const downloadPrintContainer = (
   // }
   switch (status) {
     case "APPROVED":
-      downloadMenu = [
-        tlCertificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        tlCertificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
+      if(isCeritificateGenerated){
+        downloadMenu = [
+          tlCertificateDownloadObject,
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [
+          tlCertificatePrintObject,
+          receiptPrintObject,
+          applicationPrintObject
+        ];
+      }else{
+        downloadMenu = [
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [
+          receiptPrintObject,
+          applicationPrintObject
+        ];
+      }
+    
       break;
     case "PENDINGAPPROVAL":
     case "FIELDINSPECTION":

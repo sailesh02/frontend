@@ -51,8 +51,8 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       }
     },
     children: {
-      downloadReceiptButtonLabel: getLabel({
-        labelName: "GO TO HOME",
+      pdfSignButtonLabel: getLabel({
+        labelName: "TL_PDF_SIGN",
         labelKey: "TL_PDF_SIGN"
       })
     },

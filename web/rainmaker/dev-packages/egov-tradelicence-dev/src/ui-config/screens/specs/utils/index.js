@@ -1022,7 +1022,7 @@ const getFileStore = (fileKey,documents) => {
   let requiredDocument = documents && documents.length > 0 && documents.filter( doc => {
     return doc.documentType == fileKey
   })
-  fileStoreId = requiredDocument && requiredDocument.length > 0 && requiredDocument[0].fileStoreId || null
+  fileStoreId = requiredDocument && requiredDocument.length > 0 && requiredDocument[0].documentId || null
   return fileStoreId
 }
 
@@ -1051,8 +1051,7 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
   const LicensesPayload = await getSearchResults(queryObject);
   const updatedLicenses = get(LicensesPayload, "Licenses");
   const oldFileStoreId = get(updatedLicenses[0], "fileStoreId") || getFileStore(pdfKey, LicensesPayload && LicensesPayload.Licenses && LicensesPayload.Licenses.length > 0 && 
-    LicensesPayload.Licenses[0].tradeLicenseDetail && LicensesPayload.Licenses[0].tradeLicenseDetail.additionalDetail &&
-    LicensesPayload.Licenses[0].tradeLicenseDetail.additionalDetail.signedPdfDetails || [])
+    LicensesPayload.Licenses[0].tradeLicenseDetail && LicensesPayload.Licenses[0].tradeLicenseDetail.dscDetails || [])
   if (oldFileStoreId) {
     downloadReceiptFromFilestoreID(oldFileStoreId, mode)
   }

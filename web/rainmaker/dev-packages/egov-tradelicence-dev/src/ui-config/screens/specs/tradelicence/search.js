@@ -13,6 +13,18 @@ import { pendingApprovals,showSearches } from "./searchResource/pendingApprovals
 // import { progressStatus } from "./searchResource/progressStatus";
 import { searchResults, searchDigitalSignatureResults } from "./searchResource/searchResults";
 import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplication";
+import store from "ui-redux/store";
+
+export const closePdfSigningPopup = () => {
+  store.dispatch(
+    handleField(
+      "search",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      false
+    )
+  )
+}
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -294,6 +306,23 @@ const tradeLicenseSearchAndResult = {
         maxWidth: false,
         screenKey: 'search',
         reRouteURL: '/tradelicence/search'
+      },
+      children: {
+        popup: {}
+      }
+    },
+    pdfSigningPopup : {
+      uiFramework: 'custom-containers-local',
+      componentPath: 'SignPdfContainer',
+      moduleName: "egov-workflow",
+      props: {
+        openPdfSigningPopup: true,
+        closePdfSigningPopup : closePdfSigningPopup,
+        maxWidth: false,
+        moduleName : 'TL',
+        okText :"TL_SIGN_PDF",
+        resetText : "TL_RESET_PDF",
+        updateUrl : '/tl-services/v1/_updatedscdetails?'
       },
       children: {
         popup: {}

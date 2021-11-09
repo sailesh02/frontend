@@ -3,7 +3,10 @@ import { getLocaleLabels, getStatusKey } from "egov-ui-framework/ui-utils/common
 import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 import React from "react";
 import { getEpochForDate, sortByEpoch } from "../../utils";
-
+import store from "ui-redux/store";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 export const searchResults = {
   uiFramework: "custom-molecules",
   componentPath: "Table",
@@ -198,7 +201,36 @@ const onRowClick = rowData => {
 };
 
 const onPdfSignClick = rowData => {
-  debugger
+  let applicationNumber = rowData && rowData[0]
+  let tenantId = rowData && rowData[1]
+  
+  store.dispatch(
+    handleField(
+      "search",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      true
+    )
+  )
+
+  store.dispatch(
+    handleField(
+      "search",
+      "components.pdfSigningPopup.props",
+      "applicationNumber",
+      applicationNumber
+    )
+  )
+
+
+  store.dispatch(
+    handleField(
+      "search",
+      "components.pdfSigningPopup.props",
+      "tenantId",
+      tenantId
+    )
+  )
   //set tenantId and applicationNumber
   console.log(rowData)
 }

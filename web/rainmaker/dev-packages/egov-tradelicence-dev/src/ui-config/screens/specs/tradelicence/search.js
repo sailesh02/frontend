@@ -316,13 +316,14 @@ const tradeLicenseSearchAndResult = {
       componentPath: 'SignPdfContainer',
       moduleName: "egov-workflow",
       props: {
-        openPdfSigningPopup: true,
+        openPdfSigningPopup: false,
         closePdfSigningPopup : closePdfSigningPopup,
         maxWidth: false,
-        moduleName : 'TL',
+        moduleName : 'NewTL',
         okText :"TL_SIGN_PDF",
         resetText : "TL_RESET_PDF",
-        updateUrl : '/tl-services/v1/_updatedscdetails?'
+        dataPath : 'Licenses',
+        updateUrl : '/tl-services/v1/_updatedscdetailsss?'
       },
       children: {
         popup: {}

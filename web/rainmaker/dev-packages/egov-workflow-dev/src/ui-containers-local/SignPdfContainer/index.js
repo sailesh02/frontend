@@ -19,12 +19,75 @@ import { hideSpinner,showSpinner } from "egov-ui-kit/redux/common/actions";
 import TextField from "material-ui/TextField";
 import { getLocale, getTenantId,getAccessToken, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import axios from 'axios';
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
 const passwordPattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
 // const authToken = getAccessToken();
 let RequestInfo = {};
 
 let customRequestInfo = JSON.parse(getUserInfo())
+
+const getPdfBody = (moduleName,tenantId,applicationNumber) => {
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "applicationNumber", value: applicationNumber }
+  ];
+  switch(moduleName){  
+    case 'BPA':
+      break
+    case 'NewTL':
+      try {
+        let tlSearchResult = await httpRequest(
+          "post",
+          "/tl-services/v1/_search",
+          "",
+          queryObject
+        );
+        return {
+          RequestInfo : RequestInfo,
+          "Licenses":tlSearchResult && tlSearchResult.Licenses
+        }
+      }catch(error){
+        return 
+      }
+           
+    case 'MR':
+       break
+    default:
+      return {
+        ...RequestInfo
+      }  
+  }
+}
+
+const getKey = (data) => {
+  let applicationType = moduleName && moduleName == 'NewTL' ? data[0].applicationType : ''
+  let pdfKey = "";
+  switch(moduleName){
+    case 'BPA':
+        pdfKey = "buildingpermit";
+      if (!window.location.href.includes("oc-bpa")) {
+        if (data && data.businessService === "BPA_LOW") {
+          pdfKey = "buildingpermit-low"
+        }
+      } else if (window.location.href.includes("oc-bpa")) {
+        pdfKey = "occupancy-certificate"
+      }
+      if (window.location.href.includes("oc-bpa") || window.location.href.includes("BPA.NC_OC_SAN_FEE")) {
+        pdfKey = "occupancy-certificate"
+      }
+    break; 
+    case 'NewTL':
+      pdfKey = applicationType && applicationType == "RENEWAL" ? "tlrenewalcertificate" : "tlcertificate"
+      break;
+    case 'MR':
+     pdfKey = 'mrcertificate'  
+     break;
+    default:
+      return pdfKey 
+  }
+  return pdfKey
+}
 class SignPdfContainer extends Component {
   state = {
     tokensArray : '',
@@ -320,112 +383,190 @@ class SignPdfContainer extends Component {
     }
 
   }
-  // sing the PDF
-  saveDetails = () => {
+
+  getPdfDetails = async () => {
+    let token = this.state.selectedToken
+    let certificate = this.state.selectedCeritificate
+    let password = this.state.password
+    let moduleName = this.props.moduleName
+    let applicationNumber = this.props.applicationNumber
+    let tenantId = this.props.tenantId
     if(this.state.selectedToken && this.state.selectedToken != " " && 
     this.state.selectedCeritificate && this.state.selectedCeritificate != " " &&
     this.state.password && this.state.password != " "){
-      this.props.showSpinner();
-      let requestInfo = this.getRequestInfo()
-      RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};      
-      let body =  Object.assign(
-        {},
-        {
-          RequestInfo,
-          "tenantId":getTenantId(),
-          "tokenDisplayName":this.state.selectedToken,
-          "keyStorePassPhrase":this.state.password,
-          "keyId":this.state.selectedCeritificate,
-          "channelId":"ch4",
-          responseData:null
-        }
-      );
-      
-      axios.post("/dsc-services/dsc/_dataSignInput", body, {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       })
-        .then(response => {
-          this.props.showSpinner();
-          let body = response.data.input
-          axios.post("https://localhost.emudhra.com:26769/DSC/PKCSSign", body, { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-           })
-            .then(response => {
-              this.props.showSpinner();
-              let requestInfo = this.getRequestInfo()
-              RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};                
-              let body =  Object.assign(
-                 {},
-                  {
-                   RequestInfo,
-                   "tenantId":getTenantId(),
-                   "tokenDisplayName":this.state.selectedToken,
-                   "keyStorePassPhrase":this.state.password,
-                   "keyId":this.state.selectedCeritificate,
-                   "channelId":"ch4",
-                   "responseData":response.data.responseData
-                  }
-               );
-              axios.post("/dsc-services/dsc/_dataSign", body, { // to get R1 R2
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-               })
-                .then(response => {
-                  this.props.hideSpinner()
-                    if(response && response.data && response.data.responseString){
-                      let succesMsg = this.getSuccessMsg(response.data.responseString)
-                      this.props.toggleSnackbarAndSetText(
+      let body = getPdfBody(moduleName,tenantId,applicationNumber)
+      let key = getKey(moduleName,body) 
+      let tenantIdCityCode = tenantId && tenantId.split(".")[0]
+      store.dispatch(showSpinner())
+      try{
+        let response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantIdCityCode}`, body, {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+         })
+        
+         if(response){
+          try{
+            RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+            let body =  Object.assign(
+              {},
+              {
+                RequestInfo,
+                "tenantId":getTenantId(),
+                "responseData":null,
+                "file":response.data && response.data.filestoreIds && response.data.filestoreIds[0],
+                "fileName":key,
+                "tokenDisplayName":token,
+                "certificate" : certificate,
+                "keyId":certificate,
+                "moduleName":moduleName,
+                "reportName":key,
+                "channelId":"ch4",
+                "keyStorePassPhrase": password
+              } 
+            );
+  
+            let encryptedData = await axios.post("/dsc-services/dsc/_pdfSignInput", body, { // send file store id to get encrypted data
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            })
+            if(encryptedData){
+                try{
+                  let body = encryptedData.data.input
+                  let tempFilePath = encryptedData.data.input && encryptedData.data.input.tempFilePath || ''
+                  let responseData = await axios.post("https://localhost.emudhra.com:26769/DSC/PKCSBulkSign", body, { // to get response Data
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                  })
+                  if(responseData){
+                  try{
+                    RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+                    let body =  Object.assign(
+                      {},
+                        {
+                        RequestInfo,
+                        "tokenDisplayName":null,
+                        "keyStorePassPhrase":null,
+                        "keyId":null,
+                        "channelId":"ch4",
+                        "file":null,
+                        "moduleName":moduleName,
+                        "fileName":key,
+                        "tempFilePath":tempFilePath,
+                        "tenantId":getTenantId(),
+                          responseData:responseData.data.responseData,
+                        }
+                    );
+                    let singedFileStoreId = await axios.post("/dsc-services/dsc/_pdfSign", body, { // to get filestoreId for pdf signing
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json'
+                    })
+  
+                    if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && (singedFileStoreId.data.responseString && 
+                    (singedFileStoreId.data.responseString.includes('success') || singedFileStoreId.data.responseString.includes('Success')))){
+                      if(moduleName == 'NewTL'){
+                        if(data && data.length > 0 && data[0].tradeLicenseDetail && data[0].tradeLicenseDetail.dscDetails && data[0].tradeLicenseDetail.dscDetails.length > 0){
+                          data[0].tradeLicenseDetail.dscDetails[0].documentType = key
+                          data[0].tradeLicenseDetail.dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                        }
+                        return data
+                      }
+                      else if(moduleName == 'MR'){
+                        if(data && data.length > 0 && data[0].marriagePlace && data[0].marriagePlace.additionalDetail && data[0].marriagePlace.additionalDetail.signedPdfDetails && data[0].workflowCode != "MRCORRECTION"){
+                          data[0].marriagePlace.additionalDetail.signedPdfDetails.push({
+                            "additionalDetails": {"uploadedBy": "Employee"},
+                            "documentType": key,
+                            "fileName": key,
+                            "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                            "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                          })
+                        }else if(data && data[0] && !data[0].marriagePlace.additionalDetail){
+                           data[0].marriagePlace.additionalDetail = {}
+                           data[0].marriagePlace.additionalDetail["signedPdfDetails"] = [{
+                            "additionalDetails": {"uploadedBy": "Employee"},
+                            "documentType": key,
+                            "fileName": key,
+                            "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                            "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                          }]
+                        }else{
+                          data[0].marriagePlace.additionalDetail["signedPdfDetails"] = [{
+                            "additionalDetails": {"uploadedBy": "Employee"},
+                            "documentType": key,
+                            "fileName": key,
+                            "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                            "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                          }] 
+                        }
+                        return data
+                      }else{
+                        return data
+                      }
+                      store.dispatch(hideSpinner());
+                      
+                    }else{
+                      store.dispatch(hideSpinner());
+                      let errorCode = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.responseString 
+                      if(errorCode == 'Authentication Failure'){
+                        store.dispatch(toggleSnackbarAndSetText(
                           true,
                           {
-                            labelName: succesMsg.labelName,
-                            labelKey: succesMsg.labelKey
+                            labelName: "Authentication Failure!",
+                            labelKey: 'Authentication Failure'
                           },
-                          succesMsg.type
-                      );
-                      this.props.closeDigitalSignatureDialog()
-                    }else{
-                      this.props.toggleSnackbarAndSetText(
-                        true,
-                        {
-                          labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                          labelKey: "CORE_COMMON_SIGNATURE_FAILURE_MSG"
-                        },
-                        "error"
-                    );
+                          "error"
+                        ));
+                      }else{
+                        store.dispatch(toggleSnackbarAndSetText(
+                          true,
+                          {
+                            labelName: "Issue during Digital Signature of the report (Error Code). Please contact system Administrator",
+                            labelKey: `Issue during Digital Signature of the report (${errorCode}). Please contact system Administrator`
+                          },
+                          "error"
+                        ));
+                      }
                     }
-                    this.props.hideSpinner();
-                })
-                .catch(error => {
-                  this.props.toggleSnackbarAndSetText(
-                    true,
-                    {
-                      labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                      labelKey: "CORE_COMMON_SIGNATURE_FAILURE_MSG"
-                    },
-                    "error"
-                );
-                  this.props.hideSpinner();
-                  });
-            })
-            .catch(error => {
-              this.props.hideSpinner();
-            });
-        })
-        .catch(error => {
-          this.props.hideSpinner();
-        });
+                      }catch(error){
+                        store.dispatch(hideSpinner());
+                        store.dispatch(toggleSnackbar(true, error && error.message || '', "error"));
+                      }
+                  }
+                  }catch(err){ 
+                    store.dispatch(hideSpinner()); 
+              }
+            }
+          }catch(err){
+            store.dispatch(hideSpinner());
+          }
+        }
+      }catch(err){
+        store.dispatch(hideSpinner());
+        store.dispatch(toggleSnackbar(true, err.message, "error"));
+      }  
     }else{
-      this.props.toggleSnackbarAndSetText(
-        true,
-        {
-          labelName: "CORE_COMMON_FILL_ALL_DETAILS",
-          labelKey: "CORE_COMMON_FILL_ALL_DETAILS"
-        },
-        "warning"
-    );
-    return
+        this.props.toggleSnackbarAndSetText(
+          true,
+          {
+            labelName: "CORE_COMMON_FILL_ALL_DETAILS",
+            labelKey: "CORE_COMMON_FILL_ALL_DETAILS"
+          },
+          "warning"
+      );
+      return
+    }
+   
+  }
+
+  // sign the PDF
+  saveDetails = async() => {
+    let data = await this.getPdfDetails()
+    let dataPath = this.props.dataPath
+    if(!data){
+      return
+    }else{
+     let updateFileStore = await httpRequest("post", this.props.updateUrl, "", [], {
+        [dataPath]: data
+      });
     }
   }
 

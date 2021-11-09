@@ -9,9 +9,9 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
 import "./index.css";
-import { pendingApprovals } from "./searchResource/pendingApprovals";
+import { pendingApprovals,showSearches } from "./searchResource/pendingApprovals";
 // import { progressStatus } from "./searchResource/progressStatus";
-import { searchResults } from "./searchResource/searchResults";
+import { searchResults, searchDigitalSignatureResults } from "./searchResource/searchResults";
 import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplication";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
@@ -279,9 +279,11 @@ const tradeLicenseSearchAndResult = {
           }
         },
         pendingApprovals,
-        tradeLicenseApplication,
+        showSearches,
+        // tradeLicenseApplication,
         breakAfterSearch: getBreak(),
-        searchResults
+        searchResults,
+        searchDigitalSignatureResults
       }
     },
     adhocDialog: {

@@ -12,6 +12,11 @@ import {
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {httpRequest} from '../../../../../ui-utils/api'
+import { hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 //import { LabelContainer } from "egov-ui-framework/ui-containers";
 
 export const searchApiCall = async (state, dispatch) => {
@@ -148,6 +153,62 @@ export const searchApiCall = async (state, dispatch) => {
     }
   }
 };
+
+export const getPendingDigitallySignedApplications = async (state,dispatch) => {
+  showHideTable(false, dispatch);
+  showHideDigitalSingedApplicationsTable (false,dispatch)
+  dispatch(showSpinner())
+  const userInfo = JSON.parse(getUserInfo());
+  const uuid = userInfo && userInfo.uuid
+
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: getTenantId()
+    },
+    { key: "employeeUuid", value: uuid }
+  ];
+
+  try {
+    const response = await httpRequest(
+      "post",
+      "/tl-services/v1/_searchdscdetails",
+      "",
+      queryObject
+    );
+    let data = response && response.dscDetails && response.dscDetails.length > 0 &&
+    response.dscDetails.map(item => ({
+      ['TL_COMMON_TABLE_COL_APP_NO']:
+        item.applicationNumber || "-",
+      ['TENANT_ID']: item.tenantId || "-",
+      ['PT_COMMON_TABLE_COL_ACTION_LABEL'] : "Sign Pdf"
+    }));
+
+    dispatch(
+      handleField(
+        "search",
+        "components.div.children.searchDigitalSignatureResults",
+        "props.data",
+        data
+      )
+    );
+    dispatch(
+      handleField(
+        "search",
+        "components.div.children.searchDigitalSignatureResults",
+        "props.rows",
+        response.dscDetails && response.dscDetails.length
+      )
+    );
+    showHideDigitalSingedApplicationsTable(true, dispatch);
+    dispatch(hideSpinner())
+    return response;
+
+  }catch(err){
+    dispatch(hideSpinner())
+  }
+}
+
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
     handleField(
@@ -158,3 +219,14 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
     )
   );
 };
+
+const showHideDigitalSingedApplicationsTable = (value, dispatch) => {
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.searchDigitalSignatureResults",
+      "visible",
+      value
+    )
+  );
+}

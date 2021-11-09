@@ -176,7 +176,9 @@ export const getPendingDigitallySignedApplications = async (state,dispatch) => {
       "",
       queryObject
     );
-    let data = response && response.dscDetails && response.dscDetails.length > 0 &&
+
+    let data = []
+    data = response && response.dscDetails && response.dscDetails.length > 0 &&
     response.dscDetails.map(item => ({
       ['TL_COMMON_TABLE_COL_APP_NO']:
         item.applicationNumber || "-",
@@ -197,7 +199,7 @@ export const getPendingDigitallySignedApplications = async (state,dispatch) => {
         "search",
         "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
         "props.rows",
-        response.dscDetails && response.dscDetails.length
+        response.dscDetails && response.dscDetails.length || 0
       )
     );
     showHideDigitalSingedApplicationsTable(true, dispatch);

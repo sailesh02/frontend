@@ -233,6 +233,45 @@ export const callBackForNext = async (state, dispatch) => {
 
       }
 console.log(isFormValid, "Nero form valid")
+let brideOtherrltn = get(
+  mrgObj[0],
+  "coupleDetails[0].bride.guardianDetails.relationship"
+)
+
+let groomOtherrltn = get(
+  mrgObj[0],
+  "coupleDetails[0].groom.guardianDetails.relationship"
+)
+
+console.log(brideOtherrltn, "Nero sss")
+if(brideOtherrltn == "OTHERS" && applicationNoInUrl){
+const visiblebrideOtherRelationDesc = [
+
+  {
+    path: "components.div.children.formwizardSecondStep.children.brideGuardianDetails.children.cardContent.children.brideGuardianDetailsConatiner.children.otherRltnWithBride",
+    property: "visible",
+    value: true
+  },
+
+
+];
+dispatchMultipleFieldChangeAction("apply", visiblebrideOtherRelationDesc, dispatch);
+}
+
+if(groomOtherrltn == "OTHERS" && applicationNoInUrl){
+  const visibleGroomOtherRelationDesc = [
+  
+    {
+      path: "components.div.children.formwizardSecondStep.children.groomGuardianDetails.children.cardContent.children.groomGuardianDetailsConatiner.children.otherRltnWithgroom",
+      property: "visible",
+      value: true
+    },
+  
+  
+  ];
+  dispatchMultipleFieldChangeAction("apply", visibleGroomOtherRelationDesc, dispatch);
+  }
+
       // const brideGrndRelationShip = get(mrgObj[0], "coupleDetails[0].bride.guardianDetails.relationship");
       // const groomGrndRelationShip = get(mrgObj[0], "coupleDetails[0].groom.guardianDetails.relationship");
       // console.log(brideGrndRelationShip, "Nero REl footer")
@@ -283,6 +322,8 @@ console.log(isFormValid, "Nero form valid")
         dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.country", "INDIA"));
       }
     }
+
+   
   }
   if (activeStep === 1) {
     //Bride and Groom Guardian Details
@@ -330,6 +371,10 @@ console.log(isFormValid, "Nero form valid")
         }
       }
     }
+
+    
+   
+
   }
   if (activeStep === 2) {
     //Witness Details

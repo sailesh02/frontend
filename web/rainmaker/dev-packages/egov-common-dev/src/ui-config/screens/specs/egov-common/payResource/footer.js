@@ -1,7 +1,8 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg, isPublicSearch } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, isPublicSearch, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
+
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
@@ -594,6 +595,27 @@ export const getCommonApplyFooter = children => {
   };
 };
 
+export const showHideMakePaymentPopup = (state, dispatch) => {
+  // console.log("nero sss")
+  // let toggle = get(
+  //   state.screenConfiguration.screenConfig[screenKey],
+  //   "components.paymentRedirectDialog.props.open",
+  //   false
+  // );
+  // dispatch(
+  //   handleField(screenKey, "components.paymentRedirectDialog", "props.open", !toggle)
+  // );
+  
+  var r = confirm("On click of OK button, you will be redirected to Payment Gateway Site for Payment processing. Please DO NOT close this window or click the BACK BUTTON on your browser until Payment transaction is complete");
+  if (r == true) {
+    
+    callPGService(state, dispatch);
+  } 
+
+
+};
+
+
 export const footer = getCommonApplyFooter({
   generateReceipt: {
     componentPath: "Button",
@@ -663,14 +685,20 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: callPGService
+      //  callBack: callPGService
+      callBack: (state, dispatch) => {
+        showHideMakePaymentPopup(state, dispatch);
+
+      }
     },
+
     // roleDefination: {
     //   rolePath: "user-info.roles",
     //   roles: ["CITIZEN"],
     //   action: "PAY"
     // },
     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
-  }
+  },
+  
 });
 

@@ -668,6 +668,40 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
+  }else if (purpose === "addbillingslab" && status === "success") {
+    
+    return {
+      header: getCommonContainer({
+        header: getCommonHeader({
+          labelName: `Trade License Application ${financialYearText}`,
+          labelKey: "TL_NEW_BILLING_SLAB_SUCCESS_MESSAGE_HEADER",
+          
+        }),
+        
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application is sent back Successfully",
+              labelKey: "TL_NEW_BILLING_SLAB_SUCCESS_MESSAGE"
+            },
+            // body: {
+            //   labelName:
+            //     "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+            //   labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_SUB"
+            // },
+            
+          })
+        }
+      },
+      gotoHomeFooter
+      
+    };
   }
 };
 

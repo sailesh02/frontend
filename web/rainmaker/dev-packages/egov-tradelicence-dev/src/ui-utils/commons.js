@@ -71,6 +71,27 @@ export const getSearchResults = async queryObject => {
   }
 };
 
+export const getSearchResultsForTradeSearch = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/tl-calculator/billingslab/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    enableFieldAndHideSpinner('tradesearch', "components.div.children.tradeSearchForm.children.cardContent.children.button.children.buttonContainer.children.searchButton", store.dispatch);
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
+
 const setDocsForEditFlow = async (state, dispatch) => {
   let applicationDocuments = get(
     state.screenConfiguration.preparedFinalObject,
@@ -197,15 +218,15 @@ export const updatePFOforSearchResults = async (
         true
       )
     );
-if(oldLicenseNumber !== null){
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
-        "visible",
-        true
-      )
-    );
+    if (oldLicenseNumber !== null) {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
+          "visible",
+          true
+        )
+      );
     }
   }
 
@@ -282,7 +303,7 @@ if(oldLicenseNumber !== null){
     );
 
   }
-  if(userAction == "EDITRENEWAL"){
+  if (userAction == "EDITRENEWAL") {
     dispatch(
       handleField(
         "apply",
@@ -441,6 +462,31 @@ const getMultipleOwners = owners => {
   return mergedOwners;
 };
 
+export const addUpdateBillSlab = async (state, dispatch) => {
+  try {
+
+    let queryObject = JSON.parse(
+      JSON.stringify(
+        get(state.screenConfiguration.preparedFinalObject, "billingSlab", [])
+      )
+    );
+    const response = await httpRequest(
+      "post",
+      "/tl-calculator/billingslab/_create",
+      "",
+      [],
+      { billingSlab: queryObject }
+    );
+
+    
+    if (response && response.billingSlab)
+      return true;
+  } catch (error) {
+    
+    dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+    return false;
+  }
+}
 export const applyTradeLicense = async (state, dispatch, activeIndex) => {
   try {
     let queryObject = JSON.parse(
@@ -491,7 +537,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
     disableField('apply', "components.div.children.footer.children.payButton", dispatch);
 
-    if (process.env.REACT_APP_NAME === "Citizen"&& queryObject[0].workflowCode === "NewTL") {
+    if (process.env.REACT_APP_NAME === "Citizen" && queryObject[0].workflowCode === "NewTL") {
       // let currentFinancialYr = getCurrentFinancialYear();
       // //Changing the format of FY
       // let fY1 = currentFinancialYr.split("-")[1];
@@ -544,11 +590,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     } else {
       set(queryObject[0], "tradeLicenseDetail.additionalDetail.licensePeriod", TlPeriod);
       tlPeriodDisplay = `${TlPeriod} Years`;
-if(TlStatus === "INITIATED" && getQueryArg(window.location.href, "action") === "EDITRENEWAL"){
+      if (TlStatus === "INITIATED" && getQueryArg(window.location.href, "action") === "EDITRENEWAL") {
 
-}else{
-  set(queryObject[0], "validFrom", tlcommencementDate);
-}
+      } else {
+        set(queryObject[0], "validFrom", tlcommencementDate);
+      }
       // let selectedYearInMiliSeconds = 1000 * 60 * 60 * 24 * Number(TlPeriod) * 365;
 
       var dt = new Date(queryObject[0] && queryObject[0].commencementDate);

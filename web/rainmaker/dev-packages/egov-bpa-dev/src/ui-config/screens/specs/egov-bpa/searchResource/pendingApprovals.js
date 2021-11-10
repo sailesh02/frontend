@@ -1,5 +1,7 @@
-import { getBreak } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getBreak, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
 import React from "react";
+import { BPAApplication } from "./bpaApplication";
+import {searchDigitalSignatureResults} from "../searchResource/searchResults"
 
 export const pendingApprovals = {
   uiFramework: "custom-atoms",
@@ -84,3 +86,26 @@ export const pendingApprovals = {
     }
   }
 };
+
+export const showSearches = getCommonContainer({
+  showSearchScreens: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "CustomTabContainer",
+    props: {
+      tabs: [
+        {
+          tabButton: { labelName: "SEARCH APPLICATIONS", labelKey: "BPA_SEARCH_APPLICATIONS" },
+          tabContent: { BPAApplication }
+        },
+        {
+          tabButton: { labelName: "SEARCH APPLICATIONS", labelKey: "BPA_SEARCH_PENDING_DIGITALLY_SIGNED" },
+          tabContent: { searchDigitalSignatureResults }
+        }
+      ],
+      tabIndex : 0,
+      isDigitalSignature : true,
+    },
+    type: "array"
+  }
+});

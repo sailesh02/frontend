@@ -389,7 +389,7 @@ class SignPdfContainer extends Component {
       let tenantIdCityCode = tenantId && tenantId.split(".")[0]
       try{
         this.props.showSpinner()
-        let response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantIdCityCode}`, body, {
+        let response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantId}`, body, {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
          })

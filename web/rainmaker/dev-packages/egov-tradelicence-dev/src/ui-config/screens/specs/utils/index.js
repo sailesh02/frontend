@@ -1053,7 +1053,7 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
   const oldFileStoreId = get(updatedLicenses[0], "fileStoreId") || getFileStore(pdfKey, LicensesPayload && LicensesPayload.Licenses && LicensesPayload.Licenses.length > 0 && 
     LicensesPayload.Licenses[0].tradeLicenseDetail && LicensesPayload.Licenses[0].tradeLicenseDetail.dscDetails || [])
   if (oldFileStoreId) {
-    downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+    downloadReceiptFromFilestoreID(oldFileStoreId, mode, tenantId)
   }
   else {
     try {

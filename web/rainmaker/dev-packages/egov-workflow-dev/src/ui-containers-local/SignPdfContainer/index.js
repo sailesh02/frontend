@@ -586,7 +586,9 @@ class SignPdfContainer extends Component {
   }
 
   componentDidMount = () => {
-     this.getTokenList()
+      if(process.env.REACT_APP_NAME != 'Citizen'){
+        this.getTokenList()
+      }
   }
 
   render() {

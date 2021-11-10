@@ -185,7 +185,7 @@ export const getPendingDigitallySignedApplications = async () => {
         item.applicationNumber || "-",
       ['TENANT_ID']: item.tenantId || "-",
       ['PT_COMMON_TABLE_COL_ACTION_LABEL'] : "Sign Pdf"
-    }));
+    })) || [];
 
     store.dispatch(
       handleField(

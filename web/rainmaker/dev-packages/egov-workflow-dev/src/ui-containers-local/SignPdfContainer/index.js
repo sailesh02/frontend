@@ -384,12 +384,12 @@ class SignPdfContainer extends Component {
     if(this.state.selectedToken && this.state.selectedToken != " " && 
     this.state.selectedCeritificate && this.state.selectedCeritificate != " " &&
     this.state.password && this.state.password != " "){
-      let body = await getPdfBody(moduleName,tenantId,applicationNumber)
-      let key = getKey(body,moduleName) 
+      let data = await getPdfBody(moduleName,tenantId,applicationNumber)
+      let key = getKey(data,moduleName) 
       let tenantIdCityCode = tenantId && tenantId.split(".")[0]
       try{
         this.props.showSpinner()
-        let response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantId}`, body, {
+        let response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantId}`, data, {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
          })
@@ -455,9 +455,9 @@ class SignPdfContainer extends Component {
                     (singedFileStoreId.data.responseString.includes('success') || singedFileStoreId.data.responseString.includes('Success')))){
                       this.props.hideSpinner()
                       if(moduleName == 'NewTL'){
-                        if(data && data.length > 0 && data[0].tradeLicenseDetail && data[0].tradeLicenseDetail.dscDetails && data[0].tradeLicenseDetail.dscDetails.length > 0){
-                          data[0].tradeLicenseDetail.dscDetails[0].documentType = key
-                          data[0].tradeLicenseDetail.dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                        if(data && data.Licenses && data.Licenses.length > 0 && data.Licenses[0].tradeLicenseDetail && data.Licenses[0].tradeLicenseDetail.dscDetails && data.Licenses[0].tradeLicenseDetail.dscDetails.length > 0){
+                          data.Licenses[0].tradeLicenseDetail.dscDetails[0].documentType = key
+                          data.Licenses[0].tradeLicenseDetail.dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                         }
                         return data
                       }

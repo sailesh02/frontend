@@ -327,7 +327,7 @@ const tradeLicenseSearchAndResult = {
         okText :"TL_SIGN_PDF",
         resetText : "TL_RESET_PDF",
         dataPath : 'Licenses',
-        updateUrl : '/tl-services/v1/_updatedscdetailsss?',
+        updateUrl : '/tl-services/v1/_updatedscdetails?',
         isTableRefresh : true
       },
       children: {

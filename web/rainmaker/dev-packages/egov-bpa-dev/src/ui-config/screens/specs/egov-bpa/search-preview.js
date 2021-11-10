@@ -44,6 +44,7 @@ import { declarationSummary } from "./summaryResource/declarationSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary";
 import { fieldSummary } from "./summaryResource/fieldSummary";
+import { reviewPdfSignDetails } from './summaryResource/review-pdfSign.js'
 import { previewSummary } from "./summaryResource/previewSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { nocDetailsSearchBPA} from "./noc";
@@ -51,6 +52,26 @@ import store from "ui-redux/store";
 import commonConfig from "config/common.js";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { additionalDocsInformation } from "./applyResource/documentDetails";
+
+const closePdfSigningPopup = (refreshType) => {
+  store.dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      false
+    )
+  )
+  if(refreshType == "preview"){
+    store.dispatch(handleField(
+      'search-preview',
+      'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
+      'visible',
+      false
+    ))
+    store.dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.dscDetails[0].documentId",'Yes'))
+  }
+}
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -1149,6 +1170,7 @@ const screenConfig = {
         },
         body: getCommonCard({
           estimateSummary: estimateSummary,
+          reviewPdfSignDetails : reviewPdfSignDetails,
           fieldSummary: fieldSummary,
           fieldinspectionSummary: fieldinspectionSummary,
           basicSummary: basicSummary,
@@ -1171,7 +1193,25 @@ const screenConfig = {
             nocType:''
           }
         },
-      
+        pdfSigningPopup : {
+          uiFramework: 'custom-containers-local',
+          componentPath: 'SignPdfContainer',
+          moduleName: "egov-workflow",
+          props: {
+            openPdfSigningPopup: false,
+            closePdfSigningPopup : closePdfSigningPopup,
+            maxWidth: false,
+            moduleName : 'BPA',
+            okText :"BPA_SIGN_PDF",
+            resetText : "BPA_RESET_PDF",
+            dataPath : 'BPA',
+            updateUrl : '/bpa-services/v1/_updatedscdetails?',
+            refreshType : 'Table'
+          },
+          children: {
+            popup: {}
+          }
+         },
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
     }

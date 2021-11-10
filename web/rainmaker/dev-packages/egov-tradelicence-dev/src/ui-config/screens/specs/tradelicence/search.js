@@ -16,7 +16,7 @@ import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplicatio
 import { getPendingDigitallySignedApplications } from "./searchResource/functions"
 import store from "ui-redux/store";
 
-export const closePdfSigningPopup = (isRefresh) => {
+export const closePdfSigningPopup = (refreshType) => {
   store.dispatch(
     handleField(
       "search",
@@ -25,7 +25,7 @@ export const closePdfSigningPopup = (isRefresh) => {
       false
     )
   )
-  if(isRefresh){
+  if(refreshType == 'Table'){
     getPendingDigitallySignedApplications()
   }
 }
@@ -328,7 +328,7 @@ const tradeLicenseSearchAndResult = {
         resetText : "TL_RESET_PDF",
         dataPath : 'Licenses',
         updateUrl : '/tl-services/v1/_updatedscdetails?',
-        isTableRefresh : true
+        refreshType : 'Table'
       },
       children: {
         popup: {}

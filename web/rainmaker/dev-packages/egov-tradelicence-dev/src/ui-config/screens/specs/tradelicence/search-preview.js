@@ -38,7 +38,7 @@ import { getReviewTrade } from "./applyResource/review-trade";
 import { getReviewPdfSignDetails } from "./applyResource/review-pdfSign.js"
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
-const closePdfSigningPopup = () => {
+const closePdfSigningPopup = (refreshType) => {
   store.dispatch(
     handleField(
       "search-preview",
@@ -47,6 +47,9 @@ const closePdfSigningPopup = () => {
       false
     )
   )
+  if(refreshType == "preview"){
+    // call search API
+  }
 }
 
 const ifUserRoleExists = role => {
@@ -653,7 +656,8 @@ const screenConfig = {
         okText :"TL_SIGN_PDF",
         resetText : "TL_RESET_PDF",
         dataPath : 'Licenses',
-        updateUrl : '/tl-services/v1/_updatedscdetails?'
+        refreshType : 'preview',
+        updateUrl : '/tl-services/v1/_updatedscdetailss?'
       }
     }
   }

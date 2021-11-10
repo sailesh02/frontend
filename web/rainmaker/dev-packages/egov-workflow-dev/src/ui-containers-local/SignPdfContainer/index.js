@@ -459,7 +459,7 @@ class SignPdfContainer extends Component {
                           data.Licenses[0].tradeLicenseDetail.dscDetails[0].documentType = key
                           data.Licenses[0].tradeLicenseDetail.dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                         }
-                        return data
+                        return data.Licenses
                       }
                       else if(moduleName == 'MR'){
                         if(data && data.length > 0 && data[0].marriagePlace && data[0].marriagePlace.additionalDetail && data[0].marriagePlace.additionalDetail.signedPdfDetails && data[0].workflowCode != "MRCORRECTION"){
@@ -568,6 +568,7 @@ class SignPdfContainer extends Component {
         },
         "success"
       );
+      this.props.closePdfSigningPopup(this.props.refreshType)
     }catch(error){
       this.props.toggleSnackbarAndSetText(
         true,
@@ -577,10 +578,11 @@ class SignPdfContainer extends Component {
         },
         "error"
       );
+      this.props.closePdfSigningPopup()
       this.props.hideSpinner()
       }
     }
-    this.props.closePdfSigningPopup(this.props.isTableRefresh)
+    
   }
 
   componentDidMount = () => {

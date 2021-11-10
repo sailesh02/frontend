@@ -48,7 +48,13 @@ const closePdfSigningPopup = (refreshType) => {
     )
   )
   if(refreshType == "preview"){
-    // call search API
+    store.dispatch(handleField(
+      'search-preview',
+      'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
+      'visible',
+      false
+    ))
+    store.dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.dscDetails[0].documentId",'Yes'))
   }
 }
 
@@ -661,7 +667,7 @@ const screenConfig = {
         resetText : "TL_RESET_PDF",
         dataPath : 'Licenses',
         refreshType : 'preview',
-        updateUrl : '/tl-services/v1/_updatedscdetailss?'
+        updateUrl : '/tl-services/v1/_updatedscdetails?'
       }
     }
   }

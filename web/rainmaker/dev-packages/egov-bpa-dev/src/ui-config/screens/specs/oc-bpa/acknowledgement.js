@@ -13,6 +13,29 @@ import acknowledgementCard from "../egov-bpa/acknowledgementResource/acknowledge
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
 import { getCurrentFinancialYear } from "../utils";
+import store from "ui-redux/store";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
+const closePdfSigningPopup = (refreshType) => {
+  store.dispatch(
+    handleField(
+      "acknowledgement",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      false
+    )
+  )
+  if(refreshType == 'acknowledgement'){
+    store.dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.approvalSuccessFooter.children.pdfSign",
+        "visible",
+        false
+      )
+    )
+  }
+}
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Application for Occupancy certificate`,
@@ -537,6 +560,25 @@ const screenConfig = {
       componentPath: "Div",
       props: {
         className: "common-div-css"
+      }
+    },
+    pdfSigningPopup : {
+      uiFramework: 'custom-containers-local',
+      componentPath: 'SignPdfContainer',
+      moduleName: "egov-workflow",
+      props: {
+        openPdfSigningPopup: false,
+        closePdfSigningPopup : closePdfSigningPopup,
+        maxWidth: false,
+        moduleName : 'BPA',
+        okText :"BPA_SIGN_PDF",
+        resetText : "BPA_RESET_PDF",
+        dataPath : 'BPA',
+        refreshType : "acknowledgement",
+        updateUrl : '/bpa-services/v1/_updatedscdetails?'
+      },
+      children: {
+        popup: {}
       }
     }
   },

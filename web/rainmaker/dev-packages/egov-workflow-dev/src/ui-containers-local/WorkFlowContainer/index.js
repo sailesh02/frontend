@@ -13,7 +13,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { Footer } from "../../ui-molecules-local";
 import TaskStatusContainer from "../TaskStatusContainer";
-import {getPdfDetails} from "../../ui-molecules-local/Footer"
 
 const tenant = getQueryArg(window.location.href, "tenantId");
 
@@ -148,9 +147,7 @@ class WorkFlowContainer extends React.Component {
       beforeSubmitHook
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
-    let isDsInfo = get(preparedFinalObject,'DsInfo')
     let data = get(preparedFinalObject, dataPath, []);
-    let payload
     console.log(updateUrl, moduleName, dataPath)
     if (moduleName === "NewTL") {
       if (getQueryArg(window.location.href, "edited")) {
@@ -314,36 +311,16 @@ class WorkFlowContainer extends React.Component {
     this.props.showSpinner();
     try {
       if (beforeSubmitHook) {
-        if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4"|| moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
-          if(!isDsInfo){
-            data = await beforeSubmitHook(data);
-          }else{
-            data = await beforeSubmitHook(data);
-            data = await getPdfDetails(data, preparedFinalObject, moduleName)
-            if(!data){
-              return
-            }
-          }
-        }else if(moduleName == 'NewTL' && isDsInfo){
-          data = await getPdfDetails(data, preparedFinalObject, moduleName)
-          if(!data){
-            return
-          }
-        }
-        else if(moduleName == 'MR' && isDsInfo){
-          data = await getPdfDetails(data, preparedFinalObject, moduleName)
-          if(!data){
-            return
-          }
-        }
-        else {
+        if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+          data = await beforeSubmitHook(data);
+        } else {
           data = beforeSubmitHook(data);
         }
       }
       console.log(data, "nero data")
-        payload = await httpRequest("post", updateUrl, "", [], {
-          [dataPath]: data
-        });
+      let payload = await httpRequest("post", updateUrl, "", [], {
+        [dataPath]: data
+      });
       this.setState({
         open: false
       });
@@ -409,7 +386,6 @@ class WorkFlowContainer extends React.Component {
   createWorkFLow = async (label, isDocRequired) => {
 
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
-    const {isCertificateDetailsVisible} = preparedFinalObject
     let data = {};
 
     if (dataPath == "BPA" || dataPath == "Assessment" || dataPath == "Property" || dataPath === "Noc") {
@@ -448,32 +424,7 @@ class WorkFlowContainer extends React.Component {
       }
     }
     else {
-      if(isCertificateDetailsVisible){
-        const {DsInfo} = preparedFinalObject
-        if(DsInfo){
-          const {token,certificate,password} = DsInfo
-          if(token && certificate && password ){
-            this.wfUpdate(label);
-          }else{
-            toggleSnackbar(
-              true,
-              { labelName: "Please fill mandatory fiels", labelKey: "ERR_TOKEN_CERTIFICATE_AND_PASSWORD" },
-              "error"
-            );
-            return
-          }
-        }
-        else{
-          toggleSnackbar(
-            true,
-            { labelName: "Please fill mandatory fiels", labelKey: "ERR_TOKEN_CERTIFICATE_AND_PASSWORD" },
-            "error"
-          );
-          return
-        }
-      }else{
-        this.wfUpdate(label);
-      }
+      this.wfUpdate(label);
     }
   };
 

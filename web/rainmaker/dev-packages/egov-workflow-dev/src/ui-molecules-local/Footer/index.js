@@ -5,7 +5,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
-import { getTenantId, getUserInfo,getAccessToken,getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import set from "lodash/set";
@@ -17,301 +17,12 @@ import {
 } from "../../ui-utils/commons";
 import { getDownloadItems } from "./downloadItems";
 import "./index.css";
-import { prepareFinalObject } from "../../../../../packages/lib/egov-ui-framework/ui-redux/screen-configuration/actions";
-import axios from 'axios';
-import store from "ui-redux/store";
-
-let RequestInfo = {};
-let customRequestInfo = JSON.parse(getUserInfo())
-
-// pdf signing @final approval step in BPA and OC
-// to form pdf body w.r.t modules and report type
-  const getPdfBody = (moduleName,preparedFinalObject) => {
-    switch(moduleName){  
-      case 'BPA':
-        const {BPA,scrutinyDetails} = preparedFinalObject
-        let BPAWithScrutiny = {
-          ...BPA,
-          edcrDetails:scrutinyDetails
-        }
-        return {
-          RequestInfo : RequestInfo,
-          "Bpa":[BPAWithScrutiny]
-        }
-      case 'NewTL':
-        const {Licenses} = preparedFinalObject  
-        return {
-          RequestInfo : RequestInfo,
-          "Licenses":Licenses
-        }
-      case 'MR':
-          const {MarriageRegistrations} = preparedFinalObject  
-        return {
-          RequestInfo : RequestInfo,
-          "MarriageRegistrations":MarriageRegistrations
-        }
-      default:
-        return {
-          ...RequestInfo
-        }  
-    }
-  }
-
-  // to get pdf key for calling pdf service
-  const getKey = (moduleName,data) => {
-    let applicationType = moduleName && moduleName == 'NewTL' ? data[0].applicationType : ''
-    let pdfKey = "";
-    switch(moduleName){
-      case 'BPA':
-          pdfKey = "buildingpermit";
-        if (!window.location.href.includes("oc-bpa")) {
-          if (data && data.businessService === "BPA_LOW") {
-            pdfKey = "buildingpermit-low"
-          }
-        } else if (window.location.href.includes("oc-bpa")) {
-          pdfKey = "occupancy-certificate"
-        }
-        if (window.location.href.includes("oc-bpa") || window.location.href.includes("BPA.NC_OC_SAN_FEE")) {
-          pdfKey = "occupancy-certificate"
-        }
-      break; 
-      case 'NewTL':
-        pdfKey = applicationType && applicationType == "RENEWAL" ? "tlrenewalcertificate" : "tlcertificate"
-        break;
-      case 'MR':
-       pdfKey = 'mrcertificate'  
-       break;
-      default:
-        return pdfKey 
-    }
-    return pdfKey
-  }
-
-  // to fetch tenantId from the data
-  const getTenantIdForPdf = (moduleName,data) => {
-    switch(moduleName){
-      case 'BPA':
-        return data.tenantId 
-      case 'NewTL':
-        return data[0].tenantId 
-      case 'MR':
-        return data[0].tenantId   
-    }
-  }
-
-  //actual function
-  export const getPdfDetails = async (data,preparedFinalObject,moduleName) => {
-    let {DsInfo} = preparedFinalObject
-    let {token,certificate,password} = DsInfo
-    let body = getPdfBody(moduleName,preparedFinalObject)
-    let key = getKey(moduleName,data) 
-    let tenantId = getTenantIdForPdf(moduleName,data) || getTenantId()
-    let tenantIdCityCode = tenantId && tenantId.split(".")[0]
-    store.dispatch(showSpinner())
-    try{
-      let response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantIdCityCode}`, body, {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       })
-      
-       if(response){
-        try{
-          RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-          let body =  Object.assign(
-            {},
-            {
-              RequestInfo,
-              "tenantId":getTenantId(),
-              "responseData":null,
-              "file":response.data && response.data.filestoreIds && response.data.filestoreIds[0],
-              "fileName":key,
-              "tokenDisplayName":token,
-              "certificate" : certificate,
-              "keyId":certificate,
-              "moduleName":moduleName,
-              "reportName":key,
-              "channelId":"ch4",
-              "keyStorePassPhrase": password
-            } 
-          );
-
-          let encryptedData = await axios.post("/dsc-services/dsc/_pdfSignInput", body, { // send file store id to get encrypted data
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          })
-          if(encryptedData){
-              try{
-                let body = encryptedData.data.input
-                let tempFilePath = encryptedData.data.input && encryptedData.data.input.tempFilePath || ''
-                let responseData = await axios.post("https://localhost.emudhra.com:26769/DSC/PKCSBulkSign", body, { // to get response Data
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json'
-                })
-                if(responseData){
-                try{
-                  RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-                  let body =  Object.assign(
-                    {},
-                      {
-                      RequestInfo,
-                      "tokenDisplayName":null,
-                      "keyStorePassPhrase":null,
-                      "keyId":null,
-                      "channelId":"ch4",
-                      "file":null,
-                      "moduleName":moduleName,
-                      "fileName":key,
-                      "tempFilePath":tempFilePath,
-                      "tenantId":getTenantId(),
-                        responseData:responseData.data.responseData,
-                      }
-                  );
-                  let singedFileStoreId = await axios.post("/dsc-services/dsc/_pdfSign", body, { // to get filestoreId for pdf signing
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                  })
-
-                  if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && (singedFileStoreId.data.responseString && 
-                  (singedFileStoreId.data.responseString.includes('success') || singedFileStoreId.data.responseString.includes('Success')))){
-                    if(moduleName == 'BPA'){
-                      if(data && data.additionalDetails && data.additionalDetails.signedPdfDetails){
-                        data && data.additionalDetails && data.additionalDetails.signedPdfDetails.push({
-                          "additionalDetails": {"uploadedBy": "Employee"},
-                          "documentType": key,
-                          "fileName": key,
-                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                        })
-                      }else if(!data.additionalDetails){
-                        data.additionalDetails = {}
-                        data.additionalDetails["signedPdfDetails"] = [{
-                          "additionalDetails": {"uploadedBy": "Employee"},
-                          "documentType": key,
-                          "fileName": key,
-                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                        }]
-                      }else{
-                        data.additionalDetails["signedPdfDetails"] = [{
-                          "additionalDetails": {"uploadedBy": "Employee"},
-                          "documentType": key,
-                          "fileName": key,
-                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                        }]
-                      }
-                      return data
-                    }else if(moduleName == 'NewTL'){
-                      if(data && data.length > 0 && data[0].tradeLicenseDetail && data[0].tradeLicenseDetail.additionalDetail && data[0].tradeLicenseDetail.additionalDetail.signedPdfDetails && data[0].workflowCode != "EDITRENEWAL"){
-                        data[0].tradeLicenseDetail.additionalDetail.signedPdfDetails.push({
-                          "additionalDetails": {"uploadedBy": "Employee"},
-                          "documentType": key,
-                          "fileName": key,
-                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                        })
-                      }else if(data && data[0] && !data[0].tradeLicenseDetail.additionalDetail){
-                        data[0].tradeLicenseDetail.additionalDetail = {}
-                        data[0].tradeLicenseDetail.additionalDetail["signedPdfDetails"] = [{
-                          "additionalDetails": {"uploadedBy": "Employee"},
-                          "documentType": key,
-                          "fileName": key,
-                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                        }]
-                      }else{
-                        data[0].tradeLicenseDetail.additionalDetail["signedPdfDetails"] = [{
-                          "additionalDetails": {"uploadedBy": "Employee"},
-                          "documentType": key,
-                          "fileName": key,
-                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                        }]
-                      }
-                      return data
-                    }
-                    else if(moduleName == 'MR'){
-                      if(data && data.length > 0 && data[0].marriagePlace && data[0].marriagePlace.additionalDetail && data[0].marriagePlace.additionalDetail.signedPdfDetails && data[0].workflowCode != "MRCORRECTION"){
-                        data[0].marriagePlace.additionalDetail.signedPdfDetails.push({
-                          "additionalDetails": {"uploadedBy": "Employee"},
-                          "documentType": key,
-                          "fileName": key,
-                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                        })
-                      }else if(data && data[0] && !data[0].marriagePlace.additionalDetail){
-                         data[0].marriagePlace.additionalDetail = {}
-                         data[0].marriagePlace.additionalDetail["signedPdfDetails"] = [{
-                          "additionalDetails": {"uploadedBy": "Employee"},
-                          "documentType": key,
-                          "fileName": key,
-                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                        }]
-                      }else{
-                        data[0].marriagePlace.additionalDetail["signedPdfDetails"] = [{
-                          "additionalDetails": {"uploadedBy": "Employee"},
-                          "documentType": key,
-                          "fileName": key,
-                          "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                          "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                        }] 
-                      }
-                      return data
-                    }else{
-                      return data
-                    }
-                    store.dispatch(hideSpinner());
-                    
-                  }else{
-                    store.dispatch(hideSpinner());
-                    let errorCode = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.responseString 
-                    if(errorCode == 'Authentication Failure'){
-                      store.dispatch(toggleSnackbarAndSetText(
-                        true,
-                        {
-                          labelName: "Authentication Failure!",
-                          labelKey: 'Authentication Failure'
-                        },
-                        "error"
-                      ));
-                    }else{
-                      store.dispatch(toggleSnackbarAndSetText(
-                        true,
-                        {
-                          labelName: "Issue during Digital Signature of the report (Error Code). Please contact system Administrator",
-                          labelKey: `Issue during Digital Signature of the report (${errorCode}). Please contact system Administrator`
-                        },
-                        "error"
-                      ));
-                    }
-                  }
-                    }catch(error){
-                      store.dispatch(hideSpinner());
-                      store.dispatch(toggleSnackbar(true, error && error.message || '', "error"));
-                    }
-                }
-                }catch(err){ 
-                  store.dispatch(hideSpinner()); 
-            }
-          }
-        }catch(err){
-          store.dispatch(hideSpinner());
-        }
-      }
-    }catch(err){
-      store.dispatch(hideSpinner());
-      store.dispatch(toggleSnackbar(true, err.message, "error"));
-    }  
-  }
   
 class Footer extends React.Component {
   state = {
     open: false,
     data: {},
     employeeList: [],
-    tokensArray:[],
-    certicatesArray :[]
     //responseLength: 0
   };
 
@@ -348,155 +59,6 @@ class Footer extends React.Component {
       menu: getDownloadItems(status, applicationNumber, state).printMenu
     };
   };
-
-  getRequestInfo = () => {
-    const authToken = getAccessToken();
-    let RequestInfo = {
-      apiId: "Rainmaker",
-      ver: ".01",
-      // ts: getDateInEpoch(),
-      action: "_search",
-      did: "1",
-      key: "",
-      msgId: `20170310130900|${getLocale()}`,
-      requesterId: "",
-      authToken
-    };
-    return RequestInfo
-  }
-
-  getCustomRequestInfo = () => {
-    return JSON.parse(getUserInfo())
-  }
-
-  // actual API's
-  getTokenList = () => {
-    this.props.showSpinner();
-    let requestInfo = this.getRequestInfo()
-    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};     
-    let body =  Object.assign(
-      {},
-      {
-        RequestInfo,
-        "tenantId":getTenantId(),
-        "responseData":null
-      }
-    );
-
-    axios.post("/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-     })
-      .then(response => { 
-        let body = response.data.input
-        axios.post("https://localhost.emudhra.com:26769/DSC/ListToken", body, { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-         })
-          .then(response => {
-            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};              
-            let body =  Object.assign(
-               {},
-                {
-                 RequestInfo,
-                 "tenantId":getTenantId(),
-                 "responseData":response.data.responseData
-                }
-             );
-            axios.post("/dsc-services/dsc/_getTokens", body, { 
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-             })
-              .then(response => {
-                let requiredTokenFormat = response && response.data && response.data.tokens.map (token => {
-                  return {
-                    label : token,
-                    value : token
-                  }
-                }) 
-
-                this.setState({
-                  tokensArray : requiredTokenFormat,
-                })
-                this.props.hideSpinner();
-                // this.getCertificateList({target:{value:requiredTokenFormat[0].label}}) 
-              })
-              .catch(error => { 
-                this.props.hideSpinner();
-              });
-          })
-          .catch(error => {
-            this.props.hideSpinner();
-          });
-      })
-      .catch(error => {
-        this.props.hideSpinner();
-      });
-  }
-
-  getCertificateList = (token) => {
-    this.props.showSpinner();
-    let requestInfo = this.getRequestInfo()
-    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()}; 
-    let body =  Object.assign(
-      {},
-      {
-        RequestInfo,
-        "tenantId":getTenantId(),
-        "responseData":null,
-        "tokenDisplayName":token.target.value
-      }
-    );
-
-    axios.post("/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-     })
-      .then(response => {
-        let body = response.data.input
-        axios.post("https://localhost.emudhra.com:26769/DSC/ListCertificate", body, { // to get R1 R2
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-         })
-          .then(response => {
-            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};              
-            let body =  Object.assign(
-               {},
-                {
-                 RequestInfo,
-                 "tenantId":getTenantId(),
-                  responseData:response.data.responseData,
-                  tokenDisplayName:token.target.name
-                }
-             );
-            axios.post("/dsc-services/dsc/_getCertificate", body, { // to get R1 R2
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-             })
-              .then(response => {
-                let requiredCertificateFormat = response && response.data && response.data.certificates && response.data.certificates.map (certificate => {
-                  return {
-                    label : certificate.commonName,
-                    value : certificate.keyId
-                  }
-                }) 
-                this.setState({
-                  certicatesArray : requiredCertificateFormat,
-                })
-                this.props.hideSpinner();
-              })
-              .catch(error => { 
-                this.props.hideSpinner();
-              });
-          })
-          .catch(error => {
-            this.props.hideSpinner();
-          });
-      })
-      .catch(error => {
-        this.props.hideSpinner();
-      });
-  }
 
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
@@ -577,13 +139,6 @@ class Footer extends React.Component {
         });
     }
 
-    if((item.moduleName === "BPA_OC1" || item.moduleName === "BPA_OC2" || item.moduleName === "BPA_OC3"
-    || item.moduleName === "BPA_OC4" || item.moduleName === "BPA1" || item.moduleName === "BPA2" ||
-    item.moduleName === "BPA3" || item.moduleName === "BPA4" || item.moduleName == 'NewTL' || item.moduleName == "EDITRENEWAL" ||
-    item.moduleName == "EDITRENEWAL" || item.moduleName == "MR" || item.moduleName == "MRCORRECTION") && item.buttonLabel === "APPROVE"){
-      this.getTokenList()
-      store.dispatch(prepareFinalObject("isCertificateDetailsVisible",true))
-    }
     this.setState({ open: true, data: item, employeeList });
   };
 
@@ -688,7 +243,7 @@ class Footer extends React.Component {
       state,
       dispatch
     } = this.props;
-    const { open, data, employeeList,tokensArray,certicatesArray } = this.state;
+    const { open, data, employeeList } = this.state;
     const { isDocRequired } = data;
     const appName = process.env.REACT_APP_NAME;
     const downloadMenu =
@@ -915,9 +470,6 @@ class Footer extends React.Component {
           open={open}
           onClose={this.onClose}
           dialogData={data}
-          tokensArray={tokensArray}
-          certicatesArray={certicatesArray}
-          getCertificateList={this.getCertificateList}
           dropDownData={employeeList}
           handleFieldChange={handleFieldChange}
           onButtonClick={onDialogButtonClick}
@@ -941,9 +493,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(showSpinner()),
     hideSpinner: () =>
       dispatch(hideSpinner()),
-    toggleSnackbarAndSetText: (open, message, variant) => {
-        dispatch(toggleSnackbarAndSetText(open, message, variant));
-      }
   };
 };
 

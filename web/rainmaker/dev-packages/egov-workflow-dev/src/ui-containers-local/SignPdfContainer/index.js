@@ -41,10 +41,17 @@ const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
           "",
           queryObject
         );
-        return {
-          RequestInfo : RequestInfo,
-          "Licenses":tlSearchResult && tlSearchResult.Licenses
+        let applicationDigitallySigned = tlSearchResult && tlSearchResult.Licenses && tlSearchResult.Licenses.length > 0 && tlSearchResult.Licenses[0].tradeLicenseDetail &&
+        tlSearchResult.Licenses[0].tradeLicenseDetail.dscDetails && tlSearchResult.Licenses[0].tradeLicenseDetail.dscDetails[0].documentId ? true : false
+        if(!applicationDigitallySigned){
+          return {
+            RequestInfo : RequestInfo,
+            "Licenses":tlSearchResult && tlSearchResult.Licenses
+          }
+        }else{
+          return null
         }
+      
       }catch(error){
         return 
       }
@@ -385,154 +392,168 @@ class SignPdfContainer extends Component {
     this.state.selectedCeritificate && this.state.selectedCeritificate != " " &&
     this.state.password && this.state.password != " "){
       let data = await getPdfBody(moduleName,tenantId,applicationNumber)
-      let key = getKey(data,moduleName) 
-      let tenantIdCityCode = tenantId && tenantId.split(".")[0]
-      try{
-        this.props.showSpinner()
-        let response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantId}`, data, {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-         })
-        
-         if(response){
-          try{
-            RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-            let body =  Object.assign(
-              {},
-              {
-                RequestInfo,
-                "tenantId":getTenantId(),
-                "responseData":null,
-                "file":response.data && response.data.filestoreIds && response.data.filestoreIds[0],
-                "fileName":key,
-                "tokenDisplayName":token,
-                "certificate" : certificate,
-                "keyId":certificate,
-                "moduleName":moduleName,
-                "reportName":key,
-                "channelId":"ch4",
-                "keyStorePassPhrase": password
-              } 
-            );
-  
-            let encryptedData = await axios.post("/dsc-services/dsc/_pdfSignInput", body, { // send file store id to get encrypted data
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            })
-            if(encryptedData){
-                try{
-                  let body = encryptedData.data.input
-                  let tempFilePath = encryptedData.data.input && encryptedData.data.input.tempFilePath || ''
-                  let responseData = await axios.post("https://localhost.emudhra.com:26769/DSC/PKCSBulkSign", body, { // to get response Data
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                  })
-                  if(responseData){
+      if(!data){
+        this.props.closePdfSigningPopup()
+        this.props.toggleSnackbarAndSetText(
+          true,
+          {
+            labelName: "COMMON_PDF_ALREADY_SIGNED",
+            labelKey: 'COMMON_PDF_ALREADY_SIGNED'
+          },
+          "warning"
+        );
+        return
+      }else{
+        let key = getKey(data,moduleName) 
+        let tenantIdCityCode = tenantId && tenantId.split(".")[0]
+        try{
+          this.props.showSpinner()
+          let response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantId}`, data, {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+           })
+          
+           if(response){
+            try{
+              RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+              let body =  Object.assign(
+                {},
+                {
+                  RequestInfo,
+                  "tenantId":getTenantId(),
+                  "responseData":null,
+                  "file":response.data && response.data.filestoreIds && response.data.filestoreIds[0],
+                  "fileName":key,
+                  "tokenDisplayName":token,
+                  "certificate" : certificate,
+                  "keyId":certificate,
+                  "moduleName":moduleName,
+                  "reportName":key,
+                  "channelId":"ch4",
+                  "keyStorePassPhrase": password
+                } 
+              );
+    
+              let encryptedData = await axios.post("/dsc-services/dsc/_pdfSignInput", body, { // send file store id to get encrypted data
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              })
+              if(encryptedData){
                   try{
-                    RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
-                    let body =  Object.assign(
-                      {},
-                        {
-                        RequestInfo,
-                        "tokenDisplayName":null,
-                        "keyStorePassPhrase":null,
-                        "keyId":null,
-                        "channelId":"ch4",
-                        "file":null,
-                        "moduleName":moduleName,
-                        "fileName":key,
-                        "tempFilePath":tempFilePath,
-                        "tenantId":getTenantId(),
-                          responseData:responseData.data.responseData,
-                        }
-                    );
-                    let singedFileStoreId = await axios.post("/dsc-services/dsc/_pdfSign", body, { // to get filestoreId for pdf signing
+                    let body = encryptedData.data.input
+                    let tempFilePath = encryptedData.data.input && encryptedData.data.input.tempFilePath || ''
+                    let responseData = await axios.post("https://localhost.emudhra.com:26769/DSC/PKCSBulkSign", body, { // to get response Data
                       'Content-Type': 'application/json',
                       'Accept': 'application/json'
                     })
-  
-                    if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && (singedFileStoreId.data.responseString && 
-                    (singedFileStoreId.data.responseString.includes('success') || singedFileStoreId.data.responseString.includes('Success')))){
-                      this.props.hideSpinner()
-                      if(moduleName == 'NewTL'){
-                        if(data && data.Licenses && data.Licenses.length > 0 && data.Licenses[0].tradeLicenseDetail && data.Licenses[0].tradeLicenseDetail.dscDetails && data.Licenses[0].tradeLicenseDetail.dscDetails.length > 0){
-                          data.Licenses[0].tradeLicenseDetail.dscDetails[0].documentType = key
-                          data.Licenses[0].tradeLicenseDetail.dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                    if(responseData){
+                    try{
+                      RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
+                      let body =  Object.assign(
+                        {},
+                          {
+                          RequestInfo,
+                          "tokenDisplayName":null,
+                          "keyStorePassPhrase":null,
+                          "keyId":null,
+                          "channelId":"ch4",
+                          "file":null,
+                          "moduleName":moduleName,
+                          "fileName":key,
+                          "tempFilePath":tempFilePath,
+                          "tenantId":getTenantId(),
+                            responseData:responseData.data.responseData,
+                          }
+                      );
+                      let singedFileStoreId = await axios.post("/dsc-services/dsc/_pdfSign", body, { // to get filestoreId for pdf signing
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                      })
+    
+                      if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && (singedFileStoreId.data.responseString && 
+                      (singedFileStoreId.data.responseString.includes('success') || singedFileStoreId.data.responseString.includes('Success')))){
+                        this.props.hideSpinner()
+                        if(moduleName == 'NewTL'){
+                          if(data && data.Licenses && data.Licenses.length > 0 && data.Licenses[0].tradeLicenseDetail && data.Licenses[0].tradeLicenseDetail.dscDetails && data.Licenses[0].tradeLicenseDetail.dscDetails.length > 0){
+                            data.Licenses[0].tradeLicenseDetail.dscDetails[0].documentType = key
+                            data.Licenses[0].tradeLicenseDetail.dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                          }
+                          return data.Licenses
                         }
-                        return data.Licenses
-                      }
-                      else if(moduleName == 'MR'){
-                        if(data && data.length > 0 && data[0].marriagePlace && data[0].marriagePlace.additionalDetail && data[0].marriagePlace.additionalDetail.signedPdfDetails && data[0].workflowCode != "MRCORRECTION"){
-                          data[0].marriagePlace.additionalDetail.signedPdfDetails.push({
-                            "additionalDetails": {"uploadedBy": "Employee"},
-                            "documentType": key,
-                            "fileName": key,
-                            "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                            "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                          })
-                        }else if(data && data[0] && !data[0].marriagePlace.additionalDetail){
-                           data[0].marriagePlace.additionalDetail = {}
-                           data[0].marriagePlace.additionalDetail["signedPdfDetails"] = [{
-                            "additionalDetails": {"uploadedBy": "Employee"},
-                            "documentType": key,
-                            "fileName": key,
-                            "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                            "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                          }]
+                        else if(moduleName == 'MR'){
+                          if(data && data.length > 0 && data[0].marriagePlace && data[0].marriagePlace.additionalDetail && data[0].marriagePlace.additionalDetail.signedPdfDetails && data[0].workflowCode != "MRCORRECTION"){
+                            data[0].marriagePlace.additionalDetail.signedPdfDetails.push({
+                              "additionalDetails": {"uploadedBy": "Employee"},
+                              "documentType": key,
+                              "fileName": key,
+                              "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                              "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                            })
+                          }else if(data && data[0] && !data[0].marriagePlace.additionalDetail){
+                             data[0].marriagePlace.additionalDetail = {}
+                             data[0].marriagePlace.additionalDetail["signedPdfDetails"] = [{
+                              "additionalDetails": {"uploadedBy": "Employee"},
+                              "documentType": key,
+                              "fileName": key,
+                              "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                              "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                            }]
+                          }else{
+                            data[0].marriagePlace.additionalDetail["signedPdfDetails"] = [{
+                              "additionalDetails": {"uploadedBy": "Employee"},
+                              "documentType": key,
+                              "fileName": key,
+                              "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
+                              "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                            }] 
+                          }
+                          return data
                         }else{
-                          data[0].marriagePlace.additionalDetail["signedPdfDetails"] = [{
-                            "additionalDetails": {"uploadedBy": "Employee"},
-                            "documentType": key,
-                            "fileName": key,
-                            "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                            "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                          }] 
+                          return data
                         }
-                        return data
+                        
                       }else{
-                        return data
+                        this.props.hideSpinner() 
+                        let errorCode = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.responseString 
+                        if(errorCode == 'Authentication Failure'){
+                          this.props.toggleSnackbarAndSetText(
+                            true,
+                            {
+                              labelName: "Authentication Failure!",
+                              labelKey: 'Authentication Failure'
+                            },
+                            "error"
+                          );
+                        }else{
+                          this.props.toggleSnackbarAndSetText(
+                            true,
+                            {
+                              labelName: "Issue during Digital Signature of the report (Error Code). Please contact system Administrator",
+                              labelKey: `Issue during Digital Signature of the report (${errorCode}). Please contact system Administrator`
+                            },
+                            "error"
+                          );
+                        }
                       }
-                      
-                    }else{
-                      this.props.hideSpinner() 
-                      let errorCode = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.responseString 
-                      if(errorCode == 'Authentication Failure'){
-                        store.dispatch(toggleSnackbarAndSetText(
-                          true,
-                          {
-                            labelName: "Authentication Failure!",
-                            labelKey: 'Authentication Failure'
-                          },
-                          "error"
-                        ));
-                      }else{
-                        store.dispatch(toggleSnackbarAndSetText(
-                          true,
-                          {
-                            labelName: "Issue during Digital Signature of the report (Error Code). Please contact system Administrator",
-                            labelKey: `Issue during Digital Signature of the report (${errorCode}). Please contact system Administrator`
-                          },
-                          "error"
-                        ));
-                      }
+                        }catch(error){
+                          this.props.hideSpinner();
+                          this.props.toggleSnackbarAndSetText(true, error && error.message || '', "error");
+                        }
                     }
-                      }catch(error){
-                        this.props.hideSpinner();
-                        store.dispatch(toggleSnackbarAndSetText(true, error && error.message || '', "error"));
-                      }
-                  }
-                  }catch(err){ 
-                    this.props.hideSpinner(); 
+                    }catch(err){ 
+                      this.props.hideSpinner(); 
+                }
               }
+            }catch(err){
+              this.props.hideSpinner();
             }
-          }catch(err){
-            this.props.hideSpinner();
           }
-        }
-      }catch(err){
-        this.props.hideSpinner()
-        store.dispatch(toggleSnackbarAndSetText(true, err.message, "error"));
-      }  
+        }catch(err){
+          this.props.hideSpinner()
+          this.props.toggleSnackbarAndSetText(true, err.message, "error");
+        } 
+      }
+      
     }else{
         this.props.toggleSnackbarAndSetText(
           true,

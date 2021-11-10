@@ -16,6 +16,7 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {httpRequest} from '../../../../../ui-utils/api'
 import { hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import store from "ui-redux/store";
 
 //import { LabelContainer } from "egov-ui-framework/ui-containers";
 
@@ -154,10 +155,10 @@ export const searchApiCall = async (state, dispatch) => {
   }
 };
 
-export const getPendingDigitallySignedApplications = async (state,dispatch) => {
-  showHideTable(false, dispatch);
-  showHideDigitalSingedApplicationsTable (false,dispatch)
-  dispatch(showSpinner())
+export const getPendingDigitallySignedApplications = async () => {
+  showHideTable(false);
+  showHideDigitalSingedApplicationsTable (false)
+  store.dispatch(showSpinner())
   const userInfo = JSON.parse(getUserInfo());
   const uuid = userInfo && userInfo.uuid
 
@@ -186,7 +187,7 @@ export const getPendingDigitallySignedApplications = async (state,dispatch) => {
       ['PT_COMMON_TABLE_COL_ACTION_LABEL'] : "Sign Pdf"
     }));
 
-    dispatch(
+    store.dispatch(
       handleField(
         "search",
         "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
@@ -194,7 +195,7 @@ export const getPendingDigitallySignedApplications = async (state,dispatch) => {
         data
       )
     );
-    dispatch(
+    store.dispatch(
       handleField(
         "search",
         "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
@@ -202,17 +203,17 @@ export const getPendingDigitallySignedApplications = async (state,dispatch) => {
         response.dscDetails && response.dscDetails.length || 0
       )
     );
-    showHideDigitalSingedApplicationsTable(true, dispatch);
-    dispatch(hideSpinner())
+    showHideDigitalSingedApplicationsTable(true);
+    store.dispatch(hideSpinner())
     return response;
 
   }catch(err){
-    dispatch(hideSpinner())
+    store.dispatch(hideSpinner())
   }
 }
 
-const showHideTable = (booleanHideOrShow, dispatch) => {
-  dispatch(
+const showHideTable = (booleanHideOrShow) => {
+  store.dispatch(
     handleField(
       "search",
       "components.div.children.searchResults",
@@ -222,8 +223,8 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
   );
 };
 
-const showHideDigitalSingedApplicationsTable = (value, dispatch) => {
-  dispatch(
+const showHideDigitalSingedApplicationsTable = (value) => {
+  store.dispatch(
     handleField(
       "search",
       "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",

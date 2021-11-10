@@ -21,8 +21,6 @@ import { getLocale, getTenantId,getAccessToken, getUserInfo } from "egov-ui-kit/
 import axios from 'axios';
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
-const passwordPattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
-// const authToken = getAccessToken();
 let RequestInfo = {};
 
 let customRequestInfo = JSON.parse(getUserInfo())
@@ -100,17 +98,10 @@ class SignPdfContainer extends Component {
   }
 
   setPassword = (e) => {
-    // if(e.target.value.match(passwordPattern)){
       this.setState({
         password : e.target.value,
         passwordErr:false
       })
-    // }else{
-    //   this.setState({
-    //     password : e.target.value,
-    //     passwordErr:true
-    //   })
-    // }
   }
 
   onChangeCertificate = (e) => {
@@ -124,7 +115,6 @@ class SignPdfContainer extends Component {
     let RequestInfo = {
       apiId: "Rainmaker",
       ver: ".01",
-      // ts: getDateInEpoch(),
       action: "_search",
       did: "1",
       key: "",
@@ -397,8 +387,8 @@ class SignPdfContainer extends Component {
       let body = await getPdfBody(moduleName,tenantId,applicationNumber)
       let key = getKey(body,moduleName) 
       let tenantIdCityCode = tenantId && tenantId.split(".")[0]
-      store.dispatch(showSpinner())
       try{
+        this.props.showSpinner()
         let response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantIdCityCode}`, body, {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -463,6 +453,7 @@ class SignPdfContainer extends Component {
   
                     if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && (singedFileStoreId.data.responseString && 
                     (singedFileStoreId.data.responseString.includes('success') || singedFileStoreId.data.responseString.includes('Success')))){
+                      this.props.hideSpinner()
                       if(moduleName == 'NewTL'){
                         if(data && data.length > 0 && data[0].tradeLicenseDetail && data[0].tradeLicenseDetail.dscDetails && data[0].tradeLicenseDetail.dscDetails.length > 0){
                           data[0].tradeLicenseDetail.dscDetails[0].documentType = key
@@ -501,10 +492,9 @@ class SignPdfContainer extends Component {
                       }else{
                         return data
                       }
-                      store.dispatch(hideSpinner());
                       
                     }else{
-                      store.dispatch(hideSpinner());
+                      this.props.hideSpinner() 
                       let errorCode = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.responseString 
                       if(errorCode == 'Authentication Failure'){
                         store.dispatch(toggleSnackbarAndSetText(
@@ -527,20 +517,20 @@ class SignPdfContainer extends Component {
                       }
                     }
                       }catch(error){
-                        store.dispatch(hideSpinner());
+                        this.props.hideSpinner();
                         store.dispatch(toggleSnackbarAndSetText(true, error && error.message || '', "error"));
                       }
                   }
                   }catch(err){ 
-                    store.dispatch(hideSpinner()); 
+                    this.props.hideSpinner(); 
               }
             }
           }catch(err){
-            store.dispatch(hideSpinner());
+            this.props.hideSpinner();
           }
         }
       }catch(err){
-        store.dispatch(hideSpinner());
+        this.props.hideSpinner()
         store.dispatch(toggleSnackbarAndSetText(true, err.message, "error"));
       }  
     }else{
@@ -564,11 +554,33 @@ class SignPdfContainer extends Component {
     if(!data){
       return
     }else{
-     let updateFileStore = await httpRequest("post", this.props.updateUrl, "", [], {
+    try{
+      this.props.showSpinner()
+      await httpRequest("post", this.props.updateUrl, "", [], {
         [dataPath]: data
       });
+      this.props.hideSpinner()
+      this.props.toggleSnackbarAndSetText(
+        true,
+        {
+          labelName: "COMMON_PDF_SIGNED_SUCCESSFULLY",
+          labelKey: "COMMON_PDF_SIGNED_SUCCESSFULLY"
+        },
+        "success"
+      );
+    }catch(error){
+      this.props.toggleSnackbarAndSetText(
+        true,
+        {
+          labelName: error && error.message || '',
+          labelKey: error && error.message || ''
+        },
+        "error"
+      );
+      this.props.hideSpinner()
+      }
     }
-    this.props.closePdfSigningPopup
+    this.props.closePdfSigningPopup(this.props.isTableRefresh)
   }
 
   componentDidMount = () => {

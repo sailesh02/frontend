@@ -13,9 +13,10 @@ import { pendingApprovals,showSearches } from "./searchResource/pendingApprovals
 // import { progressStatus } from "./searchResource/progressStatus";
 import { searchResults, searchDigitalSignatureResults } from "./searchResource/searchResults";
 import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplication";
+import { getPendingDigitallySignedApplications } from "./searchResource/functions"
 import store from "ui-redux/store";
 
-export const closePdfSigningPopup = () => {
+export const closePdfSigningPopup = (isRefresh) => {
   store.dispatch(
     handleField(
       "search",
@@ -24,6 +25,9 @@ export const closePdfSigningPopup = () => {
       false
     )
   )
+  if(isRefresh){
+    getPendingDigitallySignedApplications()
+  }
 }
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
@@ -323,7 +327,8 @@ const tradeLicenseSearchAndResult = {
         okText :"TL_SIGN_PDF",
         resetText : "TL_RESET_PDF",
         dataPath : 'Licenses',
-        updateUrl : '/tl-services/v1/_updatedscdetailsss?'
+        updateUrl : '/tl-services/v1/_updatedscdetailsss?',
+        isTableRefresh : true
       },
       children: {
         popup: {}

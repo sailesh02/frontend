@@ -21,6 +21,7 @@ import store from "ui-redux/store";
 //import { LabelContainer } from "egov-ui-framework/ui-containers";
 
 export const searchApiCall = async (state, dispatch) => {
+  showHideDigitalSingedApplicationsTable (false)
   showHideTable(false, dispatch);
   let queryObject = [
     {
@@ -208,6 +209,32 @@ export const getPendingDigitallySignedApplications = async () => {
     return response;
 
   }catch(err){
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: err && err.message || "",
+          labelKey: err && err.message || ""
+        },
+        "error"
+      )
+    );
+    showHideDigitalSingedApplicationsTable(true);
+    store.dispatch(
+      handleField(
+        "search",
+        "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
+        "props.data",
+        []
+      )
+    );store.dispatch(
+      handleField(
+        "search",
+        "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
+        "props.data",
+        []
+      )
+    );
     store.dispatch(hideSpinner())
   }
 }

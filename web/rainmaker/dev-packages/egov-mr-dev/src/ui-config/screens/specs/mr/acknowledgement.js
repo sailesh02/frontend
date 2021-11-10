@@ -15,8 +15,29 @@ import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
 import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
 import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
 import "./index.css";
+import store from "ui-redux/store";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
-
+const closePdfSigningPopup = (refreshType) => {
+  store.dispatch(
+    handleField(
+      "acknowledgement",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      false
+    )
+  )
+  if(refreshType == 'acknowledgement'){
+    store.dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.approvalSuccessFooter.children.pdfSign",
+        "visible",
+        false
+      )
+    )
+  }
+}
 
 const getTradeTypeSubtypeDetails = payload => {
   const tradeUnitsFromApi = get(
@@ -762,6 +783,25 @@ const screenConfig = {
       componentPath: "Div",
       props: {
         className: "common-div-css"
+      }
+    },
+    pdfSigningPopup : {
+      uiFramework: 'custom-containers-local',
+      componentPath: 'SignPdfContainer',
+      moduleName: "egov-workflow",
+      props: {
+        openPdfSigningPopup: false,
+        closePdfSigningPopup : closePdfSigningPopup,
+        maxWidth: false,
+        moduleName : 'MR',
+        okText :"MR_SIGN_PDF",
+        resetText : "MR_RESET_PDF",
+        dataPath : 'MarriageRegistrations',
+        refreshType : "acknowledgement",
+        updateUrl : '/mr-services/v1/_updatedscdetails?'
+      },
+      children: {
+        popup: {}
       }
     }
   },

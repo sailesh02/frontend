@@ -62,14 +62,15 @@ const closePdfSigningPopup = (refreshType) => {
       false
     )
   )
+
   if(refreshType == "preview"){
     store.dispatch(handleField(
       'search-preview',
-      'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
+      'components.div.children.body.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
       'visible',
       false
     ))
-    store.dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.dscDetails[0].documentId",'Yes'))
+    store.dispatch(prepareFinalObject("BPA[0].dscDetails[0].documentId",'Yes'))
   }
 }
 

@@ -23,7 +23,7 @@ export const isCertificateDigitallySigned = {
         labelKey: "TL_IS_CERTIFICATE_DIGITALLY_SIGNED"
       },
       {
-        jsonPath: "Licenses[0].tradeLicenseDetail.dscDetails[0].documentId",
+        jsonPath: "BPA[0].dscDetails[0].documentId",
         callBack : handleIsCertificateSigned
       }
     )

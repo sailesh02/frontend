@@ -211,7 +211,7 @@ const tradeLicenseSearchAndResult = {
         moduleName : 'MR',
         okText :"MR_SIGN_PDF",
         resetText : "MR_RESET_PDF",
-        dataPath : 'Licenses',
+        dataPath : 'MarriageRegistrations',
         updateUrl : '/mr-services/v1/_updatedscdetails?',
         refreshType : 'Table'
       },

@@ -54,7 +54,7 @@ class TotalDues extends React.Component {
             return role.code;
           })
           : [];
-    const showPay = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
+    const showPay = roleCodes.includes("CITIZEN") || roleCodes.includes("PT_CEMP")
     return (
       <div className="" id="pt-header-due-amount">
         <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "60px" }}>

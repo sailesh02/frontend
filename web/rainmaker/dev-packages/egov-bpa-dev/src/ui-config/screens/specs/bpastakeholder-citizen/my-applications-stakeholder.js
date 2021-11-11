@@ -281,7 +281,7 @@ const onRowClick = rowData => {
       default:
         window.location.assign(`${origin}${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}&type=${rowData[8]}&bservice=${rowData[7]}`);
     }
-  } else if ((rowData[7] === "BPA_OC1") || (rowData[7] === "BPA_OC2") || (rowData[7] === "BPA_OC3") || (rowData[7] === "BPA_OC4")) {
+  } else if ((rowData[7] === "BPA_OC1") || (rowData[7] === "BPA_OC2") || (rowData[7] === "BPA_OC3") || (rowData[7] === "BPA_OC4") || (rowData[7] == "BPA_OC")) {
     switch (rowData[9]) {
       case "INITIATED":
         window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);

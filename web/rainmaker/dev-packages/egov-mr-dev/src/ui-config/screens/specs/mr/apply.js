@@ -234,10 +234,36 @@ export const setDataForApplication = async (action, state, dispatch) => {
     []
   );
 
-  const isBrideDivyang = get(mrgObj[0], "coupleDetail[0].bride.isDivyang");
-  const isGroomDivyang = get(mrgObj[0], "coupleDetail[0].groom.isDivyang");
-  dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.isDivyang", isBrideDivyang? "Yes": "No"));
-  dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.isDivyang", isGroomDivyang? "Yes": "No"));
+  const isBrideDivyang = get(mrgObj[0], "coupleDetails[0].bride.isDivyang");
+  const isGroomDivyang = get(mrgObj[0], "coupleDetails[0].groom.isDivyang");
+  
+  dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.isDivyang", isBrideDivyang ? "Yes" : "No"));
+  dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.isDivyang", isGroomDivyang ? "Yes" : "No"));
+  
+// const brideGrndRelationShip = get(mrgObj[0], "coupleDetails[0].bride.guardianDetails.relationship");
+      // const groomGrndRelationShip = get(mrgObj[0], "coupleDetails[0].groom.guardianDetails.relationship");
+      // console.log(brideGrndRelationShip, "Nero REl footer")
+      // if (groomGrndRelationShip == "OTHERS") {
+
+      //   dispatch(
+      //     handleField(
+      //       "apply",
+      //       "components.div.children.formwizardSecondStep.children.groomGuardianDetails.children.cardContent.children.groomGuardianDetailsConatiner.children.otherRltnWithgroom",
+      //       "visible",
+      //       true
+      //     )
+      //   );
+      // }
+      // if (brideGrndRelationShip == "OTHERS") {
+      //   dispatch(
+      //     handleField(
+      //       "apply",
+      //       "components.div.children.formwizardSecondStep.children.brideGuardianDetails.children.cardContent.children.brideGuardianDetailsConatiner.children.otherRltnWithBride",
+      //       "visible",
+      //       true
+      //     )
+      //   );
+      // }
 
 }
 
@@ -382,7 +408,7 @@ export const getData = async (action, state, dispatch) => {
     );
     dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].bride.address.country", "INDIA"));
     dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.address.country", "INDIA"));
-    }
+  }
 };
 
 export const formwizardFirstStep = {
@@ -466,8 +492,8 @@ const screenConfig = {
     // let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
     dispatch(unMountScreen("search"));
     dispatch(unMountScreen("search-preview"));
-   // const tenantId = getTenantId();
-   const tenantId = getQueryArg(window.location.href, "tenantId");
+    // const tenantId = getTenantId();
+    const tenantId = getQueryArg(window.location.href, "tenantId");
 
     const URL = window.location.href
     const URLsplit = URL.split("/")

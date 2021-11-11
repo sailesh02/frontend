@@ -11,9 +11,21 @@ import { httpRequest } from "../../../../ui-utils";
 import "./index.css";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
 // import { progressStatus } from "./searchResource/progressStatus";
-import { searchResults } from "./searchResource/searchResults";
-import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplication";
+import { tradeSearchResults } from "./searchResource/searchResults";
+import { tradeSearchForm } from "./searchResource/tradesearchform";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
+
+export const showHideCityPickerPopup = (state, dispatch, screenKey) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig[screenKey],
+    "components.cityPickerDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField(screenKey, "components.cityPickerDialog", "props.open", !toggle)
+  );
+};
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -24,11 +36,19 @@ const getMdmsData = async (dispatch) => {
       tenantId: getTenantId(),
       moduleDetails: [
         {
-          moduleName: "MarriageRegistration",
+          moduleName: "TradeLicense",
           masterDetails: [
             { name: "ApplicationType" }
           ]
-        }
+        },
+        {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "tenants"
+            }
+          ]
+        },
       ]
     }
   };
@@ -43,24 +63,35 @@ const getMdmsData = async (dispatch) => {
     );
     let types = [];
     if (payload && payload.MdmsRes) {
-      types = get(payload.MdmsRes, "MarriageRegistration.ApplicationType").map((item, index) => {
+      types = get(payload.MdmsRes, "TradeLicense.ApplicationType").map((item, index) => {
         return {
           code: item.code.split(".")[1]
         }
       });
     }
+
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.searchScreen.applicationType",
         types
       )
     );
-
-
-    let EmpApplyAppsFor = [{code: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},{code: "TL_HOME_SEARCH_RESULTS_NEW_TEMP_APP_BUTTON", active: true}, {code: "TL_HOME_SEARCH_RESULTS_LEGACY_TL_RENEW_APP_BUTTON", active: true}]
+    let tenants = [];
+    if (payload && payload.MdmsRes) {
+      tenants = get(payload.MdmsRes, "tenant.tenants");
+    }
     dispatch(
       prepareFinalObject(
-        "applyScreenMdmsData.searchScreen.EmpApplyAppsFor",
+        "applyScreenMdmsData.searchScreen.tenants",
+        tenants
+      )
+    );
+
+
+    let EmpApplyAppsFor = [{code: "PERMANENT", active: true},{code: "TEMPORARY", active: true}]
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.searchScreen.tlType",
         EmpApplyAppsFor
       )
     );
@@ -71,27 +102,26 @@ const getMdmsData = async (dispatch) => {
 
 const header = getCommonHeader({
   labelName: "Trade License",
-  labelKey: "ACTION_TEST_MARRIAGE_REGISTRATION"
+  labelKey: "TL_COMMON_TL"
 });
 const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",
-  name: "search",
+  name: "tradesearch",
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("searchScreen", {}))
-    //dispatch(prepareFinalObject("EmpApplyAppsFor", []))
-    //screenConfiguration.screenConfig.search.components.div.children.headerDiv.children.tradeLicenseType.props
+    
 
     dispatch(unMountScreen("apply"));
     dispatch(unMountScreen("search-preview"));
     getMdmsData(dispatch);
-    const moduleDetails = [
-      {
-        moduleName: 'MarriageRegistration',
-        masterDetails: [{ name: 'Documents' }]
-      }
-    ];
-    getRequiredDocData(action, dispatch, moduleDetails, true);
-
+    // const moduleDetails = [
+    //   {
+    //     moduleName: 'TradeLicense',
+    //     masterDetails: [{ name: 'Documents' }]
+    //   }
+    // ];
+    // getRequiredDocData(action, dispatch, moduleDetails, true);
+  
     return action;
   },
   components: {
@@ -100,7 +130,7 @@ const tradeLicenseSearchAndResult = {
       componentPath: "Form",
       props: {
         className: "common-div-css",
-        id: "search"
+        id: "tradesearch"
       },
       children: {
         headerDiv: {
@@ -146,40 +176,44 @@ const tradeLicenseSearchAndResult = {
                 },
                 buttonLabel: getLabel({
                   labelName: "NEW APPLICATION",
-                  labelKey: "MR_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
+                  labelKey: "TL_HOME_TRADE_SEARCH_RESULTS_NEW_TRADE_RATE"
                 })
               },
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-
-                  showHideAdhocPopup(state, dispatch, 'search');
-                  dispatch(prepareFinalObject("MarriageRegistrations", []));
-                  dispatch(prepareFinalObject("LicensesTemp", []));
+                  dispatch(
+                    setRoute(
+                      `/tradelicence/traderateadd`
+                    )
+                  );
+                 // showHideCityPickerPopup(state, dispatch, 'tradesearch');
+                 // dispatch(prepareFinalObject("MarriageRegistrations", []));
+                  //dispatch(prepareFinalObject("LicensesTemp", []));
                 }
               },
               roleDefination: {
                 rolePath: "user-info.roles",
-                roles: ["MR_CEMP"]
+                roles: ["TL_CEMP"]
               }
             }
-
           }
         },
-        pendingApprovals,
-        tradeLicenseApplication,
+       // pendingApprovals,
+        tradeSearchForm,
         breakAfterSearch: getBreak(),
-        searchResults
+        tradeSearchResults
       }
     },
+    
     adhocDialog: {
       uiFramework: 'custom-containers',
       componentPath: 'DialogContainer',
       props: {
         open: getQueryArg(window.location.href, "action") === 'showRequiredDocuments' ? true : false,
         maxWidth: false,
-        screenKey: 'search',
-        reRouteURL: '/mr/search'
+        screenKey: 'tradesearch',
+        reRouteURL: '/tradelicence/tradesearch'
       },
       children: {
         popup: {}

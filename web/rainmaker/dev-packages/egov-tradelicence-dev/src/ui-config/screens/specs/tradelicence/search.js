@@ -188,7 +188,8 @@ const tradeLicenseSearchAndResult = {
               },
               roleDefination: {
                 rolePath: "user-info.roles",
-                path: "tradelicence/search"
+                roles: ["TL_CEMP"]
+                //path: "tradelicence/search"
                 //path: "tradelicence/search?action=showRequiredDocuments"
               }
             },

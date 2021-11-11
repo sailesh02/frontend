@@ -2389,6 +2389,85 @@ export const triggerUpdateByKey = (state, keyIndex, value, dispatch) => {
     dispatch(prepareFinalObject( `DynamicMdms.TradeLicense.tradeUnits.${keyIndex}`, value ));
   }
 }
+
+
+export const updateMdmsDropDownsForBillingSlab = async ( state, dispatch ) => {
+ console.log(state, "Nero State")
+  let licenseType = getQueryArg(window.location.href, "licenseType");
+  let applicationType = getQueryArg(window.location.href, "applicationType");
+  let tradeType = getQueryArg(window.location.href, "tradeType");
+  let type = getQueryArg(window.location.href, "type");
+  let uom = getQueryArg(window.location.href, "uom");
+  let from = getQueryArg(window.location.href, "from");
+  let to = getQueryArg(window.location.href, "to");
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: getTenantId()
+    },
+    {
+      key: "licenseType",
+      value: licenseType
+    },
+    {
+      key: "applicationType",
+      value: applicationType
+    },
+    {
+      key: "tradeType",
+      value: tradeType
+    },
+    {
+      key: "type",
+      value: type
+    },
+    {
+      key: "uom",
+      value: uom
+    },
+    {
+      key: "from",
+      value: from
+    },
+    {
+      key: "to",
+      value: to
+    }
+  ];
+  let payload = null;
+  payload = await httpRequest(
+    "post",
+    "/tl-calculator/billingslab/_search",
+    "",
+    queryObject
+  );
+
+  dispatch(prepareFinalObject("billingSlab[0]", payload.billingSlab[0]));
+const tradeSubTypes = payload.billingSlab;
+console.log(tradeSubTypes.length, "Nero Length")
+  if (tradeSubTypes && tradeSubTypes.length > 0) {
+    
+    try {
+      tradeSubTypes.forEach((tradeSubType, i) => {
+
+        
+        const tradeType = tradeSubType.tradeType.split(".")[0];
+        let formObj = {
+          tradeType: tradeType, tradeSubType: tradeSubType.tradeType
+        }
+        console.log(formObj, "Nero Form Ojb")
+        triggerUpdateByKey(state, i, formObj, 'set');
+
+        
+        triggerUpdateByKey(state, `tradeSubTypeTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeType}`, [])) , dispatch);
+
+        triggerUpdateByKey(state, `selectedValues[${i}]`, formObj , dispatch);
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+};
 export const updateMdmsDropDowns = async ( state, dispatch ) => {
   let appNo = getQueryArg(window.location.href, "applicationNumber");
 

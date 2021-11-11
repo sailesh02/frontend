@@ -242,7 +242,7 @@ class Footer extends React.Component {
       state,
       dispatch
     } = this.props;
-    
+
     const { open, data, employeeList } = this.state;
     const { isDocRequired } = data;
     const appName = process.env.REACT_APP_NAME;

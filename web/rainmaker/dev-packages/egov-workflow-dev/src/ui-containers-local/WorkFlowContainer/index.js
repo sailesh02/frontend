@@ -322,6 +322,7 @@ class WorkFlowContainer extends React.Component {
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
+
       this.setState({
         open: false
       });
@@ -423,7 +424,7 @@ class WorkFlowContainer extends React.Component {
           "error"
         );
       }
-    }else {
+    } else {
       this.wfUpdate(label);
     }
   };

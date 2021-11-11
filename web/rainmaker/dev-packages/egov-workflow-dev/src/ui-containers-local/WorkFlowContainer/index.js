@@ -317,7 +317,8 @@ class WorkFlowContainer extends React.Component {
           data = beforeSubmitHook(data);
         }
       }
-      console.log(data, "nero data")
+
+
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
@@ -422,8 +423,7 @@ class WorkFlowContainer extends React.Component {
           "error"
         );
       }
-    }
-    else {
+    }else {
       this.wfUpdate(label);
     }
   };

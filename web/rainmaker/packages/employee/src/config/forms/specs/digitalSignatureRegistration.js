@@ -135,20 +135,10 @@ const formConfig = {
         value: "",
       },
       submit: {
-        type: "submit",
         label: "CORE_COMMON_REGISTER",
         id: "employee-digital-signature-submit-action",
       },
-    },
-    submit: {
-      fieldKey : 'submit',
-      type: "submit",
-      label: "CORE_COMMON_REGISTER",
-      id: "employee-digital-signature-submit-action",
-    },
-    saveUrl: "/update/hjdhfjf",
-    redirectionRoute: "/hrms/acknowledgement?purpose=signatureRegistered&status=success",
-    action: "_update",
+    }
   };
   
   export default formConfig;

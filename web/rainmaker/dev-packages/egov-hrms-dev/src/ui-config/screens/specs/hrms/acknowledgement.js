@@ -98,7 +98,7 @@ const getAcknowledgementCard = (
       },
       goToHome,
     };
-  }  else if (purpose === "updatepassword" && status === "success") {
+  } else if (purpose === "updatepassword" && status === "success") {
     return {
       header: getCommonContainer({
         header: getCommonHeader({
@@ -127,7 +127,36 @@ const getAcknowledgementCard = (
       },
       goToInbox,
     };
-  } else if (purpose === "deactivate" && status === "success") {
+  } else if (purpose === "digitalSignatureRegistration" && status === "success") {
+    return {
+      header: getCommonContainer({
+        header: getCommonHeader({
+          labelName: `Update Employee`,
+          labelKey: "HR_COMMON_UPDATE_EMPLOYEE_HEADER",
+        }),
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          disabled: {
+            uiFramework: "custom-atoms-local",
+            componentPath: "DisableBackComponent",
+            moduleName: "egov-hrms",
+          },
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Employee Updated Successfully",
+              labelKey: "DIGITAL_SIGNATURE_REGISTRATION_SUCCESS_MSG",
+            },
+          }),
+        },
+      },
+      goToInbox,
+    };
+  }else if (purpose === "deactivate" && status === "success") {
     return {
       header: getCommonContainer({
         header: getCommonHeader({

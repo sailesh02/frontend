@@ -27,7 +27,10 @@ const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic, 
               </Link>
             </div>
             <div className ="col-xs-6 col-sm-6 col-md-6 col-lg-8" style = {{marginTop: "22px" }}>
-              <Button className="change-password-label-style" variant ='text' onClick = {onClickRegister} primary={true} style={{color :"#f89a3f"}}>DIGITAL SIGNATURE REGISTRATION</Button>              
+              <Link to = "/user/digital-signature-registration">
+                 <Label className="change-password-label-style" label={"CORE_COMMON_DIGITAL_SIGNATURE_REGISTRATION"} color="#f89a3f" />
+              </Link>
+              {/* <Button className="change-password-label-style" variant ='text' onClick = {onClickRegister} primary={true} style={{color :"#f89a3f"}}>DIGITAL SIGNATURE REGISTRATION</Button>               */}
             </div>
           </div>
         </div>

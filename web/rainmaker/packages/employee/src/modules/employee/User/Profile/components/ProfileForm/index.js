@@ -11,7 +11,7 @@ const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic, 
   const submit = form.submit;
   const moduleList = localStorage.getItem('storedModulesList')
   const canRegister = moduleList && moduleList.length > 0 && (moduleList.includes('rainmaker-tl') ||
-  moduleList.includes('rainmaker-pt') || moduleList.includes('rainmaker-mr')) ? true : false
+  moduleList.includes('rainmaker-pt') || moduleList.includes('rainmaker-mr') || moduleList.includes('rainmaker-common')) ? true : false
   const register = form.register;
   return (
     <div>

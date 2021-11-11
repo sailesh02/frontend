@@ -236,10 +236,10 @@ const DigitalSignatureForm = ({ form, handleFieldChange, cardTitle, formKey, con
   const fields = form.fields || {};
   const submit = form.submit;
   return (
-    <Card
-      style={containerStyle}
-      textChildren={
-        <div className={`${formKey} col-sm-12`}>
+    // <Card
+    //   style={containerStyle}
+    //   textChildren={
+      <div className="employee-change-password">
           {handleRemoveItem && (
             <div className="remove-unit-assessment" style={{ cursor: "pointer" }} onClick={handleRemoveItem}>
               <Icon action="navigation" name="close" />
@@ -263,23 +263,23 @@ const DigitalSignatureForm = ({ form, handleFieldChange, cardTitle, formKey, con
               ) : 
               (
                 <div
-                  style={
-                    fields[fieldKey].hideField
-                      ? {}
-                      : fields[fieldKey].toolTip
-                      ? { display: "flex", alignItems: "center", height: 80 }
-                      : { height: 80 }
-                  }
-                  className={
-                    fields[fieldKey].numcols ? (fields[fieldKey].hideField ? "hidden-field" : `col-sm-${fields[fieldKey].numcols} ${fields[fieldKey].id}`) : `col-sm-12 ${fields[fieldKey].id}`
-                  }
+                  // style={
+                  //   backgroundColor = "transparent",
+                  //   fields[fieldKey].hideField
+                  //     ? {}
+                  //     : fields[fieldKey].toolTip
+                  //     ? { display: "flex", alignItems: "center", height: 80 }
+                  //     : { height: 80 }
+                  // }
+                  className="emp-change-passwd-field"
                 >
                   <Field
+                    className="emp-change-passwd-field"
                     fieldKey={fieldKey}
                     field={fields[fieldKey]}
                     handleFieldChange={handleFieldChange}
                     disabled={disabled}
-                    className={className}
+                    // className={className}
                   />
                   {fields[fieldKey].toolTip && !fields[fieldKey].hideField && (
                     <ToolTipUi id={"form-wizard-tooltip"} title={fields[fieldKey].toolTipMessage} />
@@ -290,9 +290,9 @@ const DigitalSignatureForm = ({ form, handleFieldChange, cardTitle, formKey, con
             );
           })}
         </div>
-      }
-      className={className}
-    />
+      // }
+    //   className={className}
+    // />
   );
 };
 export default DigitalSignatureForm;

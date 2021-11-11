@@ -15,9 +15,29 @@ import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
 import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
 import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
 import "./index.css";
+import store from "ui-redux/store";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
-
-
+const closePdfSigningPopup = (refreshType) => {
+  store.dispatch(
+    handleField(
+      "acknowledgement",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      false
+    )
+  )
+  if(refreshType == 'acknowledgement'){
+    store.dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.approvalSuccessFooter.children.pdfSign",
+        "visible",
+        false
+      )
+    )
+  }
+}
 const getTradeTypeSubtypeDetails = payload => {
   const tradeUnitsFromApi = get(
     payload,
@@ -714,6 +734,25 @@ const screenConfig = {
       componentPath: "Div",
       props: {
         className: "common-div-css"
+      },
+    },
+    pdfSigningPopup : {
+      uiFramework: 'custom-containers-local',
+      componentPath: 'SignPdfContainer',
+      moduleName: "egov-workflow",
+      props: {
+        openPdfSigningPopup: false,
+        closePdfSigningPopup : closePdfSigningPopup,
+        maxWidth: false,
+        moduleName : 'NewTL',
+        okText :"TL_SIGN_PDF",
+        resetText : "TL_RESET_PDF",
+        dataPath : 'Licenses',
+        refreshType : "acknowledgement",
+        updateUrl : '/tl-services/v1/_updatedscdetails?'
+      },
+      children: {
+        popup: {}
       }
     }
   },

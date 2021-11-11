@@ -9,10 +9,26 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
 import "./index.css";
-import { pendingApprovals } from "./searchResource/pendingApprovals";
+import { pendingApprovals,showSearches } from "./searchResource/pendingApprovals";
 // import { progressStatus } from "./searchResource/progressStatus";
-import { searchResults } from "./searchResource/searchResults";
+import { searchResults, searchDigitalSignatureResults } from "./searchResource/searchResults";
 import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplication";
+import { getPendingDigitallySignedApplications } from "./searchResource/functions"
+import store from "ui-redux/store";
+
+export const closePdfSigningPopup = (refreshType) => {
+  store.dispatch(
+    handleField(
+      "search",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      false
+    )
+  )
+  if(refreshType == 'Table'){
+    getPendingDigitallySignedApplications()
+  }
+}
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -280,9 +296,11 @@ const tradeLicenseSearchAndResult = {
           }
         },
         pendingApprovals,
-        tradeLicenseApplication,
+        showSearches,
+        // tradeLicenseApplication,
         breakAfterSearch: getBreak(),
-        searchResults
+        searchResults,
+        // searchDigitalSignatureResults
       }
     },
     adhocDialog: {
@@ -293,6 +311,25 @@ const tradeLicenseSearchAndResult = {
         maxWidth: false,
         screenKey: 'search',
         reRouteURL: '/tradelicence/search'
+      },
+      children: {
+        popup: {}
+      }
+    },
+    pdfSigningPopup : {
+      uiFramework: 'custom-containers-local',
+      componentPath: 'SignPdfContainer',
+      moduleName: "egov-workflow",
+      props: {
+        openPdfSigningPopup: false,
+        closePdfSigningPopup : closePdfSigningPopup,
+        maxWidth: false,
+        moduleName : 'NewTL',
+        okText :"TL_SIGN_PDF",
+        resetText : "TL_RESET_PDF",
+        dataPath : 'Licenses',
+        updateUrl : '/tl-services/v1/_updatedscdetails?',
+        refreshType : 'Table'
       },
       children: {
         popup: {}

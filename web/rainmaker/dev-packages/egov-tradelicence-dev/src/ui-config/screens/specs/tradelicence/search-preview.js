@@ -1,7 +1,7 @@
 import {
   getCommonCard,
 
-
+  getLabel,
   getCommonContainer, getCommonGrayCard, getCommonHeader,
 
   getCommonTitle
@@ -35,6 +35,37 @@ import { downloadPrintContainer, footerReviewTop } from "./applyResource/footer"
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewTrade } from "./applyResource/review-trade";
+import { getReviewPdfSignDetails } from "./applyResource/review-pdfSign.js"
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
+const closePdfSigningPopup = (refreshType) => {
+  store.dispatch(
+    handleField(
+      "search-preview",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      false
+    )
+  )
+  if(refreshType == "preview"){
+    store.dispatch(handleField(
+      'search-preview',
+      'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
+      'visible',
+      false
+    ))
+    store.dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.dscDetails[0].documentId",'Yes'))
+  }
+}
+
+const ifUserRoleExists = role => {
+  let userInfo = JSON.parse(getUserInfo());
+  const roles = get(userInfo, "roles");
+  const roleCodes = roles ? roles.map(role => role.code) : [];
+  if (roleCodes.indexOf(role) > -1) {
+    return true;
+  } else return false;
+};
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -148,6 +179,27 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     }
 
    }
+
+  let applicationStatus = get(payload,"Licenses[0].status")
+
+  dispatch(handleField(
+    'search-preview',
+    'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails',
+    'visible',
+    applicationStatus != 'APPROVED' ? false : true
+  ))
+ 
+  let Licenses = get(payload,"Licenses")
+  let applicationDigitallySigned = Licenses && Licenses.length > 0 && Licenses[0].tradeLicenseDetail &&
+  Licenses[0].tradeLicenseDetail.dscDetails && Licenses[0].tradeLicenseDetail.dscDetails[0].documentId ? true : false
+
+  dispatch(handleField(
+    'search-preview',
+    'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
+    'visible',
+    (applicationStatus == 'APPROVED' && ifUserRoleExists('TL_APPROVER') && process.env.REACT_APP_NAME != 'Citizen' && !applicationDigitallySigned) ? true : false
+  ))
+
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
@@ -468,6 +520,8 @@ const estimate = getCommonGrayCard({
   })
 });
 
+const reviewPdfSignDetails = getReviewPdfSignDetails(false);
+
 const reviewTradeDetails = getReviewTrade(false);
 
 const reviewOwnerDetails = getReviewOwner(false);
@@ -506,6 +560,7 @@ export const tradeReviewDetails = getCommonCard({
     "TL_PAYMENT_VIEW_BREAKUP",
     "search-preview"
   ),
+  reviewPdfSignDetails,
   reviewTradeDetails,
   reviewOwnerDetails,
   reviewDocumentDetails
@@ -586,30 +641,6 @@ const screenConfig = {
             beforeSubmitHook:beforeSubmitHook
           }
         },
-        // actionDialog: {
-        //   uiFramework: "custom-containers-local",
-        //   componentPath: "ResubmitActionContainer",
-        //   moduleName: "egov-tradelicence",
-        //   visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
-        //   props: {
-        //     open: true,
-        //     dataPath: "Licenses",
-        //     moduleName: "NewTL",
-        //     updateUrl: "/tl-services/v1/_update",
-        //     data: {
-        //       buttonLabel: "RESUBMIT",
-        //       moduleName: "NewTL",
-        //       isLast: false,
-        //       dialogHeader: {
-        //         labelName: "RESUBMIT Application",
-        //         labelKey: "WF_RESUBMIT_APPLICATION"
-        //       },
-        //       showEmployeeList: false,
-        //       roles: "CITIZEN",
-        //       isDocRequired: false
-        //     }
-        //   }
-        // },
         tradeReviewDetails
       }
     },
@@ -621,6 +652,22 @@ const screenConfig = {
         open: false,
         maxWidth: "md",
         screenKey: "search-preview"
+      }
+    },
+    pdfSigningPopup : {
+      uiFramework: 'custom-containers-local',
+      componentPath: 'SignPdfContainer',
+      moduleName: "egov-workflow",
+      props: {
+        openPdfSigningPopup: false,
+        closePdfSigningPopup : closePdfSigningPopup,
+        maxWidth: false,
+        moduleName : 'NewTL',
+        okText :"TL_SIGN_PDF",
+        resetText : "TL_RESET_PDF",
+        dataPath : 'Licenses',
+        refreshType : 'preview',
+        updateUrl : '/tl-services/v1/_updatedscdetails?'
       }
     }
   }

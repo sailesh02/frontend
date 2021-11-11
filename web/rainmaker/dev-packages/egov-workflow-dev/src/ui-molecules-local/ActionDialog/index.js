@@ -10,7 +10,6 @@ import { Dialog, DialogContent } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { withStyles } from "@material-ui/core/styles";
 import { UploadMultipleFiles } from "egov-ui-framework/ui-molecules";
-
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 
@@ -104,7 +103,6 @@ class ActionDialog extends React.Component {
       isDocRequired
     } = dialogData;
     const { getButtonLabelName } = this;
- 
     let fullscreen = false;
     const showAssignee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     if (window.innerWidth <= 768) {

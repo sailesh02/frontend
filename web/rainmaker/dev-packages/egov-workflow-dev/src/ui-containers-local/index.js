@@ -14,4 +14,9 @@ const WorkFlowContainer = Loadable({
   loading: () => <Loading />
 });
 
-export { TaskStatusContainer, WorkFlowContainer };
+const SignPdfContainer = Loadable({
+  loader : () => import("./SignPdfContainer"),
+  loading : () => <Loading/>
+})
+
+export { TaskStatusContainer, WorkFlowContainer, SignPdfContainer };

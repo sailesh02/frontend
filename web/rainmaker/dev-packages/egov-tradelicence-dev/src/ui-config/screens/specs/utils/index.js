@@ -1017,10 +1017,20 @@ export const downloadAcknowledgementForm = (Licenses, mode = "download") => {
   }
 }
 
+const getFileStore = (fileKey,documents) => {
+  let fileStoreId;
+  let requiredDocument = documents && documents.length > 0 && documents.filter( doc => {
+    return doc.documentType == fileKey
+  })
+  fileStoreId = requiredDocument && requiredDocument.length > 0 && requiredDocument[0].documentId || null
+  return fileStoreId
+}
+
 export const downloadCertificateForm = async (Licenses, mode = 'download') => {
   let tenantId = get(Licenses[0], "tenantId");
   let applicationNumber = get(Licenses[0], "applicationNumber")
   const applicationType = Licenses && Licenses.length > 0 ? get(Licenses[0], "applicationType") : "NEW";
+  const pdfKey = applicationType === "RENEWAL" ? "tlrenewalcertificate" : "tlcertificate" 
   const queryStr = [
     { key: "key", value: applicationType === "RENEWAL" ? "tlrenewalcertificate" : "tlcertificate" },
     { key: "tenantId", value: tenantId ? tenantId.split(".")[0] : commonConfig.tenantId }
@@ -1040,9 +1050,10 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
   ];
   const LicensesPayload = await getSearchResults(queryObject);
   const updatedLicenses = get(LicensesPayload, "Licenses");
-  const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
+  const oldFileStoreId = get(updatedLicenses[0], "fileStoreId") || getFileStore(pdfKey, LicensesPayload && LicensesPayload.Licenses && LicensesPayload.Licenses.length > 0 && 
+    LicensesPayload.Licenses[0].tradeLicenseDetail && LicensesPayload.Licenses[0].tradeLicenseDetail.dscDetails || [])
   if (oldFileStoreId) {
-    downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+    downloadReceiptFromFilestoreID(oldFileStoreId, mode, tenantId)
   }
   else {
     try {

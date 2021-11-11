@@ -1,13 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, TextField } from "components";
+import { TextField } from "components";
+import Button from '@material-ui/core/Button';
 import Label from "egov-ui-kit/utils/translationNode";
 import { ProfileSection } from "modules/common";
 import "./index.css";
 
-const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic }) => {
+const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic, onClickRegister}) => {
   const fields = form.fields || {};
   const submit = form.submit;
+  const register = form.register;
   return (
     <div>
       <div className="profile-card-container">
@@ -19,17 +21,20 @@ const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic }
             <TextField {...fields.name} onChange={(e, value) => handleFieldChange("name", value)} />
             <TextField {...fields.phonenumber} />
             <TextField {...fields.email} onChange={(e, value) => handleFieldChange("email", value)} />
-            <Link to="/user/change-password">
-              <div style={{ marginTop: "24px", marginBottom: "24px" }}>
+            <div className ="col-xs-6 col-sm-6 col-md-6 col-lg-4" style = {{ marginTop: "24px", marginBottom: "14px" }}>
+              <Link to="/user/change-password">
                 <Label className="change-password-label-style" label={"CORE_COMMON_CHANGE_PASSWORD"} color="#f89a3f" />
-              </div>
-            </Link>
+              </Link>
+            </div>
+            <div className ="col-xs-6 col-sm-6 col-md-6 col-lg-8" style = {{marginTop: "22px" }}>
+              <Button className="change-password-label-style" variant ='text' onClick = {onClickRegister} primary={true} style={{color :"#f89a3f"}}>DIGITAL SIGNATURE REGISTRATION</Button>              
+            </div>
           </div>
         </div>
       </div>
 
       <div className="responsive-action-button-cont">
-        <Button className="responsive-action-button" {...submit} primary={true} fullWidth={true} />
+        <Button variant ='contained' className="responsive-action-button" style={{backgroundColor :"rgb(254, 122, 81)",color:'rgb(255, 255, 255)',lineHeight:'32px'}} {...submit} primary={true} fullWidth={true}>Save</Button>
       </div>
     </div>
   );

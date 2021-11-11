@@ -273,3 +273,110 @@ export const tradeLicenseApplication = getCommonCard({
     overflow: "visible"
   },
 });
+
+export const digitalSignatureApplication = getCommonCard({
+  subHeader: getCommonTitle({
+    labelName: "Search For Pending Digital Signature Application",
+    labelKey: "TL_HOME_SEARCH_PENDING_DIGITALLY_SIGNED_APPLICATIONS_HEADING"
+  }),
+  subParagraph: getCommonParagraph({
+    labelName: "Provide at least one parameter to search for an application",
+    labelKey: "TL_HOME_SEARCH_RESULTS_DESC"
+  }),
+  // appStatusContainer: getCommonContainer({
+  //   applicationNo: {
+  //     uiFramework: "custom-containers-local",
+  //     moduleName: "egov-tradelicence",
+  //     componentPath: "AutosuggestContainer",
+  //     props: {
+  //       label: {
+  //         labelName: "Application status",
+  //         labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
+  //       },
+  //       placeholder: {
+  //         labelName: "Select Application Status",
+  //         labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
+  //       },
+  //       required: false,
+  //       localePrefix: {
+  //         moduleName: "WF",
+  //         masterName: "NEWTL"
+  //       },
+  //       className: "autocomplete-dropdown",
+  //       labelsFromLocalisation: true,
+  //       isClearable:true,
+  //       data:[
+  //         {
+  //           code : "ALL"
+  //         },
+  //         {
+  //           code : "ASSIGNED TO ME"
+  //         },
+  //       ],
+  //     },
+  //     jsonPath: "searchScreen.status",
+  //     gridDefination: {
+  //       xs: 12,
+  //       sm: 4
+  //     }
+  //   },
+
+  // }),
+  
+
+  // button: getCommonContainer({
+  //   // firstCont: {
+
+  //   buttonContainer: getCommonContainer({
+  //     firstCont: {
+  //       uiFramework: "custom-atoms",
+  //       componentPath: "Div",
+  //       gridDefination: {
+  //         xs: 12,
+  //         sm: 4
+  //       }
+  //     },
+  //     searchButton: {
+  //       componentPath: "Button",
+  //       gridDefination: {
+  //         xs: 12,
+  //         sm: 4
+  //       },
+  //       props: {
+  //         variant: "contained",
+  //         style: {
+  //           color: "white",
+
+  //           backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+  //           borderRadius: "2px",
+  //           width: "80%",
+  //           height: "48px"
+  //         }
+  //       },
+  //       children: {
+  //         buttonLabel: getLabel({
+  //           labelName: "Search",
+  //           labelKey: "TL_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+  //         })
+  //       },
+  //       onClickDefination: {
+  //         action: "condition",
+  //         callBack: searchApiCall
+  //       }
+  //     },
+  //     lastCont: {
+  //       uiFramework: "custom-atoms",
+  //       componentPath: "Div",
+  //       gridDefination: {
+  //         xs: 12,
+  //         sm: 4
+  //       }
+  //     }
+  //   })
+  // }),
+},
+{
+  style: {
+    overflow: "visible"
+  },
+});

@@ -247,7 +247,7 @@ const DigitalSignatureForm = ({ form, handleFieldChange, cardTitle, formKey, con
                <Button className="change-password-label-style" variant ='contained' 
                onClick = {
                  (e) => register(fields.token.value,fields.certificate.value,fields.digitalSignaturePassword.value)
-               } primary={true} style={{width: '20%',color :"rgb(255, 255, 255",backgroundColor: "rgb(254, 122, 81)"}}>REGISTER
+               } primary={true} style={{width: '20%',color :"rgb(255, 255, 255",backgroundColor: "rgb(254, 122, 81)",lineHeight:'32px'}}>REGISTER
                </Button>
               </div>
               ) : 

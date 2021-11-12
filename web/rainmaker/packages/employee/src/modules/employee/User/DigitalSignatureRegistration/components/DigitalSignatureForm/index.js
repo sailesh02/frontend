@@ -274,7 +274,7 @@ const DigitalSignatureForm = ({ form, handleFieldChange, cardTitle, formKey, con
                   className="emp-change-passwd-field"
                 >
                   <Field
-                    className="emp-change-passwd-field"
+                    className="fieldStyle"
                     fieldKey={fieldKey}
                     field={fields[fieldKey]}
                     handleFieldChange={handleFieldChange}

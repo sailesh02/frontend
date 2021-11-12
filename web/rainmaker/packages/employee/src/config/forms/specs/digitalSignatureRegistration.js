@@ -102,7 +102,7 @@ const formConfig = {
         required: true,
         floatingLabelText: "CORE_COMMON_TOKEN_LABEL",
         hintText: "CORE_COMMON_TOKEN_PLACEHOLDER",
-        type: "AutocompleteDropdown",
+        type: "singleValueList",
         updateDependentFields: async({ formKey, field, dispatch }) => {
           if (field.value && field.value.length > 0) {
             if(field && field.value){
@@ -117,12 +117,18 @@ const formConfig = {
         required: true,
         floatingLabelText: "CORE_COMMON_CERTIFICATE_LABEL",
         hintText: "CORE_COMMON_CERTIFICATE_PLACEHOLDER",
-        type: "AutocompleteDropdown",
+        type: "singleValueList",
         updateDependentFields: ({ formKey, field, dispatch }) => {
           if (field.value && field.value.length > 0) {
             // dispatch(setFieldProperty(formKey, field, "value", field.value));
           }
         },
+        gridDefination: {
+          xs: 12,
+          sm: 12
+        },
+        dropDownData : [
+        ]
       },
       digitalSignaturePassword: {
         id: "digitalSignaturePassword",

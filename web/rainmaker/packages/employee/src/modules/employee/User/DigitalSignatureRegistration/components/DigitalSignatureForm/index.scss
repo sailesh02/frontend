@@ -11,8 +11,18 @@
   padding-bottom: 0px !important;
 }
 
+.fieldStyle{
+  width:80% !important;
+  background-color: transparent !important;
+  color : rgba(0, 0, 0, 0.38) !important
+}
+
 @media only screen and (min-width: 768px) {
   .employee-change-password {
     padding: 0 16px;
   }
+}
+
+#form-wizard-tooltip {
+  font-size: 12px;
 }

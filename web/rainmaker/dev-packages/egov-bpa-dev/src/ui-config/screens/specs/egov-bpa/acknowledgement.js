@@ -34,9 +34,45 @@ const closePdfSigningPopup = (refreshType) => {
     store.dispatch(
       handleField(
         "acknowledgement",
-        "components.div.children.approvalSuccessFooter.children.pdfSign",
+        "components.div.children.paymentSuccessFooter.children.pdfSign",
         "visible",
         false
+      )
+    )
+
+    store.dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.body.children.paragraph",
+        "visible",
+        false
+      )
+    )
+
+    store.dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.tail",
+        "visible",
+        false
+      )
+    )
+    
+    store.dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.body.children.header.children.key.props",
+        "labelKey",
+        "BPA_SIGN_CHECKLIST_MESSAGE_HEAD"
+      )
+    )
+
+    store.dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.header.children.header.children.key.props",
+        "labelKey",
+        "BPA_PDF_SIGNING"
       )
     )
   }
@@ -427,7 +463,7 @@ const getAcknowledgementCard = (
           })
         }
       },
-      paymentSuccessFooter: paymentSuccessFooter()
+      paymentSuccessFooter: paymentSuccessFooter(action, state, dispatch, secondNumber, tenant, uiCommonPayConfig, businessService)
     };
   } else if (purpose === "approve" && status === "success" && moduleName !== "Noc") {
     return {
@@ -766,7 +802,7 @@ const screenConfig = {
         resetText : "BPA_RESET_PDF",
         dataPath : 'BPA',
         refreshType : "acknowledgement",
-        updateUrl : '/bpa-services/v1/_updatedscdetails?'
+        updateUrl : '/bpa-services/v1/_updatedscdetailss?'
       },
       children: {
         popup: {}

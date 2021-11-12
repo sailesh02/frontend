@@ -4,7 +4,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Grid, Typography, Button } from "@material-ui/core";
 import { Container } from "egov-ui-framework/ui-atoms";
-import store from "egov-ui-framework/ui-redux/store";
+import store from "ui-redux/store";
+import {
+  addQueryArg
+} from "egov-ui-framework/ui-utils/commons";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import {
   LabelContainer,
@@ -21,6 +24,97 @@ import { getLocale, getTenantId,getAccessToken, getUserInfo } from "egov-ui-kit/
 import axios from 'axios';
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
+const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
+  const authToken = getAccessToken();
+  const userInfo = JSON.parse(getUserInfo());
+  let uuid = userInfo.uuid;
+  let userInfos = {
+    "id": uuid,
+    "tenantId": getTenantId()
+  };
+
+  let Ids = process.env.REACT_APP_NAME === "Citizen" && action != "search" ? userInfos : null;
+  let usrInfo = (action == "search") ? null: Ids;
+  let RequestInfo = {
+    "apiId": "1",
+    "ver": "1",
+    "ts": "01-01-2017 01:01:01",
+    "action": "create",
+    "did": "jh",
+    "key": "",
+    "msgId": "gfcfc",
+    "correlationId": "wefiuweiuff897",
+    authToken,
+    "userInfo": usrInfo
+  };
+
+  RequestInfo = { ...RequestInfo, ...customRequestInfo };
+  return Object.assign(
+    {},
+    {
+      RequestInfo
+    },
+    requestBody
+  );
+};
+
+const edcrInstance = axios.create({
+  baseURL: window.location.origin,
+  headers: {
+    "Content-Type": "application/json"
+  }
+})
+
+const edcrHttpRequest = async (
+  method = "post",
+  endPoint,
+  action,
+  queryObject = [],
+  requestBody = {},
+  headers = [],
+  customRequestInfo = {}
+) => {
+  store.dispatch(showSpinner());
+  let apiError = "No Record Found";
+
+  if (headers)
+    edcrInstance.defaults = Object.assign(edcrInstance.defaults, {
+      headers
+    });
+
+  endPoint = addQueryArg(endPoint, queryObject);
+  var response;
+  try {
+    response = await edcrInstance.post(
+        endPoint,
+        wrapEdcrRequestBody(requestBody, action, customRequestInfo)
+      );
+    const responseStatus = parseInt(response.status, 10);
+    store.dispatch(hideSpinner());
+    if (responseStatus === 200 || responseStatus === 201) {      
+      return response.data;
+    }
+  } catch (error) {
+    const { data, status } = error.response;
+    if (status === 400 && data === "") {
+      apiError = "INVALID_TOKEN";
+    } else {
+      apiError =
+        (data.hasOwnProperty("Errors") &&
+          data.Errors &&
+          data.Errors.length &&
+          data.Errors[0].message) ||
+        (data.hasOwnProperty("error") &&
+          data.error.fields &&
+          data.error.fields.length &&
+          data.error.fields[0].message) ||
+        (data.hasOwnProperty("error_description") && data.error_description) ||
+        apiError;
+    }
+    store.dispatch(hideSpinner());
+  }
+};
+
 let RequestInfo = {};
 
 let customRequestInfo = JSON.parse(getUserInfo())
@@ -32,6 +126,47 @@ const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
   ];
   switch(moduleName){  
     case 'BPA':
+        queryObject = [
+          { key: "tenantId", value: tenantId },
+          { key: "applicationNumber", value: applicationNumber }
+        ]
+        try{
+          let bpaResult = await httpRequest(
+            "post",
+            "/bpa-services/v1/bpa/_search",
+            "",
+            queryObject
+          );
+          let edcrNumber = bpaResult && bpaResult.BPA && bpaResult.BPA.length > 0 && bpaResult.BPA[0].edcrNumber || ''
+
+          try {
+            let edcrResponse = await edcrHttpRequest(
+              "post",
+              "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+              "search", []
+            );
+            let edcrDetails = edcrResponse.edcrDetail[0] || {}
+            let applicationDigitallySigned = bpaResult && bpaResult.BPA && bpaResult.BPA.length > 0 &&
+            bpaResult.BPA[0].dscDetails && bpaResult.BPA[0].dscDetails[0].documentId ? true : false
+            if(!applicationDigitallySigned){
+              let BPA = bpaResult.BPA[0]
+              BPA.edcrDetail = edcrDetails
+              return {
+                RequestInfo : RequestInfo,
+                "Bpa": [BPA]
+              }
+            }else{
+              return null
+            }
+          }catch(err){
+            return
+          }
+          
+
+        }catch(err){
+          return
+        }
+       
       break
     case 'NewTL':
       try {
@@ -507,6 +642,13 @@ class SignPdfContainer extends Component {
                             data.MarriageRegistrations[0].dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                           }
                           return data.MarriageRegistrations
+                        }else if(moduleName == 'BPA'){
+                          if(data && data.Bpa && data.Bpa[0].dscDetails && data.Bpa[0].dscDetails.length > 0){
+                            data.Bpa[0].dscDetails[0].documentType = key
+                            data.Bpa[0].dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                          }
+                          delete data.Bpa[0].edcrDetail
+                          return data.Bpa
                         }
                        else{
                           return data

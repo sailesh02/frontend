@@ -247,58 +247,6 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       action: "page_change",
       path: `${getRedirectionURL()}`
     }
-  },
-  pdfSign: {
-    componentPath: "Button",
-    
-    props: {
-      variant: "outlined",
-      className:"home-footer",
-      color: "primary",
-      style: {
-    //    minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      pdfSignButtonLabel: getLabel({
-        labelName: "MR_PDF_SIGN",
-        labelKey: "MR_PDF_SIGN"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-        const tenantId = getQueryArg(window.location.href, "tenantId");
-
-        dispatch(
-          handleField(
-            "acknowledgement",
-            "components.pdfSigningPopup.props",
-            "openPdfSigningPopup",
-            true
-          )
-        )
-        dispatch(
-          handleField(
-            "acknowledgement",
-            "components.pdfSigningPopup.props",
-            "applicationNumber",
-            applicationNumber
-          )
-        )
-        dispatch(
-          handleField(
-            "acknowledgement",
-            "components.pdfSigningPopup.props",
-            "tenantId",
-            tenantId
-          )
-        )
-      }
-    }
   }
   // downloadLicenseButton: {
   //   componentPath: "Button",
@@ -380,7 +328,7 @@ export const paymentFailureFooter = (applicationNumber, tenant) => {
 };
 
 //Function for payment success(Show buttons for download and print receipts)
-export const paymentSuccessFooter = () => {
+export const paymentSuccessFooter = (action, state, dispatch, applicationNumber, tenantId, uiCommonPayConfig, businessService) => {
   return getCommonApplyFooter({
     //call gotoHome
     downloadReceiptButton: {
@@ -458,6 +406,59 @@ export const paymentSuccessFooter = () => {
             : `/`
       },
        visible: true
+    },
+    pdfSign: {
+      componentPath: "Button",
+      props: {
+        variant: "outlined",
+        className:"home-footer",
+        color: "primary",
+        style: {
+      //    minWidth: "200px",
+          height: "48px",
+          marginRight: "16px"
+        }
+      },
+      children: {
+        pdfSignButtonLabel: getLabel({
+          labelName: "MR_PDF_SIGN",
+          labelKey: "MR_PDF_SIGN"
+        })
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+          const applicationNumber = getQueryArg(window.location.href, "consumerCode");
+          const tenantId = getQueryArg(window.location.href, "tenantId");
+  
+          dispatch(
+            handleField(
+              "acknowledgement",
+              "components.pdfSigningPopup.props",
+              "openPdfSigningPopup",
+              true
+            )
+          )
+          dispatch(
+            handleField(
+              "acknowledgement",
+              "components.pdfSigningPopup.props",
+              "applicationNumber",
+              applicationNumber
+            )
+          )
+          dispatch(
+            handleField(
+              "acknowledgement",
+              "components.pdfSigningPopup.props",
+              "tenantId",
+              tenantId
+            )
+          )
+        }
+      },
+      visible : ((businessService == "BPA.LOW_RISK_PERMIT_FEE") || (businessService == "BPA.NC_SAN_FEE")
+      || (businessService == "BPA.NC_OC_SAN_FEE") && process.env.REACT_APP_NAME != "Citizen")  ? true : false
     }
   });
 };

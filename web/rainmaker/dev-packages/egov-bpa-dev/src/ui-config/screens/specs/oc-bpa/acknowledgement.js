@@ -29,7 +29,7 @@ const closePdfSigningPopup = (refreshType) => {
     store.dispatch(
       handleField(
         "acknowledgement",
-        "components.div.children.approvalSuccessFooter.children.pdfSign",
+        "components.div.children.paymentSuccessFooter.children.pdfSign",
         "visible",
         false
       )

@@ -44,6 +44,13 @@ const ViewBreakupContainer = Loadable({
   loader: () => import("./ViewbreakupDialogContainer"),
   loading: () => <Loading />
 });
+
+const MakePaymentDialog = Loadable({
+  loader: () => import("./MakePaymentDialog"),
+  loading: () => <Loading />
+});
+
+
 const TestContainer = Loadable({
   loader: () => import("./TestContainer"),
   loading: () => <Loading />
@@ -59,5 +66,6 @@ export {
   PaymentRedirectPage,
   ViewBreakupContainer,
   DialogContainer,
-  TestContainer
+  TestContainer,
+  MakePaymentDialog
 };

@@ -209,15 +209,15 @@ export const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
-    if(fileStoreId){
-    const fileUrl = await httpRequest(
-      "get",
-      "/filestore/v1/files/url",
-      "",
-      queryObject
-    );
-    return fileUrl;
-    }else{
+    if (fileStoreId) {
+      const fileUrl = await httpRequest(
+        "get",
+        "/filestore/v1/files/url",
+        "",
+        queryObject
+      );
+      return fileUrl;
+    } else {
       return '';
     }
   } catch (e) {
@@ -310,7 +310,7 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
       item.documents.forEach(i => {
         if (i.fileStoreId && fileUrlPayload[i.fileStoreId]) {
           i.link = getFileUrl(fileUrlPayload[i.fileStoreId]);
-          i.title = item.businessService === "MR"? `MR_${i.documentType}` :`TL_${i.documentType}`;
+          i.title = item.businessService === "MR" ? `MR_${i.documentType}` : `TL_${i.documentType}`;
           i.name = decodeURIComponent(
             getFileUrl(fileUrlPayload[i.fileStoreId])
               .split("?")[0]
@@ -701,7 +701,7 @@ export const getStatusKey = (status) => {
 
 export const getRequiredDocData = async (action, dispatch, moduleDetails, closePopUp) => {
   let tenantId =
-    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity|| commonConfig.tenantId  : getTenantId();
+    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity || commonConfig.tenantId : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: moduleDetails[0].moduleName === "ws-services-masters" ? commonConfig.tenantId : tenantId,
@@ -741,7 +741,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
 };
 
 const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
-  console.log(moduleName, "Nero moduleName")
+  
   const tenant = getTenantId();
   switch (moduleName) {
     case "FireNoc":
@@ -768,26 +768,26 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
         const applyUrl = process.env.REACT_APP_NAME === "Citizen" ? `/wns/apply` : `/wns/apply`
         dispatch(setRoute(applyUrl));
       };
-      case 'MarriageRegistration':
-        if (closePopUp) {
-          return (state, dispatch) => {
+    case 'MarriageRegistration':
+      if (closePopUp) {
+        return (state, dispatch) => {
 
 
-            dispatch(prepareFinalObject("MarriageRegistrations", []));
-            dispatch(prepareFinalObject("LicensesTemp", []));
-            dispatch(prepareFinalObject("DynamicMdms", {}));
+          dispatch(prepareFinalObject("MarriageRegistrations", []));
+          dispatch(prepareFinalObject("LicensesTemp", []));
+          dispatch(prepareFinalObject("DynamicMdms", {}));
 
-            let applyUrl = '';
+          let applyUrl = '';
 
-               applyUrl = `/mr/apply?tenantId=${tenant}`;
+          applyUrl = `/mr/apply?tenantId=${tenant}`;
 
 
-            dispatch(
-              handleField("search", "components.adhocDialog", "props.open", false)
-            );
-            dispatch(setRoute(applyUrl));
-          };
-        }
+          dispatch(
+            handleField("search", "components.adhocDialog", "props.open", false)
+          );
+          dispatch(setRoute(applyUrl));
+        };
+      }
     case 'TradeLicense':
       if (closePopUp) {
         return (state, dispatch) => {
@@ -797,12 +797,12 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
           dispatch(prepareFinalObject("Licenses", []));
           dispatch(prepareFinalObject("LicensesTemp", []));
           dispatch(prepareFinalObject("DynamicMdms", {}));
-          console.log(legacyLicenseRenewal, "Nero legacyLicenseRenewal")
+          
           let applyUrl = '';
-          if(legacyLicenseRenewal === "true"){
-             applyUrl = `/tradelicence/apply?tenantId=${tenant}&licenseType=${applyTlfor}&legacyLicenseRenewal=true`;
-          }else{
-             applyUrl = `/tradelicence/apply?tenantId=${tenant}&licenseType=${applyTlfor}`;
+          if (legacyLicenseRenewal === "true") {
+            applyUrl = `/tradelicence/apply?tenantId=${tenant}&licenseType=${applyTlfor}&legacyLicenseRenewal=true`;
+          } else {
+            applyUrl = `/tradelicence/apply?tenantId=${tenant}&licenseType=${applyTlfor}`;
           }
 
           dispatch(
@@ -840,21 +840,54 @@ export const getObjectKeys = objData => {
   );
 };
 export const getMdmsJson = async (state, dispatch, reqObj) => {
-  let { setPath, setTransformPath, dispatchPath, moduleName, name, filter } = reqObj;
+  let { setPath, setTransformPath, dispatchPath, moduleName, name, filter, screenName } = reqObj;
   const tenantId = getQueryArg(window.location.href, "tenantId");
 
 
   let mdmsBody = '';
 
 
-  if(moduleName === "TradeLicense"){
-    let applyFor = window.localStorage.getItem('licenseType');
-    if(applyFor === "TEMPORARY"){
-      name = "TemporaryTradeType";
+  if (moduleName === "TradeLicense") {
+    if (screenName == "tradeSearchPage" || screenName == "tradeRateAddPage") {
+
+      mdmsBody = {
+        MdmsCriteria: {
+          tenantId: commonConfig.tenantId,
+
+          moduleDetails: [
+            {
+              moduleName,
+              masterDetails: [
+                { name, filter }
+              ]
+            }
+          ]
         }
-     mdmsBody = {
+      };
+    } else {
+      let applyFor = window.localStorage.getItem('licenseType');
+      if (applyFor === "TEMPORARY") {
+        name = "TemporaryTradeType";
+      }
+      mdmsBody = {
+        MdmsCriteria: {
+          tenantId: tenantId,
+
+          moduleDetails: [
+            {
+              moduleName,
+              masterDetails: [
+                { name, filter }
+              ]
+            }
+          ]
+        }
+      };
+    }
+  } else {
+    mdmsBody = {
       MdmsCriteria: {
-        tenantId: tenantId,
+        tenantId: commonConfig.tenantId,
 
         moduleDetails: [
           {
@@ -866,21 +899,6 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
         ]
       }
     };
-  }else{
-   mdmsBody = {
-    MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
-
-      moduleDetails: [
-        {
-          moduleName,
-          masterDetails: [
-            { name, filter }
-          ]
-        }
-      ]
-    }
-  };
   }
 
 

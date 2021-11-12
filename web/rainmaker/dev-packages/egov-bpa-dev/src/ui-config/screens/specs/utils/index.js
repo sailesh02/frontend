@@ -4879,7 +4879,7 @@ const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMd
  */
 const getDocumentCode = (documentType) => {
   var code = getTransformedLocale(documentType);
-  code = code && code.substring(0, code.lastIndexOf("_"));
+  code = code.substring(0, code.lastIndexOf("_"));
   return code;
 }
 export const prepareDocsInEmployee = (state, dispatch, action, appState, uploadedAppDocuments, documentsPreview, isVisibleTrue) => {
@@ -5187,17 +5187,6 @@ export const revocationPdfDownload = async (action, state, dispatch, mode = "Dow
   }
 }
 
-// get file store id based on pdf type
-const getFileStore = (fileKey,documents) => {
-  let fileStoreId;
-  let requiredDocument = documents && documents.length > 0 && documents.filter( doc => {
-    return doc.documentType == fileKey
-  })
-
-  fileStoreId = requiredDocument && requiredDocument.length > 0 && requiredDocument[0].fileStoreId || null
-  return fileStoreId
-}
-
 export const permitOrderNoDownload = async (action, state, dispatch, mode = "Download") => {
   let bpaDetails = get(
     state.screenConfiguration.preparedFinalObject, "BPA"
@@ -5227,12 +5216,7 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
   if (window.location.href.includes("oc-bpa") || window.location.href.includes("BPA.NC_OC_SAN_FEE")) {
     permitPfKey = "occupancy-certificate"
   }
- 
-  let fileStoreId
-  let fileStoreIdFromDocs
-  fileStoreIdFromDocs = getFileStore(permitPfKey, bpaDetails && bpaDetails.additionalDetails && bpaDetails.additionalDetails.signedPdfDetails || [])
-  if(!fileStoreIdFromDocs){
-     let res = await httpRequest(
+  let res = await httpRequest(
     "post",
     `pdf-service/v1/_create?key=${permitPfKey}&tenantId=${bpaDetails.tenantId}`,
     "",
@@ -5240,11 +5224,7 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
     { Bpa: [Bpa] }
   );
 
-   fileStoreId = res.filestoreIds[0];
-  }else{
-    fileStoreId = fileStoreIdFromDocs
-  }
-
+  let fileStoreId = res.filestoreIds[0];
   let pdfDownload = await httpRequest(
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []

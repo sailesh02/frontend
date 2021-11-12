@@ -1018,16 +1018,6 @@ export const downloadAcknowledgementForm = (Licenses, mode = "download") => {
   }
 }
 
-const getFileStore = (fileKey,documents) => {
-  let fileStoreId;
-  let requiredDocument = documents && documents.length > 0 && documents.filter( doc => {
-    return doc.documentType == fileKey
-  })
-  fileStoreId = requiredDocument && requiredDocument.length > 0 && requiredDocument[0].fileStoreId || null
-  return fileStoreId
-}
-
-
 export const downloadCertificateForm = async (MarriageRegistrations, mode = 'download') => {
   let tenantId = get(MarriageRegistrations[0], "tenantId");
   let applicationNumber = get(MarriageRegistrations[0], "applicationNumber")
@@ -1051,8 +1041,7 @@ export const downloadCertificateForm = async (MarriageRegistrations, mode = 'dow
   ];
   const LicensesPayload = await getSearchResults(queryObject);
   const updatedLicenses = get(LicensesPayload, "MarriageRegistrations");
-  const oldFileStoreId = get(updatedLicenses[0], "fileStoreId") || getFileStore("mrcertificate", LicensesPayload && LicensesPayload.MarriageRegistrations && LicensesPayload.MarriageRegistrations.length > 0 && LicensesPayload.MarriageRegistrations[0].marriagePlace && LicensesPayload.MarriageRegistrations[0].marriagePlace.additionalDetail && 
-  LicensesPayload.MarriageRegistrations[0].marriagePlace.additionalDetail.signedPdfDetails|| [])
+  const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
   if (oldFileStoreId) {
     downloadReceiptFromFilestoreID(oldFileStoreId, mode)
   }

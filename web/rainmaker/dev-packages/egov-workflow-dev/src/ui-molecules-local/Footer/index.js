@@ -2,7 +2,6 @@ import { Container, Item } from "egov-ui-framework/ui-atoms";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -17,12 +16,12 @@ import {
 } from "../../ui-utils/commons";
 import { getDownloadItems } from "./downloadItems";
 import "./index.css";
-  
+
 class Footer extends React.Component {
   state = {
     open: false,
     data: {},
-    employeeList: [],
+    employeeList: []
     //responseLength: 0
   };
 
@@ -243,6 +242,7 @@ class Footer extends React.Component {
       state,
       dispatch
     } = this.props;
+
     const { open, data, employeeList } = this.state;
     const { isDocRequired } = data;
     const appName = process.env.REACT_APP_NAME;
@@ -492,7 +492,7 @@ const mapDispatchToProps = dispatch => {
     showSpinner: () =>
       dispatch(showSpinner()),
     hideSpinner: () =>
-      dispatch(hideSpinner()),
+      dispatch(hideSpinner())
   };
 };
 

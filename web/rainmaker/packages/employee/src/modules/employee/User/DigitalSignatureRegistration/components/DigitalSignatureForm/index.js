@@ -240,19 +240,9 @@ const DigitalSignatureForm = ({ form, handleFieldChange, cardTitle, formKey, con
     //   style={containerStyle}
     //   textChildren={
       <div className="employee-change-password">
-          {handleRemoveItem && (
-            <div className="remove-unit-assessment" style={{ cursor: "pointer" }} onClick={handleRemoveItem}>
-              <Icon action="navigation" name="close" />
-            </div>
-          )}
-          {cardTitle && cardTitle}
-          {formName && <div className="text-left">{formName}</div>}
           {Object.keys(fields).map((fieldKey, index) => {
             return (
-              // <div key={index}>
-              fieldKey === "dummy" ? (
-                <div className="col-xs-12 dummy-field" style={{ height: 72, marginTop: 14 }} />
-              ) : fieldKey === "submit" ? (
+             fieldKey === "submit" ? (
                 <div className="responsive-action-button-cont">
                <Button className="change-password-label-style" variant ='contained' 
                onClick = {

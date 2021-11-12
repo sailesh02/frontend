@@ -32,6 +32,7 @@ export const generateMRAcknowledgement = (preparedFinalObject, fileName = "ackno
 
     let pdfData = {
         header: "MR_APPLICATION", tenantId: MR.tenantId,
+        module: "marriageregistration",
         //applicationNoHeader: 'TL_PDF_LICENSE_NO', applicationNoValue: License.licenseNumber,
         additionalHeader: "MR_HOME_SEARCH_RESULTS_APP_NO_LABEL", additionalHeaderValue: MR.applicationNumber,
         cards: [

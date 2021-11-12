@@ -13,6 +13,7 @@ import { pendingApprovals, showSearches } from "./searchResource/pendingApproval
 // import { progressStatus } from "./searchResource/progressStatus";
 import { searchResults } from "./searchResource/searchResults";
 import { getPendingDigitallySignedApplications } from "./searchResource/functions"
+import store from "ui-redux/store";
 
 const closePdfSigningPopup = (refreshType) => {
   store.dispatch(

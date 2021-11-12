@@ -36,6 +36,14 @@ const closePdfSigningPopup = (refreshType) => {
         false
       )
     )
+    store.dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.body.children.header.children.key.props",
+        "labelKey",
+        "MR_SIGN_CHECKLIST_MESSAGE_HEAD"
+      )
+    )
   }
 }
 

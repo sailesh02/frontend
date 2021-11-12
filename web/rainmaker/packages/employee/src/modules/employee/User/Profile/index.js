@@ -7,14 +7,12 @@ import ProfileForm from "./components/ProfileForm";
 import { Screen } from "modules/common";
 import img from "egov-ui-kit/assets/images/download.png";
 import "./index.css";
-import DigitalSignatureDialog from 'egov-ui-kit/common/common/Header/components/DigitalSignatureDialog/index'
 const formKey = "profileEmployee";
 const ProfileFormHOC = formHoc({ formKey })(ProfileForm);
 
 class Profile extends Component {
   state = {
     openUploadSlide: false,
-    openDigitalSignaturePopup:false,
   };
 
   setProfilePic = (file = null, imageUri = "") => {
@@ -34,38 +32,19 @@ class Profile extends Component {
     });
   };
 
-  _closeDigitalSignatureDialog = () => {
-    this.setState({
-      openDigitalSignaturePopup: false,
-    });
-  }
-
-  onClickRegister = () => {
-    this.setState({
-      openDigitalSignaturePopup : true
-    })
-  }
-
   render() {
     const { profilePic, loading } = this.props;
-    const { openUploadSlide, openDigitalSignaturePopup } = this.state;
-    const { setProfilePic, onClickAddPic, removeProfilePic, _closeDigitalSignatureDialog, onClickRegister } = this;
+    const { openUploadSlide } = this.state;
+    const { setProfilePic, onClickAddPic, removeProfilePic } = this;
 
     return (
       <Screen loading={loading} className="employee-profile-screen">
         <div className="profile-container">
-          <ProfileFormHOC onClickAddPic={onClickAddPic} img={img} profilePic={profilePic} onClickRegister = {onClickRegister} />
+          <ProfileFormHOC onClickAddPic={onClickAddPic} img={img} profilePic={profilePic} />
         </div>
         {openUploadSlide && (
           <UploadDrawer removeFile={removeProfilePic} setProfilePic={setProfilePic} onClickAddPic={onClickAddPic} openUploadSlide={openUploadSlide} />
         )}
-         {openDigitalSignaturePopup && process.env.REACT_APP_NAME !== "Citizen" && <DigitalSignatureDialog
-          openDigitalSignaturePopup={openDigitalSignaturePopup}
-          closeDigitalSignatureDialog={_closeDigitalSignatureDialog}
-          okText={"CORE_SIGNATURE_SUBMIT"}
-          resetText={"CORE_SIGNATURE_RESET"}
-          title={"CORE_DIGITAL_SIGNATURE_REGISTRATION"}
-        />}
       </Screen>
     );
   }

@@ -181,7 +181,7 @@ export const getPendingDigitallySignedApplications = async () => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-services/v1/_searchdscdetails",
+      "/mr-services/v1/_searchdscdetails",
       "",
       queryObject
     );

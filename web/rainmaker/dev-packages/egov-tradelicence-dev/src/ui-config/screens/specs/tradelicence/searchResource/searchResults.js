@@ -182,19 +182,16 @@ export const searchDigitalSignatureResults = {
 const onRowClick = rowData => {
   switch (rowData[7]) {
     case "INITIATED":
-      if(rowData[6]=="TL_TYPE_RENEWAL"){
-        routeTo(`apply?applicationNumber=${rowData[0]}&licenseNumber=${rowData[1]}&action=EDITRENEWAL&tenantId=${
-          rowData[8]
+      if (rowData[6] == "TL_TYPE_RENEWAL") {
+        routeTo(`apply?applicationNumber=${rowData[0]}&licenseNumber=${rowData[1]}&action=EDITRENEWAL&tenantId=${rowData[8]
           }`);
-      }else{
-        routeTo(`apply?applicationNumber=${rowData[0]}&tenantId=${
-          rowData[8]
+      } else {
+        routeTo(`apply?applicationNumber=${rowData[0]}&tenantId=${rowData[8]
           }`);
       }
       break;
     default:
-      routeTo(`search-preview?applicationNumber=${
-        rowData[0]
+      routeTo(`search-preview?applicationNumber=${rowData[0]
         }&tenantId=${rowData[8]}`);
       break;
   }
@@ -229,3 +226,112 @@ const onPdfSignClick = rowData => {
     )
   )
 }
+const onRowClickForUpdate = rowData => {
+  console.log(rowData, "Nero rowData")
+  
+  window.location.href = `traderateadd?purpose=billingslabrate&tenantId=${rowData[2]}&licenseType=${rowData[3]}&applicationType=${rowData[10]}&tradeType=${rowData[4]}&licenseType=${rowData[3]}&type=${rowData[9]}&uom=${rowData[5]}&from=${rowData[7]}&to=${rowData[8]}`;
+  //routeTo(`traderateadd?purpose=billingslabrate&tenantId=${rowData[2]}&licenseType=${rowData[3]}&applicationType=${rowData[10]}&tradeType=${rowData[4]}&licenseType=${rowData[3]}&type=${rowData[9]}&uom=${rowData[5]}&from=${rowData[7]}&to=${rowData[8]}`);
+};
+
+
+export const tradeSearchResults = {
+  uiFramework: "custom-molecules",
+  componentPath: "Table",
+  visible: false,
+  props: {
+    columns: [
+      {
+        labelName: "Application No",
+        labelKey: "TL_COMMON_TABLE_COL_ACTION",
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta) => (
+            <a href="javascript:void(0)" onClick={() => onRowClickForUpdate(tableMeta.rowData)}>{value}</a>
+          )
+        }
+      },
+      {
+        labelName: "Tenant Id",
+        labelKey: "TL_COMMON_TABLE_COL_RECORD_ID",
+        options:{
+          display:false
+        }
+      },
+      
+      {
+        labelName: "Tenant Id",
+        labelKey: "TL_COMMON_TABLE_COL_TENANT_ID",
+
+      },
+      {
+        labelName: "License Type",
+        labelKey: "TL_COMMON_TABLE_COL_LICENSE_TYPE",
+
+      },
+      {
+        labelName: "Trade",
+        labelKey: "TL_COMMON_TABLE_COL_TRADE",
+
+      }, 
+      {
+        labelName: "Uom",
+        labelKey: "TL_COMMON_TABLE_COL_UOM",
+
+      },
+      {
+        labelName: "From Uom",
+        labelKey: "TL_COMMON_TABLE_COL_FROM_UOM",
+
+      },
+      {
+        labelName: "To Uom",
+        labelKey: "TL_COMMON_TABLE_COL_TO_UOM",
+
+      },
+      {
+        labelName: "Rate",
+        labelKey: "TL_COMMON_TABLE_COL_RATE",
+
+      },
+      {
+        labelName: "Rate Type",
+        labelKey: "TL_COMMON_TABLE_COL_RATE_TYPE",
+
+      },
+      {
+        labelName: "Application Type",
+        labelKey: "TL_COMMON_TABLE_COL_APPLICATION_TYPE",
+
+      },
+
+    ],
+    title: {
+      labelName: "Search Results for Trade License Applications",
+      labelKey: "TL_HOME_SEARCH_RESULTS_TABLE_HEADING"
+    },
+    rows: "",
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      rowsPerPageOptions: [10, 15, 20]
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
+  }
+};

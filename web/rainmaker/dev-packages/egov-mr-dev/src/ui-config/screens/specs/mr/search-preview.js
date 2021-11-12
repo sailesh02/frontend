@@ -39,10 +39,20 @@ import { getgroomAddressAndGuardianDetails } from "./applyResource/groom-address
 import { getWitnessDetails, getAppointmentDetails, appointmentDetailsInfo } from "./applyResource/witness-detail";
 import { orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import { getReviewPdfSignDetails } from "./applyResource/review-pdfSign.js"
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let headerSideText = { word1: "", word2: "" };
+
+const ifUserRoleExists = role => {
+  let userInfo = JSON.parse(getUserInfo());
+  const roles = get(userInfo, "roles");
+  const roleCodes = roles ? roles.map(role => role.code) : [];
+  if (roleCodes.indexOf(role) > -1) {
+    return true;
+  } else return false;
+};
 
 const closePdfSigningPopup = (refreshType) => {
   store.dispatch(
@@ -783,12 +793,15 @@ const screenConfig = {
         openPdfSigningPopup: false,
         closePdfSigningPopup : closePdfSigningPopup,
         maxWidth: false,
-        moduleName : 'NewTL',
-        okText :"TL_SIGN_PDF",
-        resetText : "TL_RESET_PDF",
+        moduleName : 'MR',
+        okText :"MR_SIGN_PDF",
+        resetText : "MR_RESET_PDF",
         dataPath : 'MarriageRegistrations',
-        refreshType : 'preview',
-        updateUrl : '/mr-services/v1/_updatedscdetails?'
+        updateUrl : '/mr-services/v1/_updatedscdetails?',
+        refreshType : 'preview'
+      },
+      children: {
+        popup: {}
       }
     }
   }

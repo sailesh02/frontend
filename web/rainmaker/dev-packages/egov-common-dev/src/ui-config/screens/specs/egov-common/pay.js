@@ -152,16 +152,16 @@ const screenConfig = {
         let tenantId = getQueryArg(window.location.href, "tenantId");
         let businessService = getQueryArg(window.location.href, "businessService");
         fetchBill(action, state, dispatch, consumerCode, tenantId, businessService);
-        localStorage.setItem('pay-businessService',businessService);
+        localStorage.setItem('pay-businessService', businessService);
         let channel = getQueryArg(window.location.href, "channel");
         let redirectNumber = getQueryArg(window.location.href, "redirectNumber");
-        if(channel){
-            localStorage.setItem('pay-channel',channel);
-            redirectNumber=!redirectNumber.includes('+91')&&redirectNumber.length==10?`+91${redirectNumber}`:redirectNumber
-            localStorage.setItem('pay-redirectNumber',redirectNumber);
-        }else{
-            localStorage.setItem('pay-channel',"");
-            localStorage.setItem('pay-redirectNumber','');
+        if (channel) {
+            localStorage.setItem('pay-channel', channel);
+            redirectNumber = !redirectNumber.includes('+91') && redirectNumber.length == 10 ? `+91${redirectNumber}` : redirectNumber
+            localStorage.setItem('pay-redirectNumber', redirectNumber);
+        } else {
+            localStorage.setItem('pay-channel', "");
+            localStorage.setItem('pay-redirectNumber', '');
         }
         // fetchBill(action,state, dispatch, consumerCode, tenantId, businessService).then(
         //     response => {
@@ -187,8 +187,11 @@ const screenConfig = {
                     componentPath: "Container",
                     children: {
                         // header : {}
-                    }
+                    },
+
+
                 },
+
                 formwizardFirstStep: {
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
@@ -209,9 +212,23 @@ const screenConfig = {
                         })
                     }
                 },
-                footer
+                footer,
+                
             }
         },
+        // paymentRedirectDialog: {
+        //     uiFramework: "custom-containers-local",
+        //     moduleName: "egov-common",
+        //     componentPath: "MakePaymentDialog",
+        //     props: {
+        //         open: false,
+        //         maxWidth: false,
+        //         screenKey: "pay"
+        //     },
+        //     children: {
+        //         popup: {}
+        //     }
+        // }
     }
 };
 

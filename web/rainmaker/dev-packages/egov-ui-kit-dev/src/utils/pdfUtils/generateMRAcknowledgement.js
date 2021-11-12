@@ -31,9 +31,9 @@ export const generateMRAcknowledgement = (preparedFinalObject, fileName = "ackno
     const groomWtnsSummary = generateKeyValue(preparedFinalObject, GroomWitnessDetails);
 
     let pdfData = {
-        header: "MR_TRADE_APPLICATION", tenantId: MR.tenantId,
+        header: "MR_APPLICATION", tenantId: MR.tenantId,
         //applicationNoHeader: 'TL_PDF_LICENSE_NO', applicationNoValue: License.licenseNumber,
-        additionalHeader: "MR_PDF_APPLICATION_NO", additionalHeaderValue: MR.applicationNumber,
+        additionalHeader: "MR_HOME_SEARCH_RESULTS_APP_NO_LABEL", additionalHeaderValue: MR.applicationNumber,
         cards: [
             { items: estimateDetails, type: 'estimate' },
             { header: 'MR_MARRIAGEPLACE_LABEL', items: tradeLocationSummary },

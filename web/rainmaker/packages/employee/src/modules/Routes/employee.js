@@ -3,6 +3,7 @@ import Login from "modules/employee/User/Login";
 import OTP from "modules/employee/User/OTP";
 import LanguageSelection from "modules/employee/User/LanguageSelection";
 import ChangePassword from "modules/employee/User/ChangePassword";
+import DigitalSignatureRegistration from "modules/employee/User/DigitalSignatureRegistration";
 import Profile from "modules/employee/User/Profile";
 import ForgotPassword from "modules/employee/User/ForgotPassword";
 import PushLocalization from "modules/employee/PushLocalization";
@@ -66,6 +67,12 @@ const routes = [
     component: ChangePassword,
     needsAuthentication: true,
     options: { hideFooter: true, title: "CORE_COMMON_CHANGE_PASSWORD" },
+  },
+  {
+    path:"user/digital-signature-registration",
+    component : DigitalSignatureRegistration,
+    needsAuthentication:true,
+    options : {hideFooter : true, title : "CORE_COMMON_DIGITAL_SIGNATURE_REGISTRATION"}
   },
   {
     path: "user/profile",

@@ -920,6 +920,15 @@ class TriggerNOCContainer extends Component {
           auditDetails : BPA.auditDetails,
           additionalDetails : details
         }
+        if(payload && payload.additionalDetails && payload.additionalDetails.thirdPartNOC && 
+          payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
+          payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
+            payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'Yes'
+        }else if(payload && payload.additionalDetails && payload.additionalDetails.thirdPartNOC && 
+          payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
+          !payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
+            payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'No'
+        }
         let response = null
          if(this.props.isUpdate){
           const {Noc} = this.props.preparedFinalObject
@@ -932,6 +941,15 @@ class TriggerNOCContainer extends Component {
           updateNocPayload[0].additionalDetails.SubmittedOn = submittedOn
           if(nocType == 'NMA_NOC'){
             updateNocPayload[0].additionalDetails.thirdPartNOC = updateNocPayload[0].additionalDetails.thirdPartNOC ? updateNocPayload[0].additionalDetails.thirdPartNOC : NewNocAdditionalDetails.thirdPartNOC
+          }
+          if(nocType == 'NMA_NOC' && updateNocPayload[0] && updateNocPayload[0].additionalDetails && updateNocPayload[0].additionalDetails.thirdPartNOC && 
+          updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
+          updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
+            updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'Yes'
+          }else if(nocType == 'NMA_NOC' && updateNocPayload[0] && updateNocPayload[0].additionalDetails && updateNocPayload[0].additionalDetails.thirdPartNOC && 
+          updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
+            !updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
+              updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'No'
           }
           response = await updateNoc(updateNocPayload[0])
          }else{

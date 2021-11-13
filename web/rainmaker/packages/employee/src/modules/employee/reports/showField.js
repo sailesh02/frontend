@@ -33,12 +33,12 @@ export default class ShowField extends Component {
 
     let dropDownData = [];
 
-    if (!isEmpty(obj.defaultValue)) {
-      dropDownData.push({
-        value: "All",
-        label: "All",
-      });
-    }
+    // if (!isEmpty(obj.defaultValue)) {
+    //   dropDownData.push({
+    //     value: "All",
+    //     label: "All",
+    //   });
+    // }
 
     if (typeof obj.defaultValue == "object") {
       for (var variable in obj.defaultValue) {

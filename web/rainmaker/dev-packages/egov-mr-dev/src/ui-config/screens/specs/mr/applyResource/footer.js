@@ -472,7 +472,7 @@ if(groomOtherrltn == "OTHERS" && applicationNoInUrl){
       dispatch(
         prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
       );
-      isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+      //isFormValid = await applyTradeLicense(state, dispatch, activeStep);
 
       if (userAction == "CORRECTION") {
 

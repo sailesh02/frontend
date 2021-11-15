@@ -5,6 +5,7 @@ import {
 import {
   applicationSuccessFooter,
   paymentSuccessFooter,
+  signedSuccessFooter,
   gotoHomeFooter,
   approvalSuccessFooter,
   paymentFailureFooter
@@ -20,6 +21,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "ui-redux/store";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const closePdfSigningPopup = (refreshType) => {
   store.dispatch(
@@ -75,12 +77,33 @@ const closePdfSigningPopup = (refreshType) => {
         "BPA_PDF_SIGNING"
       )
     )
+    let consumnerCode = getQueryArg(window.location.href, "consumerCode")
+    let tenantId = getQueryArg(window.location.href, "tenantId")
+    let receiptNumber = getQueryArg(window.location.href, "receiptNumber")
+    let businessService = getQueryArg(window.location.href, "businessService")
+    store.dispatch(setRoute(`/egov-bpa/acknowledgement?status=success&consumerCode=${consumnerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&purpose=signed`))
   }
 }
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Payment Information (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
     labelKey: "COMMON_PAY_SCREEN_HEADER"
+  }),
+  applicationNumber: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-bpa",
+    componentPath: "ApplicationNoContainer",
+    props: {
+      number: getQueryArg(window.location.href, "consumerCode")
+    },
+    visible: true
+  }
+});
+
+export const digitalSignatureHeader = getCommonContainer({
+  header: getCommonHeader({
+    labelName: `BPA_PDF_SIGNING`, //later use getFinancialYearDates
+    labelKey: "BPA_PDF_SIGNING"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -130,7 +153,7 @@ const getNOCHeader=(applicationNumber)=>{
   })
   }
 
-const downloadprintMenu = (action, state, dispatch, applicationNumber, tenantId, uiCommonPayConfig, businessService) => {
+const downloadprintMenu = (action, state, dispatch, applicationNumber, tenantId, uiCommonPayConfig, businessService,signed) => {
   const receiptKey = get(uiCommonPayConfig, "receiptKey","consolidatedreceipt");
   let keyLabel = "BPA_PERMIT_ORDER";
   if(window.location.href.includes("BPA.NC_OC_SAN_FEE")) {
@@ -180,9 +203,14 @@ const downloadprintMenu = (action, state, dispatch, applicationNumber, tenantId,
    switch (businessService) {
     case "BPA.LOW_RISK_PERMIT_FEE":
     case "BPA.NC_SAN_FEE":
-    case "BPA.NC_OC_SAN_FEE":    
-    downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-    printMenu = [receiptPrintObject, applicationPrintObject];    
+    case "BPA.NC_OC_SAN_FEE": 
+    if(signed){
+      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      printMenu = [receiptPrintObject, applicationPrintObject];
+    }else{
+      downloadMenu = [receiptDownloadObject];
+      printMenu = [receiptPrintObject];
+    }    
     break;   
     default:
     downloadMenu = [receiptDownloadObject];    
@@ -243,6 +271,7 @@ const getAcknowledgementCard = (
   moduleName
 ) => {
   const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");  
+  let acknowlegmentPurpose = getQueryArg(window.location.href, "purpose") || purpose
   if (purpose === "apply" && status === "success") {
     return {
       header:getHeader(applicationNumber),
@@ -430,7 +459,33 @@ const getAcknowledgementCard = (
       // )
       gotoHomeFooter
     };
-  }  else if (purpose === "pay" && status === "success") {
+  } else if(acknowlegmentPurpose == 'signed' && status == "success"){
+    {
+      return {
+        digitalSignatureHeader,
+        headerdownloadprint: downloadprintMenu(action, state, dispatch, secondNumber, tenant, uiCommonPayConfig, businessService,true),      
+        applicationSuccessCard: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          children: {
+            card: acknowledgementCard({
+              icon: "done",
+              backgroundColor: "#39CB74",
+              header: {
+                labelName: "You have successfully signed the certificate!",
+                labelKey: "BPA_SIGN_CHECKLIST_MESSAGE_HEAD"
+              },
+              body: {
+              },
+              // number: secondNumber
+              // number: secondNumber
+            })
+          }
+        },
+        signedSuccessFooter: signedSuccessFooter(action, state, dispatch, secondNumber, tenant, uiCommonPayConfig, businessService)
+      };
+    }
+  } else if (purpose === "pay" && status === "success") {
     return {
       header,
       headerdownloadprint: downloadprintMenu(action, state, dispatch, secondNumber, tenant, uiCommonPayConfig, businessService),      

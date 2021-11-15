@@ -463,4 +463,86 @@ export const paymentSuccessFooter = (action, state, dispatch, applicationNumber,
   });
 };
 
+export const signedSuccessFooter = (action, state, dispatch, applicationNumber, tenantId, uiCommonPayConfig, businessService) => {
+  return getCommonApplyFooter({
+    //call gotoHome
+    downloadReceiptButton: {
+      componentPath: "Button",
+      props: {
+        variant: "outlined",
+        color: "primary",
+        style: {
+       //   minWidth: "200px",
+          height: "48px",
+          marginRight: "16px"
+        }
+      },
+      children: {
+        downloadReceiptButtonLabel: getLabel({
+          labelName: "DOWNLOAD RECEIPT",
+          labelKey: "BPA_CONFIRMATION_BUTTON_DOWNLOAD_RECEIPT"
+        })
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+          generatePdf(state, dispatch, "receipt_download");
+        }
+      },
+      visible: false
+    },
+    printReceiptButton: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+        style: {
+       //   minWidth: "200px",
+          height: "48px",
+          marginRight: "40px"
+        }
+      },
+      children: {
+        printReceiptButtonLabel: getLabel({
+          labelName: "PRINT RECEIPT",
+          labelKey: "BPA_CONFIRMATION_BUTTON_PRINT_RECEIPT"
+        })
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+          generatePdf(state, dispatch, "receipt_print");
+        }
+      },
+      visible: false
+    },
+    gotoHome: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+        style: {
+      //    minWidth: "200px",
+          height: "48px",
+          marginRight: "16px"
+        }
+      },
+      children: {
+        goToHomeButtonLabel: getLabel({
+          labelName: "GO TO HOME",
+          labelKey: "BPA_COMMON_BUTTON_HOME"
+        })
+      },
+      onClickDefination: {
+        action: "page_change",
+        path:
+          process.env.REACT_APP_SELF_RUNNING === "true"
+            ? `/egov-ui-framework/BPA/search`
+            : `/`
+      },
+       visible: true
+    }
+  });
+}
+
 //Write a function using map to return buttons

@@ -148,7 +148,7 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Employee Updated Successfully",
+              labelName: "Employee Registered Successfully",
               labelKey: "DIGITAL_SIGNATURE_REGISTRATION_SUCCESS_MSG",
             },
           }),

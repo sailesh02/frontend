@@ -52,8 +52,8 @@ export const approvalSuccessFooter = getCommonApplyFooter({
     },
     children: {
       pdfSignButtonLabel: getLabel({
-        labelName: "MR_PDF_SIGN",
-        labelKey: "MR_PDF_SIGN"
+        labelName: "MR_SIGN_PDF",
+        labelKey: "MR_SIGN_PDF"
       })
     },
     onClickDefination: {

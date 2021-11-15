@@ -61,7 +61,7 @@ export const getReviewPdfSignDetails = (isEditable = true) => {
             children: {
               buttonLabel: getLabel({
                 labelName: "PDF SIGN",
-                labelKey: "MR_PDF_SIGN"
+                labelKey: "MR_SIGN_PDF"
               })
             },
             onClickDefination: {

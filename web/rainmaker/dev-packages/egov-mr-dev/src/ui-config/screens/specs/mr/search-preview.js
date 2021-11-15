@@ -175,7 +175,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     'search-preview',
     'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
     'visible',
-    (applicationStatus == 'APPROVED' && ifUserRoleExists('TL_APPROVER') && process.env.REACT_APP_NAME != 'Citizen' && !applicationDigitallySigned) ? true : false
+    (applicationStatus == 'APPROVED' && ifUserRoleExists('MR_APPROVER') && process.env.REACT_APP_NAME != 'Citizen' && !applicationDigitallySigned) ? true : false
   ))
 
 

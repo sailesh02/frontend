@@ -471,6 +471,7 @@ export const generatePDF = async (logo, applicationData = {}, fileName, isCustom
         console.log(e);
     }
 
+    
     logo = logo || localStorage.getItem("UlbLogoForPdf");
     let data;
     let tableborder = {

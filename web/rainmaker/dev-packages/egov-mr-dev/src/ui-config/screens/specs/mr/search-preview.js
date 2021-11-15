@@ -38,11 +38,41 @@ import { getReviewTrade } from "./applyResource/review-trade";
 import { getgroomAddressAndGuardianDetails } from "./applyResource/groom-address-guardian-detail";
 import { getWitnessDetails, getAppointmentDetails, appointmentDetailsInfo } from "./applyResource/witness-detail";
 import { orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
+import { getReviewPdfSignDetails } from "./applyResource/review-pdfSign.js"
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let headerSideText = { word1: "", word2: "" };
 
+const ifUserRoleExists = role => {
+  let userInfo = JSON.parse(getUserInfo());
+  const roles = get(userInfo, "roles");
+  const roleCodes = roles ? roles.map(role => role.code) : [];
+  if (roleCodes.indexOf(role) > -1) {
+    return true;
+  } else return false;
+};
+
+const closePdfSigningPopup = (refreshType) => {
+  store.dispatch(
+    handleField(
+      "search-preview",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      false
+    )
+  )
+  if(refreshType == "preview"){
+    store.dispatch(handleField(
+      'search-preview',
+      'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
+      'visible',
+      false
+    ))
+    store.dispatch(prepareFinalObject("MarriageRegistrations[0].dscDetails[0].documentId",'Yes'))
+  }
+}
 
 const getTradeTypeSubtypeDetails = payload => {
   const tradeUnitsFromApi = get(
@@ -127,6 +157,26 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     {},
     fetchFromReceipt
   );
+
+  let applicationStatus = get(payload,"MarriageRegistrations[0].status")
+
+  dispatch(handleField(
+    'search-preview',
+    'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails',
+    'visible',
+    applicationStatus != 'APPROVED' ? false : true
+  ))
+ 
+  let MarriageRegistrations = get(payload,"MarriageRegistrations")
+  let applicationDigitallySigned = MarriageRegistrations && MarriageRegistrations.length > 0 &&
+  MarriageRegistrations[0].dscDetails && MarriageRegistrations[0].dscDetails[0].documentId ? true : false
+
+  dispatch(handleField(
+    'search-preview',
+    'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
+    'visible',
+    (applicationStatus == 'APPROVED' && ifUserRoleExists('MR_APPROVER') && process.env.REACT_APP_NAME != 'Citizen' && !applicationDigitallySigned) ? true : false
+  ))
 
 
 };
@@ -577,6 +627,8 @@ const estimate = getCommonGrayCard({
 
 const reviewTradeDetails = getReviewTrade(false);
 
+const reviewPdfSignDetails = getReviewPdfSignDetails(false);
+
 //const BrideAddressAndGuardianDetails = getBrideAddressAndGuardianDetails(false);
 
 const reviewDocumentDetails = getReviewDocuments(false, false);
@@ -613,6 +665,7 @@ const setActionItems = (action, object) => {
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
+  reviewPdfSignDetails,
   reviewTradeDetails,
   groomAddressAndGuardianDetails,
   witnessDetails,
@@ -732,6 +785,25 @@ const screenConfig = {
     //     screenKey: "search-preview"
     //   }
     // }
+    pdfSigningPopup : {
+      uiFramework: 'custom-containers-local',
+      componentPath: 'SignPdfContainer',
+      moduleName: "egov-workflow",
+      props: {
+        openPdfSigningPopup: false,
+        closePdfSigningPopup : closePdfSigningPopup,
+        maxWidth: false,
+        moduleName : 'MR',
+        okText :"MR_SIGN_PDF",
+        resetText : "MR_RESET_PDF",
+        dataPath : 'MarriageRegistrations',
+        updateUrl : '/mr-services/v1/_updatedscdetails?',
+        refreshType : 'preview'
+      },
+      children: {
+        popup: {}
+      }
+    }
   }
 };
 

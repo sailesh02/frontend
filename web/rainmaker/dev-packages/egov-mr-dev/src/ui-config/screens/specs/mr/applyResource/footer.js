@@ -1211,6 +1211,12 @@ export const footerReviewTop = (
   let downloadMenu = [];
   let printMenu = [];
 
+  const dscDetails = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject
+  && state.screenConfiguration.preparedFinalObject.MarriageRegistrations && state.screenConfiguration.preparedFinalObject.MarriageRegistrations.length > 0 &&
+  state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0].dscDetails || []
+  const isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
+  dscDetails[0].documentId ? true : false
+
   const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
   const receiptKey = get(uiCommonConfig, "receiptKey");
 
@@ -1304,16 +1310,28 @@ export const footerReviewTop = (
   //console.log(applicationPrintObject, "Nero applicationPrintObject")
   switch (status) {
     case "APPROVED":
-      downloadMenu = [
-        tlCertificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        tlCertificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
+      if(isCeritificateGenerated){
+        downloadMenu = [
+          tlCertificateDownloadObject,
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [
+          tlCertificatePrintObject,
+          receiptPrintObject,
+          applicationPrintObject
+        ];
+      }else{
+        downloadMenu = [
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [
+          receiptPrintObject,
+          applicationPrintObject
+        ];
+      }
+    
       break;
     case "PENDINGAPPROVAL":
 
@@ -1409,6 +1427,12 @@ export const downloadPrintContainer = (
   tenantId
 ) => {
 
+  const dscDetails = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject
+  && state.screenConfiguration.preparedFinalObject.MarriageRegistrations && state.screenConfiguration.preparedFinalObject.MarriageRegistrations.length > 0 &&
+  state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0].dscDetails || []
+  const isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
+  dscDetails[0].documentId ? true : false
+
   /** MenuButton data based on status */
   const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
   const receiptKey = get(uiCommonConfig, "receiptKey");
@@ -1499,16 +1523,28 @@ export const downloadPrintContainer = (
 
   switch (status) {
     case "APPROVED":
-      downloadMenu = [
-        tlCertificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        tlCertificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
+      if(isCeritificateGenerated){
+        downloadMenu = [
+          tlCertificateDownloadObject,
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [
+          tlCertificatePrintObject,
+          receiptPrintObject,
+          applicationPrintObject
+        ];
+      }else{
+        downloadMenu = [
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [
+          receiptPrintObject,
+          applicationPrintObject
+        ];
+      }
+     
       break;
     case "PENDINGAPPROVAL":
     case "FIELDINSPECTION":

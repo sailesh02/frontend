@@ -6,6 +6,7 @@ import {
   applicationSuccessFooter,
   paymentSuccessFooter,
   gotoHomeFooter,
+  signedSuccessFooter,
   approvalSuccessFooter,
   paymentFailureFooter
 } from "../egov-bpa/acknowledgementResource/footers";
@@ -34,6 +35,47 @@ const closePdfSigningPopup = (refreshType) => {
         false
       )
     )
+
+    store.dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.body.children.paragraph",
+        "visible",
+        false
+      )
+    )
+
+    store.dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.tail",
+        "visible",
+        false
+      )
+    )
+    
+    store.dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.body.children.header.children.key.props",
+        "labelKey",
+        "BPA_SIGN_CHECKLIST_MESSAGE_HEAD"
+      )
+    )
+
+    store.dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.header.children.header.children.key.props",
+        "labelKey",
+        "BPA_PDF_SIGNING"
+      )
+    )
+    let consumnerCode = getQueryArg(window.location.href, "consumerCode")
+    let tenantId = getQueryArg(window.location.href, "tenantId")
+    let receiptNumber = getQueryArg(window.location.href, "receiptNumber")
+    let businessService = getQueryArg(window.location.href, "businessService")
+    store.dispatch(setRoute(`/egov-bpa/acknowledgement?status=success&consumerCode=${consumnerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&purpose=signed`))
   }
 }
 export const header = getCommonContainer({
@@ -81,6 +123,7 @@ const getAcknowledgementCard = (
   secondNumber,
   tenant
 ) => {
+  let acknowlegmentPurpose = getQueryArg(window.location.href, "purpose") || purpose
   if (purpose === "apply" && status === "success") {
     return {
       header:getHeader(applicationNumber),
@@ -262,7 +305,33 @@ const getAcknowledgementCard = (
       //   tenant
       // )
     };
-  }  else if (purpose === "pay" && status === "success") {
+  } else if(acknowlegmentPurpose == 'signed' && status == "success"){
+    {
+      return {
+        digitalSignatureHeader,
+        headerdownloadprint: downloadprintMenu(action, state, dispatch, secondNumber, tenant, uiCommonPayConfig, businessService,true),      
+        applicationSuccessCard: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          children: {
+            card: acknowledgementCard({
+              icon: "done",
+              backgroundColor: "#39CB74",
+              header: {
+                labelName: "You have successfully signed the certificate!",
+                labelKey: "BPA_SIGN_CHECKLIST_MESSAGE_HEAD"
+              },
+              body: {
+              },
+              // number: secondNumber
+              // number: secondNumber
+            })
+          }
+        },
+        signedSuccessFooter: signedSuccessFooter(action, state, dispatch, secondNumber, tenant, uiCommonPayConfig, businessService)
+      };
+    }
+  } else if (purpose === "pay" && status === "success") {
     return {
       header,
       applicationSuccessCard: {

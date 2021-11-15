@@ -639,8 +639,8 @@ class SignPdfContainer extends Component {
                   item
                   sm={10}>
                   <Typography component="h2" variant="subheading">
-                    <LabelContainer labelName={"Pdf Signing"}
-                    labelKey={"Pdf Signing"} />
+                    <LabelContainer labelName={"Digitally Sign Application"}
+                    labelKey={"Digitally Sign Application"} />
                   </Typography>
                 </Grid>
                 <Grid

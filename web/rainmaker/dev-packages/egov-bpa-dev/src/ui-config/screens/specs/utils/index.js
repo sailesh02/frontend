@@ -26,7 +26,7 @@ import isEmpty from "lodash/isEmpty";
 import isUndefined from "lodash/isUndefined";
 import set from "lodash/set";
 import { edcrHttpRequest, httpRequest, wrapRequestBody } from "../../../../ui-utils/api";
-import { getBpaSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
+import { getBpaSearchResults, getAppSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
 import "./index.css";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import store from "ui-redux/store";
@@ -5191,6 +5191,19 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
   let bpaDetails = get(
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
+
+  if(!bpaDetails){
+    let applicationNumber = getQueryArg(window.location.href, "consumerCode")
+    let tenantId = getQueryArg(window.location.href, "tenantId")
+    let response = await getAppSearchResults([
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      { key: "applicationNo", value: applicationNumber }
+    ]);
+    bpaDetails = response.BPA[0]
+  }
 
   let currentDate = new Date();
   set(bpaDetails, "additionalDetails.runDate", convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate()));

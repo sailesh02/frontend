@@ -421,8 +421,8 @@ export const paymentSuccessFooter = (action, state, dispatch, applicationNumber,
       },
       children: {
         pdfSignButtonLabel: getLabel({
-          labelName: "MR_PDF_SIGN",
-          labelKey: "MR_PDF_SIGN"
+          labelName: "BPA_PDF_SIGN",
+          labelKey: "BPA_PDF_SIGN"
         })
       },
       onClickDefination: {

@@ -226,7 +226,7 @@ export const searchDigitalSignatureResults = {
     columns: [
       {
         labelName: "Application No",
-        labelKey: "TL_COMMON_TABLE_COL_APP_NO",
+        labelKey: "BPA_COMMON_TABLE_COL_APP_NO",
         options: {
           filter: false,
         }
@@ -236,8 +236,8 @@ export const searchDigitalSignatureResults = {
         labelKey: "TENANT_ID",
       },
       {
-        labelName: "PT_COMMON_TABLE_COL_ACTION_LABEL",
-        labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
+        labelName: "BPA_COMMON_TABLE_COL_ACTION_LABEL",
+        labelKey: "BPA_COMMON_TABLE_COL_ACTION_LABEL",
 	      options: {
           filter: false,
           customBodyRender: (value, tableMeta) => (
@@ -249,8 +249,8 @@ export const searchDigitalSignatureResults = {
       },
     ],
     title: {
-      labelName: "Search Results for Trade License Applications",
-      labelKey: "TL_HOME_SEARCH_RESULTS_DIGITAL_SIGNATURE"
+      labelName: "Search Results for Pending Digitally Signed Applications",
+      labelKey: "BPA_HOME_SEARCH_RESULTS_DIGITAL_SIGNATURE"
     },
     rows: "",
     options: {

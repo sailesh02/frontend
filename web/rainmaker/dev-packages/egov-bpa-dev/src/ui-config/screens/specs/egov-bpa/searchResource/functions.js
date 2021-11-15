@@ -171,10 +171,10 @@ export const getPendingDigitallySignedApplications = async () => {
     let data = []
     data = response && response.dscDetails && response.dscDetails.length > 0 &&
     response.dscDetails.map(item => ({
-      ['TL_COMMON_TABLE_COL_APP_NO']:
+      ['BPA_COMMON_TABLE_COL_APP_NO']:
         item.applicationNumber || "-",
       ['TENANT_ID']: item.tenantId || "-",
-      ['PT_COMMON_TABLE_COL_ACTION_LABEL'] : "Sign Pdf"
+      ['BPA_COMMON_TABLE_COL_ACTION_LABEL'] : "Sign Pdf"
     })) || [];
 
     store.dispatch(

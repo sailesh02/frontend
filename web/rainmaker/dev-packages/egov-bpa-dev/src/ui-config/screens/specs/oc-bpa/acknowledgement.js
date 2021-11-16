@@ -39,7 +39,7 @@ const closePdfSigningPopup = (refreshType) => {
     let tenantId = getQueryArg(window.location.href, "tenantId")
     let receiptNumber = getQueryArg(window.location.href, "receiptNumber")
     let businessService = getQueryArg(window.location.href, "businessService")
-    store.dispatch(setRoute(`/oc-bpa/pdfSigningAcknowledgement?status=success&consumerCode=${consumnerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&purpose=signed`))
+    store.dispatch(setRoute(`/oc-bpa/acknowledgement?status=success&consumerCode=${consumnerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&purpose=signed`))
   }
 }
 export const header = getCommonContainer({

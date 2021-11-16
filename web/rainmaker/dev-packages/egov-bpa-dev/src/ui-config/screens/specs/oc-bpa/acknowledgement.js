@@ -35,47 +35,11 @@ const closePdfSigningPopup = (refreshType) => {
         false
       )
     )
-
-    store.dispatch(
-      handleField(
-        "acknowledgement",
-        "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.body.children.paragraph",
-        "visible",
-        false
-      )
-    )
-
-    store.dispatch(
-      handleField(
-        "acknowledgement",
-        "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.tail",
-        "visible",
-        false
-      )
-    )
-    
-    store.dispatch(
-      handleField(
-        "acknowledgement",
-        "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.body.children.header.children.key.props",
-        "labelKey",
-        "BPA_SIGN_CHECKLIST_MESSAGE_HEAD"
-      )
-    )
-
-    store.dispatch(
-      handleField(
-        "acknowledgement",
-        "components.div.children.header.children.header.children.key.props",
-        "labelKey",
-        "BPA_PDF_SIGNING"
-      )
-    )
     let consumnerCode = getQueryArg(window.location.href, "consumerCode")
     let tenantId = getQueryArg(window.location.href, "tenantId")
     let receiptNumber = getQueryArg(window.location.href, "receiptNumber")
     let businessService = getQueryArg(window.location.href, "businessService")
-    store.dispatch(setRoute(`/egov-bpa/acknowledgement?status=success&consumerCode=${consumnerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&purpose=signed`))
+    store.dispatch(setRoute(`/oc-bpa/pdfSigningAcknowledgement?status=success&consumerCode=${consumnerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&purpose=signed`))
   }
 }
 export const header = getCommonContainer({

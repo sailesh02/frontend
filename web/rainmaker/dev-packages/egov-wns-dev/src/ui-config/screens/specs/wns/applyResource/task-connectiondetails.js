@@ -63,17 +63,17 @@ export const getConnectionDetails = () => {
 }
 
  export const connectionDetailsWater={
-    taskApplicationType : getLabelWithValueForModifiedLabel(
-        {
-            labelName:"Apply For",
-            labelKey: "WS_APPLY_FOR"
-        },
-        {
-            jsonPath: "WaterConnection[0].service",
-        },  {
-            labelKey: "WS_OLD_LABEL_NAME"
-          },
-          { jsonPath: "WaterConnectionOld[0].service" }),
+    // taskApplicationType : getLabelWithValueForModifiedLabel(
+    //     {
+    //         labelName:"Apply For",
+    //         labelKey: "WS_APPLY_FOR"
+    //     },
+    //     {
+    //         jsonPath: "WaterConnection[0].service",
+    //     },  {
+    //         labelKey: "WS_OLD_LABEL_NAME"
+    //       },
+    //       { jsonPath: "WaterConnectionOld[0].service" }),
     
      taskNumberOfTapsPropsed : getLabelWithValueForModifiedLabel(
         {
@@ -98,17 +98,17 @@ export const getConnectionDetails = () => {
 
 }
  export const connectionDetailsSewerage={
-    taskApplicationType : getLabelWithValueForModifiedLabel(
-        {
-            labelName:"Apply For",
-            labelKey: "WS_APPLY_FOR"
-        },
-        {
-            jsonPath: "WaterConnection[0].service",
-        },  {
-            labelKey: "WS_OLD_LABEL_NAME"
-          },
-          { jsonPath: "WaterConnectionOld[0].service" }),
+    // taskApplicationType : getLabelWithValueForModifiedLabel(
+    //     {
+    //         labelName:"Apply For",
+    //         labelKey: "WS_APPLY_FOR"
+    //     },
+    //     {
+    //         jsonPath: "WaterConnection[0].service",
+    //     },  {
+    //         labelKey: "WS_OLD_LABEL_NAME"
+    //       },
+    //       { jsonPath: "WaterConnectionOld[0].service" }),
     taskNoOfClosets : getLabelWithValueForModifiedLabel(
         {
             labelName:"No of closets proposed",
@@ -142,20 +142,20 @@ export const getConnectionDetails = () => {
 }
 
 export const connectionDetailsBoth = {
-    taskApplicationType : getLabelWithValueForModifiedLabel(
-        {
-            labelName:"Apply For",
-            labelKey: "WS_APPLY_FOR"
-        },
-        {
-            jsonPath: "WaterConnection[0].service",
-            callBack: handleService,
-        },  {
-            labelKey: "WS_OLD_LABEL_NAME"
-          },
-          { jsonPath: "WaterConnectionOld[0].service",
-             callBack:handleService,
-         }),
+    // taskApplicationType : getLabelWithValueForModifiedLabel(
+    //     {
+    //         labelName:"Apply For",
+    //         labelKey: "WS_APPLY_FOR"
+    //     },
+    //     {
+    //         jsonPath: "WaterConnection[0].service",
+    //         callBack: handleService,
+    //     },  {
+    //         labelKey: "WS_OLD_LABEL_NAME"
+    //       },
+    //       { jsonPath: "WaterConnectionOld[0].service",
+    //          callBack:handleService,
+    //      }),
     taskNumberOfTapsPropsed : getLabelWithValueForModifiedLabel(
       {
           labelName:"No of Taps Proposed",

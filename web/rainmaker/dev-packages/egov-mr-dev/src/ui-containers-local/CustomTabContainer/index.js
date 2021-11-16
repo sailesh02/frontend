@@ -7,6 +7,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
+import {getPendingDigitallySignedApplications} from '../../ui-config/screens/specs/mr/searchResource/functions'
 
 class MultiItem extends React.Component {
   state = {
@@ -156,7 +157,20 @@ class MultiItem extends React.Component {
   };
 
   onTabClick = tabIndex => {
-    const { state, dispatch } = this.props;
+    const { state, dispatch, isDigitalSignature } = this.props;
+    if(isDigitalSignature && tabIndex == 1){
+      getPendingDigitallySignedApplications(state,dispatch)
+    }
+    if(isDigitalSignature && tabIndex == 0){
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
+          "visible",
+          false
+        )
+      );
+    }
     this.onTabChange(tabIndex, dispatch, state);
     this.setState({ tabIndex });
   };

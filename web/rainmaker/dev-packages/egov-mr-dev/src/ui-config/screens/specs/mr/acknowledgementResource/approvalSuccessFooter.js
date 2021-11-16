@@ -1,5 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generateReceipt from "../../utils/receiptPdf";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const getCommonApplyFooter = children => {
   return {
@@ -33,6 +35,58 @@ export const approvalSuccessFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "page_change",
       path: `/inbox`
+    }
+  },
+  pdfSign: {
+    componentPath: "Button",
+    
+    props: {
+      variant: "outlined",
+      className:"home-footer",
+      color: "primary",
+      style: {
+    //    minWidth: "200px",
+        height: "48px",
+        marginRight: "16px"
+      }
+    },
+    children: {
+      pdfSignButtonLabel: getLabel({
+        labelName: "MR_PDF_SIGN",
+        labelKey: "MR_PDF_SIGN"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+        const tenantId = getQueryArg(window.location.href, "tenantId");
+
+        dispatch(
+          handleField(
+            "acknowledgement",
+            "components.pdfSigningPopup.props",
+            "openPdfSigningPopup",
+            true
+          )
+        )
+        dispatch(
+          handleField(
+            "acknowledgement",
+            "components.pdfSigningPopup.props",
+            "applicationNumber",
+            applicationNumber
+          )
+        )
+        dispatch(
+          handleField(
+            "acknowledgement",
+            "components.pdfSigningPopup.props",
+            "tenantId",
+            tenantId
+          )
+        )
+      }
     }
   }
   // downloadLicenseButton: {

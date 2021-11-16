@@ -209,7 +209,6 @@ const onPdfSignClick = rowData => {
       true
     )
   )
-
   store.dispatch(
     handleField(
       "search",
@@ -218,8 +217,6 @@ const onPdfSignClick = rowData => {
       applicationNumber
     )
   )
-
-
   store.dispatch(
     handleField(
       "search",
@@ -228,8 +225,6 @@ const onPdfSignClick = rowData => {
       tenantId
     )
   )
-  //set tenantId and applicationNumber
-  console.log(rowData)
 }
 const onRowClickForUpdate = rowData => {
   console.log(rowData, "Nero rowData")

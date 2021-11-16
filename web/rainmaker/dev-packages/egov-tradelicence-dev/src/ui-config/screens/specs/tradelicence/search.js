@@ -16,7 +16,7 @@ import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplicatio
 import { getPendingDigitallySignedApplications } from "./searchResource/functions"
 import store from "ui-redux/store";
 
-export const closePdfSigningPopup = (refreshType) => {
+const closePdfSigningPopup = (refreshType) => {
   store.dispatch(
     handleField(
       "search",
@@ -300,7 +300,6 @@ const tradeLicenseSearchAndResult = {
         // tradeLicenseApplication,
         breakAfterSearch: getBreak(),
         searchResults,
-        // searchDigitalSignatureResults
       }
     },
     adhocDialog: {

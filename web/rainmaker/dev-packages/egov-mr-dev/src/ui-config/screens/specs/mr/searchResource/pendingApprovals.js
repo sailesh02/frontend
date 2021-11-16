@@ -1,5 +1,7 @@
-import { getBreak } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getBreak, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
 import React from "react";
+import { tradeLicenseApplication } from "./tradeLicenseApplication";
+import {searchDigitalSignatureResults} from "../searchResource/searchResults"
 
 export const pendingApprovals = {
   uiFramework: "custom-atoms",
@@ -84,3 +86,26 @@ export const pendingApprovals = {
     }
   }
 };
+
+export const showSearches = getCommonContainer({
+  showSearchScreens: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-mr",
+    componentPath: "CustomTabContainer",
+    props: {
+      tabs: [
+        {
+          tabButton: { labelName: "SEARCH APPLICATIONS", labelKey: "MR_SEARCH_APPLICATIONS" },
+          tabContent: { tradeLicenseApplication }
+        },
+        {
+          tabButton: { labelName: "MR_PENDING_DIGITALLY_SIGNED_APPLICATIONS", labelKey: "MR_PENDING_DIGITALLY_SIGNED_APPLICATIONS" },
+          tabContent: { searchDigitalSignatureResults }
+        }
+      ],
+      tabIndex : 0,
+      isDigitalSignature : true,
+    },
+    type: "array"
+  }
+});

@@ -9,6 +9,7 @@ import "./index.css";
 const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic, onClickRegister}) => {
   const fields = form.fields || {};
   const submit = form.submit;
+  const moduleList = localStorage.getItem('storedModulesList')
   const register = form.register;
   return (
     <div>
@@ -26,9 +27,11 @@ const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic, 
                 <Label className="change-password-label-style" label={"CORE_COMMON_CHANGE_PASSWORD"} color="#f89a3f" />
               </Link>
             </div>
-            <div className ="col-xs-6 col-sm-6 col-md-6 col-lg-8" style = {{marginTop: "22px" }}>
-              <Button className="change-password-label-style" variant ='text' onClick = {onClickRegister} primary={true} style={{color :"#f89a3f"}}>DIGITAL SIGNATURE REGISTRATION</Button>              
-            </div>
+            { <div className ="col-xs-6 col-sm-6 col-md-6 col-lg-8" style = {{marginTop: "22px" }}>
+              <Link to = "/user/digital-signature-registration">
+                 <Label className="change-password-label-style" label={"CORE_COMMON_DIGITAL_SIGNATURE_REGISTRATION"} color="#f89a3f" />
+              </Link>
+            </div>}
           </div>
         </div>
       </div>

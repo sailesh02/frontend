@@ -57,6 +57,27 @@ const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
       }
            
     case 'MR':
+        try {
+          let mrSearchResult = await httpRequest(
+            "post",
+            "/mr-services/v1/_search",
+            "",
+            queryObject
+          );
+          let mrAplicationDigitallySigned = mrSearchResult && mrSearchResult.MarriageRegistrations && mrSearchResult.MarriageRegistrations.length > 0 &&
+          mrSearchResult.MarriageRegistrations[0].dscDetails && mrSearchResult.MarriageRegistrations[0].dscDetails[0].documentId ? true : false
+          if(!mrAplicationDigitallySigned){
+            return {
+              RequestInfo : RequestInfo,
+              "MarriageRegistrations":mrSearchResult && mrSearchResult.MarriageRegistrations
+            }
+          }else{
+            return null
+          }
+        
+        }catch(error){
+          return 
+        }
        break
     default:
       return {
@@ -481,34 +502,13 @@ class SignPdfContainer extends Component {
                           return data.Licenses
                         }
                         else if(moduleName == 'MR'){
-                          if(data && data.length > 0 && data[0].marriagePlace && data[0].marriagePlace.additionalDetail && data[0].marriagePlace.additionalDetail.signedPdfDetails && data[0].workflowCode != "MRCORRECTION"){
-                            data[0].marriagePlace.additionalDetail.signedPdfDetails.push({
-                              "additionalDetails": {"uploadedBy": "Employee"},
-                              "documentType": key,
-                              "fileName": key,
-                              "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                              "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                            })
-                          }else if(data && data[0] && !data[0].marriagePlace.additionalDetail){
-                             data[0].marriagePlace.additionalDetail = {}
-                             data[0].marriagePlace.additionalDetail["signedPdfDetails"] = [{
-                              "additionalDetails": {"uploadedBy": "Employee"},
-                              "documentType": key,
-                              "fileName": key,
-                              "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                              "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                            }]
-                          }else{
-                            data[0].marriagePlace.additionalDetail["signedPdfDetails"] = [{
-                              "additionalDetails": {"uploadedBy": "Employee"},
-                              "documentType": key,
-                              "fileName": key,
-                              "fileStore": singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId,
-                              "fileStoreId":singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                            }] 
+                          if(data && data.MarriageRegistrations && data.MarriageRegistrations.length > 0  && data.MarriageRegistrations[0].dscDetails && data.MarriageRegistrations[0].dscDetails.length > 0){
+                            data.MarriageRegistrations[0].dscDetails[0].documentType = key
+                            data.MarriageRegistrations[0].dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                           }
-                          return data
-                        }else{
+                          return data.MarriageRegistrations
+                        }
+                       else{
                           return data
                         }
                         
@@ -639,8 +639,8 @@ class SignPdfContainer extends Component {
                   item
                   sm={10}>
                   <Typography component="h2" variant="subheading">
-                    <LabelContainer labelName={"Pdf Signing"}
-                    labelKey={"Pdf Signing"} />
+                    <LabelContainer labelName={"Digitally Sign Application"}
+                    labelKey={"Digitally Sign Application"} />
                   </Typography>
                 </Grid>
                 <Grid

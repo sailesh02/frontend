@@ -6,7 +6,8 @@ export const fetchData = async (action, state, dispatch) => {
   let queryObject = [{ key: "mobileNumber", value: JSON.parse(getUserInfo()).mobileNumber }]
   let responseWater = [], responseSewerage = [];
   try { responseWater = await getWSMyResults(queryObject, 'CONNECTION', dispatch); } catch (error) { responseWater = []; console.log(error) }
-  try { responseSewerage = await getSWMyResults(queryObject, 'CONNECTION', dispatch); } catch (error) { responseSewerage = []; console.log(error) }
+  try { responseSewerage = [] } catch (error) { responseSewerage = []; console.log(error) }
+  // try { responseSewerage = await getSWMyResults(queryObject, 'CONNECTION', dispatch); } catch (error) { responseSewerage = []; console.log(error) }
   try {
     const water = (responseWater && responseWater.WaterConnection)?responseWater.WaterConnection:[]
     const sewerage = (responseSewerage && responseSewerage.SewerageConnections)?responseSewerage.SewerageConnections:[]

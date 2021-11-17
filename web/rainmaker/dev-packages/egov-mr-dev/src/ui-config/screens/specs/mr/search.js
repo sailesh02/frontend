@@ -14,6 +14,7 @@ import { pendingApprovals, showSearches } from "./searchResource/pendingApproval
 import { searchResults } from "./searchResource/searchResults";
 import { getPendingDigitallySignedApplications } from "./searchResource/functions"
 import store from "ui-redux/store";
+import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplication";
 
 const closePdfSigningPopup = (refreshType) => {
   store.dispatch(

@@ -37,58 +37,58 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       path: `/inbox`
     }
   },
-  pdfSign: {
-    componentPath: "Button",
+  // pdfSign: {
+  //   componentPath: "Button",
     
-    props: {
-      variant: "outlined",
-      className:"home-footer",
-      color: "primary",
-      style: {
-    //    minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      pdfSignButtonLabel: getLabel({
-        labelName: "TL_PDF_SIGN",
-        labelKey: "TL_PDF_SIGN"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-        const tenantId = getQueryArg(window.location.href, "tenantId");
+  //   props: {
+  //     variant: "outlined",
+  //     className:"home-footer",
+  //     color: "primary",
+  //     style: {
+  //   //    minWidth: "200px",
+  //       height: "48px",
+  //       marginRight: "16px"
+  //     }
+  //   },
+  //   children: {
+  //     pdfSignButtonLabel: getLabel({
+  //       labelName: "TL_PDF_SIGN",
+  //       labelKey: "TL_PDF_SIGN"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: (state, dispatch) => {
+  //       const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  //       const tenantId = getQueryArg(window.location.href, "tenantId");
 
-        dispatch(
-          handleField(
-            "acknowledgement",
-            "components.pdfSigningPopup.props",
-            "openPdfSigningPopup",
-            true
-          )
-        )
-        dispatch(
-          handleField(
-            "acknowledgement",
-            "components.pdfSigningPopup.props",
-            "applicationNumber",
-            applicationNumber
-          )
-        )
-        dispatch(
-          handleField(
-            "acknowledgement",
-            "components.pdfSigningPopup.props",
-            "tenantId",
-            tenantId
-          )
-        )
-      }
-    }
-  }
+  //       dispatch(
+  //         handleField(
+  //           "acknowledgement",
+  //           "components.pdfSigningPopup.props",
+  //           "openPdfSigningPopup",
+  //           true
+  //         )
+  //       )
+  //       dispatch(
+  //         handleField(
+  //           "acknowledgement",
+  //           "components.pdfSigningPopup.props",
+  //           "applicationNumber",
+  //           applicationNumber
+  //         )
+  //       )
+  //       dispatch(
+  //         handleField(
+  //           "acknowledgement",
+  //           "components.pdfSigningPopup.props",
+  //           "tenantId",
+  //           tenantId
+  //         )
+  //       )
+  //     }
+  //   }
+  // }
   // downloadLicenseButton: {
   //   componentPath: "Button",
   //   props: {

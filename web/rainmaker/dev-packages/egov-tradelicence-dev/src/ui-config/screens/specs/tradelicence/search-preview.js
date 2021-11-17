@@ -182,23 +182,23 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 
   let applicationStatus = get(payload,"Licenses[0].status")
 
-  dispatch(handleField(
-    'search-preview',
-    'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails',
-    'visible',
-    applicationStatus != 'APPROVED' ? false : true
-  ))
+  // dispatch(handleField(
+  //   'search-preview',
+  //   'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails',
+  //   'visible',
+  //   applicationStatus != 'APPROVED' ? false : true
+  // ))
  
   let Licenses = get(payload,"Licenses")
   let applicationDigitallySigned = Licenses && Licenses.length > 0 && Licenses[0].tradeLicenseDetail &&
   Licenses[0].tradeLicenseDetail.dscDetails && Licenses[0].tradeLicenseDetail.dscDetails[0].documentId ? true : false
 
-  dispatch(handleField(
-    'search-preview',
-    'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
-    'visible',
-    (applicationStatus == 'APPROVED' && ifUserRoleExists('TL_APPROVER') && process.env.REACT_APP_NAME != 'Citizen' && !applicationDigitallySigned) ? true : false
-  ))
+  // dispatch(handleField(
+  //   'search-preview',
+  //   'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
+  //   'visible',
+  //   (applicationStatus == 'APPROVED' && ifUserRoleExists('TL_APPROVER') && process.env.REACT_APP_NAME != 'Citizen' && !applicationDigitallySigned) ? true : false
+  // ))
 
 };
 
@@ -560,7 +560,7 @@ export const tradeReviewDetails = getCommonCard({
     "TL_PAYMENT_VIEW_BREAKUP",
     "search-preview"
   ),
-  reviewPdfSignDetails,
+  // reviewPdfSignDetails,
   reviewTradeDetails,
   reviewOwnerDetails,
   reviewDocumentDetails
@@ -654,22 +654,22 @@ const screenConfig = {
         screenKey: "search-preview"
       }
     },
-    pdfSigningPopup : {
-      uiFramework: 'custom-containers-local',
-      componentPath: 'SignPdfContainer',
-      moduleName: "egov-workflow",
-      props: {
-        openPdfSigningPopup: false,
-        closePdfSigningPopup : closePdfSigningPopup,
-        maxWidth: false,
-        moduleName : 'NewTL',
-        okText :"TL_SIGN_PDF",
-        resetText : "TL_RESET_PDF",
-        dataPath : 'Licenses',
-        refreshType : 'preview',
-        updateUrl : '/tl-services/v1/_updatedscdetails?'
-      }
-    }
+    // pdfSigningPopup : {
+    //   uiFramework: 'custom-containers-local',
+    //   componentPath: 'SignPdfContainer',
+    //   moduleName: "egov-workflow",
+    //   props: {
+    //     openPdfSigningPopup: false,
+    //     closePdfSigningPopup : closePdfSigningPopup,
+    //     maxWidth: false,
+    //     moduleName : 'NewTL',
+    //     okText :"TL_SIGN_PDF",
+    //     resetText : "TL_RESET_PDF",
+    //     dataPath : 'Licenses',
+    //     refreshType : 'preview',
+    //     updateUrl : '/tl-services/v1/_updatedscdetails?'
+    //   }
+    // }
   }
 };
 

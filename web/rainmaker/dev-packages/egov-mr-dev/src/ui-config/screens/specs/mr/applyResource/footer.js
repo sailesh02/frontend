@@ -1214,9 +1214,9 @@ export const footerReviewTop = (
   const dscDetails = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject
   && state.screenConfiguration.preparedFinalObject.MarriageRegistrations && state.screenConfiguration.preparedFinalObject.MarriageRegistrations.length > 0 &&
   state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0].dscDetails || []
-  const isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
-  dscDetails[0].documentId ? true : false
-
+  // const isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
+  // dscDetails[0].documentId ? true : false
+  const isCeritificateGenerated = true
   const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
   const receiptKey = get(uiCommonConfig, "receiptKey");
 
@@ -1430,9 +1430,9 @@ export const downloadPrintContainer = (
   const dscDetails = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject
   && state.screenConfiguration.preparedFinalObject.MarriageRegistrations && state.screenConfiguration.preparedFinalObject.MarriageRegistrations.length > 0 &&
   state.screenConfiguration.preparedFinalObject.MarriageRegistrations[0].dscDetails || []
-  const isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
-  dscDetails[0].documentId ? true : false
-
+  // const isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
+  // dscDetails[0].documentId ? true : false
+  const isCeritificateGenerated = true
   /** MenuButton data based on status */
   const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
   const receiptKey = get(uiCommonConfig, "receiptKey");

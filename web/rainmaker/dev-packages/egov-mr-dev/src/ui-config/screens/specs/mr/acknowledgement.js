@@ -793,25 +793,25 @@ const screenConfig = {
         className: "common-div-css"
       }
     },
-    pdfSigningPopup : {
-      uiFramework: 'custom-containers-local',
-      componentPath: 'SignPdfContainer',
-      moduleName: "egov-workflow",
-      props: {
-        openPdfSigningPopup: false,
-        closePdfSigningPopup : closePdfSigningPopup,
-        maxWidth: false,
-        moduleName : 'MR',
-        okText :"MR_SIGN_PDF",
-        resetText : "MR_RESET_PDF",
-        dataPath : 'MarriageRegistrations',
-        refreshType : "acknowledgement",
-        updateUrl : '/mr-services/v1/_updatedscdetails?'
-      },
-      children: {
-        popup: {}
-      }
-    }
+    // pdfSigningPopup : {
+    //   uiFramework: 'custom-containers-local',
+    //   componentPath: 'SignPdfContainer',
+    //   moduleName: "egov-workflow",
+    //   props: {
+    //     openPdfSigningPopup: false,
+    //     closePdfSigningPopup : closePdfSigningPopup,
+    //     maxWidth: false,
+    //     moduleName : 'MR',
+    //     okText :"MR_SIGN_PDF",
+    //     resetText : "MR_RESET_PDF",
+    //     dataPath : 'MarriageRegistrations',
+    //     refreshType : "acknowledgement",
+    //     updateUrl : '/mr-services/v1/_updatedscdetails?'
+    //   },
+    //   children: {
+    //     popup: {}
+    //   }
+    // }
   },
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");

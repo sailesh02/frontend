@@ -736,25 +736,25 @@ const screenConfig = {
         className: "common-div-css"
       },
     },
-    pdfSigningPopup : {
-      uiFramework: 'custom-containers-local',
-      componentPath: 'SignPdfContainer',
-      moduleName: "egov-workflow",
-      props: {
-        openPdfSigningPopup: false,
-        closePdfSigningPopup : closePdfSigningPopup,
-        maxWidth: false,
-        moduleName : 'NewTL',
-        okText :"TL_SIGN_PDF",
-        resetText : "TL_RESET_PDF",
-        dataPath : 'Licenses',
-        refreshType : "acknowledgement",
-        updateUrl : '/tl-services/v1/_updatedscdetails?'
-      },
-      children: {
-        popup: {}
-      }
-    }
+    // pdfSigningPopup : {
+    //   uiFramework: 'custom-containers-local',
+    //   componentPath: 'SignPdfContainer',
+    //   moduleName: "egov-workflow",
+    //   props: {
+    //     openPdfSigningPopup: false,
+    //     closePdfSigningPopup : closePdfSigningPopup,
+    //     maxWidth: false,
+    //     moduleName : 'NewTL',
+    //     okText :"TL_SIGN_PDF",
+    //     resetText : "TL_RESET_PDF",
+    //     dataPath : 'Licenses',
+    //     refreshType : "acknowledgement",
+    //     updateUrl : '/tl-services/v1/_updatedscdetails?'
+    //   },
+    //   children: {
+    //     popup: {}
+    //   }
+    // }
   },
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");

@@ -160,23 +160,23 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 
   let applicationStatus = get(payload,"MarriageRegistrations[0].status")
 
-  dispatch(handleField(
-    'search-preview',
-    'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails',
-    'visible',
-    applicationStatus != 'APPROVED' ? false : true
-  ))
+  // dispatch(handleField(
+  //   'search-preview',
+  //   'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails',
+  //   'visible',
+  //   applicationStatus != 'APPROVED' ? false : true
+  // ))
  
   let MarriageRegistrations = get(payload,"MarriageRegistrations")
   let applicationDigitallySigned = MarriageRegistrations && MarriageRegistrations.length > 0 &&
   MarriageRegistrations[0].dscDetails && MarriageRegistrations[0].dscDetails[0].documentId ? true : false
 
-  dispatch(handleField(
-    'search-preview',
-    'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
-    'visible',
-    (applicationStatus == 'APPROVED' && ifUserRoleExists('MR_APPROVER') && process.env.REACT_APP_NAME != 'Citizen' && !applicationDigitallySigned) ? true : false
-  ))
+  // dispatch(handleField(
+  //   'search-preview',
+  //   'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
+  //   'visible',
+  //   (applicationStatus == 'APPROVED' && ifUserRoleExists('MR_APPROVER') && process.env.REACT_APP_NAME != 'Citizen' && !applicationDigitallySigned) ? true : false
+  // ))
 
 
 };
@@ -665,7 +665,7 @@ const setActionItems = (action, object) => {
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
-  reviewPdfSignDetails,
+  // reviewPdfSignDetails,
   reviewTradeDetails,
   groomAddressAndGuardianDetails,
   witnessDetails,
@@ -785,25 +785,25 @@ const screenConfig = {
     //     screenKey: "search-preview"
     //   }
     // }
-    pdfSigningPopup : {
-      uiFramework: 'custom-containers-local',
-      componentPath: 'SignPdfContainer',
-      moduleName: "egov-workflow",
-      props: {
-        openPdfSigningPopup: false,
-        closePdfSigningPopup : closePdfSigningPopup,
-        maxWidth: false,
-        moduleName : 'MR',
-        okText :"MR_SIGN_PDF",
-        resetText : "MR_RESET_PDF",
-        dataPath : 'MarriageRegistrations',
-        updateUrl : '/mr-services/v1/_updatedscdetails?',
-        refreshType : 'preview'
-      },
-      children: {
-        popup: {}
-      }
-    }
+    // pdfSigningPopup : {
+    //   uiFramework: 'custom-containers-local',
+    //   componentPath: 'SignPdfContainer',
+    //   moduleName: "egov-workflow",
+    //   props: {
+    //     openPdfSigningPopup: false,
+    //     closePdfSigningPopup : closePdfSigningPopup,
+    //     maxWidth: false,
+    //     moduleName : 'MR',
+    //     okText :"MR_SIGN_PDF",
+    //     resetText : "MR_RESET_PDF",
+    //     dataPath : 'MarriageRegistrations',
+    //     updateUrl : '/mr-services/v1/_updatedscdetails?',
+    //     refreshType : 'preview'
+    //   },
+    //   children: {
+    //     popup: {}
+    //   }
+    // }
   }
 };
 

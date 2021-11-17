@@ -21,7 +21,7 @@ import store from "ui-redux/store";
 //import { LabelContainer } from "egov-ui-framework/ui-containers";
 
 export const searchApiCall = async (state, dispatch) => {
-  showHideDigitalSingedApplicationsTable (false)
+  // showHideDigitalSingedApplicationsTable (false)
   showHideTable(false, dispatch);
   let queryObject = [
     {

@@ -1050,10 +1050,12 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
   ];
   const LicensesPayload = await getSearchResults(queryObject);
   const updatedLicenses = get(LicensesPayload, "Licenses");
-  const oldFileStoreId = get(updatedLicenses[0], "fileStoreId") || getFileStore(pdfKey, LicensesPayload && LicensesPayload.Licenses && LicensesPayload.Licenses.length > 0 && 
-    LicensesPayload.Licenses[0].tradeLicenseDetail && LicensesPayload.Licenses[0].tradeLicenseDetail.dscDetails || [])
+  const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
+  // const oldFileStoreId = get(updatedLicenses[0], "fileStoreId") || getFileStore(pdfKey, LicensesPayload && LicensesPayload.Licenses && LicensesPayload.Licenses.length > 0 && 
+    // LicensesPayload.Licenses[0].tradeLicenseDetail && LicensesPayload.Licenses[0].tradeLicenseDetail.dscDetails || [])
   if (oldFileStoreId) {
-    downloadReceiptFromFilestoreID(oldFileStoreId, mode, tenantId)
+    downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+    // downloadReceiptFromFilestoreID(oldFileStoreId, mode, tenantId)
   }
   else {
     try {

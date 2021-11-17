@@ -940,8 +940,9 @@ export const footerReviewTop = (
   && state.screenConfiguration.preparedFinalObject.Licenses && state.screenConfiguration.preparedFinalObject.Licenses.length > 0 &&
   state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail && 
   state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.dscDetails
-  let isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
-  dscDetails[0].documentId ? true : false
+  // let isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
+  // dscDetails[0].documentId ? true : false
+  let isCeritificateGenerated = true
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
@@ -1199,8 +1200,9 @@ export const downloadPrintContainer = (
   && state.screenConfiguration.preparedFinalObject.Licenses && state.screenConfiguration.preparedFinalObject.Licenses.length > 0 &&
   state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail && 
   state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.dscDetails
-  const isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
-  dscDetails[0].documentId ? true : false
+  // const isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
+  // dscDetails[0].documentId ? true : false
+  let isCeritificateGenerated = true
   const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
   const receiptKey = get(uiCommonConfig, "receiptKey");
   let downloadMenu = [];

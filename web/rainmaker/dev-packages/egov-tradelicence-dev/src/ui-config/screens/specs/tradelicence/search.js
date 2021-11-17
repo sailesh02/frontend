@@ -296,8 +296,8 @@ const tradeLicenseSearchAndResult = {
           }
         },
         pendingApprovals,
-        showSearches,
-        // tradeLicenseApplication,
+        // showSearches,
+        tradeLicenseApplication,
         breakAfterSearch: getBreak(),
         searchResults,
       }
@@ -315,25 +315,25 @@ const tradeLicenseSearchAndResult = {
         popup: {}
       }
     },
-    pdfSigningPopup : {
-      uiFramework: 'custom-containers-local',
-      componentPath: 'SignPdfContainer',
-      moduleName: "egov-workflow",
-      props: {
-        openPdfSigningPopup: false,
-        closePdfSigningPopup : closePdfSigningPopup,
-        maxWidth: false,
-        moduleName : 'NewTL',
-        okText :"TL_SIGN_PDF",
-        resetText : "TL_RESET_PDF",
-        dataPath : 'Licenses',
-        updateUrl : '/tl-services/v1/_updatedscdetails?',
-        refreshType : 'Table'
-      },
-      children: {
-        popup: {}
-      }
-    }
+    // pdfSigningPopup : {
+    //   uiFramework: 'custom-containers-local',
+    //   componentPath: 'SignPdfContainer',
+    //   moduleName: "egov-workflow",
+    //   props: {
+    //     openPdfSigningPopup: false,
+    //     closePdfSigningPopup : closePdfSigningPopup,
+    //     maxWidth: false,
+    //     moduleName : 'NewTL',
+    //     okText :"TL_SIGN_PDF",
+    //     resetText : "TL_RESET_PDF",
+    //     dataPath : 'Licenses',
+    //     updateUrl : '/tl-services/v1/_updatedscdetails?',
+    //     refreshType : 'Table'
+    //   },
+    //   children: {
+    //     popup: {}
+    //   }
+    // }
   }
 };
 

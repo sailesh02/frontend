@@ -182,8 +182,8 @@ const tradeLicenseSearchAndResult = {
           }
         },
         pendingApprovals,
-        showSearches,
-        // tradeLicenseApplication,
+        // showSearches,
+        tradeLicenseApplication,
         breakAfterSearch: getBreak(),
         searchResults,
       }
@@ -201,25 +201,25 @@ const tradeLicenseSearchAndResult = {
         popup: {}
       }
     },
-    pdfSigningPopup : {
-      uiFramework: 'custom-containers-local',
-      componentPath: 'SignPdfContainer',
-      moduleName: "egov-workflow",
-      props: {
-        openPdfSigningPopup: false,
-        closePdfSigningPopup : closePdfSigningPopup,
-        maxWidth: false,
-        moduleName : 'MR',
-        okText :"MR_SIGN_PDF",
-        resetText : "MR_RESET_PDF",
-        dataPath : 'MarriageRegistrations',
-        updateUrl : '/mr-services/v1/_updatedscdetails?',
-        refreshType : 'Table'
-      },
-      children: {
-        popup: {}
-      }
-    }
+    // pdfSigningPopup : {
+    //   uiFramework: 'custom-containers-local',
+    //   componentPath: 'SignPdfContainer',
+    //   moduleName: "egov-workflow",
+    //   props: {
+    //     openPdfSigningPopup: false,
+    //     closePdfSigningPopup : closePdfSigningPopup,
+    //     maxWidth: false,
+    //     moduleName : 'MR',
+    //     okText :"MR_SIGN_PDF",
+    //     resetText : "MR_RESET_PDF",
+    //     dataPath : 'MarriageRegistrations',
+    //     updateUrl : '/mr-services/v1/_updatedscdetails?',
+    //     refreshType : 'Table'
+    //   },
+    //   children: {
+    //     popup: {}
+    //   }
+    // }
   }
 };
 

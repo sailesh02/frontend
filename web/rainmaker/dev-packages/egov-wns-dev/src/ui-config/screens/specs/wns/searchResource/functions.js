@@ -65,7 +65,10 @@ const renderSearchConnectionTable = async (state, dispatch) => {
         console.log(payloadbillingPeriod);
       } catch (err) { console.log(err) }
       let getSearchResult = getSearchResults(queryObject)
-      let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      // let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      let getSearchResultForSewerage = {
+        "SewerageConnections" : []
+      }
       let finalArray = [];
       let searchWaterConnectionResults, searcSewerageConnectionResults;
       try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = []; console.log(error) }
@@ -201,7 +204,10 @@ const renderSearchApplicationTable = async (state, dispatch) => {
         getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       } else {
         getSearchResult = getSearchResults(queryObject),
-        getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+        getSearchResultForSewerage = {
+          "SewerageConnections" : []
+        }
+        // getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       }
       let finalArray = [];
       let searchWaterConnectionResults, searcSewerageConnectionResults;

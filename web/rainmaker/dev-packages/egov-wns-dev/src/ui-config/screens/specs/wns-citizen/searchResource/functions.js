@@ -75,7 +75,10 @@ export const searchApiCall = async (state, dispatch) => {
       } catch (err) { console.log(err) }
       queryObject.push({ key: "searchType", value: "CONNECTION" });
       let getSearchResult = await getSearchResults(queryObject)
-      let getSearchResultForSewerage = await getSearchResultsForSewerage(queryObject, dispatch)
+      // let getSearchResultForSewerage = await getSearchResultsForSewerage(queryObject, dispatch)
+      let getSearchResultForSewerage = {
+        "SewerageConnections" : []
+      }      
       let finalArray = [];
       let searchWaterConnectionResults, searcSewerageConnectionResults;
       try { searchWaterConnectionResults =  getSearchResult } catch (error) { finalArray = []; console.log(error) }

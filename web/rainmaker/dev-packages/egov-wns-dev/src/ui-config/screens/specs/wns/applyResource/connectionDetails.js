@@ -39,8 +39,8 @@ export const OwnerInfoCard = getCommonCard({
   ),
 
   tradeUnitCardContainer: getCommonContainer({
-    getCheckboxContainer,
-
+    // getCheckboxContainer,
+    
     numberOfTaps: getTextField({
       label: { labelKey: "WS_CONN_DETAIL_NO_OF_TAPS" },
       placeholder: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS_PLACEHOLDER" },

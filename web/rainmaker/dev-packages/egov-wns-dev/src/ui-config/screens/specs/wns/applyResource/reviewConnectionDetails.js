@@ -840,7 +840,7 @@ const getConnectionDetails = () => {
 
 export const renderService = () => {
   return getCommonContainer({
-    taskApplicationType,
+    // taskApplicationType,
     taskNumberOfTapsPropsed,
     taskPipeSizeProposed,
     taskNoOfClosets,

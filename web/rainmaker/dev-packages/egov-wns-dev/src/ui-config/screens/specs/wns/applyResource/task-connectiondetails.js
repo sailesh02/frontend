@@ -169,41 +169,41 @@ export const connectionDetailsBoth = {
       },
       { jsonPath: "WaterConnectionOld[0].proposedTaps",
         callBack: handleConnectionDetails, }),      
-    taskNoOfClosets : getLabelWithValueForModifiedLabel(
-        {
-            labelName:"No of closets proposed",
-            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
-        },
-        { jsonPath: "SewerageConnection[0].proposedWaterClosets",
-        callBack: handleConnectionDetails },  {
-            labelKey: "WS_OLD_LABEL_NAME"
-          },
-          { jsonPath: "SewerageConnectionOld[0].proposedWaterClosets",
-          callBack: handleConnectionDetails, }
-    ),
-     taskNoOfToilets : getLabelWithValueForModifiedLabel(
-        {
-            labelName:"No of toilets proposed",
-            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TOILETS_PROPOSED"
-        },
-        { jsonPath: "SewerageConnection[0].proposedToilets",
-        callBack: handleConnectionDetails, },  {
-            labelKey: "WS_OLD_LABEL_NAME"
-          },
-          { jsonPath: "SewerageConnectionOld[0].proposedToilets",
-          callBack: handleConnectionDetails, }
-    ),
-    taskPipeSizeProposed : getLabelWithValueForModifiedLabel(
-        {
-            labelName:"No of pipe size proposed",
-            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
-        },
-        { jsonPath: "SewerageConnection[0].pipeSize",
-        callBack: handlePipeSizeProposed, },  {
-            labelKey: "WS_OLD_LABEL_NAME"
-          },
-          { jsonPath: "SewerageConnectionOld[0].pipeSize",
-          callBack: handlePipeSizeProposed, }) 
+    // taskNoOfClosets : getLabelWithValueForModifiedLabel(
+    //     {
+    //         labelName:"No of closets proposed",
+    //         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
+    //     },
+    //     { jsonPath: "SewerageConnection[0].proposedWaterClosets",
+    //     callBack: handleConnectionDetails },  {
+    //         labelKey: "WS_OLD_LABEL_NAME"
+    //       },
+    //       { jsonPath: "SewerageConnectionOld[0].proposedWaterClosets",
+    //       callBack: handleConnectionDetails, }
+    // ),
+    //  taskNoOfToilets : getLabelWithValueForModifiedLabel(
+    //     {
+    //         labelName:"No of toilets proposed",
+    //         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TOILETS_PROPOSED"
+    //     },
+    //     { jsonPath: "SewerageConnection[0].proposedToilets",
+    //     callBack: handleConnectionDetails, },  {
+    //         labelKey: "WS_OLD_LABEL_NAME"
+    //       },
+    //       { jsonPath: "SewerageConnectionOld[0].proposedToilets",
+    //       callBack: handleConnectionDetails, }
+    // ),
+    // taskPipeSizeProposed : getLabelWithValueForModifiedLabel(
+    //     {
+    //         labelName:"No of pipe size proposed",
+    //         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
+    //     },
+    //     { jsonPath: "SewerageConnection[0].pipeSize",
+    //     callBack: handlePipeSizeProposed, },  {
+    //         labelKey: "WS_OLD_LABEL_NAME"
+    //       },
+    //       { jsonPath: "SewerageConnectionOld[0].pipeSize",
+    //       callBack: handlePipeSizeProposed, }) 
 }
 
 // const connectionDetails=(applicationNumber!==null&&applicationNumber!==undefined)?(applicationNumber.includes("WS"))?connectionDetailsWater:connectionDetailsSewerage:"";

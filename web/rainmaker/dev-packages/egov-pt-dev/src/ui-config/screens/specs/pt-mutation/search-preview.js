@@ -394,6 +394,17 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
       value: 'PT.MUTATION'
     }
   ];
+  const acknowldgementNumberNoRedirect = getQueryArg(
+    window.location.href,
+    "applicationNumber"
+  ); 
+
+  dispatch(handleField(
+    "search-preview",
+    "components.div.children.taskStatus",
+    "props.acknowldgementNumberNoRedirect",
+    acknowldgementNumberNoRedirect
+  ))
   const responsePayments = await getpayments(queryObj)
   dispatch(prepareFinalObject("Payments", get(responsePayments, "Payments", [])));
 }

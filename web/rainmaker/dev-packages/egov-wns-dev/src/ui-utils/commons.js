@@ -1094,8 +1094,8 @@ export const applyForWater = async (state, dispatch) => {
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("applyScreen.locality",response.WaterConnection[0].additionalDetails.locality))
                 dispatch(prepareFinalObject("modifyAppCreated", true));
-                if(response && response.WaterConnection && response.WaterConnection[0] && response.WaterConnection[0].noOfFlats &&
-                parseInt(response.waterConnection[0].noOfFlats) > 0){
+                if(response && response.WaterConnection && response.WaterConnection.length > 0 && response.WaterConnection[0] && response.WaterConnection[0].noOfFlats &&
+                parseInt(response.WaterConnection[0].noOfFlats) > 0){
                     dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));
                 }else{
                     dispatch(prepareFinalObject("applyScreen.apartment", 'No'));
@@ -1112,8 +1112,8 @@ export const applyForWater = async (state, dispatch) => {
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("applyScreen.locality",response.WaterConnection[0].additionalDetails.locality))
                 dispatch(prepareFinalObject("ownershipTransferCreated", true));
-                if(response && response.WaterConnection && response.WaterConnection[0] && response.WaterConnection[0].noOfFlats &&
-                parseInt(response.waterConnection[0].noOfFlats) > 0){
+                if(response && response.WaterConnection && response.WaterConnection.length > 0 && response.WaterConnection[0] && response.WaterConnection[0].noOfFlats &&
+                parseInt(response.WaterConnection[0].noOfFlats) > 0){
                     dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));
                 }else{
                     dispatch(prepareFinalObject("applyScreen.apartment", 'No'));
@@ -1220,7 +1220,7 @@ export const applyForSewerage = async (state, dispatch) => {
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
                 dispatch(prepareFinalObject("applyScreen.locality",response.SewerageConnections[0].additionalDetails.locality))
                 dispatch(prepareFinalObject("ownershipTransferCreated", true));
-                if(response && response.SewerageConnections && response.SewerageConnections[0] && response.SewerageConnections[0].noOfFlats &&
+                if(response && response.SewerageConnections && response.SewerageConnections.length > 0 && response.SewerageConnections[0] && response.SewerageConnections[0].noOfFlats &&
                     parseInt(response.SewerageConnections[0].noOfFlats) > 0){
                         dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));
                 }else{
@@ -1236,7 +1236,7 @@ export const applyForSewerage = async (state, dispatch) => {
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
                 dispatch(prepareFinalObject("applyScreen.locality",response.SewerageConnections[0].additionalDetails.locality))
-                if(response && response.SewerageConnections && response.SewerageConnections[0] && response.SewerageConnections[0].noOfFlats &&
+                if(response && response.SewerageConnections && response.SewerageConnections.length > 0 && response.SewerageConnections[0] && response.SewerageConnections[0].noOfFlats &&
                     parseInt(response.SewerageConnections[0].noOfFlats) > 0){
                     dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));
                 }else{

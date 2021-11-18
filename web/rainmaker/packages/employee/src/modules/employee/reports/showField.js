@@ -33,12 +33,12 @@ export default class ShowField extends Component {
 
     let dropDownData = [];
 
-    if (!isEmpty(obj.defaultValue)) {
-      dropDownData.push({
-        value: "All",
-        label: "All",
-      });
-    }
+    // if (!isEmpty(obj.defaultValue)) {
+    //   dropDownData.push({
+    //     value: "All",
+    //     label: "All",
+    //   });
+    // }
 
     if (typeof obj.defaultValue == "object") {
       for (var variable in obj.defaultValue) {
@@ -57,6 +57,7 @@ export default class ShowField extends Component {
               value={this.props.value}
               id={obj.label.split(".").join("-")}
               fullWidth={true}
+              hintText={getLocaleLabels(`${obj.label}_PLACE`, `${obj.label}_PLACE`)}
               disabled={obj.disabled ? true : false}
               floatingLabelFixed={true}
               floatingLabelText={

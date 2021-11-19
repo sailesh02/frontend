@@ -32,8 +32,8 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
@@ -58,8 +58,8 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
@@ -84,8 +84,8 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
@@ -110,8 +110,8 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
@@ -136,8 +136,8 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
@@ -162,8 +162,8 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
@@ -188,8 +188,8 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
@@ -214,8 +214,8 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
@@ -240,8 +240,8 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
@@ -266,8 +266,8 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
@@ -292,8 +292,8 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
@@ -318,8 +318,8 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
@@ -344,8 +344,8 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else{
-            amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
@@ -377,8 +377,8 @@ const formConfig = {
           for (const [key, value] of Object.entries(additionalDetails)) {
             if(key == "usageExemption" || key == "ownershipExemption"){
               amountArray.push(Number(-value))
-            }else{
-              amountArray.push(Number(value)) // "a 5", "b 7", "c 9"
+            }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+              amountArray.push(Number(value))
             }
           }
           const total = amountArray.reduce((a, b) => a + b, 0)

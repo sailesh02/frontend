@@ -369,10 +369,11 @@ const formConfig = {
   afterInitForm: (action, store, dispatch) => {
     try{
       const mode = getQueryArg(window.location.href, "mode");
-      if(mode == "editDemandDetails"){
+      if(mode == "editDemandDetails" || mode == "WORKFLOWEDIT"){
         let state = store.getState();
-        const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties && state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
-        if(additionalDetails){
+        const additionalDetails = mode == "editDemandDetails" ? state.screenConfiguration.preparedFinalObject.Properties && state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails :
+        mode == "WORKFLOWEDIT" ? state.screenConfiguration.preparedFinalObject.newProperties && state.screenConfiguration.preparedFinalObject.newProperties[0].additionalDetails : {}
+        if(additionalDetails && additionalDetails.hasOwnProperty('holdingTax')){
           let amountArray = []
           for (const [key, value] of Object.entries(additionalDetails)) {
             if(key == "usageExemption" || key == "ownershipExemption"){

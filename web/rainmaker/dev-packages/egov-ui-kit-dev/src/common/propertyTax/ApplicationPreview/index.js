@@ -377,7 +377,8 @@ class ApplicationPreview extends Component {
     }
     return <div>
       <Screen className={""}>
-      <PTHeader header={header} subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={applicationNumber} downloadPrintButton={true} download={() => this.download()} print={() => this.print()}/>        <div className="form-without-button-cont-generic" >
+      <PTHeader header={header} subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={applicationNumber} downloadPrintButton={true} download={() => this.download()} print={() => this.print()}/>        
+      <div className="form-without-button-cont-generic" >
           <div>
             <WorkFlowContainer dataPath={applicationType.dataPath}
               moduleName={applicationType.moduleName}

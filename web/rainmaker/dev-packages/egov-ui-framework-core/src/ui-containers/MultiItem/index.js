@@ -11,7 +11,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import cloneDeep from "lodash/cloneDeep";
 import { addComponentJsonpath, getQueryArg } from "../../ui-utils/commons";
-import { prepareFinalObject as pFO } from "../../ui-redux/screen-configuration/actions";
+import { prepareFinalObject as pFO, prepareFinalObject } from "../../ui-redux/screen-configuration/actions";
 import isEqual from "lodash/isEqual";
 import LabelConatiner from "../LabelContainer";
 
@@ -291,6 +291,13 @@ const mapStateToProps = state => {
   }
 
   if(Licenses){
+
+    
+    let subOwnershipValue = get(preparedFinalObject, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory", '');
+    if(subOwnershipValue == "INDIVIDUAL.SINGLEOWNER"){
+      hasAddItem = false;
+    }
+
 
   let tlStatus = get(Licenses[0], 'status', "");
   let userAction = getQueryArg(window.location.href, "action");

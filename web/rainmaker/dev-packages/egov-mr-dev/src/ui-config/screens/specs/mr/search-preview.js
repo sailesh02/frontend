@@ -107,13 +107,13 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 
   //set Trade Types
 
-  payload &&
-    dispatch(
-      prepareFinalObject(
-        "LicensesTemp[0].tradeDetailsResponse",
-        getTradeTypeSubtypeDetails(payload)
-      )
-    );
+  // payload &&
+  //   dispatch(
+  //     prepareFinalObject(
+  //       "LicensesTemp[0].tradeDetailsResponse",
+  //       getTradeTypeSubtypeDetails(payload)
+  //     )
+  //   );
 
   const LicenseData = payload.MarriageRegistrations[0];
   const fetchFromReceipt = sts !== "pending_payment";
@@ -131,10 +131,36 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 
 };
 
+const titlebar = getCommonContainer({
+  header: getCommonHeader({
+    labelName: "Trade License Application (2018-2019)",
+    labelKey: "MR_SUMMARY_HEADER"
+  }),
+  applicationLicence: getCommonContainer({
+    applicationNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-mr",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: getQueryArg(window.location.href, "applicationNumber"),
+      }
+    },
+    // licenceNumber: {
+    //   uiFramework: "custom-atoms-local",
+    //   moduleName: "egov-mr",
+    //   componentPath: "licenceNoContainer",
+    //   visible: licenseNumber ? true : false,
+    //   props: {
+    //     number: licenseNumber,
+    //   }
+    // }
+  })
+});
+
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   dispatch(unMountScreen("search"));
   dispatch(unMountScreen("apply"));
-  //loadUlbLogo(tenantId);
+  loadUlbLogo(tenantId);
 
   //Search details for given application Number
   if (applicationNumber) {
@@ -259,7 +285,6 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         [],
         mdmsBody
       );
-      console.log(payload, "Nero payload")
       dispatch(prepareFinalObject("uiCommonConfig", get(payload.MdmsRes, "common-masters.uiCommonPay[0]")));
     } catch (e) {
       console.log(e);
@@ -301,41 +326,41 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
 
     // Get approval details based on status and set it in screenconfig
 
-    if (
-      status === "APPROVED" ||
-      status === "REJECTED" ||
-      status === "CANCELLED"
-    ) {
-      set(
-        action,
-        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.approvalDetails.visible",
-        true
-      );
+    // if (
+    //   status === "APPROVED" ||
+    //   status === "REJECTED" ||
+    //   status === "CANCELLED"
+    // ) {
+    //   set(
+    //     action,
+    //     "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.approvalDetails.visible",
+    //     true
+    //   );
 
-      if (get(data, "MarriageRegistrations[0].verificationDocuments")) {
-        await setDocuments(
-          data,
-          "MarriageRegistrations[0].verificationDocuments",
-          "LicensesTemp[0].verifyDocData",
-          dispatch, 'MR'
-        );
-      } else {
-        dispatch(
-          handleField(
-            "search-preview",
-            "components.div.children.tradeReviewDetails.children.cardContent.children.approvalDetails.children.cardContent.children.viewTow.children.lbl",
-            "visible",
-            false
-          )
-        );
-      }
-    } else {
-      set(
-        action,
-        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.approvalDetails.visible",
-        false
-      );
-    }
+    //   if (get(data, "MarriageRegistrations[0].verificationDocuments")) {
+    //     await setDocuments(
+    //       data,
+    //       "MarriageRegistrations[0].verificationDocuments",
+    //       "LicensesTemp[0].verifyDocData",
+    //       dispatch, 'MR'
+    //     );
+    //   } else {
+    //     dispatch(
+    //       handleField(
+    //         "search-preview",
+    //         "components.div.children.tradeReviewDetails.children.cardContent.children.approvalDetails.children.cardContent.children.viewTow.children.lbl",
+    //         "visible",
+    //         false
+    //       )
+    //     );
+    //   }
+    // } else {
+    //   set(
+    //     action,
+    //     "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.approvalDetails.visible",
+    //     false
+    //   );
+    // }
 
     const applicationType = get(
       state.screenConfiguration.preparedFinalObject,
@@ -354,6 +379,15 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           componentPath: "ApplicationNoContainer",
           props: {
             number: applicationNumber
+          }
+        },
+        licenceNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-mr",
+          componentPath: "licenceNoContainer",
+          visible: licenseNumber ? true : false,
+          props: {
+            number: licenseNumber,
           }
         }
       })
@@ -374,8 +408,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
 
 
 
-    setActionItems(action, obj);
-    loadReceiptGenerationData(applicationNumber, tenantId);
+   // setActionItems(action, obj);
+    //loadReceiptGenerationData(applicationNumber, tenantId);
 
     if (status !== "INITIATED") {
       process.env.REACT_APP_NAME === "Citizen"
@@ -477,6 +511,20 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.headerDiv.children.editSection",
           property: "visible",
           value: true
+        }
+
+      ];
+
+      dispatchMultipleFieldChangeAction("search-preview", actionDefination1, dispatch);
+
+
+    }else{
+      const actionDefination1 = [
+        
+        {
+          path: "components.div.children.appointmentDetailsFormCard.children.apint.children.cardContent.children.appointmentDetails.children.cardContent.children.headerDiv.children.editSection",
+          property: "visible",
+          value: false
         }
 
       ];
@@ -587,28 +635,28 @@ const appointMentDetails = getAppointmentDetails(false);
 // let approvalDetails = getApprovalDetails(status);
 let title = getCommonTitle({ labelName: titleText });
 
-const setActionItems = (action, object) => {
-  set(
-    action,
-    "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title",
-    getCommonTitle({
-      labelName: get(object, "titleText"),
-      labelKey: get(object, "titleKey")
-    })
-  );
-  set(
-    action,
-    "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title.visible",
-    get(object, "titleVisibility")
-  );
-  set(
-    action,
-    "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title.roleDefination",
-    get(object, "roleDefination")
-  );
+// const setActionItems = (action, object) => {
+//   set(
+//     action,
+//     "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title",
+//     getCommonTitle({
+//       labelName: get(object, "titleText"),
+//       labelKey: get(object, "titleKey")
+//     })
+//   );
+//   set(
+//     action,
+//     "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title.visible",
+//     get(object, "titleVisibility")
+//   );
+//   set(
+//     action,
+//     "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title.roleDefination",
+//     get(object, "roleDefination")
+//   );
 
 
-};
+// };
 
 export const tradeReviewDetails = getCommonCard({
   title,

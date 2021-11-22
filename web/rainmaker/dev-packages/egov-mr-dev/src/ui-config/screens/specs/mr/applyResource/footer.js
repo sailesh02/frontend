@@ -232,45 +232,45 @@ export const callBackForNext = async (state, dispatch) => {
         }
 
       }
-console.log(isFormValid, "Nero form valid")
-let brideOtherrltn = get(
-  mrgObj[0],
-  "coupleDetails[0].bride.guardianDetails.relationship"
-)
+      console.log(isFormValid, "Nero form valid")
+      let brideOtherrltn = get(
+        mrgObj[0],
+        "coupleDetails[0].bride.guardianDetails.relationship"
+      )
 
-let groomOtherrltn = get(
-  mrgObj[0],
-  "coupleDetails[0].groom.guardianDetails.relationship"
-)
+      let groomOtherrltn = get(
+        mrgObj[0],
+        "coupleDetails[0].groom.guardianDetails.relationship"
+      )
 
-console.log(brideOtherrltn, "Nero sss")
-if(brideOtherrltn == "OTHERS" && applicationNoInUrl){
-const visiblebrideOtherRelationDesc = [
+      console.log(brideOtherrltn, "Nero sss")
+      if (brideOtherrltn == "OTHERS" && applicationNoInUrl) {
+        const visiblebrideOtherRelationDesc = [
 
-  {
-    path: "components.div.children.formwizardSecondStep.children.brideGuardianDetails.children.cardContent.children.brideGuardianDetailsConatiner.children.otherRltnWithBride",
-    property: "visible",
-    value: true
-  },
+          {
+            path: "components.div.children.formwizardSecondStep.children.brideGuardianDetails.children.cardContent.children.brideGuardianDetailsConatiner.children.otherRltnWithBride",
+            property: "visible",
+            value: true
+          },
 
 
-];
-dispatchMultipleFieldChangeAction("apply", visiblebrideOtherRelationDesc, dispatch);
-}
+        ];
+        dispatchMultipleFieldChangeAction("apply", visiblebrideOtherRelationDesc, dispatch);
+      }
 
-if(groomOtherrltn == "OTHERS" && applicationNoInUrl){
-  const visibleGroomOtherRelationDesc = [
-  
-    {
-      path: "components.div.children.formwizardSecondStep.children.groomGuardianDetails.children.cardContent.children.groomGuardianDetailsConatiner.children.otherRltnWithgroom",
-      property: "visible",
-      value: true
-    },
-  
-  
-  ];
-  dispatchMultipleFieldChangeAction("apply", visibleGroomOtherRelationDesc, dispatch);
-  }
+      if (groomOtherrltn == "OTHERS" && applicationNoInUrl) {
+        const visibleGroomOtherRelationDesc = [
+
+          {
+            path: "components.div.children.formwizardSecondStep.children.groomGuardianDetails.children.cardContent.children.groomGuardianDetailsConatiner.children.otherRltnWithgroom",
+            property: "visible",
+            value: true
+          },
+
+
+        ];
+        dispatchMultipleFieldChangeAction("apply", visibleGroomOtherRelationDesc, dispatch);
+      }
 
       // const brideGrndRelationShip = get(mrgObj[0], "coupleDetails[0].bride.guardianDetails.relationship");
       // const groomGrndRelationShip = get(mrgObj[0], "coupleDetails[0].groom.guardianDetails.relationship");
@@ -323,7 +323,7 @@ if(groomOtherrltn == "OTHERS" && applicationNoInUrl){
       }
     }
 
-   
+
   }
   if (activeStep === 1) {
     //Bride and Groom Guardian Details
@@ -372,8 +372,8 @@ if(groomOtherrltn == "OTHERS" && applicationNoInUrl){
       }
     }
 
-    
-   
+
+
 
   }
   if (activeStep === 2) {
@@ -1299,36 +1299,46 @@ export const footerReviewTop = (
     },
     leftIcon: "assignment"
   };
-
+  console.log(status, "Nero Status App")
   //console.log(applicationDownloadObject, "Nero applicationDownloadObject")
   //console.log(applicationPrintObject, "Nero applicationPrintObject")
   switch (status) {
     case "APPROVED":
       downloadMenu = [
-        tlCertificateDownloadObject,
+        applicationDownloadObject,
         receiptDownloadObject,
-        applicationDownloadObject
+        tlCertificateDownloadObject
       ];
       printMenu = [
-        tlCertificatePrintObject,
+        applicationPrintObject,
         receiptPrintObject,
-        applicationPrintObject
+        tlCertificatePrintObject
       ];
       break;
-    case "PENDINGAPPROVAL":
-
     case "DOCVERIFICATION":
       downloadMenu = [
-        tlCertificateDownloadObject,
-        receiptDownloadObject,
+
         applicationDownloadObject
       ];
       printMenu = [
-        tlCertificateDownloadObject,
-        receiptPrintObject,
+
         applicationPrintObject
       ];
       break;
+    case "PENDINGSCHEDULE":
+    case "PENDINGAPPROVAL":
+      downloadMenu = [
+        applicationDownloadObject,
+        receiptDownloadObject
+        
+      ];
+      printMenu = [
+        applicationPrintObject,
+        receiptPrintObject
+        
+      ];
+      break;
+
     case "APPLIED":
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
@@ -1432,22 +1442,22 @@ export const downloadPrintContainer = (
   };
 
 
-  let tlPLDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "MR_PL_CERTIFICATE" },
-    link: () => {
-      const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
-      downloadProvisionalCertificateForm(MarriageRegistrations);
-    },
-    leftIcon: "book"
-  };
-  let tlPLPrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "MR_PL_CERTIFICATE" },
-    link: () => {
-      const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
-      downloadProvisionalCertificateForm(MarriageRegistrations, 'print');
-    },
-    leftIcon: "book"
-  };
+  // let tlPLDownloadObject = {
+  //   label: { labelName: "TL Certificate", labelKey: "MR_PL_CERTIFICATE" },
+  //   link: () => {
+  //     const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
+  //     downloadProvisionalCertificateForm(MarriageRegistrations);
+  //   },
+  //   leftIcon: "book"
+  // };
+  // let tlPLPrintObject = {
+  //   label: { labelName: "TL Certificate", labelKey: "MR_PL_CERTIFICATE" },
+  //   link: () => {
+  //     const { MarriageRegistrations } = state.screenConfiguration.preparedFinalObject;
+  //     downloadProvisionalCertificateForm(MarriageRegistrations, 'print');
+  //   },
+  //   leftIcon: "book"
+  // };
 
 
   let receiptDownloadObject = {
@@ -1500,28 +1510,35 @@ export const downloadPrintContainer = (
   switch (status) {
     case "APPROVED":
       downloadMenu = [
-        tlCertificateDownloadObject,
+        applicationDownloadObject,
         receiptDownloadObject,
+        tlCertificateDownloadObject
+      ];
+      printMenu = [
+        applicationPrintObject,
+        receiptPrintObject,
+        tlCertificatePrintObject
+      ];
+      break;
+    case "DOCVERIFICATION":
+      downloadMenu = [
         applicationDownloadObject
       ];
       printMenu = [
-        tlCertificatePrintObject,
-        receiptPrintObject,
         applicationPrintObject
       ];
       break;
+    case "PENDINGSCHEDULE":
     case "PENDINGAPPROVAL":
-    case "FIELDINSPECTION":
-    case "DOCVERIFICATION":
       downloadMenu = [
-        tlPLDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
+        applicationDownloadObject,
+        receiptDownloadObject
+        
       ];
       printMenu = [
-        tlPLPrintObject,
-        receiptPrintObject,
-        applicationPrintObject
+        applicationPrintObject,
+        receiptPrintObject
+        
       ];
       break;
     case "APPLIED":

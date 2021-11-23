@@ -1587,6 +1587,19 @@ export const downloadPrintContainer = (
         
       ];
       break;
+    case "PENDINGSCHEDULE":
+    case "PENDINGAPPROVAL":
+      downloadMenu = [
+        applicationDownloadObject,
+        receiptDownloadObject
+        
+      ];
+      printMenu = [
+        applicationPrintObject,
+        receiptPrintObject
+        
+      ];
+      break;
     case "APPLIED":
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];

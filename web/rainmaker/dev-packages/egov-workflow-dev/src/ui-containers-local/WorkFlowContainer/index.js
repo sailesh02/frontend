@@ -472,7 +472,7 @@ class WorkFlowContainer extends React.Component {
         let acknowldgementNumber = Property.acknowldgementNumber
         baseUrl = "pt-mutation";
         bservice = "PT.MUTATION";
-        return `/pt-mutation/apply?applicationNumber=${acknowldgementNumber}&tenantId=${tenant}&demandDetails=true`
+        return `/pt-mutation/apply?applicationNumber=${acknowldgementNumber || this.props.acknowldgementNumberNoRedirect}&tenantId=${tenant}&demandDetails=true`
       } else {
         bservice = "PT.MUTATION";
         baseUrl = "pt-mutation";

@@ -424,6 +424,29 @@ class WorkFlowContainer extends React.Component {
           "error"
         );
       }
+    }else if(dataPath == "MarriageRegistrations"){
+      
+      const todayDate = new Date();
+      let appointmentDate = get(
+        data[0],
+        "appointmentDate"
+      )
+
+      if (appointmentDate) {
+        const apntDateObj = new Date(appointmentDate);
+        if (apntDateObj < todayDate) {
+          toggleSnackbar(
+            true,
+            { labelName: "Appointment date can not be past date", labelKey: "ERR_APNT_DATE_IN_PAST" },
+            "error"
+          );
+        } else {
+          this.wfUpdate(label);
+        }
+      } else {
+        this.wfUpdate(label);
+      }
+
     } else {
       this.wfUpdate(label);
     }

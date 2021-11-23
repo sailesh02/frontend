@@ -355,19 +355,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       financialYear
     );
 
-    if (status !== "INITIATED") {
-      process.env.REACT_APP_NAME === "Citizen"
-        ? set(
-          action,
-          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-          CitizenprintCont
-        )
-        : set(
-          action,
-          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-          printCont
-        );
-    }
+    
 
     // Get approval details based on status and set it in screenconfig
 
@@ -449,6 +437,20 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
         true
       );
+
+      if (status !== "INITIATED") {
+        process.env.REACT_APP_NAME === "Citizen"
+          ? set(
+            action,
+            "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+            CitizenprintCont
+          )
+          : set(
+            action,
+            "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+            printCont
+          );
+      }  
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
 

@@ -3,7 +3,7 @@ import { dispatchMultipleFieldChangeAction, getLabel } from "egov-ui-framework/u
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject, toggleSnackbar, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import { generateTLAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateTLAcknowledgement";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -954,11 +954,35 @@ export const footerReviewTop = (
     `licenseCount`,
     1
   );
+  
+  let { Licenses } = state.screenConfiguration.preparedFinalObject;
+  let pdfOwnersNames = '';
+  let pdfTradeTypes = '';
+  if(Licenses[0].tradeLicenseDetail.owners && Licenses[0].tradeLicenseDetail.owners.length > 0){
+    for(let i=0;i<Licenses[0].tradeLicenseDetail.owners.length;i++){
+      pdfOwnersNames += Licenses[0].tradeLicenseDetail.owners[i].name+", ";
+    }
+    pdfOwnersNames = pdfOwnersNames.substring(0, pdfOwnersNames.length - 2);
+  }
+
+  if(Licenses[0].tradeLicenseDetail.tradeUnits && Licenses[0].tradeLicenseDetail.tradeUnits.length > 0){
+    for(let i=0;i<Licenses[0].tradeLicenseDetail.tradeUnits.length;i++){
+      let tradeTypeLocale = '';
+
+      tradeTypeLocale = getLocaleLabels("TradeType", `TRADELICENSE_TRADETYPE_${Licenses[0].tradeLicenseDetail.tradeUnits[i].tradeType.replace(/\./g,'_')}`);
+      console.log(tradeTypeLocale, "Nero Locallll")
+      pdfTradeTypes += tradeTypeLocale+", ";
+    }
+    pdfTradeTypes = pdfTradeTypes.substring(0, pdfTradeTypes.length - 2);
+  }
+
+  Licenses[0].additionalDetail = {ownerNames: pdfOwnersNames, tradeTypes: pdfTradeTypes};
   // let renewalMenu=[];
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+     // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+     Licenses;
       downloadCertificateForm(Licenses);
     },
     leftIcon: "book"
@@ -966,7 +990,8 @@ export const footerReviewTop = (
   let tlCertificatePrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      //const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      Licenses;
       downloadCertificateForm(Licenses, 'print');
     },
     leftIcon: "book"
@@ -975,7 +1000,8 @@ export const footerReviewTop = (
   let tlPLDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      //const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      Licenses;
       downloadProvisionalCertificateForm(Licenses);
     },
     leftIcon: "book"
@@ -983,7 +1009,8 @@ export const footerReviewTop = (
   let tlPLPrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      //const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      Licenses;
       downloadProvisionalCertificateForm(Licenses, 'print');
     },
     leftIcon: "book"
@@ -1207,10 +1234,35 @@ export const downloadPrintContainer = (
   const receiptKey = get(uiCommonConfig, "receiptKey");
   let downloadMenu = [];
   let printMenu = [];
+    let { Licenses } = state.screenConfiguration.preparedFinalObject;
+  let pdfOwnersNames = '';
+  let pdfTradeTypes = '';
+  if(Licenses[0].tradeLicenseDetail.owners && Licenses[0].tradeLicenseDetail.owners.length > 0){
+    for(let i=0;i<Licenses[0].tradeLicenseDetail.owners.length;i++){
+      pdfOwnersNames += Licenses[0].tradeLicenseDetail.owners[i].name+", ";
+    }
+    pdfOwnersNames = pdfOwnersNames.substring(0, pdfOwnersNames.length - 2);
+  }
+
+  if(Licenses[0].tradeLicenseDetail.tradeUnits && Licenses[0].tradeLicenseDetail.tradeUnits.length > 0){
+    for(let i=0;i<Licenses[0].tradeLicenseDetail.tradeUnits.length;i++){
+      let tradeTypeLocale = '';
+
+      tradeTypeLocale = getLocaleLabels("TradeType", `TRADELICENSE_TRADETYPE_${Licenses[0].tradeLicenseDetail.tradeUnits[i].tradeType.replace(/\./g,'_')}`);
+      console.log(tradeTypeLocale, "Nero Locallll")
+      pdfTradeTypes += tradeTypeLocale+", ";
+    }
+    pdfTradeTypes = pdfTradeTypes.substring(0, pdfTradeTypes.length - 2);
+  }
+
+  Licenses[0].additionalDetail = {ownerNames: pdfOwnersNames, tradeTypes: pdfTradeTypes};
+
+  console.log(Licenses, "Nero Licensee")
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      //const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      Licenses;
       downloadCertificateForm(Licenses);
     },
     leftIcon: "book"
@@ -1218,7 +1270,8 @@ export const downloadPrintContainer = (
   let tlCertificatePrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      //const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      Licenses;
       downloadCertificateForm(Licenses, 'print');
     },
     leftIcon: "book"
@@ -1228,7 +1281,8 @@ export const downloadPrintContainer = (
   let tlPLDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+     // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+     Licenses;
       downloadProvisionalCertificateForm(Licenses);
     },
     leftIcon: "book"
@@ -1236,7 +1290,8 @@ export const downloadPrintContainer = (
   let tlPLPrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+     // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+     Licenses
       downloadProvisionalCertificateForm(Licenses, 'print');
     },
     leftIcon: "book"

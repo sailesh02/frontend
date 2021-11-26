@@ -340,9 +340,10 @@ const formConfig = {
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         if(field && field.value && field.value != " "){
+          dispatch(setFieldProperty("demandDetails", "pendingFrom", "disabled", false)); 
           dispatch(setFieldProperty("demandDetails", "pendingFrom", "visible", true)); 
         }else{
-          dispatch(setFieldProperty("demandDetails", "pendingFrom", "visible", false));
+          dispatch(setFieldProperty("demandDetails", "pendingFrom", "disabled", true));
         }
         const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
         let amountArray = []
@@ -370,6 +371,7 @@ const formConfig = {
       pattern: /^[^*|\":<>[\]{}`\\()';@&$#!]+$/,
       required: false,
       visible:false,
+      disabled:true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
          
       }
@@ -388,14 +390,17 @@ const formConfig = {
     }  
   },
   afterInitForm: (action, store, dispatch) => {
-    debugger
-    set(action, "form.fields.pendingFrom.visible", false)
     try{
       const mode = getQueryArg(window.location.href, "mode");
       if(mode == "editDemandDetails" || mode == "WORKFLOWEDIT"){
         let state = store.getState();
         const additionalDetails = mode == "editDemandDetails" ? state.screenConfiguration.preparedFinalObject.Properties && state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails :
         mode == "WORKFLOWEDIT" ? state.screenConfiguration.preparedFinalObject.newProperties && state.screenConfiguration.preparedFinalObject.newProperties[0].additionalDetails : {}
+        if(additionalDetails && additionalDetails.hasOwnProperty('otherDues') && additionalDetails.otherDues && additionalDetails.otherDues != ''){
+          dispatch(setFieldProperty("demandDetails", "pendingFrom", "disabled", false)); 
+        }else{
+          dispatch(setFieldProperty("demandDetails", "pendingFrom", "disabled", true)); 
+        }
         if(additionalDetails && additionalDetails.hasOwnProperty('holdingTax')){
           let amountArray = []
           for (const [key, value] of Object.entries(additionalDetails)) {

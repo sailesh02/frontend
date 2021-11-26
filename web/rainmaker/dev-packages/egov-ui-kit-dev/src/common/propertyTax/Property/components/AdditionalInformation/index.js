@@ -33,7 +33,7 @@ export default class AdditionalInformation extends Component {
                     <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                       <Label
                         labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                        label={additionalInformation && additionalInformation[item] ? additionalInformation[item] + "" : "0"}
+                        label={additionalInformation && additionalInformation[item] ? additionalInformation[item] + "" : item == 'pendingFrom' ? "" : "0"}
                         fontSize="16px"
                       />
                     </div>

@@ -497,7 +497,7 @@ const screenConfig = {
             return role.code;
           })
           : [];
-    const isVisibleDemandDetails = roleCodes.includes("PT_APPROVER") || roleCodes.includes("PT_FIELD_INSPECTOR") || process.env.REACT_APP_NAME == "Citizen"
+    const isVisibleDemandDetails = true
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",

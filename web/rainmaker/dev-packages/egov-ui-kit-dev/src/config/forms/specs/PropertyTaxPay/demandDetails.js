@@ -339,7 +339,7 @@ const formConfig = {
       pattern: /^([0-9][0-9]{0,49})(\.\d{1,2})?$/,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        if(field && field.value && field.value != " "){
+        if(field && field.value && field.value != " " && field.value != 0){
           dispatch(setFieldProperty("demandDetails", "pendingFrom", "disabled", false)); 
           dispatch(setFieldProperty("demandDetails", "pendingFrom", "visible", true)); 
         }else{
@@ -396,7 +396,7 @@ const formConfig = {
         let state = store.getState();
         const additionalDetails = mode == "editDemandDetails" ? state.screenConfiguration.preparedFinalObject.Properties && state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails :
         mode == "WORKFLOWEDIT" ? state.screenConfiguration.preparedFinalObject.newProperties && state.screenConfiguration.preparedFinalObject.newProperties[0].additionalDetails : {}
-        if(additionalDetails && additionalDetails.hasOwnProperty('otherDues') && additionalDetails.otherDues && additionalDetails.otherDues != ''){
+        if(additionalDetails && additionalDetails.hasOwnProperty('otherDues') && additionalDetails.otherDues && additionalDetails.otherDues != '' && additionalDetails.otherDues != 0){
           dispatch(setFieldProperty("demandDetails", "pendingFrom", "disabled", false)); 
         }else{
           dispatch(setFieldProperty("demandDetails", "pendingFrom", "disabled", true)); 

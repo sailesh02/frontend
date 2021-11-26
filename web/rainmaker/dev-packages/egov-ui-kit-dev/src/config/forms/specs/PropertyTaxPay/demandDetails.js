@@ -32,7 +32,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
             amountArray.push(Number(value))
           }
         }
@@ -58,7 +58,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
             amountArray.push(Number(value))
           }
         }
@@ -84,7 +84,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
             amountArray.push(Number(value))
           }
         }
@@ -110,7 +110,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
             amountArray.push(Number(value))
           }
         }
@@ -136,7 +136,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
             amountArray.push(Number(value))
           }
         }
@@ -162,7 +162,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
             amountArray.push(Number(value))
           }
         }
@@ -188,7 +188,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
             amountArray.push(Number(value))
           }
         }
@@ -214,7 +214,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
             amountArray.push(Number(value))
           }
         }
@@ -240,7 +240,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
             amountArray.push(Number(value))
           }
         }
@@ -266,7 +266,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
             amountArray.push(Number(value))
           }
         }
@@ -292,7 +292,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
             amountArray.push(Number(value))
           }
         }
@@ -318,7 +318,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
             amountArray.push(Number(value))
           }
         }
@@ -339,17 +339,39 @@ const formConfig = {
       pattern: /^([0-9][0-9]{0,49})(\.\d{1,2})?$/,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        if(field && field.value && field.value != " "){
+          dispatch(setFieldProperty("demandDetails", "pendingFrom", "visible", true)); 
+        }else{
+          dispatch(setFieldProperty("demandDetails", "pendingFrom", "visible", false));
+        }
         const additionalDetails = state.screenConfiguration.preparedFinalObject.Properties[0].additionalDetails || {}
         let amountArray = []
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
             amountArray.push(Number(value))
           }
         }
         const total = amountArray.reduce((a, b) => a + b, 0)
         dispatch(setFieldProperty("demandDetails", "totalAmount", "value", total.toFixed(2)),0);
+      }
+    },
+    pendingFrom: {
+      id: "pendingFrom",
+      jsonPath: "Properties[0].additionalDetails.pendingFrom",
+      type: "textfield",
+      floatingLabelText: "PT_PROPERTY_PENDINGFROM",
+      hintText: "PT_PROPERTY_PENDINGFROM_PLACEHOLDER",
+      numcols: 6,
+      errorMessage: "PT_PROPERTY_PENDINGFROM_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      pattern: /^[^*|\":<>[\]{}`\\()';@&$#!]+$/,
+      required: false,
+      visible:false,
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+         
       }
     },
     totalAmount: {
@@ -363,10 +385,11 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
       pattern: /^[1-9]\d*(?:\.\d+)?$/
-    }
-   
+    }  
   },
   afterInitForm: (action, store, dispatch) => {
+    debugger
+    set(action, "form.fields.pendingFrom.visible", false)
     try{
       const mode = getQueryArg(window.location.href, "mode");
       if(mode == "editDemandDetails" || mode == "WORKFLOWEDIT"){
@@ -378,7 +401,7 @@ const formConfig = {
           for (const [key, value] of Object.entries(additionalDetails)) {
             if(key == "usageExemption" || key == "ownershipExemption"){
               amountArray.push(Number(-value))
-            }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting')){
+            }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
               amountArray.push(Number(value))
             }
           }

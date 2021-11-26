@@ -8,7 +8,7 @@ import {
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, hideSpinner, showSpinner} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import set from "lodash/set";
 import filter from "lodash/filter";
@@ -1800,14 +1800,17 @@ export const triggerModificationsDisplay = (action, isModeEnable) => {
 
 export const getDemand = async (queryObject, dispatch) => {
   try {
+    dispatch(showSpinner())
     const response = await httpRequest(
       "post",
       "/billing-service/demand/_search",
       "",
       queryObject
     );
+    dispatch(hideSpinner())
     return response;
   } catch (error) {
+      dispatch(hideSpinner())
       dispatch(
         toggleSnackbar(
           true,

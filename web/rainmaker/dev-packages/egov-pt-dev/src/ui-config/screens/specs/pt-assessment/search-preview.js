@@ -18,6 +18,11 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 const demandDetails = value => {
   return value == null || value == undefined || value == '' ? '0' : value;
 };
+
+const pendingFrom = value => {
+  return value == null || value == undefined || value == '' ? 'NA' : value;
+}
+
 const demandSummary = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",
@@ -168,7 +173,17 @@ const demandSummary = getCommonGrayCard({
         callBack : demandDetails
       }
     ),
-  })
+    pendingFrom: getLabelWithValue(
+      {
+        labelName: "Pending From",
+        labelKey: "PT_PROPERTY_PENDINGFROM"
+      },
+      {
+        jsonPath: "Assessment.additionalDetails.pendingFrom",
+        callBack : pendingFrom
+      }
+    ),
+  }),
 })
 
 
@@ -482,8 +497,8 @@ const screenConfig = {
             return role.code;
           })
           : [];
-    const isApprover = roleCodes.includes("PT_APPROVER") || roleCodes.includes("PT_FIELD_INSPECTOR")
-    set(
+      const isVisibleDemandDetails = true    
+      set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",
       false
@@ -502,7 +517,7 @@ const screenConfig = {
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.demandSummary.visible",
-      !!isApprover
+      !!isVisibleDemandDetails
     )
 
 

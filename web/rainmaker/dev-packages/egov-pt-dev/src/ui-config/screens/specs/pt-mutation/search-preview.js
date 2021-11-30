@@ -501,12 +501,12 @@ const screenConfig = {
             return role.code;
           })
           : [];
-    const isApprover = roleCodes.includes("PT_APPROVER") || roleCodes.includes("PT_FIELD_INSPECTOR")
+    const isVisibleDemandDetails = true
 
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.demandSummary.visible",
-      !!isApprover
+      !!isVisibleDemandDetails
     )
 
     // set(

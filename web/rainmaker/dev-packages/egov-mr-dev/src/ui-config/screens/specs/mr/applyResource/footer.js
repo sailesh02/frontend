@@ -149,9 +149,9 @@ export const callBackForNext = async (state, dispatch) => {
 
         console.log(brideDob, groomDob, "Nero both DOB")
 
-
+let mrgDateObj = null;
         if (marriageDate) {
-          const mrgDateObj = new Date(marriageDate);
+           mrgDateObj = new Date(marriageDate);
           if (mrgDateObj > todayDate) {
             isFormValid = isMrgDateInFutue = false;
           }
@@ -162,7 +162,7 @@ export const callBackForNext = async (state, dispatch) => {
           console.log(brideDobDay)
           const brideDobdate = new Date(`${brideDobMonth}/${brideDobDay}/${brideDobYear}`);
 
-          const diffTime = Math.abs(brideDobdate - todayDate);
+          const diffTime = Math.abs(brideDobdate - mrgDateObj);
           const brideAgeInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
 
@@ -178,7 +178,7 @@ export const callBackForNext = async (state, dispatch) => {
           console.log(groomDobDay)
           const groomDobdate = new Date(`${groomDobMonth}/${groomDobDay}/${groomDobYear}`);
 
-          const diffTime1 = Math.abs(groomDobdate - todayDate);
+          const diffTime1 = Math.abs(groomDobdate - mrgDateObj);
           const groomAgeInDays = Math.ceil(diffTime1 / (1000 * 60 * 60 * 24));
 
 

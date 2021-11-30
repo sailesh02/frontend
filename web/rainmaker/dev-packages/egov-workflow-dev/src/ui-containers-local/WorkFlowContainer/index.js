@@ -428,23 +428,37 @@ class WorkFlowContainer extends React.Component {
       
       const todayDate = new Date();
       let appointmentDate = get(
-        data[0],
+        data,
         "appointmentDate"
       )
 
-      if (appointmentDate) {
-        const apntDateObj = new Date(appointmentDate);
-        if (apntDateObj < todayDate) {
+      let appointmentTime = get(
+        data,
+        "appointmentTime"
+      )
+
+      if (appointmentDate && appointmentTime) {
+        const [aptHours, aptMins] = appointmentTime.split(":");
+        const [aptYr, aptMonth, aptDay] = appointmentDate.split("-");
+        
+       // const apntDateObj = new Date(appointmentDate);
+       const apntDateObj = new Date(aptYr, parseInt(aptMonth)-1, aptDay, aptHours, aptMins);
+        if (apntDateObj.getTime() < todayDate.getTime()) {
           toggleSnackbar(
             true,
             { labelName: "Appointment date can not be past date", labelKey: "ERR_APNT_DATE_IN_PAST" },
             "error"
           );
         } else {
+
           this.wfUpdate(label);
         }
       } else {
-        this.wfUpdate(label);
+        toggleSnackbar(
+            true,
+            { labelName: "Appointment date can not be past date", labelKey: "ERR_APNT_DATE_TIME_REQUIRED" },
+            "error"
+          );
       }
 
     } else {

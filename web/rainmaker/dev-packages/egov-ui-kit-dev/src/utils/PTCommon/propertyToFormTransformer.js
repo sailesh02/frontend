@@ -90,7 +90,8 @@ export const getDemandDetails = (propertyRes) => {
       "penalty":'0',
       "serviceTax":'0',
       "otherDues":'0',
-      "totalAmount":'0'
+      "totalAmount":'0',
+      "pendingFrom" : ''
   }
   }
   

@@ -205,6 +205,11 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     "screenConfiguration.preparedFinalObject.BPA.status"
   );
 
+  let BPAData = get(state,"BPA")
+  let applicationDigitallySigned = BPAData && BPAData.length > 0 && BPAData[0] &&
+  BPAData[0].dscDetails && BPAData[0].dscDetails[0].documentId ? true :  BPAData && BPAData.length > 0 && BPAData[0] &&
+  !BPAData[0].dscDetails ? true : false
+
   let comparisonDetails = get(
     state,
     "screenConfiguration.preparedFinalObject.comparisonDetails"
@@ -325,8 +330,10 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
 
   switch (status) {
     case "APPROVED":
-      downloadMenu.push(occupancyCertificateDownloadObject);
-      printMenu.push(occupancyCertificatePrintObject);
+      if(applicationDigitallySigned){
+        downloadMenu.push(occupancyCertificateDownloadObject);
+        printMenu.push(occupancyCertificatePrintObject);
+      }
       break;
     case "DOC_VERIFICATION_INPROGRESS":
     case "FIELDINSPECTION_INPROGRESS":

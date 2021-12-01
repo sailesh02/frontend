@@ -287,6 +287,10 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     state,
     "screenConfiguration.preparedFinalObject.BPA.status"
   );
+  let BPAData = get(state,"BPA")
+  let applicationDigitallySigned = BPAData && BPAData.length > 0 && BPAData[0] &&
+  BPAData[0].dscDetails && BPAData[0].dscDetails[0].documentId ? true :  BPAData && BPAData.length > 0 && BPAData[0] &&
+  !BPAData[0].dscDetails ? true : false
   let riskType = get(
     state,
     "screenConfiguration.preparedFinalObject.BPA.riskType"
@@ -457,8 +461,10 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
         printMenu = printMenu
         break;
       case "APPROVED":
-        downloadMenu.push(permitOrderDownloadObject);
-        printMenu.push(permitOrderPrintObject);
+        if(applicationDigitallySigned){
+          downloadMenu.push(permitOrderDownloadObject);
+          printMenu.push(permitOrderPrintObject);
+        }
         break;
       default:
         downloadMenu = [];

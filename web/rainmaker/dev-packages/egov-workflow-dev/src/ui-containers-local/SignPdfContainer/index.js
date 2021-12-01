@@ -234,7 +234,8 @@ const getKey = (data,moduleName) => {
         }
       } else if (window.location.href.includes("oc-bpa")) {
         pdfKey = "occupancy-certificate"
-      } else if(businessService && businessService.includes('OC')){
+      } else if(businessService && (businessService == "BPA_OC" || businessService == "BPA_OC1" || 
+      businessService == "BPA_OC2" || businessService == "BPA_OC3" || businessService == "BPA_OC4")){
         pdfKey = "occupancy-certificate"
       }
       if (window.location.href.includes("oc-bpa") || window.location.href.includes("BPA.NC_OC_SAN_FEE")) {

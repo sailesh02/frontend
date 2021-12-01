@@ -5187,6 +5187,16 @@ export const revocationPdfDownload = async (action, state, dispatch, mode = "Dow
   }
 }
 
+const getFileStore = (documents,fieldKey) => {
+  let fileStoreId;
+  let requiredDocument = documents && documents.length > 0 && documents.filter( doc => {
+    return doc.documentType == fieldKey
+  })
+  fileStoreId = requiredDocument && requiredDocument.length > 0 && requiredDocument[0].documentId || null
+  return fileStoreId
+}
+
+
 export const permitOrderNoDownload = async (action, state, dispatch, mode = "Download") => {
   let bpaDetails = get(
     state.screenConfiguration.preparedFinalObject, "BPA"
@@ -5229,15 +5239,20 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
   if (window.location.href.includes("oc-bpa") || window.location.href.includes("BPA.NC_OC_SAN_FEE")) {
     permitPfKey = "occupancy-certificate"
   }
-  let res = await httpRequest(
-    "post",
-    `pdf-service/v1/_create?key=${permitPfKey}&tenantId=${bpaDetails.tenantId}`,
-    "",
-    [],
-    { Bpa: [Bpa] }
-  );
 
-  let fileStoreId = res.filestoreIds[0];
+  let fileStoreId ;
+  fileStoreId = getFileStore(Bpa && Bpa.dscDetails || [],permitPfKey)
+  if(!fileStoreId){
+    let res = await httpRequest(
+      "post",
+      `pdf-service/v1/_create?key=${permitPfKey}&tenantId=${bpaDetails.tenantId}`,
+      "",
+      [],
+      { Bpa: [Bpa] }
+    );
+    fileStoreId = res.filestoreIds[0];
+  }
+  
   let pdfDownload = await httpRequest(
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []

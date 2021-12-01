@@ -226,12 +226,15 @@ const getKey = (data,moduleName) => {
   let pdfKey = "";
   switch(moduleName){
     case 'BPA':
-        pdfKey = "buildingpermit";
+      let businessService = data && data.Bpa && data.Bpa.length > 0 && data.Bpa[0].businessService
+      pdfKey = "buildingpermit";
       if (!window.location.href.includes("oc-bpa")) {
-        if (data && data.businessService === "BPA_LOW") {
+        if (data && data.Bpa && data.Bpa[0].businessService === "BPA_LOW") {
           pdfKey = "buildingpermit-low"
         }
       } else if (window.location.href.includes("oc-bpa")) {
+        pdfKey = "occupancy-certificate"
+      } else if(businessService && businessService.includes('OC')){
         pdfKey = "occupancy-certificate"
       }
       if (window.location.href.includes("oc-bpa") || window.location.href.includes("BPA.NC_OC_SAN_FEE")) {

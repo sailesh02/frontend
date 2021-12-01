@@ -70,7 +70,11 @@ export const getAllOwnerDetails = (property, isSingleOwner = false) => {
 
 export const getDemandDetails = (propertyRes) => {
   let { Properties } = propertyRes;
-  if(!Properties[0].additionalDetails || (Properties[0].additionalDetails && Properties[0].additionalDetails.hasOwnProperty("isRainwaterHarvesting")) || (Properties[0].additionalDetails && Properties[0].additionalDetails.hasOwnProperty("previousPropertyUuid"))){
+  if(!Properties[0].additionalDetails || 
+    (Properties[0].additionalDetails && 
+    Properties[0].additionalDetails.hasOwnProperty("isRainwaterHarvesting") && 
+    !Properties[0].additionalDetails.hasOwnProperty("holdingTax")) || (Properties[0].additionalDetails && 
+    Properties[0].additionalDetails.hasOwnProperty("previousPropertyUuid")) && !Properties[0].additionalDetails.hasOwnProperty("holdingTax")){
     Properties[0].additionalDetails = 
     {
       "holdingTax":'0',
@@ -86,7 +90,8 @@ export const getDemandDetails = (propertyRes) => {
       "penalty":'0',
       "serviceTax":'0',
       "otherDues":'0',
-      "totalAmount":'0'
+      "totalAmount":'0',
+      "pendingFrom" : ''
   }
   }
   

@@ -70,6 +70,7 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
     const documentsUploadRedux = getFromObject(preparedFinalObject, 'documentsUploadRedux', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
     let pdfData = {
+        module:'PT',
         header: "PTM_ACKNOWLEDGEMENT", tenantId: property.tenantId,
         applicationNoHeader: 'PT_PROPERRTYID', applicationNoValue: property.propertyId,
         additionalHeader: "PT_APPLICATION_NO", additionalHeaderValue: property.acknowldgementNumber,

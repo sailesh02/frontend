@@ -724,7 +724,7 @@ class SignPdfContainer extends Component {
                           }}
                         placeholder={{
                             labelName: "Select Token",
-                            labelKey: "CORE_COMMON_SELECT_TOKEN_LABEL"
+                            labelKey: "CORE_COMMON_TOKEN_PLACEHOLDER"
                           }}
                         data={this.state.tokensArray}
                         optionValue="value"
@@ -750,7 +750,7 @@ class SignPdfContainer extends Component {
                           }}
                         placeholder={{
                             labelName: "Select Certificate",
-                            labelKey: "CORE_COMMON_SELECT_CERTIFICATE_LABEL"
+                            labelKey: "CORE_COMMON_CERTIFICATE_PLACEHOLDER"
                           }}
                         data={this.state.ceriticatesArray}
                         optionValue="value"

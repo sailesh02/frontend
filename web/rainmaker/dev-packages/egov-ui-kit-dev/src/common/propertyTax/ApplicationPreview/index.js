@@ -22,6 +22,7 @@ import OwnerInfo from "../Property/components/OwnerInfo";
 import PdfHeader from "../Property/components/PdfHeader";
 import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
 import AdditionalInformation from '../Property/components/AdditionalInformation'
+import { generatePTAcknowledgment } from "egov-ui-kit/utils/pdfUtils/generatePTAcknowledgment";
 import "./index.css";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 const innerDivStyle = {
@@ -315,6 +316,25 @@ class ApplicationPreview extends Component {
     return filteredCity ? get(filteredCity[0], "logoId") : "";
   }
 
+  download() {
+    const { UlbLogoForPdf, properties, generalMDMSDataById,cities } = this.props;
+    let tenantInfo = cities && cities.find((t) => {
+    if (t.code == properties.tenantId)
+      return t;
+    })
+    let ulbGrade = tenantInfo && tenantInfo.city && tenantInfo.city.ulbGrade;
+    generatePTAcknowledgment(properties, generalMDMSDataById, UlbLogoForPdf, `pt-acknowledgement-${properties.propertyId}.pdf`,ulbGrade);
+  }
+  print() {
+    const { UlbLogoForPdf, properties, generalMDMSDataById,cities } = this.props;
+    let tenantInfo = cities && cities.find((t) => {
+    if (t.code == properties.tenantId)
+      return t;
+    })
+    let ulbGrade = tenantInfo && tenantInfo.city && tenantInfo.city.ulbGrade;
+    generatePTAcknowledgment(properties, generalMDMSDataById, UlbLogoForPdf, 'print',ulbGrade);
+  }
+
   render() {
     const { location, documentsUploaded } = this.props;
     const { search } = location;
@@ -329,23 +349,7 @@ class ApplicationPreview extends Component {
     let propertyIdForEditRedirect = this.props.screenConfiguration &&
     this.props.screenConfiguration.preparedFinalObject &&
     this.props.screenConfiguration.preparedFinalObject.Property && this.props.screenConfiguration.preparedFinalObject.Property.propertyId
-    const applicationDownloadObject = {
-      label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
-      link: () => {
-        generatePdfFromDiv("download", applicationNumber, "#property-application-review-form")
-      },
-      leftIcon: "assignment"
-    };
-    const applicationPrintObject = {
-      label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
-      link: () => {
-        generatePdfFromDiv("print", applicationNumber, "#property-application-review-form")
-
-      },
-      leftIcon: "assignment"
-    };
-    const downloadMenu = [applicationDownloadObject];
-    const printMenu = [applicationPrintObject];
+   
     let header = '';
     if (applicationType.dataPath == 'Property') {
       header = 'PT_APPLICATION_TITLE';
@@ -362,7 +366,7 @@ class ApplicationPreview extends Component {
             return role.code;
           })
           : [];
-    const isApprover = roleCodes.includes("PT_APPROVER") || roleCodes.includes("PT_FIELD_INSPECTOR")
+    const isApprover = true
     if (get(properties, "tenantId")) {
       let tenantid = get(properties, "tenantId");
       // logoUrl = get(properties, "tenantId") ? this.getLogoUrl(get(properties, "tenantId")) : "";
@@ -373,7 +377,7 @@ class ApplicationPreview extends Component {
     }
     return <div>
       <Screen className={""}>
-        <PTHeader header={header} subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={applicationNumber} />
+        <PTHeader header={header} subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={applicationNumber} downloadPrintButton={true} download={() => this.download()} print={() => this.print()}/>
         <div className="form-without-button-cont-generic" >
           <div>
             <WorkFlowContainer dataPath={applicationType.dataPath}

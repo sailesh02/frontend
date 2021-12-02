@@ -10,6 +10,14 @@ import { get } from "lodash";
 import store from "ui-redux/store";
 import { getPurpose, PROPERTY_FORM_PURPOSE } from "./formUtils";
 
+const getFinancialYear = () => {
+    let financialYear = ""
+    let currentYear = new Date().getFullYear()
+    let lastTwoDigits = currentYear % 100
+    financialYear = `${currentYear.toString()}-${(lastTwoDigits + 1).toString()}`
+    return financialYear
+}
+
 export const assessProperty = async (action, props) => {
     const purpose = getPurpose()
     let propertyMethodAction = purpose == PROPERTY_FORM_PURPOSE.REASSESS ? "_update" : '_create';
@@ -21,12 +29,15 @@ export const assessProperty = async (action, props) => {
         window.location.href,
         "assessmentId"
     );
-    const financialYear = getQueryArg(window.location.href, "FY");
+    let financialYear = getQueryArg(window.location.href, "FY");
+    if(purpose != PROPERTY_FORM_PURPOSE.REASSESS){
+        financialYear = getFinancialYear()
+    }
     const tenant = getQueryArg(window.location.href, "tenantId");
     let assessment = {
         "tenantId": tenant,
         "propertyId": propertyId,
-        "financialYear": financialYear || "2021-22",
+        "financialYear": financialYear,
         "assessmentDate": new Date().getTime() - 60000,
         "source": "MUNICIPAL_RECORDS",
         "channel": "CFC_COUNTER",

@@ -13,8 +13,9 @@ import { getPurpose, PROPERTY_FORM_PURPOSE } from "./formUtils";
 const getFinancialYear = () => {
     let financialYear = ""
     let currentYear = new Date().getFullYear()
-    let lastTwoDigits = currentYear % 100
-    financialYear = `${currentYear.toString()}-${(lastTwoDigits + 1).toString()}`
+    let currentYearInString = currentYear.toString()
+    let lastTwoDigits = currentYearInString.substr(-2);
+    financialYear = `${currentYear.toString()}-${(Number(lastTwoDigits) + 1).toString()}`
     return financialYear
 }
 

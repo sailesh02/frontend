@@ -26,7 +26,7 @@ export const assessProperty = async (action, props) => {
     let assessment = {
         "tenantId": tenant,
         "propertyId": propertyId,
-        "financialYear": financialYear,
+        "financialYear": financialYear || "2021-22",
         "assessmentDate": new Date().getTime() - 60000,
         "source": "MUNICIPAL_RECORDS",
         "channel": "CFC_COUNTER",

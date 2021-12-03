@@ -59,8 +59,7 @@ class LastAssessmentHistory extends Component {
         return latestAssessments;
     }
     getTransformedAssessmentHistory() {
-        const { Assessments = [], history, propertyId } = this.props;    
-        const assessmentHistoryItems = this.getLatestAssessments(Assessments).map((Assessment,index) => {
+        const Assessment = this.props && this.props.selPropertyDetails // to get last assessment demand details
             return (
                 <div>
                     {getFullRow("PT_HOLDING_TAX", Assessment.additionalDetails && Assessment.additionalDetails.holdingTax ? Assessment.additionalDetails.holdingTax : "",6)}
@@ -77,10 +76,10 @@ class LastAssessmentHistory extends Component {
                     {getFullRow("PT_PROPERTY_SERVICETAX",  Assessment.additionalDetails && Assessment.additionalDetails.serviceTax ? Assessment.additionalDetails.serviceTax : "",6)}
                     {getFullRow("PT_PROPERTY_OTHERDUES",  Assessment.additionalDetails && Assessment.additionalDetails.otherDues ? Assessment.additionalDetails.otherDues : "",6)}
                     {getFullRow("PT_PROPERTY_PENDINGFROM",  Assessment.additionalDetails && Assessment.additionalDetails.pendingFrom ? Assessment.additionalDetails.pendingFrom : "",6)}
-                </div>)
+                </div>
+            )
 
-        })
-        return assessmentHistoryItems;
+    
     }
 
     render() {

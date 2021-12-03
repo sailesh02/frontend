@@ -54,6 +54,12 @@ export const assessProperty = async (action, props) => {
             assessment.assessmentDate = new Date().getTime() - 60000;
         }
     }
+    if(purpose == PROPERTY_FORM_PURPOSE.ASSESS){
+        let oldAssessment = await getAssessmentDetails();
+        if(oldAssessment && oldAssessment.Assessments && oldAssessment.Assessments.length > 0){
+            assessment.additionalDetails = oldAssessment.Assessments[0].additionalDetails
+        }
+    }
     if (Object.keys(adhocExemptionPenalty).length > 1) {
         assessment.additionalDetails.adhocPenalty = Number(adhocExemptionPenalty.adhocPenalty);
         assessment.additionalDetails.adhocPenaltyReason = adhocExemptionPenalty.adhocPenaltyReason == 'Others' ? adhocExemptionPenalty.adhocOtherPenaltyReason : adhocExemptionPenalty.adhocPenaltyReason;

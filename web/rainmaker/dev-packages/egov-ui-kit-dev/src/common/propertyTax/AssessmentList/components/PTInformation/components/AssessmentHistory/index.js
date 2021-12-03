@@ -124,7 +124,7 @@ class AssessmentHistory extends Component {
                                     }
                                     else {
                                         history &&
-                                            history.push(getPropertyLink(propertyId, Assessment.tenantId, PROPERTY_FORM_PURPOSE.REASSESS, Assessment.financialYear, Assessment.assessmentNumber)
+                                            history.push(getPropertyLink(propertyId, Assessment.tenantId, PROPERTY_FORM_PURPOSE.ASSESS, Assessment.financialYear, Assessment.assessmentNumber)
                                             );
                                     }
                                     // lastElement.onClick();

@@ -10,6 +10,15 @@ import { get } from "lodash";
 import store from "ui-redux/store";
 import { getPurpose, PROPERTY_FORM_PURPOSE } from "./formUtils";
 
+const getFinancialYear = () => {
+    let financialYear = ""
+    let currentYear = new Date().getFullYear()
+    let currentYearInString = currentYear.toString()
+    let lastTwoDigits = currentYearInString.substr(-2);
+    financialYear = `${currentYear.toString()}-${(Number(lastTwoDigits) + 1).toString()}`
+    return financialYear
+}
+
 export const assessProperty = async (action, props) => {
     const purpose = getPurpose()
     let propertyMethodAction = purpose == PROPERTY_FORM_PURPOSE.REASSESS ? "_update" : '_create';
@@ -21,7 +30,10 @@ export const assessProperty = async (action, props) => {
         window.location.href,
         "assessmentId"
     );
-    const financialYear = getQueryArg(window.location.href, "FY");
+    let financialYear = getQueryArg(window.location.href, "FY");
+    if(purpose != PROPERTY_FORM_PURPOSE.REASSESS){
+        financialYear = getFinancialYear()
+    }
     const tenant = getQueryArg(window.location.href, "tenantId");
     let assessment = {
         "tenantId": tenant,
@@ -40,6 +52,12 @@ export const assessProperty = async (action, props) => {
             let assessmentResponse = assessments.Assessments[0];
             assessment = assessmentResponse;
             assessment.assessmentDate = new Date().getTime() - 60000;
+        }
+    }
+    if(purpose == PROPERTY_FORM_PURPOSE.ASSESS){
+        let oldAssessment = await getAssessmentDetails();
+        if(oldAssessment && oldAssessment.Assessments && oldAssessment.Assessments.length > 0){
+            assessment.additionalDetails = oldAssessment.Assessments[0].additionalDetails
         }
     }
     if (Object.keys(adhocExemptionPenalty).length > 1) {

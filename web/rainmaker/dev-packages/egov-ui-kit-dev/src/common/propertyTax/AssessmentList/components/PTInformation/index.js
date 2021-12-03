@@ -14,6 +14,7 @@ import TotalDues from "../../../Property/components/TotalDues";
 import ApplicationHistory from "./components/ApplicationHistory";
 import AssessmentHistory from "./components/AssessmentHistory";
 import PaymentHistory from "./components/PaymentHistory";
+import LastAssessmentHistory from "./components/LastAssessmentHistory"
 import "./index.css";
 
 const logoStyle = {
@@ -155,6 +156,7 @@ class PTInformation extends React.Component {
                 <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                 <div id="property-assess-form">
                   <AssessmentHistory></AssessmentHistory>
+                  <LastAssessmentHistory></LastAssessmentHistory>
                   <PaymentHistory></PaymentHistory>
                   <ApplicationHistory></ApplicationHistory>
                 </div>

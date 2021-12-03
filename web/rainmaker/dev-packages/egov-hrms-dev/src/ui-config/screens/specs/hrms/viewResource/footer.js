@@ -11,7 +11,8 @@ const gotoCreateFlow = (state, dispatch) => {
     process.env.REACT_APP_SELF_RUNNING === "true"
       ? `/egov-ui-framework/hrms/create?employeeCode=${employeeCode}&tenantId=${tenantId}`
       : `/hrms/create?employeeCode=${employeeCode}&tenantId=${tenantId}`;
-  dispatch(setRoute(createUrl));
+      window.location = createUrl;
+  //dispatch(setRoute(createUrl));
 };
 
 const getCommonCreateFooter = children => {

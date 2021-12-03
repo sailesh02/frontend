@@ -12,7 +12,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { ActionDialog } from "../";
 import {
-  getNextFinancialYearForRenewal
+  getNextFinancialYearForRenewal,
+  showPDFPreview
 } from "../../ui-utils/commons";
 import { getDownloadItems } from "./downloadItems";
 import "./index.css";
@@ -25,6 +26,9 @@ import {
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
+
+
 
 
 const ifUserRoleExists = role => {
@@ -293,7 +297,10 @@ class Footer extends React.Component {
     const { isDocRequired } = data;
     const appName = process.env.REACT_APP_NAME;
     let status = null;
-    let applicationDigitallySigned = null;
+    let applicationDigitallySigned = false;
+    let pdfPreviewData = null;
+    let pdfKey = null;
+    let modulePdfIdentifier = null;
     const downloadMenu =
       contractData &&
       contractData.map(item => {
@@ -309,10 +316,15 @@ class Footer extends React.Component {
       });
 
     if (moduleName === "NewTL") {
-
+      pdfPreviewData = get(
+        state.screenConfiguration.preparedFinalObject,
+        `Licenses`
+      );
+      pdfKey = "tlcertificate";
+      modulePdfIdentifier = "Licenses";
       applicationDigitallySigned = get(
         state.screenConfiguration.preparedFinalObject,
-        `Licenses[0].dscDetails[0].documentId`
+        `Licenses[0].tradeLicenseDetail.dscDetails[0].documentId`
       );
       status = get(
         state.screenConfiguration.preparedFinalObject,
@@ -408,12 +420,17 @@ class Footer extends React.Component {
     }
 
     if (moduleName === "MR") {
+      pdfPreviewData = get(
+        state.screenConfiguration.preparedFinalObject,
+        `MarriageRegistrations`
+      );
+      pdfKey = "mrcertificate";
       applicationDigitallySigned = get(
         state.screenConfiguration.preparedFinalObject,
         `MarriageRegistrations[0].dscDetails[0].documentId`
       );
 
-
+      modulePdfIdentifier = "MarriageRegistrations";
       status = get(
         state.screenConfiguration.preparedFinalObject,
         `MarriageRegistrations[0].status`
@@ -465,7 +482,7 @@ class Footer extends React.Component {
       //   `renewalPeriod`
       // );
 
-      if (status === "APPROVED") {
+      if (status === "APPROVED" && ifUserRoleExists("MR_CEMP")) {
         const editButton = {
           label: "Edit",
           labelKey: "WF_MR_CORRECTION_SUBMIT_BUTTON",
@@ -481,14 +498,8 @@ class Footer extends React.Component {
         };
 
 
-        if (responseLength > 1) {
-          if (applicationType !== "NEW") {
-            downloadMenu && downloadMenu.push(editButton);
 
-          }
-
-        }
-        else if (responseLength === 1) {
+        if (responseLength === 1) {
 
           downloadMenu && downloadMenu.push(editButton);
 
@@ -518,13 +529,48 @@ class Footer extends React.Component {
       },
       menu: downloadMenu
     };
+
+    const signButtonItems = {
+      label: { labelName: "Sign", labelKey: "WF_PDF_SIGN" },
+      rightIcon: "arrow_drop_down",
+      props: {
+        variant: "outlined",
+        style: {
+          backgroundColor: "#FE7A51",
+          color: "#fff",
+          border: "none",
+          height: "60px",
+          width: "135px"
+        }
+      },
+      menu: [{
+        labelName: "WF_PDF_SIGN",
+        labelKey: "WF_PDF_SIGN",
+        link: () => {
+
+          this.openSignPdfPopup();
+        }
+      },
+      {
+        labelName: "WF_PDF_PREVIEW",
+        labelKey: "WF_PDF_PREVIEW",
+        link: () => {
+
+          showPDFPreview(pdfPreviewData, pdfKey, modulePdfIdentifier);
+        }
+      }
+      ]
+
+    };
+
+
     return (
       <div className="wf-wizard-footer" id="custom-atoms-footer">
         {!isEmpty(downloadMenu) && (
           <Container>
             {process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("MR_APPROVER", "TL_APPROVER") && (moduleName === "NewTL" || moduleName === "MR") && status === "APPROVED" && !applicationDigitallySigned ?
               <Item xs={6} sm={10} className="wf-footer-container">
-                <Button
+                {/* <Button
                   variant={"contained"}
                   color={"primary"}
                   onClick={this.openSignPdfPopup}
@@ -538,10 +584,11 @@ class Footer extends React.Component {
                     labelKey=
                     {"WF_PDF_SIGN"}
                   />
-                </Button>
+                </Button> */}
+                <MenuButton data={signButtonItems} />
               </Item> : ""
             }
-            <Item xs={6} sm={process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("MR_APPROVER", "TL_APPROVER") && (moduleName === "NewTL" || moduleName === "MR") && status === "APPROVED" && !applicationDigitallySigned?2:12} className="wf-footer-container">
+            <Item xs={6} sm={process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("MR_APPROVER", "TL_APPROVER") && (moduleName === "NewTL" || moduleName === "MR") && status === "APPROVED" && !applicationDigitallySigned ? 2 : 12} className="wf-footer-container">
               <MenuButton data={buttonItems} />
             </Item>
           </Container>

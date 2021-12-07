@@ -454,11 +454,12 @@ class WorkFlowContainer extends React.Component {
           this.wfUpdate(label);
         }
       } else {
-        toggleSnackbar(
-            true,
-            { labelName: "Appointment date can not be past date", labelKey: "ERR_APNT_DATE_TIME_REQUIRED" },
-            "error"
-          );
+        // toggleSnackbar(
+        //     true,
+        //     { labelName: "Appointment date can not be past date", labelKey: "ERR_APNT_DATE_TIME_REQUIRED" },
+        //     "error"
+        //   );
+        this.wfUpdate(label);
       }
 
     } else {

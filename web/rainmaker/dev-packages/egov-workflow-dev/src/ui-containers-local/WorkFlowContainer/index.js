@@ -126,8 +126,8 @@ class WorkFlowContainer extends React.Component {
       case "VOID":
         return "purpose=application&status=voided"
       case "REOPEN":
-          return "purpose=reopen&status=success";
-      case "OPEN":  
+        return "purpose=reopen&status=success";
+      case "OPEN":
         return "purpose=reopen&status=success";
       case "SCHEDULE":
         return "purpose=schedule&status=success";
@@ -424,8 +424,8 @@ class WorkFlowContainer extends React.Component {
           "error"
         );
       }
-    }else if(dataPath == "MarriageRegistrations"){
-      
+    } else if (dataPath == "MarriageRegistrations") {
+
       const todayDate = new Date();
       let appointmentDate = get(
         data,
@@ -436,30 +436,47 @@ class WorkFlowContainer extends React.Component {
         data,
         "appointmentTime"
       )
-
+      let appStatus = get(
+        data,
+        "status"
+      )
       if (appointmentDate && appointmentTime) {
-        const [aptHours, aptMins] = appointmentTime.split(":");
-        const [aptYr, aptMonth, aptDay] = appointmentDate.split("-");
-        
-       // const apntDateObj = new Date(appointmentDate);
-       const apntDateObj = new Date(aptYr, parseInt(aptMonth)-1, aptDay, aptHours, aptMins);
-        if (apntDateObj.getTime() < todayDate.getTime()) {
-          toggleSnackbar(
-            true,
-            { labelName: "Appointment date can not be past date", labelKey: "ERR_APNT_DATE_IN_PAST" },
-            "error"
-          );
-        } else {
 
+        
+        if (typeof appointmentDate === "string") {
+          const [aptHours, aptMins] = appointmentTime.split(":");
+          const [aptYr, aptMonth, aptDay] = appointmentDate.split("-");
+
+          // const apntDateObj = new Date(appointmentDate);
+          const apntDateObj = new Date(aptYr, parseInt(aptMonth) - 1, aptDay, aptHours, aptMins);
+          if (apntDateObj.getTime() < todayDate.getTime()) {
+            toggleSnackbar(
+              true,
+              { labelName: "Appointment date can not be past date", labelKey: "ERR_APNT_DATE_IN_PAST" },
+              "error"
+            );
+          } else {
+            
+            this.wfUpdate(label);
+          }
+        } else {
+          console.log(label, "Nero Label Action");
           this.wfUpdate(label);
         }
+
+
       } else {
-        // toggleSnackbar(
-        //     true,
-        //     { labelName: "Appointment date can not be past date", labelKey: "ERR_APNT_DATE_TIME_REQUIRED" },
-        //     "error"
-        //   );
-        this.wfUpdate(label);
+        if (appStatus == "PENDINGSCHEDULE") {
+          toggleSnackbar(
+            true,
+            { labelName: "Appointment date can not be past date", labelKey: "ERR_APNT_DATE_TIME_REQUIRED" },
+            "error"
+          );
+          
+        } else {
+          
+          this.wfUpdate(label);
+        }
       }
 
     } else {
@@ -618,8 +635,8 @@ class WorkFlowContainer extends React.Component {
     }
 
 
-    if(moduleName === "SWCloseConnection" || moduleName === "SWDisconnection" || moduleName === "WSCloseConnection" || moduleName === "WSDisconnection" || moduleName === "WSReconnection" || moduleName === "SWReconnection"
-    || moduleName === "ModifySWConnection" || moduleName === "ModifyWSConnection" || moduleName === "SWOwnershipChange" || moduleName === "WSOwnershipChange"){
+    if (moduleName === "SWCloseConnection" || moduleName === "SWDisconnection" || moduleName === "WSCloseConnection" || moduleName === "WSDisconnection" || moduleName === "WSReconnection" || moduleName === "SWReconnection"
+      || moduleName === "ModifySWConnection" || moduleName === "ModifyWSConnection" || moduleName === "SWOwnershipChange" || moduleName === "WSOwnershipChange") {
       state.isStateUpdatable = false
     }
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit

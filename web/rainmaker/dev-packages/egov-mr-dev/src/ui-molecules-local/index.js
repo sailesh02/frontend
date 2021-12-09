@@ -61,6 +61,11 @@ const TLHowItWorks = Loadable({
   loading: () => <Loading />
 });
 
+const MenuButton = Loadable({
+  loader: () => import("./MenuButton"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -72,5 +77,6 @@ export {
   FeesEstimateCard,
   HowItWorks,
   ActionDialog,
-  TLHowItWorks
+  TLHowItWorks,
+  MenuButton
 };

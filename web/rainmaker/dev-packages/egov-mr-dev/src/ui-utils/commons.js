@@ -520,7 +520,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
 
       let updateResponse = [];
-      if (!isEditFlow) {
+      //if (!isEditFlow) {
 
 
 
@@ -529,7 +529,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         })
 
 
-      }
+      //}
       //Renewal flow
 
       let updatedApplicationNo = "";

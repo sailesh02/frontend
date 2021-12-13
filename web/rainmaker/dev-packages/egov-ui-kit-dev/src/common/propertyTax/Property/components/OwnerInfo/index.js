@@ -393,8 +393,8 @@ class OwnerInfo extends Component {
       }
     }) 
 
-    const isSameOwner = userInfo.mobileNumber ==  (ownerMobileNumber && ownerMobileNumber.length > 0 &&  ownerMobileNumber[0].value)  ? true : false   
-    const transferAllowed = (roleCodes.includes("CITIZEN") || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")) && isSameOwner
+    const isSameOwner = userInfo.mobileNumber ==  (ownerMobileNumber && ownerMobileNumber.length > 0 &&  ownerMobileNumber[0].value)  ? true : false  
+    const transferAllowed = (roleCodes.includes("CITIZEN") && isSameOwner) || (roleCodes.includes("PT_DOC_VERIFIER")) 
 
     return (
       <div>

@@ -1233,7 +1233,7 @@ const screenConfig = {
             okText :"BPA_SIGN_PDF",
             resetText : "BPA_RESET_PDF",
             dataPath : 'BPA',
-            updateUrl : '/bpa-services/v1/_updatedscdetails?',
+            updateUrl : '/bpa/_updatedscdetails?',
             refreshType : 'Table'
           },
           children: {

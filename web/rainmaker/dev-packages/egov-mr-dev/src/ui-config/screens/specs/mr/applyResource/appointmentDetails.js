@@ -20,7 +20,15 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 import "./index.css";
+const getCurrentDate = () => {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
 
+  today = yyyy + '-' + mm + '-' + dd;
+  return today;
+}
 export const enableCard = (state, dispatch) => {
 
   const actionDefination1 = [
@@ -115,7 +123,14 @@ export const appointmentDetails = getCommonGrayCard(
 
         },
         jsonPath: "MarriageRegistrations[0].appointmentDate",
+        props: {
 
+          inputProps: {
+
+            min: getCurrentDate()
+
+          }
+        },
         required: true,
         gridDefination: {
           xs: 12,

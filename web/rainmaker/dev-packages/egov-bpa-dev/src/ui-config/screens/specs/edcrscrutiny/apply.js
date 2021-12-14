@@ -5,12 +5,63 @@ import {
   getCommonContainer,
   getCommonHeader,
   getPattern,
-  getLabel
+  getLabel,
+  getCommonCaption,
+  getCommonValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { documentList } from "./documentList";
 import { resetFields, submitFields } from "./functions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {fetchMDMSData} from "./functions";
+
+//for displaying note in entire grid
+const getLabelWithValueNote = (label, value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 12,
+      sm: 12
+    },
+    props: {
+      style: {
+        marginBottom:'20px',
+        textAlign: 'justify'
+      },
+      ...props
+    },
+    children: {
+      label: getCommonCaption(label),
+      value: getCommonValue(value)
+    }
+  };
+};
+
+const onHrefClick = () => {
+  window.open("https://bhubaneswarone.in/home/", '_blank');
+}
+const getNoteLink = (label,value,props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Href",
+    gridDefination: {
+      xs: 12,
+      sm: 12
+    },
+    props: {
+      onClick: onHrefClick,
+      style: {
+        marginTop:'12px',
+        textAlign: 'justify'
+      },
+      ...props
+    },
+    children: {
+      label: getCommonCaption(label),
+      value: getCommonValue(value)
+    }
+  };
+}
 
 const header = getCommonHeader({
   labelName: "New Building Plan Scrutiny",
@@ -194,7 +245,6 @@ const buildingInfoCard = getCommonCard({
         documentList
       }
     },
-
     buttonContainer: getCommonContainer({
       firstCont: {
         uiFramework: "custom-atoms",
@@ -273,6 +323,31 @@ const buildingInfoCard = getCommonCard({
           sm: 3
         }
       }
+    }),
+  })
+});
+
+const noteCard = getCommonCard({
+  buildingPlanCardContainer: getCommonContainer({
+    inputdetails: getCommonContainer({
+      note: getLabelWithValueNote(
+        {
+          labelName: "",
+          labelKey: ""
+        },
+        {
+          jsonPath: "Note[0].message",
+        }
+      ),
+      link: getNoteLink(
+        {
+          labelName: "",
+          labelKey: ""
+        },
+        {
+          jsonPath: "Note[0].link",
+        }
+      )
     })
   })
 });
@@ -283,6 +358,8 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("Scrutiny[0]", {}));
     dispatch(prepareFinalObject("LicensesTemp[0]", {}));
+    dispatch(prepareFinalObject("Note[0].message","For projects in the Bhubaneswar area, kindly refer to the following link to get GIS and Comprehensive Development Plan, Airports Authority of India (AAI), National Monuments Authority (NMA) and other related information."))
+    dispatch(prepareFinalObject("Note[0].link","https://bhubaneswarone.in/home/"))
     fetchMDMSData(action, state, dispatch);
     return action;
   },
@@ -308,7 +385,8 @@ const screenConfig = {
             }
           }
         },
-        buildingInfoCard
+        buildingInfoCard,
+        noteCard
       }
     }
   }

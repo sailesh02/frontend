@@ -7,7 +7,7 @@ import get from "lodash/get";
 import React from "react";
 import { connect } from "react-redux";
 import store from "ui-redux/store";
-import { showHideAdhocPopup } from "../../ui-config/screens/specs/utils";
+import { showHideAdhocPopup, getTextToLocalMapping } from "../../ui-config/screens/specs/utils";
 import {
   isWorkflowExists, checkifInWorkflow
 } from "../../ui-utils/commons";
@@ -388,29 +388,22 @@ class Footer extends React.Component {
             ? "WS_DUE_AMOUNT_SHOULD_BE_ZERO"
             : "SW_DUE_AMOUNT_SHOULD_BE_ZERO";
         if (due && parseInt(due) > 0) {
-          toggleSnackbar(
-            true,
-            {
-              labelName: "Due Amount should be zero!",
-              labelKey: errLabel,
-            },
-            "error"
+          if(window.confirm(
+            getTextToLocalMapping("WS_PENDING_DUES_MSG"), // dues are pending but still want to proceed with the modify connection
+            )){
+              store.dispatch(
+                setRoute(
+                  `/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`
+                )
+              );
+            }
+        }else{
+          store.dispatch(
+            setRoute(
+              `/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`
+            )
           );
-
-          return false;
         }
-
-        // check for the WF Exists
-        const queryObj = [
-          { key: "businessIds", value: applicationNos },
-          { key: "tenantId", value: tenantId },
-        ];
-
-        store.dispatch(
-          setRoute(
-            `/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`
-          )
-        );
       },
     };
     const BillAmendment = {

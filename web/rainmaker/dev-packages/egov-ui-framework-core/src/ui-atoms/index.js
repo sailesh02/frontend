@@ -8,6 +8,11 @@ const Div = Loadable({
   loader: () => import("./HtmlElements/Div"),
   loading: () => <Loading />
 });
+
+const Href = Loadable({
+  loader: () => import("./HtmlElements/Href"),
+  loading: () => <Loading />
+})
 const Form = Loadable({
   loader: () => import("./HtmlElements/Form"),
   loading: () => <Loading />
@@ -188,5 +193,6 @@ export {
   AckHeader,
   AckBody,
   AckFooter,
-  ApplicationNumber
+  ApplicationNumber,
+  Href
 };

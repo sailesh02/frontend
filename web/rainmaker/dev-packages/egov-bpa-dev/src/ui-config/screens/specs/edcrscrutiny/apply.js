@@ -25,7 +25,7 @@ const getLabelWithValueNote = (label, value, props = {}) => {
     },
     props: {
       style: {
-        marginTop:'12px',
+        marginBottom:'20px',
         textAlign: 'justify'
       },
       ...props
@@ -36,6 +36,32 @@ const getLabelWithValueNote = (label, value, props = {}) => {
     }
   };
 };
+
+const onHrefClick = () => {
+  window.open("https://bhubaneswarone.in/home/", '_blank');
+}
+const getNoteLink = (label,value,props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Href",
+    gridDefination: {
+      xs: 12,
+      sm: 12
+    },
+    props: {
+      onClick: onHrefClick,
+      style: {
+        marginTop:'12px',
+        textAlign: 'justify'
+      },
+      ...props
+    },
+    children: {
+      label: getCommonCaption(label),
+      value: getCommonValue(value)
+    }
+  };
+}
 
 const header = getCommonHeader({
   labelName: "New Building Plan Scrutiny",
@@ -313,7 +339,7 @@ const noteCard = getCommonCard({
           jsonPath: "Note[0].message",
         }
       ),
-      link: getLabelWithValueNote(
+      link: getNoteLink(
         {
           labelName: "",
           labelKey: ""

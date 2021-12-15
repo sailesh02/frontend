@@ -10,6 +10,7 @@ import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
 import { paybuttonJsonpath } from "./constants";
+import { isWater} from '../../../../../ui-containers-local/CustomTabContainer/payment-methods'
 import "./index.css";
 
 const checkAmount = (totalAmount, customAmount, businessService) => {
@@ -421,7 +422,7 @@ const callBackForPay = async (state, dispatch) => {
       return;
     }
   }
-  if (selectedPaymentType === "CHEQUE" || selectedPaymentType === "OFFLINE_NEFT" || selectedPaymentType === "OFFLINE_RTGS") {
+  if ((selectedPaymentType === "CHEQUE" || selectedPaymentType === "OFFLINE_NEFT" || selectedPaymentType === "OFFLINE_RTGS") && !isWater()) {
     //Extra check - to verify ifsc and bank details are populated
 
 

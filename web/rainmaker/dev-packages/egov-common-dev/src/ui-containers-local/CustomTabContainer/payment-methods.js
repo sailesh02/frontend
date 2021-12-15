@@ -6,6 +6,16 @@ import {
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
+export const isWater = () => {
+  const businessService = getQueryArg(window.location.href, "businessService");
+  if(businessService && (businessService == 'WS' || businessService == 'SW' )){
+    return true
+  }else{
+    return false
+  }
+}
 
 const onIconClick = (state, dispatch, index) => {
   const ifscCode = get(
@@ -220,7 +230,7 @@ export const onlineDetails = getCommonContainer({
       labelName: "Enter bank IFSC",
       labelKey: "NOC_PAYMENT_IFSC_CODE_PLACEHOLDER"
     },
-    required: true,
+    required: isWater() ? false : true,
     jsonPath: "ReceiptTemp[0].instrument.ifscCode",
     iconObj: {
       iconName: "search",
@@ -243,7 +253,7 @@ export const onlineDetails = getCommonContainer({
       labelName: "Enter bank name",
       labelKey: "NOC_PAYMENT_BANK_NAME_PLACEHOLDER"
     },
-    required: true,
+    required: isWater() ? false : true,
     props: {
       disabled: true
     },
@@ -258,7 +268,7 @@ export const onlineDetails = getCommonContainer({
       labelName: "Enter bank branch",
       labelKey: "NOC_PAYMENT_BANK_BRANCH_PLACEHOLDER"
     },
-    required: true,
+    required: isWater() ? false : true,
     props: {
       disabled: true
     },
@@ -301,7 +311,7 @@ export const chequeDetails = getCommonContainer({
       labelName: "Enter bank IFSC",
       labelKey: "NOC_PAYMENT_IFSC_CODE_PLACEHOLDER"
     },
-    required: true,
+    required: isWater() ? false : true,
     jsonPath: "ReceiptTemp[0].instrument.ifscCode",
     iconObj: {
       iconName: "search",
@@ -324,7 +334,7 @@ export const chequeDetails = getCommonContainer({
       labelName: "Enter bank name",
       labelKey: "NOC_PAYMENT_BANK_NAME_PLACEHOLDER"
     },
-    required: true,
+    required: isWater() ? false : true,
     props: {
       disabled: true
     },
@@ -339,7 +349,7 @@ export const chequeDetails = getCommonContainer({
       labelName: "Enter bank branch",
       labelKey: "NOC_PAYMENT_BANK_BRANCH_PLACEHOLDER"
     },
-    required: true,
+    required: isWater() ? false : true,
     props: {
       disabled: true
     },

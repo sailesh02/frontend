@@ -9,7 +9,7 @@ export const documentList = {
     },
     inputProps : [
       {
-        type : "OWNERIDPROOF",
+        type : "BRIDEIDPROOF",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -20,7 +20,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OWNERSHIPPROOF",
+        type : "BRIDEFATHERIDPROOF",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -31,7 +31,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OWNERPHOTO",
+        type : "BRIDEMOTHERIDPROOF",
         description: {
           labelName: "Only .png and .jpeg 6MB max file size.",
           labelKey: "TL_UPLOAD_IMAGE_RESTRICTIONS"
@@ -42,7 +42,7 @@ export const documentList = {
         maxFileSize: 3000
       },
       {
-        type : "OLDLICENCENO",
+        type : "BRIDEGUARDIANIDPROOF",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -53,7 +53,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "BRIDEWITNESSIDPROOF",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -64,7 +64,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "BRIDEINVITATIONCARD",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -75,7 +75,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "BRIDERESIDENTIALPROOF",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -86,7 +86,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "BRIDEDIVYANGPROOF",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -97,7 +97,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "GROOMIDPROOF",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -108,7 +108,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "GROOMFATHERIDPROOF",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -119,7 +119,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "GROOMMOTHERIDPROOF",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -130,7 +130,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "GROOMGUARDIANIDPROOF",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -141,7 +141,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "GROOMWITNESSIDPROOF",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -152,7 +152,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "GROOMINVITATIONCARD",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -163,7 +163,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "GROOMRESIDENTIALPROOF",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -174,7 +174,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "GROOMDIVYANGPROOF",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -185,7 +185,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "JOINTPHOTO",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"
@@ -196,7 +196,7 @@ export const documentList = {
         maxFileSize: 5000
       },
       {
-        type : "OLDLICENCENO",
+        type : "JOINTAFFIDAVIT",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
           labelKey: "TL_UPLOAD_RESTRICTIONS"

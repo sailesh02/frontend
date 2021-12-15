@@ -9,8 +9,8 @@ import get from "lodash/get";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 export const isWater = () => {
-  const businessService = getQueryArg(window.location.href, "businessService");
-  if(businessService && (businessService == 'WS' || businessService == 'SW' )){
+  const consumerCode = getQueryArg(window.location.href, "consumerCode");
+  if(consumerCode && (consumerCode.includes('WS') || consumerCode.includes('SW'))){
     return true
   }else{
     return false

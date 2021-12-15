@@ -37,7 +37,7 @@ export const documentList = {
           labelKey: "TL_UPLOAD_IMAGE_RESTRICTIONS"
         },
         formatProps :{
-          accept: "image/*, .png, .jpeg",
+          accept: "image/*, .pdf, .png, .jpeg",
         },
         maxFileSize: 3000
       },
@@ -191,7 +191,7 @@ export const documentList = {
           labelKey: "TL_UPLOAD_RESTRICTIONS"
         },
         formatProps :{
-          accept : "image/*, .pdf, .png, .jpeg",
+          accept : "image/*, .png, .jpeg",
         },
         maxFileSize: 5000
       },

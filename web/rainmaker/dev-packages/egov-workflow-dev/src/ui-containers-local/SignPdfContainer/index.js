@@ -20,6 +20,7 @@ import TextField from "material-ui/TextField";
 import { getLocale, getTenantId,getAccessToken, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import axios from 'axios';
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 let RequestInfo = {};
 
@@ -44,6 +45,29 @@ const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
         let applicationDigitallySigned = tlSearchResult && tlSearchResult.Licenses && tlSearchResult.Licenses.length > 0 && tlSearchResult.Licenses[0].tradeLicenseDetail &&
         tlSearchResult.Licenses[0].tradeLicenseDetail.dscDetails && tlSearchResult.Licenses[0].tradeLicenseDetail.dscDetails[0].documentId ? true : false
         if(!applicationDigitallySigned){
+
+          let pdfOwnersNames = '';
+          let pdfTradeTypes = '';
+          if (tlSearchResult.Licenses[0].tradeLicenseDetail.owners && tlSearchResult.Licenses[0].tradeLicenseDetail.owners.length > 0) {
+            for (let i = 0; i < tlSearchResult.Licenses[0].tradeLicenseDetail.owners.length; i++) {
+              pdfOwnersNames += tlSearchResult.Licenses[0].tradeLicenseDetail.owners[i].name + ", ";
+            }
+            pdfOwnersNames = pdfOwnersNames.substring(0, pdfOwnersNames.length - 2);
+          }
+      
+          if (tlSearchResult.Licenses[0].tradeLicenseDetail.tradeUnits && tlSearchResult.Licenses[0].tradeLicenseDetail.tradeUnits.length > 0) {
+            for (let i = 0; i < tlSearchResult.Licenses[0].tradeLicenseDetail.tradeUnits.length; i++) {
+              let tradeTypeLocale = '';
+      
+              tradeTypeLocale = getLocaleLabels("TradeType", `TRADELICENSE_TRADETYPE_${tlSearchResult.Licenses[0].tradeLicenseDetail.tradeUnits[i].tradeType.replace(/\./g, '_')}`);
+              console.log(tradeTypeLocale, "Nero Locallll")
+              pdfTradeTypes += tradeTypeLocale + ", ";
+            }
+            pdfTradeTypes = pdfTradeTypes.substring(0, pdfTradeTypes.length - 2);
+          }
+      
+          tlSearchResult.Licenses[0].additionalDetail = { ownerNames: pdfOwnersNames, tradeTypes: pdfTradeTypes };
+
           return {
             RequestInfo : RequestInfo,
             "Licenses":tlSearchResult && tlSearchResult.Licenses

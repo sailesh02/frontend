@@ -23,6 +23,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import { getResultUrl } from "./commons/url";
 import Label from "egov-ui-kit/utils/translationNode";
 import commonConfig from "config/common.js";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId, setReturnUrl, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
@@ -114,7 +115,7 @@ class ShowField extends Component {
         footer: true,
         customize: function(doc) {
           doc.content[0].text = [];
-          doc.content[0].text.push({ text: "Sujog\n\n", bold: true, fontSize: 20 });
+          doc.content[0].text.push({ text: `${getLocaleLabels("RT_MSEVA_REPORT_HEADER","RT_MSEVA_REPORT_HEADER")}\n\n`, bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
           doc.content[1].margin = [ 80, 0, 80, 0 ]
         },

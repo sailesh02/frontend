@@ -228,18 +228,13 @@ const getKey = (data,moduleName) => {
     case 'BPA':
       let businessService = data && data.Bpa && data.Bpa.length > 0 && data.Bpa[0].businessService
       pdfKey = "buildingpermit";
-      if (!window.location.href.includes("oc-bpa")) {
-        if (data && data.Bpa && data.Bpa[0].businessService === "BPA_LOW") {
-          pdfKey = "buildingpermit-low"
-        }
-      } else if (window.location.href.includes("oc-bpa")) {
-        pdfKey = "occupancy-certificate"
-      } else if(businessService && (businessService == "BPA_OC" || businessService == "BPA_OC1" || 
+      if(businessService && businessService === 'BPA_LOW'){
+        pdfKey = "buildingpermit-low"
+      }else if(businessService && (businessService == "BPA_OC" || businessService == "BPA_OC1" || 
       businessService == "BPA_OC2" || businessService == "BPA_OC3" || businessService == "BPA_OC4")){
         pdfKey = "occupancy-certificate"
-      }
-      if (window.location.href.includes("oc-bpa") || window.location.href.includes("BPA.NC_OC_SAN_FEE")) {
-        pdfKey = "occupancy-certificate"
+      }else{
+        pdfKey = "buildingpermit";
       }
     break; 
     case 'NewTL':

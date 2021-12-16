@@ -70,7 +70,7 @@ const closePdfSigningPopup = (refreshType) => {
       'visible',
       false
     ))
-    store.dispatch(prepareFinalObject("BPA[0].dscDetails[0].documentId",'Yes'))
+    store.dispatch(prepareFinalObject("BPA.dscDetails[0].documentId",'Yes'))
   }
 }
 

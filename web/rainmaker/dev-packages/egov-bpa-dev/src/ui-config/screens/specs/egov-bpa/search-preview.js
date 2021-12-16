@@ -743,26 +743,32 @@ const setSearchResponse = async (
     }
   }
 
+  let BPAData = get(response,"BPA")
+  let isOldApplication = BPAData && BPAData.length > 0 && BPAData[0] &&
+  !BPAData[0].dscDetails ? true : false
+
   dispatch(handleField(
     'search-preview',
     'components.div.children.body.children.cardContent.children.reviewPdfSignDetails',
     'visible',
-    status == 'APPROVED' ? true : false
+    status == 'APPROVED' && !isOldApplication ? true : false
   ))
  
-  let BPAData = get(response,"BPA")
   let applicationDigitallySigned = BPAData && BPAData.length > 0 && BPAData[0] &&
   BPAData[0].dscDetails && BPAData[0].dscDetails[0].documentId ? true : false
 
-  dispatch(handleField(
-    'search-preview',
-    'components.div.children.body.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
-    'visible',
-    (status == 'APPROVED' && (ifUserRoleExists('BPA1_APPROVER') || 
-    ifUserRoleExists('BPA2_APPROVER') || ifUserRoleExists('BPA3_APPROVER') ||
-    ifUserRoleExists('BPA4_APPROVER')) && process.env.REACT_APP_NAME != 'Citizen' && 
-    !applicationDigitallySigned) ? true : false
-  ))
+  if(!isOldApplication){
+    dispatch(handleField(
+      'search-preview',
+      'components.div.children.body.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
+      'visible',
+      (status == 'APPROVED' && (ifUserRoleExists('BPA1_APPROVER') || 
+      ifUserRoleExists('BPA2_APPROVER') || ifUserRoleExists('BPA3_APPROVER') ||
+      ifUserRoleExists('BPA4_APPROVER')) && process.env.REACT_APP_NAME != 'Citizen' && 
+      !applicationDigitallySigned) ? true : false
+    ))
+  }
+  
 
   if (response && response.BPA["0"] && response.BPA["0"].documents) {
     dispatch(prepareFinalObject("documentsTemp", response.BPA["0"].documents));

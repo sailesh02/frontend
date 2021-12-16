@@ -13,7 +13,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getQueryArg,
-  setBusinessServiceDataToLocalStorage, setDocuments, getLocaleLabels
+  setBusinessServiceDataToLocalStorage, setDocuments
 } from "egov-ui-framework/ui-utils/commons";
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import get from "lodash/get";
@@ -47,14 +47,14 @@ const closePdfSigningPopup = (refreshType) => {
       false
     )
   )
-  if (refreshType == "preview") {
+  if(refreshType == "preview"){
     store.dispatch(handleField(
       'search-preview',
       'components.div.children.tradeReviewDetails.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
       'visible',
       false
     ))
-    store.dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.dscDetails[0].documentId", 'Yes'))
+    store.dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.dscDetails[0].documentId",'Yes'))
   }
 }
 
@@ -126,31 +126,6 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   );
 
   let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
-
-  let appStatus = get(payload, "Licenses[0].status");
-  if (appStatus != "INITIATED") {
-    let pdfOwnersNames = '';
-    let pdfTradeTypes = '';
-    if (payload.Licenses[0].tradeLicenseDetail.owners && payload.Licenses[0].tradeLicenseDetail.owners.length > 0) {
-      for (let i = 0; i < payload.Licenses[0].tradeLicenseDetail.owners.length; i++) {
-        pdfOwnersNames += payload.Licenses[0].tradeLicenseDetail.owners[i].name + ", ";
-      }
-      pdfOwnersNames = pdfOwnersNames.substring(0, pdfOwnersNames.length - 2);
-    }
-
-    if (payload.Licenses[0].tradeLicenseDetail.tradeUnits && payload.Licenses[0].tradeLicenseDetail.tradeUnits.length > 0) {
-      for (let i = 0; i < payload.Licenses[0].tradeLicenseDetail.tradeUnits.length; i++) {
-        let tradeTypeLocale = '';
-
-        tradeTypeLocale = getLocaleLabels("TradeType", `TRADELICENSE_TRADETYPE_${payload.Licenses[0].tradeLicenseDetail.tradeUnits[i].tradeType.replace(/\./g, '_')}`);
-        console.log(tradeTypeLocale, "Nero Locallll")
-        pdfTradeTypes += tradeTypeLocale + ", ";
-      }
-      pdfTradeTypes = pdfTradeTypes.substring(0, pdfTradeTypes.length - 2);
-    }
-
-    payload.Licenses[0].additionalDetail = { ownerNames: pdfOwnersNames, tradeTypes: pdfTradeTypes };
-  }
   payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
   payload && dispatch(prepareFinalObject("LicensesTemp[0].oldOwners", [...payload.Licenses[0].tradeLicenseDetail.owners]));
 
@@ -192,20 +167,20 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     fetchFromReceipt
   );
 
-  if (payload && payload.Licenses.length > 0) {
+  if(payload && payload.Licenses.length > 0){
 
     let licenseType = get(payload, "Licenses[0].licenseType");
     let tlPeriod = get(payload, "Licenses[0].tradeLicenseDetail.additionalDetail.licensePeriod")
 
-    if (licenseType === "PERMANENT") {
+    if(licenseType === "PERMANENT"){
       dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", `${tlPeriod} Years`));
-    } else {
+    }else{
       dispatch(prepareFinalObject("TradeLicensesSummaryDisplayInfo.tlPeriodForDisplayOnReview", `${tlPeriod} Days`));
     }
 
-  }
+   }
 
-  let applicationStatus = get(payload, "Licenses[0].status")
+  let applicationStatus = get(payload,"Licenses[0].status")
 
   dispatch(handleField(
     'search-preview',
@@ -213,10 +188,10 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     'visible',
     applicationStatus != 'APPROVED' ? false : true
   ))
-
-  let Licenses = get(payload, "Licenses")
+ 
+  let Licenses = get(payload,"Licenses")
   let applicationDigitallySigned = Licenses && Licenses.length > 0 && Licenses[0].tradeLicenseDetail &&
-    Licenses[0].tradeLicenseDetail.dscDetails && Licenses[0].tradeLicenseDetail.dscDetails[0].documentId ? true : false
+  Licenses[0].tradeLicenseDetail.dscDetails && Licenses[0].tradeLicenseDetail.dscDetails[0].documentId ? true : false
 
   dispatch(handleField(
     'search-preview',
@@ -272,23 +247,23 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
     const obj = setStatusBasedValue(status);
-    let appDocuments = get(data, "Licenses[0].tradeLicenseDetail.applicationDocuments", []);
+    let appDocuments=get(data, "Licenses[0].tradeLicenseDetail.applicationDocuments",[]);
     if (appDocuments) {
       let applicationDocs = [];
       appDocuments.forEach(doc => {
-        if (doc.length !== 0) {
+        if(doc.length !== 0) {
           applicationDocs.push(doc);
         }
       })
-      applicationDocs = applicationDocs.filter(document => document);
+      applicationDocs=applicationDocs.filter(document=>document);
 
-      let removedDocs = get(data, "LicensesTemp[0].removedDocs", []);
-      if (removedDocs.length > 0) {
-        removedDocs.map(removedDoc => {
-          applicationDocs = applicationDocs.filter(appDocument => !(appDocument.documentType === removedDoc.documentType && appDocument.fileStoreId === removedDoc.fileStoreId))
-        })
+      let removedDocs=get(data, "LicensesTemp[0].removedDocs",[]);
+      if(removedDocs.length>0){
+          removedDocs.map(removedDoc=>{
+            applicationDocs=applicationDocs.filter(appDocument=>!(appDocument.documentType===removedDoc.documentType&&appDocument.fileStoreId===removedDoc.fileStoreId))
+          })
       }
-      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", applicationDocs));
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments",applicationDocs));
       await setDocuments(
         get(state, "screenConfiguration.preparedFinalObject"),
         "Licenses[0].tradeLicenseDetail.applicationDocuments",
@@ -380,7 +355,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       financialYear
     );
 
-
+    
 
     // Get approval details based on status and set it in screenconfig
 
@@ -463,19 +438,19 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         true
       );
 
-    if (status !== "INITIATED") {
-      process.env.REACT_APP_NAME === "Citizen"
-        ? set(
-          action,
-          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-          CitizenprintCont
-        )
-        : set(
-          action,
-          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-          printCont
-        );
-    }
+      if (status !== "INITIATED") {
+        process.env.REACT_APP_NAME === "Citizen"
+          ? set(
+            action,
+            "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+            CitizenprintCont
+          )
+          : set(
+            action,
+            "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+            printCont
+          );
+      }  
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
 
@@ -593,14 +568,14 @@ export const tradeReviewDetails = getCommonCard({
   reviewDocumentDetails
 });
 
-export const beforeSubmitHook = (Licenses = [{}]) => {
+export const beforeSubmitHook =  (Licenses=[{}]) => {
   let state = store.getState();
-  let oldOwners = JSON.parse(
+  let oldOwners =  JSON.parse(
     JSON.stringify(get(state, "screenConfiguration.preparedFinalObject.LicensesTemp[0].oldOwners", {}))
   );
-  Licenses && Array.isArray(Licenses) && Licenses.length > 0 && set(Licenses[0], "tradeLicenseDetail.owners", checkValidOwners(get(Licenses[0], "tradeLicenseDetail.owners", []), oldOwners));
+  Licenses&&Array.isArray(Licenses)&&Licenses.length>0&& set(Licenses[0] ,"tradeLicenseDetail.owners", checkValidOwners(get(Licenses[0], "tradeLicenseDetail.owners",[]),oldOwners));
 
-  return Licenses;
+return Licenses;
 
 }
 const screenConfig = {
@@ -665,7 +640,7 @@ const screenConfig = {
             dataPath: "Licenses",
             moduleName: "NewTL",
             updateUrl: "/tl-services/v1/_update",
-            beforeSubmitHook: beforeSubmitHook
+            beforeSubmitHook:beforeSubmitHook
           }
         },
         tradeReviewDetails
@@ -681,20 +656,20 @@ const screenConfig = {
         screenKey: "search-preview"
       }
     },
-    pdfSigningPopup: {
+    pdfSigningPopup : {
       uiFramework: 'custom-containers-local',
       componentPath: 'SignPdfContainer',
       moduleName: "egov-workflow",
       props: {
         openPdfSigningPopup: false,
-        closePdfSigningPopup: closePdfSigningPopup,
+        closePdfSigningPopup : closePdfSigningPopup,
         maxWidth: false,
-        moduleName: 'NewTL',
-        okText: "TL_SIGN_PDF",
-        resetText: "TL_RESET_PDF",
-        dataPath: 'Licenses',
-        refreshType: 'preview',
-        updateUrl: '/tl-services/v1/_updatedscdetails?'
+        moduleName : 'NewTL',
+        okText :"TL_SIGN_PDF",
+        resetText : "TL_RESET_PDF",
+        dataPath : 'Licenses',
+        refreshType : 'preview',
+        updateUrl : '/tl-services/v1/_updatedscdetails?'
       }
     }
   }

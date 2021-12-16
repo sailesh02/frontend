@@ -163,7 +163,7 @@ export const getPendingDigitallySignedApplications = async () => {
   try {
     const response = await httpRequest(
       "post",
-      "/bpa/_searchdscdetails",
+      "/bpa-services/v1/bpa/_searchdscdetails",
       "",
       queryObject
     );

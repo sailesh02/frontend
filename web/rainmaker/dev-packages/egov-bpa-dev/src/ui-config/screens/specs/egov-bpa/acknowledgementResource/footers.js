@@ -406,59 +406,6 @@ export const paymentSuccessFooter = (action, state, dispatch, applicationNumber,
             : `/`
       },
        visible: true
-    },
-    pdfSign: {
-      componentPath: "Button",
-      props: {
-        variant: "outlined",
-        className:"home-footer",
-        color: "primary",
-        style: {
-      //    minWidth: "200px",
-          height: "48px",
-          marginRight: "16px"
-        }
-      },
-      children: {
-        pdfSignButtonLabel: getLabel({
-          labelName: "BPA_PDF_SIGN",
-          labelKey: "BPA_PDF_SIGN"
-        })
-      },
-      onClickDefination: {
-        action: "condition",
-        callBack: (state, dispatch) => {
-          const applicationNumber = getQueryArg(window.location.href, "consumerCode");
-          const tenantId = getQueryArg(window.location.href, "tenantId");
-  
-          dispatch(
-            handleField(
-              "acknowledgement",
-              "components.pdfSigningPopup.props",
-              "openPdfSigningPopup",
-              true
-            )
-          )
-          dispatch(
-            handleField(
-              "acknowledgement",
-              "components.pdfSigningPopup.props",
-              "applicationNumber",
-              applicationNumber
-            )
-          )
-          dispatch(
-            handleField(
-              "acknowledgement",
-              "components.pdfSigningPopup.props",
-              "tenantId",
-              tenantId
-            )
-          )
-        }
-      },
-      visible : ((businessService == "BPA.LOW_RISK_PERMIT_FEE") || (businessService == "BPA.NC_SAN_FEE")
-      || (businessService == "BPA.NC_OC_SAN_FEE") && process.env.REACT_APP_NAME != "Citizen")  ? true : false
     }
   });
 };

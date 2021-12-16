@@ -608,7 +608,7 @@ const screenConfig = {
         resetText : "BPA_RESET_PDF",
         dataPath : 'BPA',
         refreshType : "acknowledgement",
-        updateUrl : '/bpa/_updatedscdetails?'
+        updateUrl : '/bpa-services/v1/bpa/_updatedscdetails?',
       },
       children: {
         popup: {}

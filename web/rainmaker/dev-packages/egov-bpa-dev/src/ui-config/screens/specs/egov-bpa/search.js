@@ -315,7 +315,7 @@ const BpaSearchAndResult = {
         okText :"BPA_SIGN_PDF",
         resetText : "BPA_RESET_PDF",
         dataPath : 'BPA',
-        updateUrl : '/bpa/_updatedscdetails?',
+        updateUrl : '/bpa-services/v1/bpa/_updatedscdetails?',
         refreshType : 'Table'
       },
       children: {

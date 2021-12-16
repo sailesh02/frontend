@@ -23,67 +23,6 @@ import store from "ui-redux/store";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
-const closePdfSigningPopup = (refreshType) => {
-  store.dispatch(
-    handleField(
-      "acknowledgement",
-      "components.pdfSigningPopup.props",
-      "openPdfSigningPopup",
-      false
-    )
-  )
-  if(refreshType == 'acknowledgement'){
-    store.dispatch(
-      handleField(
-        "acknowledgement",
-        "components.div.children.paymentSuccessFooter.children.pdfSign",
-        "visible",
-        false
-      )
-    )
-
-    // store.dispatch(
-    //   handleField(
-    //     "acknowledgement",
-    //     "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.body.children.paragraph",
-    //     "visible",
-    //     false
-    //   )
-    // )
-
-    // store.dispatch(
-    //   handleField(
-    //     "acknowledgement",
-    //     "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.tail",
-    //     "visible",
-    //     false
-    //   )
-    // )
-    
-    // store.dispatch(
-    //   handleField(
-    //     "acknowledgement",
-    //     "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.body.children.header.children.key.props",
-    //     "labelKey",
-    //     "BPA_SIGN_CHECKLIST_MESSAGE_HEAD"
-    //   )
-    // )
-
-    // store.dispatch(
-    //   handleField(
-    //     "acknowledgement",
-    //     "components.div.children.header.children.header.children.key.props",
-    //     "labelKey",
-    //     "BPA_PDF_SIGNING"
-    //   )
-    // )
-    let consumnerCode = getQueryArg(window.location.href, "consumerCode")
-    let tenantId = getQueryArg(window.location.href, "tenantId")
-    let receiptNumber = getQueryArg(window.location.href, "receiptNumber")
-    let businessService = getQueryArg(window.location.href, "businessService")
-    store.dispatch(setRoute(`/egov-bpa/pdfSigningAcknowledgement?status=success&consumerCode=${consumnerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&purpose=signed`))
-  }
-}
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Payment Information (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
@@ -842,25 +781,6 @@ const screenConfig = {
       componentPath: "Div",
       props: {
         className: "common-div-css"
-      }
-    },
-    pdfSigningPopup : {
-      uiFramework: 'custom-containers-local',
-      componentPath: 'SignPdfContainer',
-      moduleName: "egov-workflow",
-      props: {
-        openPdfSigningPopup: false,
-        closePdfSigningPopup : closePdfSigningPopup,
-        maxWidth: false,
-        moduleName : 'BPA',
-        okText :"BPA_SIGN_PDF",
-        resetText : "BPA_RESET_PDF",
-        dataPath : 'BPA',
-        refreshType : "acknowledgement",
-        updateUrl : '/bpa/_updatedscdetails?'
-      },
-      children: {
-        popup: {}
       }
     }
   },

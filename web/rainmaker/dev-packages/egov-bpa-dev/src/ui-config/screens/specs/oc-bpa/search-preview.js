@@ -205,10 +205,11 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     "screenConfiguration.preparedFinalObject.BPA.status"
   );
 
-  let BPAData = get(state,"BPA")
-  let applicationDigitallySigned = BPAData && BPAData.length > 0 && BPAData[0] &&
-  BPAData[0].dscDetails && BPAData[0].dscDetails[0].documentId ? true :  BPAData && BPAData.length > 0 && BPAData[0] &&
-  !BPAData[0].dscDetails ? true : false
+  let BPAData = get(state.screenConfiguration.preparedFinalObject,"BPA")
+
+  let applicationDigitallySigned = BPAData &&
+  BPAData.dscDetails && BPAData.dscDetails[0].documentId ? true :  BPAData &&
+  !BPAData.dscDetails ? true : false
 
   let comparisonDetails = get(
     state,
@@ -469,14 +470,17 @@ const setSearchResponse = async (
     );
   }
 
+  let BPAData = get(response,"BPA")
+  let isOldApplication = BPAData && BPAData.length > 0 && BPAData[0] &&
+  BPAData[0].dscDetails && !BPAData[0].dscDetails ? true : false
+
   dispatch(handleField(
     'search-preview',
     'components.div.children.body.children.cardContent.children.reviewPdfSignDetails',
     'visible',
-    status == 'APPROVED' ? true : false
+    status == 'APPROVED' && !isOldApplication ? true : false
   ))
  
-  let BPAData = get(response,"BPA")
   let applicationDigitallySigned = BPAData && BPAData.length > 0 && BPAData[0] &&
   BPAData[0].dscDetails && BPAData[0].dscDetails[0].documentId ? true : false
 

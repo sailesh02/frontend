@@ -560,7 +560,7 @@ class SignPdfContainer extends Component {
                             data.Bpa[0].dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                           }
                           delete data.Bpa[0].edcrDetail
-                          return data.Bpa
+                          return data.Bpa && data.Bpa[0]
                         }
                        else{
                           return data
@@ -626,6 +626,8 @@ class SignPdfContainer extends Component {
   saveDetails = async() => {
     let data = await this.getPdfDetails()
     let dataPath = this.props.dataPath
+    let updateUrl = this.props.updateUrl
+  
     if(!data){
       return
     }else{

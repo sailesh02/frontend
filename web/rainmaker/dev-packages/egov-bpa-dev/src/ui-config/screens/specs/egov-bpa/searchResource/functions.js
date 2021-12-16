@@ -172,7 +172,7 @@ export const getPendingDigitallySignedApplications = async () => {
     data = response && response.dscDetails && response.dscDetails.length > 0 &&
     response.dscDetails.map(item => ({
       ['BPA_COMMON_TABLE_COL_APP_NO']:
-        item.applicationNumber || "-",
+        item.applicationNo || "-",
       ['TENANT_ID']: item.tenantId || "-",
       ['BPA_COMMON_TABLE_COL_ACTION_LABEL'] : "Sign Pdf"
     })) || [];

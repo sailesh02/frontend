@@ -287,10 +287,12 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     state,
     "screenConfiguration.preparedFinalObject.BPA.status"
   );
-  let BPAData = get(state,"BPA")
-  let applicationDigitallySigned = BPAData && BPAData.length > 0 && BPAData[0] &&
-  BPAData[0].dscDetails && BPAData[0].dscDetails[0].documentId ? true :  BPAData && BPAData.length > 0 && BPAData[0] &&
-  !BPAData[0].dscDetails ? true : false
+
+  let BPAData = get(state.screenConfiguration.preparedFinalObject,"BPA")
+  let applicationDigitallySigned = BPAData &&
+  BPAData.dscDetails && BPAData.dscDetails[0].documentId ? true :  BPAData &&
+  !BPAData.dscDetails ? true : false
+
   let riskType = get(
     state,
     "screenConfiguration.preparedFinalObject.BPA.riskType"

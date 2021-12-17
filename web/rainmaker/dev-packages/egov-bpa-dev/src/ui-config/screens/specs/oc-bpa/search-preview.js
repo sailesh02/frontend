@@ -64,12 +64,12 @@ const closePdfSigningPopup = (refreshType) => {
   )
 
   if(refreshType == "preview"){
-    store.dispatch(handleField(
-      'search-preview',
-      'components.div.children.body.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
-      'visible',
-      false
-    ))
+    // store.dispatch(handleField(
+    //   'search-preview',
+    //   'components.div.children.body.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
+    //   'visible',
+    //   false
+    // ))
     store.dispatch(prepareFinalObject("BPA.dscDetails[0].documentId",'Yes'))
   }
 }
@@ -484,17 +484,17 @@ const setSearchResponse = async (
   let applicationDigitallySigned = BPAData && BPAData.length > 0 && BPAData[0] &&
   BPAData[0].dscDetails && BPAData[0].dscDetails[0].documentId ? true : false
 
-  if(!isOldApplication){
-    dispatch(handleField(
-      'search-preview',
-      'components.div.children.body.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
-      'visible',
-      (status == 'APPROVED' && (ifUserRoleExists('BPA1_APPROVER') || 
-      ifUserRoleExists('BPA2_APPROVER') || ifUserRoleExists('BPA3_APPROVER') ||
-      ifUserRoleExists('BPA4_APPROVER')) && process.env.REACT_APP_NAME != 'Citizen' && 
-      !applicationDigitallySigned) ? true : false
-    ))
-  }
+  // if(!isOldApplication){
+  //   dispatch(handleField(
+  //     'search-preview',
+  //     'components.div.children.body.children.cardContent.children.reviewPdfSignDetails.children.cardContent.children.headerDiv.children.editSection',
+  //     'visible',
+  //     (status == 'APPROVED' && (ifUserRoleExists('BPA1_APPROVER') || 
+  //     ifUserRoleExists('BPA2_APPROVER') || ifUserRoleExists('BPA3_APPROVER') ||
+  //     ifUserRoleExists('BPA4_APPROVER')) && process.env.REACT_APP_NAME != 'Citizen' && 
+  //     !applicationDigitallySigned) ? true : false
+  //   ))
+  // }
   
   set(
     action,

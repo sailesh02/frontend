@@ -432,6 +432,7 @@ class Footer extends React.Component {
         `BPA`
       );
 
+      let businessService = pdfPreviewData && pdfPreviewData.businessService
       status = get(
         state.screenConfiguration.preparedFinalObject,
         `BPA.status`
@@ -440,7 +441,7 @@ class Footer extends React.Component {
       applicationDigitallySigned = pdfPreviewData && !pdfPreviewData.dscDetails ? true : pdfPreviewData &&
       pdfPreviewData.dscDetails.length > 0 && pdfPreviewData.dscDetails[0].documentId ? true : false
 
-      let edcrDetails = (moduleName === 'BPA' || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') ? 
+      let edcrDetails = (businessService === 'BPA' || businessService === 'BPA1' || businessService === 'BPA2' || businessService === 'BPA3' || businessService === 'BPA4') ? 
       get(
         state.screenConfiguration.preparedFinalObject,
         `scrutinyDetails`) : get(
@@ -450,7 +451,7 @@ class Footer extends React.Component {
       if(pdfPreviewData){
         pdfPreviewData.edcrDetail = [edcrDetails]
       }  
-      pdfKey = moduleName === 'BPA_LOW' ? "buildingpermit-low" : (moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4") ?
+      pdfKey = businessService === 'BPA_LOW' ? "buildingpermit-low" : (businessService === 'BPA_OC' || businessService === "BPA_OC1" || businessService === "BPA_OC2" || businessService === "BPA_OC3" || businessService === "BPA_OC4") ?
       "occupancy-certificate" : "buildingpermit"
       modulePdfIdentifier = "BPA";
     }

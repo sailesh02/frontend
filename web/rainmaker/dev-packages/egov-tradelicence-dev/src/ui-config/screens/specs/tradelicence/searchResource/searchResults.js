@@ -136,8 +136,8 @@ export const searchDigitalSignatureResults = {
         labelKey: "TENANT_ID",
       },
       {
-        labelName: "PT_COMMON_TABLE_COL_ACTION_LABEL",
-        labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
+        labelName: "TL_COMMON_TABLE_COL_ACTION_LABEL",
+        labelKey: "TL_COMMON_TABLE_COL_ACTION_LABEL",
 	      options: {
           filter: false,
           customBodyRender: (value, tableMeta) => (

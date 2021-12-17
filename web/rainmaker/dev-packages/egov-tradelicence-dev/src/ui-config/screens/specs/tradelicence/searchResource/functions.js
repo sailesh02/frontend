@@ -185,7 +185,7 @@ export const getPendingDigitallySignedApplications = async () => {
       ['TL_COMMON_TABLE_COL_APP_NO']:
         item.applicationNumber || "-",
       ['TENANT_ID']: item.tenantId || "-",
-      ['PT_COMMON_TABLE_COL_ACTION_LABEL'] : "Sign Pdf"
+      ['TL_COMMON_TABLE_COL_ACTION_LABEL'] : "Sign Pdf"
     })) || [];
 
     store.dispatch(

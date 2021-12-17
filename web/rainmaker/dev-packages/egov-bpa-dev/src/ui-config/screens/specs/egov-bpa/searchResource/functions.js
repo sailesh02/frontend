@@ -5,9 +5,15 @@ import { getBpaSearchResults } from "../../../../../ui-utils/commons";
 import { getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
 import { getTextToLocalMapping } from "../../utils";
 import { convertDateToEpoch, convertEpochToDate } from "../../utils/index";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {httpRequest} from '../../../../../ui-utils/api'
+import { hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import store from "ui-redux/store";
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
+  showHideDigitalSingedApplicationsTable(false);
   let tenantId = getTenantId();
   let queryObject = [
     {
@@ -138,8 +144,92 @@ export const searchApiCall = async (state, dispatch) => {
     }
   }
 };
+
+export const getPendingDigitallySignedApplications = async () => {
+  showHideTable(false);
+  showHideDigitalSingedApplicationsTable (false)
+  store.dispatch(showSpinner())
+  const userInfo = JSON.parse(getUserInfo());
+  const uuid = userInfo && userInfo.uuid
+
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: getTenantId()
+    },
+    { key: "employeeUuid", value: uuid }
+  ];
+
+  try {
+    const response = await httpRequest(
+      "post",
+      "/bpa-services/v1/bpa/_searchdscdetails",
+      "",
+      queryObject
+    );
+
+    let data = []
+    data = response && response.dscDetails && response.dscDetails.length > 0 &&
+    response.dscDetails.map(item => ({
+      ['BPA_COMMON_TABLE_COL_APP_NO']:
+        item.applicationNo || "-",
+      ['TENANT_ID']: item.tenantId || "-",
+      ['BPA_COMMON_TABLE_COL_ACTION_LABEL'] : "Sign Pdf"
+    })) || [];
+
+    store.dispatch(
+      handleField(
+        "search",
+        "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
+        "props.data",
+        data
+      )
+    );
+    store.dispatch(
+      handleField(
+        "search",
+        "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
+        "props.rows",
+        response.dscDetails && response.dscDetails.length || 0
+      )
+    );
+    showHideDigitalSingedApplicationsTable(true);
+    store.dispatch(hideSpinner())
+    return response;
+
+  }catch(err){
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: err && err.message || "",
+          labelKey: err && err.message || ""
+        },
+        "error"
+      )
+    );
+    showHideDigitalSingedApplicationsTable(true);
+    store.dispatch(
+      handleField(
+        "search",
+        "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
+        "props.data",
+        []
+      )
+    );store.dispatch(
+      handleField(
+        "search",
+        "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
+        "props.data",
+        []
+      )
+    );
+    store.dispatch(hideSpinner())
+  }
+}
+
 const showHideTable = (booleanHideOrShow, dispatch) => {
-  dispatch(
+  store.dispatch(
     handleField(
       "search",
       "components.div.children.searchResults",
@@ -148,6 +238,18 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
     )
   );
 };
+
+const showHideDigitalSingedApplicationsTable = (value) => {
+  store.dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
+      "visible",
+      value
+    )
+  );
+  
+}
 
 export const setResidentialList = (state, dispatch) => {
   let residentialList = get(

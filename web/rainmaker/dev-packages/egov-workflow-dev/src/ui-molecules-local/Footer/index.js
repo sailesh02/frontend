@@ -168,23 +168,30 @@ class Footer extends React.Component {
   openSignPdfPopup = () => {
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    let jsonPath = `components.pdfSigningPopup.props`
+    if(this.props.moduleName == "BPA" || this.props.moduleName == "BPA1" || this.props.moduleName == "BPA2" || 
+    this.props.moduleName == "BPA3" || this.props.moduleName == "BPA4" || this.props.moduleName == "BPA_OC" || this.props.moduleName == "BPA_OC1" || 
+    this.props.moduleName == "BPA_OC2" || this.props.moduleName == "BPA_OC3" || this.props.moduleName == "BPA_OC4" || 
+    this.props.moduleName == "BPA_LOW"){
+      jsonPath = `components.div.children.pdfSigningPopup.props`
+    }
     this.props.handleField(
       "search-preview",
-      "components.pdfSigningPopup.props",
+      jsonPath,
       "openPdfSigningPopup",
       true
     )
 
     this.props.handleField(
       "search-preview",
-      "components.pdfSigningPopup.props",
+      jsonPath,
       "applicationNumber",
       applicationNumber
     )
 
     this.props.handleField(
       "search-preview",
-      "components.pdfSigningPopup.props",
+      jsonPath,
       "tenantId",
       tenantId
     )
@@ -419,6 +426,36 @@ class Footer extends React.Component {
       }
     }
 
+    if((moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4')){
+      pdfPreviewData = get(
+        state.screenConfiguration.preparedFinalObject,
+        `BPA`
+      );
+
+      let businessService = pdfPreviewData && pdfPreviewData.businessService
+      status = get(
+        state.screenConfiguration.preparedFinalObject,
+        `BPA.status`
+      );
+
+      applicationDigitallySigned = pdfPreviewData && !pdfPreviewData.dscDetails ? true : pdfPreviewData &&
+      pdfPreviewData.dscDetails.length > 0 && pdfPreviewData.dscDetails[0].documentId ? true : false
+
+      let edcrDetails = (businessService === 'BPA' || businessService === 'BPA1' || businessService === 'BPA2' || businessService === 'BPA3' || businessService === 'BPA4') ? 
+      get(
+        state.screenConfiguration.preparedFinalObject,
+        `scrutinyDetails`) : get(
+        state.screenConfiguration.preparedFinalObject,
+        `ocScrutinyDetails`)
+
+      if(pdfPreviewData){
+        pdfPreviewData.edcrDetail = [edcrDetails]
+      }  
+      pdfKey = businessService === 'BPA_LOW' ? "buildingpermit-low" : (businessService === 'BPA_OC' || businessService === "BPA_OC1" || businessService === "BPA_OC2" || businessService === "BPA_OC3" || businessService === "BPA_OC4") ?
+      "occupancy-certificate" : "buildingpermit"
+      modulePdfIdentifier = "BPA";
+    }
+
     if (moduleName === "MR") {
       pdfPreviewData = get(
         state.screenConfiguration.preparedFinalObject,
@@ -568,7 +605,9 @@ class Footer extends React.Component {
       <div className="wf-wizard-footer" id="custom-atoms-footer">
         {!isEmpty(downloadMenu) && (
           <Container>
-            {process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("MR_APPROVER", "TL_APPROVER") && (moduleName === "NewTL" || moduleName === "MR") && status === "APPROVED" && !applicationDigitallySigned ?
+            {process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("MR_APPROVER", "TL_APPROVER", "BPA1_APPROVER", "BPA2_APPROVER", "BPA3_APPROVER",
+            "BPA4_APPROVER") && (moduleName === "NewTL" || moduleName === "MR" || 
+            moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') && status === "APPROVED" && !applicationDigitallySigned ?
               <Item xs={6} sm={10} className="wf-footer-container">
                 {/* <Button
                   variant={"contained"}
@@ -588,9 +627,21 @@ class Footer extends React.Component {
                 <MenuButton data={signButtonItems} />
               </Item> : ""
             }
-            <Item xs={6} sm={process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("MR_APPROVER", "TL_APPROVER") && (moduleName === "NewTL" || moduleName === "MR") && status === "APPROVED" && !applicationDigitallySigned ? 2 : 12} className="wf-footer-container">
+            <Item xs={6} sm={process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("MR_APPROVER", "TL_APPROVER", "BPA1_APPROVER", "BPA2_APPROVER", "BPA3_APPROVER",
+            "BPA4_APPROVER") && (moduleName === "NewTL" || moduleName === "MR") && status === "APPROVED" && !applicationDigitallySigned ? 2 : 12} className="wf-footer-container">
               <MenuButton data={buttonItems} />
             </Item>
+          </Container>
+        )}
+        {(!downloadMenu || downloadMenu.length == 0) && (moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA' || moduleName === 'BPA2' ||
+        moduleName === 'BPA3' || moduleName === 'BPA4') &&  (
+          <Container>
+            {process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("BPA1_APPROVER", "BPA2_APPROVER", "BPA3_APPROVER",
+            "BPA4_APPROVER") && status === "APPROVED" && !applicationDigitallySigned ?
+              <Item xs={6} sm={12} className="wf-footer-container">
+                <MenuButton data={signButtonItems} />
+              </Item> : ""
+            }
           </Container>
         )}
         <ActionDialog

@@ -14,6 +14,10 @@ import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
+import store from "ui-redux/store";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const getLocalTextFromCode = localCode => {
   return JSON.parse(getLocalization("localization_en_IN")).find(
@@ -213,3 +217,94 @@ const onRowClick = rowData => {
     }
   }
 };
+
+export const searchDigitalSignatureResults = {
+  uiFramework: "custom-molecules",
+  componentPath: "Table",
+  visible: false,
+  props: {
+    columns: [
+      {
+        labelName: "Application No",
+        labelKey: "BPA_COMMON_TABLE_COL_APP_NO",
+        options: {
+          filter: false,
+        }
+      },
+      {
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
+      },
+      {
+        labelName: "BPA_COMMON_TABLE_COL_ACTION_LABEL",
+        labelKey: "BPA_COMMON_TABLE_COL_ACTION_LABEL",
+	      options: {
+          filter: false,
+          customBodyRender: (value, tableMeta) => (
+            <a href="javascript:void(0)" onClick={() => onPdfSignClick(tableMeta.rowData)}><span style={{ color: '#fe7a51' }}>
+            {value}
+          </span></a>
+          )
+        }
+      },
+    ],
+    title: {
+      labelName: "Search Results for Pending Digitally Signed Applications",
+      labelKey: "BPA_HOME_SEARCH_RESULTS_DIGITAL_SIGNATURE"
+    },
+    rows: "",
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      rowsPerPageOptions: [10, 15, 20]
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
+  }
+}
+
+const onPdfSignClick = rowData => {
+  let applicationNumber = rowData && rowData[0]
+  let tenantId = rowData && rowData[1]
+  
+  store.dispatch(
+    handleField(
+      "search",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      true
+    )
+  )
+  store.dispatch(
+    handleField(
+      "search",
+      "components.pdfSigningPopup.props",
+      "applicationNumber",
+      applicationNumber
+    )
+  )
+  store.dispatch(
+    handleField(
+      "search",
+      "components.pdfSigningPopup.props",
+      "tenantId",
+      tenantId
+    )
+  )
+}

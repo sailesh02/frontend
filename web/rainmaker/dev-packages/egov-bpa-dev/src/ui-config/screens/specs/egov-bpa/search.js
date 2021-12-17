@@ -4,7 +4,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField, } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import {
   getTenantId,
@@ -13,8 +13,24 @@ import {
 import find from "lodash/find";
 import { applyForm, getTenantMdmsData, showApplyCityPicker } from "../utils";
 import { BPAApplication, resetFields } from "./searchResource/bpaApplication";
-import { pendingApprovals } from "./searchResource/pendingApprovals";
+import { pendingApprovals, showSearches } from "./searchResource/pendingApprovals";
 import { searchResults } from "./searchResource/searchResults";
+import store from "ui-redux/store";
+import { getPendingDigitallySignedApplications } from "./searchResource/functions"
+
+const closePdfSigningPopup = (refreshType) => {
+  store.dispatch(
+    handleField(
+      "search",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      false
+    )
+  )
+  if(refreshType == 'Table'){
+    getPendingDigitallySignedApplications()
+  }
+}
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -153,7 +169,8 @@ const BpaSearchAndResult = {
           }
         },
         pendingApprovals,
-        BPAApplication,
+        showSearches,
+        // BPAApplication,
         breakAfterSearch: getBreak(),
         searchResults
       }
@@ -281,6 +298,25 @@ const BpaSearchAndResult = {
         open: false,
         maxWidth: false,
         screenKey: "search"
+      },
+      children: {
+        popup: {}
+      }
+    },
+    pdfSigningPopup : {
+      uiFramework: 'custom-containers-local',
+      componentPath: 'SignPdfContainer',
+      moduleName: "egov-workflow",
+      props: {
+        openPdfSigningPopup: false,
+        closePdfSigningPopup : closePdfSigningPopup,
+        maxWidth: false,
+        moduleName : 'BPA',
+        okText :"BPA_SIGN_PDF",
+        resetText : "BPA_RESET_PDF",
+        dataPath : 'BPA',
+        updateUrl : '/bpa-services/v1/bpa/_updatedscdetails?',
+        refreshType : 'Table'
       },
       children: {
         popup: {}

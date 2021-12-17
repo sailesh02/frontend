@@ -331,8 +331,8 @@ export const activateDetailsMeter={
 export const paymentDetailsMeter = {
   reviewLaborCharge : getLabelWithValueForModifiedLabel(
     {
-      labelName: "WS_LABOUR_FEE",
-      labelKey: "WS_LABOUR_FEE"
+      labelName: "WS_LABOUR_FEE_APPLICABLE",
+      labelKey: "WS_LABOUR_FEE_APPLICABLE"
     },
     { jsonPath: "WaterConnection[0].additionalDetails.isLabourFeeApplicable",
       callBack: handleLaborCharge

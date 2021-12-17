@@ -121,9 +121,9 @@ const downloadprintMenu = (action, state, dispatch, applicationNumber, tenantId,
    switch (businessService) {
     case "BPA.LOW_RISK_PERMIT_FEE":
     case "BPA.NC_SAN_FEE":
-    case "BPA.NC_OC_SAN_FEE":    
-    downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-    printMenu = [receiptPrintObject, applicationPrintObject];    
+    case "BPA.NC_OC_SAN_FEE": 
+      downloadMenu = [receiptDownloadObject];
+      printMenu = [receiptPrintObject];
     break;   
     default:
     downloadMenu = [receiptDownloadObject];    

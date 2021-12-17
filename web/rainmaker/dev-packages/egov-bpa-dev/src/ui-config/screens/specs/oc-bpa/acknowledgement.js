@@ -6,7 +6,6 @@ import {
   applicationSuccessFooter,
   paymentSuccessFooter,
   gotoHomeFooter,
-  signedSuccessFooter,
   approvalSuccessFooter,
   paymentFailureFooter
 } from "../egov-bpa/acknowledgementResource/footers";
@@ -14,9 +13,6 @@ import acknowledgementCard from "../egov-bpa/acknowledgementResource/acknowledge
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
 import { getCurrentFinancialYear } from "../utils";
-import store from "ui-redux/store";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Application for Occupancy certificate`,
@@ -62,7 +58,6 @@ const getAcknowledgementCard = (
   secondNumber,
   tenant
 ) => {
-  let acknowlegmentPurpose = getQueryArg(window.location.href, "purpose") || purpose
   if (purpose === "apply" && status === "success") {
     return {
       header:getHeader(applicationNumber),
@@ -244,33 +239,7 @@ const getAcknowledgementCard = (
       //   tenant
       // )
     };
-  } else if(acknowlegmentPurpose == 'signed' && status == "success"){
-    {
-      return {
-        digitalSignatureHeader,
-        headerdownloadprint: downloadprintMenu(action, state, dispatch, secondNumber, tenant, uiCommonPayConfig, businessService,true),      
-        applicationSuccessCard: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          children: {
-            card: acknowledgementCard({
-              icon: "done",
-              backgroundColor: "#39CB74",
-              header: {
-                labelName: "You have successfully signed the certificate!",
-                labelKey: "BPA_SIGN_CHECKLIST_MESSAGE_HEAD"
-              },
-              body: {
-              },
-              // number: secondNumber
-              // number: secondNumber
-            })
-          }
-        },
-        signedSuccessFooter: signedSuccessFooter(action, state, dispatch, secondNumber, tenant, uiCommonPayConfig, businessService)
-      };
-    }
-  } else if (purpose === "pay" && status === "success") {
+  }  else if (purpose === "pay" && status === "success") {
     return {
       header,
       applicationSuccessCard: {

@@ -168,23 +168,30 @@ class Footer extends React.Component {
   openSignPdfPopup = () => {
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    let jsonPath = `components.pdfSigningPopup.props`
+    if(this.props.moduleName == "BPA" || this.props.moduleName == "BPA1" || this.props.moduleName == "BPA2" || 
+    this.props.moduleName == "BPA3" || this.props.moduleName == "BPA4" || this.props.moduleName == "BPA_OC" || this.props.moduleName == "BPA_OC1" || 
+    this.props.moduleName == "BPA_OC2" || this.props.moduleName == "BPA_OC3" || this.props.moduleName == "BPA_OC4" || 
+    this.props.moduleName == "BPA_LOW"){
+      jsonPath = `components.div.children.pdfSigningPopup.props`
+    }
     this.props.handleField(
       "search-preview",
-      "components.pdfSigningPopup.props",
+      jsonPath,
       "openPdfSigningPopup",
       true
     )
 
     this.props.handleField(
       "search-preview",
-      "components.pdfSigningPopup.props",
+      jsonPath,
       "applicationNumber",
       applicationNumber
     )
 
     this.props.handleField(
       "search-preview",
-      "components.pdfSigningPopup.props",
+      jsonPath,
       "tenantId",
       tenantId
     )
@@ -441,7 +448,7 @@ class Footer extends React.Component {
         `ocScrutinyDetails`)
 
       if(pdfPreviewData){
-        pdfPreviewData.edcrDetails = edcrDetails
+        pdfPreviewData.edcrDetail = [edcrDetails]
       }  
       pdfKey = moduleName === 'BPA_LOW' ? "buildingpermit-low" : (moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4") ?
       "occupancy-certificate" : "buildingpermit"

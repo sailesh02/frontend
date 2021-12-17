@@ -47,56 +47,56 @@ export const reviewPdfSignDetails = getCommonGrayCard({
               labelKey: "TL_PDF_SIGN_DETAILS"
             })
           },
-          editSection: {
-            componentPath: "Button",
-            props: {
-              color: "primary"
-            },
-            visible: true,
-              gridDefination: {
-                xs: 12,
-          sm: 2,
-          align: "right"
-        },
-        children: {
-          buttonLabel: getLabel({
-            labelName: "PDF SIGN",
-            labelKey: "TL_PDF_SIGN"
-          })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-            const tenantId = getQueryArg(window.location.href, "tenantId");
+      //     editSection: {
+      //       componentPath: "Button",
+      //       props: {
+      //         color: "primary"
+      //       },
+      //       visible: true,
+      //         gridDefination: {
+      //           xs: 12,
+      //     sm: 2,
+      //     align: "right"
+      //   },
+      //   children: {
+      //     buttonLabel: getLabel({
+      //       labelName: "PDF SIGN",
+      //       labelKey: "TL_PDF_SIGN"
+      //     })
+      //   },
+      //   onClickDefination: {
+      //     action: "condition",
+      //     callBack: (state, dispatch) => {
+      //       const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+      //       const tenantId = getQueryArg(window.location.href, "tenantId");
     
-            dispatch(
-              handleField(
-                "search-preview",
-                "components.div.children.pdfSigningPopup.props",
-                "openPdfSigningPopup",
-                true
-              )
-            )
-            dispatch(
-              handleField(
-                "search-preview",
-                "components.div.children.pdfSigningPopup.props",
-                "applicationNumber",
-                applicationNumber
-              )
-            )
-            dispatch(
-              handleField(
-                "search-preview",
-                "components.div.children.pdfSigningPopup.props",
-                "tenantId",
-                tenantId
-              )
-            )
-          }
-        }
-      }
+      //       dispatch(
+      //         handleField(
+      //           "search-preview",
+      //           "components.div.children.pdfSigningPopup.props",
+      //           "openPdfSigningPopup",
+      //           true
+      //         )
+      //       )
+      //       dispatch(
+      //         handleField(
+      //           "search-preview",
+      //           "components.div.children.pdfSigningPopup.props",
+      //           "applicationNumber",
+      //           applicationNumber
+      //         )
+      //       )
+      //       dispatch(
+      //         handleField(
+      //           "search-preview",
+      //           "components.div.children.pdfSigningPopup.props",
+      //           "tenantId",
+      //           tenantId
+      //         )
+      //       )
+      //     }
+      //   }
+      // }
     }
 }, 
     viewOne: getCommonContainer(isCertificateDigitallySigned),

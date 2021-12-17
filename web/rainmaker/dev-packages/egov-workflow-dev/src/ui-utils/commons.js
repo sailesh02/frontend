@@ -1,7 +1,7 @@
 
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar,hideSpinner, showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get"
 import store from "redux/store";
 
@@ -197,16 +197,19 @@ export const showPDFPreview = async (pdfPreviewData, pdfKey, modulePdfIdentifier
         });
 
       }else if(modulePdfIdentifier === "BPA") {
+        store.dispatch(showSpinner())
         let Bpa = '';
         Bpa = [pdfPreviewData];
         httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bpa }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
+          store.dispatch(hideSpinner())
           res.filestoreIds[0]
           if (res && res.filestoreIds && res.filestoreIds.length > 0) {
             res.filestoreIds.map(fileStoreId => {
               downloadReceiptFromFilestoreID(fileStoreId, "open")
             })
           } else {
+            store.dispatch(hideSpinner())
             console.log("Error In Acknowledgement form Download");
           }
         });

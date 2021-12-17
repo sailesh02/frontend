@@ -128,7 +128,7 @@ const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
     case 'BPA':
         queryObject = [
           { key: "tenantId", value: tenantId },
-          { key: "applicationNumber", value: applicationNumber }
+          { key: "applicationNo", value: applicationNumber }
         ]
         try{
           let bpaResult = await httpRequest(
@@ -150,7 +150,7 @@ const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
             bpaResult.BPA[0].dscDetails && bpaResult.BPA[0].dscDetails[0].documentId ? true : false
             if(!applicationDigitallySigned){
               let BPA = bpaResult.BPA[0]
-              BPA.edcrDetail = edcrDetails
+              BPA.edcrDetail = [edcrDetails]
               return {
                 RequestInfo : RequestInfo,
                 "Bpa": [BPA]

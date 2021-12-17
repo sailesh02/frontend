@@ -246,7 +246,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       action: "page_change",
       path: `${getRedirectionURL()}`
     }
-  }
+  },
   // downloadLicenseButton: {
   //   componentPath: "Button",
   //   props: {

@@ -605,7 +605,8 @@ class Footer extends React.Component {
       <div className="wf-wizard-footer" id="custom-atoms-footer">
         {!isEmpty(downloadMenu) && (
           <Container>
-            {process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("MR_APPROVER", "TL_APPROVER") && (moduleName === "NewTL" || moduleName === "MR" || 
+            {process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("MR_APPROVER", "TL_APPROVER", "BPA1_APPROVER", "BPA2_APPROVER", "BPA3_APPROVER",
+            "BPA4_APPROVER") && (moduleName === "NewTL" || moduleName === "MR" || 
             moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') && status === "APPROVED" && !applicationDigitallySigned ?
               <Item xs={6} sm={10} className="wf-footer-container">
                 {/* <Button
@@ -626,7 +627,8 @@ class Footer extends React.Component {
                 <MenuButton data={signButtonItems} />
               </Item> : ""
             }
-            <Item xs={6} sm={process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("MR_APPROVER", "TL_APPROVER") && (moduleName === "NewTL" || moduleName === "MR") && status === "APPROVED" && !applicationDigitallySigned ? 2 : 12} className="wf-footer-container">
+            <Item xs={6} sm={process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("MR_APPROVER", "TL_APPROVER", "BPA1_APPROVER", "BPA2_APPROVER", "BPA3_APPROVER",
+            "BPA4_APPROVER") && (moduleName === "NewTL" || moduleName === "MR") && status === "APPROVED" && !applicationDigitallySigned ? 2 : 12} className="wf-footer-container">
               <MenuButton data={buttonItems} />
             </Item>
           </Container>
@@ -634,7 +636,8 @@ class Footer extends React.Component {
         {(!downloadMenu || downloadMenu.length == 0) && (moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA' || moduleName === 'BPA2' ||
         moduleName === 'BPA3' || moduleName === 'BPA4') &&  (
           <Container>
-            {process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("TL_APPROVER") && status === "APPROVED" && !applicationDigitallySigned ?
+            {process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("BPA1_APPROVER", "BPA2_APPROVER", "BPA3_APPROVER",
+            "BPA4_APPROVER") && status === "APPROVED" && !applicationDigitallySigned ?
               <Item xs={6} sm={12} className="wf-footer-container">
                 <MenuButton data={signButtonItems} />
               </Item> : ""

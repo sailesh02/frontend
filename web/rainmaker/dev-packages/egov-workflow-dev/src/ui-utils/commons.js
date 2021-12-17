@@ -146,7 +146,7 @@ const getFileStore = (fileKey, documents) => {
   return fileStoreId
 }
 export const showPDFPreview = async (pdfPreviewData, pdfKey, modulePdfIdentifier, mode = 'download') => {
-  let tenantId = get(pdfPreviewData[0], "tenantId");
+  let tenantId = get(pdfPreviewData[0], "tenantId") || get(pdfPreviewData, "tenantId");
   let applicationNumber = get(pdfPreviewData[0], "applicationNumber")
   // const applicationType = pdfPreviewData && pdfPreviewData.length > 0 ? get(pdfPreviewData[0], "applicationType") : "NEW";
   const queryStr = [
@@ -166,11 +166,16 @@ export const showPDFPreview = async (pdfPreviewData, pdfKey, modulePdfIdentifier
       value: applicationNumber
     }
   ];
-  const LicensesPayload = await getSearchResultsForPdf(queryObject, modulePdfIdentifier);
 
-  const updatedLicenses = get(LicensesPayload, modulePdfIdentifier);
-  const oldFileStoreId = get(updatedLicenses[0], "fileStoreId") || getFileStore(pdfKey, LicensesPayload && LicensesPayload.modulePdfIdentifier && LicensesPayload.modulePdfIdentifier.length > 0 &&
-    LicensesPayload.modulePdfIdentifier[0].dscDetails || [])
+  let oldFileStoreId = null;
+  if(modulePdfIdentifier === "MarriageRegistrations" || modulePdfIdentifier === "Licenses"){
+    const LicensesPayload = await getSearchResultsForPdf(queryObject, modulePdfIdentifier);
+
+    const updatedLicenses = get(LicensesPayload, modulePdfIdentifier);
+    oldFileStoreId = get(updatedLicenses[0], "fileStoreId") || getFileStore(pdfKey, LicensesPayload && LicensesPayload.modulePdfIdentifier && LicensesPayload.modulePdfIdentifier.length > 0 &&
+      LicensesPayload.modulePdfIdentifier[0].dscDetails || [])
+  }
+  
   if (oldFileStoreId) {
     downloadReceiptFromFilestoreID(oldFileStoreId, "open", tenantId)
   }
@@ -191,7 +196,22 @@ export const showPDFPreview = async (pdfPreviewData, pdfKey, modulePdfIdentifier
           }
         });
 
-      } else {
+      }else if(modulePdfIdentifier === "BPA") {
+        let Bpa = '';
+        Bpa = [pdfPreviewData];
+        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bpa }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        .then(res => {
+          res.filestoreIds[0]
+          if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+            res.filestoreIds.map(fileStoreId => {
+              downloadReceiptFromFilestoreID(fileStoreId, "open")
+            })
+          } else {
+            console.log("Error In Acknowledgement form Download");
+          }
+        });
+      }
+      else {
         let Licenses = '';
         Licenses = pdfPreviewData;
         httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })

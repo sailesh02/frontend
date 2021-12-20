@@ -21,6 +21,16 @@ export const APPLICATIONSTATE = {
     "APPROVED": "APPROVED"
 }
 
+const getConnectionFacility = (water,sewerage) => {
+    if(water && sewerage){
+        return 'WATER-SEWERAGE'
+    }else if(water){
+        return 'WATER'
+    }else{
+        return 'SEWERAGE'
+    }
+}
+
 export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];
@@ -1002,6 +1012,9 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
 export const applyForWater = async (state, dispatch) => {
     let mode = getQueryArg(window.location.href, "mode");
     let queryObject = parserFunction(state);
+    let isWater = queryObject && queryObject.water
+    let isSewerage = queryObject && queryObject.sewerage
+    let connectionFacility = getConnectionFacility(isWater,isSewerage) 
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = waterId ? "UPDATE" : "CREATE";
     try {
@@ -1010,6 +1023,7 @@ export const applyForWater = async (state, dispatch) => {
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tenantId");
         let response;
         queryObject.tenantId = tenantId;
+        queryObject["connectionFacility"] = connectionFacility
         if (method === "UPDATE") {
             queryObject.additionalDetails.appCreatedDate = get(
                 state.screenConfiguration.preparedFinalObject,
@@ -1018,6 +1032,7 @@ export const applyForWater = async (state, dispatch) => {
             let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
             let waterSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSourceType", null);
             let waterSubSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSubSource", null);
+            queryObjectForUpdate["connectionFacility"] = connectionFacility
             queryObjectForUpdate.waterSource = queryObjectForUpdate.waterSource ? queryObjectForUpdate.waterSource : waterSource;
             queryObjectForUpdate.waterSubSource = queryObjectForUpdate.waterSubSource ? queryObjectForUpdate.waterSubSource : waterSubSource;
             set(queryObjectForUpdate, "tenantId", tenantId);
@@ -1140,12 +1155,16 @@ export const applyForSewerage = async (state, dispatch) => {
     let queryObject = parserFunction(state);
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let method = sewerId ? "UPDATE" : "CREATE";
+    let isWater = queryObject && queryObject.water
+    let isSewerage = queryObject && queryObject.sewerage
+    let connectionFacility = getConnectionFacility(isWater,isSewerage) 
     try {
         dispatch(toggleSpinner())
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tenantId");
         // const tenantId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].property.tenantId");
         let response;
         set(queryObject, "tenantId", tenantId);
+        set(queryObject, "connectionFacility", connectionFacility);
         // queryObject.tenantId = (queryObject && queryObject.property && queryObject.property.tenantId) ? queryObject.property.tenantId : null;
         if (method === "UPDATE") {
             queryObject.additionalDetails.appCreatedDate = get(
@@ -1154,6 +1173,7 @@ export const applyForSewerage = async (state, dispatch) => {
             )
             let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0]");
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
+            set(queryObjectForUpdate, "connectionFacility", connectionFacility);
             set(queryObjectForUpdate, "processInstance.action", "SUBMIT_APPLICATION");
             set(queryObjectForUpdate, "connectionType", "Non Metered");
             disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
@@ -1264,6 +1284,9 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
     let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
+    let isWater = queryObject && queryObject.water
+    let isSewerage = queryObject && queryObject.sewerage
+    let connectionFacility = getConnectionFacility(isWater,isSewerage) 
     if (waterId && sewerId) { method = "UPDATE" } else { method = "CREATE" };
     try {
         dispatch(toggleSpinner())
@@ -1271,14 +1294,17 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
         // const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
         let response;
         set(queryObject, "tenantId", tenantId);
+        set(queryObject, "connectionFacility", connectionFacility);
         // queryObject.tenantId = (queryObject && queryObject.property && queryObject.property.tenantId) ? queryObject.property.tenantId : null;
         if (method === "UPDATE") {
             let queryObjectForUpdateWater = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
+            set(queryObjectForUpdateWater, "connectionFacility", connectionFacility);
             let waterSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSourceType", null);
             let waterSubSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSubSource", null);
             queryObjectForUpdateWater.waterSource = queryObjectForUpdateWater.waterSource ? queryObjectForUpdateWater.waterSource : waterSource;
             queryObjectForUpdateWater.waterSubSource = queryObjectForUpdateWater.waterSubSource ? queryObjectForUpdateWater.waterSubSource : waterSubSource;
             let queryObjectForUpdateSewerage = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0]");
+            set(queryObjectForUpdateSewerage, "connectionFacility", connectionFacility);
             queryObjectForUpdateWater = { ...queryObjectForUpdateWater, ...queryObject }
             queryObjectForUpdateWater = findAndReplace(queryObjectForUpdateWater, "NA", null);
             queryObjectForUpdateSewerage = { ...queryObjectForUpdateSewerage, ...queryObject }
@@ -1343,6 +1369,8 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             if (typeof queryObject.additionalDetails !== 'object') {
                 queryObject.additionalDetails = {};
             }
+            set(queryObject, "connectionFacility", connectionFacility);
+
             queryObject.additionalDetails.locality = queryObject.locality;
             queryObject.additionalDetails.ward = queryObject.ward ? queryObject.ward : '';
             set(queryObject, "processInstance.action", "INITIATE");

@@ -26,7 +26,7 @@ import isEmpty from "lodash/isEmpty";
 import isUndefined from "lodash/isUndefined";
 import set from "lodash/set";
 import { edcrHttpRequest, httpRequest, wrapRequestBody } from "../../../../ui-utils/api";
-import { getBpaSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
+import { getBpaSearchResults, getAppSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
 import "./index.css";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import store from "ui-redux/store";
@@ -5187,10 +5187,33 @@ export const revocationPdfDownload = async (action, state, dispatch, mode = "Dow
   }
 }
 
+const getFileStore = (documents,fieldKey) => {
+  let fileStoreId;
+  let requiredDocument = documents && documents.length > 0 && documents.filter( doc => {
+    return doc.documentType == fieldKey
+  })
+  fileStoreId = requiredDocument && requiredDocument.length > 0 && requiredDocument[0].documentId || null
+  return fileStoreId
+}
+
+
 export const permitOrderNoDownload = async (action, state, dispatch, mode = "Download") => {
   let bpaDetails = get(
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
+
+  if(!bpaDetails){
+    let applicationNumber = getQueryArg(window.location.href, "consumerCode")
+    let tenantId = getQueryArg(window.location.href, "tenantId")
+    let response = await getAppSearchResults([
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      { key: "applicationNo", value: applicationNumber }
+    ]);
+    bpaDetails = response.BPA[0]
+  }
 
   let currentDate = new Date();
   set(bpaDetails, "additionalDetails.runDate", convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate()));
@@ -5216,15 +5239,20 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
   if (window.location.href.includes("oc-bpa") || window.location.href.includes("BPA.NC_OC_SAN_FEE")) {
     permitPfKey = "occupancy-certificate"
   }
-  let res = await httpRequest(
-    "post",
-    `pdf-service/v1/_create?key=${permitPfKey}&tenantId=${bpaDetails.tenantId}`,
-    "",
-    [],
-    { Bpa: [Bpa] }
-  );
 
-  let fileStoreId = res.filestoreIds[0];
+  let fileStoreId ;
+  fileStoreId = getFileStore(Bpa && Bpa.dscDetails || [],permitPfKey)
+  if(!fileStoreId){
+    let res = await httpRequest(
+      "post",
+      `pdf-service/v1/_create?key=${permitPfKey}&tenantId=${bpaDetails.tenantId}`,
+      "",
+      [],
+      { Bpa: [Bpa] }
+    );
+    fileStoreId = res.filestoreIds[0];
+  }
+  
   let pdfDownload = await httpRequest(
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []

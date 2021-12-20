@@ -568,7 +568,7 @@ class Footer extends React.Component {
       <div className="wf-wizard-footer" id="custom-atoms-footer">
         {!isEmpty(downloadMenu) && (
           <Container>
-            {process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("MR_APPROVER", "TL_APPROVER") && (moduleName === "NewTL" || moduleName === "MR") && status === "APPROVED" && !applicationDigitallySigned ?
+            {process.env.REACT_APP_NAME === 'Employee' && (ifUserRoleExists("MR_APPROVER") || ifUserRoleExists("TL_APPROVER")) && (moduleName === "NewTL" || moduleName === "MR") && status === "APPROVED" && !applicationDigitallySigned ?
               <Item xs={6} sm={10} className="wf-footer-container">
                 {/* <Button
                   variant={"contained"}
@@ -588,7 +588,7 @@ class Footer extends React.Component {
                 <MenuButton data={signButtonItems} />
               </Item> : ""
             }
-            <Item xs={6} sm={process.env.REACT_APP_NAME === 'Employee' && ifUserRoleExists("MR_APPROVER", "TL_APPROVER") && (moduleName === "NewTL" || moduleName === "MR") && status === "APPROVED" && !applicationDigitallySigned ? 2 : 12} className="wf-footer-container">
+            <Item xs={6} sm={process.env.REACT_APP_NAME === 'Employee' && (ifUserRoleExists("MR_APPROVER") || ifUserRoleExists("TL_APPROVER")) && (moduleName === "NewTL" || moduleName === "MR") && status === "APPROVED" && !applicationDigitallySigned ? 2 : 12} className="wf-footer-container">
               <MenuButton data={buttonItems} />
             </Item>
           </Container>

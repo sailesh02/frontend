@@ -818,7 +818,7 @@ export const getData = async (action, state, dispatch) => {
             "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
             "visible",
-            ((data && data.applicationNo && data.applicationNo.includes('WS')) || 
+            ( 
             (data.connectionFacility == serviceConst.WATER) || (data.connectionFacility == serviceConst.WATERSEWERAGE)) ? true : false
           )
         );
@@ -942,7 +942,7 @@ export const getData = async (action, state, dispatch) => {
       }
       if(data.connectionType == 'Metered'){
         let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-        if(((applicationNumber && applicationNumber.includes('WS')) || (data.connectionFacility == 
+        if(((data.connectionFacility == 
           serviceConst.WATER) || (data.connectionFacility == serviceConst.WATERSEWERAGE)) && data && data.additionalDetails && data.additionalDetails.isLabourFeeApplicable && data.additionalDetails.isLabourFeeApplicable === 'Y'){
           dispatch(
             handleField(
@@ -972,7 +972,7 @@ export const getData = async (action, state, dispatch) => {
         );
       }
       let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-      if(data.connectionType === 'Non Metered' && applicationNumber && ((!applicationNumber.includes('WS')) || (!data.connectionFacility == serviceConst.WATER))){
+      if(data.connectionType === 'Non Metered' && (!data.connectionFacility == serviceConst.WATER)){
         dispatch(
           handleField(
             "apply",
@@ -982,7 +982,7 @@ export const getData = async (action, state, dispatch) => {
           )
         );
       }
-      if((applicationNumber && applicationNumber.includes('WS')) || (data.connectionFacility == 
+      if((data.connectionFacility == 
         serviceConst.WATER) || (data.connectionFacility == serviceConst.WATERSEWERAGE)){
         dispatch(
           handleField(

@@ -380,7 +380,7 @@ export const handlePipeSizeProposed = (params) => {
   state.screenConfiguration.preparedFinalObject.WaterConnection && state.screenConfiguration.preparedFinalObject.WaterConnection[0] &&
   state.screenConfiguration.preparedFinalObject.WaterConnection[0].connectionFacility
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
-  let isWater = (applicationNumber && applicationNumber.includes('WS') || connectionFacility == serviceConst.WATER || 
+  let isWater = (connectionFacility == serviceConst.WATER || 
   connectionFacility == serviceConst.WATERSEWERAGE) ? true : false
   if(isWater){
     return 'NA'

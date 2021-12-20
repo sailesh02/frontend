@@ -533,13 +533,13 @@ export const connectionSewerage={
       labelKey: "WS_SERV_DETAIL_PIPE_SIZE"
     },
     {
-      jsonPath: "SewerageConnection[0].pipeSize",
+      jsonPath: "WaterConnection[0].pipeSize",
       // callBack: handleNA
     }, {
       labelKey: "WS_OLD_LABEL_NAME"
     },
     {
-      jsonPath: "SewerageConnectionOld[0].pipeSize",
+      jsonPath: "WaterConnectionOld[0].pipeSize",
       // callBack: handleNA
     }
   )

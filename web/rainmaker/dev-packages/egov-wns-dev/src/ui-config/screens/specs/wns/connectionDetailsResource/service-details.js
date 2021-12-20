@@ -12,7 +12,7 @@ import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUt
 
 
 export const renderService = () => {
-  const tenantId = getTenantIdCommon()
+const tenantId = getTenantIdCommon()
 const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 const service = getQueryArg(window.location.href, "service")
 const connectionType = getQueryArg(window.location.href, "connectionType")

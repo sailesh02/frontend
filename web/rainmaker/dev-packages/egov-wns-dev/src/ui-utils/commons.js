@@ -12,7 +12,8 @@ import { httpRequest } from "./api";
 
 export const serviceConst = {
     "WATER": "WATER",
-    "SEWERAGE": "SEWERAGE"
+    "SEWERAGE": "SEWERAGE",
+    "WATERSEWERAGE":"WATER-SEWERAGE"
 }
 
 export const APPLICATIONSTATE = {

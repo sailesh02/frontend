@@ -48,8 +48,8 @@ const activationDetailsHeader = getHeader({
 export const paymentDetailsMeter = {
   reviewLaborCharge : getLabelWithValueForModifiedLabel(
     {
-      labelName: "WS_LABOUR_FEE_APPLICABLE",
-      labelKey: "WS_LABOUR_FEE_APPLICABLE"
+      labelName: "WS_LABOUR_FEE",
+      labelKey: "WS_LABOUR_FEE"
     },
     { jsonPath: "applyScreen.additionalDetails.isLabourFeeApplicable",
       callBack: handleLaborCharge

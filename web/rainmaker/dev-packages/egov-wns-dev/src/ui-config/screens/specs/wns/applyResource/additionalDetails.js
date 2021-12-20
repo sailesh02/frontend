@@ -450,7 +450,7 @@ export const additionDetails = getCommonCard({
     }),
     activeDetails: getCommonContainer({
       isLabourFeeApplicable: getSelectField({
-        label: { labelKey: "WS_LABOUR_FEE_APPLICABLE" },
+        label: { labelKey: "WS_LABOUR_FEE" },
         data: [{code:'Y',label:'Yes'},{code:'N',label:'No'}],
         optionValue: "code",
         optionLabel: "label",

@@ -31,6 +31,7 @@ import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
+import { serviceConst } from "../../../../ui-utils/commons";
 
 export const getCommonApplyFooter = (position,children) => {
   return {
@@ -303,6 +304,9 @@ export const handleApartment = params => {
 export const handleInstallementorFullPayment = params => {
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
   let state = store.getState();
+  let connectionFacility = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
+  state.screenConfiguration.preparedFinalObject.WaterConnection && state.screenConfiguration.preparedFinalObject.WaterConnection[0] &&
+  state.screenConfiguration.preparedFinalObject.WaterConnection[0].connectionFacility
   if(!applicationNumber && process.env.REACT_APP_NAME != 'Citizen'){
     let laborChargeApply = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
     state.screenConfiguration.preparedFinalObject.applyScreen &&
@@ -332,7 +336,8 @@ export const handleInstallementorFullPayment = params => {
       }else{
         return 'NA'
       }
-    }else if(applicationNumber && applicationNumber.includes('SW')){
+    }else if((applicationNumber && applicationNumber.includes('SW') || connectionFacility == 
+    serviceConst.SEWERAGE)){
       return "NA"
     }
     else{
@@ -344,12 +349,16 @@ export const handleInstallementorFullPayment = params => {
 
 export const handleLaborCharge = params => {
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
+  let state = store.getState()
+  let connectionFacility = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
+  state.screenConfiguration.preparedFinalObject.WaterConnection && state.screenConfiguration.preparedFinalObject.WaterConnection[0] &&
+  state.screenConfiguration.preparedFinalObject.WaterConnection[0].connectionFacility
   if(params == 'Y'){
     return 'Yes'
   }
   else if(params == 'N'){
     return 'No'
-  }else if(applicationNumber && applicationNumber.includes('SW')){
+  }else if((applicationNumber && applicationNumber.includes('SW') || connectionFacility == serviceConst.SEWERAGE)){
     return "NA"
   }
   else{
@@ -366,8 +375,13 @@ export const handleConnectionDetails = (params) => {
 
 // since field is non mandatory for sewerage and not applicable for water
 export const handlePipeSizeProposed = (params) => {
+  let state = store.getState();
+  let connectionFacility = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
+  state.screenConfiguration.preparedFinalObject.WaterConnection && state.screenConfiguration.preparedFinalObject.WaterConnection[0] &&
+  state.screenConfiguration.preparedFinalObject.WaterConnection[0].connectionFacility
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
-  let isWater = applicationNumber && applicationNumber.includes('WS') ? true : false
+  let isWater = (applicationNumber && applicationNumber.includes('WS') || connectionFacility == serviceConst.WATER || 
+  connectionFacility == serviceConst.WATERSEWERAGE) ? true : false
   if(isWater){
     return 'NA'
   }else{

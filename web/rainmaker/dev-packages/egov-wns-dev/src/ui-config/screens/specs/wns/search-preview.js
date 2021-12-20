@@ -28,7 +28,7 @@ const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
 let serviceModuleName = (service === serviceConst.WATER) ? "NewWS1" : "NewSW1";
-let serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
+let serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/ws-services/wc/_update";
 let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
 let editredirect = `apply?${redirectQueryString}&action=edit`;
 let headerLabel = "WS_TASK_DETAILS"
@@ -776,7 +776,7 @@ const screenConfig = {
           moduleName: "egov-workflow",
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
-            dataPath: (service === serviceConst.WATER) ? "WaterConnection" : "SewerageConnection",
+            dataPath: (service === serviceConst.WATER) ? "WaterConnection" : "WaterConnection",
             moduleName: serviceModuleName,
             updateUrl: serviceUrl,
             baseUrlTemp: 'wns',

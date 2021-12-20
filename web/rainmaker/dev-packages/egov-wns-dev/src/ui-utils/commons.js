@@ -221,18 +221,18 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch, filter 
     try {
         const response = await httpRequest(
             "post",
-            "/sw-services/swc/_search",
+            "/ws-services/wc/_search",
             "_search",
             queryObject
         );
-        if (response.SewerageConnections && response.SewerageConnections.length == 0) {
+        if (response.WaterConnection && response.WaterConnection.length == 0) {
             dispatch(toggleSpinner());
             return response;
         }
         let currentTime = new Date().getTime();
         if (filter) {
-            response.SewerageConnections = response.SewerageConnections.filter(app => currentTime > app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
-            response.SewerageConnections = response.SewerageConnections.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
+            response.WaterConnection = response.WaterConnection.filter(app => currentTime > app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
+            response.WaterConnection = response.WaterConnection.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
         }
         let result = findAndReplace(response, null, "NA");
         // result.SewerageConnections = await getPropertyObj(result.SewerageConnections);
@@ -1153,7 +1153,7 @@ export const applyForWater = async (state, dispatch) => {
 export const applyForSewerage = async (state, dispatch) => {
     let mode = getQueryArg(window.location.href, "mode");
     let queryObject = parserFunction(state);
-    let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
+    let sewerId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = sewerId ? "UPDATE" : "CREATE";
     let isWater = queryObject && queryObject.water
     let isSewerage = queryObject && queryObject.sewerage
@@ -1196,10 +1196,10 @@ export const applyForSewerage = async (state, dispatch) => {
                 queryObjectForUpdate.applicationType = "MODIFY_SEWERAGE_CONNECTION"
             }
             queryObjectForUpdate.noOfFlats = queryObjectForUpdate.noOfFlats && queryObjectForUpdate.noOfFlats != "" ? queryObjectForUpdate.noOfFlats : 0
-            await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdate });
+            await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResultsForSewerage(searchQueryObject, dispatch);
-            dispatch(prepareFinalObject("SewerageConnection", searchResponse.SewerageConnections));
+            dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
             dispatch(hideSpinner())
@@ -1227,37 +1227,37 @@ export const applyForSewerage = async (state, dispatch) => {
                 queryObject.applicationType = "MODIFY_SEWERAGE_CONNECTION"
             }
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
-            response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
-            dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
+            response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
+            dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
             
             if(isOwnerShipTransfer()){
-                response.SewerageConnections[0].sewerage = true;
-                response.SewerageConnections[0].service = "Sewerage";
-                response.SewerageConnections[0].ward = response.SewerageConnections[0].additionalDetails.ward ? response.SewerageConnections[0].additionalDetails.ward : '';
-                response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality;
-                dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
-                dispatch(prepareFinalObject("applyScreen.locality",response.SewerageConnections[0].additionalDetails.locality))
+                response.WaterConnection[0].sewerage = true;
+                response.WaterConnection[0].service = "Sewerage";
+                response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
+                response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
+                dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
+                dispatch(prepareFinalObject("applyScreen.locality",response.WaterConnection[0].additionalDetails.locality))
                 dispatch(prepareFinalObject("ownershipTransferCreated", true));
-                if(response && response.SewerageConnections && response.SewerageConnections.length > 0 && response.SewerageConnections[0] && response.SewerageConnections[0].noOfFlats &&
-                    parseInt(response.SewerageConnections[0].noOfFlats) > 0){
+                if(response && response.WaterConnection && response.WaterConnection.length > 0 && response.WaterConnection[0] && response.WaterConnection[0].noOfFlats &&
+                    parseInt(response.WaterConnection[0].noOfFlats) > 0){
                         dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));
                 }else{
                     dispatch(prepareFinalObject("applyScreen.apartment", 'No'));
                 }
             }
             if (isModifyMode()) {
-                response.SewerageConnections[0].ward = response.SewerageConnections[0].additionalDetails.ward ? response.SewerageConnections[0].additionalDetails.ward : '';
-                response.SewerageConnections[0].locality = response.SewerageConnections[0].additionalDetails.locality;
+                response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
+                response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 // response.SewerageConnections = await getPropertyObj(response.SewerageConnections,"", "", true);
-                response.SewerageConnections[0].sewerage = true;
-                response.SewerageConnections[0].service = "Sewerage";
-                dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
+                response.WaterConnection[0].sewerage = true;
+                response.WaterConnection[0].service = "Sewerage";
+                dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
-                dispatch(prepareFinalObject("applyScreen.locality",response.SewerageConnections[0].additionalDetails.locality))
-                if(response && response.SewerageConnections && response.SewerageConnections.length > 0 && response.SewerageConnections[0] && response.SewerageConnections[0].noOfFlats &&
-                    parseInt(response.SewerageConnections[0].noOfFlats) > 0){
+                dispatch(prepareFinalObject("applyScreen.locality",response.WaterConnection[0].additionalDetails.locality))
+                if(response && response.WaterConnection && response.WaterConnection.length > 0 && response.WaterConnection[0] && response.WaterConnection[0].noOfFlats &&
+                    parseInt(response.WaterConnection[0].noOfFlats) > 0){
                     dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));
                 }else{
                     dispatch(prepareFinalObject("applyScreen.apartment", 'No'));
@@ -1283,11 +1283,11 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
     let method;
     let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
-    let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
+    // let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let isWater = queryObject && queryObject.water
     let isSewerage = queryObject && queryObject.sewerage
     let connectionFacility = getConnectionFacility(isWater,isSewerage) 
-    if (waterId && sewerId) { method = "UPDATE" } else { method = "CREATE" };
+    if (waterId) { method = "UPDATE" } else { method = "CREATE" };
     try {
         dispatch(toggleSpinner())
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tenantId");
@@ -1347,7 +1347,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             queryObjectForUpdateSewerage.noOfFlats = queryObjectForUpdateSewerage.noOfFlats && queryObjectForUpdateSewerage.noOfFlats != "" ? queryObjectForUpdateSewerage.noOfFlats : 0
             queryObjectForUpdateWater.noOfFlats = queryObjectForUpdateWater.noOfFlats && queryObjectForUpdateWater.noOfFlats != "" ? queryObjectForUpdateWater.noOfFlats : 0
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdateWater });
-            await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdateSewerage });
+            // await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdateSewerage });
             let searchQueryObjectWater = [
                 { key: "tenantId", value: queryObjectForUpdateWater.tenantId },
                 { key: "applicationNumber", value: queryObjectForUpdateWater.applicationNo }
@@ -1357,9 +1357,9 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
                 { key: "applicationNumber", value: queryObjectForUpdateSewerage.applicationNo }
             ];
             let searchResponse = await getSearchResults(searchQueryObjectWater);
-            let sewerageResponse = await getSearchResultsForSewerage(searchQueryObjectSewerage, dispatch);
+            // let sewerageResponse = await getSearchResultsForSewerage(searchQueryObjectSewerage, dispatch);
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
-            dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
+            // dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
             dispatch(hideSpinner())
@@ -1378,9 +1378,9 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             queryObject.property = null;
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
             response = await httpRequest("post", "/ws-services/wc/_create", "_create", [], { WaterConnection: {...queryObject,pipeSize : 0} });
-            const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "_create", [], { SewerageConnection: queryObject });
+            // const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "_create", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
-            dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
+            // dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
             dispatch(hideSpinner())

@@ -306,7 +306,7 @@ const callBackForNext = async (state, dispatch) => {
             //   );
             // }
             let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
-            let sewerData = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection")
+            let sewerData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection")
             let waterChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.water");
             let sewerChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")
             let modifyAppCreated = get(state, "screenConfiguration.preparedFinalObject.modifyAppCreated")

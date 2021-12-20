@@ -22,7 +22,8 @@ import {
   isModifyMode,
   isOwnerShipTransfer,
   isModifyModeAction, prefillDocuments, prepareDocumentsUploadData,
-  showHideFieldsFirstStep
+  showHideFieldsFirstStep,
+  serviceConst
 } from "../../../../ui-utils/commons";
 import { triggerModificationsDisplay } from "./../utils/index";
 import { additionDetails } from "./applyResource/additionalDetails";
@@ -536,16 +537,91 @@ export const getData = async (action, state, dispatch) => {
         }
       }
       else {
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType",
-            "visible",
-            true
-          )
-        );
+       
         try {
         payloadWater = await getSearchResults(queryObject)
+        let connectionFacility = payloadWater && payloadWater.waterConnection && payloadWater && 
+        payloadWater.waterConnection.length > 0 && payloadWater.waterConnection[0].connectionFacility
+
+        // set water sewerage fields
+        if((applicationNo && applicationNo.includes('SW')) || (connectionFacility == 
+          serviceConst.SEWERAGE)) {
+          dispatch(prepareFinalObject("applyScreen.water", false));
+          dispatch(prepareFinalObject("applyScreen.sewerage", true));
+        }else if(connectionFacility == 
+          serviceConst.WATERSEWERAGE){
+            dispatch(prepareFinalObject("applyScreen.water", true));
+            dispatch(prepareFinalObject("applyScreen.sewerage", true));
+          }
+        else{
+          dispatch(prepareFinalObject("applyScreen.water", true));
+          dispatch(prepareFinalObject("applyScreen.sewerage", false));
+        }
+    
+       if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
+          togglePropertyFeilds(action, true);
+          if (applicationNumber.includes("SW") || connectionFacility == 
+            serviceConst.SEWERAGE) {
+            dispatch(prepareFinalObject("applyScreen.water", false));
+            dispatch(prepareFinalObject("applyScreen.sewerage", true));
+            toggleWaterFeilds(action, false);
+            toggleSewerageFeilds(action, true);
+          } else if(connectionFacility == 
+            serviceConst.WATERSEWERAGE){
+              dispatch(prepareFinalObject("applyScreen.water", true));
+              dispatch(prepareFinalObject("applyScreen.sewerage", true));
+              toggleWaterFeilds(action, true);
+              toggleSewerageFeilds(action, true);
+            }
+          else {
+            dispatch(prepareFinalObject("applyScreen.water", true));
+            dispatch(prepareFinalObject("applyScreen.sewerage", false));
+            toggleWaterFeilds(action, true);
+            toggleSewerageFeilds(action, false);
+          }
+        } else {
+          togglePropertyFeilds(action, false)
+          set(
+            action.screenConfig,
+            "components.div.children.formwizardFirstStep.children.connectionHolderDetails.visible",
+            true
+          );
+          // set(
+          //   action.screenConfig,
+          //   "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.visible",
+          //   value
+          // );
+          if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+            toggleWaterFeilds(action, true);
+            toggleSewerageFeilds(action, true);
+          } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+            toggleWaterFeilds(action, false);
+            toggleSewerageFeilds(action, true);
+          } else {
+            toggleWaterFeilds(action, true);
+            toggleSewerageFeilds(action, false);
+          }
+        }
+        //end
+        if(connectionFacility == serviceConst.WATER || connectionFacility == serviceConst.WATERSEWERAGE){
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType",
+              "visible",
+              true
+            )
+          );
+        }else{
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType",
+              "visible",
+              false
+            )
+          );
+        }
         // to prefill dropdown data while editing
         if((actionType && (actionType.toUpperCase() === "EDIT")) && payloadWater && payloadWater.WaterConnection && payloadWater.WaterConnection[0].connectionCategory && payloadWater.WaterConnection[0].connectionType){
           switch(payloadWater.WaterConnection[0].connectionCategory){
@@ -742,7 +818,8 @@ export const getData = async (action, state, dispatch) => {
             "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
             "visible",
-            data && data.applicationNo && data.applicationNo.includes('WS') ? true : false
+            ((data && data.applicationNo && data.applicationNo.includes('WS')) || 
+            (data.connectionFacility == serviceConst.WATER) || (data.connectionFacility == serviceConst.WATERSEWERAGE)) ? true : false
           )
         );
         dispatch(
@@ -754,7 +831,8 @@ export const getData = async (action, state, dispatch) => {
           )
         );
         let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-        if(applicationNumber && applicationNumber.includes('SW')){
+        if((applicationNumber && applicationNumber.includes('SW')) || (data.connectionFacility == serviceConst.SEWERAGE) || 
+        (data.connectionFacility == serviceConst.WATERSEWERAGE)){
           dispatch(
             handleField(
               "apply",
@@ -864,7 +942,8 @@ export const getData = async (action, state, dispatch) => {
       }
       if(data.connectionType == 'Metered'){
         let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-        if(applicationNumber && applicationNumber.includes('WS') && data && data.additionalDetails && data.additionalDetails.isLabourFeeApplicable && data.additionalDetails.isLabourFeeApplicable === 'Y'){
+        if(((applicationNumber && applicationNumber.includes('WS')) || (data.connectionFacility == 
+          serviceConst.WATER) || (data.connectionFacility == serviceConst.WATERSEWERAGE)) && data && data.additionalDetails && data.additionalDetails.isLabourFeeApplicable && data.additionalDetails.isLabourFeeApplicable === 'Y'){
           dispatch(
             handleField(
               "apply",
@@ -893,7 +972,7 @@ export const getData = async (action, state, dispatch) => {
         );
       }
       let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-      if(data.connectionType === 'Non Metered' && applicationNumber && !applicationNumber.includes('WS')){
+      if(data.connectionType === 'Non Metered' && applicationNumber && ((!applicationNumber.includes('WS')) || (!data.connectionFacility == serviceConst.WATER))){
         dispatch(
           handleField(
             "apply",
@@ -903,7 +982,8 @@ export const getData = async (action, state, dispatch) => {
           )
         );
       }
-      if(applicationNumber && applicationNumber.includes('WS')){
+      if((applicationNumber && applicationNumber.includes('WS')) || (data.connectionFacility == 
+        serviceConst.WATER) || (data.connectionFacility == serviceConst.WATERSEWERAGE)){
         dispatch(
           handleField(
             "apply",

@@ -54,7 +54,7 @@ export const tradeLicenseApplication = getCommonCard({
         sm: 4
       },
       required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
+      pattern: /^[\/a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
       jsonPath: "searchScreen.licenseNumbers"
     }),

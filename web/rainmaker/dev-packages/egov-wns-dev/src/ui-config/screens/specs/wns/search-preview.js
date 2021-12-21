@@ -264,9 +264,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     }
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
     let connectionFacility = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionFacility");
-    if (connectionType === "Metered" && ( 
-      (connectionFacility == serviceConst.WATER
-    || connectionFacility == serviceConst.WATERSEWERAGE))) {
+    if (connectionType === "Metered" &&  
+      (connectionFacility == serviceConst.WATER)) {
       set(
         action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge.visible",
@@ -317,11 +316,59 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio.visible",
         true
       );
-    } else {
-      let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-      if((applicationNumber && applicationNumber.includes("WS")) || ((
-        connectionFacility == serviceConst.WATER
-      ) || (connectionFacility == serviceConst.WATERSEWERAGE))){
+    } else if(connectionType === "Metered" && connectionFacility == serviceConst.WATERSEWERAGE){
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterId.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterInstallationDate.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio.visible",
+        true
+      );
+    }else {
+      if(connectionFacility == serviceConst.WATER){
         set(
           action.screenConfig,
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
@@ -363,6 +410,47 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           true
         );
 
+      }else if((connectionFacility == serviceConst.WATERSEWERAGE)){
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterId.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterInstallationDate.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment.visible",
+          true
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio.visible",
+          true
+        );
       }else{
         set(
           action.screenConfig,
@@ -425,16 +513,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterMake.visible",
         false
       );
-      // set(
-      //   action.screenConfig,
-      //   "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment.visible",
-      //   false
-      // );
-      // set(
-      //   action.screenConfig,
-      //   "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge.visible",
-      //   false
-      // );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge.visible",
+        false
+      );
       set(
         action.screenConfig,
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio.visible",

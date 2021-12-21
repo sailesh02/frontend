@@ -755,14 +755,50 @@ export const getData = async (action, state, dispatch) => {
       let connectionFacility = data && data.connectionFacility
       if((applicationNo && applicationNo.includes('SW')) || (connectionFacility == 
         serviceConst.SEWERAGE)) {
+          dispatch(handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props",
+            "waterChecked",
+            false
+          ))
+          dispatch(handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props",
+            "sewerageChecked",
+            true
+          ))
         dispatch(prepareFinalObject("applyScreen.water", false));
         dispatch(prepareFinalObject("applyScreen.sewerage", true));
       }else if(connectionFacility == 
         serviceConst.WATERSEWERAGE){
+          dispatch(handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props",
+            "waterChecked",
+            true
+          ))
+          dispatch(handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props",
+            "sewerageChecked",
+            true
+          ))
           dispatch(prepareFinalObject("applyScreen.water", true));
           dispatch(prepareFinalObject("applyScreen.sewerage", true));
         }
       else{
+        dispatch(handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props",
+          "waterChecked",
+          true
+        ))
+        dispatch(handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props",
+          "sewerageChecked",
+          false
+        ))
         dispatch(prepareFinalObject("applyScreen.water", true));
         dispatch(prepareFinalObject("applyScreen.sewerage", false));
       }

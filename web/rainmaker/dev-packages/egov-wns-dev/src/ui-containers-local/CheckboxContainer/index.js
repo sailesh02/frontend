@@ -49,6 +49,16 @@ class CheckboxLabels extends React.Component {
     this.setState({ checkedSewerage: checkedSewerage, checkedWater: checkedWater },()=>{})
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.waterChecked && nextProps.sewerageChecked){
+      this.setState({ checkedSewerage: true, checkedWater: true,interChange:true },()=>{})
+    }else if(nextProps.waterChecked){
+      this.setState({ checkedSewerage: false, checkedWater: true,interChange:true},()=>{})
+    }else if(nextProps.sewerageChecked){
+      this.setState({ checkedSewerage: true, checkedWater: false,interChange:true },()=>{})
+    }
+  }
+
   handleWater = name => event => {
     const { jsonPathWater, approveCheck, onFieldChange } = this.props;
     this.setState({ [name]: event.target.checked, interChange: true }, () => {
@@ -89,6 +99,7 @@ class CheckboxLabels extends React.Component {
   }
 
   render() {
+
     const { classes, required, preparedFinalObject,disabled} = this.props;
     let checkedWater, checkedSewerage;
     if (this.state.interChange) {

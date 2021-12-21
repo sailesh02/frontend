@@ -868,8 +868,7 @@ export const getData = async (action, state, dispatch) => {
           )
         );
         let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-        if((applicationNumber && applicationNumber.includes('SW')) || (data.connectionFacility == serviceConst.SEWERAGE) || 
-        (data.connectionFacility == serviceConst.WATERSEWERAGE)){
+        if((applicationNumber && applicationNumber.includes('SW')) || (data.connectionFacility == serviceConst.SEWERAGE)){
           dispatch(
             handleField(
               "apply",
@@ -1027,6 +1026,15 @@ export const getData = async (action, state, dispatch) => {
             `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter`,
             "visible",
             false
+          )
+        );
+      }else{
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter`,
+            "visible",
+            true
           )
         );
       }

@@ -983,7 +983,7 @@ export const getData = async (action, state, dispatch) => {
         );
       }
       if((data.connectionFacility == 
-        serviceConst.WATER) || (data.connectionFacility == serviceConst.WATERSEWERAGE)){
+        serviceConst.WATER)){
         dispatch(
           handleField(
             "apply",

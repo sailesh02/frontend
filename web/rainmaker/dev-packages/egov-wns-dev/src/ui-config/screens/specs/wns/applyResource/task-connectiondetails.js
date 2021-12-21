@@ -168,7 +168,37 @@ export const connectionDetailsBoth = {
           labelKey: "WS_OLD_LABEL_NAME"
       },
       { jsonPath: "WaterConnectionOld[0].proposedTaps",
-        callBack: handleConnectionDetails, }),      
+        callBack: handleConnectionDetails, }), 
+        taskNoOfClosets : getLabelWithValueForModifiedLabel(
+            {
+                labelName:"No of closets proposed",
+                labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
+            },
+            { jsonPath: "WaterConnection[0].proposedWaterClosets" },  {
+                labelKey: "WS_OLD_LABEL_NAME"
+              },
+              { jsonPath: "WaterConnectionOld[0].proposedWaterClosets" }
+        ),
+         taskNoOfToilets : getLabelWithValueForModifiedLabel(
+            {
+                labelName:"No of toilets proposed",
+                labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TOILETS_PROPOSED"
+            },
+            { jsonPath: "WaterConnection[0].proposedToilets" },  {
+                labelKey: "WS_OLD_LABEL_NAME"
+              },
+              { jsonPath: "WaterConnectionOld[0].proposedToilets" }
+        ),
+        taskPipeSizeProposed : getLabelWithValueForModifiedLabel(
+            {
+                labelName:"No of pipe size proposed",
+                labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
+            },
+            { jsonPath: "WaterConnection[0].pipeSize" },  {
+                labelKey: "WS_OLD_LABEL_NAME"
+              },
+              { jsonPath: "WaterConnectionOld[0].pipeSize" })
+             
     // taskNoOfClosets : getLabelWithValueForModifiedLabel(
     //     {
     //         labelName:"No of closets proposed",

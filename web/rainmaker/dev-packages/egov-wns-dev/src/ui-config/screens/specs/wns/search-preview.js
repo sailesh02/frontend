@@ -847,8 +847,8 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     );
     payload = [];
     payload = await getSearchResults(queryObjForSearch);
-    let connectionFacility = payload && payload.waterConnection && payload && 
-    payload.waterConnection.length > 0 && payload.waterConnection[0].connectionFacility
+    let connectionFacility = payload && payload.WaterConnection && payload && 
+    payload.WaterConnection.length > 0 && payload.WaterConnection[0].connectionFacility
     if(connectionFacility == serviceConst.WATER){
       set(
         action.screenConfig,
@@ -959,8 +959,8 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       }else{
         dispatch(prepareFinalObject("WaterConnectionOld[0].apartment", 'No')); 
       }
-      let connectionFacility = oldApplicationPayload && oldApplicationPayload.waterConnection && oldApplicationPayload && 
-      oldApplicationPayload.waterConnection.length > 0 && oldApplicationPayload.waterConnection[0].connectionFacility
+      let connectionFacility = oldApplicationPayload && oldApplicationPayload.WaterConnection && oldApplicationPayload && 
+      oldApplicationPayload.WaterConnection.length > 0 && oldApplicationPayload.WaterConnection[0].connectionFacility
 
       if((connectionFacility == 
         serviceConst.WATER) || (connectionFacility == serviceConst.WATERSEWERAGE)){

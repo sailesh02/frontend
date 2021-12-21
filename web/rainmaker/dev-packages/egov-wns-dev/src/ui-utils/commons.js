@@ -1047,8 +1047,9 @@ export const applyForWater = async (state, dispatch) => {
             }
             queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.locality && queryObjectForUpdate.locality.split('_').length == 4 ? queryObjectForUpdate.locality.split('_')[3] : queryObjectForUpdate.locality;
             queryObjectForUpdate.additionalDetails.ward = queryObjectForUpdate.ward ? queryObjectForUpdate.ward : '';
-
-            queryObjectForUpdate.pipeSize = 0
+            if(!isSewerage){
+                queryObjectForUpdate.pipeSize = 0
+            }
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             queryObjectForUpdate.property = null
             queryObjectForUpdate.noOfFlats = queryObjectForUpdate.noOfFlats && queryObjectForUpdate.noOfFlats != "" ? queryObjectForUpdate.noOfFlats : 0
@@ -1083,7 +1084,9 @@ export const applyForWater = async (state, dispatch) => {
                 set(queryObject, "waterSource", getWaterSource(queryObject.waterSource, queryObject.waterSubSource));
             }
             queryObject.property = null
-            queryObject.pipeSize = 0
+            if(!isSewerage){
+                queryObject.pipeSize = 0
+            }
             if(mode === "ownershipTransfer"){
                 queryObject.applicationType = "CONNECTION_OWNERSHIP_CHANGE"
                 if(process.env.REACT_APP_NAME !== "Citizen" && queryObject){
@@ -1344,7 +1347,9 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             queryObjectForUpdateSewerage.additionalDetails.locality = queryObjectForUpdateSewerage.locality;
             queryObjectForUpdateSewerage.property = null
             queryObjectForUpdateWater.property = null
-            queryObjectForUpdateWater.pipeSize = 0
+            if(!isSewerage){
+                queryObjectForUpdateWater.pipeSize = 0
+            }
             queryObjectForUpdateSewerage.noOfFlats = queryObjectForUpdateSewerage.noOfFlats && queryObjectForUpdateSewerage.noOfFlats != "" ? queryObjectForUpdateSewerage.noOfFlats : 0
             queryObjectForUpdateWater.noOfFlats = queryObjectForUpdateWater.noOfFlats && queryObjectForUpdateWater.noOfFlats != "" ? queryObjectForUpdateWater.noOfFlats : 0
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdateWater });
@@ -1378,7 +1383,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             queryObject = findAndReplace(queryObject, "NA", null);
             queryObject.property = null;
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
-            response = await httpRequest("post", "/ws-services/wc/_create", "_create", [], { WaterConnection: {...queryObject,pipeSize : 0} });
+            response = await httpRequest("post", "/ws-services/wc/_create", "_create", [], { WaterConnection: {...queryObject} });
             // const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "_create", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
             // dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));

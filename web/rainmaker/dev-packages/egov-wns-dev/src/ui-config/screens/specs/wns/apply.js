@@ -542,67 +542,6 @@ export const getData = async (action, state, dispatch) => {
         payloadWater = await getSearchResults(queryObject)
         let connectionFacility = payloadWater && payloadWater.waterConnection && payloadWater && 
         payloadWater.waterConnection.length > 0 && payloadWater.waterConnection[0].connectionFacility
-
-        // set water sewerage fields
-        if((applicationNo && applicationNo.includes('SW')) || (connectionFacility == 
-          serviceConst.SEWERAGE)) {
-          dispatch(prepareFinalObject("applyScreen.water", false));
-          dispatch(prepareFinalObject("applyScreen.sewerage", true));
-        }else if(connectionFacility == 
-          serviceConst.WATERSEWERAGE){
-            dispatch(prepareFinalObject("applyScreen.water", true));
-            dispatch(prepareFinalObject("applyScreen.sewerage", true));
-          }
-        else{
-          dispatch(prepareFinalObject("applyScreen.water", true));
-          dispatch(prepareFinalObject("applyScreen.sewerage", false));
-        }
-    
-       if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
-          togglePropertyFeilds(action, true);
-          if (applicationNumber.includes("SW") || connectionFacility == 
-            serviceConst.SEWERAGE) {
-            dispatch(prepareFinalObject("applyScreen.water", false));
-            dispatch(prepareFinalObject("applyScreen.sewerage", true));
-            toggleWaterFeilds(action, false);
-            toggleSewerageFeilds(action, true);
-          } else if(connectionFacility == 
-            serviceConst.WATERSEWERAGE){
-              dispatch(prepareFinalObject("applyScreen.water", true));
-              dispatch(prepareFinalObject("applyScreen.sewerage", true));
-              toggleWaterFeilds(action, true);
-              toggleSewerageFeilds(action, true);
-            }
-          else {
-            dispatch(prepareFinalObject("applyScreen.water", true));
-            dispatch(prepareFinalObject("applyScreen.sewerage", false));
-            toggleWaterFeilds(action, true);
-            toggleSewerageFeilds(action, false);
-          }
-        } else {
-          togglePropertyFeilds(action, false)
-          set(
-            action.screenConfig,
-            "components.div.children.formwizardFirstStep.children.connectionHolderDetails.visible",
-            true
-          );
-          // set(
-          //   action.screenConfig,
-          //   "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.visible",
-          //   value
-          // );
-          if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-            toggleWaterFeilds(action, true);
-            toggleSewerageFeilds(action, true);
-          } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-            toggleWaterFeilds(action, false);
-            toggleSewerageFeilds(action, true);
-          } else {
-            toggleWaterFeilds(action, true);
-            toggleSewerageFeilds(action, false);
-          }
-        }
-        //end
         if(connectionFacility == serviceConst.WATER || connectionFacility == serviceConst.WATERSEWERAGE){
           dispatch(
             handleField(
@@ -812,6 +751,68 @@ export const getData = async (action, state, dispatch) => {
       }else{
         dispatch(prepareFinalObject("applyScreen.apartment", 'No'));
       }
+
+      let connectionFacility = data && data.connectionFacility
+      if((applicationNo && applicationNo.includes('SW')) || (connectionFacility == 
+        serviceConst.SEWERAGE)) {
+        dispatch(prepareFinalObject("applyScreen.water", false));
+        dispatch(prepareFinalObject("applyScreen.sewerage", true));
+      }else if(connectionFacility == 
+        serviceConst.WATERSEWERAGE){
+          dispatch(prepareFinalObject("applyScreen.water", true));
+          dispatch(prepareFinalObject("applyScreen.sewerage", true));
+        }
+      else{
+        dispatch(prepareFinalObject("applyScreen.water", true));
+        dispatch(prepareFinalObject("applyScreen.sewerage", false));
+      }
+  
+     if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
+        togglePropertyFeilds(action, true);
+        if (applicationNumber.includes("SW") || connectionFacility == 
+          serviceConst.SEWERAGE) {
+          dispatch(prepareFinalObject("applyScreen.water", false));
+          dispatch(prepareFinalObject("applyScreen.sewerage", true));
+          toggleWaterFeilds(action, false);
+          toggleSewerageFeilds(action, true);
+        } else if(connectionFacility == 
+          serviceConst.WATERSEWERAGE){
+            dispatch(prepareFinalObject("applyScreen.water", true));
+            dispatch(prepareFinalObject("applyScreen.sewerage", true));
+            toggleWaterFeilds(action, true);
+            toggleSewerageFeilds(action, true);
+          }
+        else {
+          dispatch(prepareFinalObject("applyScreen.water", true));
+          dispatch(prepareFinalObject("applyScreen.sewerage", false));
+          toggleWaterFeilds(action, true);
+          toggleSewerageFeilds(action, false);
+        }
+      } else {
+        togglePropertyFeilds(action, false)
+        set(
+          action.screenConfig,
+          "components.div.children.formwizardFirstStep.children.connectionHolderDetails.visible",
+          true
+        );
+        // set(
+        //   action.screenConfig,
+        //   "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.visible",
+        //   value
+        // );
+        if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+          toggleWaterFeilds(action, true);
+          toggleSewerageFeilds(action, true);
+        } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+          toggleWaterFeilds(action, false);
+          toggleSewerageFeilds(action, true);
+        } else {
+          toggleWaterFeilds(action, true);
+          toggleSewerageFeilds(action, false);
+        }
+      }
+      //end
+
       if (data.connectionType !== "Metered") {
         dispatch(
           handleField(

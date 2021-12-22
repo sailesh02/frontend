@@ -270,19 +270,15 @@ export const handlePropertySubUsageType = params => {
 }
 
 export const handleService = params => {
-  if(params){
-    return params
-  }else{
-    let state = store.getState();
-    // let water = get(state,"screenConfiguration.preparedFinalObject.applyScreen.water",false);
-    let water = get(state,"screenConfiguration.preparedFinalObject.WaterConnectionOld[0].service","");
-    // if(water){
-    //   return 'WATER'
-    // }else{
-    //   return 'SEWERAGE'
-    // }
-    return water;
-  }
+    if(params == serviceConst.WATER){
+      return 'Water'
+    }else if(params == serviceConst.WATERSEWERAGE){
+      return 'Water & Sewerage'
+    }else if(params == serviceConst.SEWERAGE){
+      return 'Sewerage'
+    }else{
+      return params
+    }
 }
 
 export const handleNA = params => {

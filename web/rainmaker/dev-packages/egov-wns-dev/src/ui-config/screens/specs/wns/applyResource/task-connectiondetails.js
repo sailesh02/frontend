@@ -69,11 +69,11 @@ export const getConnectionDetails = () => {
             labelKey: "WS_APPLY_FOR"
         },
         {
-            jsonPath: "WaterConnection[0].service",
+            jsonPath: "WaterConnection[0].connectionFacility",
         },  {
             labelKey: "WS_OLD_LABEL_NAME"
           },
-          { jsonPath: "WaterConnectionOld[0].service" }),
+          { jsonPath: "WaterConnectionOld[0].connectionFacility" }),
     
      taskNumberOfTapsPropsed : getLabelWithValueForModifiedLabel(
         {
@@ -104,11 +104,13 @@ export const getConnectionDetails = () => {
             labelKey: "WS_APPLY_FOR"
         },
         {
-            jsonPath: "WaterConnection[0].service",
+            jsonPath: "WaterConnection[0].connectionFacility",
+            callBack: handleService,
         },  {
             labelKey: "WS_OLD_LABEL_NAME"
           },
-          { jsonPath: "WaterConnectionOld[0].service" }),
+          { jsonPath: "WaterConnectionOld[0].connectionFacility",
+          callBack: handleService }),
     taskNoOfClosets : getLabelWithValueForModifiedLabel(
         {
             labelName:"No of closets proposed",
@@ -148,12 +150,12 @@ export const connectionDetailsBoth = {
             labelKey: "WS_APPLY_FOR"
         },
         {
-            jsonPath: "WaterConnection[0].service",
+            jsonPath: "WaterConnection[0].connectionFacility",
             callBack: handleService,
         },  {
             labelKey: "WS_OLD_LABEL_NAME"
           },
-          { jsonPath: "WaterConnectionOld[0].service",
+          { jsonPath: "WaterConnectionOld[0].connectionFacility",
              callBack:handleService,
          }),
     taskNumberOfTapsPropsed : getLabelWithValueForModifiedLabel(

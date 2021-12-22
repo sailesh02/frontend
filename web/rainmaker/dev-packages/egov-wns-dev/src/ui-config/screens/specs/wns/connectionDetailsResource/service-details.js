@@ -118,6 +118,49 @@ const connectionType = getQueryArg(window.location.href, "connectionType")
       numberOfToilets: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TOILETS" }, { jsonPath: "WaterConnection[0].noOfToilets" }),
       noOfWaterClosets: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" }, { jsonPath: "WaterConnection[0].noOfWaterClosets" }),
     })
+  }else{
+    if (connectionType === "Metered") {
+      return getCommonContainer({
+        serviceType: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_SERV_LABEL" }, { jsonPath: "WaterConnection[0].connectionFacility",callBack: handleService }),
+        connectionCategory: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_CATEGORY" }, { jsonPath: "WaterConnection[0].connectionCategory" }),
+        connectionType: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_TYPE" }, { jsonPath: "WaterConnection[0].connectionType" }),
+        meterID: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_METER_ID" }, { jsonPath: "WaterConnection[0].meterId" }),
+        connectionExecutionDate: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE" }, { jsonPath: "WaterConnection[0].connectionExecutionDate" }),
+        waterSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SOURCE" }, { jsonPath: "WaterConnection[0].waterSource" }),
+        waterSubSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" }, { jsonPath: "WaterConnection[0].waterSubSource" }),
+        meterMake: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_METER_MAKE" }, { jsonPath: "WaterConnection[0].additionalDetails.meterMake" }),
+        meterReadingRatio: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_METER_RATIO" }, { jsonPath: "WaterConnection[0].additionalDetails.meterReadingRatio" }),
+        pipeSize: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_PIPE_SIZE" }, { jsonPath: "WaterConnection[0].pipeSize" }),
+        diameter: getLabelWithValue({ labelKey: "WS_CONN_DETAIL_DIAMETER" }, { jsonPath: "WaterConnection[0].additionalDetails.diameter" }),
+        numberOfToilets: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TOILETS" }, { jsonPath: "WaterConnection[0].noOfToilets" }),
+        noOfWaterClosets: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" }, { jsonPath: "WaterConnection[0].noOfWaterClosets" }),
+        editSection: {
+          componentPath: "Button",
+          props: { color: "primary", style: { margin: "-16px" } },
+          visible: true,
+          gridDefination: { xs: 12, sm: 12, align: "left" },
+          children: { buttonLabel: getLabel({ labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL" }) },
+          onClickDefination: {
+            action: "page_change",
+            path: `meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`
+          }
+        },
+      })
+    } else {
+      return getCommonContainer({
+        serviceType: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_SERV_LABEL" }, { jsonPath: "WaterConnection[0].connectionFacility" }),
+        connectionCategory: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_CATEGORY" }, { jsonPath: "WaterConnection[0].connectionCategory" }),
+        connectionType: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_TYPE" }, { jsonPath: "WaterConnection[0].connectionType" }),
+        connectionExecutionDate: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE" }, { jsonPath: "WaterConnection[0].connectionExecutionDate" }),
+        waterSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SOURCE" }, { jsonPath: "WaterConnection[0].waterSource" }),
+        waterSubSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" }, { jsonPath: "WaterConnection[0].waterSubSource" }),
+        numberOfTaps: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" }, { jsonPath: "WaterConnection[0].noOfTaps" }),
+        pipeSize: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_PIPE_SIZE" }, { jsonPath: "WaterConnection[0].pipeSize" }),
+        diameter: getLabelWithValue({ labelKey: "WS_CONN_DETAIL_DIAMETER" }, { jsonPath: "WaterConnection[0].additionalDetails.diameter" }),
+        noOfWaterClosets: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" }, { jsonPath: "WaterConnection[0].noOfWaterClosets" }),
+        numberOfToilets: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TOILETS" }, { jsonPath: "WaterConnection[0].noOfToilets" })
+      })
+    }
   }
 }
 

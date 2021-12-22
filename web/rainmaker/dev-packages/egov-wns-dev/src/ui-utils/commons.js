@@ -1066,6 +1066,7 @@ export const applyForWater = async (state, dispatch) => {
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResults(searchQueryObject);
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
+            dispatch(prepareFinalObject("SewerageConnection", searchResponse.WaterConnection));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
             dispatch(hideSpinner())
@@ -1204,6 +1205,7 @@ export const applyForSewerage = async (state, dispatch) => {
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResultsForSewerage(searchQueryObject, dispatch);
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
+            dispatch(prepareFinalObject("SewerageConnection", searchResponse.WaterConnection));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
             dispatch(hideSpinner())
@@ -1365,7 +1367,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             let searchResponse = await getSearchResults(searchQueryObjectWater);
             // let sewerageResponse = await getSearchResultsForSewerage(searchQueryObjectSewerage, dispatch);
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
-            // dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
+            dispatch(prepareFinalObject("SewerageConnection", searchResponse.WaterConnection));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
             dispatch(hideSpinner())
@@ -1386,7 +1388,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             response = await httpRequest("post", "/ws-services/wc/_create", "_create", [], { WaterConnection: {...queryObject} });
             // const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "_create", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
-            // dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
+            dispatch(prepareFinalObject("SewerageConnection", response.WaterConnection));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
             dispatch(hideSpinner())

@@ -1,7 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generateReceipt from "../../utils/receiptPdf";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import store from "ui-redux/store";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import {
@@ -50,19 +50,42 @@ const openSignPdfPopup = () => {
   )
 
 };
-const getPdfPreview = async() => {
+const getPdfPreview = async () => {
   const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   let queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNumber }
   ];
-  let payload = await getSearchResults(queryObject);  
-  
-if(payload){
-  
-  showPDFPreview(payload.Licenses, "tlcertificate", "Licenses");
-}
+  let payload = await getSearchResults(queryObject);
+
+  if (payload) {
+
+
+    let pdfOwnersNames = '';
+    let pdfTradeTypes = '';
+    if (payload.Licenses[0].tradeLicenseDetail.owners && payload.Licenses[0].tradeLicenseDetail.owners.length > 0) {
+      for (let i = 0; i < payload.Licenses[0].tradeLicenseDetail.owners.length; i++) {
+        pdfOwnersNames += payload.Licenses[0].tradeLicenseDetail.owners[i].name + ", ";
+      }
+      pdfOwnersNames = pdfOwnersNames.substring(0, pdfOwnersNames.length - 2);
+    }
+
+    if (payload.Licenses[0].tradeLicenseDetail.tradeUnits && payload.Licenses[0].tradeLicenseDetail.tradeUnits.length > 0) {
+      for (let i = 0; i < payload.Licenses[0].tradeLicenseDetail.tradeUnits.length; i++) {
+        let tradeTypeLocale = '';
+
+        tradeTypeLocale = getLocaleLabels("TradeType", `TRADELICENSE_TRADETYPE_${payload.Licenses[0].tradeLicenseDetail.tradeUnits[i].tradeType.replace(/\./g, '_')}`);
+        console.log(tradeTypeLocale, "Nero Locallll")
+        pdfTradeTypes += tradeTypeLocale + ", ";
+      }
+      pdfTradeTypes = pdfTradeTypes.substring(0, pdfTradeTypes.length - 2);
+    }
+
+    payload.Licenses[0].additionalDetail = { ownerNames: pdfOwnersNames, tradeTypes: pdfTradeTypes };
+
+    showPDFPreview(payload.Licenses, "tlcertificate", "Licenses");
+  }
 
 }
 
@@ -125,7 +148,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
           labelKey: "WF_PDF_PREVIEW",
           link: () => {
             getPdfPreview();
-            
+
           }
         }
         ]
@@ -134,7 +157,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
   },
   // pdfSign: {
   //   componentPath: "Button",
-    
+
   //   props: {
   //     variant: "outlined",
   //     className:"home-footer",

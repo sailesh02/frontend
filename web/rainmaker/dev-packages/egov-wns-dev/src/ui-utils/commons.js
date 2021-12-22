@@ -1199,6 +1199,9 @@ export const applyForSewerage = async (state, dispatch) => {
             }
             if(isModifyMode()){
                 queryObjectForUpdate.applicationType = "MODIFY_SEWERAGE_CONNECTION"
+                if(isWater && isSewerage){
+                    queryObjectForUpdate.applicationType = "MODIFY_WATER_CONNECTION"  
+                }
             }
             queryObjectForUpdate.noOfFlats = queryObjectForUpdate.noOfFlats && queryObjectForUpdate.noOfFlats != "" ? queryObjectForUpdate.noOfFlats : 0
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
@@ -1231,6 +1234,9 @@ export const applyForSewerage = async (state, dispatch) => {
             }
             if(isModifyMode()){
                 queryObject.applicationType = "MODIFY_SEWERAGE_CONNECTION"
+                if(isWater && isSewerage){
+                    queryObject.applicationType = "MODIFY_WATER_CONNECTION"  
+                }
             }
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
@@ -1241,6 +1247,10 @@ export const applyForSewerage = async (state, dispatch) => {
             if(isOwnerShipTransfer()){
                 response.WaterConnection[0].sewerage = true;
                 response.WaterConnection[0].service = "Sewerage";
+                if(response.WaterConnection && response.WaterConnection[0] && response.WaterConnection[0].connectionFacility &&
+                    response.WaterConnection[0].connectionFacility == serviceConst.WATERSEWERAGE){
+                        response.WaterConnection[0].service = "Water And Sewerage";
+                }
                 response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
@@ -1259,6 +1269,10 @@ export const applyForSewerage = async (state, dispatch) => {
                 // response.SewerageConnections = await getPropertyObj(response.SewerageConnections,"", "", true);
                 response.WaterConnection[0].sewerage = true;
                 response.WaterConnection[0].service = "Sewerage";
+                if(response.WaterConnection && response.WaterConnection[0] && response.WaterConnection[0].connectionFacility &&
+                    response.WaterConnection[0].connectionFacility == serviceConst.WATERSEWERAGE){
+                    response.WaterConnection[0].service = "Water And Sewerage";
+                }
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
                 dispatch(prepareFinalObject("applyScreen.locality",response.WaterConnection[0].additionalDetails.locality))

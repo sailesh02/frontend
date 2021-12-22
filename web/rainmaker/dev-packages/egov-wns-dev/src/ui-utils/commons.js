@@ -1175,7 +1175,7 @@ export const applyForSewerage = async (state, dispatch) => {
                 state.screenConfiguration.preparedFinalObject,
                 "SewerageConnection[0].additionalDetails.appCreatedDate"
             )
-            let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0]");
+            let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
             set(queryObjectForUpdate, "connectionFacility", connectionFacility);
             set(queryObjectForUpdate, "processInstance.action", "SUBMIT_APPLICATION");

@@ -1268,7 +1268,7 @@ const screenConfig = {
         toggleWaterFeilds(action, true);
         toggleSewerageFeilds(action, false);
       }
-    } else if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
+    } else if (applicationNumber && getQueryArg(window.location.href, "action") === "edit" && !isModifyMode()) {
       togglePropertyFeilds(action, true);
       if (applicationNumber.includes("SW")) {
         dispatch(prepareFinalObject("applyScreen.water", false));
@@ -1293,16 +1293,19 @@ const screenConfig = {
       //   "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.visible",
       //   value
       // );
-      if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-        toggleWaterFeilds(action, true);
-        toggleSewerageFeilds(action, true);
-      } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-        toggleWaterFeilds(action, false);
-        toggleSewerageFeilds(action, true);
-      } else {
-        toggleWaterFeilds(action, true);
-        toggleSewerageFeilds(action, false);
+      if(!isModifyMode()){
+        if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+          toggleWaterFeilds(action, true);
+          toggleSewerageFeilds(action, true);
+        } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+          toggleWaterFeilds(action, false);
+          toggleSewerageFeilds(action, true);
+        } else {
+          toggleWaterFeilds(action, true);
+          toggleSewerageFeilds(action, false);
+        }
       }
+    
     }
     if (isModifyMode()) {
       triggerModificationsDisplay(action, true);

@@ -1180,7 +1180,9 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
             set(queryObjectForUpdate, "connectionFacility", connectionFacility);
             set(queryObjectForUpdate, "processInstance.action", "SUBMIT_APPLICATION");
-            set(queryObjectForUpdate, "connectionType", "Non Metered");
+            if(!isWater){
+                set(queryObjectForUpdate, "connectionType", "Non Metered");
+            }
             disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             disableField('apply', "components.div.children.footer.children.payButton", dispatch);
             if (typeof queryObjectForUpdate.additionalDetails !== 'object') {
@@ -1223,7 +1225,9 @@ export const applyForSewerage = async (state, dispatch) => {
 
             queryObject.additionalDetails.ward = queryObject.ward ? queryObject.ward : '';
             set(queryObject, "processInstance.action", "INITIATE");
-            set(queryObject, "connectionType", "Non Metered");
+            if(!isWater){
+                set(queryObject, "connectionType", "Non Metered");
+            }
             queryObject = findAndReplace(queryObject, "NA", null);
             queryObject.property = null;
             if(isOwnerShipTransfer()){
@@ -1332,7 +1336,9 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             set(queryObjectForUpdateWater, "processInstance.action", "SUBMIT_APPLICATION");
             set(queryObjectForUpdateWater, "waterSource", getWaterSource(queryObjectForUpdateWater.waterSource, queryObjectForUpdateWater.waterSubSource));
             set(queryObjectForUpdateSewerage, "processInstance.action", "SUBMIT_APPLICATION");
-            set(queryObjectForUpdateSewerage, "connectionType", "Non Metered");
+            if(!isWater){
+                set(queryObjectForUpdateSewerage, "connectionType", "Non Metered");
+            }
 
             set(
                 queryObjectForUpdateSewerage,

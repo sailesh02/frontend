@@ -7,7 +7,7 @@ import {
   getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
-import { convertEpochToDateAndHandleNA, handleApartment, handlePropertySubUsageType, handleNA,handleLocality,handleConnectionType  } from '../../utils';
+import { convertEpochToDateAndHandleNA, handleApartment, handlePropertySubUsageType, handleNA,handleLocality,handleConnectionType, handleService  } from '../../utils';
 import {isModifyMode,getTenantId} from '../../../../../ui-utils/commons'
 
 
@@ -780,15 +780,15 @@ export const taskApplicationType = getLabelWithValueForModifiedLabel(
     labelKey: "WS_APPLY_FOR"
   },
   {
-    jsonPath: "applyScreen.service",
-    callBack: handleNA
+    jsonPath: "applyScreen.connectionFacility",
+    callBack: handleService
   },
   {
     labelKey: "WS_OLD_LABEL_NAME"
   },
   {
-    jsonPath: "applyScreenOld.service",
-    callBack: handleNA
+    jsonPath: "applyScreenOld.connectionFacility",
+    callBack: handleService
   },
 );
 

@@ -394,14 +394,7 @@ export const handleLocality = params => {
 
 
 export const handleConnectionType = params => {
-  let state = store.getState();
-  let water = get(state,"screenConfiguration.preparedFinalObject.applyScreen.water",false);
-  if(water){
     return params
-  }else{
-    return 'NA'
-  }
-
 }
 
 export const handleRoadType = params =>{

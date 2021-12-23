@@ -725,6 +725,7 @@ export const getData = async (action, state, dispatch) => {
       let noOfFlats = get(state.screenConfiguration.preparedFinalObject && state.screenConfiguration.preparedFinalObject.applyScreen, "noOfFlats")
       if(noOfFlats && parseInt(noOfFlats) > 0){
         dispatch(prepareFinalObject("applyScreen.apartment", 'Yes'));
+        dispatch(prepareFinalObject("applyScreenOld.apartment", 'Yes'));
         dispatch(
           handleField(
             "apply",
@@ -750,6 +751,7 @@ export const getData = async (action, state, dispatch) => {
         ));
       }else{
         dispatch(prepareFinalObject("applyScreen.apartment", 'No'));
+        dispatch(prepareFinalObject("applyScreenOld.apartment", 'No'));
       }
 
       let connectionFacility = data && data.connectionFacility

@@ -448,6 +448,15 @@ export const toggleSewerageFeilds = (action, value) => {
   let mStep = (isMode) ? 'formwizardThirdStep' : 'formwizardThirdStep';
   // set('search-preview', "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForSW.visible", value);
   // set('search-preview', "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", true);
+  
+  if(process.env.REACT_APP_NAME !== "Citizen" && isModifyMode()){
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible`,
+      true
+    );
+  }
+
   set(
     action.screenConfig,
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter.visible`,
@@ -474,6 +483,13 @@ export const toggleSewerageFeilds = (action, value) => {
     value
   );
   if (!value) {
+    if(process.env.REACT_APP_NAME !== "Citizen" && isModifyMode()){
+      set(
+        action.screenConfig,
+        `components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible`,
+        true
+      );
+    }
     set(
       action.screenConfig,
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter.visible`,
@@ -559,7 +575,7 @@ export const toggleWaterFeilds = (action, value) => {
     );
   }
 
-  if(process.env.REACT_APP_NAME !== "Citizen" && isModifyMode() && applicationNumber && applicationNumber.includes('SW')){
+  if(process.env.REACT_APP_NAME !== "Citizen" && isModifyMode()){
     set(
       action.screenConfig,
       `components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible`,

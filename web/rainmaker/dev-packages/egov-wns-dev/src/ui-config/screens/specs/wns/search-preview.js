@@ -154,8 +154,11 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       if((
         connectionFacility == serviceConst.WATER
-      ) || (connectionFacility == serviceConst.WATERSEWERAGE)){
+      )){
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", false);
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
+      }else if(connectionFacility == serviceConst.WATERSEWERAGE){
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", true);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
       }else{
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", true);
@@ -815,7 +818,7 @@ const screenConfig = {
       "screenConfig.components.div.children.headerDiv.children.header1.children.application.children.applicationNumber.props.number",
       applicationNumber
     );
-    set(action, 'screenConfig.components.div.children.taskStatus.props.dataPath', (service === serviceConst.WATER) ? "WaterConnection" : "SewerageConnection");
+    // set(action, 'screenConfig.components.div.children.taskStatus.props.dataPath', (service === serviceConst.WATER) ? "WaterConnection" : "SewerageConnection");
     set(action, 'screenConfig.components.div.children.taskStatus.props.moduleName', serviceModuleName);
     set(action, 'screenConfig.components.div.children.taskStatus.props.updateUrl', serviceUrl);
     set(action, 'screenConfig.components.div.children.taskStatus.props.bserviceTemp', (service === serviceConst.WATER) ? "WS.ONE_TIME_FEE" : "SW.ONE_TIME_FEE");
@@ -956,8 +959,16 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
 
     // set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForSW.visible", false);
     // set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", true);
-    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", false);
+    if(connectionFacility && connectionFacility == serviceConst.WATER){
+      set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", false);
     set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
+    }else if(connectionFacility && connectionFacility == serviceConst.WATERSEWERAGE){
+      set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", true);
+    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
+    }else{
+      set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", true);
+    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", false);
+    }
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
       if(payload && payload.WaterConnection[0].noOfFlats && parseInt(payload.WaterConnection[0].noOfFlats) && parseInt(payload.WaterConnection[0].noOfFlats) > 0){

@@ -227,7 +227,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         }]
         if ((
           connectionFacility == serviceConst.WATER
-        ) || (connectionFacility == serviceConst.WATERSEWERAGE)) {
+        ) || (connectionFacility == serviceConst.WATERSEWERAGE) || (connectionFacility == serviceConst.SEWERAGE)) {
           estimate = await waterEstimateCalculation(queryObjectForEst, dispatch);
           let viewBillTooltip = [];
           if (estimate !== null && estimate !== undefined) {

@@ -22,8 +22,11 @@ export const APPLICATIONSTATE = {
     "APPROVED": "APPROVED"
 }
 
-const getConnectionFacility = (water,sewerage) => {
-    if(water && sewerage){
+const getConnectionFacility = (water,sewerage,service) => {
+    if(isModifyMode() && service == 'Water And Sewerage'){
+        return 'WATER-SEWERAGE'
+    }
+    else if(water && sewerage){
         return 'WATER-SEWERAGE'
     }else if(water){
         return 'WATER'
@@ -1011,6 +1014,7 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
 }
 
 export const applyForWater = async (state, dispatch) => {
+    debugger
     let mode = getQueryArg(window.location.href, "mode");
     let queryObject = parserFunction(state);
     let isWater = queryObject && queryObject.water
@@ -1162,7 +1166,8 @@ export const applyForSewerage = async (state, dispatch) => {
     let method = sewerId ? "UPDATE" : "CREATE";
     let isWater = queryObject && queryObject.water
     let isSewerage = queryObject && queryObject.sewerage
-    let connectionFacility = getConnectionFacility(isWater,isSewerage) 
+    let service = queryObject.service
+    let connectionFacility = getConnectionFacility(isWater,isSewerage,service) 
     try {
         dispatch(toggleSpinner())
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tenantId");
@@ -1304,6 +1309,7 @@ export const applyForSewerage = async (state, dispatch) => {
 }
 
 export const applyForBothWaterAndSewerage = async (state, dispatch) => {
+    debugger
     let method;
     let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
@@ -1338,6 +1344,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             set(queryObjectForUpdateSewerage, "processInstance.action", "SUBMIT_APPLICATION");
             if(!isWater){
                 set(queryObjectForUpdateSewerage, "connectionType", "Non Metered");
+                set(queryObjectForUpdateWater, "connectionType", "Non Metered");
             }
 
             set(

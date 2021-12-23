@@ -119,6 +119,16 @@ export const getFormattedDate = (date) => {
   }
 }
 
+export const getFormattedYearFromDate = (date) => {
+  const dateArray = new Date(date).toString().split(' ');
+  if (dateArray.length > 2) {
+    return dateArray[3];
+  }
+  else {
+    return 'dd-mmm-yyyy';
+  }
+}
+
 
 export const getLatestPropertyDetails = (propertyDetailsArray) => {
   if (propertyDetailsArray) {

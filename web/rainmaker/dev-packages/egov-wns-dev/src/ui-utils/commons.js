@@ -1498,7 +1498,7 @@ const handleApplicationNumberDisplayForBoth = (dispatch, applicationNumberWater,
             "apply",
             "components.div.children.headerDiv.children.header.children.applicationNumberSewerage",
             "visible",
-            true
+            false
         )
     );
 

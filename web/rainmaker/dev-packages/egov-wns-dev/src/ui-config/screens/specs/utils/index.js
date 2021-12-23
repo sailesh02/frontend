@@ -270,6 +270,7 @@ export const handlePropertySubUsageType = params => {
 }
 
 export const handleService = params => {
+  if(params){
     if(params == serviceConst.WATER){
       return 'Water'
     }else if(params == serviceConst.WATERSEWERAGE){
@@ -279,6 +280,15 @@ export const handleService = params => {
     }else{
       return params
     }
+  }
+  if(!params){
+    let state = store.getState();
+    let service = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
+    state.screenConfiguration.preparedFinalObject.applyScreen && state.screenConfiguration.preparedFinalObject.applyScreen.service
+    return service
+  }else{
+    return ''
+  }
 }
 
 export const handleNA = params => {

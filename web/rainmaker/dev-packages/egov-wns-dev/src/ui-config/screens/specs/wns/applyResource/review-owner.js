@@ -101,6 +101,7 @@ export const getReviewOwner = (isEditable = true) => {
     viewFive: connectionDetailsHeader,
     viewSixWS: renderServiceForWater(),
     viewSixVS: renderServiceForSW(),
+    viewSixBoth: renderServiceForBoth(),
     // viewSix: connectionDetails,
     viewSeven: connectionChargeDetailsHeader,
     viewEight: connectionChargeDetails,
@@ -545,6 +546,118 @@ export const connectionSewerage={
   )
 }
 
+export const connectionBoth = {
+  reviewConnectionType : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Connection Type",
+      labelKey: "WS_SERV_DETAIL_CONN_TYPE"
+    },
+    {
+      jsonPath: "WaterConnection[0].connectionType",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    }, {
+      jsonPath: "WaterConnectionOld[0].connectionType",
+      callBack: handleNA
+    }
+  ),
+   reviewWaterClosets : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "No. of Water Closets",
+      labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS"
+    },
+    {
+      jsonPath: "WaterConnection[0].noOfWaterClosets",
+      // callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    }, {
+      jsonPath: "WaterConnectionOld[0].noOfWaterClosets",
+      // callBack: handleNA
+    }
+  ),
+   reviewNoOfToilets : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "No. of Toilets",
+      labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS"
+    },
+    {
+      jsonPath: "WaterConnection[0].noOfToilets",
+      // callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    }, {
+      jsonPath: "WaterConnectionOld[0].noOfToilets",
+      // callBack: handleNA
+    }
+  ),
+  reviewPipeSize : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Pipe Size (in inches)",
+      labelKey: "WS_SERV_DETAIL_PIPE_SIZE"
+    },
+    {
+      jsonPath: "WaterConnection[0].pipeSize",
+      // callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].pipeSize",
+      // callBack: handleNA
+    }
+  ),
+  reviewNumberOfTaps : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "No. of Taps",
+      labelKey: "WS_SERV_DETAIL_NO_OF_TAPS"
+    },
+    {
+      jsonPath: "WaterConnection[0].noOfTaps",
+      // callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].noOfTaps",
+      // callBack: handleNA
+    }
+  ),
+  reviewWaterSource : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Water Source",
+      labelKey: "WS_SERV_DETAIL_WATER_SOURCE"
+    },
+    {
+      jsonPath: "WaterConnection[0].waterSource",
+      // callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].waterSource",
+      // callBack: handleNA
+    }
+  ),
+  reviewWaterSubSource : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Water Sub Source",
+      labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE"
+    },
+    {
+      jsonPath: "WaterConnection[0].waterSubSource",
+      // callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].waterSubSource",
+      // callBack: handleNA
+    }
+  )
+}
+
 export const additionDetailsWater=connectionWater;
 
 export const additionDetailsSewerage=connectionSewerage;
@@ -564,4 +677,8 @@ export const renderServiceForWater = () => {
 
 export const renderServiceForSW = () => {
   return getCommonContainer(connectionSewerage)
+}
+
+export const renderServiceForBoth = () => {
+  return getCommonContainer(connectionBoth)
 }

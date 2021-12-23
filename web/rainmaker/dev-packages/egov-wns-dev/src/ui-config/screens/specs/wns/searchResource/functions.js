@@ -137,7 +137,8 @@ const renderSearchConnectionTable = async (state, dispatch) => {
               // address: handleAddress(element),
               connectionType: element.connectionType,
               tenantId:element.tenantId,
-              applicationStatus:element.applicationStatus
+              applicationStatus:element.applicationStatus,
+              connectionFacility:element.connectionFacility
             })
           }) : finalArray.push({
             due: 'NA',
@@ -149,7 +150,8 @@ const renderSearchConnectionTable = async (state, dispatch) => {
             address:element.connectionHolders ? element.connectionHolders[0].correspondenceAddress : '',
             connectionType: element.connectionType,
             tenantId:element.tenantId,
-            applicationStatus:element.applicationStatus
+            applicationStatus:element.applicationStatus,
+            connectionFacility:element.connectionFacility
           })
         }
 
@@ -337,7 +339,9 @@ const showConnectionResults = (connections, dispatch) => {
     ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
     ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
     ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType,
-    ["WS_COMMON_TABLE_COL_APPLICATION_CURRENT_STATE"]: item.applicationStatus ? getTextToLocalMapping(item.applicationStatus) : 'NA'
+    ["WS_COMMON_TABLE_COL_APPLICATION_CURRENT_STATE"]: item.applicationStatus ? getTextToLocalMapping(item.applicationStatus) : 'NA',
+    ["WS_COMMON_CONNECTION_FACILITY_LABEL"]: item.connectionFacility ? item.connectionFacility : 'WATER'
+    
   }));
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchResults", "props.rows",

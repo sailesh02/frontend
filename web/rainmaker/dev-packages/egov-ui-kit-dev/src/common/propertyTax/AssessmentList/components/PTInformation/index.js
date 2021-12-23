@@ -14,6 +14,7 @@ import TotalDues from "../../../Property/components/TotalDues";
 import ApplicationHistory from "./components/ApplicationHistory";
 import AssessmentHistory from "./components/AssessmentHistory";
 import PaymentHistory from "./components/PaymentHistory";
+import DuesHistory from "./components/DuesHistory";
 import LastAssessmentHistory from "./components/LastAssessmentHistory"
 import "./index.css";
 
@@ -132,6 +133,7 @@ class PTInformation extends React.Component {
                     style={{ backgroundColor: "rgb(242,242,242)", boxShadow: "none" }}
                   />
                 )}
+                <DuesHistory></DuesHistory>
                 <PdfHeader header={{
                   logoUrl: logoUrl, corpCity: corpCity, ulbGrade: ulbGrade,
                   label: "PT_PDF_SUBHEADER"

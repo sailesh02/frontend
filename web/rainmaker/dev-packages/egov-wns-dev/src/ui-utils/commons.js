@@ -1205,7 +1205,7 @@ export const applyForSewerage = async (state, dispatch) => {
                 }
             }
             if(isModifyMode()){
-                queryObjectForUpdate.applicationType = "MODIFY_SEWERAGE_CONNECTION"
+                queryObjectForUpdate.applicationType = "MODIFY_WATER_CONNECTION"
                 if(isWater && isSewerage){
                     queryObjectForUpdate.applicationType = "MODIFY_WATER_CONNECTION"  
                 }
@@ -1242,7 +1242,7 @@ export const applyForSewerage = async (state, dispatch) => {
                 }
             }
             if(isModifyMode()){
-                queryObject.applicationType = "MODIFY_SEWERAGE_CONNECTION"
+                queryObject.applicationType = "MODIFY_WATER_CONNECTION"
                 if(isWater && isSewerage){
                     queryObject.applicationType = "MODIFY_WATER_CONNECTION"  
                 }

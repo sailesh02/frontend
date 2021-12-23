@@ -33,7 +33,7 @@ let mode = getQueryArg(window.location.href, "mode");
 export const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"},{code:"BPL"},{code:"ASSOCIATION"}]
 export const meteredTemporary = [{code:"WSFCB"},{code: "DOMESTIC"}]
 export const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL"},
-{code:"SPMA"}]
+{code:"SPMA"},{code:"ASSOCIATION"}]
 export const nonMeteredTemporory = [{code:"WSFCB"},{code:"BPL"},{code:"ROADSIDEEATERS"},{code:"SPMA"}]
 
 export const temporary = [{code: "DOMESTIC"}, {code:"WSFCB"},{code:"BPL"},{code:"ROADSIDEEATERS"},{code:"SPMA"}]

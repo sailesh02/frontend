@@ -1063,7 +1063,7 @@ export const applyForWater = async (state, dispatch) => {
                 }
             }
             if(isModifyMode()){
-                queryObjectForUpdate.applicationType = "MODIFY_WATER_CONNECTION"
+                queryObjectForUpdate.applicationType = "MODIFY_CONNECTION"
             }
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
@@ -1098,7 +1098,7 @@ export const applyForWater = async (state, dispatch) => {
                 }
             }
             if(isModifyMode()){
-                queryObject.applicationType = "MODIFY_WATER_CONNECTION"
+                queryObject.applicationType = "MODIFY_CONNECTION"
             }
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
@@ -1204,9 +1204,9 @@ export const applyForSewerage = async (state, dispatch) => {
                 }
             }
             if(isModifyMode()){
-                queryObjectForUpdate.applicationType = "MODIFY_WATER_CONNECTION"
+                queryObjectForUpdate.applicationType = "MODIFY_CONNECTION"
                 if(isWater && isSewerage){
-                    queryObjectForUpdate.applicationType = "MODIFY_WATER_CONNECTION"  
+                    queryObjectForUpdate.applicationType = "MODIFY_CONNECTION"  
                 }
             }
             queryObjectForUpdate.noOfFlats = queryObjectForUpdate.noOfFlats && queryObjectForUpdate.noOfFlats != "" ? queryObjectForUpdate.noOfFlats : 0
@@ -1241,9 +1241,9 @@ export const applyForSewerage = async (state, dispatch) => {
                 }
             }
             if(isModifyMode()){
-                queryObject.applicationType = "MODIFY_WATER_CONNECTION"
+                queryObject.applicationType = "MODIFY_CONNECTION"
                 if(isWater && isSewerage){
-                    queryObject.applicationType = "MODIFY_WATER_CONNECTION"  
+                    queryObject.applicationType = "MODIFY_CONNECTION"  
                 }
             }
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0

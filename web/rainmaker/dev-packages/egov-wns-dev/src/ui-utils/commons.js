@@ -1014,7 +1014,6 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
 }
 
 export const applyForWater = async (state, dispatch) => {
-    debugger
     let mode = getQueryArg(window.location.href, "mode");
     let queryObject = parserFunction(state);
     let isWater = queryObject && queryObject.water
@@ -1309,7 +1308,6 @@ export const applyForSewerage = async (state, dispatch) => {
 }
 
 export const applyForBothWaterAndSewerage = async (state, dispatch) => {
-    debugger
     let method;
     let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");

@@ -110,8 +110,12 @@ class TLHowItWorks extends Component {
 
         <div className="col-sm-12" style={{ padding: "15px 0px 30px 0px" }}>
           <a
-            href={
-              "https://digitaldesksujog051120.blob.core.windows.net/assets/User Manuals/TL_User_Manual_Citizen.pdf"
+            // href={
+            //   "https://digitaldesksujog051120.blob.core.windows.net/assets/User Manuals/TL_User_Manual_Citizen.pdf"
+            // }
+           href = {process.env.REACT_APP_NAME === "Citizen"?
+              "https://sujog.odisha.gov.in/filestore/v1/files/id?tenantId=od&fileStoreId=913ddd9b-6b2e-4a5e-b44d-bcb0e31f8aaf":
+              "https://sujog.odisha.gov.in/filestore/v1/files/id?tenantId=od&fileStoreId=7d37570e-945c-434c-b316-17df84e13b82"
             }
             target="_blank"
           >

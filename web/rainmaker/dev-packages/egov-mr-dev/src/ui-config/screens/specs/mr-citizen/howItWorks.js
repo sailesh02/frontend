@@ -29,7 +29,7 @@ const screenConfig = {
         header: header,
         applicationsCard: {
           uiFramework: "custom-molecules-local",
-          moduleName: "egov-tradelicence",
+          moduleName: "egov-mr",
           componentPath: "TLHowItWorks"
         }
       }

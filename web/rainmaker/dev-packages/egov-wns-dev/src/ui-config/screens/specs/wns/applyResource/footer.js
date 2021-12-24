@@ -541,7 +541,7 @@ const moveToSuccess = (combinedArray, dispatch) => {
   if (applicationNoWater && applicationNoSewerage) {
     dispatch(
       setRoute(
-        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNoWater}&applicationNumberSewerage=${applicationNoSewerage}&tenantId=${tenantId}${mode}`
+        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNoWater}&tenantId=${tenantId}${mode}`
       )
     );
   } else if (applicationNoWater) {

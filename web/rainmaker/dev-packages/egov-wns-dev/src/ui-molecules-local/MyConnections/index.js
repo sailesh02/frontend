@@ -8,7 +8,7 @@ import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { connect } from "react-redux";
 import get from "lodash/get";
 import "./index.css"
-import { getDomainLink } from "../../ui-utils/commons";
+import { getDomainLink, serviceConst } from "../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import store from "ui-redux/store";
 import { getTextToLocalMapping } from "../../ui-config/screens/specs/utils/index"
@@ -28,7 +28,7 @@ class MyConnections extends React.Component {
   getConnectionDetails = data => {
     store.dispatch(
       setRoute(
-        `/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+        `/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}&connectionFacility=${data.connectionFacility}`
       )
     );
   }
@@ -36,7 +36,7 @@ class MyConnections extends React.Component {
   getViewBillDetails = data => {
     store.dispatch(
       setRoute(
-        `/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+        `/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}&connectionFacility=${data.connectionFacility}`
       )
     );
   }
@@ -71,7 +71,8 @@ class MyConnections extends React.Component {
                         </Grid>
                         <Grid item md={8} xs={6}>
                           <LabelContainer
-                            labelName={item.service}
+                            labelName={item.connectionFacility == serviceConst.WATER ? 'Water' : 
+                          item.connectionFacility == serviceConst.WATERSEWERAGE ? 'Water & Sewerage' : 'Sewerage'}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />

@@ -100,11 +100,6 @@ const ActionFooter = Loadable({
   loading: () => <Loading />
 });
 
-const ConnectionActionsFooter = Loadable({
-  loader: () => import("./ConnectionActionsFooter"),
-  loading: () => <Loading />
-});
-
 const ConfirmationDialog = Loadable({
   loader: () => import("./ConfirmationDialog"),
   loading: () => <Loading />
@@ -131,6 +126,5 @@ export {
   FeesEstimateOverviewCard,
   OwnerHeader,
   ActionFooter,
-  ConnectionActionsFooter,
   ConfirmationDialog
 };

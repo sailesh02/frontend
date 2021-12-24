@@ -3,12 +3,14 @@ import { isModifyMode } from "./../../ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
-export const toggleWater = (onFieldChange, value) => {
+export const toggleWater = (onFieldChange, value,step) => {
   // set('search-preview', "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", value);
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-
   let isMode = isModifyMode();
   let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
+  if(step){
+    mStep = "formwizardThirdStep"
+  }
   // onFieldChange(
   //   "apply",
   //   "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize",
@@ -33,6 +35,7 @@ export const toggleWater = (onFieldChange, value) => {
     "visible",
     value
   );
+  
   onFieldChange(
     "apply",
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.dynamicMdmsWaterSource`,
@@ -217,11 +220,13 @@ export const toggleWater = (onFieldChange, value) => {
   );
 }
 
-export const toggleSewerage = (onFieldChange, value) => {
+export const toggleSewerage = (onFieldChange, value,step) => {
   let isMode = isModifyMode();
   let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   // set('search-preview', "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForSW.visible", value);
-
+  if(step){
+    mStep = "formwizardThirdStep"
+  }
   onFieldChange(
     "apply",
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter`,
@@ -440,9 +445,18 @@ export const togglePropertyFeilds = (action, value) => {
 
 export const toggleSewerageFeilds = (action, value) => {
   let isMode = isModifyMode();
-  let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
+  let mStep = (isMode) ? 'formwizardThirdStep' : 'formwizardThirdStep';
   // set('search-preview', "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForSW.visible", value);
   // set('search-preview', "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", true);
+  
+  if(process.env.REACT_APP_NAME !== "Citizen" && isModifyMode()){
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible`,
+      true
+    );
+  }
+
   set(
     action.screenConfig,
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter.visible`,
@@ -469,6 +483,13 @@ export const toggleSewerageFeilds = (action, value) => {
     value
   );
   if (!value) {
+    if(process.env.REACT_APP_NAME !== "Citizen" && isModifyMode()){
+      set(
+        action.screenConfig,
+        `components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible`,
+        true
+      );
+    }
     set(
       action.screenConfig,
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter.visible`,
@@ -544,7 +565,7 @@ export const toggleSewerageFeilds = (action, value) => {
 
 export const toggleWaterFeilds = (action, value) => {
   let isMode = isModifyMode();
-  let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
+  let mStep = (isMode) ? 'formwizardThirdStep' : 'formwizardThirdStep';
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   if(process.env.REACT_APP_NAME !== "Citizen"){
     set(
@@ -554,7 +575,7 @@ export const toggleWaterFeilds = (action, value) => {
     );
   }
 
-  if(process.env.REACT_APP_NAME !== "Citizen" && isModifyMode() && applicationNumber && applicationNumber.includes('SW')){
+  if(process.env.REACT_APP_NAME !== "Citizen" && isModifyMode()){
     set(
       action.screenConfig,
       `components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible`,
@@ -584,6 +605,15 @@ export const toggleWaterFeilds = (action, value) => {
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterSubSource.visible`,
     value
   );
+
+  if(isModifyMode()){
+    set(
+      action.screenConfig,
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.dynamicMdmsWaterSource.visible`,
+      value
+    );
+    
+  }
   // set(
   //   action.screenConfig,
   //   `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.pipeSize.visible`,
@@ -632,7 +662,16 @@ export const toggleWaterFeilds = (action, value) => {
       value
     );
   }
+
   if (!value) {
+    if(isModifyMode()){
+      set(
+        action.screenConfig,
+        `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.dynamicMdmsWaterSource.visible`,
+        value
+      );
+      
+    }
     set(
       action.screenConfig,
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.dynamicMdmsWaterSource.visible`,

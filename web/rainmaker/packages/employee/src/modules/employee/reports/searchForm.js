@@ -240,7 +240,7 @@ class ShowForm extends Component {
 
   // set the value here, introduce the disabled
   handleFormFields = () => {
-    let { metaData, searchForm ,labels} = this.props;
+    let { metaData, searchForm, labels } = this.props;
     if (!_.isEmpty(metaData) && metaData.reportDetails && metaData.reportDetails.searchParams && metaData.reportDetails.searchParams.length > 0) {
       return metaData.reportDetails.searchParams.map((item, index) => {
         item["value"] = !_.isEmpty(searchForm) ? (searchForm[item.name] ? searchForm[item.name] : "") : "";
@@ -262,7 +262,7 @@ class ShowForm extends Component {
               dateField={this.state.datefield}
               dateError={this.state.dateError}
               handler={this.handleChange}
-              localizationLabels = {labels}
+              localizationLabels={labels}
             />
           )
         );
@@ -371,16 +371,16 @@ class ShowForm extends Component {
     if (!isDrilldown) {
       let searchParams = [];
       clearReportHistory();
-      let resulturl = getResultUrl(moduleName,rptName);
-        resulturl &&
+      let resulturl = getResultUrl(moduleName, rptName);
+      resulturl &&
         commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: rptName || this.state.reportName, searchParams }).then(
-          function(response) {
+          function (response) {
             pushReportHistory({ tenantId: tenantId, reportName: self.state.reportName, searchParams });
             setReportResult(response);
             showTable(true);
             setFlag(1);
           },
-          function(err) {
+          function (err) {
             showTable(false);
             alert("Something went wrong or try again later");
           }
@@ -411,35 +411,36 @@ class ShowForm extends Component {
     let searchParams = [];
     var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
     let self = this;
-    let mandatoryfields=[]
-    metaData.reportDetails.searchParams.forEach(param=>{
-      if(param.isMandatory){
+    let mandatoryfields = []
+    metaData.reportDetails.searchParams.forEach(param => {
+      if (param.isMandatory) {
         mandatoryfields.push(param.name);
       }
     });
-    let filledMandatoryFieldsCount=searchForm ? Object.keys(searchForm)
-    .filter(param => mandatoryfields.includes(param)).length:0;
-    if(filledMandatoryFieldsCount!=mandatoryfields.length)
-    { 
-      toggleSnackbarAndSetText(true,{labelKey:"COMMON_MANDATORY_MISSING_ERROR",labelName:"Please fill all mandatory fields to search"},
-      "error");
+    let filledMandatoryFieldsCount = searchForm ? Object.keys(searchForm)
+      .filter(param => mandatoryfields.includes(param)).length : 0;
+    if (filledMandatoryFieldsCount != mandatoryfields.length) {
+      toggleSnackbarAndSetText(true, { labelKey: "COMMON_MANDATORY_MISSING_ERROR", labelName: "Please fill all mandatory fields to search" },
+        "error");
       return;
     }
     if (!isDrilldown) {
       const displayOnlyFields = this.getDisplayOnlyFields(metaData);
-      
+
       searchForm = searchForm
         ? Object.keys(searchForm)
-            .filter((param) => !_.includes(displayOnlyFields, param))
-            .reduce((acc, param) => {
-              acc[param] = searchForm[param];
-              return acc;
-            }, {})
+          .filter((param) => !_.includes(displayOnlyFields, param))
+          .reduce((acc, param) => {
+            acc[param] = searchForm[param];
+            return acc;
+          }, {})
         : searchForm;
-
+      let fromDateStr;
+      let toDateStr;
+      
       for (var variable in searchForm) {
         let input;
-        
+
         if (this.state.moduleName == "oldPGR") {
           if (variable == "fromDate") {
             input =
@@ -460,6 +461,16 @@ class ShowForm extends Component {
           } else {
             input = searchForm[variable];
           }
+
+
+          if (variable == "fromDate") {
+            fromDateStr = searchForm["fromDate"];
+          }
+          if (variable == "toDate") {
+            toDateStr = searchForm["toDate"];
+            
+          }
+
         } else {
           if (variable == "fromDate") {
             try {
@@ -480,25 +491,47 @@ class ShowForm extends Component {
           } else {
             input = searchForm[variable];
           }
+
+          if (variable == "fromDate") {
+            fromDateStr = searchForm["fromDate"];
+          }
+          if (variable == "toDate") {
+            toDateStr = searchForm["toDate"];
+            
+          }
         }
         if (input && input != "All") {
           searchParams.push({ name: variable, input });
         }
       }
 
+      if (fromDateStr && toDateStr) {
+        var fromDateObj = new Date(fromDateStr);
+        var toDateObj = new Date(toDateStr);
+        var Difference_In_Time = toDateObj.getTime() - fromDateObj.getTime();
+
+        // To calculate the no. of days between two dates
+        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+        if (Difference_In_Days > 30) {
+          toggleSnackbarAndSetText(true, { labelKey: "The From Date and To Date range should not be more than 30 days.", labelName: "Range of From Date and To Date must be less than 30 Days in search" },
+            "error");
+          return;
+        }
+      }
       setSearchParams(searchParams);
 
       clearReportHistory();
-      let resulturl = getResultUrl(this.state.moduleName,this.state.reportName);
-        resulturl &&
+      let resulturl = getResultUrl(this.state.moduleName, this.state.reportName);
+      resulturl &&
         commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: this.state.reportName, searchParams }).then(
-          function(response) {
+          function (response) {
             pushReportHistory({ tenantId: tenantId, reportName: self.state.reportName, searchParams });
             setReportResult(response);
             showTable(true);
             setFlag(1);
           },
-          function(err) {
+          function (err) {
             showTable(false);
             alert("Something went wrong or try again later");
           }
@@ -506,17 +539,17 @@ class ShowForm extends Component {
     } else {
       if (_.isEmpty(JSON.parse(localStorageGet("searchCriteria")))) {
         let reportData = reportHistory[reportIndex - 1 - 1];
-        let resulturl = getResultUrl(this.state.moduleName,this.state.reportName);
-          resulturl &&
+        let resulturl = getResultUrl(this.state.moduleName, this.state.reportName);
+        resulturl &&
           commonApiPost(resulturl, {}, { ...reportData }).then(
-            function(response) {
+            function (response) {
               decreaseReportIndex();
               setReportResult(response);
 
               showTable(true);
               setFlag(1);
             },
-            function(err) {
+            function (err) {
               showTable(false);
               alert("Something went wrong or try again later");
             }
@@ -524,9 +557,9 @@ class ShowForm extends Component {
       } else {
         var reportData = JSON.parse(localStorageGet("searchCriteria"));
         let resulturl = getResultUrl(localStorageGet("moduleName"));
-          resulturl &&
+        resulturl &&
           commonApiPost(resulturl, {}, { ...reportData }).then(
-            function(response) {
+            function (response) {
               setReturnUrl("");
               localStorageSet("searchCriteria", JSON.stringify({}));
               localStorageSet("moduleName", "");
@@ -539,7 +572,7 @@ class ShowForm extends Component {
               showTable(true);
               setFlag(1);
             },
-            function(err) {
+            function (err) {
               showTable(false);
               alert("Something went wrong or try again later");
             }
@@ -690,7 +723,7 @@ class ShowForm extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const labels = get(state.app , "localizationLabels")
+  const labels = get(state.app, "localizationLabels")
   return {
     searchForm: state.formtemp.form,
     fieldErrors: state.formtemp.fieldErrors,
@@ -747,10 +780,10 @@ const mapDispatchToProps = (dispatch) => ({
   setFlag: (flag) => {
     dispatch({ type: "SET_FLAG", flag });
   },
-  toggleSnackbarAndSetText:(open,message,type)=>{
-   dispatch(toggleSnackbarAndSetText(
-    open,message,type
-  )) 
+  toggleSnackbarAndSetText: (open, message, type) => {
+    dispatch(toggleSnackbarAndSetText(
+      open, message, type
+    ))
   },
   setMetaData: (metaData) => {
     dispatch({ type: "SET_META_DATA", metaData });

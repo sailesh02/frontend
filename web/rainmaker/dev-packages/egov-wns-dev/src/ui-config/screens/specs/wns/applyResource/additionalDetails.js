@@ -443,7 +443,107 @@ export const additionDetails = getCommonCard({
       }),
     })
   }),
-  
+  volumetricDetails : getCommonGrayCard({
+    subHeader: getCommonTitle({
+      labelKey: "WS_VOLUMETRIC_DETAILS"
+    }),
+    activeDetails: getCommonContainer({
+      isVolumetricConnection: getSelectField({
+        label: { labelKey: "WS_IS_VOLUMETRIC_CONNECTION"},
+        data: [{code:'Y',label:'Yes'},{code:'N',label:'No'}],
+        optionValue: "code",
+        optionLabel: "label",
+        placeholder: { labelKey: "WS_LABOUR_FEE_PLACEHOLDER" },
+        required: true,
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"},
+        gridDefination: { xs: 6, sm: 6 },
+        jsonPath: "applyScreen.additionalDetails.isVolumetricConnection",
+        afterFieldChange: async (action, state, dispatch) => {
+          let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+          // if(process.env.REACT_APP_NAME != 'Citizen' && !applicationNumber){
+          //   dispatch(
+          //     handleField(
+          //     "apply",
+          //     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewLaborCharge",
+          //     "visible",
+          //     true
+          //   ));
+          //   dispatch(
+          //     handleField(
+          //     "apply",
+          //     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+          //     "visible",
+          //     true
+          //   ));
+          //   dispatch(
+          //     handleField(
+          //     "apply",
+          //     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen.children.reviewInstallment",
+          //     "visible",
+          //     true
+          //   ));
+          // }
+          // if(process.env.REACT_APP_NAME !== "Citizen") {
+          //   let connectionType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
+          //   if (connectionType === undefined || connectionType == "Non Metered" || connectionType == "Metered") {
+          //     if(action && action.value && action.value === 'Y'){
+          //       dispatch(
+          //         handleField(
+          //           "apply",
+          //           `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+          //           "visible",
+          //           true
+          //         )
+          //       );
+          //       dispatch(prepareFinalObject(
+          //         "applyScreen.additionalDetails.isInstallmentApplicable","N"
+          //       ))
+          //     }else{
+          //       dispatch(
+          //         handleField(
+          //           "apply",
+          //           `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+          //           "visible",
+          //           false
+          //         )
+          //       );
+          //       dispatch(prepareFinalObject(
+          //         "applyScreen.additionalDetails.isInstallmentApplicable","N"
+          //       ))
+          //     }
+          //   }
+          //   else {
+          //     dispatch(
+          //       handleField(
+          //         "apply",
+          //         `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+          //         "visible",
+          //         false
+          //       )
+          //     );
+          //   }
+          // }
+        }
+      }),
+      volumetricWaterCharge: getTextField({
+        label: {
+          labelKey: "WS_VOLUMETRIC_CHARGE"
+        },
+        placeholder: {
+          labelKey: "WS_VOLUMETRIC_CHARGE_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: true,
+        pattern: /^[a-z0-9]+$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "applyScreen.additionalDetails.volumetricWaterCharge",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
+      }),
+    })
+  }),
   paymentDetailsContainer : getCommonGrayCard({
     subHeader: getCommonTitle({
       labelKey: "WS_PAYMENT_DETAILS"

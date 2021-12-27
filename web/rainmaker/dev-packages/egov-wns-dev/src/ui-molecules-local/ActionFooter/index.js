@@ -127,7 +127,7 @@ class Footer extends React.Component {
       applicationNo,
       applicationNos,
     } = this.props;
-
+    
     if(ifUserRoleExists('WS_CEMP')){
       if(!date){
         toggleSnackbar(
@@ -304,10 +304,13 @@ class Footer extends React.Component {
                 store.dispatch(hideSpinner())
                 let appNo = response && response.WaterConnection && response.WaterConnection[0].applicationNo
                 response.WaterConnection[0].water = true;
-                let waterSource = response.WaterConnection[0].waterSource.split(".");
-                response.WaterConnection[0].waterSource = waterSource[0];
+                if(response && response.WaterConnection && response.WaterConnection.length > 0 &&
+                  response.WaterConnection[0].waterSource){
+                    let waterSource = response.WaterConnection[0].waterSource.split(".");
+                    response.WaterConnection[0].waterSource = waterSource[0];
+                    response.WaterConnection[0].waterSubSource = waterSource[1];
+                }
                 response.WaterConnection[0].service = "Water";
-                response.WaterConnection[0].waterSubSource = waterSource[1];
                 response.WaterConnection[0].applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_CONNECTION" : 
                 this.state.dialogButton == "WS_RECONNECTION"? "RECONNECT_CONNECTION" : "CLOSE_CONNECTION"
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality

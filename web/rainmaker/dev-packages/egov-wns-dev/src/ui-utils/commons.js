@@ -7,7 +7,7 @@ import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUt
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
-import { convertDateToEpoch, convertEpochToDate, getTranslatedLabel, convertDateTimeToEpoch,getTodaysDateInYMD } from "../ui-config/screens/specs/utils";
+import { convertDateToEpoch, convertEpochToDate, getTranslatedLabel, convertDateTimeToEpoch,getTodaysDateInYMD, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 
 export const serviceConst = {
@@ -210,6 +210,11 @@ export const getSearchResults = async (queryObject, filter = false) => {
         result.WaterConnection[0].waterSourceSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource;
         let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
         let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
+        if(result.WaterConnection && result.WaterConnection.length > 0 && 
+        !result.WaterConnection[0].dateEffectiveFrom && (ifUserRoleExists('WS_CEMP') || ifUserRoleExists('WS_APPROVER')) &&
+        result.WaterConnection[0].applicationType == 'DISCONNECT_CONNECTION' ){
+            response.WaterConnection[0].dateEffectiveFrom = convertDateToEpoch(getTodaysDateInYMD())  
+        }
         result.WaterConnection[0].waterSource = waterSource;
         result.WaterConnection[0].waterSubSource = waterSubSource;
         // result.WaterConnection = await getPropertyObj(result.WaterConnection);

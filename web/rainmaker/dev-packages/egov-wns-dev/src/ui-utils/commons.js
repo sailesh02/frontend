@@ -605,6 +605,29 @@ export const validateMeterDetails = (applyScreenObject) => {
     }
 }
 
+export const validateVolumetricDetails = (applyScreenObject) => {
+    let water = applyScreenObject && applyScreenObject.water
+    let rValue = true;
+    if (rValue && water){
+        if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== ""
+        ){
+            if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+            applyScreenObject.additionalDetails.hasOwnProperty("volumetricWaterCharge") && 
+            applyScreenObject.additionalDetails["volumetricWaterCharge"] !== undefined
+            ){
+            return true
+        }else{
+            return false
+        }
+        }else{return false}
+    }else{
+    return true
+    }
+}
+
 export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {
     let propertyObject = findAndReplace(applyScreenObject, "NA", null);
     if (
@@ -736,7 +759,15 @@ const parserFunction = (state) => {
               isInstallmentApplicable: (
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.isInstallmentApplicable !== undefined
-              ) ? (queryObject.additionalDetails.isInstallmentApplicable) : ""
+              ) ? (queryObject.additionalDetails.isInstallmentApplicable) : "",
+              isVolumetricConnection: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.isVolumetricConnection !== undefined
+              ) ? (queryObject.additionalDetails.isVolumetricConnection) : "",
+              volumetricWaterCharge: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.volumetricWaterCharge !== undefined
+              ) ? (queryObject.additionalDetails.volumetricWaterCharge) : "",
         }
     }
     queryObject = { ...queryObject, ...parsedObject }

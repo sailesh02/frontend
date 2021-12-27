@@ -1258,6 +1258,14 @@ const parserFunction = (obj) => {
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.isInstallmentApplicable !== undefined
       ) ? (obj.additionalDetails.isInstallmentApplicable) : "",
+      isVolumetricConnection: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.isVolumetricConnection !== undefined
+      ) ? (obj.additionalDetails.isVolumetricConnection) : "",
+      volumetricWaterCharge: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.volumetricWaterCharge !== undefined
+      ) ? (obj.additionalDetails.volumetricWaterCharge) : "",
     },
     dateEffectiveFrom: convertDateToEpoch(obj.dateEffectiveFrom),
     noOfTaps: parseInt(obj.noOfTaps),

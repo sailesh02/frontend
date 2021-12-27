@@ -23,7 +23,7 @@ import {
   pushTheDocsUploadedToRedux,
   serviceConst,
   showHideFieldsFirstStep, validateConnHolderDetails, validateFeildsForBothWaterAndSewerage,
-  validateFeildsForSewerage, validateFeildsForWater, isEditAction, validationsForExecutionData, validateMeterDetails
+  validateFeildsForSewerage, validateFeildsForWater, isEditAction, validationsForExecutionData, validateMeterDetails, validateVolumetricDetails
 } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
@@ -441,7 +441,7 @@ const callBackForNext = async (state, dispatch) => {
       }
     } else {
       let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
-      if(validateMeterDetails(applyScreenObject)){
+      if(validateMeterDetails(applyScreenObject) && validateVolumetricDetails(applyScreenObject)){
         isFormValid = true;
         hasFieldToaster = false;
       }else{

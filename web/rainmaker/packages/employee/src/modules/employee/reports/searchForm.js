@@ -514,7 +514,7 @@ class ShowForm extends Component {
         var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 
         if (Difference_In_Days > 31) {
-          toggleSnackbarAndSetText(true, { labelKey: "The From Date and To Date range should not be more than 31 days.", labelName: "Range of From Date and To Date must be less than 30 Days in search" },
+          toggleSnackbarAndSetText(true, { labelKey: "The From Date and To Date range should not be more than 31 days.", labelName: "Range of From Date and To Date must be less than 31 Days in search" },
             "error");
           return;
         }

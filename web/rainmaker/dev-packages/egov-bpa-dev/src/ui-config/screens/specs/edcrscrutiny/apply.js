@@ -11,7 +11,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { documentList } from "./documentList";
 import { resetFields, submitFields } from "./functions";
-import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField, } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {fetchMDMSData} from "./functions";
 
 //for displaying note in entire grid
@@ -110,24 +110,6 @@ export const dropdown = {
     //     action.value && action.value.label
     //   )
     // );
-  },
-  afterFieldChange: async (action, state, dispatch) => {
-    if(action.value && (action.value == 'od.bhubaneswar' || action.value == 'od.bhubaneswardevelopmentauthority'))
-    {
-      dispatch(handleField(
-        "apply",
-        "components.div.children.noteCard",
-        "visible",
-        true
-      ))
-    }else{
-      dispatch(handleField(
-        "apply",
-        "components.div.children.noteCard",
-        "visible",
-        false
-      ))
-    }
   },
   gridDefination: {
     xs: 12,
@@ -376,7 +358,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("Scrutiny[0]", {}));
     dispatch(prepareFinalObject("LicensesTemp[0]", {}));
-    dispatch(prepareFinalObject("Note[0].message","kindly refer to the following link to get GIS and Comprehensive Development Plan, Airports Authority of India (AAI), National Monuments Authority (NMA) and other related information."))
+    dispatch(prepareFinalObject("Note[0].message","For projects in the Bhubaneswar area, kindly refer to the following link to get GIS and Comprehensive Development Plan, Airports Authority of India (AAI), National Monuments Authority (NMA) and other related information."))
     dispatch(prepareFinalObject("Note[0].link","https://bhubaneswarone.in/home/"))
     fetchMDMSData(action, state, dispatch);
     return action;
@@ -404,21 +386,7 @@ const screenConfig = {
           }
         },
         buildingInfoCard,
-        noteCard : {
-          uiFramework: "custom-atoms",
-          componentPath: "Container",
-
-          children: {
-            header: {
-              gridDefination: {
-                xs: 12,
-                sm: 12
-              },
-            ...noteCard  
-        }
-       },
-       visible:false
-      }
+        noteCard
       }
     }
   }

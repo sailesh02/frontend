@@ -185,24 +185,24 @@ export const callBackForNext = async (state, dispatch) => {
     let tradeLicenseDetail = get(queryObject[0], "tradeLicenseDetail");
     let tradeUnitsArray = get(tradeLicenseDetail, "tradeUnits");
 
-if(tlType && tlType === "TEMPORARY"){
-    if (tradeUnitsArray && tradeUnitsArray.length > 0 && tradeUnitsArray[0].uomValue > 30) {
-      isTempTradeValid = false;
-    }
+    if (tlType && tlType === "TEMPORARY") {
+      if (tradeUnitsArray && tradeUnitsArray.length > 0 && tradeUnitsArray[0].uomValue > 30) {
+        isTempTradeValid = false;
+      }
 
-  }
-  if(tlType){
-  let tradeCount = 0;
-    for (var j = 0; j < tradeUnits.length; j++) {
-      if (tradeUnits[j].isDeleted !== false) {
-        tradeCount++;
+    }
+    if (tlType) {
+      let tradeCount = 0;
+      for (var j = 0; j < tradeUnits.length; j++) {
+        if (tradeUnits[j].isDeleted !== false) {
+          tradeCount++;
+        }
+      }
+
+      if (tradeCount && tradeCount > 5) {
+        onlyFiveTradesAllowed = false;
       }
     }
-
-    if (tradeCount && tradeCount > 5) {
-      onlyFiveTradesAllowed = false;
-    }
-  }
 
     if (
       !isTradeDetailsValid ||
@@ -937,11 +937,11 @@ export const footerReviewTop = (
   financialYear
 ) => {
   let dscDetails = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject
-  && state.screenConfiguration.preparedFinalObject.Licenses && state.screenConfiguration.preparedFinalObject.Licenses.length > 0 &&
-  state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail && 
-  state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.dscDetails
+    && state.screenConfiguration.preparedFinalObject.Licenses && state.screenConfiguration.preparedFinalObject.Licenses.length > 0 &&
+    state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail &&
+    state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.dscDetails
   let isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
-  dscDetails[0].documentId ? true : false
+    dscDetails[0].documentId ? true : false
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
@@ -957,31 +957,31 @@ export const footerReviewTop = (
   let { Licenses } = state.screenConfiguration.preparedFinalObject;
   let pdfOwnersNames = '';
   let pdfTradeTypes = '';
-  if(Licenses[0].tradeLicenseDetail.owners && Licenses[0].tradeLicenseDetail.owners.length > 0){
-    for(let i=0;i<Licenses[0].tradeLicenseDetail.owners.length;i++){
-      pdfOwnersNames += Licenses[0].tradeLicenseDetail.owners[i].name+", ";
+  if (Licenses[0].tradeLicenseDetail.owners && Licenses[0].tradeLicenseDetail.owners.length > 0) {
+    for (let i = 0; i < Licenses[0].tradeLicenseDetail.owners.length; i++) {
+      pdfOwnersNames += Licenses[0].tradeLicenseDetail.owners[i].name + ", ";
     }
     pdfOwnersNames = pdfOwnersNames.substring(0, pdfOwnersNames.length - 2);
   }
 
-  if(Licenses[0].tradeLicenseDetail.tradeUnits && Licenses[0].tradeLicenseDetail.tradeUnits.length > 0){
-    for(let i=0;i<Licenses[0].tradeLicenseDetail.tradeUnits.length;i++){
+  if (Licenses[0].tradeLicenseDetail.tradeUnits && Licenses[0].tradeLicenseDetail.tradeUnits.length > 0) {
+    for (let i = 0; i < Licenses[0].tradeLicenseDetail.tradeUnits.length; i++) {
       let tradeTypeLocale = '';
+
+      tradeTypeLocale = getLocaleLabels("TradeType", `TRADELICENSE_TRADETYPE_${Licenses[0].tradeLicenseDetail.tradeUnits[i].tradeType.replace(/\./g, '_')}`);
       
-      tradeTypeLocale = getLocaleLabels("TradeType", `TRADELICENSE_TRADETYPE_${Licenses[0].tradeLicenseDetail.tradeUnits[i].tradeType.replace(/\./g,'_')}`);
-      console.log(tradeTypeLocale, "Nero Locallll")
-      pdfTradeTypes += tradeTypeLocale+", ";
+      pdfTradeTypes += tradeTypeLocale + ", ";
     }
     pdfTradeTypes = pdfTradeTypes.substring(0, pdfTradeTypes.length - 2);
   }
 
-  Licenses[0].additionalDetail = {ownerNames: pdfOwnersNames, tradeTypes: pdfTradeTypes};
+  Licenses[0].additionalDetail = { ownerNames: pdfOwnersNames, tradeTypes: pdfTradeTypes };
   // let renewalMenu=[];
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-     // const { Licenses } = state.screenConfiguration.preparedFinalObject;
-     Licenses;
+      // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      Licenses;
       downloadCertificateForm(Licenses);
     },
     leftIcon: "book"
@@ -1066,45 +1066,10 @@ export const footerReviewTop = (
     leftIcon: "assignment"
   };
 
-  // switch (status) {
-  //   case "APPROVED":
-  //     downloadMenu = [
-  //       tlCertificateDownloadObject,
-  //       receiptDownloadObject,
-  //       applicationDownloadObject
-  //     ];
-  //     printMenu = [
-  //       tlCertificatePrintObject,
-  //       receiptPrintObject,
-  //       applicationPrintObject
-  //     ];
-  //     break;
-  //   case "APPLIED":
-  //   case "CITIZENACTIONREQUIRED":
-  //   case "FIELDINSPECTION":
-  //   case "PENDINGAPPROVAL":
-  //   case "PENDINGPAYMENT":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   case "pending_approval":
-  //     downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-  //     printMenu = [receiptPrintObject, applicationPrintObject];
-  //     break;
-  //   case "CANCELLED":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   case "REJECTED":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   default:
-  //     break;
-  // }
+  
   switch (status) {
     case "APPROVED":
-      if(isCeritificateGenerated){
+      if (isCeritificateGenerated) {
         downloadMenu = [
           tlCertificateDownloadObject,
           receiptDownloadObject,
@@ -1115,7 +1080,7 @@ export const footerReviewTop = (
           receiptPrintObject,
           applicationPrintObject
         ];
-      }else{
+      } else {
         downloadMenu = [
           receiptDownloadObject,
           applicationDownloadObject
@@ -1125,21 +1090,37 @@ export const footerReviewTop = (
           applicationPrintObject
         ];
       }
- 
+
       break;
     case "PENDINGAPPROVAL":
     case "FIELDINSPECTION":
     case "DOCVERIFICATION":
-      downloadMenu = [
-        tlPLDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        tlPLPrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
+
+
+      if (Licenses && Licenses[0].licenseType != "TEMPORARY") {
+        downloadMenu = [
+          tlPLDownloadObject,
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [
+          tlPLPrintObject,
+          receiptPrintObject,
+          applicationPrintObject
+        ];
+      } else {
+        downloadMenu = [
+
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [
+
+          receiptPrintObject,
+          applicationPrintObject
+        ];
+      }
+
       break;
     case "APPLIED":
     case "PENDINGPAYMENT":
@@ -1223,11 +1204,11 @@ export const downloadPrintContainer = (
 
   /** MenuButton data based on status */
   const dscDetails = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject
-  && state.screenConfiguration.preparedFinalObject.Licenses && state.screenConfiguration.preparedFinalObject.Licenses.length > 0 &&
-  state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail && 
-  state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.dscDetails
+    && state.screenConfiguration.preparedFinalObject.Licenses && state.screenConfiguration.preparedFinalObject.Licenses.length > 0 &&
+    state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail &&
+    state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.dscDetails
   const isCeritificateGenerated = !dscDetails ? true : dscDetails && dscDetails.length > 0 &&
-  dscDetails[0].documentId ? true : false
+    dscDetails[0].documentId ? true : false
   const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
   const receiptKey = get(uiCommonConfig, "receiptKey");
   let downloadMenu = [];
@@ -1235,27 +1216,27 @@ export const downloadPrintContainer = (
   let { Licenses } = state.screenConfiguration.preparedFinalObject;
   let pdfOwnersNames = '';
   let pdfTradeTypes = '';
-  if(Licenses[0].tradeLicenseDetail.owners && Licenses[0].tradeLicenseDetail.owners.length > 0){
-    for(let i=0;i<Licenses[0].tradeLicenseDetail.owners.length;i++){
-      pdfOwnersNames += Licenses[0].tradeLicenseDetail.owners[i].name+", ";
+  if (Licenses[0].tradeLicenseDetail.owners && Licenses[0].tradeLicenseDetail.owners.length > 0) {
+    for (let i = 0; i < Licenses[0].tradeLicenseDetail.owners.length; i++) {
+      pdfOwnersNames += Licenses[0].tradeLicenseDetail.owners[i].name + ", ";
     }
     pdfOwnersNames = pdfOwnersNames.substring(0, pdfOwnersNames.length - 2);
   }
 
-  if(Licenses[0].tradeLicenseDetail.tradeUnits && Licenses[0].tradeLicenseDetail.tradeUnits.length > 0){
-    for(let i=0;i<Licenses[0].tradeLicenseDetail.tradeUnits.length;i++){
+  if (Licenses[0].tradeLicenseDetail.tradeUnits && Licenses[0].tradeLicenseDetail.tradeUnits.length > 0) {
+    for (let i = 0; i < Licenses[0].tradeLicenseDetail.tradeUnits.length; i++) {
       let tradeTypeLocale = '';
-      
-      tradeTypeLocale = getLocaleLabels("TradeType", `TRADELICENSE_TRADETYPE_${Licenses[0].tradeLicenseDetail.tradeUnits[i].tradeType.replace(/\./g,'_')}`);
-      console.log(tradeTypeLocale, "Nero Locallll")
-      pdfTradeTypes += tradeTypeLocale+", ";
+
+      tradeTypeLocale = getLocaleLabels("TradeType", `TRADELICENSE_TRADETYPE_${Licenses[0].tradeLicenseDetail.tradeUnits[i].tradeType.replace(/\./g, '_')}`);
+     
+      pdfTradeTypes += tradeTypeLocale + ", ";
     }
     pdfTradeTypes = pdfTradeTypes.substring(0, pdfTradeTypes.length - 2);
   }
 
-  Licenses[0].additionalDetail = {ownerNames: pdfOwnersNames, tradeTypes: pdfTradeTypes};
+  Licenses[0].additionalDetail = { ownerNames: pdfOwnersNames, tradeTypes: pdfTradeTypes };
+
   
-  console.log(Licenses, "Nero Licensee")
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
@@ -1279,8 +1260,8 @@ export const downloadPrintContainer = (
   let tlPLDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
-     // const { Licenses } = state.screenConfiguration.preparedFinalObject;
-     Licenses;
+      // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      Licenses;
       downloadProvisionalCertificateForm(Licenses);
     },
     leftIcon: "book"
@@ -1288,8 +1269,8 @@ export const downloadPrintContainer = (
   let tlPLPrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
     link: () => {
-     // const { Licenses } = state.screenConfiguration.preparedFinalObject;
-     Licenses
+      // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      Licenses
       downloadProvisionalCertificateForm(Licenses, 'print');
     },
     leftIcon: "book"
@@ -1342,41 +1323,10 @@ export const downloadPrintContainer = (
     },
     leftIcon: "assignment"
   };
-  // switch (status) {
-  //   case "APPROVED":
-  //     downloadMenu = [
-  //       tlCertificateDownloadObject,
-  //       receiptDownloadObject,
-  //       applicationDownloadObject
-  //     ];
-  //     printMenu = [
-  //       tlCertificatePrintObject,
-  //       receiptPrintObject,
-  //       applicationPrintObject
-  //     ];
-  //     break;
-  //   case "APPLIED":
-  //   case "CITIZENACTIONREQUIRED":
-  //   case "FIELDINSPECTION":
-  //   case "PENDINGAPPROVAL":
-  //   case "PENDINGPAYMENT":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   case "CANCELLED":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   case "REJECTED":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   default:
-  //     break;
-  // }
+  
   switch (status) {
     case "APPROVED":
-      if(isCeritificateGenerated){
+      if (isCeritificateGenerated) {
         downloadMenu = [
           tlCertificateDownloadObject,
           receiptDownloadObject,
@@ -1387,7 +1337,7 @@ export const downloadPrintContainer = (
           receiptPrintObject,
           applicationPrintObject
         ];
-      }else{
+      } else {
         downloadMenu = [
           receiptDownloadObject,
           applicationDownloadObject
@@ -1397,21 +1347,34 @@ export const downloadPrintContainer = (
           applicationPrintObject
         ];
       }
-    
+
       break;
     case "PENDINGAPPROVAL":
     case "FIELDINSPECTION":
     case "DOCVERIFICATION":
-      downloadMenu = [
-        tlPLDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        tlPLPrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
+      if (Licenses && Licenses[0].licenseType != "TEMPORARY") {
+        downloadMenu = [
+          tlPLDownloadObject,
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [
+          tlPLPrintObject,
+          receiptPrintObject,
+          applicationPrintObject
+        ];
+      } else {
+        downloadMenu = [
+
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [
+
+          receiptPrintObject,
+          applicationPrintObject
+        ];
+      }
       break;
     case "APPLIED":
     case "PENDINGPAYMENT":

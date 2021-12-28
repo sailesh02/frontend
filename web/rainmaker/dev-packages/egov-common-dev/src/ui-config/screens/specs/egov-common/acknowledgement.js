@@ -60,11 +60,12 @@ const downloadprintMenu = (
   let downloadMenu = [];
   let printMenu = [];
   const businessService = getQueryArg(window.location, "businessService");
-  if(businessService && businessService === "TL"){
+  if (businessService && businessService === "TL") {
+    const { Licenses } = state.screenConfiguration.preparedFinalObject;
     let tlPLDownloadObject = {
       label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
       link: () => {
-        const { Licenses } = state.screenConfiguration.preparedFinalObject;
+        Licenses;
         downloadProvisionalCertificateFormPaymentSuccess(Licenses);
       },
       leftIcon: "book"
@@ -73,17 +74,21 @@ const downloadprintMenu = (
     let tlPLPrintObject = {
       label: { labelName: "TL Certificate", labelKey: "TL_PL_CERTIFICATE" },
       link: () => {
-        const { Licenses } = state.screenConfiguration.preparedFinalObject;
+        Licenses;
         downloadProvisionalCertificateFormPaymentSuccess(Licenses, 'print');
       },
       leftIcon: "book"
     };
-
-  downloadMenu = [receiptDownloadObject, tlPLDownloadObject];
-  printMenu = [receiptPrintObject, tlPLPrintObject];
-  }else{
-  downloadMenu = [receiptDownloadObject];
-  printMenu = [receiptPrintObject];
+    if (Licenses && Licenses[0].licenseType != "TEMPORARY") {
+      downloadMenu = [receiptDownloadObject, tlPLDownloadObject];
+      printMenu = [receiptPrintObject, tlPLPrintObject];
+    }else{
+      downloadMenu = [receiptDownloadObject];
+      printMenu = [receiptPrintObject];
+    }
+  } else {
+    downloadMenu = [receiptDownloadObject];
+    printMenu = [receiptPrintObject];
   }
   return {
     uiFramework: "custom-atoms",

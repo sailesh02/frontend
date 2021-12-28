@@ -329,10 +329,13 @@ class Footer extends React.Component {
       );
       pdfKey = "tlcertificate";
       modulePdfIdentifier = "Licenses";
-      applicationDigitallySigned = get(
-        state.screenConfiguration.preparedFinalObject,
-        `Licenses[0].tradeLicenseDetail.dscDetails[0].documentId`
-      );
+      // applicationDigitallySigned = get(
+      //   state.screenConfiguration.preparedFinalObject,
+      //   `Licenses[0].tradeLicenseDetail.dscDetails[0].documentId`
+      // );
+
+      applicationDigitallySigned = pdfPreviewData && pdfPreviewData[0].tradeLicenseDetail.dscDetails && pdfPreviewData[0].tradeLicenseDetail.dscDetails.length > 0 && pdfPreviewData[0].tradeLicenseDetail.dscDetails[0].documentId ? true :  false
+
       status = get(
         state.screenConfiguration.preparedFinalObject,
         `Licenses[0].status`

@@ -534,7 +534,7 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: true,
-        pattern: /^[a-z0-9]+$/i,
+        pattern: /^[0-9]\d*(?:\.\d+)?$/,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.additionalDetails.volumetricWaterCharge",
         props: {disabled: process.env.REACT_APP_NAME === "Citizen"}

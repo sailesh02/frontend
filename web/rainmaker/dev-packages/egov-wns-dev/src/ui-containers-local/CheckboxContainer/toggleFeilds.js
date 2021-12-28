@@ -86,6 +86,12 @@ export const toggleWater = (onFieldChange, value,step) => {
       "visible",
       value
     );
+    onFieldChange(
+      "apply",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails`,
+      "visible",
+      value
+    );
   }
 
   onFieldChange(
@@ -97,6 +103,19 @@ export const toggleWater = (onFieldChange, value,step) => {
   onFieldChange(
     "apply",
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+    "visible",
+    value
+  );
+
+  onFieldChange(
+    "apply",
+    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.isVolumetricConnection`,
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge`,
     "visible",
     value
   );
@@ -654,11 +673,28 @@ export const toggleWaterFeilds = (action, value) => {
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate.visible`,
     value
   );
+
+  set(
+    action.screenConfig,
+    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.isVolumetricConnection.visible`,
+    value
+  );
+  set(
+    action.screenConfig,
+    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge.visible`,
+    value
+  );
+
   if((!applicationNumber && process.env.REACT_APP_NAME != 'Citizen') || (window && window.location && window.location.pathname &&
     window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen' && !isModifyMode())){
     set(
       action.screenConfig,
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.visible`,
+      value
+    );
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.visible`,
       value
     );
   }
@@ -739,11 +775,27 @@ export const toggleWaterFeilds = (action, value) => {
       value
     );
 
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.isVolumetricConnection.visible`,
+      value
+    );
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge.visible`,
+      value
+    );
+
     if((!applicationNumber && process.env.REACT_APP_NAME != 'Citizen') || (window && window.location && window.location.pathname &&
       window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen' && !isModifyMode())){
       set(
         action.screenConfig,
         `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.visible`,
+        value
+      );
+      set(
+        action.screenConfig,
+        `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.visible`,
         value
       );
     }

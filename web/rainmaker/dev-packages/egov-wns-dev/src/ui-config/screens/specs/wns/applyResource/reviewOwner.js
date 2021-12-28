@@ -7,7 +7,7 @@ import {
   getDivider,
   getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDateAndHandleNA, handleNA, handleLaborCharge, handleInstallementorFullPayment, handleRoadType } from '../../utils';
+import { convertEpochToDateAndHandleNA, handleNA, handleLaborCharge, handleInstallementorFullPayment, handleRoadType,handleIsVolumetric, handleVolumetricWaterCharge } from '../../utils';
 import { changeStep } from "./footer";
 
 const getHeader = label => {
@@ -39,6 +39,10 @@ const roadCuttingChargesHeader = getHeader({
 
 const paymentDetailsHeader = getHeader({
   labelKey:"WS_PAYMENT_DETAILS"
+})
+
+const volumetricDetailsHeader = getHeader({
+  labelKey : "WS_VOLUMETRIC_DETAILS"
 })
 
 const activationDetailsHeader = getHeader({
@@ -76,8 +80,40 @@ export const paymentDetailsMeter = {
   ),
 }
 
+export const volumetricDetailsWater = {
+  reviewVolumetricConnection : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "WS_IS_VOLUMETRIC_CONNECTION",
+      labelKey: "WS_IS_VOLUMETRIC_CONNECTION"
+    },
+    { jsonPath: "WaterConnection[0].additionalDetails.isVolumetricConnection",
+      callBack: handleIsVolumetric
+    }, {
+        labelKey: "WS_IS_VOLUMETRIC_CONNECTION"
+      },
+      { jsonPath: "WaterConnectionOld[0].additionalDetails.isVolumetricConnection",
+      callBack: handleIsVolumetric 
+    }
+  ),
+  reviewVolumetricWaterCharge : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "WS_VOLUMETRIC_CHARGE",
+      labelKey: "WS_VOLUMETRIC_CHARGE"
+    },
+    { jsonPath: "WaterConnection[0].additionalDetails.volumetricWaterCharge",
+      callBack: handleVolumetricWaterCharge 
+    }, {
+        labelKey: "WS_VOLUMETRIC_CHARGE"
+      },
+      { jsonPath: "WaterConnectionOld[0].additionalDetails.volumetricWaterCharge",
+      callBack: handleVolumetricWaterCharge 
+    }
+  ),
+}
+
 export const paymentDetails = getCommonContainer(paymentDetailsMeter)
 
+export const volumetricDetails = getCommonContainer(volumetricDetailsWater);
 
 export const reviewConnectionType = getLabelWithValueForModifiedLabel(
   {
@@ -486,6 +522,8 @@ export const reviewOwner = (isEditable = true) => {
     // viewTen: roadCuttingCharges,
     viewEleven: activationDetailsHeader,
     viewTwelve: activationDetails,
+    viewFifteen : volumetricDetailsHeader,
+    viewSixteen : volumetricDetails,
     viewThirdTeen : paymentDetailsHeader,
     viewFourTeen : paymentDetails
 

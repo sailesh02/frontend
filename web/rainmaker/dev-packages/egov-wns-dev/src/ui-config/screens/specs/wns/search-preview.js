@@ -181,7 +181,31 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           "visible",
           true
         ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          true
+        ));
       }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          true
+        ));
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
@@ -210,7 +234,31 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           "visible",
           true
         ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          true
+        ));
       }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          false
+        ));
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
@@ -989,7 +1037,31 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
           "visible",
           true
         ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          true
+        ));
       }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          false
+        ));
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
@@ -1075,7 +1147,31 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
           "visible",
           true
         ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          true
+        ));
       }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          true
+        ));
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
@@ -1121,7 +1217,31 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
           "visible",
           true
         ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          true
+        ));
       }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          true
+        ));
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
@@ -1258,6 +1378,14 @@ const parserFunction = (obj) => {
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.isInstallmentApplicable !== undefined
       ) ? (obj.additionalDetails.isInstallmentApplicable) : "",
+      isVolumetricConnection: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.isVolumetricConnection !== undefined
+      ) ? (obj.additionalDetails.isVolumetricConnection) : "",
+      volumetricWaterCharge: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.volumetricWaterCharge !== undefined
+      ) ? (obj.additionalDetails.volumetricWaterCharge) : "",
     },
     dateEffectiveFrom: convertDateToEpoch(obj.dateEffectiveFrom),
     noOfTaps: parseInt(obj.noOfTaps),

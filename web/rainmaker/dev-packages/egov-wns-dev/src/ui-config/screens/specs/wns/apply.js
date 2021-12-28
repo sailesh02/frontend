@@ -879,6 +879,25 @@ export const getData = async (action, state, dispatch) => {
               false
             )
           );
+
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails`,
+              "visible",
+              false
+            )
+          );
+
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
+              "visible",
+              false
+            )
+          );
+
           dispatch(
             handleField(
               "apply",
@@ -929,6 +948,16 @@ export const getData = async (action, state, dispatch) => {
             false
           )
         );
+
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails`,
+            "visible",
+            false
+          )
+        );
+
         dispatch(
           handleField(
             "apply",
@@ -973,6 +1002,27 @@ export const getData = async (action, state, dispatch) => {
           handleField(
             "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+            "visible",
+            false
+          )
+        );
+      }
+
+      if(((data.connectionFacility == 
+        serviceConst.WATER) || (data.connectionFacility == serviceConst.WATERSEWERAGE)) && data && data.additionalDetails && data.additionalDetails.isVolumetricConnection && data.additionalDetails.isVolumetricConnection === 'Y'){
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge`,
+            "visible",
+            true
+          )
+        );
+      }else{
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge`,
             "visible",
             false
           )

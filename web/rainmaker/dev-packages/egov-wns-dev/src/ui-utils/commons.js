@@ -7,7 +7,7 @@ import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUt
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
-import { convertDateToEpoch, convertEpochToDate, getTranslatedLabel, convertDateTimeToEpoch,getTodaysDateInYMD } from "../ui-config/screens/specs/utils";
+import { convertDateToEpoch, convertEpochToDate, getTranslatedLabel, convertDateTimeToEpoch,getTodaysDateInYMD, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 
 export const serviceConst = {
@@ -210,6 +210,11 @@ export const getSearchResults = async (queryObject, filter = false) => {
         result.WaterConnection[0].waterSourceSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource;
         let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
         let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
+        if(result.WaterConnection && result.WaterConnection.length > 0 && 
+        !result.WaterConnection[0].dateEffectiveFrom && (ifUserRoleExists('WS_CEMP') || ifUserRoleExists('WS_APPROVER')) &&
+        result.WaterConnection[0].applicationType == 'DISCONNECT_CONNECTION' ){
+            response.WaterConnection[0].dateEffectiveFrom = convertDateToEpoch(getTodaysDateInYMD())  
+        }
         result.WaterConnection[0].waterSource = waterSource;
         result.WaterConnection[0].waterSubSource = waterSubSource;
         // result.WaterConnection = await getPropertyObj(result.WaterConnection);
@@ -600,6 +605,29 @@ export const validateMeterDetails = (applyScreenObject) => {
     }
 }
 
+export const validateVolumetricDetails = (applyScreenObject) => {
+    let water = applyScreenObject && applyScreenObject.water
+    let rValue = true;
+    if (rValue && water){
+        if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== ""
+        ){
+            if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+            applyScreenObject.additionalDetails.hasOwnProperty("volumetricWaterCharge") && 
+            applyScreenObject.additionalDetails["volumetricWaterCharge"] !== undefined
+            ){
+            return true
+        }else{
+            return false
+        }
+        }else{return false}
+    }else{
+    return true
+    }
+}
+
 export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {
     let propertyObject = findAndReplace(applyScreenObject, "NA", null);
     if (
@@ -731,7 +759,15 @@ const parserFunction = (state) => {
               isInstallmentApplicable: (
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.isInstallmentApplicable !== undefined
-              ) ? (queryObject.additionalDetails.isInstallmentApplicable) : ""
+              ) ? (queryObject.additionalDetails.isInstallmentApplicable) : "",
+              isVolumetricConnection: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.isVolumetricConnection !== undefined
+              ) ? (queryObject.additionalDetails.isVolumetricConnection) : "",
+              volumetricWaterCharge: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.volumetricWaterCharge !== undefined
+              ) ? (queryObject.additionalDetails.volumetricWaterCharge) : "",
         }
     }
     queryObject = { ...queryObject, ...parsedObject }
@@ -1183,6 +1219,15 @@ export const applyForSewerage = async (state, dispatch) => {
             let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
             set(queryObjectForUpdate, "connectionFacility", connectionFacility);
+            
+            if(connectionFacility == serviceConst.WATERSEWERAGE || connectionFacility == serviceConst.WATER){
+                let waterSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSourceType", null);
+                let waterSubSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSubSource", null);
+                queryObjectForUpdate.waterSource = queryObjectForUpdate.waterSource ? queryObjectForUpdate.waterSource : waterSource;
+                queryObjectForUpdate.waterSubSource = queryObjectForUpdate.waterSubSource ? queryObjectForUpdate.waterSubSource : waterSubSource;
+                set(queryObjectForUpdate, "waterSource", getWaterSource(queryObjectForUpdate.waterSource, queryObjectForUpdate.waterSubSource));
+            }
+            
             set(queryObjectForUpdate, "processInstance.action", "SUBMIT_APPLICATION");
             if(!isWater){
                 set(queryObjectForUpdate, "connectionType", "Non Metered");
@@ -1245,6 +1290,13 @@ export const applyForSewerage = async (state, dispatch) => {
                 if(isWater && isSewerage){
                     queryObject.applicationType = "MODIFY_CONNECTION"  
                 }
+            }
+            if(connectionFacility == serviceConst.WATERSEWERAGE || connectionFacility == serviceConst.WATER){
+                let waterSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSourceType", null);
+                let waterSubSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSubSource", null);
+                queryObject.waterSource = queryObject.waterSource ? queryObject.waterSource : waterSource;
+                queryObject.waterSubSource = queryObject.waterSubSource ? queryObject.waterSubSource : waterSubSource;
+                set(queryObject, "waterSource", getWaterSource(queryObject.waterSource, queryObject.waterSubSource));
             }
             queryObject.noOfFlats = queryObject.noOfFlats && queryObject.noOfFlats != "" ? queryObject.noOfFlats : 0
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });

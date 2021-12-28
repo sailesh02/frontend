@@ -513,8 +513,8 @@ class ShowForm extends Component {
         // To calculate the no. of days between two dates
         var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 
-        if (Difference_In_Days > 30) {
-          toggleSnackbarAndSetText(true, { labelKey: "The From Date and To Date range should not be more than 30 days.", labelName: "Range of From Date and To Date must be less than 30 Days in search" },
+        if (Difference_In_Days > 31) {
+          toggleSnackbarAndSetText(true, { labelKey: "The From Date and To Date range should not be more than 31 days.", labelName: "Range of From Date and To Date must be less than 30 Days in search" },
             "error");
           return;
         }

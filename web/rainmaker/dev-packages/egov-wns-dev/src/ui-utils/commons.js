@@ -1347,6 +1347,11 @@ export const applyForSewerage = async (state, dispatch) => {
                     response.WaterConnection[0].connectionFacility == serviceConst.WATERSEWERAGE){
                         response.WaterConnection[0].service = "Water And Sewerage";
                         response.WaterConnection[0].water = true;
+                        if(response.WaterConnection[0].waterSource){
+                            let waterSource = response.WaterConnection[0].waterSource.split(".");
+                            response.WaterConnection[0].waterSource = waterSource[0];
+                            response.WaterConnection[0].waterSubSource = waterSource[1];
+                        }
                 }
                 response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
@@ -1370,6 +1375,11 @@ export const applyForSewerage = async (state, dispatch) => {
                     response.WaterConnection[0].connectionFacility == serviceConst.WATERSEWERAGE){
                     response.WaterConnection[0].service = "Water And Sewerage";
                     response.WaterConnection[0].water = true;
+                    if(response.WaterConnection[0].waterSource){
+                        let waterSource = response.WaterConnection[0].waterSource.split(".");
+                        response.WaterConnection[0].waterSource = waterSource[0];
+                        response.WaterConnection[0].waterSubSource = waterSource[1];
+                    }
                 }
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));

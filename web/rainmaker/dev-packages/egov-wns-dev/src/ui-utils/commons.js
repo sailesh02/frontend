@@ -607,23 +607,52 @@ export const validateMeterDetails = (applyScreenObject) => {
 
 export const validateVolumetricDetails = (applyScreenObject) => {
     let water = applyScreenObject && applyScreenObject.water
+    let connectionType = applyScreenObject && applyScreenObject.connectionType
+    let oldConsumption = applyScreenObject && applyScreenObject.oldConnectionNo && isModifyMode()
     let rValue = true;
-    if (rValue && water){
+    debugger
+    if (rValue && water && !oldConsumption && connectionType == 'Metered'){
         if( applyScreenObject.hasOwnProperty("additionalDetails") && 
         applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
         applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
-        applyScreenObject.additionalDetails["isVolumetricConnection"] !== ""
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "Y" &&
+        applyScreenObject.additionalDetails.hasOwnProperty("isDailyConsumption") && 
+        applyScreenObject.additionalDetails["isDailyConsumption"] !== undefined &&
+        applyScreenObject.additionalDetails["isDailyConsumption"] !== "" &&
+        applyScreenObject.additionalDetails.hasOwnProperty("volumetricConsumtion") && 
+        applyScreenObject.additionalDetails["volumetricConsumtion"] !== undefined &&
+        applyScreenObject.additionalDetails["volumetricConsumtion"] !== ""
         ){
-            if( applyScreenObject.hasOwnProperty("additionalDetails") && 
-            applyScreenObject.additionalDetails.hasOwnProperty("volumetricWaterCharge") && 
-            applyScreenObject.additionalDetails["volumetricWaterCharge"] !== undefined
-            ){
             return true
-        }else{
-            return false
+        }else if(applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "N"){
+            return true
         }
+        else{return false}
+    }else if(rValue && water && oldConsumption && connectionType == 'Metered'){
+        if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "Y" && 
+        applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("volumetricWaterCharge") && 
+        applyScreenObject.additionalDetails["volumetricWaterCharge"] !== undefined
+        ){
+            return true
+        }else if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "N"){
+            return true
         }else{return false}
-    }else{
+    }
+    else{
     return true
     }
 }

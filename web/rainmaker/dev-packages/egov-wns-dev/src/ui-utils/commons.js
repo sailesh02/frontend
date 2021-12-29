@@ -615,7 +615,7 @@ export const validateVolumetricDetails = (applyScreenObject) => {
         applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
         applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
         applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
-        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "Y" &&
+        applyScreenObject.additionalDetails["isVolumetricConnection"] == "Y" &&
         applyScreenObject.additionalDetails.hasOwnProperty("isDailyConsumption") && 
         applyScreenObject.additionalDetails["isDailyConsumption"] !== undefined &&
         applyScreenObject.additionalDetails["isDailyConsumption"] !== "" &&
@@ -628,7 +628,7 @@ export const validateVolumetricDetails = (applyScreenObject) => {
         applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
         applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
         applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
-        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "N"){
+        applyScreenObject.additionalDetails["isVolumetricConnection"] == "N"){
             return true
         }
         else{return false}

@@ -494,7 +494,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge`,
                     "visible",
-                    oldConnectioNumber ? true : false
+                    oldConnectioNumber && oldConnectioNumber!= 'NA' ? true : false
                   )
                 );
 
@@ -503,7 +503,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
                     "visible",
-                    true 
+                    oldConnectioNumber && oldConnectioNumber!= 'NA' || isModifyMode() ? false : true 
                   )
                 );
                 dispatch(
@@ -511,7 +511,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.consumptionInKL`,
                     "visible",
-                    true 
+                    oldConnectioNumber && oldConnectioNumber!= 'NA' ? false : true  
                   )
                 );
 

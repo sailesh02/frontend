@@ -1015,7 +1015,7 @@ export const getData = async (action, state, dispatch) => {
             "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge`,
             "visible",
-            data.oldConnectionNo ? true : false
+            data.oldConnectionNo && data.oldConnectionNo!= 'NA' ? true : false
           )
         );
         dispatch(
@@ -1023,7 +1023,7 @@ export const getData = async (action, state, dispatch) => {
             "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
             "visible",
-            true
+            data.oldConnectionNo && data.oldConnectionNo!= 'NA' || isModifyMode() ? false : true
           )
         );
         dispatch(
@@ -1031,7 +1031,7 @@ export const getData = async (action, state, dispatch) => {
             "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.consumptionInKL`,
             "visible",
-            true
+            data.oldConnectionNo && data.oldConnectionNo!= 'NA' ? false : true
           )
         );
       }else{

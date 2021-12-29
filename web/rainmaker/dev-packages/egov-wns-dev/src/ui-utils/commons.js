@@ -1346,6 +1346,7 @@ export const applyForSewerage = async (state, dispatch) => {
                 if(response.WaterConnection && response.WaterConnection[0] && response.WaterConnection[0].connectionFacility &&
                     response.WaterConnection[0].connectionFacility == serviceConst.WATERSEWERAGE){
                         response.WaterConnection[0].service = "Water And Sewerage";
+                        response.WaterConnection[0].water = true;
                 }
                 response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
@@ -1368,6 +1369,7 @@ export const applyForSewerage = async (state, dispatch) => {
                 if(response.WaterConnection && response.WaterConnection[0] && response.WaterConnection[0].connectionFacility &&
                     response.WaterConnection[0].connectionFacility == serviceConst.WATERSEWERAGE){
                     response.WaterConnection[0].service = "Water And Sewerage";
+                    response.WaterConnection[0].water = true;
                 }
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));

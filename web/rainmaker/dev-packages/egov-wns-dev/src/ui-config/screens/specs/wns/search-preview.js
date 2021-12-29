@@ -613,26 +613,6 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
           true
         );
-        set(
-          action.screenConfig,
-          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
-          false
-        );
-        set(
-          action.screenConfig,
-          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
-          false
-        );
-        set(
-          action.screenConfig,
-          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
-          false
-        );
-        set(
-          action.screenConfig,
-          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
-          false
-        );
       }
       set(
         action.screenConfig,

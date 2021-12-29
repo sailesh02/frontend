@@ -540,8 +540,8 @@ export const getData = async (action, state, dispatch) => {
        
         try {
         payloadWater = await getSearchResults(queryObject)
-        let connectionFacility = payloadWater && payloadWater.waterConnection && payloadWater && 
-        payloadWater.waterConnection.length > 0 && payloadWater.waterConnection[0].connectionFacility
+        let connectionFacility = payloadWater && payloadWater.WaterConnection && payloadWater && 
+        payloadWater.WaterConnection.length > 0 && payloadWater.WaterConnection[0].connectionFacility
         if(connectionFacility == serviceConst.WATER || connectionFacility == serviceConst.WATERSEWERAGE){
           dispatch(
             handleField(
@@ -1009,7 +1009,7 @@ export const getData = async (action, state, dispatch) => {
       }
 
       if(((data.connectionFacility == 
-        serviceConst.WATER) || (data.connectionFacility == serviceConst.WATERSEWERAGE)) && data && data.additionalDetails && data.additionalDetails.isVolumetricConnection && data.additionalDetails.isVolumetricConnection === 'Y'){
+        serviceConst.WATER) || (data.connectionFacility == serviceConst.WATERSEWERAGE)) && data && data.additionalDetails && data.additionalDetails.isVolumetricConnection && data.additionalDetails.isVolumetricConnection === 'Y' && data.connectionType === "Metered"){
           dispatch(
           handleField(
             "apply",
@@ -1018,7 +1018,39 @@ export const getData = async (action, state, dispatch) => {
             data.oldConnectionNo ? true : false
           )
         );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.consumptionInKL`,
+            "visible",
+            true
+          )
+        );
       }else{
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.consumptionInKL`,
+            "visible",
+            false
+          )
+        );
         dispatch(
           handleField(
             "apply",

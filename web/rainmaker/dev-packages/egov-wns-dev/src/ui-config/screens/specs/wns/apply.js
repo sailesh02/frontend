@@ -1010,12 +1010,12 @@ export const getData = async (action, state, dispatch) => {
 
       if(((data.connectionFacility == 
         serviceConst.WATER) || (data.connectionFacility == serviceConst.WATERSEWERAGE)) && data && data.additionalDetails && data.additionalDetails.isVolumetricConnection && data.additionalDetails.isVolumetricConnection === 'Y'){
-        dispatch(
+          dispatch(
           handleField(
             "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge`,
             "visible",
-            true
+            data.oldConnectionNo ? true : false
           )
         );
       }else{

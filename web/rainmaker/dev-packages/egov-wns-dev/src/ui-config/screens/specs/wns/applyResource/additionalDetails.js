@@ -485,6 +485,7 @@ export const additionDetails = getCommonCard({
           }
           if(process.env.REACT_APP_NAME !== "Citizen") {
             let connectionType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
+            let oldConnectioNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.oldConnectionNo");
             if (connectionType === undefined || connectionType == "Non Metered" || connectionType == "Metered") {
               if(action && action.value && action.value === 'Y'){
                 dispatch(
@@ -492,7 +493,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge`,
                     "visible",
-                    true
+                    oldConnectioNumber ? true : false
                   )
                 );
               }else{

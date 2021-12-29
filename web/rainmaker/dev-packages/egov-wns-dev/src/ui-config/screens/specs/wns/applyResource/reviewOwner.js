@@ -7,7 +7,7 @@ import {
   getDivider,
   getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDateAndHandleNA, handleNA, handleLaborCharge, handleInstallementorFullPayment, handleRoadType,handleIsVolumetric, handleVolumetricWaterCharge } from '../../utils';
+import { convertEpochToDateAndHandleNA, handleNA, handleLaborCharge, handleInstallementorFullPayment, handleRoadType,handleIsVolumetric, handleVolumetricWaterCharge, handleIsDailyConsumption } from '../../utils';
 import { changeStep } from "./footer";
 
 const getHeader = label => {
@@ -107,6 +107,32 @@ export const volumetricDetailsWater = {
       },
       { jsonPath: "WaterConnectionOld[0].additionalDetails.volumetricWaterCharge",
       callBack: handleVolumetricWaterCharge 
+    }
+  ),
+  reviewIsDailyConsumption : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "WS_IS_DAILY_OR_MONTHLY_COMSUMPTION",
+      labelKey: "WS_IS_DAILY_OR_MONTHLY_COMSUMPTION"
+    },
+    { jsonPath: "WaterConnection[0].additionalDetails.isDailyConsumption",
+      callBack: handleIsDailyConsumption
+    }, {
+        labelKey: "WS_IS_DAILY_OR_MONTHLY_COMSUMPTION"
+      },
+      { jsonPath: "WaterConnectionOld[0].additionalDetails.isDailyConsumption",
+      callBack: handleIsDailyConsumption 
+    }
+  ),
+  reviewVolumetricConsumtion : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "WS_VOLUMETRIC_CONSUMPTION_IN_KL",
+      labelKey: "WS_VOLUMETRIC_CONSUMPTION_IN_KL"
+    },
+    { jsonPath: "WaterConnection[0].additionalDetails.volumetricConsumtion",
+    }, {
+        labelKey: "WS_VOLUMETRIC_CONSUMPTION_IN_KL"
+      },
+      { jsonPath: "WaterConnectionOld[0].additionalDetails.volumetricConsumtion",
     }
   ),
 }

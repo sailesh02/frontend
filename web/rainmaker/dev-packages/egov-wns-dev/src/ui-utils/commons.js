@@ -610,7 +610,6 @@ export const validateVolumetricDetails = (applyScreenObject) => {
     let connectionType = applyScreenObject && applyScreenObject.connectionType
     let oldConsumption = applyScreenObject && applyScreenObject.oldConnectionNo && isModifyMode()
     let rValue = true;
-    debugger
     if (rValue && water && !oldConsumption && connectionType == 'Metered'){
         if( applyScreenObject.hasOwnProperty("additionalDetails") && 
         applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
@@ -797,6 +796,14 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.volumetricWaterCharge !== undefined
               ) ? (queryObject.additionalDetails.volumetricWaterCharge) : "",
+              isDailyConsumption: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.isDailyConsumption !== undefined
+              ) ? (queryObject.additionalDetails.isDailyConsumption) : "",
+              volumetricConsumtion: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.volumetricConsumtion !== undefined
+              ) ? (queryObject.additionalDetails.volumetricConsumtion) : "",
         }
     }
     queryObject = { ...queryObject, ...parsedObject }

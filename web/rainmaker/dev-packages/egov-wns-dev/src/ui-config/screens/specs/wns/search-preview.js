@@ -149,6 +149,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       let connectionFacility = applyScreenObject && 
       applyScreenObject.connectionFacility
+      let connectionType = applyScreenObject && 
+      applyScreenObject.connectionType
       // applyScreenObject.applicationNo.includes("WS") ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       connectionFacility == serviceConst.WATER ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
@@ -174,10 +176,28 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }
       if((
         connectionFacility == serviceConst.WATER
-      ) || (connectionFacility == serviceConst.WATERSEWERAGE)){
+      ) || (connectionFacility == serviceConst.WATERSEWERAGE) && connectionType == "Metered"){
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
           "visible",
           true
         ));
@@ -209,6 +229,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
           "visible",
           false
         ));
@@ -1386,6 +1412,14 @@ const parserFunction = (obj) => {
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.volumetricWaterCharge !== undefined
       ) ? (obj.additionalDetails.volumetricWaterCharge) : "",
+      isDailyConsumption: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.isDailyConsumption !== undefined
+      ) ? (obj.additionalDetails.isDailyConsumption) : "",
+      volumetricConsumtion: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.volumetricConsumtion !== undefined
+      ) ? (obj.additionalDetails.volumetricConsumtion) : "",
     },
     dateEffectiveFrom: convertDateToEpoch(obj.dateEffectiveFrom),
     noOfTaps: parseInt(obj.noOfTaps),

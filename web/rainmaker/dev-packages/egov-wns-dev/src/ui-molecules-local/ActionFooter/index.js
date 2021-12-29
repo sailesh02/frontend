@@ -74,6 +74,14 @@ const parserFunction = (data) => {
             queryObject.additionalDetails !== undefined &&
             queryObject.additionalDetails.volumetricWaterCharge !== undefined
           ) ? (queryObject.additionalDetails.volumetricWaterCharge) : "",
+          isDailyConsumption: (
+            queryObject.additionalDetails !== undefined &&
+            queryObject.additionalDetails.isDailyConsumption !== undefined
+          ) ? (queryObject.additionalDetails.isDailyConsumption) : "",
+          volumetricConsumtion: (
+            queryObject.additionalDetails !== undefined &&
+            queryObject.additionalDetails.volumetricConsumtion !== undefined
+          ) ? (queryObject.additionalDetails.volumetricConsumtion) : "",
       }
   }
   queryObject = { ...queryObject, ...parsedObject }

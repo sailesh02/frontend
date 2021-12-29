@@ -395,6 +395,28 @@ export const handleIsVolumetric = params => {
   }
 }
 
+export const handleIsDailyConsumption = params => {
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
+  let state = store.getState()
+  let connectionFacility = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
+  state.screenConfiguration.preparedFinalObject.WaterConnection && state.screenConfiguration.preparedFinalObject.WaterConnection[0] &&
+  state.screenConfiguration.preparedFinalObject.WaterConnection[0].connectionFacility
+  let connectionType = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
+  state.screenConfiguration.preparedFinalObject.WaterConnection && state.screenConfiguration.preparedFinalObject.WaterConnection[0] &&
+  state.screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType
+  if(params == 'Y'){
+    return 'Yes'
+  }
+  else if(params == 'N'){
+    return 'No'
+  }else if((applicationNumber && applicationNumber.includes('SW') || connectionFacility == serviceConst.SEWERAGE || connectionType !== "Metered")){
+    return "NA"
+  }
+  else{
+    return ''
+  }
+}
+
 export const handle = params => {
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber")
   let state = store.getState()

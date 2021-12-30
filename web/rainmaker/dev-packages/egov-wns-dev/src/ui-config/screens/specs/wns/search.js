@@ -13,6 +13,7 @@ import { getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-uti
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";
 import commonConfig from "config/common.js";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const getMDMSData = (action, dispatch) => {
   const moduleDetails = [
@@ -183,7 +184,7 @@ const employeeSearchResults = {
               componentPath: "Button",
               gridDefination: {
                 xs: 12,
-                sm: 6,
+                sm: 3,
                 align: "right"
               },
               visible: true,
@@ -226,6 +227,49 @@ const employeeSearchResults = {
               //     pageResetAndChange(state, dispatch);
               //   }
               // }
+            },
+            bulkImportButton: {
+              componentPath: "Button",
+              gridDefination: {
+                xs: 12,
+                sm: 3,
+                align: "right"
+              },
+              visible: true,
+              props: {
+                variant: "contained",
+                color: "primary",
+                style: {
+                  color: "white",
+                  borderRadius: "2px",
+                  width: "250px",
+                  height: "48px"
+                }
+              },
+              children: {
+                plusIconInsideButton: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "add",
+                    style: {
+                      fontSize: "24px"
+                    }
+                  }
+                },
+                buttonLabel: getLabel({
+                  labelName: "WS_BULK_METER_READING_BUTTON",
+                  labelKey: "WS_BULK_METER_READING_BUTTON"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: (state, dispatch) => {
+                  dispatch(
+                    setRoute(`/wns/bulkImport`)
+                  )
+                }
+              },
             }
           }
         },

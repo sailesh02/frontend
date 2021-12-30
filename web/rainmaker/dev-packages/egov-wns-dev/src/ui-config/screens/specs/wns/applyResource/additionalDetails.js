@@ -484,17 +484,37 @@ export const additionDetails = getCommonCard({
             ));
           }
           if(process.env.REACT_APP_NAME !== "Citizen") {
+            let mStep = isModifyMode() ? 'formwizardSecondStep' : 'formwizardThirdStep';
             let connectionType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
-            if (connectionType === undefined || connectionType == "Non Metered" || connectionType == "Metered") {
+            let oldConnectioNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.oldConnectionNo");
+            if (connectionType === undefined || connectionType != "Metered") {
               if(action && action.value && action.value === 'Y'){
                 dispatch(
                   handleField(
                     "apply",
                     `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge`,
                     "visible",
-                    true
+                    oldConnectioNumber && oldConnectioNumber!= 'NA' ? true : false
                   )
                 );
+
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+                    "visible",
+                    oldConnectioNumber && oldConnectioNumber!= 'NA' || isModifyMode() ? false : true 
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.consumptionInKL`,
+                    "visible",
+                    oldConnectioNumber && oldConnectioNumber!= 'NA' ? false : true  
+                  )
+                );
+
               }else{
                 dispatch(
                   handleField(
@@ -504,8 +524,32 @@ export const additionDetails = getCommonCard({
                     false
                   )
                 );
+
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+                    "visible",
+                    false 
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.consumptionInKL`,
+                    "visible",
+                    false 
+                  )
+                );
+
                 dispatch(prepareFinalObject(
                   "applyScreen.additionalDetails.volumetricWaterCharge",""
+                ))
+                dispatch(prepareFinalObject(
+                  "applyScreen.additionalDetails.isDailyConsumption",""
+                ))
+                dispatch(prepareFinalObject(
+                  "applyScreen.additionalDetails.volumetricConsumtion",""
                 ))
               }
             }
@@ -514,6 +558,22 @@ export const additionDetails = getCommonCard({
                 handleField(
                   "apply",
                   `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+                  "visible",
+                  false
+                )
+              );
+              dispatch(
+                handleField(
+                  "apply",
+                  `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails`,
+                  "visible",
+                  false
+                )
+              );
+              dispatch(
+                handleField(
+                  "apply",
+                  `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails`,
                   "visible",
                   false
                 )
@@ -539,6 +599,56 @@ export const additionDetails = getCommonCard({
         jsonPath: "applyScreen.additionalDetails.volumetricWaterCharge",
         props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
       }),
+      dailyConsumption : {
+        uiFramework: "custom-containers",
+        componentPath: "RadioGroupContainer",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+        jsonPath: "applyScreen.additionalDetails.isDailyConsumption",
+        props: {
+          label: {
+            name: "Relationship",
+            key: "WS_IS_DAILY_OR_MONTHLY_COMSUMPTION"
+      
+          },
+        buttons: [
+          {
+            labelName: "WS_IS_DAILY_CONSUMPTION",
+            labelKey: "WS_IS_DAILY_CONSUMPTION",
+            value: "Y"
+          },
+          {
+            label: "WS_IS_MONTHLY_CONSUMPTION",
+            labelKey: "WS_IS_MONTHLY_CONSUMPTION",
+            value: "N"
+          }
+        ],
+        jsonPath: "applyScreen.additionalDetails.isDailyConsumption",
+        required: true
+        },
+        required: true,
+        type: "array"
+      },
+      consumptionInKL : getTextField({
+        label: {
+          labelKey: "WS_VOLUMETRIC_CONSUMPTION_IN_KL"
+        },
+        placeholder: {
+          labelKey: "WS_VOLUMETRIC_CONSUMPTION_IN_KL_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: true,
+        pattern: /^[0-9]\d*(?:\.\d+)?$/,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "applyScreen.additionalDetails.volumetricConsumtion",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
+      })
     })
   }),
   paymentDetailsContainer : getCommonGrayCard({

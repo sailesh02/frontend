@@ -149,6 +149,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       let connectionFacility = applyScreenObject && 
       applyScreenObject.connectionFacility
+      let connectionType = applyScreenObject && 
+      applyScreenObject.connectionType
       // applyScreenObject.applicationNo.includes("WS") ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       connectionFacility == serviceConst.WATER ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
@@ -174,13 +176,74 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }
       if((
         connectionFacility == serviceConst.WATER
-      ) || (connectionFacility == serviceConst.WATERSEWERAGE)){
+      ) || (connectionFacility == serviceConst.WATERSEWERAGE) && connectionType == "Metered"){
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
           "visible",
           true
         ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          false
+        ));
+      }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+          "visible",
+          false
+        ));
+      }
+
+      if((
+        connectionFacility == serviceConst.WATER
+      ) || (connectionFacility == serviceConst.WATERSEWERAGE) 
+      && connectionType == "Non Metered"){
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
@@ -198,21 +261,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
           "visible",
-          true
+          false
         ));
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
           "visible",
-          true
-        ));
-        dispatch(handleField(
-          "search-preview",
-          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
-          "visible",
           false
         ));
       }
+      
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", applyScreenObject.locality));
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.ward", applyScreenObject.ward ?  applyScreenObject.ward : ''));
@@ -225,6 +283,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }else{
         dispatch(prepareFinalObject("SewerageConnection[0].apartment", 'No')); 
       }
+      debugger
       if((
         connectionFacility == serviceConst.WATER
       ) || (connectionFacility == serviceConst.WATERSEWERAGE)){
@@ -234,17 +293,18 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           "visible",
           true
         ));
+        debugger
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
           "visible",
-          true
+          connectionType == 'Non Metered' ? true : false
         ));
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
           "visible",
-          true
+          connectionType == 'Non Metered' ? true : false
         ));
       }else{
         dispatch(handleField(
@@ -423,6 +483,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     }else {
       if(connectionFacility == serviceConst.WATER){
+
         set(
           action.screenConfig,
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewDiameter.visible",
@@ -464,6 +525,24 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           true
         );
 
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          false
+          ))
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          true
+          ))
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          true
+          ))
       }else if((connectionFacility == serviceConst.WATERSEWERAGE)){
         set(
           action.screenConfig,
@@ -505,6 +584,30 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterRatio.visible",
           true
         );
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          false
+          ))
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          true
+          ))
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          true
+          ))
+          dispatch(handleField(
+            "search-preview",
+            "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+            "visible",
+            false
+            ))
       }else{
         set(
           action.screenConfig,
@@ -991,6 +1094,8 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     payload = await getSearchResults(queryObjForSearch);
     let connectionFacility = payload && payload.WaterConnection && payload && 
     payload.WaterConnection.length > 0 && payload.WaterConnection[0].connectionFacility
+    let connectionType = payload && payload.WaterConnection && payload && 
+    payload.WaterConnection.length > 0 && payload.WaterConnection[0].connectionType
     if(connectionFacility == serviceConst.WATER){
       set(
         action.screenConfig,
@@ -1041,26 +1146,26 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
           "visible",
-          true
+          connectionType == 'Non Metered' ? true :false
         ));
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
           "visible",
-          true
+          connectionType == 'Non Metered' ? true :false
         ));
       }else{
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
           "visible",
-          false
+          connectionType == 'Non Metered' ? true :false
         ));
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
           "visible",
-          false
+          connectionType == 'Non Metered' ? true :false
         ));
         dispatch(handleField(
           "search-preview",
@@ -1138,7 +1243,8 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       }
       let connectionFacility = oldApplicationPayload && oldApplicationPayload.WaterConnection && oldApplicationPayload && 
       oldApplicationPayload.WaterConnection.length > 0 && oldApplicationPayload.WaterConnection[0].connectionFacility
-
+      let connectionType = oldApplicationPayload && oldApplicationPayload.WaterConnection && oldApplicationPayload && 
+      oldApplicationPayload.WaterConnection.length > 0 && oldApplicationPayload.WaterConnection[0].connectionType
       if((connectionFacility == 
         serviceConst.WATER) || (connectionFacility == serviceConst.WATERSEWERAGE)){
         dispatch(handleField(
@@ -1151,13 +1257,13 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
           "visible",
-          true
+          connectionType == 'Non Metered' ? true :false
         ));
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
           "visible",
-          true
+          connectionType == 'Non Metered' ? true :false
         ));
       }else{
         dispatch(handleField(
@@ -1386,6 +1492,14 @@ const parserFunction = (obj) => {
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.volumetricWaterCharge !== undefined
       ) ? (obj.additionalDetails.volumetricWaterCharge) : "",
+      isDailyConsumption: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.isDailyConsumption !== undefined
+      ) ? (obj.additionalDetails.isDailyConsumption) : "",
+      volumetricConsumtion: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.volumetricConsumtion !== undefined
+      ) ? (obj.additionalDetails.volumetricConsumtion) : "",
     },
     dateEffectiveFrom: convertDateToEpoch(obj.dateEffectiveFrom),
     noOfTaps: parseInt(obj.noOfTaps),

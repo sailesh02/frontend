@@ -607,23 +607,51 @@ export const validateMeterDetails = (applyScreenObject) => {
 
 export const validateVolumetricDetails = (applyScreenObject) => {
     let water = applyScreenObject && applyScreenObject.water
+    let connectionType = applyScreenObject && applyScreenObject.connectionType
+    let oldConsumption = applyScreenObject && applyScreenObject.oldConnectionNo && isModifyMode()
     let rValue = true;
-    if (rValue && water){
+    if (rValue && water && !oldConsumption && connectionType == 'Non Metered'){
         if( applyScreenObject.hasOwnProperty("additionalDetails") && 
         applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
         applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
-        applyScreenObject.additionalDetails["isVolumetricConnection"] !== ""
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
+        applyScreenObject.additionalDetails["isVolumetricConnection"] == "Y" &&
+        applyScreenObject.additionalDetails.hasOwnProperty("isDailyConsumption") && 
+        applyScreenObject.additionalDetails["isDailyConsumption"] !== undefined &&
+        applyScreenObject.additionalDetails["isDailyConsumption"] !== "" &&
+        applyScreenObject.additionalDetails.hasOwnProperty("volumetricConsumtion") && 
+        applyScreenObject.additionalDetails["volumetricConsumtion"] !== undefined &&
+        applyScreenObject.additionalDetails["volumetricConsumtion"] !== ""
         ){
-            if( applyScreenObject.hasOwnProperty("additionalDetails") && 
-            applyScreenObject.additionalDetails.hasOwnProperty("volumetricWaterCharge") && 
-            applyScreenObject.additionalDetails["volumetricWaterCharge"] !== undefined
-            ){
             return true
-        }else{
-            return false
+        }else if(applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
+        applyScreenObject.additionalDetails["isVolumetricConnection"] == "N"){
+            return true
         }
+        else{return false}
+    }else if(rValue && water && oldConsumption && connectionType == 'Metered'){
+        if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "Y" && 
+        applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("volumetricWaterCharge") && 
+        applyScreenObject.additionalDetails["volumetricWaterCharge"] !== undefined
+        ){
+            return true
+        }else if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "N"){
+            return true
         }else{return false}
-    }else{
+    }
+    else{
     return true
     }
 }
@@ -768,6 +796,14 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.volumetricWaterCharge !== undefined
               ) ? (queryObject.additionalDetails.volumetricWaterCharge) : "",
+              isDailyConsumption: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.isDailyConsumption !== undefined
+              ) ? (queryObject.additionalDetails.isDailyConsumption) : "",
+              volumetricConsumtion: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.volumetricConsumtion !== undefined
+              ) ? (queryObject.additionalDetails.volumetricConsumtion) : "",
         }
     }
     queryObject = { ...queryObject, ...parsedObject }
@@ -1310,6 +1346,12 @@ export const applyForSewerage = async (state, dispatch) => {
                 if(response.WaterConnection && response.WaterConnection[0] && response.WaterConnection[0].connectionFacility &&
                     response.WaterConnection[0].connectionFacility == serviceConst.WATERSEWERAGE){
                         response.WaterConnection[0].service = "Water And Sewerage";
+                        response.WaterConnection[0].water = true;
+                        if(response.WaterConnection[0].waterSource){
+                            let waterSource = response.WaterConnection[0].waterSource.split(".");
+                            response.WaterConnection[0].waterSource = waterSource[0];
+                            response.WaterConnection[0].waterSubSource = waterSource[1];
+                        }
                 }
                 response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : '';
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality;
@@ -1332,6 +1374,12 @@ export const applyForSewerage = async (state, dispatch) => {
                 if(response.WaterConnection && response.WaterConnection[0] && response.WaterConnection[0].connectionFacility &&
                     response.WaterConnection[0].connectionFacility == serviceConst.WATERSEWERAGE){
                     response.WaterConnection[0].service = "Water And Sewerage";
+                    response.WaterConnection[0].water = true;
+                    if(response.WaterConnection[0].waterSource){
+                        let waterSource = response.WaterConnection[0].waterSource.split(".");
+                        response.WaterConnection[0].waterSource = waterSource[0];
+                        response.WaterConnection[0].waterSubSource = waterSource[1];
+                    }
                 }
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));

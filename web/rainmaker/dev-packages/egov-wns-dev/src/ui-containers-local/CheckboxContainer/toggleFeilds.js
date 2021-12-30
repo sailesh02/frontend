@@ -119,6 +119,21 @@ export const toggleWater = (onFieldChange, value,step) => {
     "visible",
     value
   );
+
+  onFieldChange(
+    "apply",
+    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+    "visible",
+    value
+  );
+
+  onFieldChange(
+    "apply",
+    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.consumptionInKL`,
+    "visible",
+    value
+  );
+  
   // onFieldChange(
   //   "apply",
   //   "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskPipeSizeProposed",
@@ -684,6 +699,16 @@ export const toggleWaterFeilds = (action, value) => {
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge.visible`,
     value
   );
+  set(
+    action.screenConfig,
+    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption.visible`,
+    value
+  );
+  set(
+    action.screenConfig,
+    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.consumptionInKL.visible`,
+    value
+  );
 
   if((!applicationNumber && process.env.REACT_APP_NAME != 'Citizen') || (window && window.location && window.location.pathname &&
     window.location.pathname.includes('apply') && applicationNumber && process.env.REACT_APP_NAME != 'Citizen' && !isModifyMode())){
@@ -783,6 +808,16 @@ export const toggleWaterFeilds = (action, value) => {
     set(
       action.screenConfig,
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge.visible`,
+      value
+    );
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption.visible`,
+      value
+    );
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.consumptionInKL.visible`,
       value
     );
 

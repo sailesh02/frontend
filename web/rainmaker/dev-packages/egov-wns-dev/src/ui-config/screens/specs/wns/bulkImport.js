@@ -46,8 +46,8 @@ const screenConfig = {
               scheama: getCommonGrayCard({
                 header: getCommonSubHeader(
                   {
-                    labelName: "Owner Information",
-                    labelKey: "TL_NEW_OWNER_DETAILS_HEADER_OWNER_INFO"
+                    labelName: "WS_BULK_METER_READING_INFO",
+                    labelKey: "WS_BULK_METER_READING_INFO"
                   },
                   {
                     style: {
@@ -55,241 +55,203 @@ const screenConfig = {
                     }
                   }
                 ),
-                tradeUnitCardContainer: getCommonContainer({
-                  getOwnerMobNoField: getTextField({
+                bulkImportContainer: getCommonContainer({
+                  consumerNumber: getTextField({
                     label: {
-                      labelName: "Mobile No.",
-                      labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
+                      labelName: "Consumer No.",
+                      labelKey: "WS_CONSUMER_NUMBER"
                     },
                     props:{
                       className:"applicant-details-error"
                     },
                     placeholder: {
-                      labelName: "Enter Mobile No.",
-                      labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_PLACEHOLDER"
+                      labelName: "Consumer No.",
+                      labelKey: "WS_CONSUMER_NUMBER"
                     },
-                    required: true,
-                    pattern: getPattern("MobileNo"),
-                    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",
-                    // iconObj: {
-                    //   iconName: "search",
-                    //   position: "end",
-                    //   color: "#FE7A51",
-                    //   onClickDefination: {
-                    //     action: "condition",
-                    //     callBack: (state, dispatch, fieldInfo) => {
-                    //       getDetailsForOwner(state, dispatch, fieldInfo);
-                    //     }
-                    //   }
-                    // },
-                    // title: {
-                    //   value: "Please search owner profile linked to the mobile no.",
-                    //   key: "TL_MOBILE_NO_TOOLTIP_MESSAGE"
-                    // },
-                    // infoIcon: "info_circle"
-                  }),
-                  ownerName: getTextField({
-                    label: {
-                      labelName: "Name",
-                      labelKey: "TL_NEW_OWNER_DETAILS_NAME_LABEL"
-                    },
-                    props:{
-                      className:"applicant-details-error"
-                    },
-                    placeholder: {
-                      labelName: "Enter Name",
-                      labelKey: "TL_NEW_OWNER_DETAILS_NAME_PLACEHOLDER"
-                    },
-                    required: true,
-                    pattern: getPattern("Name"),
-                    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name"
-                  }),
-                  getFatherNameField: getTextField({
-                    label: {
-                      labelName: "Father/Spouse Name",
-                      labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_LABEL"
-                    },
-                    props:{
-                      className:"applicant-details-error"
-                    },
-                    placeholder: {
-                      labelName: "Enter Father/Spouse Name",
-                      labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_PLACEHOLDER"
-                    },
-                    required: true,
-                    pattern: getPattern("Name"),
-                    jsonPath:
-                      "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
-                  }),
-                  getRelationshipRadioButton: {
-                    uiFramework: "custom-containers",
-                    componentPath: "RadioGroupContainer",
                     gridDefination: {
                       xs: 12,
-                      sm: 12,
-                      md: 6
-                    },
-                    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-                    props: {
-                      label: {
-                        name: "Relationship",
-                        key: "TL_COMMON_RELATIONSHIP_LABEL"
-                      },
-                      buttons: [
-                        {
-                          labelName: "Father",
-                          labelKey: "COMMON_RELATION_FATHER",
-                          value: "FATHER"
-                        },
-                        {
-                          label: "Husband",
-                          labelKey: "COMMON_RELATION_HUSBAND",
-                          value: "HUSBAND"
-                        }
-                      ],
-                      jsonPath:
-                        "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-                      required: true
+                      sm: 3
                     },
                     required: true,
-                    type: "array"
-                  },
-                  getOwnerGenderField: {
-                    uiFramework: "custom-containers",
-                    componentPath: "RadioGroupContainer",
-                    gridDefination: {
-                      xs: 12,
-                      sm: 12,
-                      md: 6
-                    },
-                    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
-                    props: {
-                      label: {
-                        name: "Gender",
-                        key: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
-                      },
-                      buttons: [
-                        {
-                          labelName: "Male",
-                          labelKey: "COMMON_GENDER_MALE",
-                          value: "MALE"
-                        },
-                        {
-                          label: "Female",
-                          labelKey: "COMMON_GENDER_FEMALE",
-                          value: "FEMALE"
-                        },
-                        {
-                          label: "Others",
-                          labelKey: "COMMON_GENDER_TRANSGENDER",
-                          value: "OTHERS"
-                        }
-                      ],
-                      jsonPath:
-                        "Licenses[0].tradeLicenseDetail.owners[0].gender",
-                      required: true
-                    },
-                    required: true,
-                    type: "array"
-                  },
-                  ownerDOB: {
-                    ...getDateField({
-                      label: {
-                        labelName: "Date of Birth",
-                        labelKey: "TL_EMP_APPLICATION_DOB"
-                      },
-                      placeholder: {
-                        labelName: "Enter Date of Birth",
-                        labelKey: "TL_NEW_OWNER_DETAILS_DOB_PLACEHOLDER"
-                      },
-                      required: true,
-                      pattern: getPattern("Date"),
-                      isDOB: true,
-                      maxDate: getMaxDate(14),
-                      errorMessage: "TL_DOB_ERROR_MESSAGE",
-                      jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
-                      props: {
-                        inputProps: {
-                          max: getTodaysDateInYMD()
+                    jsonPath: "meterReadings[0].connectionNo",
+                    iconObj: {
+                      iconName: "search",
+                      position: "end",
+                      color: "#FE7A51",
+                      onClickDefination: {
+                        action: "condition",
+                        callBack: (state, dispatch, fieldInfo) => {
+                          // getDetailsForOwner(state, dispatch, fieldInfo);
                         }
                       }
-                    })
-                  },
-                  getOwnerEmailField: getTextField({
-                    label: {
-                      labelName: "Email",
-                      labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
                     },
-                    props:{
-                      className:"applicant-details-error"
+                    title: {
+                      value: "WS_CONSUMER_SEARCH_TOOLTIP",
+                      key: "WS_CONSUMER_SEARCH_TOOLTIP"
                     },
-                    placeholder: {
-                      labelName: "Enter Email",
-                      labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_PLACEHOLDER"
-                    },
-                    pattern: getPattern("Email"),
-                    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
+                    infoIcon: "info_circle"
                   }),
-                  ownerPAN: getTextField({
+                  billingPeriod: getTextField({
                     label: {
-                      labelName: "PAN No.",
-                      labelKey: "TL_NEW_OWNER_DETAILS_PAN_LABEL"
+                      labelName: "WS_BILLING_PERIOD",
+                      labelKey: "WS_BILLING_PERIOD"
                     },
                     props:{
                       className:"applicant-details-error"
                     },
                     placeholder: {
-                      labelName: "Enter Owner's PAN No.",
-                      labelKey: "TL_NEW_OWNER_DETAILS_PAN_PLACEHOLDER"
+                      labelName: "WS_BILLING_PERIOD",
+                      labelKey: "WS_BILLING_PERIOD_PLACEHOLDER"
                     },
-                    pattern: getPattern("PAN"),
-                    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
-                  }),
-                  ownerAddress: getTextField({
-                    label: {
-                      labelName: "Correspondence Address",
-                      labelKey: "TL_NEW_OWNER_DETAILS_ADDR_LABEL"
-                    },
-                    props:{
-                      className:"applicant-details-error"
-                    },
-                    placeholder: {
-                      labelName: "Enter Correspondence Address",
-                      labelKey: "TL_NEW_OWNER_DETAILS_ADDR_PLACEHOLDER"
+                    gridDefination: {
+                      xs: 12,
+                      sm: 3
                     },
                     required: true,
-                    pattern: getPattern("Address"),
-                    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+                    jsonPath: "meterReadings[0].billingPeriod"
                   }),
-                  OwnerSpecialCategory: getSelectField({
+                  meterStatus: getSelectField({
                     label: {
-                      labelName: "Special Owner Category",
-                      labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_LABEL"
+                      labelName: "WS_METER_STATUS",
+                      labelKey: "WS_METER_STATUS"
                     },
                     placeholder: {
-                      labelName: "Select Special Owner Category",
-                      labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_PLACEHOLDER"
+                      labelName: "WS_METER_STATUS_PLACEHOLDER",
+                      labelKey: "WS_METER_STATUS_PLACEHOLDER"
                     },
-                    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
-                    sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
-                    localePrefix: {
-                      moduleName: "common-masters",
-                      masterName: "OwnerType"
-                    }
+                    required: true,
+                    visible: true,
+                    jsonPath: "meterReadings[0].meterStatus",
+                    gridDefination: {
+                      xs: 12,
+                      sm: 3
+                    },
+                    data: [
+                      {
+                        code: "working"
+                      },
+                      {
+                        code: "working"
+                      }
+                    ]
+                  }),
+                  lastReadingDate: {
+                    ...getDateField({
+                      label: {
+                        labelName: "WS_LAST_READING_DATE",
+                        labelKey: "WS_LAST_READING_DATE"
+                      },
+                      placeholder: {
+                        labelName: "WS_LAST_READING_DATE",
+                        labelKey: "WS_LAST_READING_DATE_PLACEHOLDER"
+                      },
+                      gridDefination: {
+                        xs: 12,
+                        sm: 3
+                      },
+                      required: true,
+                      isDOB: true,
+                      jsonPath: "meterReadings[0].lastReadingDate",
+                      // props: {
+                      //   inputProps: {
+                      //     max: getTodaysDateInYMD()
+                      //   }
+                      // }
+                    })
+                  },
+                  lastReading: getTextField({
+                    label: {
+                      labelName: "WS_LAST_READING",
+                      labelKey: "WS_LAST_READING"
+                    },
+                    props:{
+                      className:"applicant-details-error"
+                    },
+                    placeholder: {
+                      labelName: "WS_LAST_READING",
+                      labelKey: "WS_LAST_READING_DATE_PLACEHOLDER"
+                    },
+                    gridDefination: {
+                      xs: 12,
+                      sm: 3
+                    },
+                    required: true,
+                    jsonPath: "meterReadings[0].lastReading"
+                  }),
+                  currentReading: getTextField({
+                    label: {
+                      labelName: "WS_CURRENT_READING",
+                      labelKey: "WS_CURRENT_READING"
+                    },
+                    props:{
+                      className:"applicant-details-error"
+                    },
+                    placeholder: {
+                      labelName: "WS_CURRENT_READING",
+                      labelKey: "WS_CURRENT_READING_PLACEHOLDER"
+                    },
+                    gridDefination: {
+                      xs: 12,
+                      sm: 3
+                    },
+                    required: true,
+                    jsonPath: "meterReadings[0].currentReading"
+                  }),
+                  currentReadingDate: {
+                    ...getDateField({
+                      label: {
+                        labelName: "WS_CURRENT_READING_DATE",
+                        labelKey: "WS_CURRENT_READING_DATE"
+                      },
+                      placeholder: {
+                        labelName: "WS_CURRENT_READING_DATE",
+                        labelKey: "WS_CURRENT_READING_DATE_PLACEHOLDER"
+                      },
+                      required: true,
+                      isDOB: true,
+                      gridDefination: {
+                        xs: 12,
+                        sm: 3
+                      },
+                      jsonPath: "meterReadings[0].currentReadingDate",
+                      // props: {
+                      //   inputProps: {
+                      //     max: getTodaysDateInYMD()
+                      //   }
+                      // }
+                    })
+                  },
+                  consumption: getTextField({
+                    label: {
+                      labelName: "WS_CONSUMPTION",
+                      labelKey: "WS_CONSUMPTION"
+                    },
+                    props:{
+                      className:"applicant-details-error"
+                    },
+                    gridDefination: {
+                      xs: 12,
+                      sm: 3
+                    },
+                    placeholder: {
+                      labelName: "WS_CONSUMPTION",
+                      labelKey: "WS_CONSUMPTION"
+                    },
+                    jsonPath: "meterReadings[0].consumption"
                   })
                 })
               }),
               items: [],
               addItemLabel: {
-                labelName: "ADD OWNER",
-                labelKey: "TL_NEW_OWNER_DETAILS_ADD_OWN"
+                labelName: "ADD READING",
+                labelKey: "WS_ADD_NEW_READING"
               },
               headerName: "Owner Information",
               headerJsonPath:
                 "children.cardContent.children.header.children.Owner Information.props.label",
-              sourceJsonPath: "Licenses[0].tradeLicenseDetail.owners",
+              sourceJsonPath: "meterReading",
               prefixSourceJsonPath:
-                "children.cardContent.children.tradeUnitCardContainer.children"
+                "children.cardContent.children.bulkImportContainer.children"
             },
           
             type: "array"

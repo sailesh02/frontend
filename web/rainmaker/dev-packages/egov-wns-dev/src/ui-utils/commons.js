@@ -610,7 +610,7 @@ export const validateVolumetricDetails = (applyScreenObject) => {
     let connectionType = applyScreenObject && applyScreenObject.connectionType
     let oldConsumption = applyScreenObject && applyScreenObject.oldConnectionNo && isModifyMode()
     let rValue = true;
-    if (rValue && water && !oldConsumption && connectionType == 'Metered'){
+    if (rValue && water && !oldConsumption && connectionType == 'Non Metered'){
         if( applyScreenObject.hasOwnProperty("additionalDetails") && 
         applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
         applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 

@@ -870,6 +870,7 @@ export const getData = async (action, state, dispatch) => {
           )
         );
         let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+        
         if((applicationNumber && applicationNumber.includes('SW')) || (data.connectionFacility == serviceConst.SEWERAGE)){
           dispatch(
             handleField(
@@ -906,7 +907,17 @@ export const getData = async (action, state, dispatch) => {
               false
             )
           );
+        }else{
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails`,
+              "visible",
+              true
+            )
+          );
         }
+
         dispatch(
           handleField(
             "apply",
@@ -944,15 +955,6 @@ export const getData = async (action, state, dispatch) => {
           handleField(
             "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
-            "visible",
-            false
-          )
-        );
-
-        dispatch(
-          handleField(
-            "apply",
-            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails`,
             "visible",
             false
           )
@@ -1006,10 +1008,19 @@ export const getData = async (action, state, dispatch) => {
             false
           )
         );
+      }else{
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails`,
+            "visible",
+            false
+          )
+        );
       }
 
       if(((data.connectionFacility == 
-        serviceConst.WATER) || (data.connectionFacility == serviceConst.WATERSEWERAGE)) && data && data.additionalDetails && data.additionalDetails.isVolumetricConnection && data.additionalDetails.isVolumetricConnection === 'Y' && data.connectionType === "Metered"){
+        serviceConst.WATER) || (data.connectionFacility == serviceConst.WATERSEWERAGE)) && data && data.additionalDetails && data.additionalDetails.isVolumetricConnection && data.additionalDetails.isVolumetricConnection === 'Y' && data.connectionType == "Non Metered"){
           dispatch(
           handleField(
             "apply",

@@ -487,7 +487,7 @@ export const additionDetails = getCommonCard({
             let mStep = isModifyMode() ? 'formwizardSecondStep' : 'formwizardThirdStep';
             let connectionType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
             let oldConnectioNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.oldConnectionNo");
-            if (connectionType === undefined || connectionType == "Metered") {
+            if (connectionType === undefined || connectionType != "Metered") {
               if(action && action.value && action.value === 'Y'){
                 dispatch(
                   handleField(

@@ -409,7 +409,7 @@ export const handleIsDailyConsumption = params => {
   }
   else if(params == 'N'){
     return 'No'
-  }else if((applicationNumber && applicationNumber.includes('SW') || connectionFacility == serviceConst.SEWERAGE || connectionType !== "Metered")){
+  }else if((applicationNumber && applicationNumber.includes('SW') || connectionFacility == serviceConst.SEWERAGE || connectionType == "Metered")){
     return "NA"
   }
   else{

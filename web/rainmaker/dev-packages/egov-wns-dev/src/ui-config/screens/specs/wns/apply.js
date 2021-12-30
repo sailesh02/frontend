@@ -1037,6 +1037,44 @@ export const getData = async (action, state, dispatch) => {
             data.oldConnectionNo && data.oldConnectionNo!= 'NA' || isModifyMode() ? false : true
           )
         );
+        
+        if(data.oldConnectionNo && data.oldConnectionNo!= 'NA'){
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+              "disabled",
+               false 
+            )
+          );
+        }else if(isModifyMode()){
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+              "visible",
+               true 
+            )
+          )
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+              "props.buttons[0].disabled",
+               true 
+            )
+          )
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+              "props.buttons[1].disabled",
+               true 
+            )
+          )
+        }
+      
+
         dispatch(
           handleField(
             "apply",

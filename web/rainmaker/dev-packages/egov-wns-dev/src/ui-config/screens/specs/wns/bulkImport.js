@@ -108,6 +108,7 @@ const screenConfig = {
                       sm: 3
                     },
                     required: true,
+                    disabled:true,
                     jsonPath: "meterReadings[0].billingPeriod"
                   }),
                   meterStatus: getSelectField({
@@ -149,8 +150,8 @@ const screenConfig = {
                         xs: 12,
                         sm: 3
                       },
+                      disabled:true,
                       required: true,
-                      isDOB: true,
                       jsonPath: "meterReadings[0].lastReadingDate",
                       // props: {
                       //   inputProps: {
@@ -160,6 +161,7 @@ const screenConfig = {
                     })
                   },
                   lastReading: getTextField({
+                    disabled:true,
                     label: {
                       labelName: "WS_LAST_READING",
                       labelKey: "WS_LAST_READING"
@@ -222,6 +224,7 @@ const screenConfig = {
                     })
                   },
                   consumption: getTextField({
+                    disabled:true,
                     label: {
                       labelName: "WS_CONSUMPTION",
                       labelKey: "WS_CONSUMPTION"

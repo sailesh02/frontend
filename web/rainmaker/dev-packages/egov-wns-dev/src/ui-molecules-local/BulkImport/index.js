@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 // import "./App.css";
 import * as XLSX from "xlsx";
+import * as FileSaver from "file-saver";
 
 class BulkImport extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       file: "",
+      data : []
     };
   }
 
@@ -23,10 +25,23 @@ readUploadFile = (e) => {
             const worksheet = workbook.Sheets[sheetName];
             const json = XLSX.utils.sheet_to_json(worksheet);
             console.log(json);
+            this.setState({
+              data:json
+            })
         };
         reader.readAsArrayBuffer(e.target.files[0]);
     }
 }
+ exportToCSV = (apiData, fileName) => {
+  const fileType =
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+const fileExtension = ".xlsx";
+  const ws = XLSX.utils.json_to_sheet(apiData);
+  const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  const data = new Blob([excelBuffer], { type: fileType });
+  FileSaver.saveAs(data, fileName + fileExtension);
+};
 
   render() {
     return (
@@ -53,7 +68,11 @@ readUploadFile = (e) => {
         id="upload"
         onChange={this.readUploadFile}
     />
+    <div className="App">
+    <button onClick={(e) => this.exportToCSV(this.state.data, 'fileName')}>Export</button>
+    </div>
 </form>
+
     );
   }
 }

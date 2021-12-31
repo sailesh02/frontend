@@ -736,7 +736,116 @@ export const getData = async (action, state, dispatch) => {
       }else{
         dispatch(prepareFinalObject("applyScreen.apartment", 'No'));
       }
+      
       if (data.connectionType !== "Metered") {
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails`,
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails`,
+            "visible",
+            true
+          )
+        );
+
+      
+        if(data && data.additionalDetails && data.additionalDetails.isVolumetricConnection && data.additionalDetails.isVolumetricConnection === 'Y' && data.connectionType == "Non Metered"){
+            dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge`,
+              "visible",
+              data.oldConnectionNo && data.oldConnectionNo!= 'NA' ? true : false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+              "visible",
+              data.oldConnectionNo && data.oldConnectionNo!= 'NA' || isModifyMode() ? false : true
+            )
+          );
+          
+          if(data.oldConnectionNo && data.oldConnectionNo!= 'NA'){
+            dispatch(
+              handleField(
+                "apply",
+                `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+                "disabled",
+                 false 
+              )
+            );
+          }else if(isModifyMode()){
+            dispatch(
+              handleField(
+                "apply",
+                `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+                "visible",
+                 true 
+              )
+            )
+            dispatch(
+              handleField(
+                "apply",
+                `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+                "props.buttons[0].disabled",
+                 true 
+              )
+            )
+            dispatch(
+              handleField(
+                "apply",
+                `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+                "props.buttons[1].disabled",
+                 true 
+              )
+            )
+          }
+        
+  
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.consumptionInKL`,
+              "visible",
+              data.oldConnectionNo && data.oldConnectionNo!= 'NA' ? false : true
+            )
+          );
+        }else{
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+              "visible",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.consumptionInKL`,
+              "visible",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge`,
+              "visible",
+              false
+            )
+          );
+        }
+        
         dispatch(
           handleField(
             "apply",
@@ -864,6 +973,22 @@ export const getData = async (action, state, dispatch) => {
       }
       if(data.connectionType == 'Metered'){
         let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.volumetricDetails`,
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails`,
+            "visible",
+            false
+          )
+        );
         if(applicationNumber && applicationNumber.includes('WS') && data && data.additionalDetails && data.additionalDetails.isLabourFeeApplicable && data.additionalDetails.isLabourFeeApplicable === 'Y'){
           dispatch(
             handleField(

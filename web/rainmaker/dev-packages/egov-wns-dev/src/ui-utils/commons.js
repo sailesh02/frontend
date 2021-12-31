@@ -586,6 +586,57 @@ export const validateMeterDetails = (applyScreenObject) => {
     }
 }
 
+export const validateVolumetricDetails = (applyScreenObject) => {
+    let water = applyScreenObject && applyScreenObject.water
+    let connectionType = applyScreenObject && applyScreenObject.connectionType
+    let oldConsumption = applyScreenObject && applyScreenObject.oldConnectionNo && isModifyMode()
+    let rValue = true;
+    if (rValue && water && !oldConsumption && connectionType == 'Non Metered'){
+        if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
+        applyScreenObject.additionalDetails["isVolumetricConnection"] == "Y" &&
+        applyScreenObject.additionalDetails.hasOwnProperty("isDailyConsumption") && 
+        applyScreenObject.additionalDetails["isDailyConsumption"] !== undefined &&
+        applyScreenObject.additionalDetails["isDailyConsumption"] !== "" &&
+        applyScreenObject.additionalDetails.hasOwnProperty("volumetricConsumtion") && 
+        applyScreenObject.additionalDetails["volumetricConsumtion"] !== undefined &&
+        applyScreenObject.additionalDetails["volumetricConsumtion"] !== ""
+        ){
+            return true
+        }else if(applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
+        applyScreenObject.additionalDetails["isVolumetricConnection"] == "N"){
+            return true
+        }
+        else{return false}
+    }else if(rValue && water && oldConsumption && connectionType == 'Metered'){
+        if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "Y" && 
+        applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("volumetricWaterCharge") && 
+        applyScreenObject.additionalDetails["volumetricWaterCharge"] !== undefined
+        ){
+            return true
+        }else if( applyScreenObject.hasOwnProperty("additionalDetails") && 
+        applyScreenObject.additionalDetails.hasOwnProperty("isVolumetricConnection") && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== undefined && 
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "" &&
+        applyScreenObject.additionalDetails["isVolumetricConnection"] !== "N"){
+            return true
+        }else{return false}
+    }
+    else{
+    return true
+    }
+}
+
 export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {
     let propertyObject = findAndReplace(applyScreenObject, "NA", null);
     if (
@@ -714,10 +765,26 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.isLabourFeeApplicable !== undefined
               ) ? (queryObject.additionalDetails.isLabourFeeApplicable) : "",
-              isInstallmentApplicable: (
+            isInstallmentApplicable: (
+              queryObject.additionalDetails !== undefined &&
+              queryObject.additionalDetails.isInstallmentApplicable !== undefined
+            ) ? (queryObject.additionalDetails.isInstallmentApplicable) : "",
+            isVolumetricConnection: (
+            queryObject.additionalDetails !== undefined &&
+            queryObject.additionalDetails.isVolumetricConnection !== undefined
+            ) ? (queryObject.additionalDetails.isVolumetricConnection) : "",
+            volumetricWaterCharge: (
                 queryObject.additionalDetails !== undefined &&
-                queryObject.additionalDetails.isInstallmentApplicable !== undefined
-              ) ? (queryObject.additionalDetails.isInstallmentApplicable) : ""
+                queryObject.additionalDetails.volumetricWaterCharge !== undefined
+            ) ? (queryObject.additionalDetails.volumetricWaterCharge) : "",
+            isDailyConsumption: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.isDailyConsumption !== undefined
+            ) ? (queryObject.additionalDetails.isDailyConsumption) : "",
+            volumetricConsumtion: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.volumetricConsumtion !== undefined
+            ) ? (queryObject.additionalDetails.volumetricConsumtion) : "",
         }
     }
     queryObject = { ...queryObject, ...parsedObject }

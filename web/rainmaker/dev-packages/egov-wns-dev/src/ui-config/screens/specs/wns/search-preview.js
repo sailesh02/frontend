@@ -149,6 +149,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       applyScreenObject.applicationNo.includes("WS") ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
+      let connectionType = applyScreenObject && 
+      applyScreenObject.connectionType
       if(applyScreenObject && applyScreenObject.applicationNo.includes("WS")){
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
@@ -161,17 +163,94 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }else{
         dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No')); 
       }
-      if(applicationNumber && applicationNumber.includes('WS')){
+      if(applicationNumber && applicationNumber.includes('WS') && connectionType == "Metered"){
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
           "visible",
           true
         ));
-      }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+          "visible",
+          true
+        ));
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          false
+        ));
+      }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "visible",
+          false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+          "visible",
+          false
+        ));
+      }
+      if(
+        applicationNumber && applicationNumber.includes('WS') 
+      && connectionType == "Non Metered"){
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          true
+        ));
+      }else{
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
           "visible",
           false
         ));
@@ -194,6 +273,18 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
           "visible",
           true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          connectionType == 'Non Metered' ? true : false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          connectionType == 'Non Metered' ? true : false
         ));
       }else{
         dispatch(handleField(
@@ -923,6 +1014,8 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
         oldApplicationPayload.WaterConnection.shift();
       }
       const waterSource=oldApplicationPayload.WaterConnection[0].waterSource||'';
+      let connectionType = oldApplicationPayload && oldApplicationPayload.WaterConnection && oldApplicationPayload && 
+      oldApplicationPayload.WaterConnection.length > 0 && oldApplicationPayload.WaterConnection[0].connectionType
       oldApplicationPayload.WaterConnection[0].waterSource=waterSource.includes("null") ? "NA" : waterSource.split(".")[0];
       oldApplicationPayload.WaterConnection[0].waterSubSource=waterSource.includes("null") ? "NA" : waterSource.split(".")[1];
       if (oldApplicationPayload.WaterConnection.length > 0) {
@@ -940,6 +1033,18 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
           "visible",
           true
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
+          "visible",
+          connectionType == 'Non Metered' ? true :false
+        ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          connectionType == 'Non Metered' ? true :false
         ));
       }else{
         dispatch(handleField(
@@ -1123,6 +1228,22 @@ const parserFunction = (obj) => {
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.isInstallmentApplicable !== undefined
       ) ? (obj.additionalDetails.isInstallmentApplicable) : "",
+      isVolumetricConnection: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.isVolumetricConnection !== undefined
+      ) ? (obj.additionalDetails.isVolumetricConnection) : "",
+      volumetricWaterCharge: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.volumetricWaterCharge !== undefined
+      ) ? (obj.additionalDetails.volumetricWaterCharge) : "",
+      isDailyConsumption: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.isDailyConsumption !== undefined
+      ) ? (obj.additionalDetails.isDailyConsumption) : "",
+      volumetricConsumtion: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.volumetricConsumtion !== undefined
+      ) ? (obj.additionalDetails.volumetricConsumtion) : "",
     },
     dateEffectiveFrom: convertDateToEpoch(obj.dateEffectiveFrom),
     noOfTaps: parseInt(obj.noOfTaps),

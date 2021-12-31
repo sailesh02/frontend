@@ -283,7 +283,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }else{
         dispatch(prepareFinalObject("SewerageConnection[0].apartment", 'No')); 
       }
-      debugger
+      
       if((
         connectionFacility == serviceConst.WATER
       ) || (connectionFacility == serviceConst.WATERSEWERAGE)){
@@ -293,7 +293,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           "visible",
           true
         ));
-        debugger
+        
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",

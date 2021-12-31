@@ -110,6 +110,11 @@ const ConfirmationDialog = Loadable({
   loading: () => <Loading />
 })
 
+const BulkImport = Loadable({
+  loader: () => import("./BulkImport"),
+  loading: () => <Loading />
+}) 
+
 export {
   TestMolecules,
   Tooltip,
@@ -132,5 +137,6 @@ export {
   OwnerHeader,
   ActionFooter,
   ConnectionActionsFooter,
-  ConfirmationDialog
+  ConfirmationDialog,
+  BulkImport
 };

@@ -28,7 +28,7 @@ const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
 let serviceModuleName = (service === serviceConst.WATER) ? "NewWS1" : "NewSW1";
-let serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
+let serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/ws-services/wc/_update";
 let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
 let editredirect = `apply?${redirectQueryString}&action=edit`;
 let headerLabel = "WS_TASK_DETAILS"
@@ -37,7 +37,7 @@ const resetData = () => {
   applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   service = getQueryArg(window.location.href, "service");
   serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
-  serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
+  serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/ws-services/wc/_update";
   redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
   editredirect = `apply?${redirectQueryString}&action=edit`;
   if (isModifyMode()) {
@@ -267,7 +267,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }else{
         dispatch(prepareFinalObject("SewerageConnection[0].apartment", 'No')); 
       }
-      debugger
+      
       if(applicationNumber && applicationNumber.includes('WS')){
         dispatch(handleField(
           "search-preview",
@@ -804,7 +804,7 @@ const screenConfig = {
       "screenConfig.components.div.children.headerDiv.children.header1.children.application.children.applicationNumber.props.number",
       applicationNumber
     );
-    set(action, 'screenConfig.components.div.children.taskStatus.props.dataPath', (service === serviceConst.WATER) ? "WaterConnection" : "SewerageConnection");
+    set(action, 'screenConfig.components.div.children.taskStatus.props.dataPath', (service === serviceConst.WATER) ? "WaterConnection" : "WaterConnection");
     set(action, 'screenConfig.components.div.children.taskStatus.props.moduleName', serviceModuleName);
     set(action, 'screenConfig.components.div.children.taskStatus.props.updateUrl', serviceUrl);
     set(action, 'screenConfig.components.div.children.taskStatus.props.bserviceTemp', (service === serviceConst.WATER) ? "WS.ONE_TIME_FEE" : "SW.ONE_TIME_FEE");
@@ -853,7 +853,7 @@ const screenConfig = {
           moduleName: "egov-workflow",
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
-            dataPath: (service === serviceConst.WATER) ? "WaterConnection" : "SewerageConnection",
+            dataPath: (service === serviceConst.WATER) ? "WaterConnection" : "WaterConnection",
             moduleName: serviceModuleName,
             updateUrl: serviceUrl,
             baseUrlTemp: 'wns',

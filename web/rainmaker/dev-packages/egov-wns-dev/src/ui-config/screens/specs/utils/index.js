@@ -372,7 +372,7 @@ export const handleIsVolumetric = params => {
   }
   else if(params == 'N'){
     return 'No'
-  }else if((applicationNumber && applicationNumber.includes('SW') || connectionFacility == serviceConst.SEWERAGE)){
+  }else if((applicationNumber && applicationNumber.includes('SW'))){
     return "NA"
   }
   else{
@@ -394,7 +394,7 @@ export const handleIsDailyConsumption = params => {
   }
   else if(params == 'N'){
     return 'No'
-  }else if((applicationNumber && applicationNumber.includes('SW') || connectionFacility == serviceConst.SEWERAGE || connectionType == "Metered")){
+  }else if((applicationNumber && applicationNumber.includes('SW') || connectionType == "Metered")){
     return "NA"
   }
   else{

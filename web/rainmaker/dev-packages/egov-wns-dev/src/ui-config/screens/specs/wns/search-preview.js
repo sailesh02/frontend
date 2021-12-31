@@ -267,6 +267,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }else{
         dispatch(prepareFinalObject("SewerageConnection[0].apartment", 'No')); 
       }
+      debugger
       if(applicationNumber && applicationNumber.includes('WS')){
         dispatch(handleField(
           "search-preview",
@@ -923,6 +924,8 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     );
     payload = [];
     payload = await getSearchResults(queryObjForSearch);
+    let connectionType = payload && payload.WaterConnection && payload.WaterConnection.length > 0 &&
+    payload.WaterConnection[0].connectionType
     set(payload, 'WaterConnection[0].service', service);
     const convPayload = findAndReplace(payload, "NA", null)
     let queryObjectForEst = [{
@@ -944,12 +947,20 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
         dispatch(prepareFinalObject("WaterConnection[0].apartment", 'No')); 
       }
       if(applicationNumber && applicationNumber.includes('WS')){
+
         dispatch(handleField(
           "search-preview",
-          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
           "visible",
-          true
+          connectionType == 'Non Metered' ? true : false
         ));
+        dispatch(handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixteen",
+          "visible",
+          connectionType == 'Non Metered' ? true : false
+        ));
+
       }else{
         dispatch(handleField(
           "search-preview",

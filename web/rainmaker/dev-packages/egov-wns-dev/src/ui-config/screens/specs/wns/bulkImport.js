@@ -1,10 +1,12 @@
 // import { fetchData } from "./myConnectionDetails/myConnectionDetails";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg,getTodaysDateInYMD, getMaxDate } from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar, showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar, showSpinner,hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { getMeterReadingDataBulkImport } from "../../../../ui-utils/commons"
 import { getMdmsDataForMeterStatus,APPLICATIONSTATE } from "../../../../ui-utils/commons"
+import { sortpayloadDataObj } from './connection-details'
+import { convertEpochToDate } from "../utils";
 
 import {
     getCommonCard,
@@ -17,7 +19,20 @@ import {
     getDateField,
     getPattern
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { getSearchResults, getMdmsDataForAutopopulated, isWorkflowExists } from "../../../../ui-utils/commons"
+  import { getSearchResults, getMdmsDataForAutopopulatedBulk, isWorkflowExists } from "../../../../ui-utils/commons"
+
+  const getApplicationNo = (connectionsObj) => {
+    let appNos = "";
+    if(connectionsObj.length > 1){
+      for(var i=0; i< connectionsObj.length; i++){
+        appNos += connectionsObj[i].applicationNo +",";
+      }
+      appNos = appNos.slice(0,-1);
+    }else{
+      appNos = connectionsObj[0].applicationNo;
+    }
+    return appNos;
+  }
 
   const setAutopopulatedvalues = async (state, dispatch,cardIndex) => {
     let billingFrequency = get(state, "screenConfiguration.preparedFinalObject.billingCycle");
@@ -47,6 +62,17 @@ import {
         );
         return;
     }
+
+    let billingPeriod = consumptionDetails.billingPeriod
+    let lastReading = consumptionDetails.lastReading
+    let lastReadingDate = consumptionDetails.lastReadingDate
+    let consumption = consumptionDetails.consumption
+
+    dispatch(prepareFinalObject(`meterReading[${cardIndex}].billingPeriod`,billingPeriod ))
+    dispatch(prepareFinalObject(`meterReading[${cardIndex}].lastReading`,lastReading ))
+    dispatch(prepareFinalObject(`meterReading[${cardIndex}].lastReadingDate`,lastReadingDate ))
+    dispatch(prepareFinalObject(`meterReading[${cardIndex}].consumption`,consumption ))
+    dispatch(prepareFinalObject(`meterReading[${cardIndex}].meterStatus`,status ))
 
     // dispatch(
     //     handleField(
@@ -97,11 +123,11 @@ import {
     //         todayDate
     //     )
     // );
-    dispatch(prepareFinalObject(`autoPopulatedValues[${index}]`, consumptionDetails));
+    dispatch(prepareFinalObject(`autoPopulatedValues[${cardIndex}]`, consumptionDetails));
 
 }
 
-  const addMeterReading = async(state,dispatch,cartIndex,tenantId,connectionNo) => {
+  const addMeterReading = async(state,dispatch,cardIndex,tenantId,connectionNo) => {
     dispatch(showSpinner());
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNo },{ key: "searchType",value:"CONNECTION"}];
     let payloadData = await getSearchResults(queryObject);
@@ -156,7 +182,7 @@ import {
             );
             return;
         } else {
-            await getMdmsDataForAutopopulated(dispatch)
+            await getMdmsDataForAutopopulatedBulk(dispatch,cardIndex)
             await setAutopopulatedvalues(state, dispatch,cardIndex)
         }
 
@@ -187,7 +213,6 @@ import {
       await getMeterReadingDataBulkImport(dispatch,queryObj,cardIndex)
       dispatch(showSpinner());
       await addMeterReading(state,dispatch,cardIndex,localStorage.getItem('tenant-id'),connectionNo)
-      dispatch(prepareFinalObject(`meterReading[${cardIndex}].lastReading`,connectionNo))
     } catch (e) {
       dispatch(
         toggleSnackbar(
@@ -212,7 +237,6 @@ const header = getCommonHeader(
 
 const getData = async (action, state, dispatch) => {
   await getMdmsDataForMeterStatus(dispatch)
-
 }
 
 const screenConfig = {
@@ -283,7 +307,7 @@ const screenConfig = {
                       sm: 3
                     },
                     required: true,
-                    jsonPath: "meterReadings[0].connectionNo",
+                    jsonPath: "meterReading[0].connectionNo",
                     iconObj: {
                       iconName: "search",
                       position: "end",
@@ -319,7 +343,7 @@ const screenConfig = {
                     },
                     required: true,
                     disabled:true,
-                    jsonPath: "meterReadings[0].billingPeriod"
+                    jsonPath: "meterReading[0].billingPeriod"
                   }),
                   meterStatus:
                   {
@@ -335,7 +359,7 @@ const screenConfig = {
                               value: "",
                           },
                           sourceJsonPath: "meterMdmsData['ws-services-calculation'].MeterStatus",
-                          jsonPath: "meterReadings[0].meterStatus",
+                          jsonPath: "meterReading[0].meterStatus",
                           gridDefination: {
                               xs: 6,
                               sm: 3
@@ -489,7 +513,7 @@ const screenConfig = {
                       // }
                   },
                   lastReadingDate: {
-                    ...getDateField({
+                    ...getTextField({
                       label: {
                         labelName: "WS_LAST_READING_DATE",
                         labelKey: "WS_LAST_READING_DATE"
@@ -504,12 +528,7 @@ const screenConfig = {
                       },
                       disabled:true,
                       required: true,
-                      jsonPath: "meterReadings[0].lastReadingDate",
-                      // props: {
-                      //   inputProps: {
-                      //     max: getTodaysDateInYMD()
-                      //   }
-                      // }
+                      jsonPath: "meterReading[0].lastReadingDate",
                     })
                   },
                   lastReading: getTextField({
@@ -530,7 +549,7 @@ const screenConfig = {
                       sm: 3
                     },
                     required: true,
-                    jsonPath: "meterReadings[0].lastReading"
+                    jsonPath: "meterReading[0].lastReading"
                   }),
                   currentReading: getTextField({
                     label: {
@@ -549,7 +568,7 @@ const screenConfig = {
                       sm: 3
                     },
                     required: true,
-                    jsonPath: "meterReadings[0].currentReading"
+                    jsonPath: "meterReading[0].currentReading"
                   }),
                   currentReadingDate: {
                     ...getDateField({
@@ -567,12 +586,12 @@ const screenConfig = {
                         xs: 12,
                         sm: 3
                       },
-                      jsonPath: "meterReadings[0].currentReadingDate",
-                      // props: {
-                      //   inputProps: {
-                      //     max: getTodaysDateInYMD()
-                      //   }
-                      // }
+                      jsonPath: "meterReading[0].currentReadingDate",
+                      props: {
+                        inputProps: {
+                          max: getTodaysDateInYMD()
+                        }
+                      }
                     })
                   },
                   consumption: getTextField({
@@ -592,7 +611,7 @@ const screenConfig = {
                       labelName: "WS_CONSUMPTION",
                       labelKey: "WS_CONSUMPTION"
                     },
-                    jsonPath: "meterReadings[0].consumption"
+                    jsonPath: "meterReading[0].consumption"
                   })
                 })
               }),

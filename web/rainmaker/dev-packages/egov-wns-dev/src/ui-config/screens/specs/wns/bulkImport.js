@@ -1,8 +1,9 @@
 // import { fetchData } from "./myConnectionDetails/myConnectionDetails";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg,getTodaysDateInYMD, getMaxDate } from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar, showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import { getMeterReadingDataBulkImport } from "../../../../ui-utils/commons"
 
 import {
     getCommonCard,
@@ -15,19 +16,96 @@ import {
     getDateField,
     getPattern
   } from "egov-ui-framework/ui-config/screens/specs/utils";
+  import { getSearchResults, getMdmsDataForAutopopulated, isWorkflowExists } from "../../../../ui-utils/commons"
 
+  const addMeterReading = async(state,dispatch,cartIndex,tenantId,connectionNo) => {
+    dispatch(showSpinner());
+    let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNo },{ key: "searchType",value:"CONNECTION"}];
+    let payloadData = await getSearchResults(queryObject);
+    if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
+        payloadData.WaterConnection = sortpayloadDataObj(payloadData.WaterConnection);
+        let applicationNos = getApplicationNo(payloadData.WaterConnection);
+        const queryObj = [
+            { key: "businessIds", value: applicationNos },
+            { key: "tenantId", value: tenantId }
+        ];        
+        
+        // let isApplicationApproved = await isWorkflowExists(queryObj);
+        // let isApplicationApproved = payloadData.WaterConnection[0].applicationStatus === APPLICATIONSTATE.CONNECTIONACTIVATED &&
+        // payloadData.WaterConnection[0].status === APPLICATIONSTATE.STATUS ? true : false
+
+        let arraySize = payloadData.WaterConnection.length;
+        let isApplicationApproved;
+        if(arraySize === 1){
+            isApplicationApproved = payloadData.WaterConnection[0].applicationStatus === APPLICATIONSTATE.CONNECTIONACTIVATED &&
+                payloadData.WaterConnection[0].status === APPLICATIONSTATE.STATUS ? true : false
+        }else if(arraySize > 1){
+            isApplicationApproved = payloadData.WaterConnection[0].applicationStatus === APPLICATIONSTATE.APPROVED &&
+                payloadData.WaterConnection[0].status === APPLICATIONSTATE.STATUS ? true : false
+        }
+
+        if(payloadData.WaterConnection && (payloadData.WaterConnection[0].applicationStatus == "CONNECTION_DISCONNECTED" 
+        || payloadData.WaterConnection[0].applicationStatus == "CONNECTION_CLOSED")){
+            dispatch(hideSpinner());
+            dispatch(
+                toggleSnackbar(
+                    true,
+                    {
+                        labelName: "Meter Reading cannot be added as the connection is either disconnected or closed",
+                        labelKey: "Meter Reading cannot be added as the connection is either disconnected or closed"
+                    },
+                    "error"
+                )
+            );
+            return;
+        }
+        else if(!isApplicationApproved){
+            dispatch(hideSpinner());
+            dispatch(
+                toggleSnackbar(
+                    true,
+                    {
+                        labelName: "WorkFlow already Initiated",
+                        labelKey: "WS_WORKFLOW_ALREADY_INITIATED"
+                    },
+                    "error"
+                )
+            );
+            return;
+        } else {
+            await getMdmsDataForAutopopulated(dispatch)
+            // await getMdmsDataForMeterStatus(dispatch)
+            // await setAutopopulatedvalues(state, dispatch)
+            showHideCard(true, dispatch); 
+        }
+
+    }  
+    dispatch(hideSpinner());
+  }
   const getMeterReadingDetails = async (state, dispatch, fieldInfo) => {
     try {
-  
-      //call this API 
-      // http://localhost:3001/ws-calculator/meterConnection/_search?tenantId=od.anandapur&connectionNos=WS/AND/1652101&offset=0
-      // this give meter reading detials
       const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
       const connectionNo = get(
         state.screenConfiguration.preparedFinalObject,
         `meterReading[${cardIndex}].connectionNo`,
         ""
       );
+
+      let queryObj = [
+        {
+            key: "tenantId",
+            value: `${localStorage.getItem('tenant-id')}`
+        },
+        {
+            key: "connectionNos",
+            value: connectionNo
+        },
+        { key: "offset", value: "0" }
+    ];
+
+      await getMeterReadingDataBulkImport(dispatch,queryObj,cardIndex)
+      dispatch(showSpinner());
+      await addMeterReading(state,dispatch,cardIndex,localStorage.getItem('tenant-id'),connectionNo)
       dispatch(prepareFinalObject(`meterReading[${cardIndex}].lastReading`,connectionNo))
     } catch (e) {
       dispatch(

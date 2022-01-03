@@ -568,7 +568,54 @@ const screenConfig = {
                       sm: 3
                     },
                     required: true,
-                    jsonPath: "meterReading[0].currentReading"
+                    jsonPath: "meterReading[0].currentReading",
+                    iconObj: {
+                      iconName: "keyboard_arrow_right",
+                      position: "end",
+                      color: "#FE7A51",
+                      onClickDefination: {
+                        action: "condition",
+                        callBack: (state, dispatch, fieldInfo) => {
+                            const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
+                            let lastReading = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues[${cardIndex}].lastReading`);
+                            let currentReading = Number(get(state, `screenConfiguration.preparedFinalObject.meterReading[${cardIndex}].currentReading`));
+                            let consumption;
+                            if (lastReading === 0) {
+                                consumption = currentReading
+                            } else {
+                                consumption = (currentReading - lastReading).toFixed(2);
+                            }
+                            if (currentReading == '' || consumption < 0) {
+                                consumption = ''
+                            }
+                           dispatch(prepareFinalObject(`meterReading[${cardIndex}].consumption`, consumption))
+                        }
+                      },
+                    },
+                    title: {
+                      value: "WS_PREFILL_CONSUMPTION_TOOLTIP",
+                      key: "WS_PREFILL_CONSUMPTION_TOOLTIP"
+                    },
+                    infoIcon: "info_circle" 
+                  }),
+                  consumption: getTextField({
+                    disabled:true,
+                    label: {
+                      labelName: "WS_CONSUMPTION",
+                      labelKey: "WS_CONSUMPTION"
+                    },
+                    props:{
+                      className:"applicant-details-error"
+                    },
+                    gridDefination: {
+                      xs: 12,
+                      sm: 3
+                    },
+                    placeholder: {
+                      labelName: "WS_CONSUMPTION",
+                      labelKey: "WS_CONSUMPTION"
+                    },
+                    jsonPath: "meterReading[0].consumption"
                   }),
                   currentReadingDate: {
                     ...getDateField({
@@ -593,26 +640,7 @@ const screenConfig = {
                         }
                       }
                     })
-                  },
-                  consumption: getTextField({
-                    disabled:true,
-                    label: {
-                      labelName: "WS_CONSUMPTION",
-                      labelKey: "WS_CONSUMPTION"
-                    },
-                    props:{
-                      className:"applicant-details-error"
-                    },
-                    gridDefination: {
-                      xs: 12,
-                      sm: 3
-                    },
-                    placeholder: {
-                      labelName: "WS_CONSUMPTION",
-                      labelKey: "WS_CONSUMPTION"
-                    },
-                    jsonPath: "meterReading[0].consumption"
-                  })
+                  }
                 })
               }),
               items: [],

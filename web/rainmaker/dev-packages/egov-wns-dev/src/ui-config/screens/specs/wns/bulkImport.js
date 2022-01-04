@@ -50,8 +50,8 @@ const screenConfig = {
             }
           }
         },
-        breakAfterSearch: getBreak(),
         bulkImportApplication,
+        breakAfterSearch: getBreak(),
         bulkMeterReadingData,
         bulkImportFooter
       }

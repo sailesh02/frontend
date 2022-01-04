@@ -24,7 +24,7 @@ const renderBulkImportTable = async (state, dispatch) => {
   meterReading[0].meterStatus && meterReading[0].currentReading && meterReading[0].currentReadingDate ? true : false
   
   if(isFormValid){
-    let finalArray = []
+    let finalArray = get(state.screenConfiguration.preparedFinalObject, "meterReadingBulk", []);
     finalArray.push(meterReading[0])
     showBulkImportTableData(state, dispatch, finalArray)
   }else{

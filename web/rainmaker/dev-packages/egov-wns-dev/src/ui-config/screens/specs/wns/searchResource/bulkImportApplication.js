@@ -77,6 +77,48 @@ import {
     dispatch(prepareFinalObject(`meterReading[${cardIndex}].meterStatus`,status ))
     dispatch(prepareFinalObject(`autoPopulatedValues`, consumptionDetails));
 
+    dispatch(
+      handleField(
+        "bulkImport",
+        "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.billingPeriod",
+        "props.value",
+        billingPeriod
+      )
+    );
+    dispatch(
+      handleField(
+        "bulkImport",
+        "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumption",
+        "props.value",
+        consumption
+      )
+    );
+  
+    dispatch(
+      handleField(
+        "bulkImport",
+        "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.lastReading",
+        "props.value",
+        lastReading
+      )
+    );
+    dispatch(
+      handleField(
+        "bulkImport",
+        "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.lastReadingDate",
+        "props.value",
+        lastReadingDate
+      )
+    );
+    dispatch(
+      handleField(
+        "bulkImport",
+        "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.meterStatus",
+        "props.value",
+        status
+      )
+    );
+
 }
 
   const addMeterReading = async(state,dispatch,tenantId,connectionNo) => {
@@ -194,7 +236,7 @@ import {
           xs: 12,
           sm: 3
         },
-        required: true,
+        // required: true,
         jsonPath: "meterReading[0].connectionNo",
         iconObj: {
           iconName: "search",
@@ -229,7 +271,7 @@ import {
           xs: 12,
           sm: 3
         },
-        required: true,
+        // required: true,
         disabled:true,
         jsonPath: "meterReading[0].billingPeriod"
       }),
@@ -252,7 +294,7 @@ import {
                   xs: 6,
                   sm: 3
               },
-              required: true,              
+              // required: true,              
               errorMessage: "ERR_INVALID_BILLING_PERIOD",
           }),
           // afterFieldChange: async (action, state, dispatch) => {
@@ -415,7 +457,7 @@ import {
             sm: 3
           },
           disabled:true,
-          required: true,
+          // required: true,
           jsonPath: "meterReading[0].lastReadingDate",
         })
       },
@@ -436,7 +478,7 @@ import {
           xs: 12,
           sm: 3
         },
-        required: true,
+        // required: true,
         jsonPath: "meterReading[0].lastReading"
       }),
       currentReading: getTextField({
@@ -455,7 +497,7 @@ import {
           xs: 12,
           sm: 3
         },
-        required: true,
+        // required: true,
         jsonPath: "meterReading[0].currentReading",
         afterFieldChange: async (action, state, dispatch) => {
             let lastReading = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading`);
@@ -470,6 +512,14 @@ import {
                 consumption = ''
             }
            dispatch(prepareFinalObject(`meterReading[0].consumption`, consumption))
+           dispatch(
+            handleField(
+              "bulkImport",
+              "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumption",
+              "props.value",
+              consumption
+            )
+          );
         }
       }),
       consumption: getTextField({
@@ -485,7 +535,7 @@ import {
           xs: 12,
           sm: 3
         },
-        required: true,
+        // required: true,
         placeholder: {
           labelName: "WS_CONSUMPTION",
           labelKey: "WS_CONSUMPTION"
@@ -502,7 +552,7 @@ import {
             labelName: "WS_CURRENT_READING_DATE",
             labelKey: "WS_CURRENT_READING_DATE_PLACEHOLDER"
           },
-          required: true,
+          // required: true,
           isDOB: true,
           gridDefination: {
             xs: 12,

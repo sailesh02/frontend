@@ -1566,47 +1566,69 @@ export const resetFieldsForConnection = (state, dispatch) => {
 export const resetFieldsBulkImport = (state, dispatch) => {
   dispatch(
     handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.consumerid",
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumerNumber",
       "props.value",
       ""
     )
   );
   dispatch(
     handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.propertyid",
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.billingPeriod",
       "props.value",
       ""
     )
   );
-  
   dispatch(
     handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.oldConsumerid",
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumption",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.currentReading",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.currentReadingDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.lastReading",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.lastReadingDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.meterStatus",
       "props.value",
       ""
     )
   );
 
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.ownerMobNo",
-      "props.value",
-      ""
-    )
-  );
-
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.propertyid",
-      "props.value",
-      ""
-    )
-  );
 }
 
 export const getCommonGrayCard = children => {

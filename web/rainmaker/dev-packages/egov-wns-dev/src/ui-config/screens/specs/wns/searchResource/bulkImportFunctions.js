@@ -6,15 +6,16 @@ import { validateFields } from "../../utils";
 import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection, getTextToLocalMapping } from "../../utils/index";
 import { httpRequest } from "../../../../../ui-utils";
 import store from "ui-redux/store";
-
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { resetFieldsBulkImport } from '../../utils/index'
 export const updateTableRow = async (state, dispatch) => {
     store.dispatch(showSpinner())
-    await renderSearchApplicationTable(state, dispatch);
+    await renderBulkImportTable(state, dispatch);
     store.dispatch(hideSpinner())
  
 }
 
-const renderSearchApplicationTable = async (state, dispatch) => {
+const renderBulkImportTable = async (state, dispatch) => {
   let queryObject = [{ key: "tenantId", value: getTenantIdCommon() }];
   queryObject.push({ key: "isConnectionSearch", value: true });
   let meterReading = get(state.screenConfiguration.preparedFinalObject, "meterReading", {});
@@ -25,7 +26,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
   if(isFormValid){
     let finalArray = []
     finalArray.push(meterReading[0])
-    showApplicationResults(finalArray, dispatch)
+    showBulkImportTableData(state, dispatch, finalArray)
   }else{
     dispatch(
         toggleSnackbar(
@@ -40,12 +41,8 @@ const renderSearchApplicationTable = async (state, dispatch) => {
   }
 }
 
-const showHideApplicationTable = (booleanHideOrShow, dispatch) => {
-  dispatch(handleField("search", "components.div.children.searchApplicationResults", "visible", booleanHideOrShow));
-};
-
-const showApplicationResults = (connections, dispatch) => {
-  let data = connections.map(item => ({
+const showBulkImportTableData = (state, dispatch, bulkData) => {
+  let data = bulkData.map(item => ({
     ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
     ["WS_BILLING_PERIOD"]: item.billingPeriod,
     ["WS_SELECT_METER_STATUS"]: item.meterStatus,
@@ -57,8 +54,10 @@ const showApplicationResults = (connections, dispatch) => {
   }));
   dispatch(handleField("bulkImport", "components.div.children.bulkMeterReadingData", "props.data", data));
   dispatch(handleField("bulkImport", "components.div.children.bulkMeterReadingData", "props.rows",
-    connections.length
+  bulkData.length
   ));
-  showHideApplicationTable(true, dispatch);
+  dispatch(prepareFinalObject('meterReadingBulk',bulkData))
+  dispatch(prepareFinalObject('meterReading',[]))
+  resetFieldsBulkImport(state,dispatch)
 }
 

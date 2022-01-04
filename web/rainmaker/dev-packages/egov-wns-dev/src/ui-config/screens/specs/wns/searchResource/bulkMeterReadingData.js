@@ -3,6 +3,7 @@ import { sortByEpoch, getEpochForDate } from "../../utils";
 import './index.css';
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import store from "ui-redux/store";
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 
 export const bulkMeterReadingData = {
   uiFramework: "custom-molecules",
@@ -57,7 +58,7 @@ export const bulkMeterReadingData = {
         name: "Consumption",
         labelKey: "WS_CONSUMPTION",
         options: {
-          display: true
+          display: false
         }
       },
       {
@@ -69,10 +70,39 @@ export const bulkMeterReadingData = {
       },
       {
         name: "Action",
-        labelKey: "WS_ACTION_LABEL",
+        labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
         options: {
-          display: false
-        }
+            filter: false,
+            customBodyRender: (value, data) => {
+                return (
+                  <div style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+                    <LabelContainer onClick ={ () => {
+                        alert('CLicked Edit')
+                    }}
+                      labelKey="WS_EDIT"
+                      style={{
+                        color: "#fe7a51",
+                        fontSize: 14,
+                        marginRight:'2px'
+                      }}
+                      
+                    />
+                      <LabelContainer onClick ={ () => {
+                        alert('CLicked Delete')
+                    }}
+                      labelKey="WS_DELETE"
+                      style={{
+                        color: "#fe7a51",
+                        fontSize: 14,
+                      }}
+                      
+                    />
+                  </div>
+                )
+                    
+                  }
+          }
+      
       }
     ],
     title: {labelKey:"WS_HOME_SEARCH_APPLICATION_RESULTS_TABLE_HEADING", labelName:"Search Results for Water & Sewerage Application"},

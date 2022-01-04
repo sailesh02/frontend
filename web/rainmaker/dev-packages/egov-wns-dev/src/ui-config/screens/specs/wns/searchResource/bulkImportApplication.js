@@ -252,7 +252,7 @@ import {
                   xs: 6,
                   sm: 3
               },
-              required: false,
+              required: true,              
               errorMessage: "ERR_INVALID_BILLING_PERIOD",
           }),
           // afterFieldChange: async (action, state, dispatch) => {
@@ -485,6 +485,7 @@ import {
           xs: 12,
           sm: 3
         },
+        required: true,
         placeholder: {
           labelName: "WS_CONSUMPTION",
           labelKey: "WS_CONSUMPTION"

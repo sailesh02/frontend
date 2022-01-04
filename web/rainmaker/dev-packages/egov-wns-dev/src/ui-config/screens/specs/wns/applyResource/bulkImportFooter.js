@@ -1,7 +1,8 @@
 import {
     dispatchMultipleFieldChangeAction,
     getLabel,
-    getCommonContainer
+    getCommonContainer,
+    convertDateToEpoch
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -15,14 +16,85 @@ import {
   import "./index.css";
   import commonConfig from "config/common.js";
 
-  export const callBackForReset = (state, dispatch) => {
+  const callBackForReset = (state, dispatch) => {
     resetFieldsBulkImport(state,dispatch)
     resetTableData(state,dispatch)
   };
 
-  export const callBackForSaveAll = (state, dispatch) => {
+  const getDateFormat = (date,type) => {
+      if(type == 'current'){
+          return convertDateToEpoch(date, "dayend")
+      }else if(type == 'last'){
+        let dates = date.split('/')
+        let formattedDate = ''
+        if(dates.length > 2){
+            formattedDate = `${dates[2]}-${dates[1]}-${dates[0]}`
+            return convertDateToEpoch(formattedDate, "dayend")
+        }else{
+            return date
+        } 
+      }else{
+          return date
+      }
+      
+  }
+
+  const callBackForSaveAll = async (state, dispatch) => {
+    let meterReadingBulk = get(state, "screenConfiguration.preparedFinalObject.meterReadingBulk") || [];
+    if(meterReadingBulk && meterReadingBulk.length == 0){
+        dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "WS_METER_READING_DETAILS_ERROR",
+                labelKey: "WS_METER_READING_DETAILS_ERROR"
+              },
+              "warning"
+            )
+          );
+          return 
+    }
+    let apiPayload = meterReadingBulk && meterReadingBulk.map ((data,index) => {
+        return {
+            ...data,
+            tenantId : getTenantIdCommon(),
+            lastReadingDate : getDateFormat (data.lastReadingDate,'last'),
+            currentReadingDate : getDateFormat(data.currentReadingDate,'current'),
+        }
+    })
+
+    try{
+        let response = await httpRequest("post", "/ws-calculator/meterConnection/bulkk/_create", "", [], {meterReadings:apiPayload});
+        if(response){
+            dispatch(
+                toggleSnackbar(
+                  true,
+                  {
+                    labelName: "WS_METER_READING_INSERT_SUCEES",
+                    labelKey: "WS_METER_READING_INSERT_SUCEES"
+                  },
+                  "success"
+                )
+              ); 
+            callBackForReset(state,dispatch)
+
+        }
+    }catch(err){
+        dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: err.Message,
+                labelKey:  err.Message
+              },
+              "error"
+            )
+          ); 
+    }
     
-};
+    console.log("apiPayloadapiPayloadapiPayloadapiPayloadapiPayloadapiPayloadapiPayload",apiPayload)
+
+}
   
   export const bulkImportFooter = getCommonApplyFooter("BOTTOM", {
     resetButton: {

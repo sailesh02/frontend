@@ -86,6 +86,7 @@ const setAutopopulatedvalues = async (state, dispatch) => {
     let date = new Date();
     let status = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.['ws-services-calculation'].MeterStatus[0].code");
     let checkBillingPeriod = await get(state, "screenConfiguration.preparedFinalObject.consumptionDetails");
+    let autoPopulatedValues = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues") || [];
     try {
         let lastReadingDate = convertEpochToDate(checkBillingPeriod[0].currentReadingDate);
         let lastDF = new Date();
@@ -158,7 +159,9 @@ const setAutopopulatedvalues = async (state, dispatch) => {
             todayDate
         )
     );
-    dispatch(prepareFinalObject("autoPopulatedValues", consumptionDetails));
+
+    autoPopulatedValues.push(consumptionDetails)
+    dispatch(prepareFinalObject("autoPopulatedValues", autoPopulatedValues));
 
 }
 

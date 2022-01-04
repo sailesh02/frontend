@@ -381,7 +381,6 @@ export const getPropertyResultsWODispatch = async (queryObject) => {
 
 
 export const getConsumptionDetails = async (queryObject, dispatch) => {
-    debugger
     dispatch(toggleSpinner());
     try {
         const response = await httpRequest(

@@ -4,6 +4,40 @@ import './index.css';
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import store from "ui-redux/store";
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
+const deleteTableData = (value) => {
+  let consumerNumber = value && value.rowData && value.rowData.length > 0 && value.rowData[0] || ""
+  let state = store.getState()
+  let meterReadingBulk = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
+  state.screenConfiguration.preparedFinalObject.meterReadingBulk || []
+  let removedConsumerNumber = meterReadingBulk && meterReadingBulk.length > 0 && 
+  meterReadingBulk.filter( data => {
+    return data.connectionNo != consumerNumber
+  }) || []
+ 
+  let data = removedConsumerNumber.map(item => ({
+    ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
+    ["WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"]: item.billingPeriod,
+    ["WS_SELECT_METER_STATUS_LABEL"]: item.meterStatus,
+    ["WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL"]: item.lastReadingDate,
+    ["WS_CONSUMPTION_DETAILS_LAST_READING_LABEL"]: item.lastReading,
+    ["WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL"]: item.currentReading,
+    ["WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL"]: item.consumption,
+    ["WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"]: item.currentReadingDate
+  }));
+  store.dispatch(handleField("bulkImport", "components.div.children.bulkMeterReadingData", "props.data", data));
+  store.dispatch(handleField("bulkImport", "components.div.children.bulkMeterReadingData", "props.rows",
+  removedConsumerNumber.length
+  ));
+  store.dispatch(prepareFinalObject('meterReadingBulk',removedConsumerNumber))
+  store.dispatch(prepareFinalObject('meterReading',[]))
+}
+
+const editTableData = (value,data) => {
+
+}
 
 export const bulkMeterReadingData = {
   uiFramework: "custom-molecules",
@@ -65,12 +99,12 @@ export const bulkMeterReadingData = {
                 return (
                   <div>
                     <div className="linkStyle" onClick={() => 
-                        alert('CLicked Edit')}>
+                        editTableData(data)}>
                         <a style={{ color: '#fe7a51'}}>{'Edit'}
                         </a>
                     </div>
                     <div className="linkStyle" onClick={() => 
-                        alert('CLicked Delete')}>
+                        deleteTableData(data)}>
                         <a style={{ color: '#fe7a51' }}>{'Delete'}
                         </a>
                     </div>

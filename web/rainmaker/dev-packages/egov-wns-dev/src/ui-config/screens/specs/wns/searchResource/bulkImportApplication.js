@@ -9,7 +9,7 @@ import {
     getLabel,
     getDateField
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { searchApiCall } from "./functions";
+  import { updateTableRow } from "./bulkImportFunctions";
   import { resetFieldsBulkImport, getTodaysDateInYMD } from '../../utils';
   import { getMeterReadingDataBulkImport } from "../../../../../ui-utils/commons"
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -177,12 +177,6 @@ import {
   };
   
   export const bulkImportApplication = getCommonCard({
-    subHeader: getCommonTitle({
-      labelKey: "WS_SEARCH_CONNECTION_SUB_HEADER"
-    }),
-    subParagraph: getCommonParagraph({
-      labelKey: "WS_HOME_SEARCH_CONN_RESULTS_DESC"
-    }),
     bulkImportContainer: getCommonContainer({
       consumerNumber: getTextField({
         label: {
@@ -578,7 +572,7 @@ import {
           },
           onClickDefination: {
             action: "condition",
-            callBack: searchApiCall
+            callBack: updateTableRow
           }
         },
       })

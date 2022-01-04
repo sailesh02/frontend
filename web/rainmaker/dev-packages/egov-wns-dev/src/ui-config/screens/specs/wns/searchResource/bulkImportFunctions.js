@@ -44,13 +44,13 @@ const renderBulkImportTable = async (state, dispatch) => {
 const showBulkImportTableData = (state, dispatch, bulkData) => {
   let data = bulkData.map(item => ({
     ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
-    ["WS_BILLING_PERIOD"]: item.billingPeriod,
-    ["WS_SELECT_METER_STATUS"]: item.meterStatus,
-    ["WS_LAST_READING_DATE"]: item.lastReadingDate,
-    ["WS_LAST_READING"]: item.lastReading,
-    ["WS_CURRENT_READING"]: item.currentReading,
-    ["WS_CONSUMPTION"]: item.consumption,
-    ["WS_CURRENT_READING_DATE"]: item.currentReadingDate
+    ["WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"]: item.billingPeriod,
+    ["WS_SELECT_METER_STATUS_LABEL"]: item.meterStatus,
+    ["WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL"]: item.lastReadingDate,
+    ["WS_CONSUMPTION_DETAILS_LAST_READING_LABEL"]: item.lastReading,
+    ["WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL"]: item.currentReading,
+    ["WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL"]: item.consumption,
+    ["WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"]: item.currentReadingDate
   }));
   dispatch(handleField("bulkImport", "components.div.children.bulkMeterReadingData", "props.data", data));
   dispatch(handleField("bulkImport", "components.div.children.bulkMeterReadingData", "props.rows",

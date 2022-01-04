@@ -223,14 +223,14 @@ import {
       consumerNumber: getTextField({
         label: {
           labelName: "Consumer No.",
-          labelKey: "WS_CONSUMER_NUMBER"
+          labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Consumer No.",
-          labelKey: "WS_CONSUMER_NUMBER"
+          labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_PLACEHOLDER"
         },
         gridDefination: {
           xs: 12,
@@ -257,15 +257,15 @@ import {
       }),
       billingPeriod: getTextField({
         label: {
-          labelName: "WS_BILLING_PERIOD",
-          labelKey: "WS_BILLING_PERIOD"
+          labelName: "WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL",
+          labelKey: "WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
-          labelName: "WS_BILLING_PERIOD",
-          labelKey: "WS_BILLING_PERIOD_PLACEHOLDER"
+          labelName: "WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL",
+          labelKey: "WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"
         },
         gridDefination: {
           xs: 12,
@@ -279,7 +279,7 @@ import {
       {
           ...getSelectField({
               label : {
-                labelKey: "WS_SELECT_METER_STATUS"
+                labelKey: "WS_SELECT_METER_STATUS_LABEL"
               },
               placeholder: {
                   labelKey: "WS_SELECT_METER_STATUS_PLACEHOLDER"
@@ -297,160 +297,16 @@ import {
               // required: true,              
               errorMessage: "ERR_INVALID_BILLING_PERIOD",
           }),
-          // afterFieldChange: async (action, state, dispatch) => {
-          //     let status = get(state, "screenConfiguration.preparedFinalObject.metereading.meterStatus");
-          //     if (status !== 'Working') {
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
-          //                 "disabled",
-          //                 true
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
-          //                 "disabled",
-          //                 true
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont",
-          //                 "visible",
-          //                 false
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont",
-          //                 "visible",
-          //                 true
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont",
-          //                 "visible",
-          //                 true
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
-          //                 "value",
-          //                 ""
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
-          //                 "value",
-          //                 ""
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont.children.billingPeriod.props",
-          //                 "labelName",
-          //                 ""
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont.props",
-          //                 "value",
-          //                 ""
-          //             )
-          //         );
-          //     } else {
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
-          //                 "disabled",
-          //                 false
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
-          //                 "disabled",
-          //                 false
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont",
-          //                 "visible",
-          //                 true
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont",
-          //                 "visible",
-          //                 false
-          //             )
-          //         );
-          //         let todayDate = new Date()
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
-          //                 "value",
-          //                 todayDate
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
-          //                 "value",
-          //                 ""
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont.props",
-          //                 "value",
-          //                 ""
-          //             )
-          //         );
-          //         dispatch(
-          //             handleField(
-          //                 "meter-reading",
-          //                 "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont.children.billingPeriod.props",
-          //                 "labelName",
-          //                 ""
-          //             )
-          //         );
-          //     }
-  
-          // }
       },
       lastReadingDate: {
         ...getTextField({
           label: {
-            labelName: "WS_LAST_READING_DATE",
-            labelKey: "WS_LAST_READING_DATE"
+            labelName: "WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL",
+            labelKey: "WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL"
           },
           placeholder: {
-            labelName: "WS_LAST_READING_DATE",
-            labelKey: "WS_LAST_READING_DATE_PLACEHOLDER"
+            labelName: "WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL",
+            labelKey: "WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL"
           },
           gridDefination: {
             xs: 12,
@@ -464,15 +320,15 @@ import {
       lastReading: getTextField({
         disabled:true,
         label: {
-          labelName: "WS_LAST_READING",
-          labelKey: "WS_LAST_READING"
+          labelName: "WS_CONSUMPTION_DETAILS_LAST_READING_LABEL",
+          labelKey: "WS_CONSUMPTION_DETAILS_LAST_READING_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
-          labelName: "WS_LAST_READING",
-          labelKey: "WS_LAST_READING_DATE_PLACEHOLDER"
+          labelName: "WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL",
+          labelKey: "WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL"
         },
         gridDefination: {
           xs: 12,
@@ -483,15 +339,15 @@ import {
       }),
       currentReading: getTextField({
         label: {
-          labelName: "WS_CURRENT_READING",
-          labelKey: "WS_CURRENT_READING"
+          labelName: "WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL",
+          labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
-          labelName: "WS_CURRENT_READING",
-          labelKey: "WS_CURRENT_READING_PLACEHOLDER"
+          labelName: "WS_CONSUMPTION_DETAILS_CURRENT_READING_PLACEHOLDER",
+          labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_PLACEHOLDER"
         },
         gridDefination: {
           xs: 12,
@@ -525,8 +381,8 @@ import {
       consumption: getTextField({
         disabled:true,
         label: {
-          labelName: "WS_CONSUMPTION",
-          labelKey: "WS_CONSUMPTION"
+          labelName: "WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL",
+          labelKey: "WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL"
         },
         props:{
           className:"applicant-details-error"
@@ -537,20 +393,20 @@ import {
         },
         // required: true,
         placeholder: {
-          labelName: "WS_CONSUMPTION",
-          labelKey: "WS_CONSUMPTION"
+          labelName: "WS_CONSUMPTION_DETAILS_CONSUMPTION_READING_PLACEHOLDER",
+          labelKey: "WS_CONSUMPTION_DETAILS_CONSUMPTION_READING_PLACEHOLDER"
         },
         jsonPath: "meterReading[0].consumption"
       }),
       currentReadingDate: {
         ...getDateField({
           label: {
-            labelName: "WS_CURRENT_READING_DATE",
-            labelKey: "WS_CURRENT_READING_DATE"
+            labelName: "WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL",
+            labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"
           },
           placeholder: {
-            labelName: "WS_CURRENT_READING_DATE",
-            labelKey: "WS_CURRENT_READING_DATE_PLACEHOLDER"
+            labelName: "WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL",
+            labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"
           },
           // required: true,
           isDOB: true,

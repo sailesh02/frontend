@@ -21,15 +21,16 @@ export const bulkMeterReadingData = {
       },
       {
         name: "Billing Period",
-        labelKey: "WS_BILLING_PERIOD", 
+        labelKey: "WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL", 
         options: {
           filter: false,
         }
       },
       {
         name: "Meter Status",
-        labelKey: "WS_SELECT_METER_STATUS",
+        labelKey: "WS_SELECT_METER_STATUS_LABEL",
         options: {
+          display:true,
           filter: false,
           customBodyRender: value => (
             <span style={{ color: '#000000' }}>
@@ -38,19 +39,19 @@ export const bulkMeterReadingData = {
           )
         }
       },
-      {name : "Last Reading Data",labelKey: "WS_LAST_READING_DATE" },
-      {name : "Last Reading",labelKey: "WS_LAST_READING" },
-      {name : "Current Reading",labelKey: "WS_CURRENT_READING" },
+      {name : "Last Reading Date",labelKey: "WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL" },
+      {name : "Last Reading",labelKey: "WS_CONSUMPTION_DETAILS_LAST_READING_LABEL" },
+      {name : "Current Reading",labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL" },
       {
         name: "Consumption",
-        labelKey: "WS_CONSUMPTION",
+        labelKey: "WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL",
         options: {
           display: true
         }
       },
       {
         name: "Current Reading Date",
-        labelKey: "WS_CURRENT_READING_DATE", 
+        labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL", 
         options: {
           display: true
         }

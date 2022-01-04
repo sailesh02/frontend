@@ -64,7 +64,7 @@ import {
     })
 
     try{
-        let response = await httpRequest("post", "/ws-calculator/meterConnection/bulkk/_create", "", [], {meterReadings:apiPayload});
+        let response = await httpRequest("post", "/ws-calculator/meterConnection/bulk/_createe", "", [], {meterReadings:apiPayload});
         if(response){
             dispatch(
                 toggleSnackbar(

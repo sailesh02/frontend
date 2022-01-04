@@ -8,6 +8,7 @@ import { httpRequest } from "../../../../../ui-utils";
 import store from "ui-redux/store";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { resetFieldsBulkImport } from '../../utils/index'
+
 export const updateTableRow = async (state, dispatch) => {
     store.dispatch(showSpinner())
     await renderBulkImportTable(state, dispatch);
@@ -15,7 +16,14 @@ export const updateTableRow = async (state, dispatch) => {
  
 }
 
-const renderBulkImportTable = async (state, dispatch) => {
+export const editTableRow = async (state,dispatch) => {
+  store.dispatch(showSpinner())
+    await renderBulkImportTable(state, dispatch,'edited');
+    store.dispatch(hideSpinner())
+ 
+}
+
+const renderBulkImportTable = async (state, dispatch,edited) => {
   let queryObject = [{ key: "tenantId", value: getTenantIdCommon() }];
   queryObject.push({ key: "isConnectionSearch", value: true });
   let meterReading = get(state.screenConfiguration.preparedFinalObject, "meterReading", {});
@@ -26,7 +34,7 @@ const renderBulkImportTable = async (state, dispatch) => {
   if(isFormValid){
     let finalArray = get(state.screenConfiguration.preparedFinalObject, "meterReadingBulk", []);
     finalArray.push(meterReading[0])
-    showBulkImportTableData(state, dispatch, finalArray)
+    showBulkImportTableData(state, dispatch, finalArray,edited)
   }else{
     dispatch(
         toggleSnackbar(
@@ -41,7 +49,7 @@ const renderBulkImportTable = async (state, dispatch) => {
   }
 }
 
-const showBulkImportTableData = (state, dispatch, bulkData) => {
+const showBulkImportTableData = (state, dispatch, bulkData,edited) => {
   let data = bulkData.map(item => ({
     ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
     ["WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"]: item.billingPeriod,
@@ -59,5 +67,31 @@ const showBulkImportTableData = (state, dispatch, bulkData) => {
   dispatch(prepareFinalObject('meterReadingBulk',bulkData))
   dispatch(prepareFinalObject('meterReading',[]))
   resetFieldsBulkImport(state,dispatch)
+  if(edited){
+    store.dispatch(handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumerNumber",
+      "props.disabled",
+      false
+    ))
+    dispatch(handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.button.children.buttonContainer.children.editButton",
+      "visible",
+      false
+    ))
+    dispatch(handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.button.children.buttonContainer.children.resetButton",
+      "visible",
+      true
+    ))
+    dispatch(handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.button.children.buttonContainer.children.updateButton",
+      "visible",
+      true
+    ))
+  }
 }
 

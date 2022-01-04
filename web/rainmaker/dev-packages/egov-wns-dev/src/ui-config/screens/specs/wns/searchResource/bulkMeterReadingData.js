@@ -36,7 +36,115 @@ const deleteTableData = (value) => {
 }
 
 const editTableData = (value,data) => {
+  let consumerNumber = value && value.rowData && value.rowData.length > 0 && value.rowData[0] || ""
+  let state = store.getState()
+  let meterReadingBulk = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
+  state.screenConfiguration.preparedFinalObject.meterReadingBulk || []
+  let removedConsumerNumber = meterReadingBulk && meterReadingBulk.length > 0 && 
+  meterReadingBulk.filter( data => {
+    return data.connectionNo != consumerNumber
+  }) || []
 
+  let requiredConsumerNumber = meterReadingBulk && meterReadingBulk.length > 0 && 
+  meterReadingBulk.filter( data => {
+    return data.connectionNo == consumerNumber
+  }) || []
+
+  store.dispatch(prepareFinalObject('meterReading',requiredConsumerNumber))
+  store.dispatch(prepareFinalObject('meterReadingBulk',removedConsumerNumber))
+  if(requiredConsumerNumber && requiredConsumerNumber.length > 0){
+    store.dispatch(
+      handleField(
+        "bulkImport",
+        "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumption",
+        "props.value",
+        requiredConsumerNumber[0].consumption
+      )
+    );
+
+    store.dispatch(
+      handleField(
+        "bulkImport",
+        "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumerNumber",
+        "props.value",
+        requiredConsumerNumber[0].connectionNo
+      )
+    );
+    store.dispatch(
+      handleField(
+        "bulkImport",
+        "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.billingPeriod",
+        "props.value",
+        requiredConsumerNumber[0].billingPeriod
+      )
+    );
+  
+    store.dispatch(
+      handleField(
+        "bulkImport",
+        "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.lastReading",
+        "props.value",
+        requiredConsumerNumber[0].lastReading
+      )
+    );
+    store.dispatch(
+      handleField(
+        "bulkImport",
+        "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.lastReadingDate",
+        "props.value",
+        requiredConsumerNumber[0].lastReadingDate
+      )
+    );
+    store.dispatch(
+      handleField(
+        "bulkImport",
+        "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.currentReading",
+        "props.value",
+        requiredConsumerNumber[0].currentReading
+      )
+    );
+    store.dispatch(
+      handleField(
+        "bulkImport",
+        "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.currentReadingDate",
+        "props.value",
+        requiredConsumerNumber[0].currentReadingDate
+      )
+    );
+    store.dispatch(
+      handleField(
+        "bulkImport",
+        "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.meterStatus",
+        "props.value",
+        requiredConsumerNumber[0].meterStatus
+      )
+    );
+  }
+
+  store.dispatch(handleField(
+    "bulkImport",
+    "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumerNumber",
+    "props.disabled",
+    true
+  ))
+  store.dispatch(handleField(
+    "bulkImport",
+    "components.div.children.bulkImportApplication.children.cardContent.children.button.children.buttonContainer.children.editButton",
+    "visible",
+    true
+  ))
+  store.dispatch(handleField(
+    "bulkImport",
+    "components.div.children.bulkImportApplication.children.cardContent.children.button.children.buttonContainer.children.resetButton",
+    "visible",
+    false
+  ))
+  store.dispatch(handleField(
+    "bulkImport",
+    "components.div.children.bulkImportApplication.children.cardContent.children.button.children.buttonContainer.children.updateButton",
+    "visible",
+    false
+  ))
 }
 
 export const bulkMeterReadingData = {

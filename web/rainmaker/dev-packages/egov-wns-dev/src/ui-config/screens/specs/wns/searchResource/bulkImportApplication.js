@@ -9,7 +9,7 @@ import {
     getLabel,
     getDateField
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { updateTableRow } from "./bulkImportFunctions";
+  import { updateTableRow,editTableRow } from "./bulkImportFunctions";
   import { resetFieldsBulkImport, getTodaysDateInYMD } from '../../utils';
   import { getMeterReadingDataBulkImport } from "../../../../../ui-utils/commons"
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -454,7 +454,7 @@ import {
             callBack: resetFieldsBulkImport
           }
         },
-        searchButton: {
+        updateButton: {
           componentPath: "Button",
           gridDefination: {
             xs: 12,
@@ -480,6 +480,35 @@ import {
           onClickDefination: {
             action: "condition",
             callBack: updateTableRow
+          }
+        },
+        editButton:{
+          componentPath: "Button",
+          gridDefination: {
+            xs: 12,
+            sm: 6,
+            // align: "center"
+          },
+          props: {
+            variant: "contained",
+            style: {
+              color: "white",
+              margin: "8px",
+              backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+              borderRadius: "2px",
+              width: "220px",
+              height: "48px"
+            }
+          },
+          children: {
+            buttonLabel: getLabel({
+              labelKey: "WS_UPDATE_READING_BUTTON"
+            })
+          },
+          visible:false,
+          onClickDefination: {
+            action: "condition",
+            callBack: editTableRow
           }
         },
       })

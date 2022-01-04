@@ -1631,6 +1631,15 @@ export const resetFieldsBulkImport = (state, dispatch) => {
 
 }
 
+export const resetTableData = (state,dispatch) => {
+  dispatch(handleField("bulkImport", "components.div.children.bulkMeterReadingData", "props.data", []));
+  dispatch(handleField("bulkImport", "components.div.children.bulkMeterReadingData", "props.rows",
+  0
+  ));
+  dispatch(prepareFinalObject('meterReadingBulk',[]))
+  dispatch(prepareFinalObject('meterReading',[]))
+}
+
 export const getCommonGrayCard = children => {
   return {
     uiFramework: "custom-atoms",

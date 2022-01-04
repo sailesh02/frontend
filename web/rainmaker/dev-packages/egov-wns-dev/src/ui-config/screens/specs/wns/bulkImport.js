@@ -9,6 +9,7 @@ import { handleScreenConfigurationFieldChange as handleField ,unMountScreen } fr
 import "./index.css";
 import { bulkImportApplication } from './searchResource/bulkImportApplication';
 import { getMdmsDataForMeterStatus } from "../../../../ui-utils/commons"
+import {bulkImportFooter} from './applyResource/bulkImportFooter'
 
 const header = getCommonHeader({
   labelKey: "WS_BULK_METER_READING_IMPORT"
@@ -51,7 +52,8 @@ const screenConfig = {
         },
         breakAfterSearch: getBreak(),
         bulkImportApplication,
-        bulkMeterReadingData
+        bulkMeterReadingData,
+        bulkImportFooter
       }
     },
   }

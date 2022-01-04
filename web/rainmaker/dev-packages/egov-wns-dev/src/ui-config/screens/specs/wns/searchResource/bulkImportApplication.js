@@ -11,7 +11,7 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { searchApiCall } from "./functions";
   import { resetFieldsForConnection, getTodaysDateInYMD } from '../../utils';
-  import { getMeterReadingData } from "../../../../../ui-utils/commons"
+  import { getMeterReadingDataBulkImport } from "../../../../../ui-utils/commons"
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { prepareFinalObject, toggleSpinner, showSpinner, hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -41,7 +41,7 @@ import {
     let consumptionDetails = {};
     let date = new Date();
     let status = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.['ws-services-calculation'].MeterStatus[0].code");
-    let checkBillingPeriod = await get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[${cardIndex}]`);
+    let checkBillingPeriod = await get(state, `screenConfiguration.preparedFinalObject.consumptionDetails`);
     try {
         let lastReadingDate = convertEpochToDate(checkBillingPeriod[0].currentReadingDate);
         let lastDF = new Date();
@@ -75,61 +75,11 @@ import {
     dispatch(prepareFinalObject(`meterReading[${cardIndex}].lastReadingDate`,lastReadingDate ))
     dispatch(prepareFinalObject(`meterReading[${cardIndex}].consumption`,consumption ))
     dispatch(prepareFinalObject(`meterReading[${cardIndex}].meterStatus`,status ))
-
-    // dispatch(
-    //     handleField(
-    //         "meter-reading",
-    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.firstContainer.children.billingCont.children.billingPeriod.props",
-    //         "labelName",
-    //         consumptionDetails.billingPeriod
-    //     )
-    // );
-    // dispatch(
-    //     handleField(
-    //         "meter-reading",
-    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.thirdContainer.children.secCont.children.billingPeriod.props",
-    //         "labelName",
-    //         consumptionDetails.lastReading
-    //     )
-    // );
-    // dispatch(
-    //     handleField(
-    //         "meter-reading",
-    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.lastReadingContainer.children.secCont.children.billingPeriod.props",
-    //         "labelName",
-    //         consumptionDetails.lastReadingDate
-    //     )
-    // );
-    // dispatch(
-    //     handleField(
-    //         "meter-reading",
-    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont.children.billingPeriod.props",
-    //         "labelName",
-    //         consumptionDetails.consumption
-    //     )
-    // );
-    // dispatch(
-    //     handleField(
-    //         "meter-reading",
-    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.secondContainer.children.status.props",
-    //         "value",
-    //         status
-    //     )
-    // );
-    // let todayDate = new Date()
-    // dispatch(
-    //     handleField(
-    //         "meter-reading",
-    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
-    //         "value",
-    //         todayDate
-    //     )
-    // );
-    dispatch(prepareFinalObject(`autoPopulatedValues[${cardIndex}]`, consumptionDetails));
+    dispatch(prepareFinalObject(`autoPopulatedValues`, consumptionDetails));
 
 }
 
-  const addMeterReading = async(state,dispatch,cardIndex,tenantId,connectionNo) => {
+  const addMeterReading = async(state,dispatch,tenantId,connectionNo) => {
     dispatch(showSpinner());
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNo },{ key: "searchType",value:"CONNECTION"}];
     let payloadData = await getSearchResults(queryObject);
@@ -184,8 +134,8 @@ import {
             );
             return;
         } else {
-            await getMdmsDataForAutopopulatedBulk(dispatch,cardIndex)
-            await setAutopopulatedvalues(state, dispatch,cardIndex)
+            await getMdmsDataForAutopopulatedBulk(dispatch,connectionNo)
+            await setAutopopulatedvalues(state, dispatch,0)
         }
 
     }  
@@ -212,9 +162,9 @@ import {
         { key: "offset", value: "0" }
     ];
 
-      await getMeterReadingData(dispatch,queryObj,cardIndex)
+      await getMeterReadingDataBulkImport(dispatch,queryObj)
       dispatch(showSpinner());
-      await addMeterReading(state,dispatch,cardIndex,localStorage.getItem('tenant-id'),connectionNo)
+      await addMeterReading(state,dispatch,localStorage.getItem('tenant-id'),connectionNo)
     } catch (e) {
       dispatch(
         toggleSnackbar(
@@ -516,34 +466,20 @@ import {
         },
         required: true,
         jsonPath: "meterReading[0].currentReading",
-        iconObj: {
-          iconName: "keyboard_arrow_right",
-          position: "end",
-          color: "#FE7A51",
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch, fieldInfo) => {
-                const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
-                let lastReading = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues[${cardIndex}].lastReading`);
-                let currentReading = Number(get(state, `screenConfiguration.preparedFinalObject.meterReading[${cardIndex}].currentReading`));
-                let consumption;
-                if (lastReading === 0) {
-                    consumption = currentReading
-                } else {
-                    consumption = (currentReading - lastReading).toFixed(2);
-                }
-                if (currentReading == '' || consumption < 0) {
-                    consumption = ''
-                }
-               dispatch(prepareFinalObject(`meterReading[${cardIndex}].consumption`, consumption))
+        afterFieldChange: async (action, state, dispatch) => {
+            let lastReading = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading`);
+            let currentReading = Number(get(state, `screenConfiguration.preparedFinalObject.meterReading[0].currentReading`));
+            let consumption;
+            if (lastReading === 0) {
+                consumption = currentReading
+            } else {
+                consumption = (currentReading - lastReading).toFixed(2);
             }
-          },
-        },
-        title: {
-          value: "WS_PREFILL_CONSUMPTION_TOOLTIP",
-          key: "WS_PREFILL_CONSUMPTION_TOOLTIP"
-        },
-        infoIcon: "info_circle" 
+            if (currentReading == '' || consumption < 0) {
+                consumption = ''
+            }
+           dispatch(prepareFinalObject(`meterReading[0].consumption`, consumption))
+        }
       }),
       consumption: getTextField({
         disabled:true,

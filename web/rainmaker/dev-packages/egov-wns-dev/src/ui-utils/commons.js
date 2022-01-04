@@ -381,6 +381,7 @@ export const getPropertyResultsWODispatch = async (queryObject) => {
 
 
 export const getConsumptionDetails = async (queryObject, dispatch) => {
+    debugger
     dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
@@ -1552,7 +1553,7 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
     }
 }
 
-export const getMdmsDataForAutopopulatedBulk= async (dispatch,cardIndex,connectionNo) => {
+export const getMdmsDataForAutopopulatedBulk= async (dispatch,connectionNo) => {
     try {
         let queryObject = [
             {
@@ -1596,7 +1597,7 @@ export const getMdmsDataForAutopopulatedBulk= async (dispatch,cardIndex,connecti
                     billingCycle = x.billingCycle
                 }
             })
-            dispatch(prepareFinalObject(`billingCycle[${cardIndex}]`, billingCycle));
+            dispatch(prepareFinalObject(`billingCycle`, billingCycle));
         } catch (e) {
             console.log(e);
         }
@@ -1633,27 +1634,14 @@ export const getMeterReadingData = async (dispatch,queryObj) => {
     }
 };
 
-export const getMeterReadingDataBulkImport = async (dispatch,queryObj,cardIndex) => {
-    let tenantId = getQueryArg(window.location.href, "tenantId")
-    let queryObject = queryObj ? queryObj : [
-        {
-            key: "tenantId",
-            value: tenantId
-        },
-        {
-            key: "connectionNos",
-            value: getQueryArg(window.location.href, "connectionNos")
-        },
-        { key: "offset", value: "0" }
-    ];
-
+export const getMeterReadingDataBulkImport = async (dispatch,queryObj) => {
     try {
-        const response = await getConsumptionDetails(queryObject, dispatch);
+        const response = await getConsumptionDetails(queryObj, dispatch);
         const data = findAndReplace(response, null, "NA");
         if (data && data.meterReadings && data.meterReadings.length > 0) {
-            dispatch(prepareFinalObject(`consumptionDetails[${cardIndex}]`, data.meterReadings));
+            dispatch(prepareFinalObject(`consumptionDetails`, data.meterReadings));
             dispatch(
-                prepareFinalObject(`consumptionDetailsCount[${cardIndex}]`, data.meterReadings.length)
+                prepareFinalObject(`consumptionDetailsCount`, data.meterReadings.length)
             );
         }
     } catch (error) {

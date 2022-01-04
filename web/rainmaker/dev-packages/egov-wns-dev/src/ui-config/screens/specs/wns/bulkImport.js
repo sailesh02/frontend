@@ -15,6 +15,7 @@ import { httpRequest } from "../../../../ui-utils/api";
 import commonConfig from "config/common.js";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { bulkImportApplication } from './searchResource/bulkImportApplication';
+import { getMdmsDataForMeterStatus } from "../../../../ui-utils/commons"
 
 const getMDMSData = (action, dispatch) => {
   const moduleDetails = [
@@ -137,27 +138,16 @@ const commonGetAppStatus=(payload)=>{
   }
 
 }
-const employeeSearchResults = {
+const getData = async (action, state, dispatch) => {
+  await getMdmsDataForMeterStatus(dispatch)
+}
+
+const screenConfig = {
   uiFramework: "material-ui",
   name: "bulkImport",
   beforeInitScreen: (action, state, dispatch) => {
-    // dispatch(handleField("apply",
-    // "components",
-    // "div", {}));
-    // dispatch(handleField("search-preview",
-    // "components",
-    // "div", {}));
-    dispatch(prepareFinalObject('searchConnection',{}))
-    dispatch(prepareFinalObject('searchScreen',{}))
-    dispatch(unMountScreen("apply"));
-    dispatch(unMountScreen("search-preview"));
-    getMDMSData(action, dispatch);
-    resetFieldsForConnection(state, dispatch);
-    resetFieldsForApplication(state, dispatch);
-    getMDMSAppType(dispatch);
-    getMdmsTenantsData(dispatch);
-    dispatch(prepareFinalObject("searchConnection.tenantId", getTenantIdCommon()));
-    dispatch(prepareFinalObject("currentTab", "SEARCH_CONNECTION"));
+    getData(action, state, dispatch).then(() => {
+    });
     return action;
   },
   components: {
@@ -193,5 +183,5 @@ const employeeSearchResults = {
   }
 };
 
-export default employeeSearchResults;
+export default screenConfig;
 

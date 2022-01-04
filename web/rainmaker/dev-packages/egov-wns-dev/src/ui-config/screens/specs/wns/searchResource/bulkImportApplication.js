@@ -10,7 +10,7 @@ import {
     getDateField
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { searchApiCall } from "./functions";
-  import { resetFieldsForConnection, getTodaysDateInYMD } from '../../utils';
+  import { resetFieldsBulkImport, getTodaysDateInYMD } from '../../utils';
   import { getMeterReadingDataBulkImport } from "../../../../../ui-utils/commons"
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { prepareFinalObject, toggleSpinner, showSpinner, hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -251,9 +251,6 @@ import {
               labelPrefix: {
                   moduleName: "ws-services-calculation",
                   masterName: "MeterStatus"
-              },
-              props: {
-                  value: "",
               },
               sourceJsonPath: "meterMdmsData['ws-services-calculation'].MeterStatus",
               jsonPath: "meterReading[0].meterStatus",
@@ -553,7 +550,7 @@ import {
           },
           onClickDefination: {
             action: "condition",
-            callBack: resetFieldsForConnection
+            callBack: resetFieldsBulkImport
           }
         },
         searchButton: {

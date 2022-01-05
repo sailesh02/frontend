@@ -287,29 +287,6 @@ import {
         disabled:true,
         jsonPath: "meterReading[0].billingPeriod"
       }),
-      meterStatus:
-      {
-          ...getSelectField({
-              label : {
-                labelKey: "WS_SELECT_METER_STATUS_LABEL"
-              },
-              placeholder: {
-                  labelKey: "WS_SELECT_METER_STATUS_PLACEHOLDER"
-              },
-              labelPrefix: {
-                  moduleName: "ws-services-calculation",
-                  masterName: "MeterStatus"
-              },
-              sourceJsonPath: "meterMdmsData['ws-services-calculation'].MeterStatus",
-              jsonPath: "meterReading[0].meterStatus",
-              gridDefination: {
-                  xs: 6,
-                  sm: 3
-              },
-              // required: true,              
-              errorMessage: "ERR_INVALID_BILLING_PERIOD",
-          }),
-      },
       lastReadingDate: {
         ...getTextField({
           label: {
@@ -365,6 +342,7 @@ import {
           xs: 12,
           sm: 3
         },
+        errorMessage:'WS_CURRENT_READING_ERROR',
         // required: true,
         jsonPath: "meterReading[0].currentReading",
         afterFieldChange: async (action, state, dispatch) => {
@@ -388,7 +366,8 @@ import {
               consumption
             )
           );
-        }
+        },
+        pattern : /^[0-9]*$/
       }),
       consumption: getTextField({
         disabled:true,
@@ -409,7 +388,30 @@ import {
           labelKey: "WS_CONSUMPTION_DETAILS_CONSUMPTION_READING_PLACEHOLDER"
         },
         jsonPath: "meterReading[0].consumption"
-      }),
+      }),     
+      meterStatus:
+      {
+          ...getSelectField({
+              label : {
+                labelKey: "WS_SELECT_METER_STATUS_LABEL"
+              },
+              placeholder: {
+                  labelKey: "WS_SELECT_METER_STATUS_PLACEHOLDER"
+              },
+              labelPrefix: {
+                  moduleName: "ws-services-calculation",
+                  masterName: "MeterStatus"
+              },
+              sourceJsonPath: "meterMdmsData['ws-services-calculation'].MeterStatus",
+              jsonPath: "meterReading[0].meterStatus",
+              gridDefination: {
+                  xs: 6,
+                  sm: 3
+              },
+              // required: true,              
+              errorMessage: "ERR_INVALID_BILLING_PERIOD",
+          }),
+      },
       currentReadingDate: {
         ...getDateField({
           label: {
@@ -426,6 +428,7 @@ import {
             xs: 12,
             sm: 3
           },
+          errorMessage:'WS_CURRENT_READING_DATE_ERROR',
           jsonPath: "meterReading[0].currentReadingDate",
           props: {
             inputProps: {

@@ -486,7 +486,7 @@ import {
           },
           children: {
             buttonLabel: getLabel({
-              labelKey: "WS_ADD_READING_BUTTON"
+              labelKey: "WS_CONSUMPTION_DETAILS_BUTTON_METER_READING"
             })
           },
           onClickDefination: {
@@ -498,8 +498,8 @@ import {
           componentPath: "Button",
           gridDefination: {
             xs: 12,
-            sm: 6,
-            // align: "center"
+            sm: 12,
+            align: "center"
           },
           props: {
             variant: "contained",
@@ -514,7 +514,7 @@ import {
           },
           children: {
             buttonLabel: getLabel({
-              labelKey: "WS_UPDATE_READING_BUTTON"
+              labelKey: "WS_CONSUMPTION_DETAILS_BUTTON_METER_READING_UPDATE"
             })
           },
           visible:false,

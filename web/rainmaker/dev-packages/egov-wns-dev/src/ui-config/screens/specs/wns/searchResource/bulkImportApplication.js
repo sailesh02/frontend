@@ -187,7 +187,7 @@ import {
             true,
             {
                 labelName: "Data not Found",
-                labelKey: "ERR_N_DATE_FOUND"
+                labelKey: "ERR_NO_DATA_FOUND"
             },
             "warning"
         )

@@ -1,20 +1,14 @@
 import {
-    dispatchMultipleFieldChangeAction,
     getLabel,
-    getCommonContainer,
     convertDateToEpoch
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   
-  import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-  import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  import { getQueryArg, validateFields } from "egov-ui-framework/ui-utils/commons";
+  import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, showSpinner, hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
   import get from "lodash/get";
-  import set from 'lodash/set';
   import { httpRequest } from "../../../../../ui-utils";
   import { getCommonApplyFooter, resetFieldsBulkImport, resetTableData } from "../../utils";
   import "./index.css";
-  import commonConfig from "config/common.js";
 
   const callBackForReset = (state, dispatch) => {
     resetFieldsBulkImport(state,dispatch)
@@ -64,36 +58,36 @@ import {
     })
 
     try{
-        let response = await httpRequest("post", "/ws-calculator/meterConnection/bulk/_createe", "", [], {meterReadings:apiPayload});
+        dispatch(showSpinner())
+        let response = await httpRequest("post", "/ws-calculator/meterConnection/bulk/_create", "", [], {meterReadings:apiPayload});
+        dispatch(hideSpinner())
         if(response){
             dispatch(
                 toggleSnackbar(
                   true,
                   {
-                    labelName: "WS_METER_READING_INSERT_SUCEES",
-                    labelKey: "WS_METER_READING_INSERT_SUCEES"
+                    labelName: "WS_METER_READING_INSERT_SUCCESS",
+                    labelKey: "WS_METER_READING_INSERT_SUCCESS"
                   },
                   "success"
                 )
               ); 
             callBackForReset(state,dispatch)
-
         }
+
     }catch(err){
+      dispatch(hideSpinner())
         dispatch(
             toggleSnackbar(
               true,
               {
-                labelName: err.Message,
-                labelKey:  err.Message
+                labelName: err.message,
+                labelKey:  err.message
               },
               "error"
             )
           ); 
     }
-    
-    console.log("apiPayloadapiPayloadapiPayloadapiPayloadapiPayloadapiPayloadapiPayload",apiPayload)
-
 }
   
   export const bulkImportFooter = getCommonApplyFooter("BOTTOM", {

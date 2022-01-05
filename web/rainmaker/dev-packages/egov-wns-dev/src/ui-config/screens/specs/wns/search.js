@@ -229,7 +229,7 @@ const employeeSearchResults = {
               componentPath: "Button",
               gridDefination: {
                 xs: 12,
-                sm: 3,
+                sm: ifUserRoleExists('WS_CEMP') || ifUserRoleExists('SW_CEMP') ? 3 : 6,
                 align: "right"
               },
               visible: true,

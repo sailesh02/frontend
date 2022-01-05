@@ -223,7 +223,7 @@ export const bulkMeterReadingData = {
         }
       }
     ],
-    title: {labelKey:"WS_HOME_SEARCH_APPLICATION_RESULTS_TABLE_HEADING", labelName:"Search Results for Water & Sewerage Application"},
+    title: {labelKey:"WS_PER_CONNECTION_METER_READING_RESULTS", labelName:"Connection wise Meter Reading Details"},
     options: {
       filter: false,
       download: false,
@@ -233,6 +233,7 @@ export const bulkMeterReadingData = {
       hover: true,
       rowsPerPageOptions: [10, 15, 20]
     },
+    rows:0,
     customSortColumn: {
       column: "Application Date",
       sortingFn: (data, i, sortDateOrder) => {

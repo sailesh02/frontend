@@ -46,7 +46,7 @@ import {
             toggleSnackbar(
               true,
               {
-                labelName: "WS_METER_READING_DETAILS_ERROR",
+                labelName: "Please Enter Atleast One Reading to Proceed",
                 labelKey: "WS_METER_READING_DETAILS_ERROR"
               },
               "warning"

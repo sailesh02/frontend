@@ -1,11 +1,6 @@
-import { getCommonHeader, getBreak, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonHeader, getBreak } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { bulkMeterReadingData } from "./searchResource/bulkMeterReadingData";
-import { localStorageGet, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
-import find from "lodash/find";
-import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
-import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
-import { handleScreenConfigurationFieldChange as handleField ,unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { bulkImportApplication } from './searchResource/bulkImportApplication';
 import { getMdmsDataForMeterStatus } from "../../../../ui-utils/commons"
@@ -25,6 +20,8 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     getData(action, state, dispatch).then(() => {
     });
+    dispatch(prepareFinalObject('meterReadingBulk',[]))
+    dispatch(prepareFinalObject('meterReading',[]))
     return action;
   },
   components: {

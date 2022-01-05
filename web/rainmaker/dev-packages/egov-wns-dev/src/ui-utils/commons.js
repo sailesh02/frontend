@@ -1658,6 +1658,7 @@ export const getMdmsDataForMeterStatus = async (dispatch) => {
         console.log(e);
     }
 };
+
 export const getMdmsDataForAutopopulated = async (dispatch) => {
     try {
         let connectionNo = getQueryArg(window.location.href, "connectionNos");
@@ -1712,9 +1713,71 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
     }
 }
 
-export const getMeterReadingData = async (dispatch) => {
+export const getMdmsDataForAutopopulatedBulk= async (dispatch,connectionNo) => {
+    try {
+        dispatch(showSpinner())
+        let queryObject = [
+            {
+                key: "tenantId",
+                value: getTenantIdCommon()
+            },
+            { key: "offset", value: "0" },
+            { key: "connectionNumber", value: connectionNo }
+        ];
+        const data = await getSearchResults(queryObject)
+        let res = findAndReplace(data, null, "NA")
+        let connectionType = res.WaterConnection[0].connectionType
+        let mdmsBody = {
+            MdmsCriteria: {
+                tenantId: commonConfig.tenantId,
+                "moduleDetails": [
+                    {
+                        "moduleName": "ws-services-masters",
+                        "masterDetails": [
+                            {
+                                "name": "billingPeriod",
+                                "filter": "*"
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+        try {
+            dispatch(showSpinner())
+
+            let payload = await httpRequest(
+                "post",
+                "/egov-mdms-service/v1/_search",
+                "_search",
+                [],
+                mdmsBody
+            );
+
+            let billingCycle;
+            payload.MdmsRes['ws-services-masters'].billingPeriod.map((x) => {
+                if (x.connectionType === connectionType) {
+                    billingCycle = x.billingCycle
+                }
+            })
+            dispatch(hideSpinner())
+
+            dispatch(prepareFinalObject(`billingCycle`, billingCycle));
+        } catch (e) {
+            dispatch(hideSpinner())
+
+            console.log(e);
+        }
+    } catch (e) {
+        dispatch(hideSpinner())
+
+        console.log(e);
+    }
+}
+
+export const getMeterReadingData = async (dispatch,queryObj) => {
     let tenantId = getQueryArg(window.location.href, "tenantId")
-    let queryObject = [
+    let queryObject = queryObj ? queryObj : [
         {
             key: "tenantId",
             value: tenantId
@@ -1733,6 +1796,21 @@ export const getMeterReadingData = async (dispatch) => {
             dispatch(prepareFinalObject("consumptionDetails", data.meterReadings));
             dispatch(
                 prepareFinalObject("consumptionDetailsCount", data.meterReadings.length)
+            );
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getMeterReadingDataBulkImport = async (dispatch,queryObj) => {
+    try {
+        const response = await getConsumptionDetails(queryObj, dispatch);
+        const data = findAndReplace(response, null, "NA");
+        if (data && data.meterReadings && data.meterReadings.length > 0) {
+            dispatch(prepareFinalObject(`consumptionDetails`, data.meterReadings));
+            dispatch(
+                prepareFinalObject(`consumptionDetailsCount`, data.meterReadings.length)
             );
         }
     } catch (error) {

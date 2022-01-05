@@ -1,10 +1,6 @@
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar, showSpinner, hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { fetchBill, findAndReplace, getSearchResults, getSearchResultsForSewerage, getWorkFlowData, serviceConst } from "../../../../../ui-utils/commons";
-import { validateFields } from "../../utils";
-import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection, getTextToLocalMapping } from "../../utils/index";
-import { httpRequest } from "../../../../../ui-utils";
 import store from "ui-redux/store";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { resetFieldsBulkImport } from '../../utils/index'

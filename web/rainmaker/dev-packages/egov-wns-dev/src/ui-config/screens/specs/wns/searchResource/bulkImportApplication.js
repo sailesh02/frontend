@@ -180,6 +180,18 @@ import {
             await setAutopopulatedvalues(state, dispatch,0)
         }
 
+    }
+    if(payloadData && payloadData.WaterConnection && payloadData.WaterConnection.length > 0){
+      dispatch(
+        toggleSnackbar(
+            true,
+            {
+                labelName: "Data not Found",
+                labelKey: "ERR_N_DATE_FOUND"
+            },
+            "warning"
+        )
+    );
     }  
     dispatch(hideSpinner());
   }

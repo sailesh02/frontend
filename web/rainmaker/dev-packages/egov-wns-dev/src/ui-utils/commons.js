@@ -1554,6 +1554,7 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
 
 export const getMdmsDataForAutopopulatedBulk= async (dispatch,connectionNo) => {
     try {
+        dispatch(showSpinner())
         let queryObject = [
             {
                 key: "tenantId",
@@ -1582,6 +1583,8 @@ export const getMdmsDataForAutopopulatedBulk= async (dispatch,connectionNo) => {
             }
         };
         try {
+            dispatch(showSpinner())
+
             let payload = await httpRequest(
                 "post",
                 "/egov-mdms-service/v1/_search",
@@ -1596,11 +1599,17 @@ export const getMdmsDataForAutopopulatedBulk= async (dispatch,connectionNo) => {
                     billingCycle = x.billingCycle
                 }
             })
+            dispatch(hideSpinner())
+
             dispatch(prepareFinalObject(`billingCycle`, billingCycle));
         } catch (e) {
+            dispatch(hideSpinner())
+
             console.log(e);
         }
     } catch (e) {
+        dispatch(hideSpinner())
+
         console.log(e);
     }
 }

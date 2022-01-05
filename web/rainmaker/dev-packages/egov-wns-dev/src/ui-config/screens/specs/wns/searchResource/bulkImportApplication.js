@@ -181,7 +181,7 @@ import {
         }
 
     }
-    if(payloadData && payloadData.WaterConnection && payloadData.WaterConnection.length > 0){
+    if(payloadData && payloadData.WaterConnection && payloadData.WaterConnection.length === 0){
       dispatch(
         toggleSnackbar(
             true,

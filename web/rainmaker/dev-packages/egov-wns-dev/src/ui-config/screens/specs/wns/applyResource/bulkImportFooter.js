@@ -2,7 +2,7 @@ import {
     getLabel,
     convertDateToEpoch
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  
+  import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
   import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, showSpinner, hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
   import get from "lodash/get";
@@ -35,73 +35,64 @@ import {
   }
 
   const callBackForSaveAll = async (state, dispatch) => {
-    let meterReadingBulk = get(state, "screenConfiguration.preparedFinalObject.meterReadingBulk") || [];
-    // if(meterReadingBulk && meterReadingBulk.length == 0){
-    //     dispatch(
-    //         toggleSnackbar(
-    //           true,
-    //           {
-    //             labelName: "Please Enter Atleast One Reading to Proceed",
-    //             labelKey: "WS_METER_READING_DETAILS_ERROR"
-    //           },
-    //           "warning"
-    //         )
-    //       );
-    //       return 
-    // }
-    // let apiPayload = meterReadingBulk && meterReadingBulk.map ((data,index) => {
-    //     return {
-    //         ...data,
-    //         tenantId : getTenantIdCommon(),
-    //         lastReadingDate : getDateFormat (data.lastReadingDate,'last'),
-    //         currentReadingDate : getDateFormat(data.currentReadingDate,'current'),
-    //     }
-    // })
+    let meterReadingBulk = get(state, "screenConfiguration.preparedFinalObject.meterReadingBulk") || [];    
+    if(meterReadingBulk && meterReadingBulk.length == 0){
+        dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Please Enter Atleast One Reading to Proceed",
+                labelKey: "WS_METER_READING_DETAILS_ERROR"
+              },
+              "warning"
+            )
+          );
+          return 
+    }
+    if(window.confirm(getLocaleLabels('WS_BULK_SAVE_CONFIRMATION','WS_BULK_SAVE_CONFIRMATION'))){
+      let apiPayload = meterReadingBulk && meterReadingBulk.map ((data,index) => {
+        return {
+            ...data,
+            tenantId : getTenantIdCommon(),
+            lastReadingDate : getDateFormat (data.lastReadingDate,'last'),
+            currentReadingDate : getDateFormat(data.currentReadingDate,'current'),
+        }
+    })
 
-    // try{
-    //     dispatch(showSpinner())
-    //     let response = await httpRequest("post", "/ws-calculator/meterConnection/bulk/_create", "", [], {meterReadings:apiPayload});
-    //     dispatch(hideSpinner())
-    //     if(response){
-    //         dispatch(
-    //             toggleSnackbar(
-    //               true,
-    //               {
-    //                 labelName: "WS_METER_READING_INSERT_SUCCESS",
-    //                 labelKey: "WS_METER_READING_INSERT_SUCCESS"
-    //               },
-    //               "success"
-    //             )
-    //           ); 
-    //         callBackForReset(state,dispatch)
-    //     }
+    try{
+        dispatch(showSpinner())
+        let response = await httpRequest("post", "/ws-calculator/meterConnection/bulk/_create", "", [], {meterReadings:apiPayload});
+        dispatch(hideSpinner())
+        if(response){
+          let acknowledgementData = response.meterReadings
+          let success = acknowledgementData && acknowledgementData.length > 0 && acknowledgementData.filter( (data) => {
+            return data.status == 'SUCCESS' || data.status == 'Success' || data.status == 'success'
+          }) || []
+          dispatch(
+            setRoute(
+              `/wns/meterReadingAcknowledgment`
+            )
+          );
+          dispatch(prepareFinalObject('acknowledgementData',meterReadingBulk))
+          dispatch(prepareFinalObject('success',success.length))
+          dispatch(prepareFinalObject('totalCount',acknowledgementData.length))
+          callBackForReset(state,dispatch)
+        }
 
-    // }catch(err){
-    //   dispatch(hideSpinner())
-    //     dispatch(
-    //         toggleSnackbar(
-    //           true,
-    //           {
-    //             labelName: err.message,
-    //             labelKey:  err.message
-    //           },
-    //           "error"
-    //         )
-    //       ); 
-    // }
-    let acknowledgementData = meterReadingBulk
-    let success = acknowledgementData && acknowledgementData.length > 0 && acknowledgementData.filter( (data) => {
-      return data.status == 'SUCCESS' || data.status == 'Success' || data.status == 'success'
-    }) || []
-    dispatch(
-      setRoute(
-        `/wns/meterReadingAcknowledgment?purpose=pay&status=success&receiptNumber=${'1111111'}`
-      )
-    );
-    dispatch(prepareFinalObject('acknowledgementData',meterReadingBulk))
-    dispatch(prepareFinalObject('success',success.length))
-    dispatch(prepareFinalObject('totalCount',acknowledgementData.length))
-  
+    }catch(err){
+      dispatch(hideSpinner())
+        dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: err.message,
+                labelKey:  err.message
+              },
+              "error"
+            )
+          ); 
+    }
+  }
 }
   
   export const bulkImportFooter = getCommonApplyFooter("BOTTOM", {

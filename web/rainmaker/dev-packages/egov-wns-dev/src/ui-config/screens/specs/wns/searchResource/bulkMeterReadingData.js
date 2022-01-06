@@ -6,8 +6,10 @@ import store from "ui-redux/store";
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 const deleteTableData = (value) => {
+  if(window.confirm(getLocaleLabels('WS_BULK_DELETE_CONFIRMATION','WS_BULK_DELETE_CONFIRMATION'))){
   let consumerNumber = value && value.rowData && value.rowData.length > 0 && value.rowData[0] || ""
   let state = store.getState()
   let meterReadingBulk = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
@@ -33,6 +35,8 @@ const deleteTableData = (value) => {
   ));
   store.dispatch(prepareFinalObject('meterReadingBulk',removedConsumerNumber))
   store.dispatch(prepareFinalObject('meterReading',[]))
+  }
+  
 }
 
 const editTableData = (value,data) => {
@@ -304,7 +308,7 @@ export const bulkMeterReadingDataAfterSubmit = {
         }
       }
     ],
-    title: {labelKey:"WS_PER_CONNECTION_METER_READING_RESULTS", labelName:"Connection wise Meter Reading Details"},
+    title: {labelKey:"WS_PER_CONNECTION_METER_READING_SUMMARY", labelName:"Connection wise Meter Reading Summary"},
     options: {
       filter: false,
       download: false,

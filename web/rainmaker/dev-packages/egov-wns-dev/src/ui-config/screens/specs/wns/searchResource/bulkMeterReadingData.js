@@ -284,7 +284,7 @@ export const bulkMeterReadingDataAfterSubmit = {
           customBodyRender: value => (
             <LabelContainer
               style={
-                value.includes("APPROVED") ? { color: "green" } : { color: "red" }
+                value.includes("SUCCESS") ? { color: "green" } : { color: "red" }
               }
               labelKey={getStatusKey(value).labelKey}
               labelName={getStatusKey(value).labelName}

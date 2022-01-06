@@ -6,7 +6,7 @@ import store from "ui-redux/store";
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels, getStatusKey } from "egov-ui-framework/ui-utils/commons";
 
 const deleteTableData = (value) => {
   if(window.confirm(getLocaleLabels('WS_BULK_DELETE_CONFIRMATION','WS_BULK_DELETE_CONFIRMATION'))){
@@ -153,7 +153,7 @@ const editTableData = (value,data) => {
 
 export const bulkMeterReadingData = {
   uiFramework: "custom-molecules",
-  moduleName: "egov-wns",
+  // moduleName: "egov-wns",
   componentPath: "Table",
   visible: true,
   props: {
@@ -230,12 +230,18 @@ export const bulkMeterReadingData = {
     title: {labelKey:"WS_PER_CONNECTION_METER_READING_RESULTS", labelName:"Connection wise Meter Reading Details"},
     options: {
       filter: false,
-      download: false,
+      download: true,
       // responsive: "stacked",
       responsive: "scroll",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20]
+      rowsPerPageOptions: [10, 15, 20],
+      downloadOptions:{
+        fileName:'bulk meter data'
+      },
+      onDownload: (row, index) => {
+        debugger
+      },
     },
     rows:0,
     customSortColumn: {
@@ -268,6 +274,22 @@ export const bulkMeterReadingDataAfterSubmit = {
         labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL", 
         options: {
           filter: false,
+        }
+      },
+      {
+        labelName: "Meter Reading Status",
+        labelKey: "WS_CONSUMPTION_DETAILS_METER_READING_STATUS_LABEL",
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <LabelContainer
+              style={
+                value.includes("APPROVED") ? { color: "green" } : { color: "red" }
+              }
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
+          )
         }
       },
       {
@@ -306,14 +328,8 @@ export const bulkMeterReadingDataAfterSubmit = {
         options: {
           display: true
         }
-      },
-      {
-        name: "Meter Reading Status",
-        labelKey: "WS_CONSUMPTION_DETAILS_METER_READING_STATUS_LABEL", 
-        options: {
-          display: true
-        }
       }
+     
     ],
     title: {labelKey:"WS_PER_CONNECTION_METER_READING_SUMMARY", labelName:"Connection wise Meter Reading Summary"},
     options: {

@@ -3,11 +3,12 @@ import {
     getCommonContainer,
     getBreak
   } from "egov-ui-framework/ui-config/screens/specs/utils";
+  import get from "lodash/get";
   import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
   import set from "lodash/set";
-  import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { bulkMeterReadingData } from "./searchResource/bulkMeterReadingData";
+  import { bulkMeterReadingDataAfterSubmit } from "./searchResource/bulkMeterReadingData";
+  import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
   const getCommonApplyFooter = children => {
     return {
@@ -20,99 +21,67 @@ import {
     };
   };
 
-const paymentSuccessFooter = (
-    state,
-    dispatch,
-    status,
-    applicationNumber
-  ) => {
-    const redirectionURL =  "/inbox"; 
-    const bulkReadingURL = "/wns/bulkImport" 
-    return getCommonApplyFooter({
-      goToBulkMeter: {
-        componentPath: "Button",
-        props: {
-          variant: "outlined",
-          color: "primary",
-          style: {
-            // minWidth: "200px",
-            height: "48px",
-            marginRight: "16px"
+  const paymentSuccessFooter = (
+      state,
+      dispatch
+    ) => {
+      const redirectionURL =  "/inbox"; 
+      const bulkReadingURL = "/wns/bulkImport" 
+      return getCommonApplyFooter({
+        goToBulkMeter: {
+          componentPath: "Button",
+          props: {
+            variant: "outlined",
+            color: "primary",
+            style: {
+              height: "48px",
+              marginRight: "16px"
+            }
+          },
+          children: {
+            resetButtonLabel: getLabel({
+              labelName: "WS_GO_TO_BULK_METER",
+              labelKey: "WS_GO_TO_BULK_METER"
+            })
+          },
+          onClickDefination: {
+            action: "page_change",
+            path: bulkReadingURL
+          },
+          visible: true
+        },
+        goToHome: {
+          componentPath: "Button",
+          props: {
+            variant: "contained",
+            color: "primary",
+            style: {
+              height: "48px",
+              marginRight: "45px"
+            }
+          },
+          children: {
+            saveAllLabel: getLabel({
+              labelName: "WS_COMMON_BUTTON_HOME",
+              labelKey: "WS_COMMON_BUTTON_HOME"
+            }),
+          },
+          onClickDefination: {
+            action: "page_change",
+            path: redirectionURL
           }
-        },
-        children: {
-          resetButtonLabel: getLabel({
-            labelName: "WS_GO_TO_BULK_METER",
-            labelKey: "WS_GO_TO_BULK_METER"
-          })
-        },
-        onClickDefination: {
-          action: "page_change",
-          path: bulkReadingURL
-        },
-        visible: true
-      },
-      goToHome: {
-        componentPath: "Button",
-        props: {
-          variant: "contained",
-          color: "primary",
-          style: {
-            // minWidth: "200px",
-            height: "48px",
-            marginRight: "45px"
-          }
-        },
-        children: {
-          saveAllLabel: getLabel({
-            labelName: "WS_COMMON_BUTTON_HOME",
-            labelKey: "WS_COMMON_BUTTON_HOME"
-          }),
-        },
-        onClickDefination: {
-          action: "page_change",
-          path: redirectionURL
         }
-      }
-    //  gotoHome: {
-    //   componentPath: "Button",
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 9,
-    //     align: "right"
-    //   },
-    //   props: {
-    //     variant: "contained",
-    //     color: "primary",
-    //     style: {
-    //       minWidth: "15%",
-    //       height: "48px",
-    //       marginRight: "16px"
-    //     }
-    //   },
-    //   children: {
-    //     downloadReceiptButtonLabel: getLabel({
-    //       labelName: "HOME",
-    //       labelKey: "WS_COMMON_BUTTON_HOME"
-    //     })
-    //   },
-    //   onClickDefination: {
-    //     action: "page_change",
-    //     path: redirectionURL
-    //   }
-    // },
-   
-    });
-  
-};
-  
+    
+      }); 
+  };
+    
   const getAcknowledgementCard = (
     state,
     dispatch,
   ) => {
-    let success = 10
-    let count = 20
-    let Message = `You have Sucessfully Inserted ${success}/${count} Meter Readings!` 
+    let success = get(state, "screenConfiguration.preparedFinalObject.success") || 0;
+    let totalCount = get(state, "screenConfiguration.preparedFinalObject.totalCount") || 0;
+    let Message = `You have Sucessfully Inserted ${success}/${totalCount} Meter Readings!` 
       return {
         header: getCommonContainer({
           header: getCommonHeader({
@@ -142,17 +111,34 @@ const paymentSuccessFooter = (
           }
         },
         breakAfterSearch: getBreak(),
-        bulkMeterReadingData,
+        bulkMeterReadingDataAfterSubmit,
         paymentSuccessFooter: paymentSuccessFooter(
           state,
-          dispatch,
-          "APPROVED",
-          'sssssssss'
+          dispatch
         )
       };
    
   };
   
+  const setBulkMeterData = (state,dispatch) => {
+    let acknowledgementData = get(state, "screenConfiguration.preparedFinalObject.acknowledgementData") || [];
+    if(acknowledgementData && acknowledgementData.length > 0){
+      let data = acknowledgementData.map(item => ({
+        ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
+        ["WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"]: item.billingPeriod,
+        ["WS_SELECT_METER_STATUS_LABEL"]: item.meterStatus,
+        ["WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL"]: item.lastReadingDate,
+        ["WS_CONSUMPTION_DETAILS_LAST_READING_LABEL"]: item.lastReading,
+        ["WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL"]: item.currentReading,
+        ["WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL"]: item.consumption,
+        ["WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"]: item.currentReadingDate
+      }));
+      dispatch(handleField("meterReadingAcknowledgment", "components.div.children.bulkMeterReadingDataAfterSubmit", "props.data", data));
+      dispatch(handleField("meterReadingAcknowledgment", "components.div.children.bulkMeterReadingDataAfterSubmit", "props.rows",
+      acknowledgementData.length
+      )); 
+    }
+  }
   const screenConfig = {
     uiFramework: "material-ui",
     name: "meterReadingAcknowledgment",
@@ -162,12 +148,13 @@ const paymentSuccessFooter = (
         componentPath: "Div",
         props: {
           className: "common-div-css"
-        }
+        },
       }
     },
     beforeInitScreen: (action, state, dispatch) => {
       const cardOne = getAcknowledgementCard(state, dispatch);
-      set(action, "screenConfig.components.div.children", cardOne);  
+      set(action, "screenConfig.components.div.children", cardOne);
+      setBulkMeterData(state,dispatch)  
       return action;
     }
   };

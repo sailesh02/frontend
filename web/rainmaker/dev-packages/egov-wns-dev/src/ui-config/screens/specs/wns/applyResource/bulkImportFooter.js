@@ -89,12 +89,19 @@ import {
     //         )
     //       ); 
     // }
-    dispatch(prepareFinalObject('acknowledgementData',meterReadingBulk))
+    let acknowledgementData = meterReadingBulk
+    let success = acknowledgementData && acknowledgementData.length > 0 && acknowledgementData.filter( (data) => {
+      return data.status == 'SUCCESS' || data.status == 'Success' || data.status == 'success'
+    }) || []
     dispatch(
       setRoute(
         `/wns/meterReadingAcknowledgment?purpose=pay&status=success&receiptNumber=${'1111111'}`
       )
     );
+    dispatch(prepareFinalObject('acknowledgementData',meterReadingBulk))
+    dispatch(prepareFinalObject('success',success.length))
+    dispatch(prepareFinalObject('totalCount',acknowledgementData.length))
+  
 }
   
   export const bulkImportFooter = getCommonApplyFooter("BOTTOM", {

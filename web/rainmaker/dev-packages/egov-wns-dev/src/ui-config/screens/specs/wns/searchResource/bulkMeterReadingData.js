@@ -251,3 +251,84 @@ export const bulkMeterReadingData = {
     }
   }
 };
+
+export const bulkMeterReadingDataAfterSubmit = {
+  uiFramework: "custom-molecules",
+  moduleName: "egov-wns",
+  componentPath: "Table",
+  visible: true,
+  props: {
+    columns: [
+      {
+        name: "Consumer No",
+        labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL", 
+        options: {
+          filter: false,
+        }
+      },
+      {
+        name: "Billing Period",
+        labelKey: "WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL", 
+        options: {
+          filter: false,
+        }
+      },
+      {
+        name: "Meter Status",
+        labelKey: "WS_SELECT_METER_STATUS_LABEL",
+        options: {
+          display:true,
+          filter: false,
+          customBodyRender: value => (
+            <span style={{ color: '#000000' }}>
+              {value}
+            </span>
+          )
+        }
+      },
+      {name : "Last Reading Date",labelKey: "WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL" },
+      {name : "Last Reading",labelKey: "WS_CONSUMPTION_DETAILS_LAST_READING_LABEL" },
+      {name : "Current Reading",labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL" },
+      {
+        name: "Consumption",
+        labelKey: "WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL",
+        options: {
+          display: true
+        }
+      },
+      {
+        name: "Current Reading Date",
+        labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL", 
+        options: {
+          display: true
+        }
+      }
+    ],
+    title: {labelKey:"WS_PER_CONNECTION_METER_READING_RESULTS", labelName:"Connection wise Meter Reading Details"},
+    options: {
+      filter: false,
+      download: false,
+      // responsive: "stacked",
+      responsive: "scroll",
+      selectableRows: false,
+      hover: true,
+      rowsPerPageOptions: [10, 15, 20]
+    },
+    rows:0,
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
+  }
+};

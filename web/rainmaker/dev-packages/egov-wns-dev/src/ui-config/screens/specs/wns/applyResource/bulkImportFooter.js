@@ -9,6 +9,7 @@ import {
   import { httpRequest } from "../../../../../ui-utils";
   import { getCommonApplyFooter, resetFieldsBulkImport, resetTableData } from "../../utils";
   import "./index.css";
+  import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
   const callBackForReset = (state, dispatch) => {
     resetFieldsBulkImport(state,dispatch)
@@ -35,59 +36,65 @@ import {
 
   const callBackForSaveAll = async (state, dispatch) => {
     let meterReadingBulk = get(state, "screenConfiguration.preparedFinalObject.meterReadingBulk") || [];
-    if(meterReadingBulk && meterReadingBulk.length == 0){
-        dispatch(
-            toggleSnackbar(
-              true,
-              {
-                labelName: "Please Enter Atleast One Reading to Proceed",
-                labelKey: "WS_METER_READING_DETAILS_ERROR"
-              },
-              "warning"
-            )
-          );
-          return 
-    }
-    let apiPayload = meterReadingBulk && meterReadingBulk.map ((data,index) => {
-        return {
-            ...data,
-            tenantId : getTenantIdCommon(),
-            lastReadingDate : getDateFormat (data.lastReadingDate,'last'),
-            currentReadingDate : getDateFormat(data.currentReadingDate,'current'),
-        }
-    })
+    // if(meterReadingBulk && meterReadingBulk.length == 0){
+    //     dispatch(
+    //         toggleSnackbar(
+    //           true,
+    //           {
+    //             labelName: "Please Enter Atleast One Reading to Proceed",
+    //             labelKey: "WS_METER_READING_DETAILS_ERROR"
+    //           },
+    //           "warning"
+    //         )
+    //       );
+    //       return 
+    // }
+    // let apiPayload = meterReadingBulk && meterReadingBulk.map ((data,index) => {
+    //     return {
+    //         ...data,
+    //         tenantId : getTenantIdCommon(),
+    //         lastReadingDate : getDateFormat (data.lastReadingDate,'last'),
+    //         currentReadingDate : getDateFormat(data.currentReadingDate,'current'),
+    //     }
+    // })
 
-    try{
-        dispatch(showSpinner())
-        let response = await httpRequest("post", "/ws-calculator/meterConnection/bulk/_create", "", [], {meterReadings:apiPayload});
-        dispatch(hideSpinner())
-        if(response){
-            dispatch(
-                toggleSnackbar(
-                  true,
-                  {
-                    labelName: "WS_METER_READING_INSERT_SUCCESS",
-                    labelKey: "WS_METER_READING_INSERT_SUCCESS"
-                  },
-                  "success"
-                )
-              ); 
-            callBackForReset(state,dispatch)
-        }
+    // try{
+    //     dispatch(showSpinner())
+    //     let response = await httpRequest("post", "/ws-calculator/meterConnection/bulk/_create", "", [], {meterReadings:apiPayload});
+    //     dispatch(hideSpinner())
+    //     if(response){
+    //         dispatch(
+    //             toggleSnackbar(
+    //               true,
+    //               {
+    //                 labelName: "WS_METER_READING_INSERT_SUCCESS",
+    //                 labelKey: "WS_METER_READING_INSERT_SUCCESS"
+    //               },
+    //               "success"
+    //             )
+    //           ); 
+    //         callBackForReset(state,dispatch)
+    //     }
 
-    }catch(err){
-      dispatch(hideSpinner())
-        dispatch(
-            toggleSnackbar(
-              true,
-              {
-                labelName: err.message,
-                labelKey:  err.message
-              },
-              "error"
-            )
-          ); 
-    }
+    // }catch(err){
+    //   dispatch(hideSpinner())
+    //     dispatch(
+    //         toggleSnackbar(
+    //           true,
+    //           {
+    //             labelName: err.message,
+    //             labelKey:  err.message
+    //           },
+    //           "error"
+    //         )
+    //       ); 
+    // }
+    dispatch(prepareFinalObject('acknowledgementData',meterReadingBulk))
+    dispatch(
+      setRoute(
+        `/wns/meterReadingAcknowledgment?purpose=pay&status=success&receiptNumber=${'1111111'}`
+      )
+    );
 }
   
   export const bulkImportFooter = getCommonApplyFooter("BOTTOM", {

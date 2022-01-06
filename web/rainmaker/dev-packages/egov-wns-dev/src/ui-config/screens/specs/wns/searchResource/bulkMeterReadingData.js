@@ -306,6 +306,13 @@ export const bulkMeterReadingDataAfterSubmit = {
         options: {
           display: true
         }
+      },
+      {
+        name: "Meter Reading Status",
+        labelKey: "WS_CONSUMPTION_DETAILS_METER_READING_STATUS_LABEL", 
+        options: {
+          display: true
+        }
       }
     ],
     title: {labelKey:"WS_PER_CONNECTION_METER_READING_SUMMARY", labelName:"Connection wise Meter Reading Summary"},

@@ -131,7 +131,8 @@ import {
         ["WS_CONSUMPTION_DETAILS_LAST_READING_LABEL"]: item.lastReading,
         ["WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL"]: item.currentReading,
         ["WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL"]: item.consumption,
-        ["WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"]: item.currentReadingDate
+        ["WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"]: item.currentReadingDate,
+        ["WS_CONSUMPTION_DETAILS_METER_READING_STATUS_LABEL"]:item.status
       }));
       dispatch(handleField("meterReadingAcknowledgment", "components.div.children.bulkMeterReadingDataAfterSubmit", "props.data", data));
       dispatch(handleField("meterReadingAcknowledgment", "components.div.children.bulkMeterReadingDataAfterSubmit", "props.rows",

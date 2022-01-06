@@ -64,19 +64,19 @@ import {
         let response = await httpRequest("post", "/ws-calculator/meterConnection/bulk/_create", "", [], {meterReadings:apiPayload});
         dispatch(hideSpinner())
         if(response){
+          callBackForReset(state,dispatch)
           let acknowledgementData = response.meterReadings
           let success = acknowledgementData && acknowledgementData.length > 0 && acknowledgementData.filter( (data) => {
             return data.status == 'SUCCESS' || data.status == 'Success' || data.status == 'success'
           }) || []
+          dispatch(prepareFinalObject('acknowledgementData',acknowledgementData))
+          dispatch(prepareFinalObject('success',success.length))
+          dispatch(prepareFinalObject('totalCount',acknowledgementData.length))
           dispatch(
             setRoute(
               `/wns/meterReadingAcknowledgment`
             )
           );
-          dispatch(prepareFinalObject('acknowledgementData',meterReadingBulk))
-          dispatch(prepareFinalObject('success',success.length))
-          dispatch(prepareFinalObject('totalCount',acknowledgementData.length))
-          callBackForReset(state,dispatch)
         }
 
     }catch(err){

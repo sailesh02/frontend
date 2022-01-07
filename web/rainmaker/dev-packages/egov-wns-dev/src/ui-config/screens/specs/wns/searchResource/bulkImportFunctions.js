@@ -9,14 +9,14 @@ export const updateTableRow = async (state, dispatch) => {
     store.dispatch(showSpinner())
     await renderBulkImportTable(state, dispatch);
     store.dispatch(hideSpinner())
- 
+
 }
 
 export const editTableRow = async (state,dispatch) => {
   store.dispatch(showSpinner())
     await renderBulkImportTable(state, dispatch,'edited');
     store.dispatch(hideSpinner())
- 
+
 }
 
 const renderBulkImportTable = async (state, dispatch,edited) => {
@@ -26,7 +26,7 @@ const renderBulkImportTable = async (state, dispatch,edited) => {
   let isFormValid = meterReading && meterReading.length > 0 && meterReading[0].connectionNo && meterReading[0].billingPeriod && 
   meterReading[0].consumption && meterReading[0].consumption != " " && meterReading[0].lastReading && meterReading[0].lastReadingDate &&
   meterReading[0].meterStatus && meterReading[0].currentReading && meterReading[0].currentReadingDate ? true : false
-  
+
   if(isFormValid){
     let finalArray = get(state.screenConfiguration.preparedFinalObject, "meterReadingBulk", []);
     finalArray.push(meterReading[0])
@@ -90,4 +90,3 @@ const showBulkImportTableData = (state, dispatch, bulkData,edited) => {
     ))
   }
 }
-

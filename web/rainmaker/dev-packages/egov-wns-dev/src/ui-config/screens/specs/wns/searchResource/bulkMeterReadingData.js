@@ -6,8 +6,10 @@ import store from "ui-redux/store";
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getLocaleLabels, getStatusKey } from "egov-ui-framework/ui-utils/commons";
 
 const deleteTableData = (value) => {
+  if(window.confirm(getLocaleLabels('WS_BULK_DELETE_CONFIRMATION','WS_BULK_DELETE_CONFIRMATION'))){
   let consumerNumber = value && value.rowData && value.rowData.length > 0 && value.rowData[0] || ""
   let state = store.getState()
   let meterReadingBulk = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
@@ -16,7 +18,7 @@ const deleteTableData = (value) => {
   meterReadingBulk.filter( data => {
     return data.connectionNo != consumerNumber
   }) || []
- 
+
   let data = removedConsumerNumber.map(item => ({
     ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
     ["WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"]: item.billingPeriod,
@@ -33,6 +35,8 @@ const deleteTableData = (value) => {
   ));
   store.dispatch(prepareFinalObject('meterReadingBulk',removedConsumerNumber))
   store.dispatch(prepareFinalObject('meterReading',[]))
+  }
+
 }
 
 const editTableData = (value,data) => {
@@ -78,7 +82,7 @@ const editTableData = (value,data) => {
         requiredConsumerNumber[0].billingPeriod
       )
     );
-  
+
     store.dispatch(
       handleField(
         "bulkImport",
@@ -149,7 +153,7 @@ const editTableData = (value,data) => {
 
 export const bulkMeterReadingData = {
   uiFramework: "custom-molecules",
-  moduleName: "egov-wns",
+  // moduleName: "egov-wns",
   componentPath: "Table",
   visible: true,
   props: {
@@ -218,7 +222,7 @@ export const bulkMeterReadingData = {
                     </div>
                   </div>
                 )
-                    
+
             }
         }
       }
@@ -226,7 +230,111 @@ export const bulkMeterReadingData = {
     title: {labelKey:"WS_PER_CONNECTION_METER_READING_RESULTS", labelName:"Connection wise Meter Reading Details"},
     options: {
       filter: false,
-      download: false,
+      download: true,
+      // responsive: "stacked",
+      responsive: "scroll",
+      selectableRows: false,
+      hover: true,
+      rowsPerPageOptions: [10, 15, 20],
+      downloadOptions:{
+        fileName:'bulk meter data'
+      }
+    },
+    rows:0,
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
+  }
+};
+
+export const bulkMeterReadingDataAfterSubmit = {
+  uiFramework: "custom-molecules",
+  moduleName: "egov-wns",
+  componentPath: "Table",
+  visible: true,
+  props: {
+    columns: [
+      {
+        name: "Consumer No",
+        labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL", 
+        options: {
+          filter: false,
+        }
+      },
+      {
+        labelName: "Meter Reading Status",
+        labelKey: "WS_CONSUMPTION_DETAILS_METER_READING_STATUS_LABEL",
+        options: {
+          filter: false,
+          customBodyRender: value => {
+            return (
+              <LabelContainer
+                style={
+                  value.includes("SUCCESS") ? { color: "green" } : { color: "red" }
+                }
+                labelKey={getStatusKey(value).labelKey}
+                labelName={getStatusKey(value).labelName}
+              />
+            )
+          }
+
+        }
+      },
+      {
+        name: "Billing Period",
+        labelKey: "WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL", 
+        options: {
+          filter: false,
+        }
+      },
+      {
+        name: "Meter Status",
+        labelKey: "WS_SELECT_METER_STATUS_LABEL",
+        options: {
+          display:true,
+          filter: false,
+          customBodyRender: value => (
+            <span style={{ color: '#000000' }}>
+              {value}
+            </span>
+          )
+        }
+      },
+      {name : "Last Reading Date",labelKey: "WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL" },
+      {name : "Last Reading",labelKey: "WS_CONSUMPTION_DETAILS_LAST_READING_LABEL" },
+      {name : "Current Reading",labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL" },
+      {
+        name: "Consumption",
+        labelKey: "WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL",
+        options: {
+          display: true
+        }
+      },
+      {
+        name: "Current Reading Date",
+        labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL", 
+        options: {
+          display: true
+        }
+      }
+
+    ],
+    title: {labelKey:"WS_PER_CONNECTION_METER_READING_SUMMARY", labelName:"Connection wise Meter Reading Summary"},
+    options: {
+      filter: false,
+      download: true,
       // responsive: "stacked",
       responsive: "scroll",
       selectableRows: false,

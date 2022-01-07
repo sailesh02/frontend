@@ -334,7 +334,7 @@ export const bulkMeterReadingDataAfterSubmit = {
     title: {labelKey:"WS_PER_CONNECTION_METER_READING_SUMMARY", labelName:"Connection wise Meter Reading Summary"},
     options: {
       filter: false,
-      download: false,
+      download: true,
       // responsive: "stacked",
       responsive: "scroll",
       selectableRows: false,

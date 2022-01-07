@@ -9,6 +9,7 @@ import {
   import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { bulkMeterReadingDataAfterSubmit } from "./searchResource/bulkMeterReadingData";
   import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import {convertEpochToDate} from '../utils/index'
 
   const getCommonApplyFooter = children => {
     return {
@@ -121,24 +122,27 @@ import {
   };
   
   const setBulkMeterData = (state,dispatch) => {
-    let acknowledgementData = get(state, "screenConfiguration.preparedFinalObject.acknowledgementData") || [];
-    if(acknowledgementData && acknowledgementData.length > 0){
-      let data = acknowledgementData.map(item => ({
-        ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
-        ["WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"]: item.billingPeriod,
-        ["WS_SELECT_METER_STATUS_LABEL"]: item.meterStatus,
-        ["WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL"]: item.lastReadingDate,
-        ["WS_CONSUMPTION_DETAILS_LAST_READING_LABEL"]: item.lastReading,
-        ["WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL"]: item.currentReading,
-        ["WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL"]: item.consumption,
-        ["WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"]: item.currentReadingDate,
-        ["WS_CONSUMPTION_DETAILS_METER_READING_STATUS_LABEL"]:item.status
-      }));
-      dispatch(handleField("meterReadingAcknowledgment", "components.div.children.bulkMeterReadingDataAfterSubmit", "props.data", data));
-      dispatch(handleField("meterReadingAcknowledgment", "components.div.children.bulkMeterReadingDataAfterSubmit", "props.rows",
-      acknowledgementData.length
-      )); 
-    }
+    setTimeout( () => {
+      let acknowledgementData = get(state, "screenConfiguration.preparedFinalObject.acknowledgementData") || [];
+      if(acknowledgementData && acknowledgementData.length > 0){
+        let data = acknowledgementData.map(item => ({
+          ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
+          ["WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"]: item.billingPeriod,
+          ["WS_SELECT_METER_STATUS_LABEL"]: item.meterStatus,
+          ["WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL"]: item.lastReadingDate ? convertEpochToDate(item.lastReadingDate) : '',
+          ["WS_CONSUMPTION_DETAILS_LAST_READING_LABEL"]: item.lastReading,
+          ["WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL"]: item.currentReading,
+          ["WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL"]: item.consumption,
+          ["WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"]: item.currentReadingDate ? convertEpochToDate(item.currentReadingDate) : '',
+          ["WS_CONSUMPTION_DETAILS_METER_READING_STATUS_LABEL"]:item.status
+        }));
+        dispatch(handleField("meterReadingAcknowledgment", "components.div.children.bulkMeterReadingDataAfterSubmit", "props.data", data));
+        dispatch(handleField("meterReadingAcknowledgment", "components.div.children.bulkMeterReadingDataAfterSubmit", "props.rows",
+        acknowledgementData.length
+        )); 
+      }
+    }, 5000)
+  
   }
   const screenConfig = {
     uiFramework: "material-ui",

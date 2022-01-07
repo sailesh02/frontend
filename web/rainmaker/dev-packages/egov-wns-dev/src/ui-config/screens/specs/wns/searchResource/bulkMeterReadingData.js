@@ -238,10 +238,7 @@ export const bulkMeterReadingData = {
       rowsPerPageOptions: [10, 15, 20],
       downloadOptions:{
         fileName:'bulk meter data'
-      },
-      onDownload: (row, index) => {
-        debugger
-      },
+      }
     },
     rows:0,
     customSortColumn: {
@@ -281,15 +278,18 @@ export const bulkMeterReadingDataAfterSubmit = {
         labelKey: "WS_CONSUMPTION_DETAILS_METER_READING_STATUS_LABEL",
         options: {
           filter: false,
-          customBodyRender: value => (
-            <LabelContainer
-              style={
-                value.includes("SUCCESS") ? { color: "green" } : { color: "red" }
-              }
-              labelKey={getStatusKey(value).labelKey}
-              labelName={getStatusKey(value).labelName}
-            />
-          )
+          customBodyRender: value => {
+            return (
+              <LabelContainer
+                style={
+                  value.includes("SUCCESS") ? { color: "green" } : { color: "red" }
+                }
+                labelKey={getStatusKey(value).labelKey}
+                labelName={getStatusKey(value).labelName}
+              />
+            )
+          }
+     
         }
       },
       {

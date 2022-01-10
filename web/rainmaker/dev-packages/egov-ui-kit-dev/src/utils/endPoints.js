@@ -34,7 +34,8 @@ export const CATEGORY = {
 
 export const AUTH = {
   LOGOUT: {
-    URL: "/user/_logout",
+    //URL: "/user/_logout",
+    URL: "/user/v1/_logout",
     ACTION: "_logout",
   },
 };

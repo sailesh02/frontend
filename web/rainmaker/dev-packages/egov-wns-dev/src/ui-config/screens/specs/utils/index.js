@@ -1640,6 +1640,83 @@ export const resetFieldsForConnection = (state, dispatch) => {
   );
 }
 
+export const resetFieldsBulkImport = (state, dispatch) => {
+  dispatch(
+    handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumerNumber",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.billingPeriod",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumption",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.currentReading",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.currentReadingDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.lastReading",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.lastReadingDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "bulkImport",
+      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.meterStatus",
+      "props.value",
+      ""
+    )
+  );
+
+}
+
+export const resetTableData = (state,dispatch) => {
+  dispatch(handleField("bulkImport", "components.div.children.bulkMeterReadingData", "props.data", []));
+  dispatch(handleField("bulkImport", "components.div.children.bulkMeterReadingData", "props.rows",
+  0
+  ));
+  dispatch(prepareFinalObject('meterReadingBulk',[]))
+  dispatch(prepareFinalObject('meterReading',[]))
+}
+
 export const getCommonGrayCard = children => {
   return {
     uiFramework: "custom-atoms",

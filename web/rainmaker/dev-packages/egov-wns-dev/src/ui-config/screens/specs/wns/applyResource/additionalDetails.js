@@ -453,7 +453,7 @@ export const additionDetails = getCommonCard({
         data: [{code:'Y',label:'Yes'},{code:'N',label:'No'}],
         optionValue: "code",
         optionLabel: "label",
-        placeholder: { labelKey: "WS_LABOUR_FEE_PLACEHOLDER" },
+        placeholder: { labelKey: "WS_IS_VOLUMETRIC_CONNECTION_PLACEHOLDER" },
         required: true,
         props: {disabled: process.env.REACT_APP_NAME === "Citizen"},
         gridDefination: { xs: 6, sm: 6 },

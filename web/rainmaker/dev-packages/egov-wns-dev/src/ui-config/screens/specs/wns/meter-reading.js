@@ -159,7 +159,6 @@ const setAutopopulatedvalues = async (state, dispatch) => {
         )
     );
     dispatch(prepareFinalObject("autoPopulatedValues", consumptionDetails));
-
 }
 
 

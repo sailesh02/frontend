@@ -23,12 +23,39 @@ const renderBulkImportTable = async (state, dispatch,edited) => {
   let queryObject = [{ key: "tenantId", value: getTenantIdCommon() }];
   queryObject.push({ key: "isConnectionSearch", value: true });
   let meterReading = get(state.screenConfiguration.preparedFinalObject, "meterReading", {});
-  let isFormValid = meterReading && meterReading.length > 0 && meterReading[0].connectionNo && meterReading[0].billingPeriod && 
-  meterReading[0].consumption && meterReading[0].consumption != " " && meterReading[0].lastReading && meterReading[0].lastReadingDate &&
-  meterReading[0].meterStatus && meterReading[0].currentReading && meterReading[0].currentReadingDate ? true : false
+  
+  let connectionExistInFinalArray = false;
+  let errorMsg = "WS_METER_READING_DETAILS_ERROR";
+  let finalArray = get(state.screenConfiguration.preparedFinalObject, "meterReadingBulk", []);
+
+  
+  for (var i=0; i < finalArray.length; i++) {
+      if (finalArray[i].connectionNo === meterReading[0].connectionNo) {
+        connectionExistInFinalArray = true;
+        errorMsg = "WS_METER_READING_DETAILS_CONSUMER_EXISTS_ERROR";
+          break;
+      }
+  }
+
+var isFormValid = false;
+
+if(meterReading[0].meterStatus != "Working"){
+  isFormValid = true;
+  let currentReadingDate = new Date();
+  currentReadingDate = currentReadingDate.getTime();
+  meterReading[0].currentReadingDate = currentReadingDate;
+  meterReading[0].currentReading = parseFloat(meterReading[0].consumption) + meterReading[0].lastReading;
+
+}else{
+  isFormValid = meterReading && meterReading.length > 0 && meterReading[0].connectionNo && meterReading[0].billingPeriod && 
+  meterReading[0].consumption && meterReading[0].consumption != " " && meterReading[0].lastReadingDate &&
+  meterReading[0].meterStatus && meterReading[0].currentReading && meterReading[0].currentReadingDate && !connectionExistInFinalArray ? true : false
+}
 
   if(isFormValid){
-    let finalArray = get(state.screenConfiguration.preparedFinalObject, "meterReadingBulk", []);
+
+   // let finalArray = get(state.screenConfiguration.preparedFinalObject, "meterReadingBulk", []);
+    
     finalArray.push(meterReading[0])
     showBulkImportTableData(state, dispatch, finalArray,edited)
   }else{
@@ -37,7 +64,7 @@ const renderBulkImportTable = async (state, dispatch,edited) => {
           true,
           {
             labelName: "WS_METER_READING_DETAILS_ERROR",
-            labelKey: "WS_METER_READING_DETAILS_ERROR"
+            labelKey: errorMsg
           },
           "warning"
         )

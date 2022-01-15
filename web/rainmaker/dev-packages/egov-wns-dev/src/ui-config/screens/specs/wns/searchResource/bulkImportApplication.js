@@ -404,6 +404,68 @@ export const bulkImportApplication = getCommonCard({
             },
             sourceJsonPath: "meterMdmsData['ws-services-calculation'].MeterStatus",
             jsonPath: "meterReading[0].meterStatus",
+            afterFieldChange: async (action, state, dispatch) => {
+              console.log(action, "Nero Action")
+              if(action.value != "Working"){
+                  dispatch(
+                    handleField(
+                      "bulkImport",
+                      "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumption",
+                      "props.disabled",
+                      false
+                    )
+              );
+
+              dispatch(
+                handleField(
+                  "bulkImport",
+                  "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.currentReading",
+                  "props.disabled",
+                  true
+                )
+          );
+
+          dispatch(
+            handleField(
+              "bulkImport",
+              "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.currentReadingDate",
+              "props.disabled",
+              true
+            )
+      );
+
+
+              }else{
+                dispatch(
+                  handleField(
+                    "bulkImport",
+                    "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumption",
+                    "props.disabled",
+                    true
+                  )
+            );
+                dispatch(
+                  handleField(
+                    "bulkImport",
+                    "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.currentReading",
+                    "props.disabled",
+                    false
+                  )
+            );
+
+
+            dispatch(
+              handleField(
+                "bulkImport",
+                "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.currentReadingDate",
+                "props.disabled",
+                false
+              )
+        );
+              }
+            
+              
+            },
             gridDefination: {
                 xs: 6,
                 sm: 3
@@ -434,6 +496,27 @@ export const bulkImportApplication = getCommonCard({
           inputProps: {
             max: getTodaysDateInYMD()
           }
+        },
+        afterFieldChange: async (action, state, dispatch) => {
+          let billingPeriod = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod`);
+          let selectedCurrentReadingDate = get(state, `screenConfiguration.preparedFinalObject.meterReading[0].currentReadingDate`);
+
+      if(typeof selectedCurrentReadingDate == "string"){
+          const[selectedCurrentReadyingYear, selectedCurrentReadingMonth, selectedCurrentReadingDay] = selectedCurrentReadingDate.split("-");
+          selectedCurrentReadingDate = `${selectedCurrentReadingDay}/${selectedCurrentReadingMonth}/${selectedCurrentReadyingYear}`;
+         let updatedBillingPeriod = billingPeriod.split("-")[0]+"- "+selectedCurrentReadingDate;
+
+          dispatch(
+            handleField(
+              "bulkImport",
+              "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.billingPeriod",
+              "props.value",
+              updatedBillingPeriod
+            )
+          );
+
+            }
+          
         }
       })
     }

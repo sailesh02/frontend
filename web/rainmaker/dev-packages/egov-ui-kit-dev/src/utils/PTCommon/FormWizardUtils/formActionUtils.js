@@ -10,13 +10,33 @@ import { get } from "lodash";
 import store from "ui-redux/store";
 import { getPurpose, PROPERTY_FORM_PURPOSE } from "./formUtils";
 
+// const getFinancialYear = () => {
+//     let financialYear = ""
+//     let currentYear = new Date().getFullYear()
+//     let currentYearInString = currentYear.toString()
+//     let lastTwoDigits = currentYearInString.substr(-2);
+//     financialYear = `${currentYear.toString()}-${(Number(lastTwoDigits) + 1).toString()}`
+//     return financialYear
+// }
+
 const getFinancialYear = () => {
-    let financialYear = ""
-    let currentYear = new Date().getFullYear()
-    let currentYearInString = currentYear.toString()
-    let lastTwoDigits = currentYearInString.substr(-2);
-    financialYear = `${currentYear.toString()}-${(Number(lastTwoDigits) + 1).toString()}`
-    return financialYear
+    var today = new Date();
+    
+    //get current month
+    var curMonth = today.getMonth();
+    
+    var fiscalYr = "";
+    if (curMonth > 3) { //
+        var nextYr1 = (today.getFullYear() + 1).toString();
+        fiscalYr = today.getFullYear().toString() + "-" + nextYr1.charAt(2) + nextYr1.charAt(3);
+    } else {
+        
+        var nextYr2 = today.getFullYear().toString();
+        console.log(nextYr2)
+        fiscalYr = (today.getFullYear() - 1).toString() + "-" + nextYr2.charAt(2) + nextYr2.charAt(3);
+    }
+
+    return fiscalYr;
 }
 
 export const assessProperty = async (action, props) => {

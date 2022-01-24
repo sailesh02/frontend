@@ -726,7 +726,7 @@ export const downloadReceipt = (receiptQueryString) => {
 
 const download =(Payments,tenant)=>{
   const queryStr = [
-    { key: "key", value: "consolidatedreceipt" },
+    { key: "key", value: "pt-consolidatedreceipt" },
     { key: "tenantId", value:tenant }
   ]
   httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })

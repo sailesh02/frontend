@@ -93,13 +93,13 @@ const getTradeTypeSubtypeDetails = payload => {
   return tradeUnitDetails;
 };
 
-const searchResults = async (action, state, dispatch, applicationNo) => {
+const searchResults = async (action, state, dispatch, applicationNo, tenantId) => {
+  
   let queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNo }
   ];
   let payload = await getSearchResults(queryObject);
-
   headerSideText = getHeaderSideText(
     get(payload, "MarriageRegistrations[0].status"),
     get(payload, "MarriageRegistrations[0].licenseNumber")
@@ -207,7 +207,7 @@ const titlebar = getCommonContainer({
   })
 });
 
-const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
+const beforeInitFn = async (action, state, dispatch, applicationNumber, tenantId) => {
   dispatch(unMountScreen("search"));
   dispatch(unMountScreen("apply"));
   loadUlbLogo(tenantId);
@@ -215,7 +215,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   //Search details for given application Number
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&
-      (await searchResults(action, state, dispatch, applicationNumber));
+      (await searchResults(action, state, dispatch, applicationNumber, tenantId));
     //await searchResults(action, state, dispatch, applicationNumber)
     //check for Apply for Correction flow
     const licenseNumber = get(
@@ -741,7 +741,7 @@ const screenConfig = {
       "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
       applicationNumber
     );
-    beforeInitFn(action, state, dispatch, applicationNumber);
+    beforeInitFn(action, state, dispatch, applicationNumber, tenantId);
     return action;
   },
 

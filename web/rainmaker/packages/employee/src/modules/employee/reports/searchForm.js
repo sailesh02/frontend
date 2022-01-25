@@ -15,14 +15,16 @@ import { getResultUrl } from "./commons/url";
 import commonConfig from "config/common.js";
 import { getTenantId, setReturnUrl, localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-
+//import {LoadingIndicator} from "../../../components"
+import  LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
 class ShowForm extends Component {
   state = {
-    searchBtnText: <LabelContainer labelName="APPLY" labelKey="REPORTS_SEARCH_APPLY_LABEL" />,
-    filterApplied: false,
-    getResults: false,
-    dateError: "",
-  };
+      searchBtnText: <LabelContainer labelName="APPLY" labelKey="REPORTS_SEARCH_APPLY_LABEL" />,
+      filterApplied: false,
+      getResults: false,
+      dateError: ""
+    };
+  
 
   toDateObj = (dateStr) => {
     var parts = dateStr.match(/(\d{4})\-(\d{2})\-(\d{2})/);
@@ -406,7 +408,8 @@ class ShowForm extends Component {
       pushReportHistory,
       clearReportHistory,
       decreaseReportIndex,
-      toggleSnackbarAndSetText
+      toggleSnackbarAndSetText,
+      setLoader
     } = this.props;
     let searchParams = [];
     var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
@@ -424,6 +427,7 @@ class ShowForm extends Component {
         "error");
       return;
     }
+    setLoader(true);
     if (!isDrilldown) {
       const displayOnlyFields = this.getDisplayOnlyFields(metaData);
 
@@ -530,11 +534,15 @@ class ShowForm extends Component {
             setReportResult(response);
             showTable(true);
             setFlag(1);
-          },
+            setLoader(false)
+                      },
           function (err) {
             showTable(false);
             alert("Something went wrong or try again later");
-          }
+          },
+
+          
+
         );
     } else {
       if (_.isEmpty(JSON.parse(localStorageGet("searchCriteria")))) {
@@ -548,6 +556,7 @@ class ShowForm extends Component {
 
               showTable(true);
               setFlag(1);
+              setLoader(false)
             },
             function (err) {
               showTable(false);
@@ -571,6 +580,7 @@ class ShowForm extends Component {
 
               showTable(true);
               setFlag(1);
+              setLoader(false)
             },
             function (err) {
               showTable(false);
@@ -653,10 +663,11 @@ class ShowForm extends Component {
   };
 
   render() {
-    let { buttonText, metaData, reportIndex, searchForm } = this.props;
+    let { buttonText, metaData, reportIndex, searchForm, loader } = this.props;
     let { search } = this;
     return (
       <div className="">
+       {loader && <LoadingIndicator />}
         {metaData && metaData.reportDetails && (
           <form
             onSubmit={(e) => {
@@ -725,6 +736,7 @@ class ShowForm extends Component {
 const mapStateToProps = (state) => {
   const labels = get(state.app, "localizationLabels")
   return {
+    loader: state.report.showLoader,
     searchForm: state.formtemp.form,
     fieldErrors: state.formtemp.fieldErrors,
     isFormValid: state.formtemp.isFormValid,
@@ -799,6 +811,10 @@ const mapDispatchToProps = (dispatch) => ({
   },
   decreaseReportIndex: () => {
     dispatch({ type: "DECREASE_REPORT_INDEX" });
+  },
+
+  setLoader: (flag) => {
+    dispatch({ type: "SET_REPORT_LOADER", flag });
   },
 });
 

@@ -486,12 +486,16 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
 
       console.log(activeIndex, "Nero active step")
+      if(getQueryArg(window.location.href, "action") != 'edit'){
       if ((activeIndex === 4 || activeIndex === 1)) {
 
         action = activeIndex === 4 ? "APPLY" : "INITIATE";
 
 
       }
+    }else if(activeIndex === 4){
+      action = "FORWARD"
+    }
 
       if (isCorrection && activeIndex === 3) {
         let renewalSearchQueryObject = [

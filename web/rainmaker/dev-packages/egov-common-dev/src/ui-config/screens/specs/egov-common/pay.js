@@ -140,6 +140,9 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
             dispatch(handleField("pay", raidButtonComponentPath, "props.value", "partial_amount"));
         }
     }
+    if (get(totalAmount, "totalAmount") === 0) {
+    dispatch(handleField("pay", "components.div.children.footer.children.generateReceipt", "props.disabled", true));
+    }
 };
 
 

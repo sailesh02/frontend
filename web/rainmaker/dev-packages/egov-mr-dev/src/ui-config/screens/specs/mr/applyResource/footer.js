@@ -100,7 +100,10 @@ export const callBackForNext = async (state, dispatch) => {
     "action"
   );
   console.log(mrgObj, "Nero mrgObje")
-
+  let appStatus = get(
+    mrgObj[0],
+    "status"
+  )
   if (activeStep === 0) {
     //Bride and Groom Details
 
@@ -304,8 +307,9 @@ let mrgDateObj = null;
 
 
     if (isFormValid) {
-      isFormValid = await applyTradeLicense(state, dispatch, activeStep);
-
+      if(userAction != 'edit'){
+        isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+      }
       if (!isFormValid) {
         hasFieldToaster = false;
       }
@@ -356,8 +360,9 @@ let mrgDateObj = null;
       //     true
       //   )
       // );
-
+      if(userAction != 'edit'){
       isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+      }
       if (isFormValid) {
         if (!applicationNoInUrl) {
           dispatch(prepareFinalObject("MarriageRegistrations[0].coupleDetails[0].groom.witness.country", "INDIA"));
@@ -398,7 +403,9 @@ let mrgDateObj = null;
 
 
     if (isFormValid) {
+      if(userAction != 'edit'){
       isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+      }
       if (!isFormValid) {
         hasFieldToaster = false;
       }

@@ -9,6 +9,7 @@ const defaultState = {
   tableSelectionData: [],
   reportHistory: [],
   reportIndex: 0,
+  showLoader: false
 };
 
 export default (state = defaultState, action) => {
@@ -89,6 +90,12 @@ export default (state = defaultState, action) => {
         ...state,
         tableSelectionData: action.tableSelectionData,
       };
+
+    case "SET_REPORT_LOADER":
+      return {
+        ...state,
+        showLoader: action.flag,
+      };  
 
     default:
       return state;

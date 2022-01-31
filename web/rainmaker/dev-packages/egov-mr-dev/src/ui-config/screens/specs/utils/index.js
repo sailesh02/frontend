@@ -517,6 +517,7 @@ export const calculateBill = async queryObject => {
 };
 export const getReceipt = async queryObject => {
   try {
+    console.log(getPaymentSearchAPI('MR'), "getPaymentSearchAPI('MR') Nero")
     const response = await httpRequest(
       "post",
       getPaymentSearchAPI('MR'),
@@ -664,7 +665,6 @@ export const getMdmsData = async queryObject => {
 };
 
 export const getDetailsFromProperty = async (state, dispatch) => {
-  console.log("Nero getDetailsFromProperty")
   try {
     const propertyId = get(
       state.screenConfiguration.preparedFinalObject,
@@ -1409,8 +1409,15 @@ const isApplicationPaid = (currentStatus, workflowCode) => {
   if (!isEmpty(businessServiceData)) {
     const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
     const states = tlBusinessService && tlBusinessService.length > 0 && tlBusinessService[0].states;
+    
     for (var i = 0; i < states.length; i++) {
       if (states[i].state === currentStatus) {
+        
+        break;
+      }
+      
+      if (currentStatus == "CITIZENACTIONPENDINGATDOCVERIFICATION") {
+        
         break;
       }
       if (
@@ -1467,8 +1474,7 @@ export const createEstimateData = async (
   const currentStatus = LicenseData.status;
   const isPAID = isApplicationPaid(currentStatus, workflowCode);
   const fetchBillResponse = await getBill(getBillQueryObj);
-  const payload = isPAID
-    ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
+  const payload = isPAID ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
     : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
   let estimateData = payload
     ? isPAID
@@ -1482,6 +1488,7 @@ export const createEstimateData = async (
       )
       : payload && getEstimateData(payload, false, LicenseData)
     : [];
+
   estimateData = estimateData || [];
   set(
     estimateData,

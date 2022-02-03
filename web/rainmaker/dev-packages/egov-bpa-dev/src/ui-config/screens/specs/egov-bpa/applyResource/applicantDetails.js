@@ -337,7 +337,7 @@ const institutionInformation = () => {
         errorMessage: "Invalid Name",
         required: true,
         jsonPath:
-          "BPA.landInfo.additionalDetail.institutionName",
+          "BPA.landInfo.additionalDetails.institutionName",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -357,7 +357,7 @@ const institutionInformation = () => {
         pattern: getPattern("MobileNo"),
         errorMessage: "Invalid Number",
         jsonPath:
-          "BPA.landInfo.additionalDetail.telephoneNumber",
+          "BPA.landInfo.additionalDetails.telephoneNumber",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -396,7 +396,7 @@ const institutionInformation = () => {
         pattern: getPattern("Name"),
         errorMessage: "Invalid Designation Name",
         jsonPath:
-          "BPA.landInfo.additionalDetail.institutionDesignation",
+          "BPA.landInfo.additionalDetails.institutionDesignation",
         gridDefination: {
           xs: 12,
           sm: 12,

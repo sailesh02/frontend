@@ -480,6 +480,28 @@ const callBackForNext = async (state, dispatch) => {
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
       return
     }
+
+    if (bpaObj && (bpaObj.landInfo.ownershipCategory.includes("INSTITUTIONALGOVERNMENT") || bpaObj.landInfo.ownershipCategory.includes("INSTITUTIONALPRIVATE") )) {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.applicantSummary",
+          "visible",
+          false
+        )
+      );
+    
+    }else{
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.institutionSummary",
+        "visible",
+        false
+      )
+    );
+  }
+
   }
 
   if (activeStep !== 4) {
@@ -576,7 +598,17 @@ const callBackForNext = async (state, dispatch) => {
             };
             dispatch(toggleSnackbar(true, errorMessage, "warning"));
           }
-        }
+        } else{
+              let response = await createUpdateBpaApplication(
+                state,
+                dispatch,
+                "INITIATE"
+              );
+              responseStatus = get(response, "status", "");
+              responseStatus === "success" && changeStep(state, dispatch);
+              prepareDocumentsUploadData(state, dispatch);
+            }
+          
         let applicationNumber = get(
           state.screenConfiguration.preparedFinalObject,
           "BPA.applicationNo"

@@ -38,7 +38,7 @@ import {
 } from "../utils/index";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved } from "./searchResource/citizenFooter";
-import { applicantSummary } from "./summaryResource/applicantSummary";
+import { applicantSummary, institutionSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
@@ -893,6 +893,27 @@ const setSearchResponse = async (
     );
   }
 
+  if (response && response.BPA["0"] && (response.BPA["0"].landInfo.ownershipCategory.includes("INSTITUTIONALGOVERNMENT") || response.BPA["0"].landInfo.ownershipCategory.includes("INSTITUTIONALPRIVATE") )) {
+        dispatch(
+          handleField(
+            "search-preview",
+            "components.div.children.body.children.cardContent.children.applicantSummary",
+            "visible",
+            false
+          )
+        );
+      
+      }else{
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.institutionSummary",
+          "visible",
+          false
+        )
+      );
+    }
+
 };
 
 export const getNocList = async (state,dispatch,filter) => {
@@ -1212,6 +1233,7 @@ const screenConfig = {
           basicSummary: basicSummary,
           scrutinySummary: scrutinySummary,
           applicantSummary: applicantSummary,
+          institutionSummary: institutionSummary,
           additionalDocsInformation: additionalDocsInformation,
           previewSummary: previewSummary,
           nocDetailsApply: nocDetailsSearchBPA,

@@ -119,7 +119,9 @@ export const searchResults = {
         name: "Application No", labelKey: "BPA_COMMON_TABLE_COL_APP_NO"
       },
       {
-        name: "Owner Name", labelKey: "BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"
+        name: "Owner Name", labelKey: "BPA_COMMON_TABLE_COL_OWN_NAME_LABEL", options: {
+          display: false
+        }
       },
       {
         name: "Application Date", labelKey: "BPA_COMMON_TABLE_COL_APP_DATE_LABEL"

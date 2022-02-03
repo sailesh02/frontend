@@ -5,7 +5,7 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { basicSummary } from "./summaryResource/basicSummary";
 import { scrutinySummary } from './summaryResource/scrutinySummary';
-import { applicantSummary } from "./summaryResource/applicantSummary";
+import { applicantSummary, institutionSummary } from "./summaryResource/applicantSummary";
 import { applyDocSummary } from "./summaryResource/applyDocSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocDetailsApplyBPA } from "./noc";
@@ -19,6 +19,7 @@ export const bpaSummaryDetails = getCommonCard({
   basicSummary: basicSummary,
   scrutinySummary: scrutinySummary,
   applicantSummary: applicantSummary,
+  institutionSummary: institutionSummary,
   applyDocSummary: applyDocSummary,
   nocDetailsApply: nocDetailsApplyBPA
 });

@@ -240,7 +240,7 @@ export const institutionSummary = getCommonGrayCard({
         labelKey: "BPA_INSTITUTION_TYPE_LABEL"
       },
       {
-        jsonPath: "BPA.landInfo.ownerShipType",
+        jsonPath: "BPA.landInfo.ownershipCategory",
         callBack: value => {
           return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(
             value
@@ -255,7 +255,7 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "BPA.landInfo.additionalDetail.institutionName",
+          "BPA.landInfo.additionalDetails.institutionName",
           callBack: checkValueForNA
       }
     ),
@@ -266,7 +266,7 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "BPA.landInfo.additionalDetail.telephoneNumber",
+          "BPA.landInfo.additionalDetails.telephoneNumber",
           callBack: checkValueForNA
       }
     ),
@@ -287,7 +287,7 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "BPA.landInfo.additionalDetail.institutionDesignation",
+          "BPA.landInfo.additionalDetails.institutionDesignation",
           callBack: checkValueForNA
       }
     ),

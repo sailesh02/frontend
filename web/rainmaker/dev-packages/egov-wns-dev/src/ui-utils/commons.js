@@ -444,11 +444,12 @@ export const validateConnHolderDetails = (holderData) => {
     if (holderData.connectionHolders == null) {
         return true
     } else if (holderData.connectionHolders && holderData.connectionHolders.length > 0) {
+        let mobileNoValidationPattern = /^[6789][0-9]{9}$/;
         let holderOwners = holderData.connectionHolders;
         let valid = [];
         for (let i = 0; i < holderOwners.length; i++) {
             if (
-                holderOwners[i].hasOwnProperty("mobileNumber") && holderOwners[i]['mobileNumber'] !== undefined && holderOwners[i]["mobileNumber"] !== "" &&
+                holderOwners[i].hasOwnProperty("mobileNumber") && holderOwners[i]['mobileNumber'] !== undefined && holderOwners[i]["mobileNumber"] !== "" && holderOwners[i]["mobileNumber"].match(mobileNoValidationPattern) &&
                 holderOwners[i].hasOwnProperty("name") && holderOwners[i]['name'] !== undefined && holderOwners[i]["name"] !== "" &&
                 holderOwners[i].hasOwnProperty("fatherOrHusbandName") && holderOwners[i]['fatherOrHusbandName'] !== undefined && holderOwners[i]["fatherOrHusbandName"] !== "" &&
                 holderOwners[i].hasOwnProperty("correspondenceAddress") && holderOwners[i]['correspondenceAddress'] !== undefined && holderOwners[i]["correspondenceAddress"] !== "" &&

@@ -191,11 +191,34 @@ const header = getCommonContainer({
 
 });
 
+const searchResults = async (dispatch) => {
+    let connectionNos = getQueryArg(window.location.href,"connectionNos")  
+    let tenantId = getQueryArg(window.location.href,"tenantId")
+    let queryObject = [
+        { key: "tenantId", value: tenantId },
+        { key: "connectionNumber", value: connectionNos },
+        { key: "searchType",value:"CONNECTION"}
+      ];
+      let payloadData = await getSearchResults(
+        queryObject,
+        false
+      );  
+
+if (
+    payloadData !== null &&
+    payloadData !== undefined &&
+    payloadData.WaterConnection.length > 0
+  ) {
+    dispatch(prepareFinalObject("DataForMeterReading", payloadData.WaterConnection))
+  }
+}
+
 const screenConfig = {
     uiFramework: "material-ui",
     name: "meter-reading",
     beforeInitScreen: (action, state, dispatch) => {
         getMeterReadingData(dispatch);
+        searchResults(dispatch);
         set(
             action,
             "screenConfig.components.div.children.header.children.applicationNumber.props.number", getQueryArg(window.location.href, "connectionNos"))

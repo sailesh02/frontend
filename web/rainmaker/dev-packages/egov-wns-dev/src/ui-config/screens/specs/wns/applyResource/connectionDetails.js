@@ -1,5 +1,5 @@
 import { getCommonCard, getPattern, getCommonSubHeader, getTextField, getSelectField, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 // export const getGenderRadioButton = {
 //   uiFramework: "custom-containers",
 //   componentPath: "RadioGroupContainer",
@@ -74,11 +74,15 @@ export const OwnerInfoCard = getCommonCard({
     numberOfToilets: getTextField({
       label: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS" },
       placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS_PLACEHOLDER" },
-      required: true,
+      //required: true,
       gridDefination: { xs: 12, sm: 6 },
       jsonPath: "applyScreen.proposedToilets",
       pattern: /^[0-9]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     })
-  })
+  },{
+    style:getQueryArg(window.location.href, "mode") === "MODIFY"? {"pointer-events":"none", "cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
+  
+  }
+  )
 });

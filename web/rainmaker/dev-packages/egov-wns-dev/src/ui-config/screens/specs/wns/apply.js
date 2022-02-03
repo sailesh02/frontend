@@ -358,6 +358,17 @@ export const getData = async (action, state, dispatch) => {
             tenantId.toUpperCase()
           )
         );
+
+
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable.props`,
+            "disabled",
+            true
+          )
+        );
+
       }
 
       dispatch(

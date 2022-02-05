@@ -449,7 +449,7 @@ export const additionDetails = getCommonCard({
           sm: 6
         }
       }),
-    }, 
+    },
     {
       style:getQueryArg(window.location.href, "mode") === "MODIFY"? {"pointer-events":"none", "cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
     
@@ -625,7 +625,7 @@ export const additionDetails = getCommonCard({
           label: {
             name: "Relationship",
             key: "WS_IS_DAILY_OR_MONTHLY_COMSUMPTION"
-
+      
           },
         buttons: [
           {
@@ -800,7 +800,6 @@ export const additionDetails = getCommonCard({
         props: {
           disabled: process.env.REACT_APP_NAME === "Citizen",
           inputProps: {
-            //min: getTodaysDateInYMD()
             min: getCurrentDate()
           }
         }

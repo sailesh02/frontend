@@ -26,7 +26,6 @@ import { convertEpochToDateAndHandleNA } from '../../utils';
 //     callBack: convertEpochToDateAndHandleNA
 //   }
 // )};
-
 const getCurrentDate = () => {
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');

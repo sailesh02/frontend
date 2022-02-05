@@ -163,12 +163,12 @@ import {
         sm: 6
       }
     }),
-  },
-  {
-    style:getQueryArg(window.location.href, "mode") === "MODIFY"? {"pointer-events":"none", "cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
-  
   }
+  // ,
+  // {
+  //   style:getQueryArg(window.location.href, "mode") === "MODIFY"? {"pointer-events":"none", "cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
   
+  // }
   );
   // const connHolderDetail = getCommonContainer({
   //   mobileNumber: getTextField({

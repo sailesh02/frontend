@@ -580,9 +580,10 @@ export const meterReadingEditable =
                         let meterReadingRatio = get(state, "screenConfiguration.preparedFinalObject.DataForMeterReading[0].additionalDetails.meterReadingRatio");
                         
                         let multipier = meterReadingRatio.split(":")[1];
+                        
                         let consumption;
                         if (lastReading === 0) {
-                            consumption = currentReading;
+                            consumption = currentReading
                             consumption = consumption*multipier;
                         } else {
                             consumption = (currentReading - lastReading).toFixed(2);
@@ -632,46 +633,46 @@ export const meterReadingEditable =
                         })
                     },
                 },
-                    currentReadingDate: {
-                        ...getDateField({
-                            placeholder: {
-                                labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"
-                            },
-                            gridDefination: {
-                                xs: 6,
-                                sm: 3
-                            },
-                            required: true,
-                            pattern: getPattern("Date"),
-                            // errorMessage: "ERR_INVALID_CONSUMER_NO",
-                            jsonPath: "metereading.currentReadingDate",
-                            afterFieldChange: async (action, state, dispatch) => {
-                                let billingPeriod = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod");
+                currentReadingDate: {
+                    ...getDateField({
+                        placeholder: {
+                            labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"
+                        },
+                        gridDefination: {
+                            xs: 6,
+                            sm: 3
+                        },
+                        required: true,
+                        pattern: getPattern("Date"),
+                        // errorMessage: "ERR_INVALID_CONSUMER_NO",
+                        jsonPath: "metereading.currentReadingDate",
+                        afterFieldChange: async (action, state, dispatch) => {
+                            let billingPeriod = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod");
 
-                                // let billingPeriod = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod`);
-                                let selectedCurrentReadingDate = action.value;
-                    
-                                    if(typeof selectedCurrentReadingDate == "string"){
-                                        const[selectedCurrentReadyingYear, selectedCurrentReadingMonth, selectedCurrentReadingDay] = selectedCurrentReadingDate.split("-");
-                                        selectedCurrentReadingDate = `${selectedCurrentReadingDay}/${selectedCurrentReadingMonth}/${selectedCurrentReadyingYear}`;
-                                        let updatedBillingPeriod = billingPeriod.split("-")[0]+"- "+selectedCurrentReadingDate;
-                                    
-                                        dispatch(
-                                            handleField(
-                                                "meter-reading",
-                                                "components.div.children.meterReadingEditable.children.card.children.cardContent.children.firstContainer.children.billingCont.children.billingPeriod.props",
-                                                "labelName",
-                                                updatedBillingPeriod
-                                            )
-                                        );   
-                    
-                                }
+                            // let billingPeriod = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod`);
+                             let selectedCurrentReadingDate = action.value;
+                
+                                if(typeof selectedCurrentReadingDate == "string"){
+                                    const[selectedCurrentReadyingYear, selectedCurrentReadingMonth, selectedCurrentReadingDay] = selectedCurrentReadingDate.split("-");
+                                    selectedCurrentReadingDate = `${selectedCurrentReadingDay}/${selectedCurrentReadingMonth}/${selectedCurrentReadyingYear}`;
+                                    let updatedBillingPeriod = billingPeriod.split("-")[0]+"- "+selectedCurrentReadingDate;
                                 
-                                
-                                
-                        }
-                    })
-                },
+                                    dispatch(
+                                        handleField(
+                                            "meter-reading",
+                                            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.firstContainer.children.billingCont.children.billingPeriod.props",
+                                            "labelName",
+                                            updatedBillingPeriod
+                                        )
+                                    );   
+                
+                              }
+                            
+                            
+                            
+                      }
+                })
+            },
                 lastCont: {
                     uiFramework: "custom-atoms",
                     componentPath: "Div",

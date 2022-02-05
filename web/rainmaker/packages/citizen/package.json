@@ -72,7 +72,7 @@
     "watch-css": "yarn run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "run-p watch-css start-js",
-    "build-js": "react-scripts build",
+    "build-js": "react-scripts --max_old_space_size=4096 build",
     "build": "run-s build-css build-js",
     "prettier": "prettier --write \"src/**/*.js\"",
     "test": "react-scripts test --env=jsdom",

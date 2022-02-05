@@ -9,14 +9,14 @@ export const updateTableRow = async (state, dispatch) => {
     store.dispatch(showSpinner())
     await renderBulkImportTable(state, dispatch);
     store.dispatch(hideSpinner())
-
+ 
 }
 
 export const editTableRow = async (state,dispatch) => {
   store.dispatch(showSpinner())
     await renderBulkImportTable(state, dispatch,'edited');
     store.dispatch(hideSpinner())
-
+ 
 }
 
 const renderBulkImportTable = async (state, dispatch,edited) => {
@@ -117,3 +117,4 @@ const showBulkImportTableData = (state, dispatch, bulkData,edited) => {
     ))
   }
 }
+

@@ -200,13 +200,12 @@ const mapStateToProps = state => {
     "consumptionDetails",
     []
   );
-
   const DataForMeterReading = get(
     state.screenConfiguration.preparedFinalObject,
     "DataForMeterReading",
     []
   );
-
+  
   const screenConfig = get(state.screenConfiguration, "screenConfig");
   return { screenConfig, consumptionDetails, DataForMeterReading };
 };

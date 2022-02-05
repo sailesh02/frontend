@@ -72,10 +72,10 @@ import {
             path: redirectionURL
           }
         }
-
+    
       }); 
   };
-
+    
   const getAcknowledgementCard = (
     state,
     dispatch,
@@ -105,7 +105,7 @@ import {
               body: {
               },
               tailText: {
-
+              
               },
               number: ''
             })
@@ -118,9 +118,9 @@ import {
           dispatch
         )
       };
-
+   
   };
-
+  
   const setBulkMeterData = (state,dispatch) => {
     setTimeout( () => {
       let acknowledgementData = get(state, "screenConfiguration.preparedFinalObject.acknowledgementData") || [];
@@ -142,7 +142,7 @@ import {
         )); 
       }
     }, 5000)
-
+  
   }
   const screenConfig = {
     uiFramework: "material-ui",
@@ -163,5 +163,6 @@ import {
       return action;
     }
   };
-
+  
   export default screenConfig;
+  

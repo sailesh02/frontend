@@ -10,7 +10,7 @@ export const fetchData = async (action, state, dispatch) => {
   // try { responseSewerage = await getSWMyResults(queryObject, 'CONNECTION', dispatch); } catch (error) { responseSewerage = []; console.log(error) }
   try {
     const water = (responseWater && responseWater.WaterConnection)?responseWater.WaterConnection:[]
-    const sewerage = (responseSewerage && responseSewerage.SewerageConnections)?responseSewerage.SewerageConnections:[]
+    const sewerage = (responseSewerage && responseSewerage.WaterConnection)?responseSewerage.WaterConnection:[]
     const finalArray = water.concat(sewerage);
     if (finalArray !== undefined && finalArray !== null) {
       const myConnectionsResult=finalArray.filter(item => item.connectionNo !== "NA" && item.connectionNo !== null);  

@@ -190,7 +190,6 @@ const header = getCommonContainer({
     }
 
 });
-
 const searchResults = async (dispatch) => {
     let connectionNos = getQueryArg(window.location.href,"connectionNos")  
     let tenantId = getQueryArg(window.location.href,"tenantId")
@@ -212,7 +211,6 @@ if (
     dispatch(prepareFinalObject("DataForMeterReading", payloadData.WaterConnection))
   }
 }
-
 const screenConfig = {
     uiFramework: "material-ui",
     name: "meter-reading",

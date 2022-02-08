@@ -16,6 +16,7 @@ import { propertySearchApiCall } from './functions';
 import { handlePropertySubUsageType, handleNA, resetFieldsForApplication } from '../../utils';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {getTranslatedLabel} from "egov-ui-kit/utils/commons"
+import { serviceConst } from "../../../../../ui-utils/commons";
 
 let isMode = getQueryArg(window.location.href, "mode");
 
@@ -32,7 +33,7 @@ let mode = getQueryArg(window.location.href, "mode");
 export const meteredPermanent = [{code: "DOMESTIC"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},{code:"INSTITUTIONAL"},{code:"BPL"},{code:"ASSOCIATION"}]
 export const meteredTemporary = [{code:"WSFCB"},{code: "DOMESTIC"}]
 export const nonMeteredPermanent = [{code:"DOMESTIC"},{code:"BPL"},
-{code:"SPMA"}]
+{code:"SPMA"},{code:"ASSOCIATION"}]
 export const nonMeteredTemporory = [{code:"WSFCB"},{code:"BPL"},{code:"ROADSIDEEATERS"},{code:"SPMA"}]
 
 export const temporary = [{code: "DOMESTIC"}, {code:"WSFCB"},{code:"BPL"},{code:"ROADSIDEEATERS"},{code:"SPMA"}]
@@ -703,7 +704,8 @@ const propertyDetailsNoId = getCommonContainer({
     afterFieldChange: (action, state, dispatch) => {
       const edit = getQueryArg(window.location.href, "action");
       const applicationNumber = getQueryArg(window.location.href, "action");
-
+      let connectionFacility = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionFacility") || 
+      get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].connectionFacility")
       // only while creating application from employee side
       if(process.env.REACT_APP_NAME != "Citizen" && !applicationNumber){
         dispatch(
@@ -853,7 +855,8 @@ const propertyDetailsNoId = getCommonContainer({
           );
         }
 
-        if(action.value == 'Non Metered' && applicationNumber && applicationNumber.includes('SW')){
+        if(action.value == 'Non Metered' && applicationNumber && (applicationNumber.includes('SW') || 
+        connectionFacility == serviceConst.SEWERAGE)){
           dispatch(
             handleField(
               "apply",

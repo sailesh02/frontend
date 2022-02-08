@@ -24,7 +24,7 @@ import {
 } from "../../../../ui-utils/commons";
 import { getDemand, ifUserRoleExists, getTranslatedLabel} from "../utils";
 import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
-import { connectionDetailsFooter,connectionDisconnect } from "./connectionDetailsResource/connectionDetailsFooter";
+import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
 import {
   connHolderDetailsSameAsOwnerSummary,
   connHolderDetailsSummary,

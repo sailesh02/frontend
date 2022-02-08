@@ -634,10 +634,13 @@ class WorkFlowContainer extends React.Component {
       editDemands = true
     }
 
-
     if (moduleName === "SWCloseConnection" || moduleName === "SWDisconnection" || moduleName === "WSCloseConnection" || moduleName === "WSDisconnection" || moduleName === "WSReconnection" || moduleName === "SWReconnection"
       || moduleName === "ModifySWConnection" || moduleName === "ModifyWSConnection" || moduleName === "SWOwnershipChange" || moduleName === "WSOwnershipChange") {
-      state.isStateUpdatable = false
+      state.isStateUpdatable = false;
+    }
+
+    if (moduleName === "ModifySWConnection"){
+      state.isStateUpdatable = true
     }
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {

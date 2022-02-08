@@ -25,7 +25,15 @@ import set from 'lodash/set';
 import { getTodaysDateInYMD, getQueryArg, getObjectKeys, getObjectValues } from 'egov-ui-framework/ui-utils/commons';
 import { isModifyMode } from "../../../../../ui-utils/commons";
 let isMode = isModifyMode();
+const getCurrentDate = () => {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
 
+  today = yyyy + '-' + mm + '-' + dd;
+  return today;
+}
 const getPlumberRadioButton = {
   uiFramework: "custom-containers-local",
   moduleName: "egov-wns",
@@ -441,7 +449,12 @@ export const additionDetails = getCommonCard({
           sm: 6
         }
       }),
-    })
+    },
+    {
+      style:getQueryArg(window.location.href, "mode") === "MODIFY"? {"pointer-events":"none", "cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
+    
+    }
+    )
   }),
   volumetricDetails : getCommonGrayCard({
     subHeader: getCommonTitle({
@@ -612,7 +625,7 @@ export const additionDetails = getCommonCard({
           label: {
             name: "Relationship",
             key: "WS_IS_DAILY_OR_MONTHLY_COMSUMPTION"
-
+      
           },
         buttons: [
           {
@@ -787,7 +800,7 @@ export const additionDetails = getCommonCard({
         props: {
           disabled: process.env.REACT_APP_NAME === "Citizen",
           inputProps: {
-            min: getTodaysDateInYMD()
+            min: getCurrentDate()
           }
         }
       }),

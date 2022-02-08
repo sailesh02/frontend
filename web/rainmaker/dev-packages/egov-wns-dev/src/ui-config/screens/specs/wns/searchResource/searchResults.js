@@ -47,7 +47,7 @@ export const searchResults = {
       },
       {name : "Due",labelKey: "WS_COMMON_TABLE_COL_DUE_LABEL" },
       {name : "Address",labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
-      {name : "Due Date",labelKey: "WS_COMMON_TABLE_COL_DUE_DATE_LABEL" },
+      {name : "Due Date",labelKey: "WS_COMMON_TABLE_COL_DUE_DATE_LABEL", options: {display: false} },
       {
         name: "Action",
         labelKey: "WS_COMMON_TABLE_COL_ACTION_LABEL",
@@ -90,7 +90,11 @@ export const searchResults = {
       {
         name: "applicationStatus",
         labelKey: "WS_COMMON_TABLE_COL_APPLICATION_CURRENT_STATE"
-      }
+      },
+      {name : "Connection Facility",labelKey: "WS_COMMON_CONNECTION_FACILITY_LABEL",
+      options: {
+        display: false
+        } }
     ],
     title: {labelKey:"WS_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName:"Search Results for Water & Sewerage Connections"},
     options: {
@@ -121,12 +125,13 @@ export const searchResults = {
 
 const getConnectionDetails = data => {
   store.dispatch(
-    setRoute(`connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}&due=${data.rowData[4]}`)
+    setRoute(`connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}&due=${data.rowData[4]}&connectionFacility=${data.rowData[11]}`)
   )
 }
 
 const getViewBillDetails = data => {
-  store.dispatch(
-    setRoute( `viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`)
-  )
+  window.location.href = `viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}&connectionFacility=${data.rowData[11]}`;
+  // store.dispatch(
+  //   setRoute( `viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}&connectionFacility=${data.rowData[11]}`)
+  // )
 }

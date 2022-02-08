@@ -29,11 +29,15 @@ const styles = {
 // }
 class MeterReading extends React.Component {
   render() {
-    const { consumptionDetails, onActionClick, classes } = this.props;
+    const { consumptionDetails, onActionClick, classes, DataForMeterReading } = this.props;
     // if (consumptionDetails.length > 0) {
     //   var lastReadingDate = convertEpochToDate(consumptionDetails[0].lastReadingDate)
     //   var currentReadingDate = convertEpochToDate(consumptionDetails[0].currentReadingDate)
     // }
+    let unitMultiplier = 1;
+    if (DataForMeterReading.length > 0) {
+      unitMultiplier = DataForMeterReading[0].additionalDetails.meterReadingRatio.split(":")[1];
+    }
     return (
       <div>
         {consumptionDetails && consumptionDetails.length > 0 ? (
@@ -148,7 +152,7 @@ class MeterReading extends React.Component {
                       </Grid>
                       <Grid item md={8} xs={6}>
                         <Label
-                          labelName={item.currentReading - item.lastReading}
+                          labelName={(item.currentReading - item.lastReading)*unitMultiplier}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
@@ -196,8 +200,14 @@ const mapStateToProps = state => {
     "consumptionDetails",
     []
   );
+  const DataForMeterReading = get(
+    state.screenConfiguration.preparedFinalObject,
+    "DataForMeterReading",
+    []
+  );
+  
   const screenConfig = get(state.screenConfiguration, "screenConfig");
-  return { screenConfig, consumptionDetails };
+  return { screenConfig, consumptionDetails, DataForMeterReading };
 };
 const mapDispatchToProps = dispatch => {
   return {

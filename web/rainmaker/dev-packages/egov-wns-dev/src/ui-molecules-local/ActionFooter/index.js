@@ -143,7 +143,7 @@ class Footer extends React.Component {
       applicationNo,
       applicationNos,
     } = this.props;
-
+    
     if(ifUserRoleExists('WS_CEMP')){
       if(!date){
         toggleSnackbar(
@@ -231,7 +231,7 @@ class Footer extends React.Component {
               set(payloadSewerageCreate, "connectionType", "Non Metered");
               set(payloadSewerageCreate, "tenantId", tenantId);
               payloadSewerageCreate.applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? 
-              "DISCONNECT_SEWERAGE_CONNECTION" : this.state.dialogButton == "WS_RECONNECTION" ? "SEWERAGE_RECONNECTION" : "CLOSE_SEWERAGE_CONNECTION",
+              "DISCONNECT_CONNECTION" : this.state.dialogButton == "WS_RECONNECTION" ? "RECONNECT_CONNECTION" : "CLOSE_SEWERAGE_CONNECTION",
               payloadSewerageCreate = findAndReplace(payloadSewerageCreate, "NA", null);
               payloadSewerageCreate.property = null;
               payloadSewerageCreate.noOfFlats = payloadSewerageCreate.payloadSewerageCreate && payloadSewerageCreate.noOfFlats != "" ? queryObject.noOfFlats : 0
@@ -250,8 +250,8 @@ class Footer extends React.Component {
               let payloadSewerageUpdate = parserFunction(response.SewerageConnections[0]);
               set(payloadSewerageUpdate, "processInstance.action", "SUBMIT_APPLICATION");
               set(payloadSewerageUpdate, "connectionType", "Non Metered");
-              payloadSewerageUpdate.applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_SEWERAGE_CONNECTION" : 
-              this.state.dialogButton == "WS_RECONNECTION" ? "SEWERAGE_RECONNECTION" : "CLOSE_SEWERAGE_CONNECTION"
+              payloadSewerageUpdate.applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_CONNECTION" : 
+              this.state.dialogButton == "WS_RECONNECTION" ? "RECONNECT_CONNECTION" : "CLOSE_CONNECTION"
               if (typeof payloadSewerageUpdate.additionalDetails !== 'object') {
                 payloadSewerageUpdate.additionalDetails = {};
               }
@@ -312,7 +312,7 @@ class Footer extends React.Component {
                 payload = findAndReplace(payload, "NA", null);
                 set(payload, "processInstance.action", "INITIATE")
                 payload.applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? 
-                "DISCONNECT_WATER_CONNECTION" : this.state.dialogButton == "WS_RECONNECTION" ? "WATER_RECONNECTION" :"CLOSE_WATER_CONNECTION"
+                "DISCONNECT_CONNECTION" : this.state.dialogButton == "WS_RECONNECTION" ? "RECONNECT_CONNECTION" :"CLOSE_CONNECTION"
                 set(payload, "waterSource", getWaterSource(payload.waterSource, payload.waterSubSource));
                 payload.pipeSize = 0
                 payload.noOfFlats = payload.noOfFlats && payload.noOfFlats != "" ? payload.noOfFlats : 0
@@ -320,12 +320,15 @@ class Footer extends React.Component {
                 store.dispatch(hideSpinner())
                 let appNo = response && response.WaterConnection && response.WaterConnection[0].applicationNo
                 response.WaterConnection[0].water = true;
-                let waterSource = response.WaterConnection[0].waterSource.split(".");
-                response.WaterConnection[0].waterSource = waterSource[0];
+                if(response && response.WaterConnection && response.WaterConnection.length > 0 &&
+                  response.WaterConnection[0].waterSource){
+                    let waterSource = response.WaterConnection[0].waterSource.split(".");
+                    response.WaterConnection[0].waterSource = waterSource[0];
+                    response.WaterConnection[0].waterSubSource = waterSource[1];
+                }
                 response.WaterConnection[0].service = "Water";
-                response.WaterConnection[0].waterSubSource = waterSource[1];
-                response.WaterConnection[0].applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_WATER_CONNECTION" : 
-                this.state.dialogButton == "WS_RECONNECTION"? "WATER_RECONNECTION" : "CLOSE_WATER_CONNECTION"
+                response.WaterConnection[0].applicationType = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "DISCONNECT_CONNECTION" : 
+                this.state.dialogButton == "WS_RECONNECTION"? "RECONNECT_CONNECTION" : "CLOSE_CONNECTION"
                 response.WaterConnection[0].locality = response.WaterConnection[0].additionalDetails.locality
                 response.WaterConnection[0].ward = response.WaterConnection[0].additionalDetails.ward ? response.WaterConnection[0].additionalDetails.ward : ''
                 if(ifUserRoleExists('WS_CEMP')){

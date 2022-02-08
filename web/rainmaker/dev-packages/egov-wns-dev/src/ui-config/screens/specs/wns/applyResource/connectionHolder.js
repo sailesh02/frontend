@@ -8,7 +8,7 @@ import {
     getLabel,
     getSelectField,
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+  import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
   const connHolderDetail = getCommonContainer({
     mobileNumber: getTextField({
@@ -163,7 +163,13 @@ import {
         sm: 6
       }
     }),
-  });
+  }
+  // ,
+  // {
+  //   style:getQueryArg(window.location.href, "mode") === "MODIFY"? {"pointer-events":"none", "cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
+  
+  // }
+  );
   // const connHolderDetail = getCommonContainer({
   //   mobileNumber: getTextField({
   //     label: {

@@ -18,7 +18,7 @@ const deleteTableData = (value) => {
   meterReadingBulk.filter( data => {
     return data.connectionNo != consumerNumber
   }) || []
-
+ 
   let data = removedConsumerNumber.map(item => ({
     ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
     ["WS_CONSUMPTION_DETAILS_BILLING_PERIOD_LABEL"]: item.billingPeriod,
@@ -36,7 +36,7 @@ const deleteTableData = (value) => {
   store.dispatch(prepareFinalObject('meterReadingBulk',removedConsumerNumber))
   store.dispatch(prepareFinalObject('meterReading',[]))
   }
-
+  
 }
 
 const editTableData = (value,data) => {
@@ -82,7 +82,7 @@ const editTableData = (value,data) => {
         requiredConsumerNumber[0].billingPeriod
       )
     );
-
+  
     store.dispatch(
       handleField(
         "bulkImport",
@@ -222,7 +222,7 @@ export const bulkMeterReadingData = {
                     </div>
                   </div>
                 )
-
+                    
             }
         }
       }
@@ -289,7 +289,7 @@ export const bulkMeterReadingDataAfterSubmit = {
               />
             )
           }
-
+     
         }
       },
       {
@@ -329,7 +329,7 @@ export const bulkMeterReadingDataAfterSubmit = {
           display: true
         }
       }
-
+     
     ],
     title: {labelKey:"WS_PER_CONNECTION_METER_READING_SUMMARY", labelName:"Connection wise Meter Reading Summary"},
     options: {

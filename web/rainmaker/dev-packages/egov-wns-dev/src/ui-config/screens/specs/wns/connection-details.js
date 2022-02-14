@@ -561,22 +561,22 @@ const screenConfig = {
               },
               ...headerrow,
             },
-            helpSection: {
-              uiFramework: "custom-atoms",
-              componentPath: "Container",
-              props: {
-                color: "primary",
-                style: { justifyContent: "flex-end" }, //, dsplay: "block"
-              },
-              gridDefination: {
-                xs: 12,
-                sm: 5,
-                align: "right",
-              },
-              children: {
-                connectionDetailsDownload,
-              },
-            },
+            // helpSection: {
+            //   uiFramework: "custom-atoms",
+            //   componentPath: "Container",
+            //   props: {
+            //     color: "primary",
+            //     style: { justifyContent: "flex-end" }, //, dsplay: "block"
+            //   },
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 5,
+            //     align: "right",
+            //   },
+            //   children: {
+            //     connectionDetailsDownload,
+            //   },
+            // },
           },
         },
         connectionDetails,

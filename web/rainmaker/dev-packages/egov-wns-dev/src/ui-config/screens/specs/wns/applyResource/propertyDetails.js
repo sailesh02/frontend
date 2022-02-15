@@ -39,7 +39,8 @@ export const nonMeteredTemporory = [{code:"WSFCB"},{code:"BPL"},{code:"ROADSIDEE
 export const temporary = [{code: "DOMESTIC"}, {code:"WSFCB"},{code:"BPL"},{code:"ROADSIDEEATERS"},{code:"SPMA"}]
 export const permanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},
 , {code:"BPL"},{code:"ASSOCIATION"}, {code:"SPMA"} ]
-
+export const seweragepermanent = [{code: "DOMESTIC"},{code: "INSTITUTIONAL"},{code: "INDUSTRIAL"},{code: "COMMERCIAL"},
+, {code:"BPL"}]
 let modifyLink;
 if(isMode==="MODIFY"){
   modifyLink=`/wns/apply?`;
@@ -681,6 +682,18 @@ const propertyDetailsNoId = getCommonContainer({
               break;
           }
         }
+
+          if(!water && sewerage){
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.usageCategory.props",
+                "data",
+                seweragepermanent
+              )
+            );
+          }
+        
 
       }
   }

@@ -34,7 +34,7 @@ class ConfirmationDialog extends Component {
   }
 
   render() {
-    let { open, closeDialogue, onClickFunction, dialogHeader,dialogButton } = this.props
+    let { open, closeDialogue, onClickFunction, dialogHeader,dialogButton, dueAmountMsg } = this.props
     return  (
       <Dialog
       fullScreen={false}
@@ -63,6 +63,7 @@ class ConfirmationDialog extends Component {
                     labelKey={dialogHeader} />
                   </Typography>
                 </Grid>
+                
                 {ifUserRoleExists('WS_CEMP') &&
                 <Grid item sm={12} marginTop={18}>
                 <Grid style={{marginTop:'10px'}}
@@ -83,6 +84,12 @@ class ConfirmationDialog extends Component {
                 </Grid>  
                 
                 </Grid>}
+                {dialogButton === "WS_DISCONNECT_CONNECTION" ?
+                <Grid item sm={10} marginTop={24}>
+                    <LabelContainer style={{color: "#FE7A51"}} labelName={"WS_MODIFICATIONS_EFFECTIVE_FROM"}
+                    labelKey={dueAmountMsg} />
+                </Grid> : ""
+                }
                 <Grid
                   item
                   sm={2}

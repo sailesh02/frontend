@@ -10,10 +10,10 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
-import { toggleWater, toggleSewerage , toggleConnectionTypeDetails } from './toggleFeilds';
+import { toggleWater, toggleSewerage , toggleConnectionTypeDetails, setDataBasedOnFacility } from './toggleFeilds';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { isModifyMode } from "../../ui-utils/commons";
-
+import get from "lodash/get";
 const styles = {
   root: {
     color: "#FE7A51",
@@ -65,7 +65,29 @@ class CheckboxLabels extends React.Component {
     if(isModifyMode()){
       step = true
     }
-    const { jsonPathWater, approveCheck, onFieldChange } = this.props;
+
+    
+    const { jsonPathWater, approveCheck, onFieldChange, preparedFinalObject } = this.props;
+
+  //   const isWaterSet = get(preparedFinalObject, "applyScreen.water")
+  //   const isSewerageSet = get(preparedFinalObject, "applyScreen.sewerage")
+  //   if(!this.state.checkedWater && this.state.checkedSewerage){
+  //     console.log("Here")
+  //   onFieldChange(
+  //     "apply",
+  //     "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionCategory.props",
+  //     "data",
+  //     [{ code: "PERMANENT" }]
+  //   );
+  // }else{
+  //   console.log("in Else")
+  //   onFieldChange(
+  //     "apply",
+  //     "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionCategory.props",
+  //     "data",
+  //     [{ code: "PERMANENT" }, { code: "TEMPORARY" }]
+  //   );
+  // }
     this.setState({ [name]: event.target.checked, interChange: true }, () => {
       if (this.state.checkedWater) {
         toggleConnectionTypeDetails(onFieldChange, true)
@@ -80,6 +102,7 @@ class CheckboxLabels extends React.Component {
         toggleConnectionTypeDetails(onFieldChange, false)
       }
       approveCheck(jsonPathWater, this.state.checkedWater);
+      setDataBasedOnFacility(onFieldChange);
     });
   };
 
@@ -88,7 +111,29 @@ class CheckboxLabels extends React.Component {
     if(isModifyMode()){
       step = true
     }
-    const { jsonPathSewerage, approveCheck, onFieldChange } = this.props;
+    const { jsonPathSewerage, approveCheck, onFieldChange, preparedFinalObject } = this.props;
+
+  //   console.log(preparedFinalObject, "Swerage clicked")
+  //   const isWaterSet = get(preparedFinalObject, "applyScreen.water")
+  //   const isSewerageSet = get(preparedFinalObject, "applyScreen.sewerage")
+  //   console.log(isWaterSet, isSewerageSet, "Nero Hsssss")
+  //   console.log(this.state.checkedWater, this.state.checkedSewerage, "Nero Test")
+  //   if(!this.state.checkedWater && event.target.checked){
+
+  //   onFieldChange(
+  //     "apply",
+  //     "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionCategory.props",
+  //     "data",
+  //     [{ code: "PERMANENT" }]
+  //   );
+  // }else{
+  //   onFieldChange(
+  //     "apply",
+  //     "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionCategory.props",
+  //     "data",
+  //     [{ code: "PERMANENT" }, { code: "TEMPORARY" }]
+  //   );
+  // }
     this.setState({ [name]: event.target.checked, interChange: true }, () => {
       if (this.state.checkedSewerage) {
         toggleConnectionTypeDetails(onFieldChange, false)
@@ -104,6 +149,7 @@ class CheckboxLabels extends React.Component {
         toggleSewerage(onFieldChange, false,step); 
       }
       approveCheck(jsonPathSewerage, this.state.checkedSewerage);
+      setDataBasedOnFacility(onFieldChange);
     });
   }
 

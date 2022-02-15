@@ -153,8 +153,8 @@ const callBackForNext = async (state, dispatch) => {
     // }
 
     // validateFields("components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children", state, dispatch)
-    validateFields("components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.children", state, dispatch)
-
+    isFormValid = validateFields("components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.children", state, dispatch)
+console.log(isFormValid, "Nero form Valid"); 
     validateFields("components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children", state, dispatch)
 
     if (getQueryArg(window.location.href, "action") === "edit" && !isModifyMode() && !isOwnerShipTransfer()) {
@@ -233,7 +233,7 @@ const callBackForNext = async (state, dispatch) => {
         //   return false;
         // }
         // TODO else part update propertyId.
-
+      if(isFormValid){
         if (validateConnHolderDetails(applyScreenObject)) {
           isFormValid = true;
           hasFieldToaster = false;
@@ -377,6 +377,18 @@ const callBackForNext = async (state, dispatch) => {
             )
           )
         }
+      }else{
+        isFormValid = false;
+          dispatch(
+            toggleSnackbar(
+              true, {
+              labelKey: "WS_FILL_REQUIRED_HOLDER_FIELDS",
+              labelName: "Please fill Required details"
+            },
+              "warning"
+            )
+          )
+      }
       // } else {
       //   isFormValid = false;
       //   dispatch(

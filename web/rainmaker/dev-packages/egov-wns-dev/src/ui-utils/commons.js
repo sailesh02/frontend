@@ -2472,7 +2472,8 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
         let obj = {};
         if (type === 'estimateNotice' || type === 'sanctionLetter') {
             estResponse.Calculation[0].taxHeadEstimates.map((val) => {
-                val.taxHeadCode = val.taxHeadCode.substring(3)
+                //val.taxHeadCode = val.taxHeadCode.substring(3)
+                val.taxHeadCode = val.taxHeadCode;
             });
             wnsConnection[0].pdfTaxhead = estResponse.Calculation[0].taxHeadEstimates;
 

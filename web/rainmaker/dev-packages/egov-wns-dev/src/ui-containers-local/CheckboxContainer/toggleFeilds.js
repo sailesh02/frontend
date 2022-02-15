@@ -2,7 +2,7 @@ import set from "lodash/set";
 import { isModifyMode } from "./../../ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-
+import store from "ui-redux/store";
 export const toggleWater = (onFieldChange, value,step) => {
   // set('search-preview', "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", value);
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -254,6 +254,34 @@ export const toggleWater = (onFieldChange, value,step) => {
   );
 }
 
+export const setDataBasedOnFacility = (onFieldChange) => {
+
+  let state = store.getState();
+  console.log(state, "Nero State in toggle")
+  let isWaterSet = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
+  state.screenConfiguration.preparedFinalObject.applyScreen && state.screenConfiguration.preparedFinalObject.applyScreen.water
+  
+  let isSewerageSet = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject &&
+  state.screenConfiguration.preparedFinalObject.applyScreen && state.screenConfiguration.preparedFinalObject.applyScreen.sewerage
+  if(!isWaterSet && isSewerageSet){
+    console.log("Here")
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionCategory.props",
+    "data",
+    [{ code: "PERMANENT" }]
+  );
+}else{
+  console.log("in Else")
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionCategory.props",
+    "data",
+    [{ code: "PERMANENT" }, { code: "TEMPORARY" }]
+  );
+}
+
+}
 export const toggleSewerage = (onFieldChange, value,step) => {
   let isMode = isModifyMode();
   let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';

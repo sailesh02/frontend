@@ -89,12 +89,18 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     const documentsUploadRedux = getFromObject(preparedFinalObject, 'DocumentsData', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
     const tenantId = getQueryArg(window.location.href, "tenantId");
-
+    let connectionFacility = "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER";
+    if(WaterConnection.connectionFacility === "SEWERAGE"){
+        connectionFacility = "PDF_STATIC_LABEL_SEWERAGE_ACKNOWELDGMENT_LOGO_SUB_HEADER"
+    }else if(WaterConnection.connectionFacility === "WATER-SEWERAGE"){
+        connectionFacility = "PDF_STATIC_LABEL_WATER_SEWERAGE_ACKNOWELDGMENT_LOGO_SUB_HEADER"
+    }
 
     let pdfData = {
         module: 'WS',
-        header: WaterConnection.applicationNo.includes("WS") ? "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER" : "PDF_STATIC_LABEL_SW_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER", tenantId: tenantId,
-        applicationNoHeader: WaterConnection.applicationType !== null ? WaterConnection.applicationType.split("_").join(" ") : "",
+       // header: WaterConnection.applicationNo.includes("WS") ? "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER" : "PDF_STATIC_LABEL_SW_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER", tenantId: tenantId,
+       header: connectionFacility, tenantId: tenantId,
+       applicationNoHeader: WaterConnection.applicationType !== null ? WaterConnection.applicationType.split("_").join(" ") : "",
         additionalHeader: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_APPLICATION_NO', additionalHeaderValue: WaterConnection.applicationNo,
         cards: [
             { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PROPERTY_DETAILS_HEADER", items: propertyDetail },

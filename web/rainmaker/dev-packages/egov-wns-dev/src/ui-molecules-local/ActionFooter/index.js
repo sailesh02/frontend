@@ -97,21 +97,21 @@ return obj
 }
 
 const fetchBill = async(queryObject) => {
-try {
-  store.dispatch(showSpinner())
-  const response = await httpRequest(
-      "post",
-      "/billing-service/bill/v2/_fetchbill",
-      "_fetchBill",
-      queryObject
-  );
-  store.dispatch(hideSpinner())
-  return findAndReplace(response, null, "NA");
-} catch (error) {
-  store.dispatch(hideSpinner())
-  console.log(error)
-}
-}
+    try {
+      store.dispatch(showSpinner())
+      const response = await httpRequest(
+          "post",
+          "/billing-service/bill/v2/_fetchbill",
+          "_fetchBill",
+          queryObject
+      );
+      store.dispatch(hideSpinner())
+      return findAndReplace(response, null, "NA");
+    } catch (error) {
+      store.dispatch(hideSpinner())
+      console.log(error)
+    }
+    }
 
 const getTodaysDateInYMD = () => {
   let date = new Date();
@@ -127,7 +127,50 @@ class Footer extends React.Component {
     openDialog:false,
     dialogHeader:'',
     dialogButton:'',
+    dueAmountmsg:''
   };
+
+  componentDidMount = async () => {
+    const {
+      //connectionNumber,
+      tenantId,
+      toggleSnackbar,
+      applicationNo,
+      applicationNos,
+      businessService,
+      applicationStatus,
+      bill,
+      isAmendmentInWorkflow
+    } = this.props;
+   let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+   let connectionFacility = getQueryArg(window.location.href, "connectionFacility");
+  
+    let due
+    let fetchBillQueryObj = []
+          if(connectionFacility === "WATER"){
+            fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "WS" }]
+          }else{
+            fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "SW" }]
+          }
+
+          const billResults = await httpRequest(
+            "post",
+            "/billing-service/bill/v2/_fetchbill",
+            "_fetchBill",
+            fetchBillQueryObj
+        );
+          billResults && billResults.Bill &&Array.isArray(billResults.Bill)&&billResults.Bill.length>0 && billResults.Bill.map(bill => {
+              due = bill.totalAmount
+              if(due > 0){
+                this.setState({dueAmountmsg: "The connection has some pending dues. Still you want to proceed?"})
+                console.log(due, "Nero Due Amount")
+              }
+          })
+
+         
+          
+
+  }
 
  closeDialogue = () => {
     this.setState({
@@ -180,7 +223,9 @@ class Footer extends React.Component {
           }else{
             fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "WS" }]
           }
+        if(this.state.dialogButton !== "WS_DISCONNECT_CONNECTION"){  
           let billResults = await fetchBill(fetchBillQueryObj)
+          
           billResults && billResults.Bill &&Array.isArray(billResults.Bill)&&billResults.Bill.length>0 && billResults.Bill.map(bill => {
               due = bill.totalAmount
           })
@@ -188,6 +233,7 @@ class Footer extends React.Component {
             applicationNo && applicationNo.includes("WS")
               ? "WS_PENDING_FEES_ERROR"
               : "WS_PENDING_FEES_ERROR";
+              
           if (due && parseInt(due) > 0) {
             toggleSnackbar(
               true,
@@ -200,7 +246,9 @@ class Footer extends React.Component {
   
             return false;
           }
-  
+        } 
+          
+  //return false;
            // to disconnect the connection
             let payloadSewerage,payloadWater
             let queryObject = [
@@ -208,6 +256,7 @@ class Footer extends React.Component {
                { key: "applicationNumber", value: applicationNo }
              ];
             if (applicationNo.includes("SW")) {
+              
               try{
                 store.dispatch(toggleSpinner())
                 payloadSewerage = await getSearchResultsSW(queryObject)
@@ -292,6 +341,7 @@ class Footer extends React.Component {
                 );
               } 
             }else{
+              
               try{
                 store.dispatch(toggleSpinner())
                 payloadWater = await getSearchResults(queryObject)
@@ -584,7 +634,7 @@ class Footer extends React.Component {
           </Item>
         </Container>
         {this.state.openDialog && <ConfirmationDialog open={this.state.openDialog} closeDialogue = {this.closeDialogue} 
-        dialogHeader={this.state.dialogHeader} onClickFunction={this.onClickFunction} dialogButton={this.state.dialogButton}></ConfirmationDialog>}
+        dialogHeader={this.state.dialogHeader} onClickFunction={this.onClickFunction} dialogButton={this.state.dialogButton} dueAmountMsg={this.state.dueAmountmsg}></ConfirmationDialog>}
       </div>
     );
   }

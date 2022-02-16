@@ -709,6 +709,7 @@ const propertyDetailsNoId = getCommonContainer({
     },
     jsonPath: "applyScreen.connectionType",
     visible: true,
+    disabled: getQueryArg(window.location.href, "mode") === "MODIFY"? true: false,
     localePrefix: {
       moduleName: "WS",
       masterName: "PROPTYPE"

@@ -2170,7 +2170,7 @@ const getMonth = (toPeriod) => {
 
 const getYear = (fromYear,month) => {
     let year = parseInt(fromYear)
-    if(parseInt(month) == 12){
+    if(parseInt(month) == 12 || parseInt(month) == 1 || parseInt(month) == 2 || parseInt(month) == 3){
         return year + 1
     }else{
         return year

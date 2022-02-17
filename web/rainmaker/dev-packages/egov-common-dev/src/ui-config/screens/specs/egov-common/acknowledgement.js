@@ -6,7 +6,7 @@ import { generateBill, ifUserRoleExists } from "../utils";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { paymentFooter } from "./acknowledgementResource/paymentFooter";
 import "./index.css";
-import { getHeader } from "./pay";
+import { getHeader, getZeroPaymentHeader } from "./pay";
 import { downloadProvisionalCertificateFormPaymentSuccess } from "egov-tradelicence/ui-config/screens/specs/utils";
 
 
@@ -151,6 +151,7 @@ const getAcknowledgementCard = (
 
   const roleExists = ifUserRoleExists("CITIZEN");
   let header = getHeader(state);
+  let zeroPaymentHeader = getZeroPaymentHeader(state);
   const businessService = getQueryArg(window.location.href, "businessService");
   const transBusinessService = businessService
     ? businessService.toUpperCase().replace(/[._:-\s\/]/g, "_")
@@ -159,7 +160,37 @@ const getAcknowledgementCard = (
     state.screenConfiguration.preparedFinalObject,
     "commonPayInfo"
   );
-  if (status === "success") {
+  if(status === "success" && receiptNumber == "ZEROPAYMENT"){
+    return {
+      
+      zeroPaymentHeader,
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelKey: `COMMON_SUCCESS_ZERO_PAYMENT_MESSAGE`
+                
+            },
+            body: {
+              labelKey: `COMMON_SUCCESS_ZERO_PAYMENT_MESSAGE_DETAIL`,
+            }
+            
+          }),
+        },
+      },
+      paymentFooter: paymentFooter(
+        state,
+        consumerCode,
+        tenant,
+        status,
+        businessService
+      ),
+    };
+  }else if (status === "success") {
     return {
       header,
       headerdownloadprint: downloadprintMenu(

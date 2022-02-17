@@ -313,6 +313,39 @@ const updatePayAction = async (
   }
 };
 
+const callBackForZeroPay = async (state, dispatch) => {
+
+  const applicationNumber = getQueryArg(window.location, "consumerCode");
+  const tenantId = getQueryArg(window.location, "tenantId");
+
+  let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
+
+  const response = await httpRequest(
+    "post",
+    "/ws-services/wc/_search",
+    "_search",
+    queryObject
+  );
+
+
+  if (response.WaterConnection && response.WaterConnection.length > 0) {
+    let payload = response.WaterConnection[0];
+    payload.action = "PAY"
+    payload.processInstance.action = "PAY"
+    let updateResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: payload });
+    if (updateResponse.WaterConnection && updateResponse.WaterConnection.length > 0) {
+    await updatePayAction(
+      state,
+      dispatch,
+      applicationNumber,
+      tenantId,
+      'ZEROPAYMENT'
+    );
+    }
+  }
+
+}
+
 const callBackForPay = async (state, dispatch) => {
   let isFormValid = true;
   const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
@@ -655,6 +688,39 @@ export const footer = getCommonApplyFooter({
     //   action: "PAY"
     // },
     visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
+  },
+  makeZeroPayment: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      className: "gen-receipt-com",
+      // style: {
+      //   width: "379px",
+      //   height: "48px ",
+      //   right: "19px ",
+      //   position: "relative",
+      //   borderRadius: "0px "
+      // }
+    },
+    children: {
+      submitButtonLabel: getLabel({
+        labelName: "GENERATE RECEIPT",
+        labelKey: "COMMON_MAKE_ZERO_PAYMENT"
+      }),
+      submitButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: callBackForZeroPay
+    },
+    visible: false
   },
   makePayment: {
     componentPath: "Button",

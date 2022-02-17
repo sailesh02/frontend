@@ -42,6 +42,29 @@ export const getHeader = (state) => {
     });
 }
 
+export const getZeroPaymentHeader = (state) => {
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
+    let consumerCode = getQueryArg(window.location.href, "consumerCode");
+    let businessService = getQueryArg(window.location.href, "businessService");
+    let label = get(uiCommonPayConfig, "headerBandLabel");
+    return getCommonContainer({
+        header: getCommonHeader({
+            labelName: `Payment (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+            labelKey: "COMMON_ZERO_PAY_SCREEN_HEADER"
+        }),
+        consumerCode: {
+            uiFramework: "custom-atoms-local",
+            moduleName: "egov-common",
+            componentPath: "ApplicationNoContainer",
+            props: {
+                number: consumerCode,
+                label: {
+                    labelKey: label ? label : "PAYMENT_COMMON_CONSUMER_CODE",
+                },
+            }
+        }
+    });
+}
 
 const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBusinessService) => {
     await getBusinessServiceMdmsData(dispatch, tenantId);
@@ -140,8 +163,27 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
             dispatch(handleField("pay", raidButtonComponentPath, "props.value", "partial_amount"));
         }
     }
-    if (get(totalAmount, "totalAmount") === 0) {
-    dispatch(handleField("pay", "components.div.children.footer.children.generateReceipt", "props.disabled", true));
+    
+    if (getQueryArg(window.location.href, "businessService").includes("WS")) {
+        if (get(totalAmount, "totalAmount") === 0) {
+            dispatch(handleField("pay", "components.div.children.footer.children.makeZeroPayment", "visible", true));
+            dispatch(handleField("pay", "components.div.children.footer.children.makePayment", "visible", false));
+            dispatch(handleField("pay", "components.div.children.footer.children.generateReceipt", "visible", false));
+            dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.g8Details", "visible", false));
+            dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails", "visible", false));
+            dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePayerDetails", "visible", false));
+            
+
+        } else {
+            dispatch(handleField("pay", "components.div.children.footer.children.makeZeroPayment", "visible", false));
+            
+            dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.zeroAmountMsgCard", "visible", false));
+        }
+    } else {
+        if (get(totalAmount, "totalAmount") === 0) {
+            dispatch(handleField("pay", "components.div.children.footer.children.generateReceipt", "props.disabled", true));
+            dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.zeroAmountMsgCard", "visible", false));
+        }
     }
 };
 
@@ -211,7 +253,15 @@ const screenConfig = {
                             },
                             capturePaymentDetails: process.env.REACT_APP_NAME === "Citizen" ? {} : capturePaymentDetails,
                             capturePayerDetails: process.env.REACT_APP_NAME === "Citizen" ? capturePayerDetails : {},
-                            g8Details: process.env.REACT_APP_NAME === "Citizen" ? {} : g8Details
+                            g8Details: process.env.REACT_APP_NAME === "Citizen" ? {} : g8Details,
+                            
+                        }),
+                        zeroAmountMsgCard: getCommonCard({
+                            zeroAmountMsg: getCommonTitle({
+                                labelName: "Consumer belongs to special category, so payble amount is zero. Please click Proceed button to process the application",
+                                labelKey: "COMMON_MAKE_ZERO_PAYMENT_MESSAGE",
+                                style: {"color": "green"}
+                            })
                         })
                     }
                 },

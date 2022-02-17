@@ -28,6 +28,7 @@ import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getMdmsData } from './apply';
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { download } from "egov-common/ui-utils/commons";
 let headerLabel = "WS_APPLICATION_NEW_CONNECTION_HEADER";
 const applicationNo = getQueryArg(window.location.href, "applicationNumber");
 if(isModifyMode()){
@@ -873,6 +874,36 @@ export const downloadPrintContainer = (
     // },
     leftIcon: "assignment"
   };
+
+
+  let receiptDownloadObject = {
+    label: { labelName: "Receipt", labelKey: "COMMON_DOWNLOAD_RECEIPT" },
+    link: () => {
+
+
+      const receiptQueryString = [
+        { key: "consumerCodes", value: applicationNumber },
+        { key: "tenantIds", value: get(state.screenConfiguration.preparedFinalObject.WaterConnection[0], "tenantId") }
+      ]
+      download(receiptQueryString, "download", "ws-onetime-receipt", state);
+      // generateReceipt(state, dispatch, "receipt_download");
+    },
+    leftIcon: "receipt"
+  };
+  let receiptPrintObject = {
+    label: { labelName: "Receipt", labelKey: "COMMON_PRINT_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "consumerCodes", value: applicationNumber },
+        { key: "tenantIds", value: get(state.screenConfiguration.preparedFinalObject.WaterConnection[0], "tenantId") }
+      ]
+      download(receiptQueryString, "print", "ws-onetime-receipt", state);
+      // generateReceipt(state, dispatch, "receipt_print");
+    },
+    leftIcon: "receipt"
+  };
+
+
   switch (appStatus) {
     case "PENDING_FOR_DOCUMENT_VERIFICATION":
     case "PENDING_FOR_CITIZEN_ACTION":
@@ -887,8 +918,8 @@ export const downloadPrintContainer = (
       break;
     case "PENDING_FOR_CONNECTION_ACTIVATION":
     case "CONNECTION_ACTIVATED":
-      downloadMenu = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject];
-      printMenu = [sanctionPrintObject, wsEstimatePrintObject, applicationPrintObject];
+      downloadMenu = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject, receiptDownloadObject];
+      printMenu = [sanctionPrintObject, wsEstimatePrintObject, applicationPrintObject, receiptPrintObject];
       break;
     case "REJECTED":
       downloadMenu = [applicationDownloadObject];

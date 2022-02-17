@@ -147,12 +147,9 @@ class Footer extends React.Component {
   
     let due
     let fetchBillQueryObj = []
-          if(connectionFacility === "WATER"){
-            fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "WS" }]
-          }else{
-            fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "SW" }]
-          }
-
+          
+          fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "WS" }]
+          
           const billResults = await httpRequest(
             "post",
             "/billing-service/bill/v2/_fetchbill",
@@ -163,7 +160,7 @@ class Footer extends React.Component {
               due = bill.totalAmount
               if(due > 0){
                 this.setState({dueAmountmsg: "The connection has some pending dues. Still you want to proceed?"})
-                console.log(due, "Nero Due Amount")
+                
               }
           })
 

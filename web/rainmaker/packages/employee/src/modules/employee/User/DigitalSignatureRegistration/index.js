@@ -45,7 +45,7 @@ class DigitalSignatureRegistration extends Component {
     return JSON.parse(getUserInfo())
   }
 
-  getTokenList = () => {
+  getTokenList_bkup = () => {
     this.props.showSpinner();
     let requestInfo = this.getRequestInfo()
     RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};    
@@ -110,6 +110,190 @@ class DigitalSignatureRegistration extends Component {
       .catch(error => {
         console.log(error)
 
+        this.props.hideSpinner();
+      });
+  }
+
+  getTokenList = () => {
+    this.props.showSpinner();
+    let requestInfo = this.getRequestInfo()
+    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};    
+    let body =  Object.assign(
+      {},
+      {
+        RequestInfo,
+        "tenantId":getTenantId(),
+        "responseData":null
+      }
+    );
+    
+    axios.post("/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+     })
+      .then(response => {
+        let body = response.data.input
+        if((response.data && response.data.input && response.data.input.emudhraErrorCode) && (response.data && response.data.input && response.data.input.dscErrorCode)){
+          store.dispatch(toggleSnackbarAndSetText(
+            true,
+            {
+              labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+              labelKey: `Error in eMudhra end, ${response.data.input.emudhraErrorCode}`
+            },
+            "error"
+          ));
+          this.props.hideSpinner();
+        }else if((response.data && response.data.input && response.data.input.emudhraErrorCode) && (response.data && response.data.input && !response.data.input.dscErrorCode)){
+          store.dispatch(toggleSnackbarAndSetText(
+            true,
+            {
+              labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+              labelKey: `Error in eMudhra end, ${response.data.input.emudhraErrorCode}`
+            },
+            "error"
+          ));
+          this.props.hideSpinner();
+        }else if((response.data && response.data.input && !response.data.input.emudhraErrorCode) && (response.data && response.data.input && response.data.input.dscErrorCode)){
+          store.dispatch(toggleSnackbarAndSetText(
+            true,
+            {
+              labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+              labelKey: `Error in Sujog end, ${response.data.input.dscErrorCode}`
+            },
+            "error"
+          ));
+          this.props.hideSpinner();
+        }else{
+        axios.post("https://localhost.emudhra.com:26769/DSC/ListToken", body, { // to get R1 R2
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+         })
+          .then(response => {
+
+            console.log(response, "Mudra Response")
+            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};                 
+            let body =  Object.assign(
+               {},
+                {
+                 RequestInfo,
+                 "tenantId":getTenantId(),
+                 "responseData":response.data.responseData
+                }
+             );
+            axios.post("/dsc-services/dsc/_getTokens", body, { // to get tokens
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+             })
+              .then(response => { 
+
+                if((response.data && response.data.emudhraErrorCode) && (response.data  && response.data.dscErrorCode)){
+                  store.dispatch(toggleSnackbarAndSetText(
+                    true,
+                    {
+                      labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                      labelKey: `Error in eMudhra end, ${response.data.emudhraErrorCode}`
+                    },
+                    "error"
+                  ));
+                  this.props.hideSpinner();
+                }else if((response.data  && response.data.emudhraErrorCode) && (response.data && !response.data.dscErrorCode)){
+                  store.dispatch(toggleSnackbarAndSetText(
+                    true,
+                    {
+                      labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                      labelKey: `Error in eMudhra end, ${response.data.emudhraErrorCode}`
+                    },
+                    "error"
+                  ));
+                  this.props.hideSpinner();
+
+                }else if((response.data && !response.data.emudhraErrorCode) && (response.data && response.data.dscErrorCode)){
+                  store.dispatch(toggleSnackbarAndSetText(
+                    true,
+                    {
+                      labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                      labelKey: `Error in Sujog end, ${response.data.dscErrorCode}`
+                    },
+                    "error"
+                  ));
+                  this.props.hideSpinner();
+
+                }else{
+                
+                let requiredTokenFormat = response && response.data && response.data.tokens && response.data.tokens.map (token => {
+                  return {
+                    label : token,
+                    value : token,
+                    name: token,
+                    value: token
+                  }
+                }) 
+                this.props.hideSpinner();
+                if(requiredTokenFormat && requiredTokenFormat.length > 0){
+                  store.dispatch(setFieldProperty("digitalSignatureRegistration", "token", "dropDownData", requiredTokenFormat));
+                }
+              }
+
+              })
+
+
+
+              .catch(error => { 
+                console.log(error)
+                store.dispatch(toggleSnackbarAndSetText(
+                  true,
+                  {
+                    labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                    labelKey: "Something went wrong. Please contact to Sujog"
+                  },
+                  "error"
+                ));
+                this.props.hideSpinner();
+              });
+
+
+
+          })
+          .catch(error => { 
+            console.log(error, "eMudra Error")
+            if (!error.response) {
+              // network error
+              
+              store.dispatch(toggleSnackbarAndSetText(
+                true,
+                {
+                  labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                  labelKey: "Error in detecting Token device. Please check whether hardware device connected properly"
+                },
+                "error"
+              ));
+          }else{
+            store.dispatch(toggleSnackbarAndSetText(
+              true,
+              {
+                labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                labelKey: "Something went wrong with the Token device. Please check whether hardware device connected properly"
+              },
+              "error"
+            ));
+          }
+            
+            this.props.hideSpinner();
+          });
+
+        }
+
+      })
+      .catch(error => {
+        console.log(error)
+        store.dispatch(toggleSnackbarAndSetText(
+          true,
+          {
+            labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+            labelKey: "Something went wrong. Please contact to Sujog"
+          },
+          "error"
+        ));
         this.props.hideSpinner();
       });
   }

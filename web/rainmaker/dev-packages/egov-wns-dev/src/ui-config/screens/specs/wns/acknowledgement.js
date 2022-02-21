@@ -883,7 +883,8 @@ export const downloadPrintContainer = (
 
       const receiptQueryString = [
         { key: "consumerCodes", value: applicationNumber },
-        { key: "tenantIds", value: get(state.screenConfiguration.preparedFinalObject.WaterConnection[0], "tenantId") }
+        { key: "tenantIds", value: get(state.screenConfiguration.preparedFinalObject.WaterConnection[0], "tenantId") },
+        {key: "businessService", value: "WS.ONE_TIME_FEE"}
       ]
       download(receiptQueryString, "download", "ws-onetime-receipt", state);
       // generateReceipt(state, dispatch, "receipt_download");
@@ -895,7 +896,8 @@ export const downloadPrintContainer = (
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: applicationNumber },
-        { key: "tenantIds", value: get(state.screenConfiguration.preparedFinalObject.WaterConnection[0], "tenantId") }
+        { key: "tenantIds", value: get(state.screenConfiguration.preparedFinalObject.WaterConnection[0], "tenantId") },
+        {key: "businessService", value: "WS.ONE_TIME_FEE"}
       ]
       download(receiptQueryString, "print", "ws-onetime-receipt", state);
       // generateReceipt(state, dispatch, "receipt_print");

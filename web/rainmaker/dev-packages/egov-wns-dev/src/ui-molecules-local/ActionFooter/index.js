@@ -147,7 +147,8 @@ class Footer extends React.Component {
   
     let due
     let fetchBillQueryObj = []
-          
+       try {
+         
           fetchBillQueryObj = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: connectionNumber }, { key: "businessService", value: "WS" }]
           
           const billResults = await httpRequest(
@@ -163,6 +164,10 @@ class Footer extends React.Component {
                 
               }
           })
+
+        } catch ( error ){
+          console.log(error, "Neero Error")
+        }
 
          
           

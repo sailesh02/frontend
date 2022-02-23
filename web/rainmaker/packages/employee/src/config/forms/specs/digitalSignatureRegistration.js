@@ -27,86 +27,6 @@ const getCustomRequestInfo = () => {
   return JSON.parse(getUserInfo())
 }
 
-const getCertificateList_bkup = (token) => {
-  store.dispatch(showSpinner());
-  let requestInfo = getRequestInfo()
-  RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};
-  let body =  Object.assign(
-    {},
-    {
-      RequestInfo,
-      "tenantId":getTenantId(),
-      "responseData":null,
-      "tokenDisplayName":token
-    }
-  );
-
-  axios.post("/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-   })
-    .then(response => {
-      let body = response.data.input
-      axios.post("https://localhost.emudhra.com:26769/DSC/ListCertificate", body, { // to get R1 R2
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       })
-        .then(response => {
-          if(response && response.data && response.data.errorCode){
-            this.props.toggleSnackbarAndSetText(
-              true,
-              {
-                labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
-              },
-              "error"
-            );
-            this.props.hideSpinner();
-          }else{
-
-          RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};
-          let body =  Object.assign(
-             {},
-              {
-               RequestInfo,
-               "tenantId":getTenantId(),
-                responseData:response.data.responseData,
-                tokenDisplayName:token
-              }
-           );
-          axios.post("/dsc-services/dsc/_getCertificate", body, { // to get R1 R2
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-           })
-            .then(response => {
-              let requiredCertificateFormat = response && response.data && response.data.certificates &&
-              response.data.certificates.map (certificate => {
-                return {
-                  label : certificate.commonName,
-                  value : certificate.keyId,
-                  name: certificate.commonName,
-                  value: certificate.keyId
-                }
-              }) || []
-              store.dispatch(hideSpinner());
-              store.dispatch(setFieldProperty("digitalSignatureRegistration", "certificate", "dropDownData", requiredCertificateFormat));
-              return requiredCertificateFormat
-            })
-            .catch(error => {
-              store.dispatch(hideSpinner());
-            });
-
-          }
-        })
-        .catch(error => {
-          store.dispatch(hideSpinner());
-        });
-    })
-    .catch(error => {
-      store.dispatch(hideSpinner());
-    });
-}
-
 const getCertificateList = (token) => {
   store.dispatch(showSpinner());
   let requestInfo = getRequestInfo()
@@ -133,7 +53,7 @@ const getCertificateList = (token) => {
           true,
           {
             labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-            labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
+            labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.input.emudhraErrorCode}`
           },
           "error"
         ));
@@ -143,7 +63,7 @@ const getCertificateList = (token) => {
           true,
           {
             labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-            labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
+            labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.input.emudhraErrorCode}`
           },
           "error"
         ));
@@ -153,7 +73,7 @@ const getCertificateList = (token) => {
           true,
           {
             labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-            labelKey: `An error occurred processing your request, ${response.data.input.dscErrorCode}`
+            labelKey: `An error occurred processing your request. If this problem persists, please contact Sujog Support, Error Detail - ${response.data.input.dscErrorCode}`
           },
           "error"
         ));
@@ -169,7 +89,7 @@ const getCertificateList = (token) => {
               true,
               {
                 labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
+                labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.errorCode}, ${response.data.errorMessage}`
               },
               "error"
             );
@@ -196,7 +116,7 @@ const getCertificateList = (token) => {
                   true,
                   {
                     labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                    labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
+                    labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.emudhraErrorCode}`
                   },
                   "error"
                 ));
@@ -206,7 +126,7 @@ const getCertificateList = (token) => {
                   true,
                   {
                     labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                    labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
+                    labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.emudhraErrorCode}`
                   },
                   "error"
                 ));
@@ -217,7 +137,7 @@ const getCertificateList = (token) => {
                   true,
                   {
                     labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                    labelKey: `An error occurred processing your request, ${response.data.dscErrorCode}`
+                    labelKey: `An error occurred processing your request. If this problem persists, please contact Sujog Support, Error Detail - ${response.data.dscErrorCode}`
                   },
                   "error"
                 ));

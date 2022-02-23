@@ -45,89 +45,6 @@ class DigitalSignatureRegistration extends Component {
     return JSON.parse(getUserInfo())
   }
 
-  getTokenList_bkup = () => {
-    this.props.showSpinner();
-    let requestInfo = this.getRequestInfo()
-    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};
-    let body =  Object.assign(
-      {},
-      {
-        RequestInfo,
-        "tenantId":getTenantId(),
-        "responseData":null
-      }
-    );
-
-    axios.post("/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-     })
-      .then(response => {
-        let body = response.data.input
-        axios.post("https://localhost.emudhra.com:26769/DSC/ListToken", body, { // to get R1 R2
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-         })
-          .then(response => {
-
-            if(response && response.data && response.data.errorCode){
-              this.props.toggleSnackbarAndSetText(
-                true,
-                {
-                  labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                  labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
-                },
-                "error"
-              );
-              this.props.hideSpinner();
-            }else{
-
-            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};
-            let body =  Object.assign(
-               {},
-                {
-                 RequestInfo,
-                 "tenantId":getTenantId(),
-                 "responseData":response.data.responseData
-                }
-             );
-            axios.post("/dsc-services/dsc/_getTokens", body, { // to get tokens
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-             })
-              .then(response => {
-                let requiredTokenFormat = response && response.data && response.data.tokens && response.data.tokens.map (token => {
-                  return {
-                    label : token,
-                    value : token,
-                    name: token,
-                    value: token
-                  }
-                })
-                this.props.hideSpinner();
-                if(requiredTokenFormat && requiredTokenFormat.length > 0){
-                  store.dispatch(setFieldProperty("digitalSignatureRegistration", "token", "dropDownData", requiredTokenFormat));
-                }
-              })
-              .catch(error => {
-                console.log(error)
-                this.props.hideSpinner();
-              });
-
-            }
-          })
-          .catch(error => {
-            console.log(error)
-
-            this.props.hideSpinner();
-          });
-      })
-      .catch(error => {
-        console.log(error)
-
-        this.props.hideSpinner();
-      });
-  }
 
   getTokenList = () => {
     this.props.showSpinner();
@@ -153,7 +70,7 @@ class DigitalSignatureRegistration extends Component {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
+              labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.input.emudhraErrorCode}`
             },
             "error"
           ));
@@ -163,7 +80,7 @@ class DigitalSignatureRegistration extends Component {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
+              labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.input.emudhraErrorCode}`
             },
             "error"
           ));
@@ -173,7 +90,7 @@ class DigitalSignatureRegistration extends Component {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `An error occurred processing your request, ${response.data.input.dscErrorCode}`
+              labelKey: `An error occurred processing your request. If this problem persists, please contact Sujog Support, Error detail - ${response.data.input.dscErrorCode}`
             },
             "error"
           ));
@@ -189,7 +106,7 @@ class DigitalSignatureRegistration extends Component {
                 true,
                 {
                   labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                  labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
+                  labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.errorCode}, ${response.data.errorMessage}`
                 },
                 "error"
               );
@@ -216,7 +133,7 @@ class DigitalSignatureRegistration extends Component {
                     true,
                     {
                       labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                      labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
+                      labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.emudhraErrorCode}`
                     },
                     "error"
                   ));
@@ -226,7 +143,7 @@ class DigitalSignatureRegistration extends Component {
                     true,
                     {
                       labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                      labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
+                      labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.emudhraErrorCode}`
                     },
                     "error"
                   ));
@@ -237,7 +154,7 @@ class DigitalSignatureRegistration extends Component {
                     true,
                     {
                       labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                      labelKey: `An error occurred processing your request, ${response.data.dscErrorCode}`
+                      labelKey: `An error occurred processing your request. If this problem persists, please contact Sujog Support, Error Detail - ${response.data.dscErrorCode}`
                     },
                     "error"
                   ));

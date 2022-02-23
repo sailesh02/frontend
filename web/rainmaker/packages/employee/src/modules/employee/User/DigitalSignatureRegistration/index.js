@@ -48,7 +48,7 @@ class DigitalSignatureRegistration extends Component {
   getTokenList_bkup = () => {
     this.props.showSpinner();
     let requestInfo = this.getRequestInfo()
-    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};    
+    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};
     let body =  Object.assign(
       {},
       {
@@ -57,7 +57,7 @@ class DigitalSignatureRegistration extends Component {
         "responseData":null
       }
     );
-    
+
     axios.post("/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
       'Content-Type': 'application/json',
       'Accept': 'application/json'
@@ -69,7 +69,20 @@ class DigitalSignatureRegistration extends Component {
           'Accept': 'application/json'
          })
           .then(response => {
-            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};                 
+
+            if(response && response.data && response.data.errorCode){
+              this.props.toggleSnackbarAndSetText(
+                true,
+                {
+                  labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                  labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
+                },
+                "error"
+              );
+              this.props.hideSpinner();
+            }else{
+
+            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};
             let body =  Object.assign(
                {},
                 {
@@ -82,7 +95,7 @@ class DigitalSignatureRegistration extends Component {
               'Content-Type': 'application/json',
               'Accept': 'application/json'
              })
-              .then(response => { 
+              .then(response => {
                 let requiredTokenFormat = response && response.data && response.data.tokens && response.data.tokens.map (token => {
                   return {
                     label : token,
@@ -90,18 +103,20 @@ class DigitalSignatureRegistration extends Component {
                     name: token,
                     value: token
                   }
-                }) 
+                })
                 this.props.hideSpinner();
                 if(requiredTokenFormat && requiredTokenFormat.length > 0){
                   store.dispatch(setFieldProperty("digitalSignatureRegistration", "token", "dropDownData", requiredTokenFormat));
                 }
               })
-              .catch(error => { 
+              .catch(error => {
                 console.log(error)
                 this.props.hideSpinner();
               });
+
+            }
           })
-          .catch(error => { 
+          .catch(error => {
             console.log(error)
 
             this.props.hideSpinner();
@@ -117,7 +132,7 @@ class DigitalSignatureRegistration extends Component {
   getTokenList = () => {
     this.props.showSpinner();
     let requestInfo = this.getRequestInfo()
-    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};    
+    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};
     let body =  Object.assign(
       {},
       {
@@ -126,7 +141,7 @@ class DigitalSignatureRegistration extends Component {
         "responseData":null
       }
     );
-    
+
     axios.post("/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
       'Content-Type': 'application/json',
       'Accept': 'application/json'
@@ -138,7 +153,7 @@ class DigitalSignatureRegistration extends Component {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `Error in eMudhra end, ${response.data.input.emudhraErrorCode}`
+              labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
             },
             "error"
           ));
@@ -148,7 +163,7 @@ class DigitalSignatureRegistration extends Component {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `Error in eMudhra end, ${response.data.input.emudhraErrorCode}`
+              labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
             },
             "error"
           ));
@@ -158,7 +173,7 @@ class DigitalSignatureRegistration extends Component {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `Error in Sujog end, ${response.data.input.dscErrorCode}`
+              labelKey: `An error occurred processing your request, ${response.data.input.dscErrorCode}`
             },
             "error"
           ));
@@ -169,9 +184,19 @@ class DigitalSignatureRegistration extends Component {
           'Accept': 'application/json'
          })
           .then(response => {
-
+            if(response && response.data && response.data.errorCode){
+              this.props.toggleSnackbarAndSetText(
+                true,
+                {
+                  labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                  labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
+                },
+                "error"
+              );
+              this.props.hideSpinner();
+            }else{
             console.log(response, "Mudra Response")
-            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};                 
+            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};
             let body =  Object.assign(
                {},
                 {
@@ -184,14 +209,14 @@ class DigitalSignatureRegistration extends Component {
               'Content-Type': 'application/json',
               'Accept': 'application/json'
              })
-              .then(response => { 
+              .then(response => {
 
                 if((response.data && response.data.emudhraErrorCode) && (response.data  && response.data.dscErrorCode)){
                   store.dispatch(toggleSnackbarAndSetText(
                     true,
                     {
                       labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                      labelKey: `Error in eMudhra end, ${response.data.emudhraErrorCode}`
+                      labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
                     },
                     "error"
                   ));
@@ -201,7 +226,7 @@ class DigitalSignatureRegistration extends Component {
                     true,
                     {
                       labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                      labelKey: `Error in eMudhra end, ${response.data.emudhraErrorCode}`
+                      labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
                     },
                     "error"
                   ));
@@ -212,14 +237,14 @@ class DigitalSignatureRegistration extends Component {
                     true,
                     {
                       labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                      labelKey: `Error in Sujog end, ${response.data.dscErrorCode}`
+                      labelKey: `An error occurred processing your request, ${response.data.dscErrorCode}`
                     },
                     "error"
                   ));
                   this.props.hideSpinner();
 
                 }else{
-                
+
                 let requiredTokenFormat = response && response.data && response.data.tokens && response.data.tokens.map (token => {
                   return {
                     label : token,
@@ -227,7 +252,7 @@ class DigitalSignatureRegistration extends Component {
                     name: token,
                     value: token
                   }
-                }) 
+                })
                 this.props.hideSpinner();
                 if(requiredTokenFormat && requiredTokenFormat.length > 0){
                   store.dispatch(setFieldProperty("digitalSignatureRegistration", "token", "dropDownData", requiredTokenFormat));
@@ -238,7 +263,7 @@ class DigitalSignatureRegistration extends Component {
 
 
 
-              .catch(error => { 
+              .catch(error => {
                 console.log(error)
                 store.dispatch(toggleSnackbarAndSetText(
                   true,
@@ -251,14 +276,14 @@ class DigitalSignatureRegistration extends Component {
                 this.props.hideSpinner();
               });
 
-
+            }
 
           })
-          .catch(error => { 
+          .catch(error => {
             console.log(error, "eMudra Error")
             if (!error.response) {
               // network error
-              
+
               store.dispatch(toggleSnackbarAndSetText(
                 true,
                 {
@@ -277,7 +302,7 @@ class DigitalSignatureRegistration extends Component {
               "error"
             ));
           }
-            
+
             this.props.hideSpinner();
           });
 

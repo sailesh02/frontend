@@ -20,7 +20,7 @@ const getSuccessMsg = (responseString) => {
         labelKey:'DIGITAL_SIGNATURE_REGISTRATION_SUCCESS_MSG',
         labelName:'Digital Signature registration successfully completed.',
         type: "success"
-      }  
+      }
     case 'exception':
       return {
         labelKey:'DIGITAL_SIGNATURE_REGISTRATION_EXCEPTION_MSG',
@@ -74,13 +74,13 @@ const getSuccessMsg = (responseString) => {
         labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E70010_MSG',
         labelName:'Issue in Digital Signature registration (e70010), please contact System Administrator.',
         type: "error"
-      } 
+      }
     case 'e7009':
       return {
         labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E7009_MSG',
         labelName:'Issue in Digital Signature registration (e7009), please contact System Administrator.',
         type: "error"
-      } 
+      }
     case 'e7001':
       return {
         labelKey:'DIGITAL_SIGNATURE_REGISTRATION_CODE_E7001_MSG',
@@ -98,8 +98,8 @@ const getSuccessMsg = (responseString) => {
         labelKey:'ERR_DIGITAL_SIGNATURE_FAILURE_MSG',
         labelName:'ERR_DIGITAL_SIGNATURE_FAILURE_MSG',
         type: "error"
-      }  
-      
+      }
+
   }
 
 }
@@ -157,7 +157,7 @@ const register = (token, certificate, password) => {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `Error in eMudhra end, ${response.data.input.emudhraErrorCode}`
+              labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
             },
             "error"
           ));
@@ -167,7 +167,7 @@ const register = (token, certificate, password) => {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `Error in eMudhra end, ${response.data.input.emudhraErrorCode}`
+              labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
             },
             "error"
           ));
@@ -177,7 +177,7 @@ const register = (token, certificate, password) => {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `Error in Sujog end, ${response.data.input.dscErrorCode}`
+              labelKey: `An error occurred processing your request, ${response.data.input.dscErrorCode}`
             },
             "error"
           ));
@@ -189,6 +189,18 @@ const register = (token, certificate, password) => {
           })
             .then(response => {
               store.dispatch(showSpinner())
+              if(response && response.data && response.data.errorCode){
+                this.props.toggleSnackbarAndSetText(
+                  true,
+                  {
+                    labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                    labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
+                  },
+                  "error"
+                );
+                this.props.hideSpinner();
+              }else{
+
               let requestInfo = getRequestInfo()
               RequestInfo = { ...requestInfo, "userInfo": getCustomRequestInfo() };
               let body = Object.assign(
@@ -215,7 +227,7 @@ const register = (token, certificate, password) => {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `Error in eMudhra end, ${response.data.emudhraErrorCode}`
+                        labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
                       },
                       "error"
                     ));
@@ -225,7 +237,7 @@ const register = (token, certificate, password) => {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `Error in eMudhra end, ${response.data.emudhraErrorCode}`
+                        labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
                       },
                       "error"
                     ));
@@ -236,7 +248,7 @@ const register = (token, certificate, password) => {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `Error in Sujog end, ${response.data.dscErrorCode}`
+                        labelKey: `An error occurred processing your request, ${response.data.dscErrorCode}`
                       },
                       "error"
                     ));
@@ -267,6 +279,7 @@ const register = (token, certificate, password) => {
                   ));
                   store.dispatch(hideSpinner())
                 });
+              }
             })
             .catch(error => {
 
@@ -314,12 +327,12 @@ const register = (token, certificate, password) => {
 }
 
 const register_bkup = (token,certificate,password) => {
-  if(token && token != " " && 
+  if(token && token != " " &&
   certificate && certificate != " " &&
   password && password != " "){
     store.dispatch(showSpinner());
     let requestInfo = getRequestInfo()
-    RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};      
+    RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};
     let body =  Object.assign(
       {},
       {
@@ -332,7 +345,7 @@ const register_bkup = (token,certificate,password) => {
         responseData:null
       }
     );
-    
+
     axios.post("/dsc-services/dsc/_dataSignInput", body, {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
@@ -340,14 +353,26 @@ const register_bkup = (token,certificate,password) => {
       .then(response => {
         store.dispatch(showSpinner())
         let body = response.data.input
-        axios.post("https://localhost.emudhra.com:26769/DSC/PKCSSign", body, { 
+        axios.post("https://localhost.emudhra.com:26769/DSC/PKCSSign", body, {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
          })
           .then(response => {
             store.dispatch(showSpinner())
+            if(response && response.data && response.data.errorCode){
+              this.props.toggleSnackbarAndSetText(
+                true,
+                {
+                  labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                  labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
+                },
+                "error"
+              );
+              this.props.hideSpinner();
+            }else{
+
             let requestInfo = getRequestInfo()
-            RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};                
+            RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};
             let body =  Object.assign(
                {},
                 {
@@ -400,6 +425,8 @@ const register_bkup = (token,certificate,password) => {
                 ));
               store.dispatch(hideSpinner())
                 });
+
+              }
           })
           .catch(error => {
             store.dispatch(hideSpinner())
@@ -433,13 +460,13 @@ const DigitalSignatureForm = ({ form, handleFieldChange, cardTitle, formKey, con
             return (
              fieldKey === "submit" ? (
                 <div className="responsive-action-button-cont">
-               <Button className="change-password-label-style" variant ='contained' 
+               <Button className="change-password-label-style" variant ='contained'
                onClick = {
                  (e) => register(fields.token.value,fields.certificate.value,fields.digitalSignaturePassword.value)
                } primary={true} style={{width: '20%',color :"rgb(255, 255, 255",backgroundColor: "rgb(254, 122, 81)",lineHeight:'32px'}}>REGISTER
                </Button>
               </div>
-              ) : 
+              ) :
               (
                 <div
                   // style={

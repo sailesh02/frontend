@@ -30,7 +30,7 @@ const getCustomRequestInfo = () => {
 const getCertificateList_bkup = (token) => {
   store.dispatch(showSpinner());
   let requestInfo = getRequestInfo()
-  RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()}; 
+  RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};
   let body =  Object.assign(
     {},
     {
@@ -40,7 +40,7 @@ const getCertificateList_bkup = (token) => {
       "tokenDisplayName":token
     }
   );
-  
+
   axios.post("/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -52,7 +52,19 @@ const getCertificateList_bkup = (token) => {
         'Accept': 'application/json'
        })
         .then(response => {
-          RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};              
+          if(response && response.data && response.data.errorCode){
+            this.props.toggleSnackbarAndSetText(
+              true,
+              {
+                labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
+              },
+              "error"
+            );
+            this.props.hideSpinner();
+          }else{
+
+          RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};
           let body =  Object.assign(
              {},
               {
@@ -83,6 +95,8 @@ const getCertificateList_bkup = (token) => {
             .catch(error => {
               store.dispatch(hideSpinner());
             });
+
+          }
         })
         .catch(error => {
           store.dispatch(hideSpinner());
@@ -96,7 +110,7 @@ const getCertificateList_bkup = (token) => {
 const getCertificateList = (token) => {
   store.dispatch(showSpinner());
   let requestInfo = getRequestInfo()
-  RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()}; 
+  RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};
   let body =  Object.assign(
     {},
     {
@@ -106,7 +120,7 @@ const getCertificateList = (token) => {
       "tokenDisplayName":token
     }
   );
-  
+
   axios.post("/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -119,7 +133,7 @@ const getCertificateList = (token) => {
           true,
           {
             labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-            labelKey: `Error in eMudhra end, ${response.data.input.emudhraErrorCode}`
+            labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
           },
           "error"
         ));
@@ -129,7 +143,7 @@ const getCertificateList = (token) => {
           true,
           {
             labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-            labelKey: `Error in eMudhra end, ${response.data.input.emudhraErrorCode}`
+            labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
           },
           "error"
         ));
@@ -139,7 +153,7 @@ const getCertificateList = (token) => {
           true,
           {
             labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-            labelKey: `Error in Sujog end, ${response.data.input.dscErrorCode}`
+            labelKey: `An error occurred processing your request, ${response.data.input.dscErrorCode}`
           },
           "error"
         ));
@@ -150,7 +164,18 @@ const getCertificateList = (token) => {
         'Accept': 'application/json'
        })
         .then(response => {
-          RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};              
+          if(response && response.data && response.data.errorCode){
+            this.props.toggleSnackbarAndSetText(
+              true,
+              {
+                labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
+              },
+              "error"
+            );
+            this.props.hideSpinner();
+          }else{
+          RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};
           let body =  Object.assign(
              {},
               {
@@ -171,7 +196,7 @@ const getCertificateList = (token) => {
                   true,
                   {
                     labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                    labelKey: `Error in eMudhra end, ${response.data.emudhraErrorCode}`
+                    labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
                   },
                   "error"
                 ));
@@ -181,18 +206,18 @@ const getCertificateList = (token) => {
                   true,
                   {
                     labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                    labelKey: `Error in eMudhra end, ${response.data.emudhraErrorCode}`
+                    labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
                   },
                   "error"
                 ));
                 this.props.hideSpinner();
-                
+
               }else if((response.data && !response.data.emudhraErrorCode) && (response.data && response.data.dscErrorCode)){
                 store.dispatch(toggleSnackbarAndSetText(
                   true,
                   {
                     labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                    labelKey: `Error in Sujog end, ${response.data.dscErrorCode}`
+                    labelKey: `An error occurred processing your request, ${response.data.dscErrorCode}`
                   },
                   "error"
                 ));
@@ -227,14 +252,14 @@ const getCertificateList = (token) => {
               this.props.hideSpinner();
               store.dispatch(hideSpinner());
             });
-           
-            
+          }
+
         })
         .catch(error => {
 
           if (!error.response) {
             // network error
-            
+
             store.dispatch(toggleSnackbarAndSetText(
               true,
               {
@@ -317,6 +342,5 @@ const formConfig = {
       },
     }
   };
-  
+
   export default formConfig;
-  

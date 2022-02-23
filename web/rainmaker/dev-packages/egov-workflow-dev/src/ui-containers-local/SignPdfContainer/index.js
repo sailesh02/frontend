@@ -92,7 +92,7 @@ const edcrHttpRequest = async (
       );
     const responseStatus = parseInt(response.status, 10);
     store.dispatch(hideSpinner());
-    if (responseStatus === 200 || responseStatus === 201) {      
+    if (responseStatus === 200 || responseStatus === 201) {
       return response.data;
     }
   } catch (error) {
@@ -125,7 +125,7 @@ const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
     { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNumber }
   ];
-  switch(moduleName){  
+  switch(moduleName){
     case 'BPA':
         queryObject = [
           { key: "tenantId", value: tenantId },
@@ -162,12 +162,12 @@ const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
           }catch(err){
             return
           }
-          
+
 
         }catch(err){
           return
         }
-       
+
       break
     case 'NewTL':
       try {
@@ -189,18 +189,18 @@ const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
             }
             pdfOwnersNames = pdfOwnersNames.substring(0, pdfOwnersNames.length - 2);
           }
-      
+
           if (tlSearchResult.Licenses[0].tradeLicenseDetail.tradeUnits && tlSearchResult.Licenses[0].tradeLicenseDetail.tradeUnits.length > 0) {
             for (let i = 0; i < tlSearchResult.Licenses[0].tradeLicenseDetail.tradeUnits.length; i++) {
               let tradeTypeLocale = '';
-      
+
               tradeTypeLocale = getLocaleLabels("TradeType", `TRADELICENSE_TRADETYPE_${tlSearchResult.Licenses[0].tradeLicenseDetail.tradeUnits[i].tradeType.replace(/\./g, '_')}`);
               console.log(tradeTypeLocale, "Nero Locallll")
               pdfTradeTypes += tradeTypeLocale + ", ";
             }
             pdfTradeTypes = pdfTradeTypes.substring(0, pdfTradeTypes.length - 2);
           }
-      
+
           tlSearchResult.Licenses[0].additionalDetail = { ownerNames: pdfOwnersNames, tradeTypes: pdfTradeTypes };
 
           return {
@@ -210,11 +210,11 @@ const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
         }else{
           return null
         }
-      
+
       }catch(error){
-        return 
+        return
       }
-           
+
     case 'MR':
         try {
           let mrSearchResult = await httpRequest(
@@ -233,15 +233,15 @@ const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
           }else{
             return null
           }
-        
+
         }catch(error){
-          return 
+          return
         }
        break
     default:
       return {
         ...RequestInfo
-      }  
+      }
   }
 }
 
@@ -254,21 +254,21 @@ const getKey = (data,moduleName) => {
       pdfKey = "buildingpermit";
       if(businessService && businessService === 'BPA_LOW'){
         pdfKey = "buildingpermit-low"
-      }else if(businessService && (businessService == "BPA_OC" || businessService == "BPA_OC1" || 
+      }else if(businessService && (businessService == "BPA_OC" || businessService == "BPA_OC1" ||
       businessService == "BPA_OC2" || businessService == "BPA_OC3" || businessService == "BPA_OC4")){
         pdfKey = "occupancy-certificate"
       }else{
         pdfKey = "buildingpermit";
       }
-    break; 
+    break;
     case 'NewTL':
       pdfKey = applicationType && applicationType == "RENEWAL" ? "tlrenewalcertificate" : "tlcertificate"
       break;
     case 'MR':
-     pdfKey = 'mrcertificate'  
+     pdfKey = 'mrcertificate'
      break;
     default:
-      return pdfKey 
+      return pdfKey
   }
   return pdfKey
 }
@@ -318,7 +318,7 @@ class SignPdfContainer extends Component {
   getCertificateList_bkup = (token) => {
     this.props.showSpinner();
     let requestInfo = this.getRequestInfo()
-    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()}; 
+    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};
     let body =  Object.assign(
       {},
       {
@@ -328,7 +328,7 @@ class SignPdfContainer extends Component {
         "tokenDisplayName":token
       }
     );
-    
+
     axios.post("/dsc-services/dsc/_getInputCertificate", body, { // to get R1 R2
       'Content-Type': 'application/json',
       'Accept': 'application/json'
@@ -340,7 +340,19 @@ class SignPdfContainer extends Component {
           'Accept': 'application/json'
          })
           .then(response => {
-            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};              
+            if(response && response.data && response.data.errorCode){
+              this.props.toggleSnackbarAndSetText(
+                true,
+                {
+                  labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                  labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
+                },
+                "error"
+              );
+              this.props.hideSpinner();
+            }else{
+
+            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};
             let body =  Object.assign(
                {},
                 {
@@ -355,14 +367,14 @@ class SignPdfContainer extends Component {
               'Accept': 'application/json'
              })
               .then(response => {
-              
+
                 let requiredCertificateFormat = response && response.data && response.data.certificates &&
                 response.data.certificates.map (certificate => {
                   return {
                     label : certificate.commonName,
                     value : certificate.keyId
                   }
-                }) 
+                })
                 this.props.hideSpinner();
                 this.setState({
                   ceriticatesArray : requiredCertificateFormat,
@@ -372,6 +384,8 @@ class SignPdfContainer extends Component {
                 this.props.hideSpinner();
 
               });
+            }
+
           })
           .catch(error => {
             this.props.hideSpinner();
@@ -386,7 +400,7 @@ class SignPdfContainer extends Component {
   getTokenList_bkup = () => {
     this.props.showSpinner();
     let requestInfo = this.getRequestInfo()
-    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};    
+    RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};
     let body =  Object.assign(
       {},
       {
@@ -395,7 +409,7 @@ class SignPdfContainer extends Component {
         "responseData":null
       }
     );
-    
+
     axios.post("/dsc-services/dsc/_getTokenInput", body, { // to get R1 R2
       'Content-Type': 'application/json',
       'Accept': 'application/json'
@@ -407,7 +421,18 @@ class SignPdfContainer extends Component {
           'Accept': 'application/json'
          })
           .then(response => {
-            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};                 
+            if(response && response.data && response.data.errorCode){
+              this.props.toggleSnackbarAndSetText(
+                true,
+                {
+                  labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                  labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
+                },
+                "error"
+              );
+              this.props.hideSpinner();
+            }else{
+            RequestInfo = { ...requestInfo,"userInfo" : this.getCustomRequestInfo()};
             let body =  Object.assign(
                {},
                 {
@@ -420,13 +445,13 @@ class SignPdfContainer extends Component {
               'Content-Type': 'application/json',
               'Accept': 'application/json'
              })
-              .then(response => { 
+              .then(response => {
                 let requiredTokenFormat = response && response.data && response.data.tokens && response.data.tokens.map (token => {
                   return {
                     label : token,
                     value : token
                   }
-                }) 
+                })
                 this.props.hideSpinner();
                 if(requiredTokenFormat && requiredTokenFormat.length > 0){
                   this.setState({
@@ -435,12 +460,14 @@ class SignPdfContainer extends Component {
                   })
                 }
               })
-              .catch(error => { 
+              .catch(error => {
                 console.log(error)
                 this.props.hideSpinner();
               });
+
+            }
           })
-          .catch(error => { 
+          .catch(error => {
             console.log(error)
 
             this.props.hideSpinner();
@@ -479,7 +506,7 @@ class SignPdfContainer extends Component {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `Error in eMudhra end, ${response.data.input.emudhraErrorCode}`
+              labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
             },
             "error"
           ));
@@ -489,7 +516,7 @@ class SignPdfContainer extends Component {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `Error in eMudhra end, ${response.data.input.emudhraErrorCode}`
+              labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
             },
             "error"
           ));
@@ -499,7 +526,7 @@ class SignPdfContainer extends Component {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `Error in Sujog end, ${response.data.input.dscErrorCode}`
+              labelKey: `An error occurred processing your request, ${response.data.input.dscErrorCode}`
             },
             "error"
           ));
@@ -511,6 +538,18 @@ class SignPdfContainer extends Component {
             'Accept': 'application/json'
           })
             .then(response => {
+              if(response && response.data && response.data.errorCode){
+                this.props.toggleSnackbarAndSetText(
+                  true,
+                  {
+                    labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                    labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
+                  },
+                  "error"
+                );
+                this.props.hideSpinner();
+              }else{
+
               RequestInfo = { ...requestInfo, "userInfo": this.getCustomRequestInfo() };
               let body = Object.assign(
                 {},
@@ -532,7 +571,7 @@ class SignPdfContainer extends Component {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `Error in eMudhra end, ${response.data.emudhraErrorCode}`
+                        labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
                       },
                       "error"
                     ));
@@ -542,7 +581,7 @@ class SignPdfContainer extends Component {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `Error in eMudhra end, ${response.data.emudhraErrorCode}`
+                        labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
                       },
                       "error"
                     ));
@@ -553,7 +592,7 @@ class SignPdfContainer extends Component {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `Error in Sujog end, ${response.data.dscErrorCode}`
+                        labelKey: `An error occurred processing your request, ${response.data.dscErrorCode}`
                       },
                       "error"
                     ));
@@ -579,6 +618,9 @@ class SignPdfContainer extends Component {
                   this.props.hideSpinner();
 
                 });
+
+
+              }
             })
             .catch(error => {
               this.props.hideSpinner();
@@ -638,7 +680,7 @@ class SignPdfContainer extends Component {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `Error in eMudhra end, ${response.data.input.emudhraErrorCode}`
+              labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
             },
             "error"
           ));
@@ -648,7 +690,7 @@ class SignPdfContainer extends Component {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `Error in eMudhra end, ${response.data.input.emudhraErrorCode}`
+              labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
             },
             "error"
           ));
@@ -658,7 +700,7 @@ class SignPdfContainer extends Component {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `Error in Sujog end, ${response.data.input.dscErrorCode}`
+              labelKey: `An error occurred processing your request, ${response.data.input.dscErrorCode}`
             },
             "error"
           ));
@@ -669,6 +711,18 @@ class SignPdfContainer extends Component {
             'Accept': 'application/json'
           })
             .then(response => {
+
+              if(response && response.data && response.data.errorCode){
+                this.props.toggleSnackbarAndSetText(
+                  true,
+                  {
+                    labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                    labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
+                  },
+                  "error"
+                );
+                this.props.hideSpinner();
+              }else{
               RequestInfo = { ...requestInfo, "userInfo": this.getCustomRequestInfo() };
               let body = Object.assign(
                 {},
@@ -689,7 +743,7 @@ class SignPdfContainer extends Component {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `Error in eMudhra end, ${response.data.emudhraErrorCode}`
+                        labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
                       },
                       "error"
                     ));
@@ -699,7 +753,7 @@ class SignPdfContainer extends Component {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `Error in eMudhra end, ${response.data.emudhraErrorCode}`
+                        labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
                       },
                       "error"
                     ));
@@ -710,7 +764,7 @@ class SignPdfContainer extends Component {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `Error in Sujog end, ${response.data.dscErrorCode}`
+                        labelKey: `An error occurred processing your request, ${response.data.dscErrorCode}`
                       },
                       "error"
                     ));
@@ -737,6 +791,8 @@ class SignPdfContainer extends Component {
                   console.log(error)
                   this.props.hideSpinner();
                 });
+
+              }
             })
             .catch(error => {
               console.log(error)
@@ -795,7 +851,7 @@ class SignPdfContainer extends Component {
     let moduleName = this.props.moduleName
     let applicationNumber = this.props.applicationNumber
     let tenantId = this.props.tenantId
-    if(this.state.selectedToken && this.state.selectedToken != " " && 
+    if(this.state.selectedToken && this.state.selectedToken != " " &&
     this.state.selectedCeritificate && this.state.selectedCeritificate != " " &&
     this.state.password && this.state.password != " "){
       let data = await getPdfBody(moduleName,tenantId,applicationNumber)
@@ -811,7 +867,7 @@ class SignPdfContainer extends Component {
         );
         return
       }else{
-        let key = getKey(data,moduleName) 
+        let key = getKey(data,moduleName)
         let tenantIdCityCode = tenantId && tenantId.split(".")[0]
         try{
           this.props.showSpinner()
@@ -819,7 +875,7 @@ class SignPdfContainer extends Component {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
            })
-          
+
            if(response){
             try{
               RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
@@ -838,9 +894,9 @@ class SignPdfContainer extends Component {
                   "reportName":key,
                   "channelId":"ch4",
                   "keyStorePassPhrase": password
-                } 
+                }
               );
-    
+
               let encryptedData = await axios.post("/dsc-services/dsc/_pdfSignInput", body, { // send file store id to get encrypted data
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -853,7 +909,17 @@ class SignPdfContainer extends Component {
                       'Content-Type': 'application/json',
                       'Accept': 'application/json'
                     })
-                    if(responseData){
+                    if(responseData && responseData.data && responseData.data.errorCode){
+                      this.props.toggleSnackbarAndSetText(
+                        true,
+                        {
+                          labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                          labelKey: `An error occurred processing your request, ${responseData.data.errorCode}, ${responseData.data.errorMessage}`
+                        },
+                        "error"
+                      );
+                      this.props.hideSpinner();
+                    }else if(responseData){
                     try{
                       RequestInfo = { ...RequestInfo,"userInfo" :customRequestInfo};
                       let body =  Object.assign(
@@ -876,8 +942,8 @@ class SignPdfContainer extends Component {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                       })
-    
-                      if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && (singedFileStoreId.data.responseString && 
+
+                      if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && (singedFileStoreId.data.responseString &&
                       (singedFileStoreId.data.responseString.includes('success') || singedFileStoreId.data.responseString.includes('Success')))){
                         this.props.hideSpinner()
                         if(moduleName == 'NewTL'){
@@ -904,10 +970,10 @@ class SignPdfContainer extends Component {
                        else{
                           return data
                         }
-                        
+
                       }else{
-                        this.props.hideSpinner() 
-                        let errorCode = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.responseString 
+                        this.props.hideSpinner()
+                        let errorCode = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.responseString
                         if(errorCode == 'Authentication Failure'){
                           this.props.toggleSnackbarAndSetText(
                             true,
@@ -933,8 +999,8 @@ class SignPdfContainer extends Component {
                           this.props.toggleSnackbarAndSetText(true, error && error.message || '', "error");
                         }
                     }
-                    }catch(err){ 
-                      this.props.hideSpinner(); 
+                    }catch(err){
+                      this.props.hideSpinner();
                 }
               }
             }catch(err){
@@ -944,9 +1010,9 @@ class SignPdfContainer extends Component {
         }catch(err){
           this.props.hideSpinner()
           this.props.toggleSnackbarAndSetText(true, err.message, "error");
-        } 
+        }
       }
-      
+
     }else{
         this.props.toggleSnackbarAndSetText(
           true,
@@ -958,7 +1024,7 @@ class SignPdfContainer extends Component {
       );
       return
     }
-   
+
   }
 
   getPdfDetails = async () => {
@@ -1021,13 +1087,13 @@ class SignPdfContainer extends Component {
               if (encryptedData) {
                 try {
                   let body = encryptedData.data.input
-                  
+
                   if ((encryptedData.data && encryptedData.data.input && encryptedData.data.input.emudhraErrorCode) && (encryptedData.data && encryptedData.data.input && encryptedData.data.input.dscErrorCode)) {
                     this.props.toggleSnackbarAndSetText(
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `Error in eMudhra end, ${encryptedData.data.input.emudhraErrorCode}`
+                        labelKey: `An error occurred processing your request, ${encryptedData.data.input.emudhraErrorCode}`
                       },
                       "error"
                     );
@@ -1037,7 +1103,7 @@ class SignPdfContainer extends Component {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `Error in eMudhra end, ${encryptedData.data.input.emudhraErrorCode}`
+                        labelKey: `An error occurred processing your request, ${encryptedData.data.input.emudhraErrorCode}`
                       },
                       "error"
                     );
@@ -1047,19 +1113,29 @@ class SignPdfContainer extends Component {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `Error in Sujog end, ${encryptedData.data.input.dscErrorCode}`
+                        labelKey: `An error occurred processing your request, ${encryptedData.data.input.dscErrorCode}`
                       },
                       "error"
                     );
                     this.props.hideSpinner();
-                  
+
                 } else{
                   let tempFilePath = encryptedData.data.input && encryptedData.data.input.tempFilePath || ''
                   let responseData = await axios.post("https://localhost.emudhra.com:26769/DSC/PKCSBulkSign", body, { // to get response Data
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                   })
-                  if (responseData) {
+                  if(responseData && responseData.data && responseData.data.errorCode){
+                    this.props.toggleSnackbarAndSetText(
+                      true,
+                      {
+                        labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
+                        labelKey: `An error occurred processing your request, ${responseData.data.errorCode}, ${responseData.data.errorMessage}`
+                      },
+                      "error"
+                    );
+                    this.props.hideSpinner();
+                  }else if (responseData) {
                     try {
                       RequestInfo = { ...RequestInfo, "userInfo": customRequestInfo };
                       let body = Object.assign(
@@ -1087,7 +1163,7 @@ class SignPdfContainer extends Component {
                           true,
                           {
                             labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                            labelKey: `Error in eMudhra end, ${singedFileStoreId.data.emudhraErrorCode}`
+                            labelKey: `An error occurred processing your request, ${singedFileStoreId.data.emudhraErrorCode}`
                           },
                           "error"
                         );
@@ -1097,7 +1173,7 @@ class SignPdfContainer extends Component {
                           true,
                           {
                             labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                            labelKey: `Error in eMudhra end, ${singedFileStoreId.data.emudhraErrorCode}`
+                            labelKey: `An error occurred processing your request, ${singedFileStoreId.data.emudhraErrorCode}`
                           },
                           "error"
                         );
@@ -1108,7 +1184,7 @@ class SignPdfContainer extends Component {
                           true,
                           {
                             labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                            labelKey: `Error in Sujog end, ${response.data.dscErrorCode}`
+                            labelKey: `An error occurred processing your request, ${singedFileStoreId.data.dscErrorCode}`
                           },
                           "error"
                         );
@@ -1173,7 +1249,7 @@ class SignPdfContainer extends Component {
                         this.props.hideSpinner();
                         if (!error.response) {
                           // network error
-          
+
                           this.props.toggleSnackbarAndSetText(
                             true,
                             {
@@ -1196,7 +1272,7 @@ class SignPdfContainer extends Component {
                       }
                     }
 
-                  }    
+                  }
 
                 } catch (err) {
                     this.props.hideSpinner();
@@ -1231,7 +1307,7 @@ class SignPdfContainer extends Component {
     let data = await this.getPdfDetails()
     let dataPath = this.props.dataPath
     let updateUrl = this.props.updateUrl
-  
+
     if(!data){
       return
     }else{
@@ -1256,7 +1332,7 @@ class SignPdfContainer extends Component {
         {
           labelName: error && error.message || '',
            //labelKey: error && error.message || ''
-           labelKey: "Error in Sujog end, error in update call post pdf sign"
+           labelKey: "An error occurred processing your request, error in update call post pdf sign"
         },
         "error"
       );
@@ -1264,7 +1340,7 @@ class SignPdfContainer extends Component {
       this.props.hideSpinner()
       }
     }
-    
+
   }
 
   componentDidMount = () => {
@@ -1275,7 +1351,7 @@ class SignPdfContainer extends Component {
 
   render() {
     let { closePdfSigningPopup,openPdfSigningPopup,okText,resetText,title} = this.props;
-   
+
     return (
       <Dialog
       fullScreen={false}
@@ -1418,7 +1494,7 @@ class SignPdfContainer extends Component {
                     <LabelContainer
                       labelName={resetText}
                       labelKey=
-                      {resetText}     
+                      {resetText}
                     />
                     </Button>
                     <Button
@@ -1429,18 +1505,18 @@ class SignPdfContainer extends Component {
                       <LabelContainer
                         labelName={okText}
                         labelKey=
-                          {okText}     
+                          {okText}
                       />
                     </Button>
                 </Grid>
               </Grid>
             }
-            
+
           />
         }
       />
     </Dialog>
-    ) 
+    )
   }
 }
 

@@ -303,6 +303,20 @@ class WorkFlowContainer extends React.Component {
 
     }
 
+    if (moduleName == "NewWS1") {
+      var dateEffectiveFrom = get(data[0], "dateEffectiveFrom", '');
+      dateEffectiveFrom = dateEffectiveFrom.split("-");
+      
+
+
+      var dateEffectiveFrom = new Date(dateEffectiveFrom[0], dateEffectiveFrom[1] - 1, dateEffectiveFrom[2], 23, 59);
+      set(
+        data[0],
+        "dateEffectiveFrom",
+        dateEffectiveFrom.getTime()
+      );
+    }
+
     console.log(data, "Nero data 2")
     const applicationNumber = getQueryArg(
       window.location.href,
@@ -639,7 +653,7 @@ class WorkFlowContainer extends React.Component {
       state.isStateUpdatable = false;
     }
 
-    if (moduleName === "ModifySWConnection"){
+    if (moduleName === "ModifySWConnection" || moduleName === "ModifyWSConnection"){
       state.isStateUpdatable = true
     }
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit

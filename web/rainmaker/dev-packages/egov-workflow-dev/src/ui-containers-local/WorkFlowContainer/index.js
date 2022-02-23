@@ -305,16 +305,16 @@ class WorkFlowContainer extends React.Component {
 
     if (moduleName == "NewWS1") {
       var dateEffectiveFrom = get(data[0], "dateEffectiveFrom", '');
-      dateEffectiveFrom = dateEffectiveFrom.split("-");
-      
+      if (typeof dateEffectiveFrom === "string") {
+        dateEffectiveFrom = dateEffectiveFrom.split("-");
+        var dateEffectiveFrom = new Date(dateEffectiveFrom[0], dateEffectiveFrom[1] - 1, dateEffectiveFrom[2], 23, 59);
+        set(
+          data[0],
+          "dateEffectiveFrom",
+          dateEffectiveFrom.getTime()
+        );
+      }
 
-
-      var dateEffectiveFrom = new Date(dateEffectiveFrom[0], dateEffectiveFrom[1] - 1, dateEffectiveFrom[2], 23, 59);
-      set(
-        data[0],
-        "dateEffectiveFrom",
-        dateEffectiveFrom.getTime()
-      );
     }
 
     console.log(data, "Nero data 2")
@@ -652,8 +652,10 @@ class WorkFlowContainer extends React.Component {
       || moduleName === "ModifySWConnection" || moduleName === "ModifyWSConnection" || moduleName === "SWOwnershipChange" || moduleName === "WSOwnershipChange") {
       state.isStateUpdatable = false;
     }
+    console.log(applicationState, "Nero State Status")
 
     if (moduleName === "ModifySWConnection" || moduleName === "ModifyWSConnection"){
+      if(applicationState != "PENDING_FOR_APPROVAL")
       state.isStateUpdatable = true
     }
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit

@@ -129,7 +129,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
             finalArray.push({
               due: bill.totalAmount,
               dueDate: updatedDueDate,
-              service: element.connectionFacility,
+              service: element.service,
               connectionNo: element.connectionNo,
               name: (element.connectionHolders) ? element.connectionHolders[0].name:'',
               status: element.status,
@@ -143,7 +143,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
           }) : finalArray.push({
             due: 'NA',
             dueDate: 'NA',
-            service: element.connectionFacility,
+            service: element.service,
             connectionNo: element.connectionNo,
             name: (element.connectionHolders) ? element.connectionHolders[0].name:'',
             status: element.status,
@@ -277,7 +277,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
               name: ownerName.slice(2),
               applicationStatus: appStatus,
               address: handleAddress(element),
-              service: element.connectionFacility,
+              service: element.service,
               connectionType: element.connectionType,
               tenantId: element.tenantId
             })
@@ -289,7 +289,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
               address:element.connectionHolders ? element.connectionHolders[0].name : '',
               applicationStatus: appStatus,
               address:element.connectionHolders ? element.connectionHolders[0].correspondenceAddress : '',
-              service: element.connectionFacility,
+              service: element.service,
               connectionType: element.connectionType,
               tenantId: element.tenantId
             })

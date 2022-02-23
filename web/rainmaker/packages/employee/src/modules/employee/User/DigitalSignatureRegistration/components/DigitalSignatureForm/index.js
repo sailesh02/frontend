@@ -157,7 +157,7 @@ const register = (token, certificate, password) => {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
+              labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.input.emudhraErrorCode}`
             },
             "error"
           ));
@@ -167,7 +167,7 @@ const register = (token, certificate, password) => {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `An error occurred processing your request, ${response.data.input.emudhraErrorCode}`
+              labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.input.emudhraErrorCode}`
             },
             "error"
           ));
@@ -177,7 +177,7 @@ const register = (token, certificate, password) => {
             true,
             {
               labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-              labelKey: `An error occurred processing your request, ${response.data.input.dscErrorCode}`
+              labelKey: `An error occurred processing your request. If this problem persists, please contact Sujog Support, Error Detail - ${response.data.input.dscErrorCode}`
             },
             "error"
           ));
@@ -194,7 +194,7 @@ const register = (token, certificate, password) => {
                   true,
                   {
                     labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                    labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
+                    labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.errorCode}, ${response.data.errorMessage}`
                   },
                   "error"
                 );
@@ -227,7 +227,7 @@ const register = (token, certificate, password) => {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
+                        labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.emudhraErrorCode}`
                       },
                       "error"
                     ));
@@ -237,7 +237,7 @@ const register = (token, certificate, password) => {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `An error occurred processing your request, ${response.data.emudhraErrorCode}`
+                        labelKey: `An error occurred processing your request. If this problem persists, please contact eMudhra Support, Error Detail - ${response.data.emudhraErrorCode}`
                       },
                       "error"
                     ));
@@ -248,7 +248,7 @@ const register = (token, certificate, password) => {
                       true,
                       {
                         labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: `An error occurred processing your request, ${response.data.dscErrorCode}`
+                        labelKey: `An error occurred processing your request. If this problem persists, please contact Sujog Support, Error Detail - ${response.data.dscErrorCode}`
                       },
                       "error"
                     ));
@@ -290,7 +290,7 @@ const register = (token, certificate, password) => {
                   true,
                   {
                     labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                    labelKey: "Error in detecting Token device. Please check whether hardware device connected properly"
+                    labelKey: "Errors in detecting Token device. Please check whether hardware device connected properly"
                   },
                   "error"
                 ));
@@ -323,128 +323,6 @@ const register = (token, certificate, password) => {
       "warning"
     ));
     return
-  }
-}
-
-const register_bkup = (token,certificate,password) => {
-  if(token && token != " " &&
-  certificate && certificate != " " &&
-  password && password != " "){
-    store.dispatch(showSpinner());
-    let requestInfo = getRequestInfo()
-    RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};
-    let body =  Object.assign(
-      {},
-      {
-        RequestInfo,
-        "tenantId":getTenantId(),
-        "tokenDisplayName":token,
-        "keyStorePassPhrase":password,
-        "keyId":certificate,
-        "channelId":"ch4",
-        responseData:null
-      }
-    );
-
-    axios.post("/dsc-services/dsc/_dataSignInput", body, {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-     })
-      .then(response => {
-        store.dispatch(showSpinner())
-        let body = response.data.input
-        axios.post("https://localhost.emudhra.com:26769/DSC/PKCSSign", body, {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-         })
-          .then(response => {
-            store.dispatch(showSpinner())
-            if(response && response.data && response.data.errorCode){
-              this.props.toggleSnackbarAndSetText(
-                true,
-                {
-                  labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                  labelKey: `An error occurred processing your request, ${response.data.errorCode}, ${response.data.errorMessage}`
-                },
-                "error"
-              );
-              this.props.hideSpinner();
-            }else{
-
-            let requestInfo = getRequestInfo()
-            RequestInfo = { ...requestInfo,"userInfo" : getCustomRequestInfo()};
-            let body =  Object.assign(
-               {},
-                {
-                 RequestInfo,
-                 "tenantId":getTenantId(),
-                 "tokenDisplayName":token,
-                 "keyStorePassPhrase":password,
-                 "keyId":certificate,
-                 "channelId":"ch4",
-                 "responseData":response.data.responseData
-                }
-             );
-            axios.post("/dsc-services/dsc/_dataSign", body, { // to get R1 R2
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-             })
-              .then(response => {
-                store.dispatch(hideSpinner())
-                  if(response && response.data && response.data.responseString){
-                    let succesMsg = getSuccessMsg(response.data.responseString)
-                    store.dispatch(toggleSnackbarAndSetText(
-                        true,
-                        {
-                          labelName: succesMsg.labelName,
-                          labelKey: succesMsg.labelKey
-                        },
-                        succesMsg.type
-                    ));
-
-                  }else{
-                    store.dispatch(toggleSnackbarAndSetText(
-                      true,
-                      {
-                        labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                        labelKey: "CORE_COMMON_SIGNATURE_FAILURE_MSG"
-                      },
-                      "error"
-                  ));
-                  }
-                  store.dispatch(hideSpinner())
-              })
-              .catch(error => {
-                store.dispatch(toggleSnackbarAndSetText(
-                  true,
-                  {
-                    labelName: "CORE_COMMON_SIGNATURE_FAILURE_MSG",
-                    labelKey: "CORE_COMMON_SIGNATURE_FAILURE_MSG"
-                  },
-                  "error"
-                ));
-              store.dispatch(hideSpinner())
-                });
-
-              }
-          })
-          .catch(error => {
-            store.dispatch(hideSpinner())
-          });
-      })
-      .catch(error => {
-        store.dispatch(hideSpinner())
-      });
-  }else{
-    store.dispatch(toggleSnackbarAndSetText(
-      true,
-      {
-        labelName: "CORE_COMMON_FILL_ALL_DETAILS",
-        labelKey: "CORE_COMMON_FILL_ALL_DETAILS"
-      },
-      "warning"
-  ));
-  return
   }
 }
 

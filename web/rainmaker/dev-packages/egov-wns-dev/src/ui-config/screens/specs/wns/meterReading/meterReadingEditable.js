@@ -6,7 +6,8 @@ import {
     getPattern,
     getDateField,
     getLabel,
-    convertDateToEpoch
+    convertDateToEpoch,
+    convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -15,7 +16,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { validateFields } from "../../utils";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
-import { createMeterReading } from "../../../../../ui-utils/commons"
+import { createMeterReading,UpdateMeterReading } from "../../../../../ui-utils/commons"
 import {
     getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
@@ -164,15 +165,251 @@ const saveData = async (state, dispatch) => {
     }
     // console.log(data)
     data.tenantId = getQueryArg(window.location.href, "tenantId")
+    console.log(data,"data")
     createMeterReading(dispatch, data)
 
 }
+const UpdateCurrentReading = async (state, dispatch)=>{
+// console.log("updated")
+let data = get(state, "screenConfiguration.preparedFinalObject.metereading");
+data["lastReadingDate"] = convertDateToEpoch(data.lastReadingDate)
+UpdateMeterReading(dispatch, data)
+}
+
+
+const cancelSave = async (state, dispatch)=>{
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable",
+            "visible",
+            false
+        )
+    )
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.searchButton",
+            "visible",
+            false
+          )
+    )
+    
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.editButton",
+            "visible",
+            false
+          )
+    )
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.cancleButton",
+            "visible",
+            false
+          )
+    )
+
+
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.secondContainer.children.status.props",
+    //         "value",
+    //         "Working"
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+    //         "disabled",
+    //         false
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+    //         "disabled",
+    //         false
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont",
+    //         "visible",
+    //         true
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont",
+    //         "visible",
+    //         false
+    //     )
+    // );
+    // let todayDate = new Date()
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+    //         "value",
+    //         todayDate
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+    //         "value",
+    //         ""
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont.props",
+    //         "value",
+    //         ""
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont.children.billingPeriod.props",
+    //         "labelName",
+    //         ""
+    //     )
+    // );
 
 
 
+}
+const cancelEdit = async (state, dispatch)=>{
+    let data = get(state, "screenConfiguration.preparedFinalObject.metereading");
+    console.log(data,"ttttttttttttt")
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable",
+            "visible",
+            false
+        )
+    )
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.searchButton",
+            "visible",
+            false
+          )
+    )
+    
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.editButton",
+            "visible",
+            false
+          )
+    )
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.cancleSaveButton",
+            "visible",
+            false
+          )
+    )
+
+
+
+
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.secondContainer.children.status.props",
+    //         "value",
+    //         "Working"
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+    //         "disabled",
+    //         false
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+    //         "disabled",
+    //         false
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont",
+    //         "visible",
+    //         true
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont",
+    //         "visible",
+    //         false
+    //     )
+    // );
+    // let todayDate = new Date()
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+    //         "value",
+    //         convertEpochToDate(data.lastReadingDate)
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+    //         "value",
+    //         data.currentReading
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont.props",
+    //         "value",
+    //         ""
+    //     )
+    // );
+    // dispatch(
+    //     handleField(
+    //         "meter-reading",
+    //         "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont.children.billingPeriod.props",
+    //         "labelName",
+    //         ""
+    //     )
+    // );
+}
+
+console.log('meterReadingEditable  is coming')
 
 export const meterReadingEditable =
 {
+    
     uiFramework: "custom-atoms",
     moduleName: "egov-wns",
     componentPath: "Div",
@@ -254,6 +491,26 @@ export const meterReadingEditable =
                     children: {
                         billingPeriod: getLabel({
                             labelKey: "WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL"
+                        })
+                    },
+                },
+                secCont: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Div",
+                    gridDefination: {
+                        xs: 6,
+                        sm: 3
+                    },
+                    props: {
+                        style: {
+                            fontSize: 14,
+                            color: "rgba(0, 0, 0)",
+                            marginTop: '20px'
+                        }
+                    },
+                    children: {
+                        billingPeriod: getLabel({
+                            labelName: ""
                         })
                     },
                 },
@@ -633,6 +890,26 @@ export const meterReadingEditable =
                         })
                     },
                 },
+                secCont: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Div",
+                    gridDefination: {
+                        xs: 6,
+                        sm: 3
+                    },
+                    props: {
+                        style: {
+                            fontSize: 14,
+                            color: "rgba(0, 0, 0)",
+                            marginTop: '20px'
+                        }
+                    },
+                    children: {
+                        billingPeriod: getLabel({
+                            labelName: ""
+                        })
+                    },
+                },
                 currentReadingDate: {
                     ...getDateField({
                         placeholder: {
@@ -759,15 +1036,77 @@ export const meterReadingEditable =
                         uiFramework: "custom-atoms",
                         componentPath: "Div",
                         gridDefination: {
-                            xs: 3,
-                            sm: 3
+                            xs: 2,
+                            sm: 2
                         }
                     },
+                  
                     searchButton: {
                         componentPath: "Button",
                         gridDefination: {
-                            xs: 6,
-                            sm: 4,
+                            xs: 3,
+                            sm: 2,
+                            align: "center"
+                        },
+                        props: {
+                            variant: "outlined",
+                            style: {
+                                color: "#FE7A51",
+                                borderColor: "#FE7A51",
+                                width: "150px",
+                                height: "40px",
+                                margin: "15px 0px",
+                                float: "left"
+                            }
+                        },
+                        visible:false,
+                        children: {
+                            buttonLabel: getLabel({
+                                labelKey: "WS_COMMON_BUTTON_SAVE"
+                            })
+                        },
+                        onClickDefination: {
+                            action: "condition",
+                            callBack: saveData
+                        }
+                    },
+
+             
+                    editButton: {
+                        componentPath: "Button",
+                        gridDefination: {
+                            xs: 3,
+                            sm: 2,
+                            align: "center"
+                        },
+                        props: {
+                            variant: "outlined",
+                            style: {
+                                color: "#FE7A51",
+                                borderColor: "#FE7A51",
+                                width: "150px",
+                                height: "40px",
+                                margin: "15px 0px",
+                                float: "left"
+                            }
+                        },
+                        visible:false,
+                        children: {
+                            buttonLabel: getLabel({
+                                labelKey: "",
+                                labelName:'Update'
+                            })
+                        },
+                        onClickDefination: {
+                            action: "condition",
+                            callBack: UpdateCurrentReading
+                        }
+                    },
+                    cancleButton: {
+                        componentPath: "Button",
+                        gridDefination: {
+                            xs: 3,
+                            sm: 2,
                             align: "center"
                         },
                         props: {
@@ -783,20 +1122,52 @@ export const meterReadingEditable =
                         },
                         children: {
                             buttonLabel: getLabel({
-                                labelKey: "WS_COMMON_BUTTON_SAVE"
+                                labelKey: "",
+                                labelName:"Cancel"
+
                             })
                         },
                         onClickDefination: {
                             action: "condition",
-                            callBack: saveData
+                            callBack: cancelEdit
+                        }
+                    },
+                    cancleSaveButton: {
+                        componentPath: "Button",
+                        gridDefination: {
+                            xs: 3,
+                            sm: 2,
+                            align: "center"
+                        },
+                        props: {
+                            variant: "outlined",
+                            style: {
+                                color: "#FE7A51",
+                                borderColor: "#FE7A51",
+                                width: "150px",
+                                height: "40px",
+                                margin: "15px 0px",
+                                float: "left"
+                            }
+                        },
+                        children: {
+                            buttonLabel: getLabel({
+                                labelKey: "",
+                                labelName:"Cancel"
+
+                            })
+                        },
+                        onClickDefination: {
+                            action: "condition",
+                            callBack: cancelSave
                         }
                     },
                     lastCont: {
                         uiFramework: "custom-atoms",
                         componentPath: "Div",
                         gridDefination: {
-                            xs: 6,
-                            sm: 4
+                            xs: 7,
+                            sm: 8
                         }
                     }
                 })

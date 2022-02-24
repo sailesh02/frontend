@@ -15,6 +15,82 @@ import { sortpayloadDataObj } from './connection-details'
 
 const addMeterReading = async (state, dispatch) => {
     dispatch(showSpinner());
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.searchButton",
+            "visible",
+            true
+          )
+    )
+    
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.editButton",
+            "visible",
+            false
+          )
+    )
+
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.cancleButton",
+            "visible",
+            false
+          )
+    )
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.cancleSaveButton",
+            "visible",
+            true
+          )
+      )
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.secondContainer.children.status",
+            "visible",
+             true
+        )
+    );
+    dispatch(
+        handleField(
+          "meter-reading",
+          "components.div.children.meterReadingEditable.children.card.children.cardContent.children.secondContainer.children.secCont",
+          "visible",
+          false
+        )
+      )
+
+      dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.secCont",
+            "visible",
+            false
+        )
+      );
+        dispatch(
+          handleField(
+              "meter-reading",
+              "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate",
+              "visible",
+              true
+          )
+      );
+
+      dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+            "value",
+            ""
+        )
+    );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const connectionNos = getQueryArg(window.location.href, "connectionNos");
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNos },{ key: "searchType",value:"CONNECTION"}];

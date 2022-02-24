@@ -2001,6 +2001,137 @@ export const createMeterReading = async (dispatch, body) => {
         );
     }
 }
+export const UpdateMeterReading = async (dispatch, body) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "/ws-calculator/meterConnection/_update",
+            "", [], { meterReadings: body }
+        );
+        if (response && response !== undefined && response !== null) {
+            getMeterReadingData(dispatch);
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.secondContainer.children.status.props",
+                    "value",
+                    "Working"
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+                    "disabled",
+                    false
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+                    "disabled",
+                    false
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont",
+                    "visible",
+                    true
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont",
+                    "visible",
+                    false
+                )
+            );
+            // let todayDate = new Date()
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+                    "value",
+                    response.meterReadings[0].currentReadingDate
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+                    "value",
+                    response.meterReadings[0].currentReading
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont.props",
+                    "value",
+                    ""
+                )
+            );
+            dispatch(
+                handleField(
+                    "meter-reading",
+                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont.children.billingPeriod.props",
+                    "labelName",
+                    ""
+                )
+            );
+
+
+        }
+        dispatch(
+            handleField(
+                "meter-reading",
+                "components.div.children.meterReadingEditable",
+                "visible",
+                false
+            )
+        );
+        dispatch(
+            handleField(
+                "meter-reading",
+                "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.searchButton",
+                "visible",
+                false
+              )
+        )
+        
+        dispatch(
+            handleField(
+                "meter-reading",
+                "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.editButton",
+                "visible",
+                false
+              )
+        )
+        dispatch(
+            handleField(
+                "meter-reading",
+                "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.cancleButton",
+                "visible",
+                false
+              )
+        )
+        dispatch(prepareFinalObject("metereading", {}));
+        dispatch(toggleSpinner());
+    } catch (error) {
+        dispatch(toggleSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+}
 
 export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
     const FETCHCONNECTIONDETAILS = {

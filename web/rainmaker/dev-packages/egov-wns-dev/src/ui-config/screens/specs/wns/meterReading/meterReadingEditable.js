@@ -15,7 +15,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { validateFields } from "../../utils";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
-import { createMeterReading } from "../../../../../ui-utils/commons"
+import { createMeterReading,UpdateMeterReading } from "../../../../../ui-utils/commons"
 import {
     getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
@@ -164,15 +164,86 @@ const saveData = async (state, dispatch) => {
     }
     // console.log(data)
     data.tenantId = getQueryArg(window.location.href, "tenantId")
+    console.log(data,"data")
     createMeterReading(dispatch, data)
 
 }
+const UpdateCurrentReading = async (state, dispatch)=>{
+console.log("updated")
+
+let data = get(state, "screenConfiguration.preparedFinalObject.metereading");
+// let editVisiable =   get(state.screenConfiguration, "screenConfig.meter-reading.components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.editButton.visible");
+// if(editVisiable == true){
+
+// }
+// "id": "35cc1cd5-3f9c-4a66-83b8-484e776ec695",
+// "tenantId": "od.cuttack",
+// "connectionNo": "WS/CTC/029627",
+// "billingPeriod": "16/12/2021 - 19/01/2022",
+// "meterStatus": "Working",
+// "lastReading": 201,
+// "lastReadingDate": "1639679399000",
+// "currentReading": 251,
+// "currentReadingDate": "1642616999000",
+// "consumption": 50
+// data.tenantId = getQueryArg(window.location.href, "tenantId")
+// data.connectionNo = getQueryArg(window.location.href, "connectionNos")
+// // data['currentReadingDate'] = data
+// data["id"] = Alldata[0].id
+// data["billingPeriod"] = Alldata[0].billingPeriod
+data["lastReadingDate"] = convertDateToEpoch(data.lastReadingDate)
+// data["meterStatus"] =Alldata[0].meterStatus
+// data["lastReading"] = Alldata[0].lastReading
+// data["currentReadingDate"] = convertDateToEpoch(Alldata[0].currentReadingDate)
+// data["consumption"] = ""
+
+// console.log( convertDateToEpoch(data.lastReadingDate), "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
+UpdateMeterReading(dispatch, data)
 
 
+}
 
+const cancleData = async (state, dispatch)=>{
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable",
+            "visible",
+            false
+        )
+    )
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.searchButton",
+            "visible",
+            true
+          )
+    )
+    
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.editButton",
+            "visible",
+            false
+          )
+    )
+    dispatch(
+        handleField(
+            "meter-reading",
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.cancleButton",
+            "visible",
+            false
+          )
+    )
+}
+
+console.log('meterReadingEditable  is coming')
 
 export const meterReadingEditable =
 {
+    
     uiFramework: "custom-atoms",
     moduleName: "egov-wns",
     componentPath: "Div",
@@ -254,6 +325,26 @@ export const meterReadingEditable =
                     children: {
                         billingPeriod: getLabel({
                             labelKey: "WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL"
+                        })
+                    },
+                },
+                secCont: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Div",
+                    gridDefination: {
+                        xs: 6,
+                        sm: 3
+                    },
+                    props: {
+                        style: {
+                            fontSize: 14,
+                            color: "rgba(0, 0, 0)",
+                            marginTop: '20px'
+                        }
+                    },
+                    children: {
+                        billingPeriod: getLabel({
+                            labelName: ""
                         })
                     },
                 },
@@ -759,15 +850,77 @@ export const meterReadingEditable =
                         uiFramework: "custom-atoms",
                         componentPath: "Div",
                         gridDefination: {
-                            xs: 3,
-                            sm: 3
+                            xs: 2,
+                            sm: 2
                         }
                     },
+                  
                     searchButton: {
                         componentPath: "Button",
                         gridDefination: {
-                            xs: 6,
-                            sm: 4,
+                            xs: 3,
+                            sm: 2,
+                            align: "center"
+                        },
+                        props: {
+                            variant: "outlined",
+                            style: {
+                                color: "#FE7A51",
+                                borderColor: "#FE7A51",
+                                width: "150px",
+                                height: "40px",
+                                margin: "15px 0px",
+                                float: "left"
+                            }
+                        },
+                        visible:false,
+                        children: {
+                            buttonLabel: getLabel({
+                                labelKey: "WS_COMMON_BUTTON_SAVE"
+                            })
+                        },
+                        onClickDefination: {
+                            action: "condition",
+                            callBack: saveData
+                        }
+                    },
+
+             
+                    editButton: {
+                        componentPath: "Button",
+                        gridDefination: {
+                            xs: 3,
+                            sm: 2,
+                            align: "center"
+                        },
+                        props: {
+                            variant: "outlined",
+                            style: {
+                                color: "#FE7A51",
+                                borderColor: "#FE7A51",
+                                width: "150px",
+                                height: "40px",
+                                margin: "15px 0px",
+                                float: "left"
+                            }
+                        },
+                        visible:false,
+                        children: {
+                            buttonLabel: getLabel({
+                                labelKey: "",
+                                labelName:'Update'
+                            })
+                        },
+                        onClickDefination: {
+                            action: "condition",
+                            callBack: UpdateCurrentReading
+                        }
+                    },
+                    cancleButton: {
+                        componentPath: "Button",
+                        gridDefination: {
+                            xs: 3,
+                            sm: 2,
                             align: "center"
                         },
                         props: {
@@ -783,20 +936,22 @@ export const meterReadingEditable =
                         },
                         children: {
                             buttonLabel: getLabel({
-                                labelKey: "WS_COMMON_BUTTON_SAVE"
+                                labelKey: "",
+                                labelName:"Cancle"
+
                             })
                         },
                         onClickDefination: {
                             action: "condition",
-                            callBack: saveData
+                            callBack: cancleData
                         }
                     },
                     lastCont: {
                         uiFramework: "custom-atoms",
                         componentPath: "Div",
                         gridDefination: {
-                            xs: 6,
-                            sm: 4
+                            xs: 7,
+                            sm: 8
                         }
                     }
                 })

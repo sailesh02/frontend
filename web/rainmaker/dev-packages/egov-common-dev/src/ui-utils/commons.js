@@ -2,7 +2,7 @@ import commonConfig from "config/common.js";
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { getFileUrlFromAPI, getTransformedLocale, getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { downloadPdf, getPaymentSearchAPI, openPdf, printPdf } from "egov-ui-kit/utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
@@ -543,6 +543,11 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
     configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
   }
 
+  let businessServiceForPdfKey = '';
+  if(getQueryArg(window.location.href, "businessService")){
+    businessServiceForPdfKey = getQueryArg(window.location.href, "businessService");
+  }
+
   const DOWNLOADRECEIPT = {
     GET: {
       URL: "/pdf-service/v1/_create",
@@ -558,10 +563,18 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
   receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
   try {
     httpRequest("post", getPaymentSearchAPI(businessService), "_search", receiptQueryString).then((payloadReceiptDetails) => {
-      const queryStr = [
+      let queryStr;
+      if(businessServiceForPdfKey == "WS"){
+        queryStr = [
+          { key: "key", value: "ws-connection-onetime-receipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ]
+      }else{
+       queryStr = [
         { key: "key", value: configKey },
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
       ]
+    }
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");
         store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }

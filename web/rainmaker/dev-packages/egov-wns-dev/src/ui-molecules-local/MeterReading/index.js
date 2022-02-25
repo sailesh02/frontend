@@ -6,31 +6,224 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
-import get from "lodash/get";
+// import get from "lodash/get";
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import get from "lodash/get";
+import store from "ui-redux/store";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import set from "lodash/set";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { meterReadingEditable } from "../../ui-config/screens/specs/wns/meterReading/meterReadingEditable";
 import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getSearchResults, getMdmsDataForAutopopulated, isWorkflowExists } from "../../ui-utils/commons"
+import { getMdmsDataForMeterStatus,APPLICATIONSTATE } from "../../ui-utils/commons"
 const styles = {
   card: {
     marginLeft: 8,
     marginRight: 8,
     borderRadius: "inherit"
+  },
+  editStyle:{
+    color:'white',
+    float:'right',
+    backgroundColor:"#DB6844",
+    
   }
 };
-// onCardClick = () => {
-// switch (item.status) {
-//   case "INITIATED":
-//     return `/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
-//   default:
-//     return `/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
-// }
-// };
-// onCardClick = () => {
-// }
 class MeterReading extends React.Component {
+  editMeterData =async(data)=>{
+    // console.log(data, "comingggg........................")
+    
+    let state = store.getState()
+    // console.log(state,"sataetee")
+    store.dispatch(
+      handleField(
+          "meter-reading",
+          "components.div.children.meterReadingEditable",
+          "visible",
+          true
+      )
+  );
+  store.dispatch(
+    handleField(
+        "meter-reading",
+        "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.searchButton",
+        "visible",
+        false
+      )
+)
+
+store.dispatch(
+    handleField(
+        "meter-reading",
+        "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.editButton",
+        "visible",
+        true
+      )
+)
+store.dispatch(
+    handleField(
+        "meter-reading",
+        "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.cancleButton",
+        "visible",
+        true
+      )
+)
+
+  try {
+      // let lastReadingDate = convertEpochToDate(checkBillingPeriod[0].lastReadingDate);
+      // let lastDF = new Date();
+      // let endDate = ("0" + lastDF.getDate()).slice(-2) + '/' + ("0" + (lastDF.getMonth() + 1)).slice(-2) + '/' + lastDF.getFullYear()
+      // data['billingPeriod'] = lastReadingDate + " - " + endDate
+      // data['lastReading'] = checkBillingPeriod[0].currentReading
+      data['consumption'] = ''
+      // data['lastReadingDate'] = lastReadingDate
+  }catch (e) { 
+      console.log(e);         
+      dispatch(
+          toggleSnackbar(
+              true,
+              {
+                  labelName: "Failed to parse meter reading data.",
+                  labelKey: "ERR_FAILED_TO_PARSE_METER_READING_DATA"
+              },
+              "warning"
+          )
+      );
+      return;
+  }
+
+    store.dispatch(
+      handleField(
+          "meter-reading",
+          "components.div.children.meterReadingEditable.children.card.children.cardContent.children.firstContainer.children.billingCont.children.billingPeriod.props",
+          "labelName",
+          data.billingPeriod
+      )
+  );
+  store.dispatch(
+      handleField(
+          "meter-reading",
+          "components.div.children.meterReadingEditable.children.card.children.cardContent.children.thirdContainer.children.secCont.children.billingPeriod.props",
+          "labelName",
+          data.lastReading
+      )
+  );
+  store.dispatch(
+      handleField(
+          "meter-reading",
+          "components.div.children.meterReadingEditable.children.card.children.cardContent.children.lastReadingContainer.children.secCont.children.billingPeriod.props",
+          "labelName",
+          convertEpochToDate(data.lastReadingDate)
+      )
+  );
+  store.dispatch(
+      handleField(
+          "meter-reading",
+          "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont.children.billingPeriod.props",
+          "labelName",
+          data.consumption
+      )
+  );
+ store.dispatch(
+    handleField(
+        "meter-reading",
+        "components.div.children.meterReadingEditable.children.card.children.cardContent.children.secondContainer.children.status",
+        "visible",
+         false
+    )
+);
+
+store.dispatch(
+  handleField(
+    "meter-reading",
+    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.secondContainer.children.status.props",
+    "value",
+    data.meterStatus
+  )
+);
+
+
+store.dispatch(
+  handleField(
+    "meter-reading",
+    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.secondContainer.children.secCont.children.billingPeriod.props",
+    "labelName",
+    data.meterStatus
+  )
+)
+
+store.dispatch(
+  handleField(
+    "meter-reading",
+    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.secondContainer.children.secCont",
+    "visible",
+    true
+  )
+)
+  // let todayDate = new Date()
+  store.dispatch(
+      handleField(
+          "meter-reading",
+          "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+          "value",
+          Number(data.currentReadingDate)
+      )
+  );
+  store.dispatch(
+    handleField(
+        "meter-reading",
+        "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.secCont.children.billingPeriod.props",
+        "labelName",
+        convertEpochToDate(data.currentReadingDate)
+    )
+);
+ 
+store.dispatch(
+  handleField(
+      "meter-reading",
+      "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.secCont",
+      "visible",
+      true
+  )
+);
+  store.dispatch(
+    handleField(
+        "meter-reading",
+        "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate",
+        "visible",
+        false
+    )
+);
+store.dispatch(
+  handleField(
+      "meter-reading",
+      "components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.cancleSaveButton",
+      "visible",
+      false
+    )
+)
+
+store.dispatch(
+  handleField(
+      "meter-reading",
+      "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+      "value",
+      data.currentReading
+  )
+);
+  store.dispatch(prepareFinalObject("autoPopulatedValues", data));
+  store.dispatch(prepareFinalObject("metereading", data));
+  }
   render() {
     const { consumptionDetails, onActionClick, classes, DataForMeterReading } = this.props;
-    // if (consumptionDetails.length > 0) {
+    let state = store.getState()
+  let editVisiable =   get(state.screenConfiguration, "screenConfig.meter-reading.components.div.children.meterReadingEditable.children.card.children.cardContent.children.button.children.buttonContainer.children.editButton.visible");
+  // console.log(editVisiable,"editVisiable")
+  // if (consumptionDetails.length > 0) {
     //   var lastReadingDate = convertEpochToDate(consumptionDetails[0].lastReadingDate)
     //   var currentReadingDate = convertEpochToDate(consumptionDetails[0].currentReadingDate)
     // }
@@ -40,11 +233,16 @@ class MeterReading extends React.Component {
     }
     return (
       <div>
-        {consumptionDetails && consumptionDetails.length > 0 ? (
-          consumptionDetails.map(item => {
+       {editVisiable == true ?"" : consumptionDetails && consumptionDetails.length > 0 ? (
+          consumptionDetails.map((item,index) => {
             return (
               <Card className={classes.card}>
                 <CardContent>
+                  {consumptionDetails.length > 1&& index == 0? <div className="linkStyle" onClick={() => 
+                        this.editMeterData(consumptionDetails[0])}>
+                        <a style={{ color: '#fe7a51', float:"right"}}>{'Edit'}
+                        </a>
+                    </div>:""}
                   <div>
                     <Grid container style={{ marginBottom: 12 }}>
                       <Grid item md={4} xs={6}>

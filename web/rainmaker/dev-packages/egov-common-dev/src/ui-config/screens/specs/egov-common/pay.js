@@ -183,6 +183,8 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
         if (get(totalAmount, "totalAmount") === 0) {
             dispatch(handleField("pay", "components.div.children.footer.children.generateReceipt", "props.disabled", true));
             dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.zeroAmountMsgCard", "visible", false));
+        }else{
+            dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.zeroAmountMsgCard", "visible", false));
         }
     }
 };

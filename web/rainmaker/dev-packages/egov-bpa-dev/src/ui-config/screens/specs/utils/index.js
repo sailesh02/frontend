@@ -2701,6 +2701,53 @@ export const getLabelOnlyValue = (value, props = {}) => {
   };
 };
 
+
+export const checkIfMobileIsRegistered = async (state, dispatch) => {
+
+
+  const ownerNo = get(
+    state.screenConfiguration.preparedFinalObject,
+    `BPA.landInfo.owners[0].mobileNumber`,
+    ""
+  );
+
+    try{
+    let payload = await httpRequest(
+      "post",
+      "/user/_search?tenantId=" + getTenantId(),
+      "_search",
+      [],
+      {
+        tenantId: getTenantId(),
+        userName: `${ownerNo}`
+      }
+    );
+    if (payload && payload.user && payload.user.hasOwnProperty("length")) {
+      if (payload.user.length === 0) {
+        console.log("nere in api")
+        // dispatch(
+        //   toggleSnackbar(
+        //     true,
+        //     {
+        //       labelName: "This mobile number is not registered!",
+        //       labelKey: "ERR_MOBILE_NUMBER_NOT_REGISTERED"
+        //     },
+        //     "info"
+        //   )
+        // );
+        return false;
+      }else{
+        return true;
+      }      
+    }
+  }catch (error) {
+    console.log(error, "Nero Error")
+  }
+
+
+  
+}
+
 export const checkOwnerAndArchitectMobileNo = (state, dispatch) => {
   let userInfo = JSON.parse(getUserInfo());
 

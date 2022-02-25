@@ -17,7 +17,7 @@ import {
   getNocSearchResults,
   validateThirdPartyDetails
 } from "../../../../../ui-utils/commons";
-import { prepareNocFinalCards, compare, checkOwnerAndArchitectMobileNo } from "../../../specs/utils/index";
+import { prepareNocFinalCards, compare, checkOwnerAndArchitectMobileNo, checkIfMobileIsRegistered } from "../../../specs/utils/index";
 import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
@@ -196,8 +196,13 @@ const callBackForNext = async (state, dispatch) => {
     0
   );
 
+let bpaObj = get(
+  state.screenConfiguration.preparedFinalObject,
+  "BPA"
+)
   let isFormValid = true;
   let hasFieldToaster = false;
+  let isMobileExists = true;
 
   if (activeStep === 0) {
     let isBasicDetailsCardValid = validateFields(
@@ -299,9 +304,18 @@ const callBackForNext = async (state, dispatch) => {
       multipleApplicantCardPath,
       []
     );
+    
     if(!checkOwnerAndArchitectMobileNo(state, dispatch)){
       isFormValid = false;
     }
+
+   let isMobileExistsResponse =  await checkIfMobileIsRegistered(state, dispatch);
+
+if(!isMobileExistsResponse){
+  isMobileExists = false;
+  isFormValid = false;
+  hasFieldToaster = true;
+}
 
     let isMultipleApplicantCardValid = true;
     for (var j = 0; j < multipleApplicantCardItems.length; j++) {
@@ -682,11 +696,19 @@ const callBackForNext = async (state, dispatch) => {
           };
           break;
         case 2:
+          if(!isMobileExists){
+            errorMessage = {
+              labelName:
+                "Mobile No is not registered!",
+              labelKey: "ERR_MOBILE_NUMBER_NOT_REGISTERED"
+            };
+          }else{
           errorMessage = {
             labelName:
               "Please fill all mandatory fields for Applicant Details, then proceed!",
             labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
           };
+        }
           break;
       }
       dispatch(toggleSnackbar(true, errorMessage, "warning"));

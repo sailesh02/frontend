@@ -23,7 +23,7 @@ import {
   pushTheDocsUploadedToRedux,
   serviceConst,
   showHideFieldsFirstStep, validateConnHolderDetails, validateFeildsForBothWaterAndSewerage,
-  validateFeildsForSewerage, validateFeildsForWater, isEditAction, validationsForExecutionData, validateMeterDetails, validateVolumetricDetails
+  validateFeildsForSewerage, validateFeildsForWater, isEditAction, validationsForExecutionData, validateMeterDetails, validateVolumetricDetails, validationsForModifyConnectionData
 } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
@@ -409,6 +409,7 @@ console.log(isFormValid, "Nero form Valid");
   if (activeStep === 1) {
     if (isModifyMode()) {
       let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+      let connectionOldData = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreenOld", {}), "NA", null);
       if(validationsForExecutionData(applyScreenObject)){
         isFormValid = true;
         hasFieldToaster = false;
@@ -419,6 +420,20 @@ console.log(isFormValid, "Nero form Valid");
           labelName:
             "Date Effective From cannot be less than execution date!",
           labelKey: "ERR_DATE_EFFECTIVE_FROM_CANNOT_LESS_THAN_EXECUTION_DATE_TOAST"
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        return
+      }
+      if(validationsForModifyConnectionData(applyScreenObject, connectionOldData)){
+        isFormValid = true;
+        hasFieldToaster = false;
+      }else{
+        isFormValid = false;
+        hasFieldToaster = true;
+        let errorMessage = {
+          labelName:
+            "Can not modify meter connection in non metered connection!",
+          labelKey: "ERR_CAN_NOT_MODIFY_METERED_TO_METERED_TOAST"
         };
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
         return

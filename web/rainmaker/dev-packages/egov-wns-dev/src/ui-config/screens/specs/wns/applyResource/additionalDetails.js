@@ -172,6 +172,72 @@ export const additionDetails = getCommonCard({
             else {
               showHideFeilds(dispatch, true);
             }
+
+            console.log(action.value, "Nero Hello")
+            if(action.value === "Metered"){
+
+              console.log(action.value, "Nero Hello 1")
+                
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.connectionExecutionDate.props",
+                    "disabled",
+                    false
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter.props",
+                    "disabled",
+                    false
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading.props",
+                    "disabled",
+                    false
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID.props",
+                    "disabled",
+                    false
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate.props",
+                    "disabled",
+                    false
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake.props",
+                    "disabled",
+                    false
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio.props",
+                    "disabled",
+                    false
+                  )
+                );
+
+                
+              }
+            
           }
         }
       },
@@ -349,7 +415,7 @@ export const additionDetails = getCommonCard({
         pattern: getPattern("Date"),
         errorMessage: "ERR_INVALID_DATE",
         jsonPath: "applyScreen.connectionExecutionDate",
-        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen" || getQueryArg(window.location.href, "mode") === "MODIFY"? true:false}
       }),
       diameter: getSelectField({
         label: { labelKey: "WS_CONN_DETAIL_DIAMETER" },
@@ -358,7 +424,7 @@ export const additionDetails = getCommonCard({
         optionLabel: "label",
         placeholder: { labelKey: "WS_CONN_DETAIL_DIAMETER_PLACEHOLDER" },
         required: true,
-        props: {disabled: process.env.REACT_APP_NAME === "Citizen"},
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen" || getQueryArg(window.location.href, "mode") === "MODIFY"? true:false},
         gridDefination: { xs: 12, sm: 6 },
         jsonPath: "applyScreen.additionalDetails.diameter"
       }),
@@ -377,7 +443,7 @@ export const additionDetails = getCommonCard({
         pattern: /^[a-z0-9]+$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.meterId",
-        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen" || getQueryArg(window.location.href, "mode") === "MODIFY"? true:false}
       }),
       meterInstallationDate: getDateField({
         label: { labelName: "meterInstallationDate", labelKey: "WS_ADDN_DETAIL_METER_INSTALL_DATE" },
@@ -393,7 +459,7 @@ export const additionDetails = getCommonCard({
         pattern: getPattern("Date"),
         errorMessage: "ERR_INVALID_DATE",
         jsonPath: "applyScreen.meterInstallationDate",
-        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen" || getQueryArg(window.location.href, "mode") === "MODIFY"? true:false}
       }),
       initialMeterReading: getTextField({
         label: {
@@ -410,7 +476,7 @@ export const additionDetails = getCommonCard({
         pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.additionalDetails.initialMeterReading",
-        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen" || getQueryArg(window.location.href, "mode") === "MODIFY"? true:false}
       }),
       meterMake : getTextField({
         label: {
@@ -426,7 +492,7 @@ export const additionDetails = getCommonCard({
         required: true,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.additionalDetails.meterMake",
-        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen" || getQueryArg(window.location.href, "mode") === "MODIFY"? true:false}
       }),
       meterReadingRatio: getSelectField({
         label: {
@@ -443,17 +509,17 @@ export const additionDetails = getCommonCard({
         jsonPath: "applyScreen.additionalDetails.meterReadingRatio",
         optionValue: "code",
         optionLabel: "label",
-        props: {disabled: process.env.REACT_APP_NAME === "Citizen"},
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen" || getQueryArg(window.location.href, "mode") === "MODIFY"? true:false},
         gridDefination: {
           xs: 12,
           sm: 6
         }
       }),
     },
-    {
-      style:getQueryArg(window.location.href, "mode") === "MODIFY"? {"pointer-events":"none", "cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
+    // {
+    //   style:getQueryArg(window.location.href, "mode") === "MODIFY"? {"pointer-events":"none", "cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
     
-    }
+    // }
     )
   }),
   volumetricDetails : getCommonGrayCard({
@@ -979,4 +1045,7 @@ const showHideFeilds = (dispatch, value) => {
       value
     )
   );
+
+
+
 }

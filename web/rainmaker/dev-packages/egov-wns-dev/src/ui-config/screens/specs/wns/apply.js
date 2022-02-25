@@ -1243,6 +1243,27 @@ export const getData = async (action, state, dispatch) => {
       //For Modify Connection hide the connection details card
       if (isModifyMode()) {
         showHideFieldModifyConnection(action);
+        
+          console.log(data, "Nero Data for Metere")
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType",
+              "visible",
+              false
+            )
+          );
+          // dispatch(
+          //   handleField(
+          //     "apply",
+          //     "components.div.children.formwizardFirstStep.children.PropertyDetailsNoId.children.cardContent.children.propertyDetailsNoId.children.holderDetails.children.connectionType.props",
+          //     "visible",
+          //     false
+          //   )
+          // );
+          
+
+        
       }
 
       if(isOwnerShipTransfer()){

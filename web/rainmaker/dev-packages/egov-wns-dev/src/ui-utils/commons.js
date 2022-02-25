@@ -560,7 +560,26 @@ export const convertEpochToDateInYMD = dateEpoch => {
     day = (day > 9 ? "" : "0") + day;
     return `${year}-${month}-${day}`;
   };
+  
+  export const validationsForModifyConnectionData = (applyScreenObject, connectionOldData) => {
+console.log(applyScreenObject, connectionOldData, "Nero old Data")
+    let selectedConnectionType = applyScreenObject.hasOwnProperty("connectionType") && applyScreenObject["connectionType"];
+    let oldConnectionType = connectionOldData.hasOwnProperty("connectionType") && connectionOldData["connectionType"];
+    if(selectedConnectionType == "Non Metered"){
+        if(oldConnectionType == "Metered"){
+            return false;
+        }else{
+            return true;
+        }
 
+    }else if(selectedConnectionType == "Metered" || selectedConnectionType == "Non Metered"){
+        if(oldConnectionType == "Non Metered"){
+            return true;
+        }else if(oldConnectionType == "Metered"){
+            return true;
+        }
+    }
+}
 export const validationsForExecutionData = (applyScreenObject) => {
     let rValue = true;
     if (rValue &&
@@ -2899,3 +2918,28 @@ export const getTenantId = () => {
     let id = getQueryArg(window.location.href, "tenantId");
     return id 
 }
+
+export const getDemandsOfConnection = async (queryObject, dispatch, filter = false) => {
+    console.log(queryObject, "Nero query object")
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "/billing-service/demand/_search",
+            "_search",
+            queryObject
+        );
+
+        console.log(response, "Nero Reponse")
+        if (response.Demands && response.Demands.length > 0) {
+            dispatch(toggleSpinner());
+            return response.Demands;
+        }
+        
+        dispatch(toggleSpinner());
+        
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error)
+    }
+};

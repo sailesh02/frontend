@@ -122,7 +122,7 @@ export const callPGService = async (state, dispatch) => {
         taxAndPayments,
         user,
         callbackUrl,
-        additionalDetails: { isWhatsapp: localStorage.getItem('pay-channel') == 'whatsapp' ? true : false }
+        additionalDetails: null
       }
     };
     const goToPaymentGateway = await httpRequest(

@@ -75,6 +75,7 @@ android {
 			signingConfig signingConfigs.Employee
 
 			buildConfigField 'String', 'url', '"https://sujog-dev.odisha.gov.in/employee/user/login"'
+			buildConfigField 'String', 'gatewayHost', '"test.ccavenue.com"'
 		}
 		CitizenQASujog {
 			minSdkVersion 19
@@ -88,6 +89,7 @@ android {
 			signingConfig signingConfigs.Citizen
 
 			buildConfigField 'String', 'url', '"https://sujog-dev.odisha.gov.in/citizen/user/register"'
+			buildConfigField 'String', 'gatewayHost', '"test.ccavenue.com"'
 		}
 		CitizenProd {
 			minSdkVersion 19

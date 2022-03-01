@@ -1640,6 +1640,27 @@ export const resetFieldsForConnection = (state, dispatch) => {
   );
 }
 
+export const resetVolumFieldsForConnection =(state,dispatch)=>{
+  dispatch(prepareFinalObject("volumetric", []))
+  dispatch(prepareFinalObject("VolumetricData", []))
+  dispatch(
+    handleField(
+    "volumetricCharges",
+    "components.div.children.volumetricSearch.children.cardContent.children.wnsvolumetricCharge.children.consumerid.props",
+    "value",
+    ""
+    )
+  )
+
+  dispatch(
+    handleField(
+    "volumetricCharges",
+    "components.div.children.volumetricSearch.children.cardContent.children.wnsvolumetricCharge.children.city.props",
+    "value",
+    ""
+    )
+  )
+}
 export const resetFieldsBulkImport = (state, dispatch) => {
   dispatch(
     handleField(

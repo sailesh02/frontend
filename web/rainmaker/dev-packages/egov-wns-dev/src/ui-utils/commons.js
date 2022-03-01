@@ -7,9 +7,9 @@ import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUt
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
+import { setRoute } from "../../../../packages/employee/node_modules/egov-ui-framework/ui-redux/app/actions";
 import { convertDateToEpoch, convertEpochToDate, getTranslatedLabel, convertDateTimeToEpoch,getTodaysDateInYMD, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
-
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE",
@@ -187,6 +187,58 @@ export const getSearchResultsSW = async (queryObject, filter = false) => {
     }
 };
 
+
+export const getVolumetricSearchResults =async (queryObject)=>{
+    // console.log("after after comingggggggggggggg")
+    try {
+        store.dispatch(showSpinner())
+        const response = await httpRequest(
+            "post",
+            "/ws-services/wc/_search",
+            "_search",
+            queryObject
+        );
+ 
+        if (response.WaterConnection.length > 0) {
+        let result = findAndReplace(response, null, "NA");
+        result.WaterConnection[0].waterSourceSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource;
+        let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
+        let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
+        if(result.WaterConnection && result.WaterConnection.length > 0 && 
+        !result.WaterConnection[0].dateEffectiveFrom && (ifUserRoleExists('WS_CEMP') || ifUserRoleExists('WS_APPROVER')) &&
+        result.WaterConnection[0].applicationType == 'DISCONNECT_CONNECTION' ){
+            response.WaterConnection[0].dateEffectiveFrom = convertDateToEpoch(getTodaysDateInYMD())  
+        }
+        result.WaterConnection[0].waterSource = waterSource;
+        result.WaterConnection[0].waterSubSource = waterSubSource;
+        // result.WaterConnection = await getPropertyObj(result.WaterConnection);
+        store.dispatch(hideSpinner())
+        store.dispatch(prepareFinalObject("volumetric", []))
+        store.dispatch(
+            handleField(
+            "volumetricCharges",
+            "components.div.children.volumetricSearch.children.cardContent.children.wnsvolumetricCharge.children.consumerid.props",
+            "value",
+            ""
+            )
+          )
+      
+          store.dispatch(
+            handleField(
+            "volumetricCharges",
+            "components.div.children.volumetricSearch.children.cardContent.children.wnsvolumetricCharge.children.city.props",
+            "value",
+            ""
+            )
+          )
+        return result;
+            }
+    }
+    catch(error){
+        store.dispatch(hideSpinner())
+        console.log(error, "getvaolumetricerror") 
+    }
+}
 export const getSearchResults = async (queryObject, filter = false) => {
     try {
         store.dispatch(showSpinner())
@@ -253,6 +305,84 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch, filter 
     }
 };
 
+export const volumetricUpdate = async (queryObject, dispatch)=>{
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "/ws-services/wc/_update",
+            "",[],
+            queryObject
+        );
+        // console.log(response,"response")
+        if (response.WaterConnection.length > 0) {
+            const tenantId = getTenantIdCommon()
+            const applicationNumber =!!response&&response.WaterConnection[0].applicationNo
+            const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+            const route = `/wns/acknowledgement?purpose=update&status=success&connectionNumber=${connectionNumber}&tenantId=${tenantId}`;
+              dispatch(setRoute(route));
+              dispatch(hideSpinner());
+            store.dispatch(prepareFinalObject("volumetric", []))
+            store.dispatch(
+                handleField(
+                    "volumetric-connection-details",
+                    "components.div.children.connectionDetails.children.cardContent.children.volumetricDetail.children.cardContent.children.viewVolumetricFields.children.migratedSewerageFee.props",
+                    "disabled",
+                    true
+                )
+            )
+        
+            store.dispatch(
+                handleField(
+                    "volumetric-connection-details",
+                    "components.div.children.connectionDetails.children.cardContent.children.volumetricDetail.children.cardContent.children.viewVolumetricFields.children.volumetricWaterCharge.props",
+                    "disabled",
+                    true
+                )
+            )
+        
+            store.dispatch(
+                handleField(
+                    "volumetric-connection-details",
+                    "components.div.children.connectionDetails.children.cardContent.children.volumetricDetail.children.cardContent.children.viewVolumetricFields.children.button.children.buttonContainer.children.UpdateButton",
+                    "visible",
+                    false
+                )
+            )
+        
+            store.dispatch(
+                handleField(
+                    "volumetric-connection-details",
+                    "components.div.children.connectionDetails.children.cardContent.children.volumetricDetail.children.cardContent.children.viewVolumetricFields.children.button.children.buttonContainer.children.CancleButton",
+                    "visible",
+                    false
+                )
+            )
+            store.dispatch(
+                handleField(
+                    "volumetric-connection-details",
+                    "components.div.children.connectionDetails.children.cardContent.children.volumetricDetail.children.cardContent.children.headerDiv.children.header.children.searchButton",
+                    "visible",
+                    true
+                )
+            )
+        // }
+        return response
+
+        }
+           
+
+    }
+    catch (error) {
+        dispatch(hideSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+}
 export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
     dispatch(toggleSpinner());
     try {

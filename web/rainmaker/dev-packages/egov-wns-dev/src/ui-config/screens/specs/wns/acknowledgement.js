@@ -45,6 +45,11 @@ const headerrow = getCommonContainer({
     labelKey: headerLabel,
   }),
 });
+const headerRowInformationUpdate = getCommonContainer({
+  header: getCommonHeader({
+    labelKey: "Update Information",
+  }),
+});
 
 const headerForCloseConnection = getCommonContainer({
   header: getCommonHeader({
@@ -120,7 +125,8 @@ const connectionHeader = (state,
   tenant,
   purpose
   ) => {
-  const headerRow = purpose == 'disconnect' ? headerFordisconnect : purpose == "closeConnection" ? headerForCloseConnection : purpose == "reconnection" ? headerForReconnection : purpose == "ownershipTransfer" ? headerForOwnershipTransfer : headerrow 
+  const headerRow = purpose == 'disconnect' ? headerFordisconnect : purpose == "closeConnection" ? headerForCloseConnection : purpose == "reconnection" ? headerForReconnection : purpose == "ownershipTransfer" ? headerForOwnershipTransfer : purpose == "update"?headerRowInformationUpdate: headerrow 
+ console.log(purpose, "purposepurpose")
   return getCommonContainer({
     headerDiv: {
       uiFramework: "custom-atoms",
@@ -215,7 +221,59 @@ const getAcknowledgementCard = (
         tenant
       )
     };
-  } else if (purpose === "apply" && status === "success") {
+  }
+   else if (purpose === "update" && status === "success") {
+    return {
+      commonHeader: connectionHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant,
+        purpose),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          // style: {
+          //   position: "absolute",
+          //   width: "95%"
+          // }
+        },
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Information updated successfully",
+              // labelKey: "WS_APPLICATION_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              // labelName:
+              //   " A notification regarding application submission has been sent at registered mobile no. Please note the application no. for future reference. ",
+              // labelKey: "WS_APPLICATION_SUCCESS_ACKO_MESSAGE_SUB"
+            },
+            // tailText: {
+            //   labelName: "Application Number.",
+            //   labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+            // },
+            // number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  }
+  
+  
+  else if (purpose === "apply" && status === "success") {
     return {
       commonHeader: commonHeader(state,
         dispatch,

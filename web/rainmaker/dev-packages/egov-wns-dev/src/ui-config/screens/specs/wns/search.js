@@ -1,4 +1,4 @@
-import { getCommonHeader, getBreak, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonHeader, getBreak, getLabel, getSelectField } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { showSearches } from "./searchResource/searchTabs";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { searchResults } from "./searchResource/searchResults";
@@ -181,98 +181,45 @@ const employeeSearchResults = {
               },
               ...header
             },
-            bulkImportButton: {
-              componentPath: "Button",
-              gridDefination: {
-                xs: 12,
-                sm: 3,
-                align: "right",
-                display:"block"
-              },
-              visible: ifUserRoleExists('WS_CEMP') || ifUserRoleExists('SW_CEMP'),
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px"
-                }
-              },
-              children: {
-                plusIconInsideButton: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "add",
-                    style: {
-                      fontSize: "24px"
-                    }
-                  }
+            tradeLicenseType: {
+              ...getSelectField({
+                label: {
+                  labelName: "Action",
+                  labelKey: "WS_HOME_SEARCH_ACTION_BUTTON"
                 },
-                buttonLabel: getLabel({
-                  labelName: "WS_BULK_METER_READING_BUTTON",
-                  labelKey: "WS_BULK_METER_READING_BUTTON"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  dispatch(
-                    setRoute(`/wns/bulkImport`)
-                  )
-                }
-              },
-            },
-            newApplicationButton: {
-              componentPath: "Button",
-              gridDefination: {
-                xs: 12,
-                sm: ifUserRoleExists('WS_CEMP') || ifUserRoleExists('SW_CEMP') ? 3 : 6,
-                align: "right"
-              },
-              visible: true,
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px"
-                }
-              },
-              children: {
-                plusIconInsideButton: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "add",
-                    style: {
-                      fontSize: "24px"
-                    }
-                  }
+                placeholder: {
+                  labelName: "Select Action",
+                  labelKey: "WS_HOME_SEARCH_ACTION_BUTTON_PLACEHOLDER"
                 },
-                buttonLabel: getLabel({
-                  labelName: "NEW APPLICATION",
-                  labelKey: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  showHideAdhocPopup(state, dispatch, "search");
+                jsonPath: "EmpApplyAppsFor",
+                props: {
+                  className: "tl-trade-type"
+                },
+                data: ifUserRoleExists('WS_NERO')? [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},{code: "WS_BULK_METER_READING_BUTTON", active: true},{code:"WS_VOLUMETRIC_CHARGES_BUTTON",active:true}, {code: "WS_DEMAND_ADJUSTMENT_BUTTON", active: true}]:[{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},{code: "WS_BULK_METER_READING_BUTTON", active: true},{code:"WS_VOLUMETRIC_CHARGES_BUTTON",active:true}, {code: "WS_DEMAND_ADJUSTMENT_BUTTON", active: true}]
+               // sourceJsonPath: "applyScreenMdmsData.searchScreen.EmpApplyAppsFor"
+              }),
+               afterFieldChange: (action, state, dispatch) => {
 
-                }
-              },
-              // onClickDefination: {
-              //   action: "condition",
-              //   callBack: (state, dispatch) => {
-              //     pageResetAndChange(state, dispatch);
-              //   }
-              // }
-            }
+                  if(action.value == "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"){
+                    showHideAdhocPopup(state, dispatch, "search");
+                  }else if(action.value == "WS_BULK_METER_READING_BUTTON"){
+                    dispatch(
+                      setRoute(`/wns/bulkImport`)
+                    )
+                  }else if(action.value == "WS_DEMAND_ADJUSTMENT_BUTTON"){
+                    dispatch(
+                      setRoute(`/wns/demand-adjust-search`)
+                    )
+                  }
+
+                  else if(action.value === "WS_VOLUMETRIC_CHARGES_BUTTON"){
+                    dispatch(
+                      setRoute(`/wns/volumetricCharges`)
+                    )
+                  }
+               }
+            },
+            
           }
         },
         showSearches,

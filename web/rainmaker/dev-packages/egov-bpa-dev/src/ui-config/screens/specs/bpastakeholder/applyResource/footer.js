@@ -177,6 +177,8 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
+    
+    
     const isLicenseeTypeValid = validateFields(
       "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container1.children",
       state,
@@ -242,6 +244,14 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
   if (activeStep === 1) {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.footer.children.nextButton.props",
+        "disabled",
+        true
+      )
+    );
     const data = get(state.screenConfiguration, "preparedFinalObject");
 
     const isTradeDetailsValid = validateFields(
@@ -294,7 +304,19 @@ export const callBackForNext = async (state, dispatch) => {
       isFormValid = await applyTradeLicense(state, dispatch);
       if (!isFormValid) {
         hasFieldToaster = false;
+        
       }
+      setTimeout(() => {  
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.footer.children.nextButton.props",
+            "disabled",
+            false
+          )
+        );
+      
+      }, 2000);
       let tenantIdInLocastorage = getTenantId();
       if (!tenantIdInLocastorage || tenantIdInLocastorage == "null"){
         let tenantId = window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID")  || process.env.REACT_APP_DEFAULT_TENANT_ID;

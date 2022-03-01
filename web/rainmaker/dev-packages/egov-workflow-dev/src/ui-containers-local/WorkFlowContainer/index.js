@@ -317,12 +317,13 @@ class WorkFlowContainer extends React.Component {
 
     }
 
-    console.log(data, "Nero data 2")
+    console.log(data, "Nero data 2 BPA")
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
     this.props.showSpinner();
+    let isDocsDropDownSelected = true;
     try {
       if (beforeSubmitHook) {
         if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
@@ -331,8 +332,98 @@ class WorkFlowContainer extends React.Component {
           data = beforeSubmitHook(data);
         }
       }
+console.log(moduleName, "Nero module")
+let bPAUploadedDocs;
+let BPADocs;
+ 
+      if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+        bPAUploadedDocs =  get(preparedFinalObject, "documentDetailsUploadRedux", []);
+        BPADocs = get(
+          preparedFinalObject,
+          "BPA.documents",
+          []
+        );
+       // console.log(bPAUploadedDocs, "nero docssss")
+        console.log(bPAUploadedDocs, "Nero documentsss")
+        if(bPAUploadedDocs && bPAUploadedDocs.length > 0){
+          for(let k=0;k<bPAUploadedDocs.length;k++){
+           // if(bPAUploadedDocs[k].fileStoreId && !bPAUploadedDocs[k].documentType.includes(".")){
+            if(bPAUploadedDocs[k] && bPAUploadedDocs[k].documents && bPAUploadedDocs[k].documents.length > 0 ){
+                for(let j=0;j<bPAUploadedDocs[k].documents.length;j++){
+                  if(bPAUploadedDocs[k].documents[j].fileUrl && !bPAUploadedDocs[k].dropDownValues.value){
+                      console.log("Nero Hellosss")
+                      isDocsDropDownSelected = false; 
+                      break;
+                  }
+              }
 
+            }
+           }
+        }
+      }      
 
+      if(!isDocsDropDownSelected){
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Documents Required",
+            labelKey: "Please select Document Type first and Proceed"
+          },
+          "error"
+        );
+        this.props.hideSpinner();
+        return false;
+      }else if(moduleName === "BPA"){
+        let documnts = [];
+        let documentsUpdalod = bPAUploadedDocs;
+        if (documentsUpdalod) {
+          Object.keys(documentsUpdalod).forEach(function (key) {
+            documnts.push(documentsUpdalod[key])
+          });
+        }
+console.log(BPADocs, "bpa docs")
+        let requiredDocuments = [];
+        if (documnts && documnts.length > 0) {
+          documnts.forEach(documents => {
+            if (documents && documents.documents) {
+              documents.documents.forEach(docItem => {
+                if (documents.dropDownValues && documents.dropDownValues.value) {
+                  let doc = {};
+                  doc.documentType = documents.dropDownValues.value;
+                  doc.fileStoreId = docItem.fileStoreId;
+                  doc.fileStore = docItem.fileStoreId;
+                  doc.fileName = docItem.fileName;
+                  doc.fileUrl = docItem.fileUrl;
+                  doc.additionalDetails = docItem.additionalDetails;
+                  BPADocs && BPADocs.forEach(bpaDc => {
+                    console.log(bpaDc)
+                    if (bpaDc.fileStoreId === docItem.fileStoreId) {
+                      console.log("Here I am")
+                      doc.id = bpaDc.id;
+                    }
+                  });
+                  requiredDocuments.push(doc);
+                }else{
+                  let doc = {};
+                  doc.documentType = docItem.title.split('_').join('.');;
+                  doc.fileStoreId = docItem.fileStoreId;
+                  doc.fileStore = docItem.fileStoreId;
+                  doc.fileName = docItem.fileName;
+                 // doc.fileUrl = docItem.fileUrl;
+                  doc.additionalDetails = docItem.additionalDetails;
+                  
+                  requiredDocuments.push(doc);
+                }
+              })
+            }
+          });
+        }
+        data.documents = requiredDocuments;
+
+      }
+
+ console.log(data , "Nero h")
+ //return false;
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
@@ -376,6 +467,7 @@ class WorkFlowContainer extends React.Component {
         }
       }
     } catch (e) {
+      console.log(e, "Neero Error")
       this.props.hideSpinner();
       if (moduleName === "BPA") {
         toggleSnackbar(

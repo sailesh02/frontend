@@ -459,6 +459,7 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
       case "APPROVAL_INPROGRESS":
       case "PENDING_SANC_FEE_PAYMENT":
       case "REJECTED":
+      case "CITIZEN_ACTION_PENDING_AT_DOC_VERIF":
         downloadMenu = downloadMenu
         printMenu = printMenu
         break;

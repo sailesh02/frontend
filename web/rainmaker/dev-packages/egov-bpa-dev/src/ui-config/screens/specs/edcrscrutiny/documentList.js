@@ -8,7 +8,7 @@ export const documentList = {
       labelKey: "EDCR_BUTTON_UPLOAD_FILE"
     },
     description: {
-      labelName: "Only .dxf files. 30MB max file size.",
+      labelName: "Only .dxf files. 150MB max file size.",
       labelKey: "EDCR_UPLOAD_RESTRICTIONS"
     },
     inputProps: {
@@ -22,6 +22,6 @@ export const documentList = {
       }
     ],
     documentTypePrefix: "EDCR_",
-    maxFileSize: 30000
+    maxFileSize: 150000
   }
 };

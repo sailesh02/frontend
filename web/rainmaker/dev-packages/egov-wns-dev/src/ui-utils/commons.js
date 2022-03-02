@@ -7,7 +7,7 @@ import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUt
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
-import { setRoute } from "../../../../packages/employee/node_modules/egov-ui-framework/ui-redux/app/actions";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { convertDateToEpoch, convertEpochToDate, getTranslatedLabel, convertDateTimeToEpoch,getTodaysDateInYMD, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 export const serviceConst = {

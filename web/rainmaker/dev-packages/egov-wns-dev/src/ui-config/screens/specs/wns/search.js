@@ -195,7 +195,23 @@ const employeeSearchResults = {
                 props: {
                   className: "tl-trade-type"
                 },
-                data: ifUserRoleExists('WS_NERO')? [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},{code: "WS_BULK_METER_READING_BUTTON", active: true},{code:"WS_VOLUMETRIC_CHARGES_BUTTON",active:true}, {code: "WS_DEMAND_ADJUSTMENT_BUTTON", active: true}]:[{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},{code: "WS_BULK_METER_READING_BUTTON", active: true},{code:"WS_VOLUMETRIC_CHARGES_BUTTON",active:true}, {code: "WS_DEMAND_ADJUSTMENT_BUTTON", active: true}]
+                data: (ifUserRoleExists('SW_CEMP') || ifUserRoleExists('WS_CEMP')) && ifUserRoleExists('WS_DEMAND_CORRECTOR')?
+                  [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},
+                  {code: "WS_BULK_METER_READING_BUTTON", active: true},
+                  {code:"WS_VOLUMETRIC_CHARGES_BUTTON",active:true},
+                  {code: "WS_DEMAND_ADJUSTMENT_BUTTON", active: true}]
+                  :
+                  (ifUserRoleExists('SW_CEMP') || ifUserRoleExists('WS_CEMP'))?
+                  [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},
+                  {code: "WS_BULK_METER_READING_BUTTON", active: true},
+                  {code:"WS_VOLUMETRIC_CHARGES_BUTTON",active:true},
+                  ]
+                  :
+                  ifUserRoleExists('WS_DEMAND_CORRECTOR')?
+                  [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},
+                  {code: "WS_DEMAND_ADJUSTMENT_BUTTON", active: true}]
+                  :
+                [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true}]
                // sourceJsonPath: "applyScreenMdmsData.searchScreen.EmpApplyAppsFor"
               }),
                afterFieldChange: (action, state, dispatch) => {

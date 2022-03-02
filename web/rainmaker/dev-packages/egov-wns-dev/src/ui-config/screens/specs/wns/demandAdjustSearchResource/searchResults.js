@@ -1,6 +1,6 @@
 import React from "react";
 import { sortByEpoch, getEpochForDate } from "../../utils";
-import './index.css'
+//import './index.css'
 
 export const searchResults = {
   uiFramework: "custom-molecules",

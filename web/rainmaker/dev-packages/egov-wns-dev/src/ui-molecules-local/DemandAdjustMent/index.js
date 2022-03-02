@@ -12,16 +12,12 @@ import TextFieldContainer from "egov-ui-framework/ui-containers/TextFieldContain
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import store from "ui-redux/store";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import set from "lodash/set";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { prepareFinalObject, showSpinner, hideSpinner, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
-
 import { updateDemand } from "../../ui-utils/commons"
-//import { getMdmsDataForMeterStatus, APPLICATIONSTATE } from "../../ui-utils/commons"
 import { Button } from "egov-ui-framework/ui-atoms";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
 const styles = {
   card: {
     marginLeft: 8,
@@ -39,58 +35,104 @@ class MeterReading extends React.Component {
 
   state = {
 
-    isEditVisible: false
+    isEditVisible: false,
+    IntegerErrMsg: 'Please Enter Valid Number',
+    taxRoundOfAmountErr: false
   }
 
   handleChange = (e) => {
-    console.log("Neeraj", e.target.value)
+    //console.log(typeof e.target.value, "Nero Type")
+
+    // if(!e.target.value.match(/^-?\d*\.?\d{0,6}$/)){
+    //   this.setState({
+    //     selectedDate: e.target.value,
+    //     taxRoundOfAmountErr: true,
+    //     IntegerErrMsg:'Please Enter Valid Number'
+    //   })
+    // }
+    
+    // if(e.target.value == '' || e.target.value == null){
+    //   this.setState({
+    //     selectedDate: e.target.value,
+    //     taxRoundOfAmountErr: true,
+    //     IntegerErrMsg: "Please enter value"
+    //   })
+    // }
+
+    //   store.dispatch(prepareFinalObject('taxRoundOffAmount', e.target.value))
+    
+    
+
     this.setState({
-      selectedDate: e.target.value
+      selectedDate: e.target.value,
+      taxRoundOfAmountErr: !e.target.value.match(/^-?\d*\.?\d{0,6}$/) ? true : false
     })
+
+
     store.dispatch(prepareFinalObject('taxRoundOffAmount', e.target.value))
+    
   }
-  create_UUID = () => {
-    var dt = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = (dt + Math.random() * 16) % 16 | 0;
-      dt = Math.floor(dt / 16);
-      return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-    });
-    return uuid;
-  }
+
   onUpdateButtonCLick = async (e) => {
+    
+    let consumerCode = getQueryArg(window.location.href, "connectionNumber");
+    const tenantId = getQueryArg(window.location.href, "tenantId")
+
     // console.log(e.target, buttonLable, "Nero Event")
     let state = store.getState();
     let { screenConfiguration } = state;
-    console.log(screenConfiguration, "Nero 3")
+
     let { preparedFinalObject } = screenConfiguration;
-    console.log(preparedFinalObject, "Nero 2")
+
     let enteredTaxHeadAmount = preparedFinalObject && preparedFinalObject.taxRoundOffAmount
+
+    if(enteredTaxHeadAmount == '' || enteredTaxHeadAmount == null){
+      this.setState({
+        selectedDate: e.target.value,
+        taxRoundOfAmountErr: true,
+        IntegerErrMsg: "Please enter value"
+      })
+
+      return false;
+    }
+    store.dispatch(showSpinner())
     let demands = preparedFinalObject && preparedFinalObject.Demands;
-    console.log(demands, "Nero 1")
+
     let editableDemandDetail = demands && demands[0].demandDetails;
-    let uuid = await this.create_UUID();
-    console.log(uuid, "Uid neero")
     let newTaxHead = {
-      id: uuid,
-      //demandId: "cc306b8a-e257-46f9-b29e-fdcbea1fdc17",
       taxHeadMasterCode: "WS_ARREAR_ADJUSTMENT",
       taxAmount: parseInt(enteredTaxHeadAmount),
       collectionAmount: 0.00,
       additionalDetails: null,
-      // auditDetails: {
-      //   "createdBy": "2743bf22-0102-5121-bpa2-79e5d0ce0002",
-      //   "lastModifiedBy": "2743bf22-0102-5121-bpa2-79e5d0ce0002",
-      //   "createdTime": 1645625600573,
-      //   "lastModifiedTime": 1645625600573
-      // },
     }
     editableDemandDetail.push(newTaxHead);
     console.log(editableDemandDetail)
     demands[0].demandDetails = editableDemandDetail;
+    try {
+      let updatedRes = await updateDemand(demands);
 
-    await updateDemand(demands);
-    console.log(state, "Nero State")
+      if (updatedRes && updatedRes.Demands && updatedRes.Demands.length > 0) {
+
+        const route = `/wns/acknowledgement?purpose=update&status=success&connectionNumber=${consumerCode}&tenantId=${tenantId}`;
+        store.dispatch(
+          setRoute(route)
+        )
+        store.dispatch(hideSpinner())
+      }
+
+    } catch (error) {
+      console.log(error, "Nero Error")
+      store.dispatch(toggleSnackbar(
+        true,
+        {
+          labelName: "Please select date",
+          labelKey: error.message,
+        },
+        "error"
+      ));
+      store.dispatch(hideSpinner())
+    }
+
   }
   onCancelButtonCLick = (e) => {
     //console.log(e.target, buttonLable, "Nero Event")
@@ -103,10 +145,8 @@ class MeterReading extends React.Component {
   }
   render() {
     const { Demands, onActionClick, classes, } = this.props;
-    console.log(Demands, "Nero Demand")
-    
     let editVisiable = false;
-    
+
     return (
       <div>
         {editVisiable == true ? "" : Demands && Demands.length > 0 ? (
@@ -126,7 +166,8 @@ class MeterReading extends React.Component {
                           marginLeft: "20px",
                           float: "right",
                           color: "#fe7a51",
-                          cursor: "pointer"
+                          cursor: "pointer",
+                          fontWeight: "bold"
                         }}>{'ADJUST'}
                       </a>
                     </div>
@@ -220,10 +261,10 @@ class MeterReading extends React.Component {
                         </Grid>
                         <Grid item md={8} xs={6}>
                           <TextFieldContainer
-
+                            pattern={/^[1-9]\d*(\.\d+)?$/i}
                             onChange={this.handleChange}
                             jsonPath={`taxRoundOffAmount`}
-                          />
+                          />{this.state.taxRoundOfAmountErr && <span class="MuiFormLabel-asterisk">{this.state.IntegerErrMsg}</span>}
                         </Grid>
                       </Grid> : ""}
                     {Demands.length > 0 && index == 0 && this.state.isEditVisible ?
@@ -242,6 +283,7 @@ class MeterReading extends React.Component {
                             variant="contained"
                             color="primary"
                             onClick={this.onUpdateButtonCLick}
+                            disabled={this.state.taxRoundOfAmountErr ? true : false}
                           >
                             <LabelContainer
                               labelName={`UPDATE`}
@@ -313,20 +355,17 @@ const mapStateToProps = state => {
     "Demands",
     []
   );
-  // const DataForMeterReading = get(
-  //   state.screenConfiguration.preparedFinalObject,
-  //   "DataForMeterReading",
-  //   []
-  // );
+
 
   const screenConfig = get(state.screenConfiguration, "screenConfig");
   return { screenConfig, Demands };
 };
 const mapDispatchToProps = dispatch => {
   return {
-    setRoute: path => dispatch(setRoute(path))
-    // handleField: (screenKey, jsonPath, fieldKey, value) =>
-    //   dispatch(handleField(screenKey, jsonPath, fieldKey, value))
+    setRoute: path => dispatch(setRoute(path)),
+
+    toggleSnackbar: (open, message, variant) => dispatch(toggleSnackbar(open, message, variant))
+
   };
 };
 export default withStyles(styles)(connect(

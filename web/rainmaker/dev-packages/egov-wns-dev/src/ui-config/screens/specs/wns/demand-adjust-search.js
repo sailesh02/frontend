@@ -4,7 +4,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { searchResults } from "./demandAdjustSearchResource/searchResults";
 import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
 import { handleScreenConfigurationFieldChange as handleField ,unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import "./index.css";
+//import "./index.css";
 import { httpRequest } from "../../../../ui-utils/api";
 import commonConfig from "config/common.js";
 

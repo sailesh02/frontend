@@ -104,6 +104,11 @@ const ConfirmationDialog = Loadable({
   loader: () => import("./ConfirmationDialog"),
   loading: () => <Loading />
 })
+const DemandAdjustMent = Loadable({
+  loader: () => import("./DemandAdjustMent"),
+  loading: () => <Loading />
+})
+
 
 export {
   TestMolecules,
@@ -126,5 +131,6 @@ export {
   FeesEstimateOverviewCard,
   OwnerHeader,
   ActionFooter,
-  ConfirmationDialog
+  ConfirmationDialog,
+  DemandAdjustMent
 };

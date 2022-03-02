@@ -3063,7 +3063,9 @@ export const getDemandsOfConnection = async (queryObject, dispatch, filter = fal
         console.log(response, "Nero Reponse")
         if (response.Demands && response.Demands.length > 0) {
             dispatch(toggleSpinner());
-            return response.Demands;
+            let demands = response.Demands;
+            demands.sort((a,b) => (a.taxPeriodFrom < b.taxPeriodFrom) ? 1 : ((b.taxPeriodFrom < a.taxPeriodFrom) ? -1 : 0))
+            return demands;
         }
         
         dispatch(toggleSpinner());
@@ -3073,3 +3075,20 @@ export const getDemandsOfConnection = async (queryObject, dispatch, filter = fal
         console.log(error)
     }
 };
+
+
+export const updateDemand = async(queryObject) =>{
+    let tenantId = getQueryArg(window.location.href, "tenantId");
+    let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+   
+    const response = await httpRequest(
+        "post",
+        "/ws-calculator/demand/_modify",
+        "_modify",
+        [{key: "tenantId", value: tenantId}, {key: "consumerCode", value: connectionNumber}, {key: "businessService", value: "WS"}],
+        {Demands: queryObject}
+    );
+    return response;
+    
+
+}

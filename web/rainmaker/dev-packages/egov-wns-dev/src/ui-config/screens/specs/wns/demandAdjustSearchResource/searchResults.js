@@ -1,5 +1,6 @@
 import React from "react";
 import { sortByEpoch, getEpochForDate } from "../../utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 //import './index.css'
 
 export const searchResults = {
@@ -75,9 +76,14 @@ export const searchResults = {
 };
 
 const getViewDemandDetails = data => {
-  
+
+  let purpose = getQueryArg(window.location.href, "purpose");
+  if(purpose == "PRINT_RECEIPT"){
+    window.location.href = `connection-past-payments?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[2]}&purpose=PRINT_RECEIPT`;
+  }else{
   window.location.href = `viewDemand?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[2]}&businessService=WS`;
   // store.dispatch(
   //   setRoute( `viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}&connectionFacility=${data.rowData[11]}`)
   // )
+  }
 }

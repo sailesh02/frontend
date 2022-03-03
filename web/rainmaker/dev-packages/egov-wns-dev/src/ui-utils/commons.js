@@ -236,7 +236,12 @@ export const getVolumetricSearchResults =async (queryObject)=>{
     }
     catch(error){
         store.dispatch(hideSpinner())
-        console.log(error, "getvaolumetricerror") 
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
     }
 }
 export const getSearchResults = async (queryObject, filter = false) => {
@@ -579,10 +584,10 @@ export const validateFeildsForBothWaterAndSewerage = (applyScreenObject) => {
         applyScreenObject["proposedWaterClosets"] !== undefined &&
         applyScreenObject["proposedWaterClosets"] !== "" &&
         applyScreenObject["proposedWaterClosets"].toString().match(/^[0-9]*$/i) &&
-        applyScreenObject.hasOwnProperty("proposedToilets") &&
-        applyScreenObject["proposedToilets"] !== undefined &&
-        applyScreenObject["proposedToilets"] !== "" &&
-        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i) &&
+        // applyScreenObject.hasOwnProperty("proposedToilets") &&
+        // applyScreenObject["proposedToilets"] !== undefined &&
+        // applyScreenObject["proposedToilets"] == "" &&
+        // applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i) &&
         applyScreenObject.hasOwnProperty("ward") && 
         applyScreenObject["ward"] !== undefined &&
         applyScreenObject["ward"] !== ""
@@ -669,10 +674,10 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
         applyScreenObject["proposedWaterClosets"] !== undefined &&
         applyScreenObject["proposedWaterClosets"] !== "" &&
         applyScreenObject["proposedWaterClosets"].toString().match(/^[0-9]*$/i) &&
-        applyScreenObject.hasOwnProperty("proposedToilets") &&
-        applyScreenObject["proposedToilets"] !== undefined &&
-        applyScreenObject["proposedToilets"] !== "" &&
-        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i) &&
+        // applyScreenObject.hasOwnProperty("proposedToilets") &&
+        // applyScreenObject["proposedToilets"] !== undefined &&
+        // applyScreenObject["proposedToilets"] == "" &&
+        // applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i) &&
         applyScreenObject.hasOwnProperty("ward") && 
         applyScreenObject["ward"] !== undefined &&
         applyScreenObject["ward"] !== ""

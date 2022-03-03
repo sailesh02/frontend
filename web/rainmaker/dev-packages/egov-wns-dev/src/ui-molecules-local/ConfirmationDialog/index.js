@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Grid, Typography, Button } from "@material-ui/core";
 import { Container } from "egov-ui-framework/ui-atoms";
-import { getTodaysDateInYMD } from 'egov-ui-framework/ui-utils/commons';
+// import { getTodaysDateInYMD } from 'egov-ui-framework/ui-utils/commons';
 import store from "ui-redux/store";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
@@ -16,7 +16,17 @@ import { ifUserRoleExists } from "../../ui-config/screens/specs/utils";
 // import { MuiPickersUtilsProvider,
 //   KeyboardDatePicker,} from "@material-ui/pickers";
 import CloseIcon from "@material-ui/icons/Close";
+ const getCurrentDate = () => {
+  var today = new Date();
+  let tomorrow =  new Date()
+  tomorrow.setDate(today.getDate() + 1)
+  var dd = String(tomorrow.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
 
+  today = yyyy + '-' + mm + '-' + dd;
+  return today;
+}
 class ConfirmationDialog extends Component {
   state = {
     ownerName : '',
@@ -75,8 +85,9 @@ class ConfirmationDialog extends Component {
                 <Grid item sm={10}>
                 <TextFieldContainer
                     type="date"
+                    defaultValue ={getCurrentDate()}
                     required={true}
-                    inputProps = {{min: getTodaysDateInYMD()}}
+                    inputProps = {{min: getCurrentDate()}}
                     onChange={this.handleDateChange}
                     jsonPath={`effectiveDate`}
                        />    

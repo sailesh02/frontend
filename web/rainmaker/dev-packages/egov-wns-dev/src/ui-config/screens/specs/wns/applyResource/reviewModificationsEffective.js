@@ -28,7 +28,9 @@ import { convertEpochToDateAndHandleNA } from '../../utils';
 // )};
 const getCurrentDate = () => {
   var today = new Date();
-  var dd = String(today.getDate()).padStart(2, '0');
+  let tomorrow =  new Date()
+  tomorrow.setDate(today.getDate() + 1)
+  var dd = String(tomorrow.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = today.getFullYear();
 

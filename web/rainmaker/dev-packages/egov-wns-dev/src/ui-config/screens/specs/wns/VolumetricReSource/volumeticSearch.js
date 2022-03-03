@@ -12,9 +12,14 @@ import {
   import { resetFieldsForConnection, resetVolumFieldsForConnection } from '../../utils';
   // import { searchApiCall } from "../searchResource/functions";
   import { searchApiCallVolumetric } from '../VolumetricReSource/volumetricFunction'
-// console.log("comingggggggggggggggggggggggggggggggggggggggg")
-
+  
   export const volumetricSearch = getCommonCard({
+    subHeader: getCommonTitle({
+      labelKey: "WS_SEARCH_CONNECTION_SUB_HEADER"
+    }),
+    subParagraph: getCommonParagraph({
+      labelKey: "WS_HOME_SEARCH_CONN_RESULTS_DESC"
+    }),
     wnsvolumetricCharge: getCommonContainer({
         city: {
           uiFramework: "custom-containers-local",

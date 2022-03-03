@@ -247,7 +247,7 @@ let VolumetricResults = await volumetricUpdate(queryObj, dispatch)
             labelName: "Volumetric Water Charge"
         },
         placeholder: {
-            labelKey: "WS_ENTER_VOLUMETRIC_WATER_CHARGE"
+            labelKey: "WS_ENTER_VOLUMETRIC_WATER_CHARGE_PLACEHOLDER"
         },
         gridDefination: {
             xs: 12,
@@ -267,7 +267,7 @@ let VolumetricResults = await volumetricUpdate(queryObj, dispatch)
             labelName:"Migrated Sewerage Fee"
         },
         placeholder: {
-            labelKey: "WS_ENTER_MIGRATED_SEWERAGE_FEE"
+            labelKey: "WS_ENTER_MIGRATED_SEWERAGE_FEE_PLACEHOLDER"
         },
         gridDefination: {
             xs: 12,
@@ -418,7 +418,8 @@ let VolumetricResults = await volumetricUpdate(queryObj, dispatch)
                       },
                       children: {
                         buttonLabel: getLabel({
-                          labelKey: "WS_EDIT"
+                          // labelKey: "WS_EDIT",
+                          labelName:"Edit"
                         })
                       },
                       onClickDefination: {

@@ -9,7 +9,7 @@ import commonConfig from "config/common.js";
 
 
 const header = getCommonHeader({
-  labelKey: "WS_VOLUMETRIC_SEARCH_CONNECTION_HEADER"
+  labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
 export const getMdmsTenantsDataVolumetric = async (dispatch) => {
   let mdmsBody = {

@@ -19,9 +19,19 @@ import ConfirmationDialog from "../ConfirmationDialog";
 import { toggleSpinner,hideSpinner, showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { ifUserRoleExists } from "../../ui-config/screens/specs/utils";
-
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 // import { getRequiredDocData, showHideAdhocPopup } from "egov-billamend/ui-config/screens/specs/utils"
+const getCurrentDate = () => {
+  var today = new Date();
+  let tomorrow =  new Date()
+  tomorrow.setDate(today.getDate() + 1)
+  var dd = String(tomorrow.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
 
+  today = yyyy + '-' + mm + '-' + dd;
+  return today;
+}
 const parserFunction = (data) => {
   let queryObject = JSON.parse(JSON.stringify(data));
   let parsedObject = {
@@ -178,6 +188,7 @@ class Footer extends React.Component {
     this.setState({
       openDialog:false
     })
+    store.dispatch(prepareFinalObject('effectiveDate',getCurrentDate()))
   }
 
   onClickFunction = async(date) => {
@@ -326,6 +337,7 @@ class Footer extends React.Component {
                     )
                   );
                   store.dispatch(hideSpinner())
+                  store.dispatch(prepareFinalObject('effectiveDate',getCurrentDate()))
                 }catch(err){
                   store.dispatch(hideSpinner())  
                 }  
@@ -411,8 +423,10 @@ class Footer extends React.Component {
                       )
                     );
                     store.dispatch(hideSpinner())
+                    store.dispatch(prepareFinalObject('effectiveDate',getCurrentDate()))
                   }catch(err){
                     store.dispatch(hideSpinner())
+                    // store.dispatch(prepareFinalObject('effectiveDate',""))
                   }
                 
                 },5000)

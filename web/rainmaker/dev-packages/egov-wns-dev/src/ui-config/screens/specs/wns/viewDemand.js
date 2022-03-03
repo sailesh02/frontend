@@ -16,7 +16,7 @@ import { getService } from "./viewBillResource/serviceDetails";
 import { viewBillFooter } from "./viewBillResource/viewBillFooter";
 import { adhocPopupViewBill } from "./applyResource/adhocPopupViewBill";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { demandEditable } from "./demandAdjustSearchResource/demandEditable"
+
 
 let consumerCode = getQueryArg(window.location.href, "connectionNumber");
 const tenantId = getQueryArg(window.location.href, "tenantId")

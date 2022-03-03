@@ -10,6 +10,7 @@ import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 import { getItemStatus } from "../common/AssessmentList"
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const secondaryTextLabelStyle = {
   letterSpacing: 0.5
@@ -97,7 +98,7 @@ class PastPayments extends Component {
               </div>
               <div style={{ height: "auto" }}>
                 <Label
-                  label={element.payerAddress ? element.payerAddress : "NA"}
+                  label={`Address : ${element.payerAddress ? element.payerAddress : "NA"}`}
                   labelStyle={secondaryTextLabelStyle}
                   fontSize="14px"
                   containerStyle={secondaryTextContainer}
@@ -132,7 +133,8 @@ class PastPayments extends Component {
     );
     return (
       <div class="screen screen-with-bredcrumb">
-        <BreadCrumbs url={urls} history="" label="WS_COMMON_PAST_PAYMENTS"/>
+        {(getQueryArg(window.location.href, "purpose") == "PRINT_RECEIPT")? "" :
+        <BreadCrumbs url={urls} history="" label="WS_COMMON_PAST_PAYMENTS"/> }
         <div className="form-without-button-cont-generic">
           <div className="rainmaker-card clearfix property-tax-card">
             <div className="list-main-card">

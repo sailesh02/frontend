@@ -3092,3 +3092,42 @@ export const updateDemand = async(queryObject) =>{
     
 
 }
+
+export const getConnectionPastPayments = async (dispatch) => {
+    dispatch(toggleSpinner());
+    let tenantId = getQueryArg(window.location.href, "tenantId");
+    let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+   
+    let queryObject = [
+        {
+            key: "tenantIds",
+            value: tenantId
+        },
+        {
+            key: "consumerCodes",
+            value: connectionNumber
+        }
+    ];
+    try {
+        const response = await httpRequest(
+            "post",
+            "collection-services/payments/_search",
+            "_search",
+            queryObject
+        );
+        console.log(response, "Nero res")
+        dispatch(toggleSpinner());
+        if (response && response.Payments) {
+            dispatch(prepareFinalObject("pastPaymentsForWater", response.Payments));
+        }
+        return findAndReplace(response, null, "NA");;
+    } catch (error) {
+        dispatch(toggleSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+}

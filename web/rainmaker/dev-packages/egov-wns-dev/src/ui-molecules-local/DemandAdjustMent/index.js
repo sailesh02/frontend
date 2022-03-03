@@ -259,7 +259,7 @@ class MeterReading extends React.Component {
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                           />
                         </Grid>
-                        <Grid item md={8} xs={6}>
+                        <Grid item md={3} xs={3}>
                           <TextFieldContainer
                             pattern={/^[1-9]\d*(\.\d+)?$/i}
                             onChange={this.handleChange}

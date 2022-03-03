@@ -27,7 +27,9 @@ import { isModifyMode } from "../../../../../ui-utils/commons";
 let isMode = isModifyMode();
 const getCurrentDate = () => {
   var today = new Date();
-  var dd = String(today.getDate()).padStart(2, '0');
+  let tomorrow =  new Date()
+  tomorrow.setDate(today.getDate() + 1)
+  var dd = String(tomorrow.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = today.getFullYear();
 
@@ -172,7 +174,6 @@ export const additionDetails = getCommonCard({
             else {
               showHideFeilds(dispatch, true);
             }
-
             console.log(action.value, "Nero Hello")
             if(action.value === "Metered"){
 
@@ -183,7 +184,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.connectionExecutionDate.props",
                     "disabled",
-                    false
+                    true
                   )
                 );
                 dispatch(
@@ -191,7 +192,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter.props",
                     "disabled",
-                    false
+                    true
                   )
                 );
                 dispatch(
@@ -199,7 +200,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading.props",
                     "disabled",
-                    false
+                    true
                   )
                 );
                 dispatch(
@@ -207,7 +208,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID.props",
                     "disabled",
-                    false
+                    true
                   )
                 );
                 dispatch(
@@ -215,7 +216,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate.props",
                     "disabled",
-                    false
+                    true
                   )
                 );
                 dispatch(
@@ -223,7 +224,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake.props",
                     "disabled",
-                    false
+                    true
                   )
                 );
                 dispatch(
@@ -231,7 +232,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio.props",
                     "disabled",
-                    false
+                    true
                   )
                 );
 
@@ -863,11 +864,13 @@ export const additionDetails = getCommonCard({
         pattern: getPattern("Date"),
         errorMessage: "ERR_INVALID_DATE",
         jsonPath: "applyScreen.dateEffectiveFrom",
+        value :getCurrentDate(),
         props: {
           disabled: process.env.REACT_APP_NAME === "Citizen",
           inputProps: {
             min: getCurrentDate()
-          }
+          },
+          value :getCurrentDate(),
         }
       }),
       

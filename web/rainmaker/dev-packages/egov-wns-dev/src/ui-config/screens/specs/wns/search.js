@@ -200,14 +200,14 @@ const employeeSearchResults = {
                   {code: "WS_BULK_METER_READING_BUTTON", active: true},
                   {code:"WS_VOLUMETRIC_CHARGES_BUTTON",active:true},
                   {code: "WS_DEMAND_ADJUSTMENT_BUTTON", active: true},
-                  {code: "WS_PRINT_RECEIPT_BUTTON", active: true}
+                  {code: "WS_VIEW_PAYMENT_HISTORY_BUTTON", active: true}
                 ]
                   :
                   (ifUserRoleExists('SW_CEMP') || ifUserRoleExists('WS_CEMP'))?
                   [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},
                   {code: "WS_BULK_METER_READING_BUTTON", active: true},
                   {code:"WS_VOLUMETRIC_CHARGES_BUTTON",active:true},
-                  {code: "WS_PRINT_RECEIPT_BUTTON", active: true}
+                  {code: "WS_VIEW_PAYMENT_HISTORY_BUTTON", active: true}
                   ]
                   :
                   ifUserRoleExists('WS_DEMAND_CORRECTOR')?
@@ -235,7 +235,7 @@ const employeeSearchResults = {
                     dispatch(
                       setRoute(`/wns/volumetricCharges`)
                     )
-                  }else if(action.value === "WS_PRINT_RECEIPT_BUTTON"){
+                  }else if(action.value === "WS_VIEW_PAYMENT_HISTORY_BUTTON"){
                     dispatch(
                       setRoute(`/wns/demand-adjust-search?purpose=PRINT_RECEIPT`)
                     )

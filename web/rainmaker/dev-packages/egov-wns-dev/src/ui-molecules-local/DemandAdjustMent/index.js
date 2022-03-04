@@ -31,6 +31,27 @@ const styles = {
 
   }
 };
+
+export const sumTaxHeads = (demandDetails) => {
+ // console.log(demandDetails, "Nero demandDetails")
+  let holder = {}
+  let demandDetailsArray = [];
+  
+  demandDetails.forEach(function(d) {
+      if (holder.hasOwnProperty(d.taxHeadMasterCode)) {
+        holder[d.taxHeadMasterCode] = holder[d.taxHeadMasterCode] + d.taxAmount;
+      } else {
+        holder[d.taxHeadMasterCode] = d.taxAmount;
+      }
+    });
+
+    for (var prop in holder) {
+      demandDetailsArray.push({ taxHeadMasterCode: prop, taxAmount: holder[prop] });
+    }
+
+    return demandDetailsArray;
+}
+
 class MeterReading extends React.Component {
 
   state = {
@@ -41,27 +62,6 @@ class MeterReading extends React.Component {
   }
 
   handleChange = (e) => {
-    //console.log(typeof e.target.value, "Nero Type")
-
-    // if(!e.target.value.match(/^-?\d*\.?\d{0,6}$/)){
-    //   this.setState({
-    //     selectedDate: e.target.value,
-    //     taxRoundOfAmountErr: true,
-    //     IntegerErrMsg:'Please Enter Valid Number'
-    //   })
-    // }
-    
-    // if(e.target.value == '' || e.target.value == null){
-    //   this.setState({
-    //     selectedDate: e.target.value,
-    //     taxRoundOfAmountErr: true,
-    //     IntegerErrMsg: "Please enter value"
-    //   })
-    // }
-
-    //   store.dispatch(prepareFinalObject('taxRoundOffAmount', e.target.value))
-    
-    
 
     this.setState({
       selectedDate: e.target.value,
@@ -70,11 +70,11 @@ class MeterReading extends React.Component {
 
 
     store.dispatch(prepareFinalObject('taxRoundOffAmount', e.target.value))
-    
+
   }
 
   onUpdateButtonCLick = async (e) => {
-    
+
     let consumerCode = getQueryArg(window.location.href, "connectionNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId")
 
@@ -86,7 +86,7 @@ class MeterReading extends React.Component {
 
     let enteredTaxHeadAmount = preparedFinalObject && preparedFinalObject.taxRoundOffAmount
 
-    if(enteredTaxHeadAmount == '' || enteredTaxHeadAmount == null){
+    if (enteredTaxHeadAmount == '' || enteredTaxHeadAmount == null) {
       this.setState({
         selectedDate: e.target.value,
         taxRoundOfAmountErr: true,
@@ -144,9 +144,14 @@ class MeterReading extends React.Component {
 
   }
   render() {
-    const { Demands, onActionClick, classes, } = this.props;
+    const { Demands, onActionClick, classes, totalBillAmount} = this.props;
     let editVisiable = false;
-
+    //console.log(Demands, totalBillAmount, "Nero Demands totalBillAmount")
+    let {isEditVisible} = this.state;
+    if(totalBillAmount < 1){
+      isEditVisible = true
+    }
+this.state.isEditVisible
     return (
       <div>
         {editVisiable == true ? "" : Demands && Demands.length > 0 ? (
@@ -154,7 +159,7 @@ class MeterReading extends React.Component {
             return (
               <Card className={classes.card}>
                 <CardContent>
-                  {Demands.length > 0 && index == 0 && !this.state.isEditVisible ?
+                  {Demands.length > 0 && index == 0 && !isEditVisible ?
 
                     <div className="linkStyle" onClick={() =>
                       this.editLastDemandData(Demands[0])}>
@@ -203,7 +208,7 @@ class MeterReading extends React.Component {
                       </Grid>
                       <Grid item md={8} xs={6}>
                         <Label
-                          labelName={item.payer.name}
+                          labelName={item.payername}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
@@ -356,9 +361,20 @@ const mapStateToProps = state => {
     []
   );
 
-
+  const totalBillAmount = get(
+    state.screenConfiguration.preparedFinalObject,
+    "totalBillAmountForDemand",
+    0
+  );
   const screenConfig = get(state.screenConfiguration, "screenConfig");
-  return { screenConfig, Demands };
+
+
+  let newArray = [];
+  for (let i = 0; i < Demands.length; i++) {
+    newArray.push({ payername: Demands[i].payer.name, taxPeriodTo: Demands[i].taxPeriodTo, taxPeriodFrom: Demands[i].taxPeriodFrom, demandDetails: sumTaxHeads(Demands[i].demandDetails) })
+  }
+//console.log(newArray, "Nero Array")
+  return { screenConfig, Demands: newArray, totalBillAmount };
 };
 const mapDispatchToProps = dispatch => {
   return {

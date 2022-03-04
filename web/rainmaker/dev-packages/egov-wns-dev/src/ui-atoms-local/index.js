@@ -66,7 +66,10 @@ const SnackbarWarning = Loadable({
   loader: () => import("./SnackbarWarning"),
   loading: () => <Loading />
 });
-
+const TotalBill = Loadable({
+  loader: () => import("./TotalBill"),
+  loading: () => <Loading />
+});
 export {
   TestAtoms,
   ApplicationNoContainer,
@@ -80,5 +83,6 @@ export {
   ConsumerNoContainer,
   BreadCrumbs,
   AddLinkForProperty,
-  SnackbarWarning
+  SnackbarWarning,
+  TotalBill
 };

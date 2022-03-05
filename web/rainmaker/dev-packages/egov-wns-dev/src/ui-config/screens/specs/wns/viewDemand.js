@@ -1,4 +1,4 @@
-import { getCommonHeader, getCommonCard, getCommonGrayCard, getCommonContainer, getCommonSubHeader, convertEpochToDate, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonHeader, getCommonCard, getCommonGrayCard, getCommonContainer, getCommonSubHeader, convertEpochToDate, getLabel, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
 // import get from "lodash/get";
 import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS, getConsumptionDetails, billingPeriodMDMS, getExpiryDate, serviceConst, getDemandsOfConnection } from "../../../../ui-utils/commons";
 import set from "lodash/set";
@@ -10,10 +10,7 @@ import {
   getFeesEstimateCard,
   showHideAdhocPopup
 } from "../utils";
-import { getProperty } from "./viewBillResource/propertyDetails";
-import { getOwner } from "./viewBillResource/ownerDetails";
-import { getService } from "./viewBillResource/serviceDetails";
-import { viewBillFooter } from "./viewBillResource/viewBillFooter";
+
 import { adhocPopupViewBill } from "./applyResource/adhocPopupViewBill";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
@@ -51,35 +48,6 @@ let headerrow = getCommonContainer({
   }
 });
 
-const estimate = getCommonGrayCard({
-  header: getCommonSubHeader({ labelKey: "WS_VIEWBILL_DETAILS_HEADER" }),
-  estimateSection: getFeesEstimateCard({ sourceJsonPath: "viewBillToolipData" }),
-  // addPenaltyRebateButton: {
-  //   componentPath: "Button",
-  //   props: {
-  //     color: "primary",
-  //     style: {}
-  //   },
-  //   children: {
-  //     previousButtonLabel: getLabel({
-  //       labelKey: "WS_PAYMENT_ADD_REBATE_PENALTY"
-  //     })
-  //   },
-  //   onClickDefination: {
-  //     action: "condition",
-  //     callBack: (state, dispatch) => {
-  //       showHideAdhocPopup(state, dispatch, "viewBill");
-  //     }
-  //   },
-  //   visible: process.env.REACT_APP_NAME !== "Citizen"
-  // }
-});
-
-const propertyDetails = getProperty();
-const ownerDetails = getOwner();
-const serviceDetails = getService();
-
-export const viewBill = getCommonCard({ estimate, serviceDetails, propertyDetails, ownerDetails });
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -110,14 +78,19 @@ const screenConfig = {
           componentPath: "Container",
           children: { header1: { gridDefination: { xs: 12, sm: 8 }, ...headerrow } }
         },
-        //demandEditable,
+        
+        totalAmount:{
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-wns",
+          componentPath: "TotalBill"
+        },
+        
         viewTwo: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-wns",
           componentPath: "DemandAdjustMent"
       }
-        // viewBill,
-        // viewBillFooter
+        
       }
     }
   }

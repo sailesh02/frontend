@@ -507,10 +507,21 @@ const screenConfig = {
       "screenConfig.components.div.children.headerDiv.children.header1.children.connectionNumber.props.number",
       connectionNo
     );
-   
-    
-
-  
+    const connectionType = getQueryArg(window.location.href, "connectionType")
+    if(connectionType === "Non Metered"){
+      set(
+        action,
+        "screenConfig.components.div.children.connectionDetails.children.cardContent.children.volumetricDetail.visible",
+        true
+      )
+    }    
+    if(connectionType === "Metered"){
+      set(
+        action,
+        "screenConfig.components.div.children.connectionDetails.children.cardContent.children.volumetricDetail.visible",
+        false
+      )
+    } 
     return action;
   },
 

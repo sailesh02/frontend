@@ -43,6 +43,7 @@ const searchResultsVolu = async (state, dispatch) => {
   
   if (payloadData !== null && payloadData !== undefined &&payloadData.WaterConnection.length > 0) {
     store.dispatch(prepareFinalObject("VolumetricData", payloadData.WaterConnection))
+    store.dispatch(prepareFinalObject("oldConnectionNumber", payloadData.WaterConnection[0].oldConnectionNo))
     let waterMeteredDemandExipryDate = 0;
     let waterNonMeteredDemandExipryDate = 0;
     let sewerageNonMeteredDemandExpiryDate = 0;

@@ -417,12 +417,15 @@ console.log(BPADocs, "bpa docs")
               })
             }
           });
+          data.documents = requiredDocuments;
+        }else{
+          data.documents = [...BPADocs];
         }
-        data.documents = requiredDocuments;
+        
 
       }
 
- console.log(data , "Nero h")
+ console.log(data , "Nero h new")
  //return false;
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data

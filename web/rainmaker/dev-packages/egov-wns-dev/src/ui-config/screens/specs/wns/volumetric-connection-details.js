@@ -508,14 +508,22 @@ const screenConfig = {
       connectionNo
     );
     const connectionType = getQueryArg(window.location.href, "connectionType")
-    if(connectionType === "Non Metered"){
+    const oldConnectionNo =!!state.screenConfiguration.preparedFinalObject&&state.screenConfiguration.preparedFinalObject.oldConnectionNumber
+    if(connectionType === "Non Metered"&&!!oldConnectionNo &&oldConnectionNo !== null&&oldConnectionNo!= undefined&&oldConnectionNo != "" && oldConnectionNo != "NA"){
       set(
         action,
         "screenConfig.components.div.children.connectionDetails.children.cardContent.children.volumetricDetail.visible",
         true
       )
+    }
+    else{
+      set(
+        action,
+        "screenConfig.components.div.children.connectionDetails.children.cardContent.children.volumetricDetail.visible",
+        false
+      )
     }    
-    if(connectionType === "Metered"){
+    if(connectionType === "Metered"&&oldConnectionNo ==null&& oldConnectionNo== undefined && oldConnectionNo==""&&oldConnectionNo == "NA"){
       set(
         action,
         "screenConfig.components.div.children.connectionDetails.children.cardContent.children.volumetricDetail.visible",

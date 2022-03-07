@@ -2,7 +2,7 @@ name: A workflow to build egov frontend
 on: 
  push:
     branches:
-      - dev-release-v2.3
+      - dev-release-v2.3 
 jobs:
   build:
     name: Build citizen

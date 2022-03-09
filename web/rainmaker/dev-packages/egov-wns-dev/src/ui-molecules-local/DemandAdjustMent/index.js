@@ -96,9 +96,13 @@ class MeterReading extends React.Component {
       return false;
     }
     store.dispatch(showSpinner())
-    let demands = preparedFinalObject && preparedFinalObject.Demands;
+    let demands = [preparedFinalObject && preparedFinalObject.Demands[0]];
+console.log(demands, "Nero demands")
 
     let editableDemandDetail = demands && demands[0].demandDetails;
+    editableDemandDetail = editableDemandDetail && editableDemandDetail.filter(item => item.taxHeadMasterCode != "WS_ARREAR_ADJUSTMENT")
+    console.log(editableDemandDetail, "Nero editablee")
+    //return false;
     let newTaxHead = {
       taxHeadMasterCode: "WS_ARREAR_ADJUSTMENT",
       taxAmount: parseInt(enteredTaxHeadAmount),
@@ -108,6 +112,9 @@ class MeterReading extends React.Component {
     editableDemandDetail.push(newTaxHead);
     console.log(editableDemandDetail)
     demands[0].demandDetails = editableDemandDetail;
+    
+    console.log(demands, "Nero demands k")
+    //return false;
     try {
       let updatedRes = await updateDemand(demands);
 

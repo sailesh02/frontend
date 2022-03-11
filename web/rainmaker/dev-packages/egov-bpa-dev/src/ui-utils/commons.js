@@ -1865,6 +1865,75 @@ export const getNocSearchResults = async (queryObject, dispatch,displayNoc) => {
   }
 };
 
+export const fireBuildingTypeDropDownApi = async()=>{
+try {
+const resp = await httpRequest(
+  "post",
+  "/noc-services/v1/noc/thirdPartyData/getBuildingtypes",
+  "",
+  []
+)
+
+if(resp.result.length >0 && resp.message== "Building type"){
+  const data=[{ "id":"1","name":"Voter Id"},{
+    "id":"2",
+    "name":"Aadhar Card"
+  },{
+    "id":"3",
+    "name":"Driving License"
+  },
+  {
+    "id":"4",
+    "name":"Other"
+  }]
+  store.dispatch(prepareFinalObject("identityProofTypeList", data))
+  store.dispatch(prepareFinalObject("FireNOcBuildingtype", resp.result));
+return resp
+}
+
+} catch(err){
+  console.log(err,"rrrrrrrrrrrr")
+}
+}
+
+export const getFiredistrictsDropDownApi = async()=>{
+  try {
+  const resp = await httpRequest(
+    "post",
+    "/noc-services/v1/noc/thirdPartyData/getFiredistricts",
+    "",
+    []
+  )
+  if(resp.result.length >0 && resp.message== "Fire District"){
+    store.dispatch(prepareFinalObject("FireNOcFiredistricts", resp.result));
+    return resp;
+  }
+
+
+  } catch(err){
+    console.log(err,"rrrrrrrrrrrr")
+  }
+  }
+
+  export const getFireStationsDropDownApi = async()=>{
+    try {
+    const resp = await httpRequest(
+      "post",
+      "/noc-services/v1/noc/thirdPartyData/getFireStations",
+      "",
+      []
+    )
+    if(resp.result.length >0 && resp.message== "Fire Station"){
+      store.dispatch(prepareFinalObject("FireNOcFireStation", resp.result));
+      return resp;
+    }
+
+  
+    } catch(err){
+      console.log(err,"rrrrrrrrrrrr")
+    }
+    }
+
 export const createNoc = async (payload) => {
   let customRequestInfo = JSON.parse(getUserInfo())
   try {
@@ -1915,7 +1984,28 @@ export const updateNoc = async (payload) => {
     throw error;
   }
 };
+export const validateFireNocDetails = (fireDetails) =>{
+  if (fireDetails == null || Object.keys(fireDetails).length === 0) {
+    return false;
+  }else if(fireDetails && fireDetails.thirdPartyNOC && Object.keys(fireDetails.thirdPartyNOC).length === 0 ){
+    return false
+  }else if(fireDetails&&fireDetails.thirdPartyNOC){
+    let validfire = [];
+    if(fireDetails.hasOwnProperty("thirdPartyNOC")&&fireDetails.thirdPartyNOC.hasOwnProperty("Buildingtypes")
+    && fireDetails.thirdPartyNOC["Buildingtypes"] !== undefined&&fireDetails.thirdPartyNOC["Buildingtypes"] !== null && fireDetails.thirdPartyNOC["Buildingtypes"] !==  ""&&
+    fireDetails.thirdPartyNOC["firedistricts"] !== undefined&&  fireDetails.thirdPartyNOC["firedistricts"] !== null&&  fireDetails.thirdPartyNOC["firedistricts"] !== ""&&
+    fireDetails.thirdPartyNOC["fireStations"] !== undefined&&  fireDetails.thirdPartyNOC["fireStations"] !== null&&  fireDetails.thirdPartyNOC["fireStations"] !== ""&&
+    fireDetails.thirdPartyNOC["identityProofNo"] !== undefined&&  fireDetails.thirdPartyNOC["identityProofNo"] !== null&&  fireDetails.thirdPartyNOC["identityProofNo"] !== ""&&
+    fireDetails.thirdPartyNOC["identityProofType"] !== undefined&&  fireDetails.thirdPartyNOC["identityProofType"] !== null&&  fireDetails.thirdPartyNOC["identityProofType"] !== ""){ 
+      validfire.push(1) 
+    } 
+    else { validfire.push(0) }
 
+    if (validfire.includes(0)) { return false; } else { return true; }
+  } 
+  
+
+}
 export const validateThirdPartyDetails = (thirdPartyDetails) => {
   if (thirdPartyDetails == null || Object.keys(thirdPartyDetails).length === 0) {
     return false

@@ -19,9 +19,9 @@ import {
   getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../ui-utils/api";
-import { createNoc, updateNoc, validateThirdPartyDetails, getNocSearchResults, getAdditionalDetails,prepareNOCUploadData } from "../../ui-utils/commons"
+import {fireBuildingTypeDropDownApi,getFiredistrictsDropDownApi,getFireStationsDropDownApi, createNoc, updateNoc, validateThirdPartyDetails, getNocSearchResults, getAdditionalDetails,prepareNOCUploadData, validateFireNocDetails } from "../../ui-utils/commons"
 import get from "lodash/get";
-import {fieldConfig,numberPattern,stringPattern} from "../../ui-molecules-local/NocDetailCardBPA"
+import {fieldConfig,numberPattern,stringPattern, fireFileConfig} from "../../ui-molecules-local/NocDetailCardBPA"
 import { withStyles } from "@material-ui/core/styles";
 import commonConfig from "config/common.js";
 import {convertDateToEpoch,prepareNocFinalCards} from "../../ui-config/screens/specs/utils/index"
@@ -119,6 +119,10 @@ class TriggerNOCContainer extends Component {
     stateNameErr:false,
     surveryNoErr:false,
     talukaErr:false,
+    identityProofTypeErr:false,
+    fireStationsErr:false,
+    BuildingtypesErr:false,
+    firedistrictsErr:false,
     numberErrMsg:'Please Enter Valid Number upto two Decimal Points',
     stringErrMsg:'Please Enter Valid String'
   }
@@ -236,7 +240,179 @@ class TriggerNOCContainer extends Component {
     }
     store.dispatch(prepareFinalObject(`NewNocAdditionalDetails.thirdPartNOC.${jsonPath}`,e.target.value)) 
   };
+
+fireBuildingDropDOwn = async()=>{
+  await fireBuildingTypeDropDownApi()
+}
+FiredistrictsDropDown = async()=>{
+  await getFiredistrictsDropDownApi()
+}
+
+FireStationsDropDown = async()=>{
+  await getFireStationsDropDownApi()
+}
+  onFireFieldChange  = (key,jsonPath,fieldName) => e => {
+  switch (fieldName) {
+  case "identityProofType":
+    store.dispatch(prepareFinalObject(`NewNocAdditionalDetailsFire.thirdPartyNOC.identityProofType`,e.target.value))
+    break;
+  case "Buildingtypes":
+  store.dispatch(prepareFinalObject(`NewNocAdditionalDetailsFire.thirdPartyNOC.Buildingtypes`,e.target.value
+  )) 
+  break;
+
+  case "firedistricts":
+  store.dispatch(prepareFinalObject(`NewNocAdditionalDetailsFire.thirdPartyNOC.firedistricts`,e.target.value
+  )) 
+  break;
+
+  case "fireStations":
+    store.dispatch(prepareFinalObject(`NewNocAdditionalDetailsFire.thirdPartyNOC.fireStations`,e.target.value
+    )) 
+    break;
+
+  case "identityProofNo":
+    store.dispatch(prepareFinalObject(`NewNocAdditionalDetailsFire.thirdPartyNOC.identityProofNo`,e.target.value)) 
+    break;
+  default:
+    this.setState({
+      identityProofTypeErr:false,
+      fireStationsErr:false,
+      BuildingtypesErr:false,
+      firedistrictsErr:false
+    })
+    store.dispatch(prepareFinalObject(`NewNocAdditionalDetailsFire.${jsonPath}`,e.target.value)) 
+    break;
+}
+  }
+  getNocFireCForm = (keyFire)=>{
+    const setBuildingTypeData = store.getState()
+    const dataDropdwonBuilding = setBuildingTypeData.screenConfiguration.preparedFinalObject.FireNOcBuildingtype;
+    const dataDropdownFIreDistricts = setBuildingTypeData.screenConfiguration.preparedFinalObject.FireNOcFiredistricts;
+    const dataDropdwonfireStations = setBuildingTypeData.screenConfiguration.preparedFinalObject.FireNOcFireStation;
+    return (
+      <React.Fragment>
+          <Grid container="true" spacing={12}>
+          <Grid item xs={6}>
+          <LabelContainer style={{
+              fontSize: '11px',
+              fontWeight: 500
+            }}
+            labelName={fireFileConfig.identityProofType.label.labelName}
+            labelKey={fireFileConfig.identityProofType.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span> 
+            <TextFieldContainer
+              select ={true}
+              data={[{
+                "id":"1",
+                "name":"Voter Id"
+              },
+              {
+                "id":"2",
+                "name":"Aadhar Card"
+              },
+              {
+                "id":"3",
+                "name":"Driving License"
+              },
+              {
+                "id":"4",
+                "name":"Other"
+              }]}
+              optionValue="name"
+              optionLabel="name"
+              style={{ marginRight: "15px" }}
+              placeholder={fireFileConfig.identityProofType.placeholder}
+              jsonPath = {`NewNocAdditionalDetailsFire.thirdPartyNOC.identityProofType`}
+              onChange={this.onFireFieldChange(keyFire,"NewNocAdditionalDetailsFire.identityProofType","identityProofType")}
+            />{this.state.identityProofTypeErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+           
+          </Grid>
+          <Grid item xs={6}>
+            <LabelContainer style={{
+              fontSize: '11px',
+              fontWeight: 500
+            }}
+            labelName={fireFileConfig.Buildingtypes.label.labelName}
+            labelKey={fireFileConfig.Buildingtypes.label.labelKey} /><span class="MuiFormLabel-asterisk" >&thinsp;* </span>
+            <TextFieldContainer
+              select ={true}
+              data={dataDropdwonBuilding}
+              optionValue="BuildingType"
+              optionLabel="BuildingType"
+              style={{ marginRight: "15px" , width:"100%"}}
+              placeholder={fireFileConfig.Buildingtypes.placeholder}
+              jsonPath = {`NewNocAdditionalDetailsFire.thirdPartyNOC.Buildingtypes`}
+              onChange={this.onFireFieldChange(keyFire,"NewNocAdditionalDetailsFire.Buildingtypes","Buildingtypes")}
+            />{this.state.BuildingtypesErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+          </Grid>
+        </Grid>
+         <Grid container="true" spacing={12}>
+        <Grid item xs={6}>
+        <LabelContainer style={{
+              fontSize: '11px',
+              fontWeight: 500
+            }}
+            labelName={fireFileConfig.firedistricts.label.labelName}
+            labelKey={fireFileConfig.firedistricts.label.labelKey} /><span class="MuiFormLabel-asterisk" style={{marginRight:"30px"}}>&thinsp;*</span>
+            <TextFieldContainer
+              select ={true}
+              data={dataDropdownFIreDistricts}
+              optionValue="name"
+              optionLabel="name"
+              style={{ marginRight: "15px", width:"80%"}}
+              placeholder={fireFileConfig.firedistricts.placeholder}
+              jsonPath = {`NewNocAdditionalDetailsFire.thirdPartyNOC.firedistricts`}
+              onChange={this.onFireFieldChange(keyFire,"NewNocAdditionalDetailsFire.firedistricts","firedistricts")}
+            />{this.state.firedistrictsErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+          </Grid>
+         
+        <Grid item xs={6}>
+        <LabelContainer style={{
+              fontSize: '11px',
+              fontWeight: 500
+            }}
+            labelName={fireFileConfig.fireStations.label.labelName}
+            labelKey={fireFileConfig.fireStations.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+            <TextFieldContainer
+              select ={true}
+              data={dataDropdwonfireStations}
+              optionValue="name"
+              optionLabel="name"
+              style={{ marginRight: "15px", width:"100%" }}
+              placeholder={fireFileConfig.fireStations.placeholder}
+              jsonPath = {`NewNocAdditionalDetailsFire.thirdPartyNOC.fireStations`}
+              onChange={this.onFireFieldChange(keyFire,"NewNocAdditionalDetailsFire.fireStations","fireStations")}
+            />{this.state.firedistrictsErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
+          </Grid>
+          </Grid> 
+
+       <Grid container="true" spacing={12}>
+      <Grid item xs={6}>
+              <LabelContainer style={{
+                fontSize: '11px',
+                fontWeight: 500
+                }}
+                labelName={fireFileConfig.identityProofNo.label.labelName}
+                labelKey={fireFileConfig.identityProofNo.label.labelKey} /><span class="MuiFormLabel-asterisk">&thinsp;*</span>
+              <TextFieldContainer
+                required={true}
+                style={{ marginRight: "15px" }}
+                placeholder={fireFileConfig.identityProofNo.placeholder}
+                jsonPath = {`NewNocAdditionalDetailsFire.thirdPartyNOC.identityProofNo`}
+                onChange={this.onFireFieldChange(keyFire,"NewNocAdditionalDetailsFire.identityProofNo","identityProofNo")}
+              />
+              </Grid>
+
+              <Grid item xs={6}>
+                
+                </Grid>
   
+</Grid> 
+
+      </React.Fragment>
+    )
+  }
+
   getNMANOCForm = (key) => {
     return (
       <React.Fragment>
@@ -875,7 +1051,7 @@ class TriggerNOCContainer extends Component {
       let isValid = true
       let isRequiredDocumentsUpload = false
       let additionalDetails = getAdditionalDetails(nocType,this.props.preparedFinalObject)
-      let { payloadDocumentFormat,NewNocAdditionalDetails } = this.props.preparedFinalObject
+      let { payloadDocumentFormat,NewNocAdditionalDetails, NewNocAdditionalDetailsFire, FireNOcBuildingtype , FireNOcFiredistricts, FireNOcFireStation, identityProofTypeList} = this.props.preparedFinalObject
       isRequiredDocumentsUpload = this.checkRequiredDocument(payloadDocumentFormat)
       if(!isRequiredDocumentsUpload){
         store.dispatch(
@@ -890,18 +1066,33 @@ class TriggerNOCContainer extends Component {
         )
         return
       }
+      if(nocType == "FIRE_NOC"){
+        if(validateFireNocDetails(NewNocAdditionalDetailsFire)){
+          isValid = true
+        }else{
+          isValid = false
+
+        }
+      }
       if(nocType === "NMA_NOC"){
-      // if(nocType === "NMA_NOC" && this.props.type == 'new'){
         if(validateThirdPartyDetails(NewNocAdditionalDetails)){
           isValid = true
         }else{
           isValid = false
         }
       }
-
-      if(isValid && isRequiredDocumentsUpload){
-        let details = {
-          ...additionalDetails, ...NewNocAdditionalDetails,"SubmittedOn":submittedOn
+      if(isValid==true && isRequiredDocumentsUpload){
+        let details
+        if(nocType === "NMA_NOC"){
+           details = {
+            ...additionalDetails, ...NewNocAdditionalDetails,"SubmittedOn":submittedOn
+          }
+        }
+      
+        if(nocType == "FIRE_NOC"){
+           details = {
+            ...additionalDetails, ...NewNocAdditionalDetailsFire,"SubmittedOn":submittedOn
+          }
         }
         let {BPA} = this.props.preparedFinalObject
         let payload = {
@@ -918,8 +1109,10 @@ class TriggerNOCContainer extends Component {
           documents : payloadDocumentFormat,
           workflow : null,
           auditDetails : BPA.auditDetails,
-          additionalDetails : details
+          additionalDetails : details,
         }
+
+        
         if(payload && payload.additionalDetails && payload.additionalDetails.thirdPartNOC && 
           payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
           payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
@@ -929,6 +1122,10 @@ class TriggerNOCContainer extends Component {
           !payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
             payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'No'
         }
+        let buildingTypes = null
+        let fireDistricts = null
+        let fireStations = null
+        let identityProofTypes = null
         let response = null
          if(this.props.isUpdate){
           const {Noc} = this.props.preparedFinalObject
@@ -939,7 +1136,7 @@ class TriggerNOCContainer extends Component {
           })
           updateNocPayload[0].documents = payloadDocumentFormat,
           updateNocPayload[0].additionalDetails.SubmittedOn = submittedOn
-          if(nocType == 'NMA_NOC'){
+          if(nocType == 'NMA_NOC'|| nocType == "FIRE_NOC"){
             updateNocPayload[0].additionalDetails.thirdPartNOC = updateNocPayload[0].additionalDetails.thirdPartNOC ? updateNocPayload[0].additionalDetails.thirdPartNOC : NewNocAdditionalDetails.thirdPartNOC
           }
           if(nocType == 'NMA_NOC' && updateNocPayload[0] && updateNocPayload[0].additionalDetails && updateNocPayload[0].additionalDetails.thirdPartNOC && 
@@ -950,6 +1147,29 @@ class TriggerNOCContainer extends Component {
           updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
             !updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
               updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'No'
+          }
+
+            if(nocType == "FIRE_NOC"){
+             buildingTypes = FireNOcBuildingtype&&FireNOcBuildingtype.length>0&&FireNOcBuildingtype.filter(data=>{
+              return data.BuildingType ==NewNocAdditionalDetailsFire.thirdPartyNOC.Buildingtypes
+            })
+            fireDistricts = FireNOcFiredistricts&& FireNOcFiredistricts.length>0&&FireNOcFiredistricts.filter(data=>{
+            return data.name === NewNocAdditionalDetailsFire.thirdPartyNOC.firedistricts
+              
+            })
+         
+             fireStations = FireNOcFireStation&&FireNOcFireStation.length >0 && FireNOcFireStation.filter(dataa=>{
+              return dataa.name == NewNocAdditionalDetailsFire.thirdPartyNOC.fireStations
+            })
+             identityProofTypes = identityProofTypeList&& identityProofTypeList.length>0 && identityProofTypeList.filter(item=>{
+            return item.name === NewNocAdditionalDetailsFire.thirdPartyNOC.identityProofType
+            })
+            const identityProofNo =  NewNocAdditionalDetailsFire.thirdPartyNOC.identityProofNo
+          const buildingType =   buildingTypes[0];
+          const fireDistrict =  fireDistricts[0]
+          const fireStation=  fireStations[0]
+            const identityProofType=  identityProofTypes[0]
+            updateNocPayload[0].additionalDetails.thirdPartNOC = {buildingType,fireDistrict, fireStation, identityProofType, identityProofNo}
           }
           response = await updateNoc(updateNocPayload[0])
          }else{
@@ -1016,6 +1236,7 @@ class TriggerNOCContainer extends Component {
         )
       )
     }
+  
   };
 
   saveDetails = (nocType) => {
@@ -1032,6 +1253,9 @@ class TriggerNOCContainer extends Component {
   componentDidMount = () => {
     store.dispatch(prepareFinalObject("nocDocumentsDetailsRedux", {}));
     store.dispatch(prepareFinalObject("documentsContractNOC", []));
+    this.fireBuildingDropDOwn()
+    this.FiredistrictsDropDown()
+    this.FireStationsDropDown()
   };
 
   closeDialog = () => {
@@ -1076,7 +1300,6 @@ class TriggerNOCContainer extends Component {
 
   render() {
     let { open } = this.props;
-
     return (
       <Dialog
       fullScreen={false}
@@ -1151,12 +1374,22 @@ class TriggerNOCContainer extends Component {
                     {this.getNMANOCForm(0)}
                     </Grid>
                   }
+                    {((this.state.nocType == "FIRE_NOC"  || this.props.nocType == "FIRE_NOC")) &&
+                  <Grid item xs = {12} style={{marginTop:'8px'}}>
+                    <Typography component="h2">
+                      <LabelContainer labelName="Required Documents"
+                      labelKey="BPA_ADDITIONAL_DETAILS" />
+                    </Typography>
+                    {this.getNocFireCForm(0)}
+                    </Grid>
+                  }
                   <Grid item sm={12}>
                   <Typography component="h2">
                     <LabelContainer labelName="Required Documents"
                     labelKey="BPA_DOCUMENT_DETAILS_HEADER" />
                   </Typography>
                   </Grid>
+                  {((this.state.nocType == "NMA_NOC"  || this.props.nocType == 'NMA_NOC')) &&
                   <Grid item sm={12}>
                       <DocumentListContainerNOC
                         buttonLabel = {{
@@ -1174,6 +1407,26 @@ class TriggerNOCContainer extends Component {
                         maxFileSize = {5000}>
                       </DocumentListContainerNOC>
                   </Grid>
+            }
+             {((this.state.nocType == "FIRE_NOC"  || this.props.nocType == "FIRE_NOC")) &&
+            <Grid item sm={12}>
+            <DocumentListContainerNOC
+              buttonLabel = {{
+                labelName: "UPLOAD FILE",
+                labelKey: "BPA_BUTTON_UPLOAD FILE"
+              }}
+              description = {{
+                labelName: "Only .pdf files. 6MB max file size.",
+                labelKey: "BPA_UPLOAD_FILE_RESTRICTIONS"
+              }}
+              inputProps = {{
+                accept: ".pdf"
+              }}
+              documentTypePrefix = "BPA_"
+              maxFileSize = {5000}>
+            </DocumentListContainerNOC>
+        </Grid>
+           }
                 <Grid item sm={12}
                  style={{
                   marginTop: 8,

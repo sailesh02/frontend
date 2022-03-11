@@ -964,8 +964,10 @@ class NocDetailCardBPA extends Component {
           return false
         }
       })
-      
-      if(isUploadedDoc && isUploadedDoc.includes(false)){
+      if(isUploadedDoc &&isUploadedDoc.includes(false) &&requiredNoc && requiredNoc.length > 0 && requiredNoc[0].nocType == 'FIRE_NOC' ){
+        allDocumentsUploaded = true
+      }
+      if(isUploadedDoc && isUploadedDoc.includes(false) &&requiredNoc && requiredNoc.length > 0 && requiredNoc[0].nocType == 'NMA_NOC' ){
         allDocumentsUploaded = false
       }
       else if(documents && documents.length > 0 && docFromMDMS && docFromMDMS.length > 0){

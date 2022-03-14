@@ -189,7 +189,8 @@ export const additionDetails = getCommonCard({
             else {
               showHideFeilds(dispatch, true);
             }
-            console.log(action.value, "Nero Hello")
+
+            
             if(action.value === "Metered"){
 
               
@@ -261,6 +262,14 @@ export const additionDetails = getCommonCard({
                 dispatch(
                   handleField(
                     "apply",
+                    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.maxMeterDigits.props",
+                    "disabled",
+                    false
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio.props",
                     "disabled",
                     true
@@ -275,6 +284,7 @@ export const additionDetails = getCommonCard({
                     false
                   )
                 );
+
 
               }else{
 

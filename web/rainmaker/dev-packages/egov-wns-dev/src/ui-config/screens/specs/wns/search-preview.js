@@ -23,6 +23,8 @@ import { getReviewConnectionDetails } from "./applyResource/review-trade";
 import { snackbarWarningMessage } from "./applyResource/reviewConnectionDetails";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 import {connectionDetailsWater,connectionDetailsSewerage} from './applyResource/task-connectiondetails'
+import { httpRequest } from "../../../../ui-utils"
+import commonConfig from "config/common.js";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -81,6 +83,32 @@ const headerrow = getCommonContainer({
   })
 });
 
+const getMdmsDataForInstallment = async(dispatch) => {
+
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [
+        
+        { moduleName: "ws-services-calculation", masterDetails: [{ name: "Installment" }] },
+        
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+    
+    let scrutinyFeeInstallments = payload.MdmsRes && payload.MdmsRes['ws-services-calculation'].Installment && payload.MdmsRes['ws-services-calculation'].Installment.filter( item => item.feeType == "WS_SCRUTINY_FEE")
+    let labourFeeInstallments = payload.MdmsRes && payload.MdmsRes['ws-services-calculation'].Installment && payload.MdmsRes['ws-services-calculation'].Installment.filter( item => item.feeType == "WS_LABOUR_FEE")
+  
+      payload.MdmsRes['ws-services-calculation'].ScrutinyFeeInstallmentsInfo = scrutinyFeeInstallments;
+      payload.MdmsRes['ws-services-calculation'].LabourFeeInstallmentsInfo = labourFeeInstallments;
+      dispatch(prepareFinalObject("applyScreenMdmsDataForInstallment", payload.MdmsRes));
+  } catch (error) {
+   console.log(error, "Error") 
+  }
+}
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   if(isDisconnectOrClose() || process.env.REACT_APP_NAME === "Citizen"){
     set(
@@ -109,7 +137,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   if (getQueryArg(window.location.href, "service", null) != null) {
     resetData();
   }
-
+  let r = await getMdmsDataForInstallment(dispatch);
   let Response = await getWorkFlowData(queryObj);
   let processInstanceAppStatus = Response && Response.ProcessInstances && Response.ProcessInstances.length > 0 && Response.ProcessInstances[0].state.applicationStatus;
   //Search details for given application Number
@@ -232,12 +260,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           "visible",
           false
         ));
-        dispatch(handleField(
-          "search-preview",
-          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
-          "visible",
-          false
-        ));
+        // dispatch(handleField(
+        //   "search-preview",
+        //   "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+        //   "visible",
+        //   false
+        // ));
       }
 
       if((
@@ -602,12 +630,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           "visible",
           true
           ))
-          dispatch(handleField(
-            "search-preview",
-            "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
-            "visible",
-            false
-            ))
+          // dispatch(handleField(
+          //   "search-preview",
+          //   "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+          //   "visible",
+          //   false
+          //   ))
       }else{
         set(
           action.screenConfig,
@@ -713,6 +741,19 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen.visible",
         false
       );
+
+      dispatch(handleField(
+            "search-preview",
+            "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFourTeen",
+            "visible",
+            false
+            ))
+      dispatch(handleField(
+        "search-preview",
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+        "visible",
+        false
+        ))      
     } else {
       set(
         action.screenConfig,
@@ -1084,6 +1125,7 @@ const screenConfig = {
 const searchResults = async (action, state, dispatch, applicationNumber, processInstanceAppStatus) => {
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
   let viewBillTooltip = [], estimate, payload = [];
+  
   if (service === serviceConst.WATER || applicationNumber.includes('WS')) {
     set(
       action.screenConfig,
@@ -1092,6 +1134,28 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     );
     payload = [];
     payload = await getSearchResults(queryObjForSearch);
+    
+    let installmentInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsDataForInstallment.ws-services-calculation");
+    
+    let usageCategoryForInstallment = payload && payload.WaterConnection.length > 0 && payload.WaterConnection[0].usageCategory;
+    let feeForConnectionType = payload && payload.WaterConnection.length > 0 && payload.WaterConnection[0].connectionType;
+    let selectedLabourInstallment = installmentInfo && installmentInfo.LabourFeeInstallmentsInfo.filter(item => item.usageCategory === usageCategoryForInstallment)
+    //let usageCategoryForInstallment = payload && payload.WaterConnection.length > 0 && payload.WaterConnection[0].usageCategory;
+    let selectedScrutinyInstallment = installmentInfo && installmentInfo.ScrutinyFeeInstallmentsInfo.filter(item => item.usageCategory === usageCategoryForInstallment)
+    // dispatch(prepareFinalObject(
+    //   "WaterConnection[0].additionalDetails.scrutinyFeeTotalAmount", selectedScrutinyFee && selectedScrutinyFee[0].totalAmount
+    // ))
+    if(feeForConnectionType === "Non Metered"){
+    if(usageCategoryForInstallment === "DOMESTIC"){
+    set(payload, 'WaterConnection[0].additionalDetails.scrutinyFeeTotalAmount', selectedScrutinyInstallment && selectedScrutinyInstallment[0].totalAmount);
+    set(payload, 'WaterConnection[0].additionalDetails.totalAmount', selectedLabourInstallment && selectedLabourInstallment[0].totalAmount);
+    }
+    if(usageCategoryForInstallment === "BPL" || usageCategoryForInstallment === "ROADSIDEEATERS"){
+      
+      set(payload, 'WaterConnection[0].additionalDetails.totalAmount', selectedLabourInstallment && selectedLabourInstallment[0].totalAmount);
+      }
+
+    }
     let connectionFacility = payload && payload.WaterConnection && payload && 
     payload.WaterConnection.length > 0 && payload.WaterConnection[0].connectionFacility
     let connectionType = payload && payload.WaterConnection && payload && 
@@ -1454,6 +1518,7 @@ const parserFunction = (obj) => {
     proposedWaterClosets: parseInt(obj.proposedWaterClosets),
     proposedToilets: parseInt(obj.proposedToilets),
     roadCuttingArea: parseInt(obj.roadCuttingArea),
+    noOfFlats: parseInt(obj.noOfFlats) > 0 ? parseInt(obj.noOfFlats) : 0,
     additionalDetails: {
       initialMeterReading: (
         obj.additionalDetails !== undefined &&
@@ -1468,6 +1533,10 @@ const parserFunction = (obj) => {
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.meterMake !== undefined
       ) ? (obj.additionalDetails.meterMake) : "",
+      maxMeterDigits:(
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.maxMeterDigits !== undefined
+      ) ? (obj.additionalDetails.maxMeterDigits) : "",
       meterReadingRatio: (
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.meterReadingRatio !== undefined
@@ -1476,14 +1545,14 @@ const parserFunction = (obj) => {
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.diameter !== undefined
       ) ? (obj.additionalDetails.diameter) : "",
-      isLabourFeeApplicable: (
-        obj.additionalDetails !== undefined &&
-        obj.additionalDetails.isLabourFeeApplicable !== undefined
-      ) ? (obj.additionalDetails.isLabourFeeApplicable) : "",
-      isInstallmentApplicable: (
-        obj.additionalDetails !== undefined &&
-        obj.additionalDetails.isInstallmentApplicable !== undefined
-      ) ? (obj.additionalDetails.isInstallmentApplicable) : "",
+      // isLabourFeeApplicable: (
+      //   obj.additionalDetails !== undefined &&
+      //   obj.additionalDetails.isLabourFeeApplicable !== undefined
+      // ) ? (obj.additionalDetails.isLabourFeeApplicable) : "",
+      // isInstallmentApplicable: (
+      //   obj.additionalDetails !== undefined &&
+      //   obj.additionalDetails.isInstallmentApplicable !== undefined
+      // ) ? (obj.additionalDetails.isInstallmentApplicable) : "",
       isVolumetricConnection: (
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.isVolumetricConnection !== undefined
@@ -1500,6 +1569,53 @@ const parserFunction = (obj) => {
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.volumetricConsumtion !== undefined
       ) ? (obj.additionalDetails.volumetricConsumtion) : "",
+
+      isLabourFeeApplicable: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.isLabourFeeApplicable !== undefined
+      ) ? (obj.additionalDetails.isLabourFeeApplicable) : "",
+      isInstallmentApplicable: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.isInstallmentApplicable !== undefined
+      ) ? (obj.additionalDetails.isInstallmentApplicable) : "",
+
+
+      noOfLabourFeeInstallments: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.noOfLabourFeeInstallments !== undefined
+      ) ? (obj.additionalDetails.noOfLabourFeeInstallments) : "",
+      labourFeeInstallmentAmount: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.labourFeeInstallmentAmount !== undefined
+      ) ? (obj.additionalDetails.labourFeeInstallmentAmount) : "",
+      totalAmount: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.totalAmount !== undefined
+      ) ? (obj.additionalDetails.totalAmount) : "",
+
+
+      isInstallmentApplicableForScrutinyFee: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.isInstallmentApplicableForScrutinyFee !== undefined
+      ) ? (obj.additionalDetails.isInstallmentApplicableForScrutinyFee) : "",
+
+      noOfScrutinyFeeInstallments: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.noOfScrutinyFeeInstallments !== undefined
+      ) ? (obj.additionalDetails.noOfScrutinyFeeInstallments) : "",
+
+      scrutinyFeeInstallmentAmount: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.scrutinyFeeInstallmentAmount !== undefined
+      ) ? (obj.additionalDetails.scrutinyFeeInstallmentAmount) : "",
+
+      scrutinyFeeTotalAmount: (
+        obj.additionalDetails !== undefined &&
+        obj.additionalDetails.scrutinyFeeTotalAmount !== undefined
+      ) ? (obj.additionalDetails.scrutinyFeeTotalAmount) : "",
+
+      
+      
     },
     dateEffectiveFrom: convertDateToEpoch(obj.dateEffectiveFrom),
     noOfTaps: parseInt(obj.noOfTaps),

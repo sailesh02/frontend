@@ -24,6 +24,8 @@ import { httpRequest } from '../../../../../ui-utils/index';
 import set from 'lodash/set';
 import { getTodaysDateInYMD, getQueryArg, getObjectKeys, getObjectValues } from 'egov-ui-framework/ui-utils/commons';
 import { isModifyMode } from "../../../../../ui-utils/commons";
+import store from "ui-redux/store";
+import {getInstallmentCard} from "./footer"
 let isMode = isModifyMode();
 const getCurrentDate = () => {
   var today = new Date();
@@ -93,6 +95,17 @@ const waterSubSourceChange = (reqObj) => {
     console.log(e);
   }
 }
+
+// const getLabourFeeLabel = () => {
+//   let state = store.getState();
+//   console.log(state, "Nero statess")
+//  let hello =  state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && state.screenConfiguration.preparedFinalObject.applyScreenMdmsData;
+//  console.log(hello, "Nero Hello")
+//  console.log(hello && hello.ward)
+//  let ward =  get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ward");
+//  console.log(ward, "Nero Ward")
+//   return `Lobour Fee - Rs. ${ward && ward.length > 0  && ward[0].code}`;
+// }
 export const commonRoadCuttingChargeInformation = () => {
   return getCommonGrayCard({
     roadDetails: getCommonContainer({
@@ -162,10 +175,12 @@ export const additionDetails = getCommonCard({
           jsonPath: "applyScreen.connectionType"
         }),
         afterFieldChange: async (action, state, dispatch) => {
+          let connectionCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionCategory");
+          let usageCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.usageCategory");
+
           if(process.env.REACT_APP_NAME !== "Citizen") {
             let connType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
-            console.log('connType');
-            console.log(connType);
+            
             if (connType === undefined || connType === "Non Metered" || connType === "Bulk-supply" || connType !== "Metered") {
               showHideFeilds(dispatch, false);
             }
@@ -173,10 +188,10 @@ export const additionDetails = getCommonCard({
               showHideFeilds(dispatch, true);
             }
 
-            console.log(action.value, "Nero Hello")
+            
             if(action.value === "Metered"){
 
-              console.log(action.value, "Nero Hello 1")
+              
                 
                 dispatch(
                   handleField(
@@ -229,13 +244,57 @@ export const additionDetails = getCommonCard({
                 dispatch(
                   handleField(
                     "apply",
+                    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.maxMeterDigits.props",
+                    "disabled",
+                    false
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio.props",
                     "disabled",
                     false
                   )
                 );
 
-                
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
+                    "visible",
+                    false
+                  )
+                );
+
+              }else{
+
+                if(connectionCategory == "PERMANENT" && (usageCategory === "BPL" || usageCategory === "DOMESTIC")){
+                  dispatch(
+                    handleField(
+                      "apply",
+                      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+                      "visible",
+                      true
+                    )
+                  );
+                  getInstallmentCard(dispatch, state)
+                }
+
+                if(connectionCategory == "TEMPORARY" && usageCategory === "ROADSIDEEATERS"){
+                  dispatch(
+                    handleField(
+                      "apply",
+                      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+                      "visible",
+                      true
+                    )
+                  );
+                  getInstallmentCard(dispatch, state)
+                }
+
+
+
               }
             
           }
@@ -515,6 +574,22 @@ export const additionDetails = getCommonCard({
           sm: 6
         }
       }),
+      maxMeterDigits : getTextField({
+        label: {
+          labelKey: "WS_ADDN_DETAILS_MAX_METER_DIGITS_LABEL"
+        },
+        placeholder: {
+          labelKey: "WS_ADDN_DETAILS_MAX_METER_DIGITS_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        //required: true,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "applyScreen.additionalDetails.maxMeterDigits",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen" || getQueryArg(window.location.href, "mode") === "MODIFY"? true:false}
+      }),
     },
     // {
     //   style:getQueryArg(window.location.href, "mode") === "MODIFY"? {"pointer-events":"none", "cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
@@ -565,6 +640,8 @@ export const additionDetails = getCommonCard({
           if(process.env.REACT_APP_NAME !== "Citizen") {
             let mStep = isModifyMode() ? 'formwizardSecondStep' : 'formwizardThirdStep';
             let connectionType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
+            let connectionCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionCategory");
+            let usageCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.usageCategory");
             let oldConnectioNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.oldConnectionNo");
             if (connectionType === undefined || connectionType != "Metered") {
               if(action && action.value && action.value === 'Y'){
@@ -593,6 +670,18 @@ export const additionDetails = getCommonCard({
                     oldConnectioNumber && oldConnectioNumber!= 'NA' ? false : true  
                   )
                 );
+
+                // if(connectionCategory == "TEMPORARY" && usageCategory === "ROADSIDEEATERS"){
+                //   dispatch(
+                //     handleField(
+                //       "apply",
+                //       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+                //       "visible",
+                //       true
+                //     )
+                //   );
+                //   getInstallmentCard(dispatch, state)
+                // }
 
               }else{
                 dispatch(
@@ -731,9 +820,183 @@ export const additionDetails = getCommonCard({
     })
   }),
   paymentDetailsContainer : getCommonGrayCard({
-    subHeader: getCommonTitle({
-      labelKey: "WS_PAYMENT_DETAILS"
+    // header: getCommonTitle({
+    //   labelKey: "WS_PAYMENT_DETAILS_HELO"
+    // }),
+    header: getCommonHeader(
+      {
+        labelKey: "Fee Details",
+      
+      },
+      {
+        style: {"marginBottom": "30px"}
+      }
+    ),
+    scrutinyFeeSubHeader: getCommonTitle({
+      
+       labelKey: "Scrutiny Fee"
+     }),
+     scrutinyFeeDetails: getCommonContainer({
+      scrutinyFeeAmount : getTextField({
+        label: {
+          labelKey: "Scrutiny Fee Amount in Rs."
+        },
+        placeholder: {
+          labelKey: "Scrutiny fee Amount in Rs."
+        },
+        
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        props: {disabled: true},
+        
+       // value: 5900,
+        jsonPath: "applyScreenMdmsData.ws-services-calculation.ScrutinyFeeInstallmentsInfo[0].totalAmount",
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen"}
+      }),
+      scrutinyInstallmentType: {
+        uiFramework: "custom-containers",
+        componentPath: "RadioGroupContainer",
+        gridDefination: {
+          xs: 6,
+          sm: 6
+        },
+        jsonPath: "applyScreen.additionalDetails.isInstallmentApplicableForScrutinyFee",
+        props: {
+         // value:'N',
+          label: { name: "WS_FULL_PAYMENT_OR_INSTALLMENT", key: "WS_FULL_PAYMENT_OR_INSTALLMENT" },
+          className: "applicant-details-error",
+          buttons: [
+            {
+             // disabled:true,
+              labelName: "Male",
+              labelKey: "WS_FULL_PAYMENT",
+              value: "N"
+            },
+            {
+            //  disabled:true,
+              labelName: "FEMALE",
+              labelKey: "WS_INSTALLMENT",
+              value: "Y"
+            }
+          ],
+          jsonPath: "applyScreen.additionalDetails.isInstallmentApplicableForScrutinyFee",
+          required: true,
+          errorMessage: "Required",
+        },
+        afterFieldChange: async (action, state, dispatch) => {
+          let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+          
+          if(action.value == "Y"){
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.scrutinyFeeDetails.children.noOfScrutinyInstallments",
+                "visible",
+                true
+              )
+            );
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.scrutinyFeeDetails.children.scrutinyInstallmentAmount",
+                "visible",
+                true
+              )
+            );
+
+            
+          }else{
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.scrutinyFeeDetails.children.noOfScrutinyInstallments",
+                "visible",
+                false
+              )
+            );
+
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.scrutinyFeeDetails.children.scrutinyInstallmentAmount",
+                "visible",
+                false
+              )
+            );
+
+            dispatch(prepareFinalObject(
+              "applyScreen.additionalDetails.scrutinyFeeInstallmentAmount", null
+            ))
+
+            dispatch(prepareFinalObject(
+              "applyScreen.additionalDetails.noOfScrutinyFeeInstallments", null
+            ))
+
+            
+            
+          }
+          
+        },
+        required: true,
+        type: "array"
+      },
+      
+
+      noOfScrutinyInstallments: getSelectField({
+      label: { labelKey: "WS_NO_OF_INSTALLMENTS_LABEL" },
+     // data: [{code:'12'},{code:'24'}, {code: '36'}],
+       optionValue: "noOfInstallment",
+       optionLabel: "noOfInstallment",
+      sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.ScrutinyFeeInstallmentsInfo",
+      placeholder: { labelKey: "WS_NO_OF_INSTALLMENTS_PLACEHOLDER" },
+      required: false,
+      visible:false,
+      props: {disabled: process.env.REACT_APP_NAME === "Citizen"},
+      gridDefination: { xs: 6, sm: 6 },
+      jsonPath: "applyScreen.additionalDetails.noOfScrutinyFeeInstallments",
+      afterFieldChange: async (action, state, dispatch) => {
+        let scrutinyFeeInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-calculation.ScrutinyFeeInstallmentsInfo");
+        
+        let selectedInstallment = scrutinyFeeInfo && scrutinyFeeInfo.filter(item => item.noOfInstallment === action.value)
+        
+
+        dispatch(prepareFinalObject(
+          "applyScreen.additionalDetails.scrutinyFeeInstallmentAmount", selectedInstallment && selectedInstallment[0].installmentAmount
+        ))
+      }
     }),
+    scrutinyInstallmentAmount : getTextField({
+      label: {
+        labelKey: "WS_INSTALLMENT_AMOUNT_LABEL"
+      },
+      placeholder: {
+        labelKey: "WS_INSTALLMENT_AMOUNT_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
+      visible: false,
+      jsonPath: "applyScreen.additionalDetails.scrutinyFeeInstallmentAmount",
+      props: {disabled: true, style: {marginBottom: "30px"}},
+      
+    })
+
+
+  
+  },
+  {style: {borderBottom: "1px dotted", marginTop: "8px"}}
+  
+  ),
+
+    subHeader: getCommonTitle({
+      // labelKey: "Labor Fee - Rs. 3000",
+       labelKey: "Labour Fee"
+     },
+     {style: {marginTop: "30px"}}
+     ),
     activeDetails: getCommonContainer({
       isLabourFeeApplicable: getSelectField({
         label: { labelKey: "WS_LABOUR_FEE" },
@@ -747,6 +1010,10 @@ export const additionDetails = getCommonCard({
         jsonPath: "applyScreen.additionalDetails.isLabourFeeApplicable",
         afterFieldChange: async (action, state, dispatch) => {
           let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+          let usageCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.usageCategory");
+          let labourFeeInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-calculation.LabourFeeInstallmentsInfo");
+          let selectedInstallment = labourFeeInfo && labourFeeInfo.filter(item => item.usageCategory === usageCategory)
+        
           if(process.env.REACT_APP_NAME != 'Citizen' && !applicationNumber){
             dispatch(
               handleField(
@@ -785,7 +1052,14 @@ export const additionDetails = getCommonCard({
                 dispatch(prepareFinalObject(
                   "applyScreen.additionalDetails.isInstallmentApplicable","N"
                 ))
+                dispatch(prepareFinalObject(
+                  "applyScreen.additionalDetails.totalAmount", selectedInstallment && selectedInstallment[0].totalAmount
+                ))
+                
               }else{
+                dispatch(prepareFinalObject(
+                  "applyScreen.additionalDetails.totalAmount", null
+                ))
                 dispatch(
                   handleField(
                     "apply",
@@ -797,6 +1071,34 @@ export const additionDetails = getCommonCard({
                 dispatch(prepareFinalObject(
                   "applyScreen.additionalDetails.isInstallmentApplicable","N"
                 ))
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.noOfLabourFeeInstallments`,
+                    "visible",
+                    false
+                  )
+                );
+    
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.labourInstallmentAmount`,
+                    "visible",
+                    false
+                  )
+                );
+    
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.subHeader1.children.key.props",
+                    "labelKey",
+                    ""
+                  )
+                );
+
+
               }
             }
             else {
@@ -821,19 +1123,19 @@ export const additionDetails = getCommonCard({
         },
         jsonPath: "applyScreen.additionalDetails.isInstallmentApplicable",
         props: {
-          value:'N',
+         // value:'N',
           label: { name: "WS_FULL_PAYMENT_OR_INSTALLMENT", key: "WS_FULL_PAYMENT_OR_INSTALLMENT" },
           className: "applicant-details-error",
           buttons: [
             {
-              disabled:true,
-              labelName: "Male",
+             // disabled:true,
+              labelName: "WS_FULL_PAYMENT",
               labelKey: "WS_FULL_PAYMENT",
               value: "N"
             },
             {
-              disabled:true,
-              labelName: "FEMALE",
+            //  disabled:true,
+              labelName: "WS_INSTALLMENT",
               labelKey: "WS_INSTALLMENT",
               value: "Y"
             }
@@ -842,11 +1144,164 @@ export const additionDetails = getCommonCard({
           required: true,
           errorMessage: "Required",
         },
+        afterFieldChange: async (action, state, dispatch) => {
+          let usageCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.usageCategory");
+          let labourFeeInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-calculation.LabourFeeInstallmentsInfo");
+          let selectedInstallment = labourFeeInfo && labourFeeInfo.filter(item => item.usageCategory === usageCategory)
+        
+          
+          if(action.value == "Y"){
+            
+            dispatch(
+              handleField(
+                "apply",
+                `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.noOfLabourFeeInstallments`,
+                "visible",
+                true
+              )
+            );
+            dispatch(
+              handleField(
+                "apply",
+                `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.labourInstallmentAmount`,
+                "visible",
+                true
+              )
+            );
+
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.subHeader1.children.key.props",
+                "visible",
+                true
+              )
+            );
+
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.subHeader1.children.key.props",
+                "labelKey",
+                `Labour Fee Amount - ${selectedInstallment && selectedInstallment[0].totalAmount}`
+              )
+            );
+            
+            dispatch(prepareFinalObject(
+              "applyScreen.additionalDetails.totalAmount", null
+            ))
+
+            dispatch(prepareFinalObject(
+              "applyScreen.additionalDetails.noOfLabourFeeInstallments", selectedInstallment && selectedInstallment[0].noOfInstallment
+            ))
+            dispatch(prepareFinalObject(
+              "applyScreen.additionalDetails.labourFeeInstallmentAmount", selectedInstallment && selectedInstallment[0].installmentAmount
+            ))
+
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.noOfLabourFeeInstallments.props",
+                "disabled",
+                true
+              )
+            );
+            
+          }else{
+
+            dispatch(prepareFinalObject(
+              "applyScreen.additionalDetails.totalAmount", selectedInstallment && selectedInstallment[0].totalAmount
+            ))
+            dispatch(
+              handleField(
+                "apply",
+                `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.noOfLabourFeeInstallments`,
+                "visible",
+                false
+              )
+            );
+
+            dispatch(
+              handleField(
+                "apply",
+                `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.labourInstallmentAmount`,
+                "visible",
+                false
+              )
+            );
+
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.subHeader1.children.key.props",
+                "labelKey",
+                ""
+              )
+            );
+
+            dispatch(prepareFinalObject(
+              "applyScreen.additionalDetails.noOfLabourFeeInstallments", null
+            ))
+            dispatch(prepareFinalObject(
+              "applyScreen.additionalDetails.labourFeeInstallmentAmount", null
+            ))
+            
+          }
+          
+        },
         required: true,
         type: "array"
-      }
-    })
-  }),
+      },
+      subHeader1: getCommonTitle({
+         labelKey: ""
+       },
+       {
+         style:{width: "100%", marginBottom: "20px", marginTop: "18px", fontSize: "15px"}
+       }
+       ),
+       noOfLabourFeeInstallments: getSelectField({
+        label: { labelKey: "WS_NO_OF_INSTALLMENTS_LABEL" },
+       // data: [{code:'12'},{code:'24'}, {code: '36'}],
+        // optionValue: "code",
+        // optionLabel: "label",
+        optionValue: "noOfInstallment",
+       optionLabel: "noOfInstallment",
+        sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.LabourFeeInstallmentsInfo",
+        placeholder: { labelKey: "WS_NO_OF_INSTALLMENTS_PLACEHOLDER" },
+        required: false,
+        visible: false,
+        props: {disabled: process.env.REACT_APP_NAME === "Citizen",},
+        gridDefination: { xs: 6, sm: 6 },
+        jsonPath: "applyScreen.additionalDetails.noOfLabourFeeInstallments",
+        afterFieldChange: async (action, state, dispatch) => {
+         
+         
+        }
+      }),
+      labourInstallmentAmount : getTextField({
+        label: {
+          labelKey: "WS_INSTALLMENT_AMOUNT_LABEL"
+        },
+        placeholder: {
+          labelKey: "WS_INSTALLMENT_AMOUNT_PLACEHOLDER"
+        },
+        visible: false,
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        jsonPath: "applyScreen.additionalDetails.labourFeeInstallmentAmount",
+        props: {disabled: true}
+      })
+
+
+
+    },
+    {style: {marginTop: "8px"}}
+   
+    )
+  }
+  ),
 
   modificationsEffectiveFrom : getCommonGrayCard({
     subHeader: getCommonTitle({
@@ -877,22 +1332,22 @@ export const additionDetails = getCommonCard({
 
 const showHideFeilds = (dispatch, value) => {
   let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep'; 
-  dispatch(
-    handleField(
-      "apply",
-      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
-      "visible",
-      value
-    )
-  );
-  dispatch(
-    handleField(
-      "apply",
-      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
-      "visible",
-      value
-    )
-  );
+  // dispatch(
+  //   handleField(
+  //     "apply",
+  //     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
+  //     "visible",
+  //     value
+  //   )
+  // );
+  // dispatch(
+  //   handleField(
+  //     "apply",
+  //     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+  //     "visible",
+  //     value
+  //   )
+  // );
   dispatch(
     handleField(
       "apply",
@@ -909,6 +1364,15 @@ const showHideFeilds = (dispatch, value) => {
       value
     )
   );
+  dispatch(
+    handleField(
+      "apply",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.maxMeterDigits`,
+      "visible",
+      value
+    )
+  );
+  
   dispatch(
     handleField(
       "apply",
@@ -933,22 +1397,22 @@ const showHideFeilds = (dispatch, value) => {
       value
     )
   );
-  dispatch(
-    handleField(
-      "apply",
-      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
-      "visible",
-      value
-    )
-  );
-  dispatch(
-    handleField(
-      "apply",
-      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
-      "visible",
-      value
-    )
-  );
+  // dispatch(
+  //   handleField(
+  //     "apply",
+  //     `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isLabourFeeApplicable`,
+  //     "visible",
+  //     value
+  //   )
+  // );
+  // dispatch(
+  //   handleField(
+  //     "apply",
+  //     `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+  //     "visible",
+  //     value
+  //   )
+  // );
   dispatch(
     handleField(
       "apply",
@@ -961,6 +1425,14 @@ const showHideFeilds = (dispatch, value) => {
     handleField(
       "apply",
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.maxMeterDigits`,
       "visible",
       value
     )

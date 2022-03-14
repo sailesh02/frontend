@@ -692,7 +692,7 @@ export const convertEpochToDateInYMD = dateEpoch => {
   };
   
   export const validationsForModifyConnectionData = (applyScreenObject, connectionOldData) => {
-console.log(applyScreenObject, connectionOldData, "Nero old Data")
+
     let selectedConnectionType = applyScreenObject.hasOwnProperty("connectionType") && applyScreenObject["connectionType"];
     let oldConnectionType = connectionOldData.hasOwnProperty("connectionType") && connectionOldData["connectionType"];
     if(selectedConnectionType == "Non Metered"){
@@ -726,20 +726,101 @@ export const validationsForExecutionData = (applyScreenObject) => {
     }else{return false}
 }
 
+export const validateInstallmentDetails = (applyScreenObject, WaterConnection) => {
+  if(WaterConnection && WaterConnection[0].applicationStatus == "PENDING_FOR_FIELD_INSPECTION"){
+
+    let connectionType = applyScreenObject && applyScreenObject.connectionType;
+    let isApartment = applyScreenObject && applyScreenObject.apartment;
+    let connectionCategory = applyScreenObject && applyScreenObject.connectionCategory;
+    let usageCategory = applyScreenObject && applyScreenObject.usageCategory;
+
+    if(connectionType === "Non Metered" && connectionCategory == "PERMANENT" && (!isApartment || isApartment=="No")){
+        if(usageCategory == "DOMESTIC"){
+            
+            if( applyScreenObject.hasOwnProperty("additionalDetails") &&
+            applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== undefined && 
+            applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== "" &&
+            applyScreenObject.additionalDetails["isInstallmentApplicableForScrutinyFee"] !== undefined && 
+            applyScreenObject.additionalDetails["isInstallmentApplicableForScrutinyFee"] !== ""
+           
+           ){
+            return true;
+           }else{
+               return false;
+            }
+          }else if(usageCategory == "BPL"){
+            if( applyScreenObject.hasOwnProperty("additionalDetails") &&
+            applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== undefined && 
+            applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== "" 
+           ){
+                    return true;
+                }else{
+                    return false;
+                    }
+          
+            }else{
+                return true;
+            }
+
+
+        }else if(connectionType === "Non Metered" && connectionCategory == "TEMPORARY" && (!isApartment || isApartment=="No")){
+            if(usageCategory == "ROADSIDEEATERS"){
+                if( applyScreenObject.hasOwnProperty("additionalDetails") &&
+                applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== undefined && 
+                applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== "" 
+               ){
+                    return true;
+                }else{
+                    return false;
+                    }
+              
+                }else{
+                    return true;
+                }
+        }else if(connectionType === "Metered" && connectionCategory == "TEMPORARY" && (!isApartment || isApartment=="No")){
+            if(usageCategory == "DOMESTIC"){
+                if( applyScreenObject.hasOwnProperty("additionalDetails") &&
+                applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== undefined && 
+                applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== "" 
+               ){
+                    return true;
+                }else{
+                    return false;
+                    }
+              
+                }else{
+                    return true;
+                }
+        }else{
+            return true;
+        }
+    }else{
+        return true;
+    }
+}
 export const validateMeterDetails = (applyScreenObject) => {
     let connectionType = applyScreenObject && applyScreenObject.connectionType
     let water = applyScreenObject && applyScreenObject.water
     let rValue = true;
     if (rValue && connectionType && connectionType == 'Metered' && water){
+        
         if( applyScreenObject.hasOwnProperty("additionalDetails") && 
         applyScreenObject.additionalDetails.hasOwnProperty("meterMake") && 
         applyScreenObject.additionalDetails.hasOwnProperty("meterReadingRatio") && 
         applyScreenObject.additionalDetails["meterMake"] !== undefined && 
         applyScreenObject.additionalDetails["meterMake"] !== "" &&
         applyScreenObject.additionalDetails["meterReadingRatio"] !== undefined && 
-        applyScreenObject.additionalDetails["meterReadingRatio"] !== "" && 
-        applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== undefined && 
-        applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== ""){
+        applyScreenObject.additionalDetails["meterReadingRatio"] !== "" &&
+        applyScreenObject.additionalDetails["maxMeterDigits"] !== undefined && 
+        applyScreenObject.additionalDetails["maxMeterDigits"] !== "" &&
+        parseInt(applyScreenObject.additionalDetails["maxMeterDigits"]) > 0 &&
+        parseInt(applyScreenObject.additionalDetails["maxMeterDigits"]) < 7 
+        )
+        
+        // && 
+        // applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== undefined && 
+        // applyScreenObject.additionalDetails["isLabourFeeApplicable"] !== "")
+        {
             return true
         }else{return false}
     }else if(rValue && connectionType && connectionType == 'Non Metered' && !water){
@@ -922,6 +1003,10 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.meterMake !== undefined
               ) ? (queryObject.additionalDetails.meterMake) : "",
+            maxMeterDigits:(
+            queryObject.additionalDetails !== undefined &&
+            queryObject.additionalDetails.maxMeterDigits !== undefined
+            ) ? (queryObject.additionalDetails.maxMeterDigits) : "",  
             meterReadingRatio: (
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.meterReadingRatio !== undefined
@@ -930,14 +1015,7 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.diameter !== undefined
             ) ? (queryObject.additionalDetails.diameter) : "",
-            isLabourFeeApplicable: (
-                queryObject.additionalDetails !== undefined &&
-                queryObject.additionalDetails.isLabourFeeApplicable !== undefined
-              ) ? (queryObject.additionalDetails.isLabourFeeApplicable) : "",
-              isInstallmentApplicable: (
-                queryObject.additionalDetails !== undefined &&
-                queryObject.additionalDetails.isInstallmentApplicable !== undefined
-              ) ? (queryObject.additionalDetails.isInstallmentApplicable) : "",
+            
               isVolumetricConnection: (
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.isVolumetricConnection !== undefined
@@ -954,6 +1032,45 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.volumetricConsumtion !== undefined
               ) ? (queryObject.additionalDetails.volumetricConsumtion) : "",
+              isLabourFeeApplicable: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.isLabourFeeApplicable !== undefined
+              ) ? (queryObject.additionalDetails.isLabourFeeApplicable) : "",
+              isInstallmentApplicable: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.isInstallmentApplicable !== undefined
+              ) ? (queryObject.additionalDetails.isInstallmentApplicable) : "",
+
+
+              noOfLabourFeeInstallments: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.noOfLabourFeeInstallments !== undefined
+              ) ? (queryObject.additionalDetails.noOfLabourFeeInstallments) : "",
+              labourFeeInstallmentAmount: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.labourFeeInstallmentAmount !== undefined
+              ) ? (queryObject.additionalDetails.labourFeeInstallmentAmount) : "",
+              totalAmount: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.totalAmount !== undefined
+              ) ? (queryObject.additionalDetails.totalAmount) : "",
+
+
+              isInstallmentApplicableForScrutinyFee: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.isInstallmentApplicableForScrutinyFee !== undefined
+              ) ? (queryObject.additionalDetails.isInstallmentApplicableForScrutinyFee) : "",
+              noOfScrutinyFeeInstallments: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.noOfScrutinyFeeInstallments !== undefined
+              ) ? (queryObject.additionalDetails.noOfScrutinyFeeInstallments) : "",
+              scrutinyFeeInstallmentAmount: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.scrutinyFeeInstallmentAmount !== undefined
+              ) ? (queryObject.additionalDetails.scrutinyFeeInstallmentAmount) : "",
+
+              
+              
         }
     }
     queryObject = { ...queryObject, ...parsedObject }
@@ -3050,7 +3167,7 @@ export const getTenantId = () => {
 }
 
 export const getDemandsOfConnection = async (queryObject, dispatch, filter = false) => {
-    console.log(queryObject, "Nero query object")
+    
     dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
@@ -3060,7 +3177,7 @@ export const getDemandsOfConnection = async (queryObject, dispatch, filter = fal
             queryObject
         );
 
-        console.log(response, "Nero Reponse")
+        
         if (response.Demands && response.Demands.length > 0) {
             dispatch(toggleSpinner());
             let demands = response.Demands;
@@ -3115,7 +3232,7 @@ export const getConnectionPastPayments = async (dispatch) => {
             "_search",
             queryObject
         );
-        console.log(response, "Nero res")
+        
         dispatch(toggleSpinner());
         if (response && response.Payments) {
             dispatch(prepareFinalObject("pastPaymentsForWater", response.Payments));

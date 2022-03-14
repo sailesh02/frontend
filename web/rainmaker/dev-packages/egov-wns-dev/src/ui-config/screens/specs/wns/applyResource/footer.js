@@ -23,7 +23,7 @@ import {
   pushTheDocsUploadedToRedux,
   serviceConst,
   showHideFieldsFirstStep, validateConnHolderDetails, validateFeildsForBothWaterAndSewerage,
-  validateFeildsForSewerage, validateFeildsForWater, isEditAction, validationsForExecutionData, validateMeterDetails, validateVolumetricDetails, validationsForModifyConnectionData
+  validateFeildsForSewerage, validateFeildsForWater, isEditAction, validationsForExecutionData, validateMeterDetails, validateVolumetricDetails, validationsForModifyConnectionData, validateInstallmentDetails
 } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
@@ -148,13 +148,16 @@ const callBackForNext = async (state, dispatch) => {
   )
   /* validations for property details screen */
   if (activeStep === 0) {
+    let connectionCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionCategory");
+    let connectionType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
+    let isVolumetricConnection = get(state, "screenConfiguration.preparedFinalObject.applyScreen.additionalDetails.isVolumetricConnection");
     // if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
     //   isFormValid = await appl;
     // }
 
     // validateFields("components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children", state, dispatch)
     isFormValid = validateFields("components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.children", state, dispatch)
-console.log(isFormValid, "Nero form Valid"); 
+
     validateFields("components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children", state, dispatch)
 
     if (getQueryArg(window.location.href, "action") === "edit" && !isModifyMode() && !isOwnerShipTransfer()) {
@@ -403,10 +406,37 @@ console.log(isFormValid, "Nero form Valid");
       // }
     }
     prepareDocumentsUploadData(state, dispatch);
+    if(isModifyMode() && process.env.REACT_APP_NAME === "Employee"  && connectionCategory === 'PERMANENT' && connectionType === "Non Metered"){
+      getInstallmentCard(dispatch, state);
+    }else if(isModifyMode() && process.env.REACT_APP_NAME === "Employee" && connectionCategory === 'TEMPORARY' && connectionType === "Non Metered"){
+      getInstallmentCard(dispatch, state);
+    }
+    // else if(isModifyMode() && process.env.REACT_APP_NAME === "Employee" && connectionCategory === 'TEMPORARY' && connectionType === "Metered"){
+    //   getInstallmentCard(dispatch, state);
+    // } 
+    else{
+      dispatch(
+        handleField(
+          "apply",
+          `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
+          "visible",
+          false
+        )
+      );
+    }
+    
   }
 
   /* validations for Additional /Docuemnts details screen */
   if (activeStep === 1) {
+    let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
+    let connectionCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionCategory");
+    let usageCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.usageCategory")
+    let isApartment = get(state, "screenConfiguration.preparedFinalObject.applyScreen.apartment")
+    let connectionType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
+    let isVolumetricConnection = get(state, "screenConfiguration.preparedFinalObject.applyScreen.additionalDetails.isVolumetricConnection");
+
+    
     if (isModifyMode()) {
       let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
       let connectionOldData = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreenOld", {}), "NA", null);
@@ -451,9 +481,31 @@ console.log(isFormValid, "Nero form Valid");
         hasFieldToaster = true;
       }
     }
+
+
+if(!isModifyMode() && process.env.REACT_APP_NAME === "Employee" && connectionCategory === 'PERMANENT' && connectionType === "Non Metered"){
+  getInstallmentCard(dispatch, state);
+}else if(!isModifyMode() && process.env.REACT_APP_NAME === "Employee" && connectionCategory === 'TEMPORARY' && connectionType === "Non Metered"){
+  getInstallmentCard(dispatch, state);
+}
+// else if(!isModifyMode() && process.env.REACT_APP_NAME === "Employee" && connectionCategory === 'TEMPORARY' && connectionType === "Metered"){
+//   getInstallmentCard(dispatch, state);
+// }
+else{
+  dispatch(
+    handleField(
+      "apply",
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
+      "visible",
+      false
+    )
+  );
+}
+
   }
   /* validations for Additional /Docuemnts details screen */
   if (activeStep === 2 && (isModifyMode() || process.env.REACT_APP_NAME !== "Citizen")) {
+    
     if (isModifyMode()) {
       if (moveToReview(state, dispatch)) {
         await pushTheDocsUploadedToRedux(state, dispatch);
@@ -468,6 +520,7 @@ console.log(isFormValid, "Nero form Valid");
       }
     } else {
       let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+      let WaterConnection = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "WaterConnection", {}), "NA", null);
       if(validateMeterDetails(applyScreenObject) && validateVolumetricDetails(applyScreenObject)){
         isFormValid = true;
         hasFieldToaster = false;
@@ -482,6 +535,23 @@ console.log(isFormValid, "Nero form Valid");
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
         return
       }
+
+      if(validateInstallmentDetails(applyScreenObject, WaterConnection)){
+        isFormValid = true;
+        hasFieldToaster = false;
+      }else{
+        isFormValid = false;
+        hasFieldToaster = true;
+        let errorMessage = {
+          labelName:
+            "ERR_FILL_MANDATORY_FIELDS",
+          labelKey: "ERR_FILL_MANDATORY_FIELDS"
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        return
+      }
+
+
       let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
       if(roadCuttingInfo && roadCuttingInfo != 'NA' && roadCuttingInfo.length > 0) {
         for (let i = 0; i < roadCuttingInfo.length; i++) {
@@ -1115,4 +1185,326 @@ export const footerReview = (
     default:
       break;
   }
+}
+
+export const getInstallmentCard = (dispatch, state) => {
+  let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
+    let connectionCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionCategory");
+    let usageCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.usageCategory")
+    let isApartment = get(state, "screenConfiguration.preparedFinalObject.applyScreen.apartment")
+    let connectionType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType")
+    
+      if(process.env.REACT_APP_NAME === "Employee"){
+          if (waterData && waterData.length > 0){
+            
+            if(connectionType === "Non Metered" && connectionCategory == "PERMANENT" && (!isApartment || isApartment=="No")){
+              dispatch(
+                handleField(
+                  "apply",
+                  `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
+                  "visible",
+                  true
+                )
+              );
+              
+            if(usageCategory == "DOMESTIC"){
+
+              
+              showHideLabourAndScrutinyFeeFeilds(dispatch, "DO_NOTHING", state);
+            }else if(usageCategory == "BPL"){
+
+              
+              showHideLabourAndScrutinyFeeFeilds(dispatch, "HIDE_SCRUTINY", state);
+
+            }else{
+
+              
+              showHideLabourAndScrutinyFeeFeilds(dispatch, "HIDE_FEE_CARD", state);  
+
+            }
+    
+            showHideLabourAndScrutinyFeeFeilds(dispatch, "INITIALIZE", state);
+    
+          }else if(connectionType === "Non Metered" && connectionCategory == "TEMPORARY" && (!isApartment || isApartment=="No")){
+
+            dispatch(
+              handleField(
+                "apply",
+                `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
+                "visible",
+                true
+              )
+            );
+           
+              if(usageCategory == "ROADSIDEEATERS"){
+
+                
+                showHideLabourAndScrutinyFeeFeilds(dispatch, "HIDE_SCRUTINY", state);
+
+              }else{
+
+                
+                showHideLabourAndScrutinyFeeFeilds(dispatch, "HIDE_FEE_CARD", state); 
+
+              }
+  
+         // showHideLabourAndScrutinyFeeFeilds(dispatch, "INITIALIZE", state);
+
+
+          }else if(connectionType === "Metered" && connectionCategory == "TEMPORARY" && (!isApartment || isApartment=="No")){
+
+            dispatch(
+              handleField(
+                "apply",
+                `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
+                "visible",
+                true
+              )
+            );
+           
+              if(usageCategory == "DOMESTIC"){
+
+                
+                showHideLabourAndScrutinyFeeFeilds(dispatch, "HIDE_SCRUTINY", state);
+
+              }else{
+
+                
+                showHideLabourAndScrutinyFeeFeilds(dispatch, "HIDE_FEE_CARD", state); 
+
+              }
+  
+         // showHideLabourAndScrutinyFeeFeilds(dispatch, "INITIALIZE", state);
+
+
+          }else{
+            
+            showHideLabourAndScrutinyFeeFeilds(dispatch, "HIDE_FEE_CARD", state);
+          }
+    
+          }
+        }
+}
+
+const showHideLabourAndScrutinyFeeFeilds = (dispatch, value, state) => {
+
+  let scrutinyFeeInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-calculation.ScrutinyFeeInstallmentsInfo");
+  let usageCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.usageCategory");
+  let applyScreen = get(state, "screenConfiguration.preparedFinalObject.applyScreen");
+  let WaterConnection = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
+
+
+  //let usageCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.usageCategory");
+          let labourFeeInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-calculation.LabourFeeInstallmentsInfo");
+          let selectedLabourInstallment = labourFeeInfo && labourFeeInfo.filter(item => item.usageCategory === usageCategory)
+  
+  let selectedScrutinyFee = scrutinyFeeInfo && scrutinyFeeInfo.filter(item => item.usageCategory === usageCategory)
+        
+
+  if(value === "HIDE_SCRUTINY"){
+    let showHideScrutinyFeeFields =  [{
+      path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.scrutinyFeeDetails",
+      property: "visible",
+      value: false
+    },
+    {
+      path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.scrutinyFeeSubHeader",
+      property: "visible",
+      value: false
+    }]
+    dispatchMultipleFieldChangeAction("apply", showHideScrutinyFeeFields, dispatch);
+  }
+
+  if(value === "HIDE_FEE_CARD"){
+    let actionDefinitions =  [{
+      path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer",
+      property: "visible",
+      value: false
+    }
+  ]
+    dispatchMultipleFieldChangeAction("apply", actionDefinitions, dispatch);
+  }
+
+  if(value == "INITIALIZE" && (WaterConnection && WaterConnection[0].applicationStatus == "INITIATED")){
+    if(applyScreen && applyScreen.usageCategory == "DOMESTIC"){
+      if(WaterConnection[0].applicationType == "NEW_CONNECTION"){
+      dispatch(prepareFinalObject(
+        "applyScreen.additionalDetails.isInstallmentApplicableForScrutinyFee", "N"
+      ))
+    }
+      dispatch(prepareFinalObject(
+        "applyScreen.additionalDetails.scrutinyFeeTotalAmount", selectedScrutinyFee && selectedScrutinyFee[0].totalAmount
+      ))
+    }
+  }
+
+  if(WaterConnection && WaterConnection[0].applicationStatus  == "PENDING_FOR_CITIZEN_ACTION" || WaterConnection[0].applicationStatus == "PENDING_FOR_FIELD_INSPECTION" || (WaterConnection[0].applicationStatus == "INITIATED" && WaterConnection[0].applicationType == "MODIFY_CONNECTION")){
+    if(applyScreen && applyScreen.additionalDetails.isLabourFeeApplicable == "Y"){
+      if(applyScreen && applyScreen.additionalDetails.isInstallmentApplicable == "Y"){
+        
+          let actionDefinitions =  [{
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.noOfLabourFeeInstallments",
+            property: "visible",
+            value: true
+          },
+          {
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.labourInstallmentAmount",
+            property: "visible",
+            value: true
+          },
+          {
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable",
+            property: "visible",
+            value: true
+          },
+          {
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.subHeader1.children.key.props",
+            property: "labelKey",
+            value: `Labour Fee Amount - ${selectedLabourInstallment && selectedLabourInstallment[0].totalAmount}`
+          }
+        ]
+        dispatchMultipleFieldChangeAction("apply", actionDefinitions, dispatch);
+      }
+      if(applyScreen && applyScreen.additionalDetails.isInstallmentApplicable == "N"){
+        
+          let actionDefinitions =  [{
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.noOfLabourFeeInstallments",
+            property: "visible",
+            value: false
+          },
+          {
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.labourInstallmentAmount",
+            property: "visible",
+            value: false
+          },
+          {
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable",
+            property: "visible",
+            value: true
+          },
+          
+          {
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.subHeader1.children.key.props",
+            property: "labelKey",
+            value: `Labour Fee Amount - ${selectedLabourInstallment && selectedLabourInstallment[0].totalAmount}`
+          }
+        ]
+        dispatchMultipleFieldChangeAction("apply", actionDefinitions, dispatch);
+      }
+
+  }
+
+    if(applyScreen && applyScreen.additionalDetails.isInstallmentApplicableForScrutinyFee == "Y"){
+      
+        let actionDefinitions =  [{
+          path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.scrutinyFeeDetails.children.noOfScrutinyInstallments",
+          property: "visible",
+          value: true
+        },
+        {
+          path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.scrutinyFeeDetails.children.scrutinyInstallmentAmount",
+          property: "visible",
+          value: true
+        }
+      ]
+      dispatchMultipleFieldChangeAction("apply", actionDefinitions, dispatch);
+    }
+  }else if(WaterConnection && WaterConnection[0].applicationStatus == "PENDING_FOR_DOCUMENT_VERIFICATION"){
+
+    let actionDefinitions1 =  [{
+      path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer",
+      property: "visible",
+      value: false,
+    },
+    
+  ]
+  dispatchMultipleFieldChangeAction("apply", actionDefinitions1, dispatch);
+
+  }else if((WaterConnection && WaterConnection[0].applicationStatus != "PENDING_FOR_CITIZEN_ACTION") && (WaterConnection && WaterConnection[0].applicationStatus != "PENDING_FOR_FIELD_INSPECTION") && (WaterConnection && WaterConnection[0].applicationStatus  != "INITIATED")){
+    
+    if(applyScreen && applyScreen.additionalDetails.isLabourFeeApplicable == "Y"){
+      if(applyScreen && applyScreen.additionalDetails.isInstallmentApplicable == "Y"){
+        
+          let actionDefinitions =  [{
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.noOfLabourFeeInstallments",
+            property: "visible",
+            value: true
+          },
+          {
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.labourInstallmentAmount",
+            property: "visible",
+            value: true
+          },
+          {
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.subHeader1.children.key.props",
+            property: "labelKey",
+            value: `Labour Fee Amount - ${selectedLabourInstallment && selectedLabourInstallment[0].totalAmount}`
+          }
+        ]
+        dispatchMultipleFieldChangeAction("apply", actionDefinitions, dispatch);
+      }
+      if(applyScreen && applyScreen.additionalDetails.isInstallmentApplicable == "N"){
+        
+          let actionDefinitions =  [{
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.noOfLabourFeeInstallments",
+            property: "visible",
+            value: false
+          },
+          {
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.labourInstallmentAmount",
+            property: "visible",
+            value: false
+          },
+          {
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable",
+            property: "visible",
+            value: true
+          },
+          {
+            path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.subHeader1.children.key.props",
+            property: "labelKey",
+            value: `Labour Fee Amount - ${selectedLabourInstallment && selectedLabourInstallment[0].totalAmount}`
+          }
+        ]
+        dispatchMultipleFieldChangeAction("apply", actionDefinitions, dispatch);
+      }
+  }
+
+    if(applyScreen && applyScreen.additionalDetails.isInstallmentApplicableForScrutinyFee == "Y"){
+      
+        let actionDefinitions =  [{
+          path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.scrutinyFeeDetails.children.noOfScrutinyInstallments",
+          property: "visible",
+          value: true
+        },
+        {
+          path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.scrutinyFeeDetails.children.scrutinyInstallmentAmount",
+          property: "visible",
+          value: true
+        }
+      ]
+      dispatchMultipleFieldChangeAction("apply", actionDefinitions, dispatch);
+    }
+    let actionDefinitions1 =  [{
+      path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.props.style",
+      property: "pointerEvents",
+      value: "none",
+    }]
+  dispatchMultipleFieldChangeAction("apply", actionDefinitions1, dispatch);
+
+    
+
+  }
+  
+
+  if (isModifyMode()) {
+    let actionDefinitions1 =  [{
+      path: "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.props.style",
+      property: "pointerEvents",
+      value: "none",
+    }]
+  dispatchMultipleFieldChangeAction("apply", actionDefinitions1, dispatch);
+  }
+  
+
 }

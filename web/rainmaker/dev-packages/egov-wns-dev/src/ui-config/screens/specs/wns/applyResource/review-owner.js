@@ -44,6 +44,11 @@ const paymentDetailsHeader = getHeader({
   labelKey:"WS_PAYMENT_DETAILS"
 })
 
+const ScrutinyFeeDetailsHeader = getHeader({
+  labelKey:"Scrutiny Fee Payment Details"
+})
+
+
 const volumetricDetailsHeader = getHeader({
   labelKey : "WS_VOLUMETRIC_DETAILS"
 })
@@ -116,7 +121,9 @@ export const getReviewOwner = (isEditable = true) => {
     viewFifteen : volumetricDetailsHeader,
     viewSixteen : volumetricDetails,
     viewThirdTeen : paymentDetailsHeader,
-    viewFourTeen : paymentDetails
+    viewFourTeen : paymentDetails,
+   // view16th : ScrutinyFeeDetailsHeader,
+   // view17th : ScrutinyFeeDetails
 
   })
 };
@@ -332,8 +339,65 @@ export const activateDetailsMeter={
       { jsonPath: "WaterConnectionOld[0].additionalDetails.meterReadingRatio",
       // callBack: handleNA
      }
+  ),
+  reviewMaxMeterDigits : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "WS_ADDN_DETAILS_MAX_METER_DIGITS_REVIEW_LABEL",
+      labelKey: "WS_ADDN_DETAILS_MAX_METER_DIGITS_REVIEW_LABEL"
+    },
+    { jsonPath: "WaterConnection[0].additionalDetails.maxMeterDigits",
+      // callBack: handleNA 
+    }, {
+        labelKey: "WS_ADDN_DETAILS_MAX_METER_DIGITS_REVIEW_LABEL"
+      },
+      { jsonPath: "WaterConnectionOld[0].additionalDetails.maxMeterDigits",
+      // callBack: handleNA 
+    }
   )
 }
+
+// export const scrutinyDetails = {
+//   reviewScrutinyFeeInstallmentApplicable: getLabelWithValue(
+//     {
+//       labelName: "WS_SCRUTINY_INSTALLMENT_APPLICABLE_LABEL",
+//       labelKey: "Scrutiny Fee Installment Applicable"
+//     },
+//     {
+//       jsonPath: "WaterConnection[0].additionalDetails.isInstallmentApplicableForScrutinyFee",
+//       callBack: handleNA
+//     }
+//   ),
+//   reviewScrutinyFeeTotalAmount: getLabelWithValue(
+//     {
+//       labelName: "WS_SCRUTINY_FEE_TOTAL_AMOUNT_LABEL",
+//       labelKey: "Scrutiny Fee Total Amount in Rs."
+//     },
+//     {
+//       jsonPath: "WaterConnection[0].additionalDetails.scrutinyFeeTotalAmount",
+//       callBack: handleNA
+//     }
+//   ),
+//   reviewScrutinyFeeNoOfInstallments: getLabelWithValue(
+//     {
+//       labelName: "WS_SCRUTINY_NO_OF_INSTALLMENTS_LABEL",
+//       labelKey: "Scrutiny Fee No of Installments"
+//     },
+//     {
+//       jsonPath: "WaterConnection[0].additionalDetails.noOfScrutinyFeeInstallments",
+//       callBack: handleNA
+//     }
+//   ),
+//   reviewScrutinyFeeInstallmentAmount: getLabelWithValue(
+//     {
+//       labelName: "Area (in sq ft)",
+//       labelKey: "Scrutiny Fee Installment Amount in Rs."
+//     },
+//     {
+//       jsonPath: "WaterConnection[0].additionalDetails.scrutinyFeeInstallmentAmount",
+//       callBack: handleNA
+//     }
+//   ),
+// }
 
 export const paymentDetailsMeter = {
   reviewLaborCharge : getLabelWithValueForModifiedLabel(
@@ -350,6 +414,16 @@ export const paymentDetailsMeter = {
       callBack: handleLaborCharge 
     }
   ),
+  reviewLabourFeeTotalAmount: getLabelWithValue(
+    {
+      labelName: "Labour Fee Total Amount in Rs.",
+      labelKey: "WS_LABOUR_FEE_TOTAL_AMOUNT_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.totalAmount",
+      callBack: handleNA
+    }
+  ),
   reviewInstallment : getLabelWithValueForModifiedLabel(
     {
       labelName: "WS_FULL_PAYMENT_OR_INSTALLMENT",
@@ -364,6 +438,69 @@ export const paymentDetailsMeter = {
       callBack: handleInstallementorFullPayment 
     }
   ),
+
+  reviewNoOfInstallment: getLabelWithValue(
+    {
+      labelName: "Labour Fee No Of Installments",
+      labelKey: "WS_LABOUR_FEE_NO_OF_INSTALLMENT_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.noOfLabourFeeInstallments",
+      callBack: handleNA
+    }
+  ),
+  reviewLabourFeeInstallmentAmount: getLabelWithValue(
+    {
+      labelName: "Labour Fee Installment Amount in Rs.",
+      labelKey: "WS_LABOUR_FEE_INSTALLMENT_AMOUNT_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.labourFeeInstallmentAmount",
+      callBack: handleNA
+    }
+  ),
+  reviewScrutinyFeeInstallmentApplicable: getLabelWithValue(
+    {
+      labelName: "Scrutiny Fee Installment Applicable",
+      labelKey: "WS_SCRUTINY_INSTALLMENT_APPLICABLE_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.isInstallmentApplicableForScrutinyFee",
+      callBack: handleNA
+    }
+  ),
+  reviewScrutinyFeeTotalAmount: getLabelWithValue(
+    {
+      labelName: "Scrutiny Fee Total Amount in Rs.",
+      labelKey: "WS_SCRUTINY_FEE_TOTAL_AMOUNT_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.scrutinyFeeTotalAmount",
+      callBack: handleNA
+    }
+  ),
+  reviewScrutinyFeeNoOfInstallments: getLabelWithValue(
+    {
+      labelName: "Scrutiny Fee No of Installments",
+      labelKey: "WS_SCRUTINY_NO_OF_INSTALLMENTS_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.noOfScrutinyFeeInstallments",
+      callBack: handleNA
+    }
+  ),
+  reviewScrutinyFeeInstallmentAmount: getLabelWithValue(
+    {
+      labelName: "Scrutiny Fee Installment Amount in Rs.",
+      labelKey: "WS_SCRUTINY_FEE_INSTALLMENT_AMOUNT_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.scrutinyFeeInstallmentAmount",
+      callBack: handleNA
+    }
+  )
+  
+
 }
 
 export const volumetricDetailsWater = {
@@ -463,6 +600,8 @@ const activationDetails = getCommonContainer(activateDetailsMeter);
 const paymentDetails = getCommonContainer(paymentDetailsMeter)
 
 const volumetricDetails = getCommonContainer(volumetricDetailsWater);
+ 
+//const ScrutinyFeeDetails = getCommonContainer(scrutinyDetails)
 
 export const connectionWater={
   reviewConnectionType : getLabelWithValueForModifiedLabel(

@@ -108,6 +108,7 @@ const summaryScreenEMP = getCommonCard({
   reviewConnDetails,
   reviewModificationsDetails,
   reviewDocumentDetails,
+  reviewOwnerDetails,
   reviewOwnerDetails
 })
 let summaryScreen = (process.env.REACT_APP_NAME === "Citizen" || (process.env.REACT_APP_NAME !== 'Citizen' && isOwnerShipTransfer())) ? summaryScreenCitizen : summaryScreenEMP;
@@ -150,7 +151,7 @@ export const getMdmsData = async (dispatch,state) => {
         { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }] },
        // { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
         { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }, { name: "RoadType" },{ name: "PipeSize" },{name : "PipeDiameter"}] },
-        { moduleName: "ws-services-calculation", masterDetails: [{ name: "PipeSize" }] },
+        { moduleName: "ws-services-calculation", masterDetails: [{ name: "PipeSize" }, { name: "Installment" }] },
         {
           moduleName: "ws-services-masters", masterDetails: [
             { name: "Documents" },
@@ -161,7 +162,8 @@ export const getMdmsData = async (dispatch,state) => {
             { name: "MeterReadingRatio"}
           ]
         },
-        { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" },{name: "OwnerType"}]}
+        { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" },{name: "OwnerType"}]},
+       // {moduleName: "ws-services-calculation", masterDetails: [{ name: "Installment" }]}
       ]
     }
   };
@@ -280,6 +282,64 @@ export const getMdmsData = async (dispatch,state) => {
     payload.MdmsRes['common-masters'].tenants = tenants;
 
     payload.MdmsRes.tenant.citymodule = wnstenants.tenants;
+  //   let Installment = [
+  //     {
+  //         "usageCategory": "DOMESTIC",
+  //         "feeType": "WS_SCRUTINY_FEE",
+  //         "totalAmount": 3000,
+  //         "noOfInstallment": 36,
+  //         "installmentAmount": 100,
+  //         "effectiveFrom": "01/04/2021"
+  //     },
+  //     {
+  //         "usageCategory": "DOMESTIC",
+  //         "feeType": "WS_SCRUTINY_FEE",
+  //         "totalAmount": 3000,
+  //         "noOfInstallment": 24,
+  //         "installmentAmount": 150,
+  //         "effectiveFrom": "01/04/2021"
+  //     },
+  //     {
+  //         "usageCategory": "DOMESTIC",
+  //         "feeType": "WS_SCRUTINY_FEE",
+  //         "totalAmount": 3000,
+  //         "noOfInstallment": 12,
+  //         "installmentAmount": 270,
+  //         "effectiveFrom": "01/04/2021"
+  //     },
+  //     {
+  //         "usageCategory": "DOMESTIC",
+  //         "feeType": "WS_LABOUR_FEE",
+  //         "totalAmount": 3600,
+  //         "noOfInstallment": 36,
+  //         "installmentAmount": 100,
+  //         "effectiveFrom": "01/04/2021"
+  //     },
+  //     {
+  //         "usageCategory": "BPL",
+  //         "feeType": "WS_LABOUR_FEE",
+  //         "totalAmount": 3600,
+  //         "noOfInstallment": 36,
+  //         "installmentAmount": 100,
+  //         "effectiveFrom": "01/04/2021"
+  //     },
+  //     {
+  //         "usageCategory": "ROADSIDEEATERS",
+  //         "feeType": "WS_LABOUR_FEE",
+  //         "totalAmount": 3600,
+  //         "noOfInstallment": 36,
+  //         "installmentAmount": 100,
+  //         "effectiveFrom": "01/04/2021"
+  //     }
+  // ]
+
+  let scrutinyFeeInstallments = payload.MdmsRes && payload.MdmsRes['ws-services-calculation'].Installment && payload.MdmsRes['ws-services-calculation'].Installment.filter( item => item.feeType == "WS_SCRUTINY_FEE")
+  let labourFeeInstallments = payload.MdmsRes && payload.MdmsRes['ws-services-calculation'].Installment && payload.MdmsRes['ws-services-calculation'].Installment.filter( item => item.feeType == "WS_LABOUR_FEE")
+  //payload.MdmsRes['ws-services-calculation'].Installment = '';
+      payload.MdmsRes['ws-services-calculation'].ScrutinyFeeInstallmentsInfo = scrutinyFeeInstallments;
+      payload.MdmsRes['ws-services-calculation'].LabourFeeInstallmentsInfo = labourFeeInstallments;
+   // payload.MdmsRes['ws-services-calculation'].Installment.ScrutinyFee = installments && installments.filter(item => item.feeType === "WS_SCRUTINY_FEE")
+   // payload.MdmsRes['ws-services-calculation'].Installment.LabourFee = installments && installments.filter(item => item.feeType === "WS_LABOUR_FEE")
 
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) { console.log(e); }
@@ -678,7 +738,7 @@ export const getData = async (action, state, dispatch) => {
 
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
       dispatch(prepareFinalObject("applyScreen.usageCategory",combinedArray ? combinedArray[0].usageCategory : ''))
-      dispatch(prepareFinalObject("applyScreen.additionalDetails.isInstallmentApplicable","N"))
+     // dispatch(prepareFinalObject("applyScreen.additionalDetails.isInstallmentApplicable","N"))
       let localizationLabels = {};
       if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
       let locality = `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${combinedArray[0].additionalDetails.locality
@@ -1004,6 +1064,14 @@ export const getData = async (action, state, dispatch) => {
         dispatch(
           handleField(
             "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.maxMeterDigits`,
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio`,
             "visible",
             false
@@ -1013,6 +1081,14 @@ export const getData = async (action, state, dispatch) => {
           handleField(
             "apply",
             `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake`,
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.maxMeterDigits`,
             "visible",
             false
           )
@@ -1244,7 +1320,7 @@ export const getData = async (action, state, dispatch) => {
       if (isModifyMode()) {
         showHideFieldModifyConnection(action);
         
-          console.log(data, "Nero Data for Metere")
+          
           dispatch(
             handleField(
               "apply",

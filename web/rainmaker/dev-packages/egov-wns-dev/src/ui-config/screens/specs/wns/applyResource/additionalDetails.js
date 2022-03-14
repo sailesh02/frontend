@@ -253,6 +253,14 @@ export const additionDetails = getCommonCard({
                 dispatch(
                   handleField(
                     "apply",
+                    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.maxMeterDigits.props",
+                    "disabled",
+                    false
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio.props",
                     "disabled",
                     true

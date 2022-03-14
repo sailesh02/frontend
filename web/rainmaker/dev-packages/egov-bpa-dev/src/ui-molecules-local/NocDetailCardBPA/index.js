@@ -79,6 +79,64 @@ const styles = {
 export const numberPattern = /^([0-9][0-9]{0,49})(\.\d{1,2})?$/
 export const stringPattern = /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i
 
+export const fireFileConfig = {
+  identityProofType: {
+    label: {
+      labelName: "Identity Proof",
+      labelKey: "BPA_IDENTITY_PROOF_TYPE"
+    },
+    placeholder: {
+      labelName: "Enter Identity Proof Placeholder",
+      labelKey: "BPA_IDENTITY_PROOF_TYPE_PLACEHOLDER"
+    }
+  },
+  Buildingtypes: {
+    label: {
+      labelName:"Building Type",
+      labelKey:"BPA_BUILDING_TYPE"
+    },
+    placeholder: {
+      labelName: "Enter Building Type Placeholder",
+      labelKey: "BPA_BUILDING_TYPE_PLACEHOLDER"
+    }
+  },
+
+
+fireStations: {
+    label: {
+      labelName:"Fire Stations",
+      labelKey:"BPA_FIRESTATIONS"
+    },
+    placeholder: {
+      labelName: "Enter Fire Stations Placeholder",
+      labelKey: "BPA_FIRESTATIONS_PLACEHOLDER"
+    }
+  },
+
+  firedistricts:{
+    label: {
+      labelName:"Fire districts",
+      labelKey:"BPA_FIREDISTRICTS"
+    },
+    placeholder: {
+      labelName: "Enter Fire districts Placeholder",
+      labelKey: "BPA_FIREDISTRICTS_PLACEHOLDER"
+    }
+  },
+
+  identityProofNo: {
+    label: {
+      labelName: "Identity Proof No",
+      labelKey: "BPA_NOC_FIRE_IDENTITYPROOfNO_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Identity Proof No",
+      labelKey: "BPA_NOC_FIRE_IDENTITYPROOfNO_LABEL_PLACEHOLDER"
+    }
+  }
+
+}
+
 export const fieldConfig = {
   nocType: {
     label: {
@@ -335,6 +393,17 @@ const fontStyle = {
   textOverflow: "ellipsis",
   // marginLeft:"7px",
 };
+
+const fontStyleBuilding ={
+  fontSize: "12px",
+  fontWeight: "500",
+  color: "rgba(0, 0, 0, 0.87)",
+  fontFamily: "Roboto",
+  // width:150,
+  overflow: "hidden", 
+  // whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+}
 class NocDetailCardBPA extends Component {
   constructor(props) {
     super(props);
@@ -723,7 +792,94 @@ class NocDetailCardBPA extends Component {
     </React.Fragment>
   );
   }
+  getFIREOCForm =(firekey, disabled,fireDetails)=>{
+    const data = fireDetails.thirdPartNOC
+      return (
+        <React.Fragment>
+         
+           <Grid container="true" spacing={12}>
+           <Grid item xs={12}>
+              <div style={styles.dividerStyle}>
+                <div style={ styles.labelStyle}>
+                  <span>Fire Noc Details</span>
+                  <div style={styles.underlineStyle} />
+                </div>
+              </div>
+            </Grid>
+             </Grid>
+             <Grid container="true" spacing={12}>
+             <Grid item xs={6}>
+              <Typography
+                variant="h6"
+                gutterBottom
+                style={titleStyle}>
+                {getTransformedLocale(fireFileConfig.identityProofType.label.labelKey)}
+              </Typography>
+              <div style={fontStyle}>
+                {fireDetails && data && data.identityProofType.name
+                ? data.identityProofType.name : ''}
+              </div>
+            </Grid>
+       
+            <Grid item xs={6}>
+              <Typography
+                variant="h6"
+                gutterBottom
+                style={titleStyle}>
+                {getTransformedLocale(fireFileConfig.firedistricts.label.labelKey)}
+              </Typography>
+              <div style={fontStyle}>
+                {fireDetails && data && data.fireDistrict.name
+                ? data.fireDistrict.name : ''}
+              </div>
+            </Grid>
+               </Grid>
+    
+               <Grid container="true" spacing={12}>
+               <Grid item xs={6}>
+              <Typography
+                variant="h6"
+                gutterBottom
+                style={titleStyle}>
+                {getTransformedLocale(fireFileConfig.fireStations.label.labelKey)}
+              </Typography>
+              <div style={fontStyle}>
+                {fireDetails && data && data.fireStation.name
+                ? data.fireStation.name : ''}
+              </div>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                variant="h6"
+                gutterBottom
+                style={titleStyle}>
+                {getTransformedLocale(fireFileConfig.identityProofNo.label.labelKey)}
+              </Typography>
+              <div style={fontStyle}>
+                {fireDetails && data && data.identityProofNo
+                ? data.identityProofNo : ''}
+              </div>
+            </Grid>
+                 </Grid>
+                 <Grid container="true" spacing={12}>
+                <Grid item xs={12}>
+              <Typography
+                variant="h6"
+                gutterBottom
+                style={titleStyle}>
+                {getTransformedLocale(fireFileConfig.Buildingtypes.label.labelKey)}
+              </Typography>
+              <div style={fontStyleBuilding}>
+                {fireDetails && data && data.buildingType.BuildingType
+                ? data.buildingType.BuildingType : ''}
+              </div>
+            </Grid>
+                </Grid>
+        </React.Fragment>
+      )
+    // }
 
+  }
   static getDerivedStateFromProps(props, state) {
     if (
       (state.editableDocuments == null &&
@@ -789,11 +945,18 @@ class NocDetailCardBPA extends Component {
         documents.push(doc.documentType)
       }
     })
+    if(requiredNoc && requiredNoc.length > 0 && requiredNoc[0].nocType == 'FIRE_NOC'){
+      if(requiredNoc[0].additionalDetails && requiredNoc[0].additionalDetails.thirdPartNOC){
+        allDocumentsUploaded = true
+      }
+    }
+    
     if(requiredNoc && requiredNoc.length > 0 && requiredNoc[0].nocType == 'NMA_NOC'){
       if(requiredNoc[0].additionalDetails && requiredNoc[0].additionalDetails.thirdPartNOC){
         allDocumentsUploaded = true
       }
-    }else{
+    }  
+    else{
       let isUploadedDoc = docFromMDMS && docFromMDMS.length > 0 && docFromMDMS.map ( doc => {
         if(documents.includes(doc)){
           return true
@@ -801,8 +964,10 @@ class NocDetailCardBPA extends Component {
           return false
         }
       })
-      
-      if(isUploadedDoc && isUploadedDoc.includes(false)){
+      if(isUploadedDoc &&isUploadedDoc.includes(false) &&requiredNoc && requiredNoc.length > 0 && requiredNoc[0].nocType == 'FIRE_NOC' ){
+        allDocumentsUploaded = true
+      }
+      if(isUploadedDoc && isUploadedDoc.includes(false) &&requiredNoc && requiredNoc.length > 0 && requiredNoc[0].nocType == 'NMA_NOC' ){
         allDocumentsUploaded = false
       }
       else if(documents && documents.length > 0 && docFromMDMS && docFromMDMS.length > 0){
@@ -861,7 +1026,6 @@ class NocDetailCardBPA extends Component {
     })
 
     store.dispatch(prepareFinalObject("SelectedNocDocument",requiredDocumentsFormat))
-
     if(this.checkAllRequiredDocumentsUploaded(nocType,requiredDocumentsFormat)){
       store.dispatch(
         toggleSnackbar(
@@ -991,6 +1155,7 @@ class NocDetailCardBPA extends Component {
         "trigger"
       ))
       store.dispatch(prepareFinalObject(`NewNocAdditionalDetails`,{}))  
+      store.dispatch(prepareFinalObject(`NewNocAdditionalDetailsFire`, {}))
   }
 
   render() {
@@ -1044,6 +1209,8 @@ class NocDetailCardBPA extends Component {
                 />
                 </div>
             <div>{this.getCard(card, index)}</div>  
+            <div>{card.nocType == 'FIRE_NOC' && card && card.additionalDetails && card.additionalDetails.submissionDetails.thirdPartNOC&&
+            this.getFIREOCForm(index,disabled,card.additionalDetails.submissionDetails)}</div>
             <div>{card.nocType == 'NMA_NOC' && card.nmaDetails && card.nmaDetails.thirdPartNOC && 
             this.getNMANOCForm(index,disabled,card.nmaDetails.thirdPartNOC)}</div>
           </div>) : (
@@ -1206,7 +1373,7 @@ class NocDetailCardBPA extends Component {
                nocDocumentsDetailsRedux,
                `[${index}].documentCode`
              );
-             if ((oldDocType != docType.code || oldDocCode != card.name)) {
+             if ((oldDocType != docType.code || oldDocCode != card.name)) {[]
                nocDocumentsDetailsRedux[index] = {
                  documentType: docType.code,
                  documentCode: card.name,

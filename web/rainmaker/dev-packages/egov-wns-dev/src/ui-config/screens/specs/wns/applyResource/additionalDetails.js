@@ -200,7 +200,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.connectionExecutionDate.props",
                     "disabled",
-                    true
+                    false
                   )
                 );
                 dispatch(
@@ -208,7 +208,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.diameter.props",
                     "disabled",
-                    true
+                    false
                   )
                 );
                 dispatch(
@@ -216,7 +216,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading.props",
                     "disabled",
-                    true
+                    false
                   )
                 );
                 dispatch(
@@ -224,7 +224,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID.props",
                     "disabled",
-                    true
+                    false
                   )
                 );
                 dispatch(
@@ -232,7 +232,7 @@ export const additionDetails = getCommonCard({
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate.props",
                     "disabled",
-                    true
+                    false
                   )
                 );
                 dispatch(
@@ -240,14 +240,6 @@ export const additionDetails = getCommonCard({
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterMake.props",
                     "disabled",
-                    true
-                  )
-                );
-                dispatch(
-                  handleField(
-                    "apply",
-                    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.maxMeterDigits.props",
-                    "disabled",
                     false
                   )
                 );
@@ -259,20 +251,13 @@ export const additionDetails = getCommonCard({
                     false
                   )
                 );
-                dispatch(
-                  handleField(
-                    "apply",
-                    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.maxMeterDigits.props",
-                    "disabled",
-                    false
-                  )
-                );
+                
                 dispatch(
                   handleField(
                     "apply",
                     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterReadingRatio.props",
                     "disabled",
-                    true
+                    false
                   )
                 );
 
@@ -685,6 +670,24 @@ export const additionDetails = getCommonCard({
                   handleField(
                     "apply",
                     `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.consumptionInKL`,
+                    "visible",
+                    oldConnectioNumber && oldConnectioNumber!= 'NA' ? false : true  
+                  )
+                );
+
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.dailyConsumption`,
+                    "visible",
+                    oldConnectioNumber && oldConnectioNumber!= 'NA' ? false : true  
+                  )
+                );
+
+                dispatch(
+                  handleField(
+                    "apply",
+                    `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.volumetricDetails.children.cardContent.children.activeDetails.children.volumetricWaterCharge`,
                     "visible",
                     oldConnectioNumber && oldConnectioNumber!= 'NA' ? false : true  
                   )

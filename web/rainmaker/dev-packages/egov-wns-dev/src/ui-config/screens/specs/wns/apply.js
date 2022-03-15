@@ -1342,6 +1342,12 @@ export const getData = async (action, state, dispatch) => {
         
       }
 
+      if(isModifyMode()){
+        if(data && data.dateEffectiveFrom == 0){
+          var currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+          dispatch(prepareFinalObject("applyScreen.dateEffectiveFrom", currentDate.getTime()));
+        }
+      }
       if(isOwnerShipTransfer()){
         disableFieldsForOwnerShipTransfer(action)
       }

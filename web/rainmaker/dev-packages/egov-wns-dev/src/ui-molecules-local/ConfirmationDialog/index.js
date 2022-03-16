@@ -30,7 +30,8 @@ import CloseIcon from "@material-ui/icons/Close";
 class ConfirmationDialog extends Component {
   state = {
     ownerName : '',
-    selectedDate : new Date()
+    //selectedDate : new Date()
+    selectedDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000).getTime()
   }
 
   componentDidMount = () => {

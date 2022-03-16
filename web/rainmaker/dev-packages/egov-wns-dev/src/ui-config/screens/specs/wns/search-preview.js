@@ -553,12 +553,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           true
         );
 
-        dispatch(handleField(
-          "search-preview",
-          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
-          "visible",
-          false
-          ))
+        // dispatch(handleField(
+        //   "search-preview",
+        //   "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirdTeen",
+        //   "visible",
+        //   false
+        //   ))
         dispatch(handleField(
           "search-preview",
           "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewFifteen",
@@ -1139,21 +1139,22 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     
     let usageCategoryForInstallment = payload && payload.WaterConnection.length > 0 && payload.WaterConnection[0].usageCategory;
     let feeForConnectionType = payload && payload.WaterConnection.length > 0 && payload.WaterConnection[0].connectionType;
+    let applicationStatus = payload && payload.WaterConnection.length > 0 && payload.WaterConnection[0].applicationStatus;
     let selectedLabourInstallment = installmentInfo && installmentInfo.LabourFeeInstallmentsInfo.filter(item => item.usageCategory === usageCategoryForInstallment)
     //let usageCategoryForInstallment = payload && payload.WaterConnection.length > 0 && payload.WaterConnection[0].usageCategory;
     let selectedScrutinyInstallment = installmentInfo && installmentInfo.ScrutinyFeeInstallmentsInfo.filter(item => item.usageCategory === usageCategoryForInstallment)
     // dispatch(prepareFinalObject(
     //   "WaterConnection[0].additionalDetails.scrutinyFeeTotalAmount", selectedScrutinyFee && selectedScrutinyFee[0].totalAmount
     // ))
-    if(feeForConnectionType === "Non Metered"){
-    if(usageCategoryForInstallment === "DOMESTIC"){
-    set(payload, 'WaterConnection[0].additionalDetails.scrutinyFeeTotalAmount', selectedScrutinyInstallment && selectedScrutinyInstallment[0].totalAmount);
-    set(payload, 'WaterConnection[0].additionalDetails.totalAmount', selectedLabourInstallment && selectedLabourInstallment[0].totalAmount);
-    }
-    if(usageCategoryForInstallment === "BPL" || usageCategoryForInstallment === "ROADSIDEEATERS"){
-      
+    if(feeForConnectionType === "Non Metered" && applicationStatus != "INITIATED" && applicationStatus != "PENDING_FOR_DOCUMENT_VERIFICATION"){
+      if(usageCategoryForInstallment === "DOMESTIC"){
+      set(payload, 'WaterConnection[0].additionalDetails.scrutinyFeeTotalAmount', selectedScrutinyInstallment && selectedScrutinyInstallment[0].totalAmount);
       set(payload, 'WaterConnection[0].additionalDetails.totalAmount', selectedLabourInstallment && selectedLabourInstallment[0].totalAmount);
       }
+      if(usageCategoryForInstallment === "BPL" || usageCategoryForInstallment === "ROADSIDEEATERS"){
+        
+        set(payload, 'WaterConnection[0].additionalDetails.totalAmount', selectedLabourInstallment && selectedLabourInstallment[0].totalAmount);
+        }
 
     }
     let connectionFacility = payload && payload.WaterConnection && payload && 

@@ -103,7 +103,7 @@ export const searchApiCall = async (state, dispatch) => {
         ['CR_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
         ['CR_COMMON_TABLE_CONSUMERCODE']: item.amount || "-",
         ['CR_COMMON_TABLE_COL_STATUS']: item.status || "-",
-        ['CR_COMMON_TABLE_ACTION']:item.status!=="CANCELLED"&&(item.instrumentStatus="APPROVED"||item.instrumentStatus=="REMITTED")&&(convertedConfig[item.businessService]?convertedConfig[item.businessService].cancelReceipt:convertedConfig['DEFAULT'].cancelReceipt)? "CANCEL":"NA",
+        ['CR_COMMON_TABLE_ACTION']:item.status!=="DISHONOURED"&&item.status!=="CANCELLED"&&(item.instrumentStatus="APPROVED"||item.instrumentStatus=="REMITTED")&&(convertedConfig[item.businessService]?convertedConfig[item.businessService].cancelReceipt:convertedConfig['DEFAULT'].cancelReceipt)? "CANCEL":"NA",
         ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
         ["TENANT_ID"]: item.tenantId || "-",
         ["SERVICE_TYPE"]: item.serviceType

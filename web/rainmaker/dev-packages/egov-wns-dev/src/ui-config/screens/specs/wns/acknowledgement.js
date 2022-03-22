@@ -75,6 +75,14 @@ const headerForOwnershipTransfer = getCommonContainer({
   })
 })
 
+const headerFortriggerBillGenerationBatch = getCommonContainer({
+  header:getCommonHeader({
+    labelKey:"WS_BILL_GENERATION_TRIGGER_HEADER",
+    labelName: "Bill Generation Batch Trigger Info"
+  })
+})
+
+
 const commonHeader = (state,
   dispatch,
   applicationNumber,
@@ -125,7 +133,12 @@ const connectionHeader = (state,
   tenant,
   purpose
   ) => {
-  const headerRow = purpose == 'disconnect' ? headerFordisconnect : purpose == "closeConnection" ? headerForCloseConnection : purpose == "reconnection" ? headerForReconnection : purpose == "ownershipTransfer" ? headerForOwnershipTransfer : purpose == "update"?headerRowInformationUpdate: headerrow 
+  const headerRow = purpose == 'disconnect' ? headerFordisconnect :
+   purpose == "closeConnection" ? headerForCloseConnection :
+   purpose == "reconnection" ? headerForReconnection :
+   purpose == "ownershipTransfer" ? headerForOwnershipTransfer :
+   purpose == "triggerBillGenerationBatch" ? headerFortriggerBillGenerationBatch :
+   purpose == "update"? headerRowInformationUpdate: headerrow 
  console.log(purpose, "purposepurpose")
   return getCommonContainer({
     headerDiv: {
@@ -272,7 +285,55 @@ const getAcknowledgementCard = (
     };
   }
   
-  
+  else if (purpose === "triggerBillGenerationBatch" && status === "success") {
+    return {
+      commonHeader: connectionHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant,
+        purpose),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          // style: {
+          //   position: "absolute",
+          //   width: "95%"
+          // }
+        },
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Bill Generation Batch Triggered Successfully",
+              labelKey: "WS_BILL_GENERATION_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              // labelName:
+              //   " A notification regarding application submission has been sent at registered mobile no. Please note the application no. for future reference. ",
+              // labelKey: "WS_APPLICATION_SUCCESS_ACKO_MESSAGE_SUB"
+            },
+            // tailText: {
+            //   labelName: "Application Number.",
+            //   labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+            // },
+            // number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  }
   else if (purpose === "apply" && status === "success") {
     return {
       commonHeader: commonHeader(state,

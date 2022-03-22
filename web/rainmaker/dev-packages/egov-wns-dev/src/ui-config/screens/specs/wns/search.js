@@ -200,25 +200,32 @@ const employeeSearchResults = {
                   {code: "WS_BULK_METER_READING_BUTTON", active: true},
                   {code:"WS_VOLUMETRIC_CHARGES_BUTTON",active:true},
                   {code: "WS_DEMAND_ADJUSTMENT_BUTTON", active: true},
-                  {code: "WS_VIEW_PAYMENT_HISTORY_BUTTON", active: true}
+                  {code: "WS_VIEW_PAYMENT_HISTORY_BUTTON", active: true},
+                  ifUserRoleExists('SYSTEM') ? {code:"WS_BILL_GENERATE_BATCH_BUTTON",active:true}:''
+                  
                 ]
                   :
                   (ifUserRoleExists('SW_CEMP') || ifUserRoleExists('WS_CEMP'))?
                   [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},
                   {code: "WS_BULK_METER_READING_BUTTON", active: true},
-                 // {code:"WS_VOLUMETRIC_CHARGES_BUTTON",active:true},
-                  {code: "WS_VIEW_PAYMENT_HISTORY_BUTTON", active: true}
+                  {code: "WS_VIEW_PAYMENT_HISTORY_BUTTON", active: true},
+                  ifUserRoleExists('SYSTEM') ? {code:"WS_BILL_GENERATE_BATCH_BUTTON",active:true}:''
                   ]
                   :
                   (ifUserRoleExists('WS_APPROVER'))?
                   [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},
                   {code:"WS_VOLUMETRIC_CHARGES_BUTTON",active:true},
-                 
+                  {code:"WS_BILL_GENERATE_BATCH_BUTTON",active:true},
+                  
+                  ifUserRoleExists('SYSTEM') ? {code:"WS_BILL_GENERATE_BATCH_BUTTON",active:true}:''
                   ]
                   :
                   ifUserRoleExists('WS_DEMAND_CORRECTOR')?
                   [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},
                   {code: "WS_DEMAND_ADJUSTMENT_BUTTON", active: true}]
+                  :
+                  ifUserRoleExists('SYSTEM')?
+                  [{code: "WS_BILL_GENERATE_BATCH_BUTTON", active: true}]
                   :
                 [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true}]
                // sourceJsonPath: "applyScreenMdmsData.searchScreen.EmpApplyAppsFor"
@@ -245,6 +252,10 @@ const employeeSearchResults = {
                     dispatch(
                       setRoute(`/wns/demand-adjust-search?purpose=PRINT_RECEIPT`)
                     )
+                  }else if(action.value === "WS_BILL_GENERATE_BATCH_BUTTON"){
+                    
+                      window.location.href = `/wns/generate-bill`
+                    
                   }
                }
             },

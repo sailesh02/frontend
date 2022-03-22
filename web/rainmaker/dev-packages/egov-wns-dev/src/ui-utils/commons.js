@@ -3253,3 +3253,64 @@ export const getConnectionPastPayments = async (dispatch) => {
         );
     }
 }
+
+export const triggerBillGenerationBatchForULBs = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    console.log(queryObject, "Nero queryObject")
+    try {
+        const response = await httpRequest(
+            "post",
+            "ws-calculator/waterCalculator/_jobscheduler",
+            "_jobscheduler",
+            [],
+            {BulkBillCriteria: queryObject}
+        );
+        
+        dispatch(toggleSpinner());
+        //console.log(response, "Nero Response")
+        if (!response) {
+            return true;
+           // dispatch(prepareFinalObject("pastPaymentsForWater", response.Payments));
+        }
+        //return findAndReplace(response, null, "NA");;
+    } catch (error) {
+        dispatch(toggleSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+}
+
+export const triggerBillGenerationBatchForConnections = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    console.log(queryObject, "Nero ddd  queryObject")
+    try {
+        const response = await httpRequest(
+            "post",
+            "ws-calculator/waterCalculator/generate/_bill",
+            "_bill",
+            [],
+            {BulkBillCriteria: queryObject}
+        );
+        
+        dispatch(toggleSpinner());
+        //console.log(response, "Nero Response")
+        if (!response) {
+            return true;
+           // dispatch(prepareFinalObject("pastPaymentsForWater", response.Payments));
+        }
+        //return findAndReplace(response, null, "NA");;
+    } catch (error) {
+        dispatch(toggleSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+}
+

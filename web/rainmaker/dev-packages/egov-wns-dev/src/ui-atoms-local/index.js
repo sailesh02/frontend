@@ -70,6 +70,10 @@ const TotalBill = Loadable({
   loader: () => import("./TotalBill"),
   loading: () => <Loading />
 });
+const MultiAutoSuggest = Loadable({
+  loader: () => import("./MultiAutoSuggest"),
+  loading: () => <Loading />
+});
 export {
   TestAtoms,
   ApplicationNoContainer,
@@ -84,5 +88,6 @@ export {
   BreadCrumbs,
   AddLinkForProperty,
   SnackbarWarning,
-  TotalBill
+  TotalBill,
+  MultiAutoSuggest
 };

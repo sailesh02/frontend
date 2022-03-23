@@ -61,7 +61,12 @@ const CheckboxContainerConnHolder = Loadable({
 const AutosuggestContainer = Loadable({
     loader: () => import("./AutosuggestContainer"),
     loading: () => <Loading />
-});  
+}); 
+
+const MultiAutoSuggestContainer = Loadable({
+  loader: () => import("./MultiAutoSuggestContainer"),
+  loading: () => <Loading />
+}); 
 
 export {
   CustomTabContainer,
@@ -76,5 +81,6 @@ export {
   EstimateOverviewCardContainer,
   ModificationDocumentListContainer,
   CheckboxContainerConnHolder,
-  AutosuggestContainer
+  AutosuggestContainer,
+  MultiAutoSuggestContainer
 };

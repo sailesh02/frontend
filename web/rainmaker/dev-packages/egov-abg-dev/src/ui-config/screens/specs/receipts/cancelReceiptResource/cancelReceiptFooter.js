@@ -144,7 +144,11 @@ const cancelReceipt = async (state, dispatch) => {
   if (isFormValid && paymentWorkflows && Array.isArray(paymentWorkflows) && paymentWorkflows.length > 0) {
     try {
       dispatch(showSpinner());
+      if(paymentWorkflows && paymentWorkflows.length > 0 && paymentWorkflows[0].reason == "CHEQUEBOUNCE"){
+        set(paymentWorkflows[0], 'action', 'DISHONOUR');
+      }else{
       set(paymentWorkflows[0], 'action', 'CANCEL');
+      }
       set(paymentWorkflows[0], 'tenantId', getQueryArg(window.location.href, "tenantId"));
       set(paymentWorkflows[0], 'paymentId', get(state.screenConfiguration.preparedFinalObject, 'PaymentReceipt.id', ''));
       let payload = await httpRequest(
@@ -166,7 +170,7 @@ const cancelReceipt = async (state, dispatch) => {
           true,
           {
             labelName: "Please fill the required fields.",
-            labelKey: error.message
+            labelKey: error.message.includes(",")?error.message.split(",")[0]:error.message
           },
           "error"
         )

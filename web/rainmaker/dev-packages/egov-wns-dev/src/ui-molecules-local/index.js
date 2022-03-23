@@ -109,6 +109,10 @@ const DemandAdjustMent = Loadable({
   loading: () => <Loading />
 })
 
+const ChipsInput = Loadable({
+  loader: () => import("./ChipsInput"),
+  loading: () => <Loading />
+})
 
 export {
   TestMolecules,
@@ -132,5 +136,5 @@ export {
   OwnerHeader,
   ActionFooter,
   ConfirmationDialog,
-  DemandAdjustMent
+  ChipsInput
 };

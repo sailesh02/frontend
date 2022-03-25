@@ -362,22 +362,32 @@ if(!isMobileExistsResponse){
   if (activeStep === 3) {
     
     let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
+    let bpaApp = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
     let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
     let nocTypesFromMDMS = get(
-      state.screenConfiguration.preparedFinalObject,
-      "nocTypes",
+      state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA,
+      "NocTypeMapping",
       []
     )
+    console.log(nocTypesFromMDMS, "nero edcs Nocs")
+    let applicationType = bpaApp.applicationType;
+    let serviceType = bpaApp.serviceType;
 
      // to get activate noc's list form mdms
-     let activatedNocs = nocTypesFromMDMS && nocTypesFromMDMS.length > 0 && nocTypesFromMDMS.filter( noc => {
-      if(noc.isActive){
-        return noc
+    //  let activatedNocs = nocTypesFromMDMS && nocTypesFromMDMS.length > 0 && nocTypesFromMDMS.filter( noc => {
+    //   if(noc.isActive){
+    //     return noc
+    //   }
+    // }) || []
+
+    let activatedNocs = nocTypesFromMDMS && nocTypesFromMDMS.length > 0 && nocTypesFromMDMS.filter( noc => {
+      if(noc.applicationType == applicationType && noc.serviceType == serviceType && noc.riskType == "ALL"){
+        return noc.nocTypes;
       }
     }) || []
-
-    activatedNocs = activatedNocs && activatedNocs.length > 0 && activatedNocs.map( noc => {
-      return noc.code
+console.log(activatedNocs, "nero mdms Nocs")
+    activatedNocs = activatedNocs && activatedNocs.length > 0 && activatedNocs[0].nocTypes.map( noc => {
+      return noc.type
     }) || []
 
     // check if noc suggested by ecdr is activated in the system
@@ -393,11 +403,23 @@ if(!isMobileExistsResponse){
       return nc.nocType
     })
     let isValid = true
+    let notCreatedNocsByBPA;
     // add required nocs and already created noc's
-    let mergedNocs = requiredNocs
-    nocAlreadyCreated && nocAlreadyCreated.length > 0 && nocAlreadyCreated.map( noc => {
-      if(mergedNocs && !mergedNocs.includes(noc)){
-        mergedNocs.push(noc)
+    let mergedNocs = requiredNocs;
+    let allRequiredNocsCreated = true;
+    
+    // nocAlreadyCreated && nocAlreadyCreated.length > 0 && nocAlreadyCreated.map( noc => {
+    //   if(mergedNocs && !mergedNocs.includes(noc)){
+    //     mergedNocs.push(noc)
+    //   }
+    // })
+    console.log(mergedNocs.join(), "Nero splits")
+    mergedNocs && mergedNocs.length > 0 && mergedNocs.map( noc =>{
+      if(nocAlreadyCreated && nocAlreadyCreated.includes(noc)){
+
+      }else{
+        allRequiredNocsCreated = false;
+        notCreatedNocsByBPA.push(noc)
       }
     })
 
@@ -425,9 +447,10 @@ if(!isMobileExistsResponse){
        isValid = true
       }
     }
-
+    
     // to check if all required NOC's are triggered
-    if((noc.length == mergedNocs.length) && isValid){
+   // if((noc.length == mergedNocs.length) && isValid){
+    if(allRequiredNocsCreated && isValid){
       const documentsFormat = Object.values(
         get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
       );
@@ -489,7 +512,8 @@ if(!isMobileExistsResponse){
     }else{
       let errorMessage = {
         labelName: "Please trigger all required noc's",
-        labelKey: "ERR_TRIGGER_REQUIRED_NOCS_TOAST"
+        //labelKey: "ERR_TRIGGER_REQUIRED_NOCS_TOAST"
+        labelKey: `Please trigger all required noc's. Noc's not created ${notCreatedNocsByBPA.join()}`
       };
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
       return
@@ -613,6 +637,9 @@ if(!isMobileExistsResponse){
             dispatch(toggleSnackbar(true, errorMessage, "warning"));
           }
         } else{
+          if (bpaStatus) {
+            changeStep(state, dispatch);
+          } else {
               let response = await createUpdateBpaApplication(
                 state,
                 dispatch,
@@ -622,6 +649,7 @@ if(!isMobileExistsResponse){
               responseStatus === "success" && changeStep(state, dispatch);
               prepareDocumentsUploadData(state, dispatch);
             }
+          }
           
         let applicationNumber = get(
           state.screenConfiguration.preparedFinalObject,

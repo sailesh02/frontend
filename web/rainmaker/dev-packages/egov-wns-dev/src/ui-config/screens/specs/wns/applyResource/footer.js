@@ -525,6 +525,7 @@ else{
         isFormValid = true;
         hasFieldToaster = false;
       }else{
+        console.log("Nero 2")
         isFormValid = false;
         hasFieldToaster = true;
         let errorMessage = {
@@ -540,6 +541,7 @@ else{
         isFormValid = true;
         hasFieldToaster = false;
       }else{
+        console.log("Nero 1")
         isFormValid = false;
         hasFieldToaster = true;
         let errorMessage = {

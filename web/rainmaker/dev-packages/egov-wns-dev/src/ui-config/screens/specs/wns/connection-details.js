@@ -4,7 +4,8 @@ import {
   convertEpochToDate,
   getCommonCard,
   getCommonContainer,
-  getCommonHeader
+  getCommonHeader,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -444,6 +445,10 @@ export const connectionDetails = getCommonCard({
   connectionHolders,
   // connectionHoldersSameAsOwner,
 });
+
+const confirmCallback = async (state, dispatch) => {
+  console.log("Nero callback")
+}
 const getMDMSData = async (action, state, dispatch) => {
   const tenantId = getTenantId();
   let mdmsBody = {

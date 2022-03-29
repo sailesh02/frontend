@@ -165,7 +165,7 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     }
     
     if (getQueryArg(window.location.href, "businessService").includes("WS")) {
-        if (get(totalAmount, "totalAmount") === 0) {
+        if (get(totalAmount, "totalAmount") === 0 && getQueryArg(window.location.href, "businessService").includes("WS.ONE_TIME_FEE")) {
             dispatch(handleField("pay", "components.div.children.footer.children.makeZeroPayment", "visible", true));
             dispatch(handleField("pay", "components.div.children.footer.children.makePayment", "visible", false));
             dispatch(handleField("pay", "components.div.children.footer.children.generateReceipt", "visible", false));

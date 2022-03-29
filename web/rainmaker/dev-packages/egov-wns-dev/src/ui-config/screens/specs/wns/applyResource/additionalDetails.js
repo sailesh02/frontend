@@ -578,7 +578,7 @@ export const additionDetails = getCommonCard({
           sm: 6
         }
       }),
-      maxMeterDigits : getTextField({
+      maxMeterDigits : getSelectField({
         label: {
           labelKey: "WS_ADDN_DETAILS_MAX_METER_DIGITS_LABEL"
         },
@@ -589,6 +589,11 @@ export const additionDetails = getCommonCard({
           xs: 12,
           sm: 6
         },
+        data: [{value: 4, label: 4},
+          {value: 5, label: 5}, {value: 6, label: 6}, {value: 7, label: 7}, {value: 8, label: 8}
+         ],
+         optionValue:"value",
+         optionLabel:"label",
         //required: true,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.additionalDetails.maxMeterDigits",

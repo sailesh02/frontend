@@ -817,9 +817,7 @@ export const validateMeterDetails = (applyScreenObject) => {
         applyScreenObject.additionalDetails["meterReadingRatio"] !== undefined && 
         applyScreenObject.additionalDetails["meterReadingRatio"] !== "" &&
         applyScreenObject.additionalDetails["maxMeterDigits"] !== undefined && 
-        applyScreenObject.additionalDetails["maxMeterDigits"] !== "" &&
-        parseInt(applyScreenObject.additionalDetails["maxMeterDigits"]) > 0 &&
-        parseInt(applyScreenObject.additionalDetails["maxMeterDigits"]) < 7 
+        applyScreenObject.additionalDetails["maxMeterDigits"] !== "" 
         )
         
         // && 

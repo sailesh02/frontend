@@ -74,6 +74,12 @@ const MultiAutoSuggest = Loadable({
   loader: () => import("./MultiAutoSuggest"),
   loading: () => <Loading />
 });
+
+const MaxMeterDigitsUpdateLink = Loadable({
+  loader: () => import("./MaxMeterDigitsUpdateLink"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
   ApplicationNoContainer,
@@ -89,5 +95,6 @@ export {
   AddLinkForProperty,
   SnackbarWarning,
   TotalBill,
-  MultiAutoSuggest
+  MultiAutoSuggest,
+  MaxMeterDigitsUpdateLink
 };

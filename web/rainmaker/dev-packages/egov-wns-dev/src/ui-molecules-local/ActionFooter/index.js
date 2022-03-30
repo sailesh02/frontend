@@ -92,6 +92,10 @@ const parserFunction = (data) => {
             queryObject.additionalDetails !== undefined &&
             queryObject.additionalDetails.volumetricConsumtion !== undefined
           ) ? (queryObject.additionalDetails.volumetricConsumtion) : "",
+          maxMeterDigits: (
+            queryObject.additionalDetails !== undefined &&
+            queryObject.additionalDetails.maxMeterDigits !== undefined
+          ) ? (queryObject.additionalDetails.maxMeterDigits) : "",
       }
   }
   queryObject = { ...queryObject, ...parsedObject }

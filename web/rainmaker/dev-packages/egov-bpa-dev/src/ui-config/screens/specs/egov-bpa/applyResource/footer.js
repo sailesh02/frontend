@@ -364,12 +364,14 @@ if(!isMobileExistsResponse){
     let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
     let bpaApp = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
     let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
+    console.log(requiredNocs, "Nero NOCs in EDCR")
     let nocTypesFromMDMS = get(
       state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA,
       "NocTypeMapping",
       []
     )
-    console.log(nocTypesFromMDMS, "nero edcs Nocs")
+    //let nocTypesFromMDMS = [];
+    console.log(nocTypesFromMDMS, "nero Nocs in MDMS")
     let applicationType = bpaApp.applicationType;
     let serviceType = bpaApp.serviceType;
 
@@ -403,7 +405,7 @@ console.log(activatedNocs, "nero mdms Nocs")
       return nc.nocType
     })
     let isValid = true
-    let notCreatedNocsByBPA;
+    let notCreatedNocsByBPA = [];
     // add required nocs and already created noc's
     let mergedNocs = requiredNocs;
     let allRequiredNocsCreated = true;
@@ -414,9 +416,10 @@ console.log(activatedNocs, "nero mdms Nocs")
     //   }
     // })
     console.log(mergedNocs.join(), "Nero splits")
+    console.log(nocAlreadyCreated, "Nero Noc aleay created")
     mergedNocs && mergedNocs.length > 0 && mergedNocs.map( noc =>{
       if(nocAlreadyCreated && nocAlreadyCreated.includes(noc)){
-
+        console.log("in noc already created")
       }else{
         allRequiredNocsCreated = false;
         notCreatedNocsByBPA.push(noc)
@@ -437,7 +440,7 @@ console.log(activatedNocs, "nero mdms Nocs")
             true,
             {
               labelName: "ERR_FILL_NMA_NOC_DETAILS",
-              labelKey: "ERR_FILL_NMA_NOC_DETAILS",
+              labelKey: "Error in NMA",
             },
             "warning"
           )
@@ -447,10 +450,11 @@ console.log(activatedNocs, "nero mdms Nocs")
        isValid = true
       }
     }
-    
+    console.log(allRequiredNocsCreated, isValid, "Nero HEllo")
     // to check if all required NOC's are triggered
    // if((noc.length == mergedNocs.length) && isValid){
-    if(allRequiredNocsCreated && isValid){
+    if(allRequiredNocsCreated){
+      console.log("Nero in if")
       const documentsFormat = Object.values(
         get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
       );
@@ -510,6 +514,7 @@ console.log(activatedNocs, "nero mdms Nocs")
         getSummaryRequiredDetails(state, dispatch);
       }
     }else{
+      console.log("Nero in Else")
       let errorMessage = {
         labelName: "Please trigger all required noc's",
         //labelKey: "ERR_TRIGGER_REQUIRED_NOCS_TOAST"

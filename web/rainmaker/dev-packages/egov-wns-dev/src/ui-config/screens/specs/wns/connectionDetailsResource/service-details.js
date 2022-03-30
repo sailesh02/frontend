@@ -9,9 +9,22 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { serviceConst } from "../../../../../ui-utils/commons";
 import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import { handleService } from "../../utils";
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import store from "ui-redux/store";
 
-
-
+export const showConfirmationBox = () => {
+  let screenKey = "connection-details";
+  let state = store.getState();
+  let toggle = get(
+    state.screenConfiguration.screenConfig[screenKey],
+    "components.adhocDialog.props.open",
+    false
+  );
+  store.dispatch(
+    handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
+  );
+}
 export const renderService = () => {
 const tenantId = getTenantIdCommon()
 const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
@@ -40,17 +53,30 @@ const connectionType = getQueryArg(window.location.href, "connectionType")
         waterSubSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" }, { jsonPath: "WaterConnection[0].waterSubSource" }),
         meterMake: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_METER_MAKE" }, { jsonPath: "WaterConnection[0].additionalDetails.meterMake" }),
         meterReadingRatio: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_METER_RATIO" }, { jsonPath: "WaterConnection[0].additionalDetails.meterReadingRatio" }),
+        maxMeterDigits: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_MAX_METER_DIGITS_LABEL" }, { jsonPath: "WaterConnection[0].additionalDetails.maxMeterDigits" }),
+        div: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          
+          gridDefination: { xs: 6, sm: 4, align: "left" }
+        },
         editSection: {
           componentPath: "Button",
           props: { color: "primary", style: { margin: "-16px" } },
           visible: true,
-          gridDefination: { xs: 12, sm: 12, align: "left" },
+          gridDefination: { xs: 12, sm: 3, align: "left" },
           children: { buttonLabel: getLabel({ labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL" }) },
           onClickDefination: {
             action: "page_change",
             path: `meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`
           }
         },
+        editMaxMeterDigits: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-wns",
+          componentPath: "MaxMeterDigitsUpdateLink",
+          
+        }
       })
     } else {
       return getCommonContainer({
@@ -81,17 +107,30 @@ const connectionType = getQueryArg(window.location.href, "connectionType")
         diameter: getLabelWithValue({ labelKey: "WS_CONN_DETAIL_DIAMETER" }, { jsonPath: "WaterConnection[0].additionalDetails.diameter" }),
         numberOfToilets: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TOILETS" }, { jsonPath: "WaterConnection[0].noOfToilets" }),
         noOfWaterClosets: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" }, { jsonPath: "WaterConnection[0].noOfWaterClosets" }),
+        maxMeterDigits: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_MAX_METER_DIGITS_LABEL" }, { jsonPath: "WaterConnection[0].additionalDetails.maxMeterDigits" }),
+        div: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          
+          gridDefination: { xs: 6, sm: 4, align: "left" }
+        },
         editSection: {
           componentPath: "Button",
           props: { color: "primary", style: { margin: "-16px" } },
           visible: true,
-          gridDefination: { xs: 12, sm: 12, align: "left" },
+          gridDefination: { xs: 12, sm: 3, align: "left" },
           children: { buttonLabel: getLabel({ labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL" }) },
           onClickDefination: {
             action: "page_change",
             path: `meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`
           }
         },
+        editMaxMeterDigits: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-wns",
+          componentPath: "MaxMeterDigitsUpdateLink",
+          
+        }
       })
     } else {
       return getCommonContainer({
@@ -134,17 +173,30 @@ const connectionType = getQueryArg(window.location.href, "connectionType")
         diameter: getLabelWithValue({ labelKey: "WS_CONN_DETAIL_DIAMETER" }, { jsonPath: "WaterConnection[0].additionalDetails.diameter" }),
         numberOfToilets: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TOILETS" }, { jsonPath: "WaterConnection[0].noOfToilets" }),
         noOfWaterClosets: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" }, { jsonPath: "WaterConnection[0].noOfWaterClosets" }),
+        maxMeterDigits: getLabelWithValue({ labelKey: "WS_ADDN_DETAILS_MAX_METER_DIGITS_LABEL" }, { jsonPath: "WaterConnection[0].additionalDetails.maxMeterDigits" }),
+        div: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          
+          gridDefination: { xs: 6, sm: 4, align: "left" }
+        },
         editSection: {
           componentPath: "Button",
           props: { color: "primary", style: { margin: "-16px" } },
           visible: true,
-          gridDefination: { xs: 12, sm: 12, align: "left" },
+          gridDefination: { xs: 12, sm: 3, align: "left" },
           children: { buttonLabel: getLabel({ labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL" }) },
           onClickDefination: {
             action: "page_change",
             path: `meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`
           }
         },
+        editMaxMeterDigits: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-wns",
+          componentPath: "MaxMeterDigitsUpdateLink",
+          
+        }
       })
     } else {
       return getCommonContainer({

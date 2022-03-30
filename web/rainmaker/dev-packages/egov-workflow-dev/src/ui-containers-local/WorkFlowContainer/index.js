@@ -385,6 +385,7 @@ console.log(BPADocs, "bpa docs")
         let requiredDocuments = [];
         if (documnts && documnts.length > 0) {
           documnts.forEach(documents => {
+            
             if (documents && documents.documents) {
               documents.documents.forEach(docItem => {
                 if (documents.dropDownValues && documents.dropDownValues.value) {
@@ -395,7 +396,7 @@ console.log(BPADocs, "bpa docs")
                   doc.fileName = docItem.fileName;
                   doc.fileUrl = docItem.fileUrl;
                   doc.additionalDetails = docItem.additionalDetails;
-                  BPADocs && BPADocs.forEach(bpaDc => {
+                  BPADocs && BPADocs.length > 0 && BPADocs.forEach(bpaDc => {
                     console.log(bpaDc)
                     if (bpaDc.fileStoreId === docItem.fileStoreId) {
                       console.log("Here I am")
@@ -419,7 +420,10 @@ console.log(BPADocs, "bpa docs")
           });
           data.documents = requiredDocuments;
         }else{
+          
+          if(BPADocs && BPADocs.length > 0){
           data.documents = [...BPADocs];
+          }
         }
         
 

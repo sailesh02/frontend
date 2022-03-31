@@ -140,14 +140,30 @@ const saveData = async (state, dispatch) => {
             );
             return;
         }
+    }else if (data.meterStatus === 'Reset') {
+        const isCurrentMeterValid = validateFields(
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children",
+            state,
+            dispatch,
+            "meter-reading"
+        );
+        const isDateValid = validateFields(
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children",
+            state,
+            dispatch,
+            "meter-reading"
+        );
+        if (data.currentReading === undefined || data.currentReading === null || data.currentReading === '') {
+            return;
+        }
+        
     } else {
         const consumption = validateFields(
             "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children",
             state,
             dispatch,
             "meter-reading"
-        );
-        // console.log(data.consumption, consumption)
+        );         
         if (data.consumption === undefined || data.currentReading === null || data.consumption === '') {
             return;
         }
@@ -165,7 +181,6 @@ const saveData = async (state, dispatch) => {
     }
     // console.log(data)
     data.tenantId = getQueryArg(window.location.href, "tenantId")
-    console.log(data,"data")
     createMeterReading(dispatch, data)
 
 }
@@ -407,6 +422,15 @@ const cancelEdit = async (state, dispatch)=>{
 
 // console.log('meterReadingEditable  is coming')
 
+const getMaxMeterDigits = (maxMeterDigits) => {
+    let digitsString = '';
+    if(maxMeterDigits && maxMeterDigits > 3){
+        for(let i=0; i<maxMeterDigits; i++ ){
+            digitsString += '9'; 
+        }
+    }
+    return parseInt(digitsString);
+}
 export const meterReadingEditable =
 {
     
@@ -538,7 +562,41 @@ export const meterReadingEditable =
                     }),
                     afterFieldChange: async (action, state, dispatch) => {
                         let status = get(state, "screenConfiguration.preparedFinalObject.metereading.meterStatus");
-                        if (status !== 'Working') {
+                        console.log(action.value, "Nero ")
+                        if (action.value === 'Reset'){
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.seventhContainer",
+                                    "visible",
+                                    true
+                                )
+                            );
+
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.seventhContainer.children.firstCont",
+                                    "visible",
+                                    true
+                                )
+                            );
+
+                            
+
+                        }else{
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.seventhContainer",
+                                    "visible",
+                                    false
+                                )
+                            );
+                        }
+                        
+                        
+                        if (status !== 'Working' && status !== 'Reset') {
                             dispatch(
                                 handleField(
                                     "meter-reading",
@@ -833,22 +891,47 @@ export const meterReadingEditable =
                     }),
                     afterFieldChange: async (action, state, dispatch) => {
                         let lastReading = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading");
+                        let meterStatus = get(state, "screenConfiguration.preparedFinalObject.metereading.meterStatus");
                         let currentReading = get(state, "screenConfiguration.preparedFinalObject.metereading.currentReading");
                         let meterReadingRatio = get(state, "screenConfiguration.preparedFinalObject.DataForMeterReading[0].additionalDetails.meterReadingRatio");
+                        let maxMeterDigits = get(state, "screenConfiguration.preparedFinalObject.DataForMeterReading[0].additionalDetails.maxMeterDigits");
                         
                         let multipier = meterReadingRatio.split(":")[1];
                         
                         let consumption;
-                        if (lastReading === 0) {
-                            consumption = currentReading
+                        // if(meterStatus === 'Working'){
+                        //     if (lastReading === 0) {
+                        //         consumption = currentReading
+                        //         consumption = consumption*multipier;
+                        //     } else {
+                        //         consumption = (currentReading - lastReading).toFixed(2);
+                        //         consumption = consumption*multipier;
+                        //     }
+                        //     if (currentReading == '' || consumption < 0) {
+                        //         consumption = ''
+                        //     }
+                        // }
+
+                        if(meterStatus === 'Reset'){
+                           let maxDigits =  getMaxMeterDigits(maxMeterDigits);
+                           console.log(maxDigits, "nero digitst", typeof maxDigits)
+                           let calculateReadingDiff = maxDigits - parseInt(lastReading);
+                            consumption = calculateReadingDiff + parseInt(currentReading)
                             consumption = consumption*multipier;
-                        } else {
-                            consumption = (currentReading - lastReading).toFixed(2);
-                            consumption = consumption*multipier;
+                        }else{
+                            if (lastReading === 0) {
+                                consumption = currentReading
+                                consumption = consumption*multipier;
+                            } else {
+                                consumption = (currentReading - lastReading).toFixed(2);
+                                consumption = consumption*multipier;
+                            }
+                            if (currentReading == '' || consumption < 0) {
+                                consumption = ''
+                            } 
                         }
-                        if (currentReading == '' || consumption < 0) {
-                            consumption = ''
-                        }
+
+
                         dispatch(
                             handleField(
                                 "meter-reading",
@@ -1028,7 +1111,37 @@ export const meterReadingEditable =
                 }
 
             }),
+            seventhContainer: getCommonContainer({
+                firstCont: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Div",
+                    gridDefination: {
+                        xs: 12,
+                        sm: 6
+                    },
+                    visible: false,
+                    props: {
+                        style: {
+                            fontSize: 18,
+                            color: "rgba(0, 0, 0, 0.60)",
+                            marginTop: '20px',
+                            color: "red",
+                            align: "right"
+                        }
+                    },
+                    children: {
+                        billingPeriod: getLabel({
+                           
+                            labelKey: "WS_METER_READING_RESET_WARNING",
+                           
+                        },
+                        
+                        )
+                    },
+                }
+                
 
+            }),
             button: getCommonContainer({
 
                 buttonContainer: getCommonContainer({

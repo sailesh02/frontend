@@ -4,8 +4,31 @@ import get from "lodash/get";
 import store from "ui-redux/store";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { resetFieldsBulkImport } from '../../utils/index'
+import { getMaxMeterDigits } from './bulkImportApplication'
 
 export const updateTableRow = async (state, dispatch) => {
+
+  let meterStatus = get(state, `screenConfiguration.preparedFinalObject.meterReading[0].meterStatus`);
+  let maxMeterDigits = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues.maxMeterDigits`);
+  if(meterStatus === 'Reset'){
+    console.log(maxMeterDigits, "Nero Hello")
+    let maxDigits =  getMaxMeterDigits(maxMeterDigits);
+    
+    if(isNaN(maxDigits)){
+      dispatch(
+        toggleSnackbar(
+            true,
+            {
+                labelName: "Failed to parse meter reading data.",
+                labelKey: "ERR_UPDATE_MAX_METER_DIGITS"
+            },
+            "warning"
+        )
+    );
+
+    return;
+  }
+ }
     store.dispatch(showSpinner())
     await renderBulkImportTable(state, dispatch);
     store.dispatch(hideSpinner())
@@ -39,7 +62,7 @@ const renderBulkImportTable = async (state, dispatch,edited) => {
 
 var isFormValid = false;
 
-if(meterReading[0].meterStatus != "Working"){
+if(meterReading[0].meterStatus != "Working" && meterReading[0].meterStatus != "Reset"){
   isFormValid = true;
   let currentReadingDate = new Date();
   currentReadingDate = currentReadingDate.getTime();

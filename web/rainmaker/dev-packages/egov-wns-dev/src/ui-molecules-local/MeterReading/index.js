@@ -20,6 +20,8 @@ import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults, getMdmsDataForAutopopulated, isWorkflowExists } from "../../ui-utils/commons"
 import { getMdmsDataForMeterStatus,APPLICATIONSTATE } from "../../ui-utils/commons"
+import { getMaxMeterDigits } from '../../ui-config/screens/specs/wns/searchResource/bulkImportApplication'
+
 const styles = {
   card: {
     marginLeft: 8,
@@ -228,13 +230,28 @@ store.dispatch(
     //   var currentReadingDate = convertEpochToDate(consumptionDetails[0].currentReadingDate)
     // }
     let unitMultiplier = 1;
+    let maxMeterDigits;
     if (DataForMeterReading.length > 0) {
       unitMultiplier = DataForMeterReading[0].additionalDetails.meterReadingRatio.split(":")[1];
+      maxMeterDigits = DataForMeterReading[0].additionalDetails.maxMeterDigits;
     }
     return (
       <div>
        {editVisiable == true ?"" : consumptionDetails && consumptionDetails.length > 0 ? (
           consumptionDetails.map((item,index) => {
+            
+            let calculatedConsumption = 0;
+            if(item && item.meterStatus === "Working"){
+            calculatedConsumption = (item.currentReading - item.lastReading)*unitMultiplier;
+            }else if(item && item.meterStatus === "Reset"){
+              calculatedConsumption = "12"
+              let maxDigits =  getMaxMeterDigits(maxMeterDigits);
+              let calculateReadingDiff = maxDigits - parseInt(item.lastReading);
+              calculatedConsumption = calculateReadingDiff + parseInt(item.currentReading)  
+              calculatedConsumption = calculatedConsumption*unitMultiplier;
+            }else{
+              calculatedConsumption = item.consumption;
+            }
             return (
               <Card className={classes.card}>
                 <CardContent>
@@ -350,7 +367,7 @@ store.dispatch(
                       </Grid>
                       <Grid item md={8} xs={6}>
                         <Label
-                          labelName={(item.currentReading - item.lastReading)*unitMultiplier}
+                          labelName={calculatedConsumption}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />

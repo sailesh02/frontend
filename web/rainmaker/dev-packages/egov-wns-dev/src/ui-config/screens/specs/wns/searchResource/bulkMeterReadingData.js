@@ -7,6 +7,8 @@ import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getLocaleLabels, getStatusKey } from "egov-ui-framework/ui-utils/commons";
+import { getMaxMeterDigits } from './bulkImportApplication'
+import get from "lodash/get";
 
 const deleteTableData = (value) => {
   if(window.confirm(getLocaleLabels('WS_BULK_DELETE_CONFIRMATION','WS_BULK_DELETE_CONFIRMATION'))){
@@ -42,6 +44,7 @@ const deleteTableData = (value) => {
 const editTableData = (value,data) => {
   let consumerNumber = value && value.rowData && value.rowData.length > 0 && value.rowData[0] || ""
   let state = store.getState()
+  let maxMeterDigits = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues.maxMeterDigits`);
   let meterReadingBulk = state && state.screenConfiguration && state.screenConfiguration.preparedFinalObject && 
   state.screenConfiguration.preparedFinalObject.meterReadingBulk || []
   let removedConsumerNumber = meterReadingBulk && meterReadingBulk.length > 0 && 
@@ -54,6 +57,16 @@ const editTableData = (value,data) => {
     return data.connectionNo == consumerNumber
   }) || []
 
+  console.log(requiredConsumerNumber, "Nero Edit details"); 
+  // if(requiredConsumerNumber && requiredConsumerNumber[0].meterStatus === "Reset"){
+  //   let maxDigits =  getMaxMeterDigits(maxMeterDigits);
+  //   let calculatedvalue = maxDigits - requiredConsumerNumber[0].consumption;
+  //   calculatedvalue = calculatedvalue
+  //   let enteredReading = calculatedvalue - requiredConsumerNumber[0].lastReading;
+  //   requiredConsumerNumber[0].currentReading = Math.abs(enteredReading);
+  // }
+  console.log(requiredConsumerNumber, "Nero Edit details fgh");
+  //return false;
   store.dispatch(prepareFinalObject('meterReading',requiredConsumerNumber))
   store.dispatch(prepareFinalObject('meterReadingBulk',removedConsumerNumber))
   if(requiredConsumerNumber && requiredConsumerNumber.length > 0){

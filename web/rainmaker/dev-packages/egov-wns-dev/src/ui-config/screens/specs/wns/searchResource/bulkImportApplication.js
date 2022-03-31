@@ -36,7 +36,8 @@ import {
     return appNos;
   }
 
-  const setAutopopulatedvalues = async (state, dispatch,cardIndex) => {
+  const setAutopopulatedvalues = async (state, dispatch,cardIndex, waterConnectionDetails) => {
+    console.log(waterConnectionDetails, "Nero connection")
     let billingFrequency = get(state, "screenConfiguration.preparedFinalObject.billingCycle");
     let consumptionDetails = {};
     let date = new Date();
@@ -50,6 +51,9 @@ import {
         consumptionDetails['lastReading'] = checkBillingPeriod[0].currentReading
         consumptionDetails['consumption'] = ''
         consumptionDetails['lastReadingDate'] = lastReadingDate
+        consumptionDetails['maxMeterDigits'] = waterConnectionDetails.additionalDetails.maxMeterDigits;
+        consumptionDetails['meterReadingRatio'] = waterConnectionDetails.additionalDetails.meterReadingRatio;
+        //consumptionDetails['meterReadingRatio'] = "1:5"
     }catch (e) { 
         console.log(e);         
         dispatch(
@@ -177,7 +181,7 @@ import {
             return;
         } else {
             await getMdmsDataForAutopopulatedBulk(dispatch,connectionNo)
-            await setAutopopulatedvalues(state, dispatch,0)
+            await setAutopopulatedvalues(state, dispatch,0, payloadData.WaterConnection && payloadData.WaterConnection[0])
         }
 
     }
@@ -230,6 +234,16 @@ import {
     }
   };
   
+  export const getMaxMeterDigits = (maxMeterDigits) => {
+    let digitsString = '';
+    if(maxMeterDigits && maxMeterDigits > 3){
+        for(let i=0; i<maxMeterDigits; i++ ){
+            digitsString += '9'; 
+        }
+    }
+    return parseInt(digitsString);
+}
+
   export const bulkImportApplication = getCommonCard({
     bulkImportContainer: getCommonContainer({
       consumerNumber: getTextField({
@@ -347,16 +361,48 @@ import {
         jsonPath: "meterReading[0].currentReading",
         afterFieldChange: async (action, state, dispatch) => {
             let lastReading = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading`);
+            let maxMeterDigits = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues.maxMeterDigits`);
             let currentReading = Number(get(state, `screenConfiguration.preparedFinalObject.meterReading[0].currentReading`));
+            let meterStatus = get(state, `screenConfiguration.preparedFinalObject.meterReading[0].meterStatus`);
+            let meterReadingRatio = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues.meterReadingRatio`);
             let consumption;
-            if (lastReading === 0) {
-                consumption = currentReading
-            } else {
-                consumption = (currentReading - lastReading).toFixed(2);
+            let multipier = meterReadingRatio.split(":")[1];
+            if(meterStatus === 'Working'){
+              if (lastReading === 0) {
+                  consumption = currentReading;
+                  consumption = consumption*multipier;
+              } else {
+                  consumption = (currentReading - lastReading).toFixed(2);
+                  consumption = consumption*multipier;
+              }
+              if (currentReading == '' || consumption < 0) {
+                  consumption = ''
+              }
             }
-            if (currentReading == '' || consumption < 0) {
-                consumption = ''
-            }
+
+
+            if(meterStatus === 'Reset'){
+              console.log(maxMeterDigits, "Nero Hello")
+              let maxDigits =  getMaxMeterDigits(maxMeterDigits);
+              
+              if(isNaN(maxDigits)){
+                dispatch(
+                  toggleSnackbar(
+                      true,
+                      {
+                          labelName: "Failed to parse meter reading data.",
+                          labelKey: "ERR_UPDATE_MAX_METER_DIGITS"
+                      },
+                      "warning"
+                  )
+              );
+              }else{
+                  let calculateReadingDiff = maxDigits - parseInt(lastReading);
+                  consumption = calculateReadingDiff + parseInt(currentReading)  
+                  consumption = consumption*multipier;
+
+                }
+           } 
            dispatch(prepareFinalObject(`meterReading[0].consumption`, consumption))
            dispatch(
             handleField(
@@ -406,7 +452,67 @@ import {
               jsonPath: "meterReading[0].meterStatus",
               afterFieldChange: async (action, state, dispatch) => {
                 console.log(action, "Nero Action")
-                if(action.value != "Working"){
+                let lastReading = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading`);
+            let maxMeterDigits = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues.maxMeterDigits`);
+            let currentReading = Number(get(state, `screenConfiguration.preparedFinalObject.meterReading[0].currentReading`));
+            let meterStatus = get(state, `screenConfiguration.preparedFinalObject.meterReading[0].meterStatus`);
+            let meterReadingRatio = get(state, `screenConfiguration.preparedFinalObject.autoPopulatedValues.meterReadingRatio`);
+            let consumption;
+            let multipier = meterReadingRatio.split(":")[1];
+              if(action.value === "Working"){
+                if (lastReading === 0) {
+                  consumption = currentReading;
+                  consumption = consumption*multipier;
+              } else {
+                  consumption = (currentReading - lastReading).toFixed(2);
+                  consumption = consumption*multipier;
+              }
+
+              dispatch(prepareFinalObject(`meterReading[0].consumption`, consumption))
+                    dispatch(
+                     handleField(
+                       "bulkImport",
+                       "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumption",
+                       "props.value",
+                       consumption
+                     )
+                   );
+
+              }
+                if(action.value === "Reset"){
+                  
+                  let maxDigits =  getMaxMeterDigits(maxMeterDigits);
+                  console.log(maxDigits, "nero max", typeof maxDigits)
+                  if(isNaN(maxDigits)){
+                    
+                      dispatch(
+                        toggleSnackbar(
+                            true,
+                            {
+                                labelName: "Failed to parse meter reading data.",
+                                labelKey: "ERR_UPDATE_MAX_METER_DIGITS"
+                            },
+                            "warning"
+                        )
+                    );
+                            return;
+                    }else{
+                      let calculateReadingDiff = maxDigits - parseInt(lastReading);
+                      consumption = calculateReadingDiff + parseInt(currentReading)  
+                      consumption = consumption*multipier;
+                    }
+                    dispatch(prepareFinalObject(`meterReading[0].consumption`, consumption))
+                    dispatch(
+                     handleField(
+                       "bulkImport",
+                       "components.div.children.bulkImportApplication.children.cardContent.children.bulkImportContainer.children.consumption",
+                       "props.value",
+                       consumption
+                     )
+                   );
+               
+                }
+                if(action.value != "Working" && action.value != "Reset"){
                     dispatch(
                       handleField(
                         "bulkImport",

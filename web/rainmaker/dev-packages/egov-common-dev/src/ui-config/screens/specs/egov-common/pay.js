@@ -179,7 +179,23 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
             
             dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.zeroAmountMsgCard", "visible", false));
         }
-    } else {
+    }else if(getQueryArg(window.location.href, "businessService").includes("PT.MUTATION")){
+        if (get(totalAmount, "totalAmount") === 0) {
+            dispatch(handleField("pay", "components.div.children.footer.children.makeZeroPayment", "visible", true));
+            dispatch(handleField("pay", "components.div.children.footer.children.makePayment", "visible", false));
+            dispatch(handleField("pay", "components.div.children.footer.children.generateReceipt", "visible", false));
+            dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.g8Details", "visible", false));
+            dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails", "visible", false));
+            dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePayerDetails", "visible", false));
+            
+
+        } else {
+            dispatch(handleField("pay", "components.div.children.footer.children.makeZeroPayment", "visible", false));
+            
+            dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.zeroAmountMsgCard", "visible", false));
+        }
+    }
+     else {
         if (get(totalAmount, "totalAmount") === 0) {
             dispatch(handleField("pay", "components.div.children.footer.children.generateReceipt", "props.disabled", true));
             dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.zeroAmountMsgCard", "visible", false));

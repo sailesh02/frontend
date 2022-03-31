@@ -317,7 +317,8 @@ const callBackForZeroPay = async (state, dispatch) => {
 
   const applicationNumber = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
-
+  const businessService = getQueryArg(window.location, "businessService")
+  // console.log(businessService,"outsidebsPM")
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
 
   const response = await httpRequest(
@@ -326,7 +327,6 @@ const callBackForZeroPay = async (state, dispatch) => {
     "_search",
     queryObject
   );
-
 
   if (response.WaterConnection && response.WaterConnection.length > 0) {
     let payload = response.WaterConnection[0];
@@ -343,6 +343,68 @@ const callBackForZeroPay = async (state, dispatch) => {
     );
     }
   }
+
+
+
+
+  
+  if(businessService == "PT.MUTATION"){
+    let propertyQueryObject =  [{ key: "tenantId", value: tenantId }, { key: "acknowledgementIds", value: applicationNumber }]
+    const responseProperty = await httpRequest(
+      "post",
+      "/property-services/property/_search",
+      "_search",
+      propertyQueryObject
+    );
+    // console.log(responseProperty, "responseProperty")
+if(responseProperty.Properties&& responseProperty.Properties.length>0){
+  let propertyId = responseProperty.Properties[0].propertyId
+  if(propertyId != undefined ||propertyId != null){
+    let propertyQueryObjectId =  [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyId }, {key:"audit", value:true}]
+    const responsePropertyData = await httpRequest(
+      "post",
+      "/property-services/property/_search",
+      "_search",
+      propertyQueryObjectId
+    );
+    // property-services/property/_search?propertyIds=PT-NPD-1007518&tenantId=od.nuapada&audit=true
+    // console.log(responsePropertyData,"responsePropertyData")
+if(responsePropertyData.Properties &&responsePropertyData.Properties.length>0 ){
+  let payloadQuery = responsePropertyData.Properties[0]
+  payloadQuery.workflow.action = "PAY"
+  payloadQuery.workflow.state = null
+  payloadQuery.workflow.assignes =[]
+  payloadQuery.workflow.wfDocuments= []
+  // property-services/property/_update
+  let updatePropertyResponse = await httpRequest(
+    "post",
+    "/property-services/property/_update", 
+    "", 
+    [], 
+    { Property: payloadQuery });
+  if (updatePropertyResponse.Properties && updatePropertyResponse.Properties.length > 0) {
+    console.log(updatePropertyResponse,"updatePropertyResponse")
+  await updatePayAction(
+    state,
+    dispatch,
+    propertyId,
+    tenantId,
+    'ZEROPAYMENT'
+  );
+  }
+
+}
+else{
+  console.log("err")
+}
+}
+
+}
+  
+  }
+
+
+ 
 
 }
 

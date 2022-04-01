@@ -152,6 +152,7 @@ class PTInformation extends React.Component {
                   totalBillAmountDue={totalBillAmountDue}
                   ownershipTransfer={true}
                   viewHistory={true}
+                  viewOwnerDetail={true}
                   propertiesAudit={propertiesAudit}
                   showTransferOwner={showTransferOwner}
                 ></OwnerInfo>

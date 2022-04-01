@@ -63,3 +63,20 @@ export const TransferOwnership = ({ ownershipTransfer, openDialog }) => {
     )
   );
 };
+
+export const EditOwenerNameAndPhone = ({ ownerDetail, openDialogOwner , perOwner, index}) => {
+  return (
+    ownerDetail && (
+      <Button
+        className="edit-ownerShip"
+        label={
+          <Label buttonLabel={true} label="PT_EDIT" color="rgb(254, 122, 81)" fontSize="16px" height="30px" labelStyle={labelStyle} />
+        }
+        // buttonStyle={buttonStyle}
+        onClick={() => {
+          openDialogOwner("editownerDetail",perOwner , index);
+        }}
+      ></Button>
+    )
+  );
+};

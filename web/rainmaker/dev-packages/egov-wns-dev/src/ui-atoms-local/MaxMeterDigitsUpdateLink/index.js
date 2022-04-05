@@ -74,8 +74,7 @@ class MaxMeterDigitsUpdateLink extends React.Component {
         this.closeDialogue()
         //let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : this.state.dialogButton == "WS_RECONNECTION" ? "reconnection" : "closeConnection";
         let status = "success";
-        console.log("Nero Hello")
-        window.location.href = `/wns/acknowledgement?purpose=update&status=${status}&tenantId=${tenantId}`
+        window.location.href = `employee/wns/acknowledgement?purpose=update&status=${status}&tenantId=${tenantId}`
         // store.dispatch(
         //   setRoute(
         //     `/wns/acknowledgement?purpose=update&status=${status}&tenantId=${tenantId}`

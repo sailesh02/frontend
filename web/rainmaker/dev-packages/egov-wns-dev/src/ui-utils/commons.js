@@ -2570,7 +2570,8 @@ const getMonth = (toPeriod) => {
 
 const getYear = (fromYear,month) => {
     let year = parseInt(fromYear)
-    if(parseInt(month) == 12 || parseInt(month) == 1 || parseInt(month) == 2 || parseInt(month) == 3){
+   // if(parseInt(month) == 12 || parseInt(month) == 1 || parseInt(month) == 2 || parseInt(month) == 3){
+    if(parseInt(month) == 12){
         return year + 1
     }else{
         return year
@@ -2589,13 +2590,36 @@ export const getExpiryDate = (billingPeriodMDMS,currentDemand,filter) => {
         date = rebate && rebate.endingDay || ''
         fromFY = rebate && rebate.fromFY && rebate.fromFY.split('-')[0] || []
         year = getYear(fromFY,monthValue)
+
+        //Calculate End Day of Due Date Starts Here
+       
+        var d = new Date(year, month, 0);
+        let lastDayOfMonth = d.getDate();
+        if(parseInt(lastDayOfMonth) != parseInt(date)){
+            console.log(d.getDate());    
+            date = lastDayOfMonth;
+        }
+        
+        //Calculate End day of Due Date Ends Here
         return filter ? `${year}-${month}-${date}` : `${date}/${month}/${year}`
     }else{
         let rebate = billingPeriodMDMS && billingPeriodMDMS["sw-services-calculation"] && 
         billingPeriodMDMS["sw-services-calculation"].Rebate && billingPeriodMDMS["sw-services-calculation"].Rebate[0]
+        console.log(rebate, "Nero Rebate 2")
         date = rebate && rebate.endingDay || ''
         fromFY = rebate && rebate.fromFY && rebate.fromFY.split('-')[0] || []  
-        year = getYear(fromFY,month)     
+        year = getYear(fromFY,month)   
+
+        //Calculate End Day of Due Date Starts Here
+       
+       var d = new Date(year, month, 0);
+       let lastDayOfMonth = d.getDate();
+       if(parseInt(lastDayOfMonth) != parseInt(date)){
+           console.log(d.getDate());    
+           date = lastDayOfMonth;
+       }
+       
+       //Calculate End day of Due Date Ends Here
         return filter ? `${year}-${month}-${date}` : `${date}/${month}/${year}`
     }
 }
@@ -3312,3 +3336,107 @@ export const triggerBillGenerationBatchForConnections = async (queryObject, disp
     }
 }
 
+
+export const getSearchResultsOfApp = async (queryObject, filter = false) => {
+    try {
+        store.dispatch(showSpinner())
+        const response = await httpRequest(
+            "post",
+            "/ws-services/wc/_search",
+            "_search",
+            queryObject
+        );
+        if (response.WaterConnection && response.WaterConnection.length > 0) {
+            store.dispatch(hideSpinner())
+            return response;
+        }
+        
+        store.dispatch(hideSpinner())
+        return result;
+    } catch (error) { 
+        store.dispatch(hideSpinner())
+        console.log(error) }
+};
+
+export const applyReplaceMeter = async (state, dispatch) => {
+
+    let payload = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
+    let replaceMeterScreen = get(state, "screenConfiguration.preparedFinalObject.replaceMeterScreen");
+    let applicationType = get(payload, "applicationType", "");
+    console.log(payload, "Nero Payload");
+    console.log(replaceMeterScreen, "Nero replaeement", applicationType)
+    
+    if(typeof replaceMeterScreen.meterInstallationDate === "string"){
+        payload.meterInstallationDate = convertDateToEpoch(replaceMeterScreen && replaceMeterScreen.meterInstallationDate)
+    }
+    payload.meterId = replaceMeterScreen.meterId;
+    payload.additionalDetails.diameter = replaceMeterScreen.additionalDetails.diameter;
+    payload.additionalDetails.initialMeterReading = replaceMeterScreen.additionalDetails.initialMeterReading;
+    payload.additionalDetails.maxMeterDigits = replaceMeterScreen.additionalDetails.maxMeterDigits;
+    payload.additionalDetails.meterMake = replaceMeterScreen.additionalDetails.meterMake;
+    payload.additionalDetails.meterReadingRatio = replaceMeterScreen.additionalDetails.meterReadingRatio;
+
+    let applicationNo = get(payload, "applicationNo");
+    console.log(payload, "updated payload")
+    let response;
+
+    try {
+        if(payload && applicationNo && applicationNo !== undefined && applicationNo !== "" && applicationType && applicationType === "METER_REPLACEMENT"){
+            //set(payload, "applicationType", "METER_REPLACEMENT");
+            if(payload && payload.applicationStatus === "INITIATED"){
+                set(payload, "processInstance.action", "SUBMIT_APPLICATION");
+            }
+            if(payload && payload.applicationStatus === "PENDING_FOR_APPROVAL"){
+                set(payload, "processInstance.action", "APPROVE_CONNECTION");
+            }
+            await httpRequest("post", "ws-services/wc/_update", "", [], { WaterConnection: payload });
+            let searchQueryObject = [{ key: "tenantId", value: payload.tenantId }, { key: "applicationNumber", value: applicationNo }];
+            let searchResponse = await getSearchResultsOfApp(searchQueryObject);
+            console.log(searchResponse, "Nero search")
+            dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection[0]));
+        }else{
+            set(payload, "applicationType", "METER_REPLACEMENT");
+            set(payload.processInstance, 'action', "INITIATE")
+            response = await httpRequest("post", "ws-services/wc/_create", "", [], { WaterConnection: payload });
+            console.log(response, "Nero responsess")
+            dispatch(prepareFinalObject("WaterConnection", response.WaterConnection[0]));
+        }
+
+        return true;
+    } catch (error) {
+        console.log(error, "Error")
+        return false;   
+    }
+    
+
+    
+}
+
+  export const updatePFOforSearchResults = async (
+    action,
+    state,
+    dispatch,
+    applicationNo,
+    tenantId
+  ) => {
+    let searchQueryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNo }];
+    let searchResponse = await getSearchResultsOfApp(searchQueryObject);
+    if(searchResponse && searchResponse.WaterConnection && searchResponse.WaterConnection.length > 0){
+
+    let replaceMeterScreen = {additionalDetails: {}};
+    let searchedWc = searchResponse.WaterConnection[0];
+    console.log(searchedWc, "Nero searched")
+    replaceMeterScreen.meterInstallationDate = searchedWc && searchedWc.meterInstallationDate
+    replaceMeterScreen.meterId = searchedWc && searchedWc.meterId;
+    replaceMeterScreen.additionalDetails.diameter = searchedWc && searchedWc.additionalDetails.diameter;
+    replaceMeterScreen.additionalDetails.initialMeterReading = searchedWc && searchedWc.additionalDetails.initialMeterReading;
+    replaceMeterScreen.additionalDetails.maxMeterDigits = searchedWc && searchedWc.additionalDetails.maxMeterDigits;
+    replaceMeterScreen.additionalDetails.meterMake = searchedWc && searchedWc.additionalDetails.meterMake;
+    replaceMeterScreen.additionalDetails.meterReadingRatio = searchedWc && searchedWc.additionalDetails.meterReadingRatio;
+
+        dispatch(prepareFinalObject("WaterConnection", searchedWc));
+        dispatch(prepareFinalObject("replaceMeterScreen", replaceMeterScreen));
+    }
+    //console.log
+
+}

@@ -136,5 +136,6 @@ export {
   OwnerHeader,
   ActionFooter,
   ConfirmationDialog,
-  ChipsInput
+  ChipsInput,
+  DemandAdjustMent
 };

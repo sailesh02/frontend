@@ -14,11 +14,12 @@ import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { TransferOwnership, ViewHistory } from "../ActionItems";
+import { TransferOwnership, ViewHistory ,EditOwenerNameAndPhone } from "../ActionItems";
 import PendingAmountDialog from "../PendingAmountDue";
 import PropertyInfoCard from "../PropertyInfoCard";
 import TransferOwnerShipDialog from "../TransferOwnerShipDialog";
 import ViewHistoryDialog from "../ViewHistory";
+import EditOwnerDetailDialog from "../EditOwnerDetail";
 import "./index.css";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
@@ -196,6 +197,10 @@ class OwnerInfo extends Component {
     viewHistory: false,
     docRequired: false,
     ownershipInfo: {},
+    editOwnerDetail:false,
+    editOwnerData:[],
+    fullPopertyData :[],
+    indexData:''
   };
   openApplyDocsUI = () => {
 
@@ -319,7 +324,40 @@ class OwnerInfo extends Component {
       console.log(e);
     }
   }
+
+  // getPropertyOwnerResponse = async (propertyId, tenantId, dialogName)=>{
+  //   const queryObject = [
+  //     { key: "propertyIds", value: propertyId },
+  //     { key: "tenantId", value: tenantId },
+  //     { key: "audit", value: true }
+  //   ];
+  //   let editOwnerData = [];
+    
+  //   try {
+  //     const payload = await httpRequest(
+  //       "property-services/property/_search",
+  //       "_search",
+  //       queryObject
+  //     );
+  //     if (payload && payload.Properties.length > 0) {
   
+  //       payload.Properties = this.getUniqueList(payload.Properties);
+  //       payload.Properties.map((item) => {
+  //         // let lastModifiedDate = item.auditDetails.lastModifiedTime;
+  //         // if (!editOwnerData[lastModifiedDate]) {
+  //         //   editOwnerData[lastModifiedDate] = [];
+  //         // }
+  //         item.owners = item.owners.filter(owner => owner.status == "ACTIVE")
+  //         editOwnerData.push(item)
+  //       });
+  //       // editOwnerData.push(payload.Properties[0])
+       
+  //       this.setState({editOwnerDetail: true, editOwnerData})
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
   openDialog = async (dialogName) => {
     const { properties } = this.props;
     const { propertyId, tenantId } = properties;
@@ -354,13 +392,25 @@ class OwnerInfo extends Component {
     }
   };
 
+openDialogOwner = async (dialogName, perOwnerDeatail, index)=>{
+  const { properties } = this.props;
+  const { propertyId, tenantId } = properties;
+let editOwnerData = [];
+ if(dialogName === "editownerDetail"){
+   console.log(perOwnerDeatail,"perOwnerDeatail")
+   editOwnerData.push(perOwnerDeatail)
+    // await this.getPropertyOwnerResponse(propertyId, tenantId, dialogName);
+    this.setState({editOwnerDetail: true, editOwnerData ,indexData: index})
+  }
+}
   closeDialogue = (dialogName) => {
+    this.setState({editOwnerDetail: false})
     this.setState({ [dialogName]: false });
   };
 
 
   render() {
-    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue, mdmsMutationDocuments, OldProperty, showTransferOwner } = this.props;
+    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, viewOwnerDetail, totalBillAmountDue, mdmsMutationDocuments, OldProperty, showTransferOwner } = this.props;
     let ownerInfo = [];
     let multipleOwner = false;
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
@@ -414,6 +464,10 @@ class OwnerInfo extends Component {
                     )}
                   </div>
                   {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>}
+                  {properties.ownershipCategory== "INDIVIDUAL.SINGLEOWNER"? viewOwnerDetail&&<div style={{marginLeft:"630px"}}>
+                                <EditOwenerNameAndPhone ownerDetail={ownerInfo} index={0} perOwner={ownerInfo[0].items} openDialogOwner= {this.openDialogOwner}/>
+                              </div>:''
+                              }
                   {/* Transfer ownership button and View History button */}
                   {(viewHistory || ownershipTransfer) && showTransferOwner && !!transferAllowed && (
                     <div id="pt-header-button-container" className="header-button-container">
@@ -422,7 +476,7 @@ class OwnerInfo extends Component {
                     </div>
                   )}
                   {/* ------------------------- */}
-                </div>
+                </div>               
                 <div>
                   {ownerInfo.map((ownerItem, ind) => {
                     return (
@@ -437,6 +491,11 @@ class OwnerInfo extends Component {
                                   secondaryText={"-" + (ind + 1)}
                                   fontSize="18px"
                                 />
+                                
+                              }
+                              {properties.ownershipCategory== "INDIVIDUAL.MULTIPLEOWNERS"? viewOwnerDetail&&<div>
+                                <EditOwenerNameAndPhone ownerDetail={ownerInfo} index={ind} perOwner={ownerItem.items} openDialogOwner= {this.openDialogOwner}/>
+                              </div>:''
                               }
                             </div>
                           </div>
@@ -479,6 +538,17 @@ class OwnerInfo extends Component {
             ownershipInfo={this.state.ownershipInfo}
             closeDialogue={() => this.closeDialogue("viewHistory")}
           ></ViewHistoryDialog>
+        )}
+
+{this.state.editOwnerDetail && (
+          <EditOwnerDetailDialog
+            open={this.state.editOwnerDetail}
+            ownerDetail={this.state.editOwnerData}
+            tenantId={properties.tenantId}
+            consumerCode={properties.propertyId}
+            indexDataDetail = {this.state.indexData}
+            closeDialogue={() => this.closeDialogue("editownerDetail")}
+          ></EditOwnerDetailDialog>
         )}
       </div>
     );

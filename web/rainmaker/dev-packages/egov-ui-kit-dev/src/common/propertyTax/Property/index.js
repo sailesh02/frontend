@@ -325,7 +325,7 @@ class Property extends Component {
     } = this.props;
 
     let userInfo = JSON.parse(getUserInfo());
-    console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",new Date(1623153780253))
+    // console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",new Date(1623153780253))
     const { closeYearRangeDialogue } = this;
     const { closeEditMobileDialog } = this;
     const { dialogueOpen, urlToAppend, showAssessmentHistory,editMobileOpen } = this.state;

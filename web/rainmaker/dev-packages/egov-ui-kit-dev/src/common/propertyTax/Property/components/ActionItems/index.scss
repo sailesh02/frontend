@@ -33,3 +33,23 @@
         margin-right: -10px;
     }
   }
+
+  .edit-ownerShip{
+    border: 1px solid rgb(254, 122, 81);
+    background-color: transparent;
+    box-shadow: none !important;
+    button{
+        box-shadow: none !important;
+        div{
+            box-shadow: none !important;
+            div {
+                height: 30px;
+                background-color: transparent !important;
+                box-shadow: none !important;
+                span {
+                 
+                }
+            }
+        }
+    }
+  }

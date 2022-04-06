@@ -149,7 +149,7 @@ export const getLatestPropertyDetails = (propertyDetailsArray) => {
 
 export const getCurrentFinancialYear = () => {
   var today = new Date();
-  var curMonth = today.getMonth();
+  var curMonth = today.getMonth()+1;
   var fiscalYr = "";
   if (curMonth > 3) {
     var nextYr1 = (today.getFullYear() + 1).toString();

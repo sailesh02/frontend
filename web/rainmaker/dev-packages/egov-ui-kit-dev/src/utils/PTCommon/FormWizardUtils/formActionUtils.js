@@ -24,7 +24,7 @@ const getFinancialYear = () => {
     var today = new Date();
     
     //get current month
-    var curMonth = today.getMonth();
+    var curMonth = today.getMonth()+1;
     
     var fiscalYr = "";
     if (curMonth > 3) { //

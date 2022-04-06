@@ -281,7 +281,8 @@ export const getImportantDates = async (self) => {
       });
     }
   } catch (e) {
-    alert(e);
+    console.log(3, e)
+    // alert(e);
   }
 };
 
@@ -405,6 +406,7 @@ export const getCalculationScreenData = async (billingSlabs, tenantId, self) => 
       { key: "tenantId", value: tenantId },
     ]);
   } catch (e) {
+    // console.log(e.message,"4444")
     alert(e.message);
   }
 

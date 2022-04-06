@@ -3370,8 +3370,7 @@ export const applyReplaceMeter = async (state, dispatch) => {
         payload.meterInstallationDate = convertDateToEpoch(replaceMeterScreen && replaceMeterScreen.meterInstallationDate)
     }
     payload.meterId = replaceMeterScreen.meterId;
-    payload.additionalDetails.diameter = replaceMeterScreen.additionalDetails.diameter;
-    payload.additionalDetails.initialMeterReading = replaceMeterScreen.additionalDetails.initialMeterReading;
+    payload.additionalDetails.initialMeterReading = parseInt(replaceMeterScreen.additionalDetails.initialMeterReading);
     payload.additionalDetails.maxMeterDigits = replaceMeterScreen.additionalDetails.maxMeterDigits;
     payload.additionalDetails.meterMake = replaceMeterScreen.additionalDetails.meterMake;
     payload.additionalDetails.meterReadingRatio = replaceMeterScreen.additionalDetails.meterReadingRatio;
@@ -3381,14 +3380,11 @@ export const applyReplaceMeter = async (state, dispatch) => {
     let response;
 
     try {
-        if(payload && applicationNo && applicationNo !== undefined && applicationNo !== "" && applicationType && applicationType === "METER_REPLACEMENT"){
+        if(payload && applicationNo && applicationNo !== undefined && applicationNo !== "" && applicationType && applicationType === "METER_REPLACEMENT" && payload && payload.applicationStatus === "INITIATED"){
             //set(payload, "applicationType", "METER_REPLACEMENT");
-            if(payload && payload.applicationStatus === "INITIATED"){
+            //if(payload && payload.applicationStatus === "INITIATED"){
                 set(payload, "processInstance.action", "SUBMIT_APPLICATION");
-            }
-            if(payload && payload.applicationStatus === "PENDING_FOR_APPROVAL"){
-                set(payload, "processInstance.action", "APPROVE_CONNECTION");
-            }
+            //}
             await httpRequest("post", "ws-services/wc/_update", "", [], { WaterConnection: payload });
             let searchQueryObject = [{ key: "tenantId", value: payload.tenantId }, { key: "applicationNumber", value: applicationNo }];
             let searchResponse = await getSearchResultsOfApp(searchQueryObject);
@@ -3401,10 +3397,18 @@ export const applyReplaceMeter = async (state, dispatch) => {
             console.log(response, "Nero responsess")
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection[0]));
         }
-
+        setApplicationNumberBoxForMeterReplaceScreen(state, dispatch);
         return true;
     } catch (error) {
-        console.log(error, "Error")
+        store.dispatch(toggleSnackbar(
+            true,
+            {
+              labelName: "API Error",
+              labelKey: error.message,
+            },
+            "error"
+          ));
+        console.log(error, "Nero Error")
         return false;   
     }
     
@@ -3439,4 +3443,17 @@ export const applyReplaceMeter = async (state, dispatch) => {
     }
     //console.log
 
+}
+
+const setApplicationNumberBoxForMeterReplaceScreen = (state, dispatch) => {
+    let applicationNumber = get(state, "screenConfiguration.preparedFinalObject.WaterConnection.applicationNo", null);
+   
+    if (applicationNumber) {
+        handleApplicationNumberDisplayForMeterReplaceScreen(dispatch, applicationNumber)
+    }
+};
+
+export const handleApplicationNumberDisplayForMeterReplaceScreen = (dispatch, applicationNumber) => {
+    dispatch(handleField("replaceMeter", "components.div.children.headerDiv.children.header.children.applicationNumberWater", "visible", true));
+    dispatch(handleField("replaceMeter", "components.div.children.headerDiv.children.header.children.applicationNumberWater", "props.number", applicationNumber));
 }

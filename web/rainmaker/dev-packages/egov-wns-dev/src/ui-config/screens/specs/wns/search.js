@@ -201,7 +201,7 @@ const employeeSearchResults = {
                   {code:"WS_VOLUMETRIC_CHARGES_BUTTON",active:true},
                   {code: "WS_DEMAND_ADJUSTMENT_BUTTON", active: true},
                   {code: "WS_VIEW_PAYMENT_HISTORY_BUTTON", active: true},
-                  ifUserRoleExists('SYSTEM') ? {code:"WS_BILL_GENERATE_BATCH_BUTTON",active:true}:''
+                  ifUserRoleExists('WS_BILL_GENERATOR') ? {code:"WS_BILL_GENERATE_BATCH_BUTTON",active:true}:''
                   
                 ]
                   :
@@ -209,7 +209,7 @@ const employeeSearchResults = {
                   [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},
                   {code: "WS_BULK_METER_READING_BUTTON", active: true},
                   {code: "WS_VIEW_PAYMENT_HISTORY_BUTTON", active: true},
-                  ifUserRoleExists('SYSTEM') ? {code:"WS_BILL_GENERATE_BATCH_BUTTON",active:true}:''
+                  ifUserRoleExists('WS_BILL_GENERATOR') ? {code:"WS_BILL_GENERATE_BATCH_BUTTON",active:true}:''
                   ]
                   :
                   (ifUserRoleExists('WS_APPROVER'))?
@@ -217,14 +217,14 @@ const employeeSearchResults = {
                   {code:"WS_VOLUMETRIC_CHARGES_BUTTON",active:true},
                   {code:"WS_BILL_GENERATE_BATCH_BUTTON",active:true},
                   
-                  ifUserRoleExists('SYSTEM') ? {code:"WS_BILL_GENERATE_BATCH_BUTTON",active:true}:''
+                  ifUserRoleExists('WS_BILL_GENERATOR') ? {code:"WS_BILL_GENERATE_BATCH_BUTTON",active:true}:''
                   ]
                   :
                   ifUserRoleExists('WS_DEMAND_CORRECTOR')?
                   [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true},
                   {code: "WS_DEMAND_ADJUSTMENT_BUTTON", active: true}]
                   :
-                  ifUserRoleExists('SYSTEM')?
+                  ifUserRoleExists('WS_BILL_GENERATOR')?
                   [{code: "WS_BILL_GENERATE_BATCH_BUTTON", active: true}]
                   :
                 [{code: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON", active: true}]

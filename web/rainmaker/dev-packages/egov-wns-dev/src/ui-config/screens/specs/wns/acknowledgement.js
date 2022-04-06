@@ -51,6 +51,14 @@ const headerRowInformationUpdate = getCommonContainer({
   }),
 });
 
+const headerForMeterReplace = getCommonContainer({
+  header: getCommonHeader({
+    labelKey: "WS_APPLICATION_METER_REPLACEMENT_HEADER",
+  }),
+});
+
+
+
 const headerForCloseConnection = getCommonContainer({
   header: getCommonHeader({
     labelKey: "WS_APPLICATION_NEW_CLOSE_CONNECTION_HEADER",
@@ -138,7 +146,9 @@ const connectionHeader = (state,
    purpose == "reconnection" ? headerForReconnection :
    purpose == "ownershipTransfer" ? headerForOwnershipTransfer :
    purpose == "triggerBillGenerationBatch" ? headerFortriggerBillGenerationBatch :
-   purpose == "update"? headerRowInformationUpdate: headerrow 
+   purpose == "update"? headerRowInformationUpdate: 
+   purpose == "applymeterreplace" || "approve_meter_replace"? headerForMeterReplace: headerrow 
+
  console.log(purpose, "purposepurpose")
   return getCommonContainer({
     headerDiv: {
@@ -325,6 +335,95 @@ const getAcknowledgementCard = (
       iframeForPdf: {
         uiFramework: "custom-atoms",
         componentPath: "Div"
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  }
+  else if (purpose === "applymeterreplace" && status === "success") {
+    return {
+      commonHeader: connectionHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant,
+        purpose),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          // style: {
+          //   position: "absolute",
+          //   width: "95%"
+          // }
+        },
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Thank you for submitting the Application",
+              labelKey: "WS_APPLICATION_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                " A notification regarding application submission has been sent at registered mobile no. Please note the application no. for future reference. ",
+              labelKey: "WS_APPLICATION_SUCCESS_ACKO_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application Number.",
+              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  }
+  else if (purpose === "approve_meter_replace" && status === "success") {
+    loadReceiptGenerationData(applicationNumber, tenant);
+    return {
+      commonHeader: connectionHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant,
+        purpose),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application is Approved Successfully",
+              labelKey: "WS_APPROVAL_CHECKLIST_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding Approval connection has been sent to registered Mobile No.",
+              labelKey: "WS_APPROVAL_CHECKLIST_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application Number.",
+              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
       },
       applicationSuccessFooter: applicationSuccessFooter(
         state,

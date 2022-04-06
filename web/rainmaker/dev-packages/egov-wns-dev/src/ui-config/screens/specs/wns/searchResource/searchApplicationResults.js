@@ -131,7 +131,7 @@ const getApplicationDetails = data => {
   }
   else {
     store.dispatch(
-      setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}`)
+      setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}&applicationType=${data.rowData[2].replace(" ","_")}`)
     )
   }
 }

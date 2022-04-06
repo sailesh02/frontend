@@ -79,6 +79,10 @@ const MaxMeterDigitsUpdateLink = Loadable({
   loader: () => import("./MaxMeterDigitsUpdateLink"),
   loading: () => <Loading />
 });
+const LinkItem = Loadable({
+  loader: () => import("./LinkItem"),
+  loading: () => <Loading />
+});
 
 export {
   TestAtoms,
@@ -96,5 +100,6 @@ export {
   SnackbarWarning,
   TotalBill,
   MultiAutoSuggest,
-  MaxMeterDigitsUpdateLink
+  MaxMeterDigitsUpdateLink,
+  LinkItem
 };

@@ -10,11 +10,12 @@ import {
 import { connect } from "react-redux";
 import { Grid, Typography,  } from "@material-ui/core";
 import { Container } from "egov-ui-framework/ui-atoms";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import store from "ui-redux/store";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+// import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 const bodyStyle = {
   backgroundColor: "#FFFFFF",
@@ -126,14 +127,23 @@ class EditOwnerDetailDialog extends Component {
                   }
                   return updatePropertyResponse;
               } catch(err){
-                 store.dispatch(toggleSnackbar(true, { labelName: err.message }, "error"));
+                this.props.toggleSnackbarAndSetText(
+                  true,
+                { labelName:"Same input not allow" , labelKey:"Same input not allow"},
+                  "error"
+                );
                   console.log(err)
               }
            
           
           }
         } catch (e) {
-          store.dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
+          this.props.toggleSnackbarAndSetText(
+            true,
+          { labelName:e.message, labelKey: e.message},
+            "error"
+          );
+          // store.dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
           console.log(e);
         }
 }
@@ -219,7 +229,7 @@ render() {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchProperties: (queryObjectProperty) => store.dispatch(fetchProperties(queryObjectProperty)),
-   
+    toggleSnackbarAndSetText: (open, message, error) => store.dispatch(toggleSnackbarAndSetText(open, message, error)),
   };
 };
 

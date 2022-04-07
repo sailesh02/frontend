@@ -13,7 +13,8 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 const styles = {
  // color: "rgba(0, 0, 0, 0.87)",
   lineHeight: "35px",
-  fontSize: "16px"
+  fontSize: "16px",
+  marginRight: "20px"
 };
 
 const clickHereStyles = {
@@ -65,21 +66,19 @@ class MaxMeterDigitsUpdateLink extends React.Component {
     let payload = waterUpdatePayload;
     payload.applicationType = "UPDATE_MAX_METER_DIGITS"
     payload.additionalDetails.maxMeterDigits = maxMeterDigits;
-    console.log(waterUpdatePayload, "Nero water");
-    // return false;
+    
     store.dispatch(toggleSpinner())
-    setTimeout(async () => {
       try {
         let updateConnection = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: payload });
         this.closeDialogue()
         //let purpose = this.state.dialogButton == "WS_DISCONNECT_CONNECTION" ? "disconnect" : this.state.dialogButton == "WS_RECONNECTION" ? "reconnection" : "closeConnection";
         let status = "success";
-        window.location.href = `employee/wns/acknowledgement?purpose=update&status=${status}&tenantId=${tenantId}`
-        // store.dispatch(
-        //   setRoute(
-        //     `/wns/acknowledgement?purpose=update&status=${status}&tenantId=${tenantId}`
-        //   )
-        // );
+       
+        store.dispatch(
+          setRoute(
+            `/wns/acknowledgement?purpose=update&status=${status}&tenantId=${tenantId}`
+          )
+        );
         store.dispatch(hideSpinner())
 
       } catch (err) {
@@ -94,7 +93,7 @@ class MaxMeterDigitsUpdateLink extends React.Component {
           "error"
         ));
       }
-    }, 2000)
+   // }, 2000)
   }else{
     store.dispatch(toggleSnackbar(
       true,

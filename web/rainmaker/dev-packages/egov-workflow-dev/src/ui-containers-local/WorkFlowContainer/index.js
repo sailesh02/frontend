@@ -133,6 +133,12 @@ class WorkFlowContainer extends React.Component {
         return "purpose=schedule&status=success";
       case "RESCHEDULE":
         return "purpose=reschedule&status=success";
+      case "METER_REPLACE_SUBMIT_APPLICATION":
+        return "purpose=applymeterreplace&status=success";  
+      case "METER_REPLACE_APPROVE_APPLICATION":
+        return "purpose=approve_meter_replace&status=success";  
+  
+          
     }
   };
 
@@ -466,7 +472,13 @@ console.log(BPADocs, "bpa docs")
         else path = "Licenses[0].licenseNumber";
         const licenseNumber = get(payload, path, "");
         if (redirectQueryString) {
-          this.props.setRoute(`acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`);
+          if(data.applicationType === "METER_REPLACEMENT" && label === "SUBMIT_APPLICATION"){
+            this.props.setRoute(`acknowledgement?${this.getPurposeString("METER_REPLACE_SUBMIT_APPLICATION")}&${redirectQueryString}`);
+          }else if(data.applicationType === "METER_REPLACEMENT" && label === "APPROVE_CONNECTION"){
+            this.props.setRoute(`acknowledgement?${this.getPurposeString("METER_REPLACE_APPROVE_APPLICATION")}&${redirectQueryString}`);
+          }else{
+            this.props.setRoute(`acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`);
+          }
         } else {
           this.props.setRoute(`acknowledgement?${this.getPurposeString(
             label
@@ -757,6 +769,14 @@ console.log(BPADocs, "bpa docs")
       if(applicationState != "PENDING_FOR_APPROVAL")
       state.isStateUpdatable = true
     }
+    if (moduleName === "WSReplaceMeter"){
+      if(applicationState === "INITIATED"){
+      state.isStateUpdatable = true
+      }else{
+        state.isStateUpdatable = false
+      }
+    }
+   
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
       editAction = {

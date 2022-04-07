@@ -32,16 +32,21 @@ let service = getQueryArg(window.location.href, "service");
 let serviceModuleName = (service === serviceConst.WATER) ? "NewWS1" : "NewSW1";
 let serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/ws-services/wc/_update";
 let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-let editredirect = `apply?${redirectQueryString}&action=edit`;
+let editredirect = `apply?${redirectQueryString}&action=edit`; 
 let headerLabel = "WS_TASK_DETAILS"
+let applicationType = getQueryArg(window.location.href, "applicationType");
 
 const resetData = () => {
+  
   applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   service = getQueryArg(window.location.href, "service");
   serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
   serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
   redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
   editredirect = `apply?${redirectQueryString}&action=edit`;
+  if(applicationType === "METER_REPLACEMENT"){
+    editredirect = `replaceMeter?${redirectQueryString}&action=edit`;
+  }
   if (isModifyMode()) {
     redirectQueryString += '&mode=MODIFY';
     editredirect += '&mode=MODIFY&modeaction=edit';
@@ -845,7 +850,19 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     }
   }
 
-
+  let applicationType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationType");
+  console.log(applicationType, "Nero Application")
+  if(getQueryArg(window.location.href, "applicationType") === "METER_REPLACEMENT" || applicationType === "METER_REPLACEMENT"){
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.estimate",
+          "visible",
+          false
+        )
+      );
+    }
+  
 };
 
 let titleText = "";

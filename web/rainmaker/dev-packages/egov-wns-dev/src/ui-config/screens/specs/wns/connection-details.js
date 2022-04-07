@@ -368,6 +368,20 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       true
     ))
   }  
+
+  const connectionType = connectionObj && connectionObj.length > 0
+  ? connectionObj[0].connectionType
+  : "";
+
+  if(connectionType == "Metered"){
+    dispatch(handleField(
+      "connection-details",
+      "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.headerDiv.children.replaceMeterButton",
+      "visible",
+      true
+    ))
+  }
+
 };
 
 const beforeInitFn = async (action, state, dispatch, connectionNumber,service) => {

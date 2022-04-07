@@ -12,6 +12,7 @@ import { handleService } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import store from "ui-redux/store";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 export const showConfirmationBox = () => {
   let screenKey = "connection-details";
@@ -76,7 +77,18 @@ const connectionType = getQueryArg(window.location.href, "connectionType")
           moduleName: "egov-wns",
           componentPath: "MaxMeterDigitsUpdateLink",
           
-        }
+        },
+        // replaceMeterLink: {
+        //   uiFramework: "custom-atoms-local",
+        //   moduleName: "egov-wns",
+        //   componentPath: "LinkItem",
+        //   props: {
+        //     label: "WS_REPLACE_METER_LABEL",
+        //     redirectPath: `replaceMeter?connectionNumber=${connectionNumber}&tenantId=${tenantId}`
+        //   }
+        // },
+
+        
       })
     } else {
       return getCommonContainer({
@@ -129,8 +141,7 @@ const connectionType = getQueryArg(window.location.href, "connectionType")
           uiFramework: "custom-atoms-local",
           moduleName: "egov-wns",
           componentPath: "MaxMeterDigitsUpdateLink",
-          
-        }
+         },
       })
     } else {
       return getCommonContainer({
@@ -196,7 +207,7 @@ const connectionType = getQueryArg(window.location.href, "connectionType")
           moduleName: "egov-wns",
           componentPath: "MaxMeterDigitsUpdateLink",
           
-        }
+        },
       })
     } else {
       return getCommonContainer({
@@ -214,6 +225,18 @@ const connectionType = getQueryArg(window.location.href, "connectionType")
       })
     }
   }
+}
+export const onClickReplaceMeter = async (state, dispatch) => {
+ 
+  const tenantId = getTenantIdCommon()
+  const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+
+  dispatch(
+    setRoute(
+      `/wns/replaceMeter?connectionNumber=${connectionNumber}&tenantId=${tenantId}`
+    )
+  );
+
 }
 
 export const getServiceDetails = () => {
@@ -234,7 +257,38 @@ export const getServiceDetails = () => {
           ...getCommonSubHeader({
             labelKey: "WS_COMMON_SERV_DETAIL"
           })
-        }
+        },
+        replaceMeterButton: {
+          componentPath: "Button",
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            align: "right"
+          },
+          visible:false,
+          props: {
+            variant: "contained",
+            style: {
+              color: "white",
+              margin: "8px",
+              backgroundColor: "rgb(254, 122, 81)",
+              borderRadius: "2px",
+              width: "220px",
+              height: "48px",
+              marginTop:'-27px'
+            },
+            
+          },
+          children: {
+            buttonLabel: getLabel({
+              labelKey: "WS_REPLACE_METER_LABEL"
+            })
+          },
+          onClickDefination: {
+            action: "condition",
+            callBack: onClickReplaceMeter
+          }
+        },
       }
     },
     viewOne: renderService()

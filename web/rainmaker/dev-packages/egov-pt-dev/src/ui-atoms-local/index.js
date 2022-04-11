@@ -59,6 +59,10 @@ const Button = Loadable({
   loader: () => import("./Button"),
   loading: () => <Loading />
 });
+const TotalBill = Loadable({
+  loader: () => import("./TotalBill"),
+  loading: () => <Loading />
+});
 
 export {
   TestAtoms,
@@ -72,5 +76,6 @@ export {
   MyApplicationIcon,
   PropertyIdContainer,
   pdfHeader,
-  Button
+  Button,
+  TotalBill
 };

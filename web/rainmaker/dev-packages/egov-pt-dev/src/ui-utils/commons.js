@@ -126,6 +126,33 @@ export const getSearchResults = async (queryObject, requestBody) => {
   }
 };
 
+
+
+export const getDemandSearchResult = async (queryObject, dispatch) => {
+  // store.dispatch(toggleSpinner());
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/demand/_search",
+      "_search",
+      queryObject
+    );
+    // store.dispatch(toggleSpinner());
+ return response;
+   
+  } catch (error) {
+    // store.dispatch(toggleSpinner());
+  store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error, "fetxh");
+  }
+};
+
 export const createUpdatePTApplication = async (state, dispatch, status) => {
   let nocId = get(
     state,

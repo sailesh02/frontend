@@ -57,6 +57,10 @@ const HowItWorks = Loadable({
   loading: () => <Loading />
 });
 
+const DemandAdjustMent = Loadable({
+  loader: () => import("./DemandAdjustMent"),
+  loading: () => <Loading />
+})
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -68,5 +72,6 @@ export {
   FeesEstimateCard,
   DividerWithLabel,
   Table,
-  HowItWorks
+  HowItWorks,
+  DemandAdjustMent
 };

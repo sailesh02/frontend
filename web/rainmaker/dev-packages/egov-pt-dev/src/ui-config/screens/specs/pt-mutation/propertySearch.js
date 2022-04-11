@@ -1,5 +1,5 @@
 import commonConfig from "config/common.js";
-import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getBreak, getCommonHeader, getLabel , getSelectField} from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject ,unMountScreen} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, getRequiredDocData,showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -9,7 +9,7 @@ import { resetFields } from "./mutation-methods";
 import propertySearchTabs from "./property-search-tabs";
 import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 let userInfo = JSON.parse(getUserInfo());
 const roleCodes =
     userInfo && userInfo.roles
@@ -148,55 +148,93 @@ const screenConfig = {
               },
               ...header
             },
-            newApplicationButton: {
-              componentPath: "Button",
-              gridDefination: {
-                xs: 12,
-                sm: 6,
-                align: "right"
-              },
-              visible: showAddProperty,
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px"
-                }
-              },
 
-              children: {
-                plusIconInsideButton: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "add",
-                    style: {
-                      fontSize: "24px"
-                    }
-                  }
+            propertyTaxType: {
+              ...getSelectField({
+                label: {
+                  labelName: "Action",
+                  labelKey: "PT_HOME_SEARCH_ACTION_BUTTON"
                 },
+                placeholder: {
+                  labelName: "Select Action",
+                  labelKey: "PT_HOME_SEARCH_ACTION_BUTTON_PLACEHOLDER"
+                },
+                jsonPath: "EmpApplyAppsFor",
+                props: {
+                  className: "tl-trade-type"
+                },
+                data: roleCodes.includes("PT_APPROVER")&& roleCodes.includes('PT_DEMAND_CORRECTOR')?[{code: "PT_DEMAND_ADJUSTMENT_BUTTON", active: true},
+                showAddProperty?  {code: "PT_ADD_NEW_PROPERTY_BUTTON", active: true}:""]:
+                [ showAddProperty?  {code: "PT_ADD_NEW_PROPERTY_BUTTON", active: true}:""]
+              
+              }),
+               afterFieldChange: (action, state, dispatch) => {
 
-                buttonLabel: getLabel({
-                  labelName: "Add New Property",
-                  labelKey: "PT_ADD_NEW_PROPERTY_BUTTON"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  showHideAdhocPopup(state, dispatch, "propertySearch");
+                  if(action.value == "PT_ADD_NEW_PROPERTY_BUTTON"){
+                    showHideAdhocPopup(state, dispatch, "propertySearch");
+                  }else if(action.value == "PT_DEMAND_ADJUSTMENT_BUTTON"){
+                    dispatch(
+                      setRoute(`/pt-mutation/demand-adjust-search?purpose=DEMAND_ADJUST`)
+                    )
+                  }
 
-                }
-              },
-              // roleDefination: {
-              //   rolePath: "user-info.roles",
-              //   path : "tradelicence/apply"
+                 
+               }
+            },
 
-              // }
-            }
+
+
+
+
+            // newApplicationButton: {
+            //   componentPath: "Button",
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 6,
+            //     align: "right"
+            //   },
+            //   visible: showAddProperty,
+            //   props: {
+            //     variant: "contained",
+            //     color: "primary",
+            //     style: {
+            //       color: "white",
+            //       borderRadius: "2px",
+            //       width: "250px",
+            //       height: "48px"
+            //     }
+            //   },
+
+            //   children: {
+            //     plusIconInsideButton: {
+            //       uiFramework: "custom-atoms",
+            //       componentPath: "Icon",
+            //       props: {
+            //         iconName: "add",
+            //         style: {
+            //           fontSize: "24px"
+            //         }
+            //       }
+            //     },
+
+            //     buttonLabel: getLabel({
+            //       labelName: "Add New Property",
+            //       labelKey: "PT_ADD_NEW_PROPERTY_BUTTON" 
+            //     })
+            //   },
+            //   onClickDefination: {
+            //     action: "condition",
+            //     callBack: (state, dispatch) => {
+            //       showHideAdhocPopup(state, dispatch, "propertySearch");
+
+            //     }
+            //   },
+            //   // roleDefination: {
+            //   //   rolePath: "user-info.roles",
+            //   //   path : "tradelicence/apply"
+
+            //   // }
+            // }
           }
         },
         propertySearchTabs,

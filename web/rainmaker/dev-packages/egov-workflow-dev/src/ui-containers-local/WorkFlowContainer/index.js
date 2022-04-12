@@ -436,6 +436,45 @@ console.log(BPADocs, "bpa docs")
       }
 
  console.log(data , "Nero h new")
+  
+ 
+ if(moduleName === "BPA"){
+  let appStatus = data.status;
+  if(appStatus && (appStatus == "APP_L1_VERIFICATION_INPROGRESS" || appStatus == "APP_L2_VERIFICATION_INPROGRESS" || appStatus == "APP_L3_VERIFICATION_INPROGRESS" || appStatus == "APPROVAL_INPROGRESS")){
+    const feeAmount = get(
+      data,
+      "additionalDetails.sanctionFeeAdjustmentAmount",
+      "NODATA"
+    );
+    
+    const feeAmountAdjustReason = get(
+      data,
+      "additionalDetails.modificationReasonSanctionFeeAdjustmentAmount",
+      "NODATA"
+    );
+    const sanctionFeeCardEnabled = get(
+      data,
+      "additionalDetails.sanctionFeeCardEnabled",
+      false
+    );
+console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
+  //  if(sanctionFeeCardEnabled && feeAmount !== "" && feeAmount !== undefined && feeAmountAdjustReason !== "" && feeAmountAdjustReason !== undefined){
+      if(sanctionFeeCardEnabled && (feeAmount == "NODATA" || feeAmountAdjustReason == "NODATA")){
+    // }else{
+      this.props.hideSpinner();
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Documents Required",
+          labelKey: "Please enter valid sanction fee amount details"
+        },
+        "error"
+      );
+      return;
+    }
+  }
+ }
+ console.log(data , "Nero h new a")
  //return false;
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data

@@ -65,8 +65,9 @@ export const TransferOwnership = ({ ownershipTransfer, openDialog }) => {
 };
 
 export const EditOwenerNameAndPhone = ({ ownerDetail, openDialogOwner , perOwner, index}) => {
+  const appName = process.env.REACT_APP_NAME === "Employee";
   return (
-    ownerDetail && (
+    ownerDetail&&appName== true && (
       <Button
         className="edit-ownerShip"
         label={

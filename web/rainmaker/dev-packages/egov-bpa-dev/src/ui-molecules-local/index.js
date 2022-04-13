@@ -152,6 +152,10 @@ const PBATrainingTutorials = Loadable({
   loader: () => import("./PBATrainingTutorials"),
   loading: () => <Loading />
 });
+const BpaSanctionFeesCard = Loadable({
+  loader: () => import("./BpaSanctionFeesCard"),
+  loading: () => <Loading />
+});
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -184,5 +188,6 @@ export {
   NocData,
   BPAHowItWorks,
   TrainingTutorials,
-  PBATrainingTutorials
+  PBATrainingTutorials,
+  BpaSanctionFeesCard
 };

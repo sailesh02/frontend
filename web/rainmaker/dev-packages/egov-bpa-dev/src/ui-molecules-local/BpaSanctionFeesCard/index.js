@@ -77,12 +77,10 @@ function totalAmount(arr) {
     .reduce((prev, next) => prev + next, 0);
 }
 
-function BpaFeesEstimateCard(props) {
+function BpaSanctionFeesCard(props) {
   const { classes, estimate } = props;
   const total = totalAmount(estimate.fees);
-  let applicationStatus = estimate.applicationStatus;
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
-  const isPaid = (applicationStatus === 'INITIATED' || applicationStatus === 'CITIZEN_APPROVAL_INPROCESS' || applicationStatus === 'INPROGRESS' || applicationStatus === 'PENDING_APPL_FEE')?false:true;
   return (
     <Grid container>
       <Grid item={true} xs={12} sm={7}>
@@ -172,22 +170,6 @@ function BpaFeesEstimateCard(props) {
         <Typography className={totalHeadClassName} align="right">
           Rs {total}
         </Typography>
-        { isPaid? (
-                    <Typography variant="body2" align="right"  style={{ color: 'green' }}>
-                      <LabelContainer
-                        labelName="Paid Successfully"
-                        labelKey="BPA_COMMON_PAID_SUCCESS"
-                      />
-                    </Typography>
-                    ):(
-                    <Typography variant="body2" align="right" style={{ color: 'red' }}>
-                      <LabelContainer
-                        labelName="Not Paid"
-                        labelKey="BPA_COMMON_NOT_PAID"
-                      />
-                      </Typography> 
-                    )
-                }
         {estimate.extra && estimate.extra.length !== 0 ? (
           <Card className={classes.whiteCard}>
             {estimate.extra.map((item, key) => {
@@ -226,4 +208,4 @@ function BpaFeesEstimateCard(props) {
   );
 }
 
-export default withStyles(styles)(BpaFeesEstimateCard);
+export default withStyles(styles)(BpaSanctionFeesCard);

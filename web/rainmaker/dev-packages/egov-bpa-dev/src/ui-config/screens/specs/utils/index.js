@@ -5993,3 +5993,174 @@ export const getPermitDetailForPc = async (state, dispatch, fieldInfo) => {
   dispatch(prepareFinalObject("bpaDetails", bpaDetails));
   dispatch(prepareFinalObject(`BPA.landInfo`, get(bpaDetails, "landInfo", {})));
 }
+
+export const createSacntionFeeBill = async (apiPayload, dispatch) => {
+  console.log(apiPayload, "Nero apiPayload")
+  try {
+    const response = await httpRequest("post", "/bpa-services/v1/bpa/_estimate", "", [], { CalulationCriteria: apiPayload });
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error, "fetxh");
+  }
+
+  //await httpRequest("post", "ws-services/wc/_update", "", [], { WaterConnection: payload });
+};
+
+export const generateBillForSanctionFee = async (bpaObject, edcrObject, dispatch, applicationNumber, tenantId, jsonPath) => {
+
+  console.log(bpaObject, edcrObject, "Nero Edcr")
+
+ // return;
+  try {
+    if (applicationNumber && tenantId) {
+      let riskType = edcrObject && edcrObject.planDetail.planInformation.riskType
+      bpaObject.BPA[0].riskType = riskType;
+      console.log(bpaObject, edcrObject, "Nero Edcr 12")
+      let apiPayload = [
+        {
+          BPA: bpaObject && bpaObject.BPA[0],
+          applicationNo: applicationNumber,
+         // applicationType: edcrObject && edcrObject.appliactionType,
+          feeType: jsonPath === "applyScreenMdmsData.sanctionFeeCardData"? "SanctionFee": "ApplicationFee",
+         // serviceType: edcrObject && edcrObject.applicationSubType,
+          tenantId: tenantId,
+          "applicationType": "BUILDING_PLAN_SCRUTINY",
+          "serviceType": "NEW_CONSTRUCTION"
+        }
+      ];
+      
+      const payload = await createSacntionFeeBill(apiPayload, dispatch);
+      console.log(payload, "Nero sanc fee Api response")
+      if (payload && payload.Calculations && payload.Calculations.length > 0) {
+
+        if(payload.Calculations[0].feetype == "ApplicationFee"){
+          const estimateData = createSanctionFeeData(payload.Calculations, "appfee");
+          estimateData &&
+            estimateData.length &&
+            dispatch(
+              prepareFinalObject(
+                jsonPath,
+                estimateData
+              )
+            );
+        }else{
+          const estimateData = createSanctionFeeData(payload.Calculations, "sancfee");
+          estimateData &&
+            estimateData.length &&
+            dispatch(
+              prepareFinalObject(
+                jsonPath,
+                estimateData
+              )
+            );
+        }
+        
+        
+      }
+
+      
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const createSanctionFeeData = (billDetails, feetype) => {
+    //let billDetails;
+    // if(feetype === "sancfee"){
+    //  billDetails =  [
+    //       {
+    //           "applicationNumber": null,
+    //           "BPA": {},
+    //           "tenantId": "od.cuttack",
+    //           "taxHeadEstimates": [
+    //               {
+    //                   "taxHeadCode": "BPA_SANC_SANC_FEE",
+    //                   "estimateAmount": 4773,
+    //                   "category": "FEE"
+    //               },
+    //               {
+    //                   "taxHeadCode": "BPA_SANC_WORKER_WELFARE_CESS",
+    //                   "estimateAmount": 61137,
+    //                   "category": "FEE"
+    //               },
+    //               {
+    //                   "taxHeadCode": "BPA_SANC_SHELTER_FEE",
+    //                   "estimateAmount": 0,
+    //                   "category": "FEE"
+    //               },
+    //               {
+    //                   "taxHeadCode": "BPA_SANC_TEMP_RETENTION_FEE",
+    //                   "estimateAmount": 2000,
+    //                   "category": "FEE"
+    //               },
+    //               {
+    //                   "taxHeadCode": "BPA_SANC_SECURITY_DEPOSIT",
+    //                   "estimateAmount": 0,
+    //                   "category": "FEE"
+    //               },
+    //               {
+    //                   "taxHeadCode": "BPA_SANC_PUR_FAR",
+    //                   "estimateAmount": 4950,
+    //                   "category": "FEE"
+    //               },
+    //               {
+    //                   "taxHeadCode": "BPA_SANC_EIDP_FEE",
+    //                   "estimateAmount": 0,
+    //                   "category": "FEE"
+    //               }
+    //           ],
+    //           "feeType": "SanctionFee"
+    //       }
+    //   ];
+    //   }else{
+    //     billDetails =  [
+    //       {
+    //           "applicationNumber": null,
+    //           "BPA": {},
+    //           "tenantId": "od.cuttack",
+    //           "taxHeadEstimates": [
+    //               {
+    //                   "taxHeadCode": "BPA_BLDNG_OPRN_FEE",
+    //                   "estimateAmount": 1225,
+    //                   "category": "FEE"
+    //               }
+                  
+    //           ],
+    //           "feeType": "ApplicationFee"
+    //       }
+    //   ];
+    // }
+    
+
+  //const billDetails
+  // let fees =
+  //   billDetails &&
+  //   billDetails[0].taxHeadEstimates &&
+  //   billDetails[0].taxHeadEstimates.map(item => {
+  //     return {
+  //       name: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode },
+  //       value: item.estimateAmount,
+  //       info: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode }
+  //     };
+  //   });
+  
+  let fees =
+    billDetails &&
+    billDetails[0].taxHeadEstimates &&
+    billDetails[0].taxHeadEstimates.map(item => {
+      return {
+        name: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode },
+        value: item.estimateAmount,
+        info: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode }
+      };
+    });
+  return fees;
+};

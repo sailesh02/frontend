@@ -34,7 +34,8 @@ import {
   revocationPdfDownload,
   setProposedBuildingData,
   prepareNocFinalCards,
-  compare
+  compare,
+  generateBillForSanctionFee
 } from "../utils/index";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved } from "./searchResource/citizenFooter";
@@ -42,6 +43,7 @@ import { applicantSummary, institutionSummary } from "./summaryResource/applican
 import { basicSummary } from "./summaryResource/basicSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
+import { sanctionFeeSummary } from "./summaryResource/sanctionFeeSummary";
 import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary";
 import { fieldSummary } from "./summaryResource/fieldSummary";
 import { reviewPdfSignDetails } from './summaryResource/review-pdfSign.js'
@@ -52,6 +54,7 @@ import store from "ui-redux/store";
 import commonConfig from "config/common.js";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { additionalDocsInformation } from "./applyResource/documentDetails";
+import { sanctionFeeAdjustmentDetails } from "./applyResource/sanctionFeeAdjustmentDetails";
 
 const closePdfSigningPopup = (refreshType) => {
   store.dispatch(
@@ -626,10 +629,23 @@ const setSearchResponse = async (
     );
   }
 
+  let appStatus = get(response, "BPA[0].status", '');
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary.visible",
-    (get(response, "BPA[0].status") == "CITIZEN_APPROVAL_INPROCESS")
+    (appStatus && (appStatus == "CITIZEN_APPROVAL_INPROCESS" || appStatus == "APP_L1_VERIFICATION_INPROGRESS" || appStatus == "APP_L2_VERIFICATION_INPROGRESS" || appStatus == "APP_L3_VERIFICATION_INPROGRESS" || appStatus == "APPROVAL_INPROGRESS"))
+  );
+
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.sanctionFeeSummary.visible",
+    (appStatus && (appStatus == "APP_L1_VERIFICATION_INPROGRESS" || appStatus == "APP_L2_VERIFICATION_INPROGRESS" || appStatus == "APP_L3_VERIFICATION_INPROGRESS" || appStatus == "APPROVAL_INPROGRESS"))
+  );
+
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.sanctionFeeAdjustFormCard.visible",
+    (appStatus && (appStatus == "APP_L1_VERIFICATION_INPROGRESS" || appStatus == "APP_L2_VERIFICATION_INPROGRESS" || appStatus == "APP_L3_VERIFICATION_INPROGRESS" || appStatus == "APPROVAL_INPROGRESS"))
   );
   let edcrRes = await edcrHttpRequest(
     "post",
@@ -638,6 +654,16 @@ const setSearchResponse = async (
   );
 
   dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
+
+
+  
+  /*********Call Sanction Fee Api and save it in State********/
+  if(appStatus && (appStatus == "APP_L1_VERIFICATION_INPROGRESS" || appStatus == "APP_L2_VERIFICATION_INPROGRESS" || appStatus == "APP_L3_VERIFICATION_INPROGRESS" || appStatus == "APPROVAL_INPROGRESS")){
+    generateBillForSanctionFee(response, edcrRes && edcrRes.edcrDetail[0], dispatch, applicationNumber, tenantId, "applyScreenMdmsData.sanctionFeeCardData");
+    generateBillForSanctionFee(response, edcrRes && edcrRes.edcrDetail[0], dispatch, applicationNumber, tenantId, "applyScreenMdmsData.estimateCardData");
+    }
+   // dispatch(prepareFinalObject("BPA.additionalDetails.sanctionFeeCardEnabled", false));
+  /*******************/
 
   let additionalDocTypes = ["DocTypes1", "DocTypes1", "DocTypes2", "DocTypes3", "DocTypes4", "DocTypes5", "DocTypes6", "DocTypes7"];
 
@@ -1228,6 +1254,19 @@ const screenConfig = {
         },
         body: getCommonCard({
           estimateSummary: estimateSummary,
+          sanctionFeeSummary: sanctionFeeSummary,
+          sanctionFeeAdjustFormCard: {
+            uiFramework: "custom-atoms",
+            componentPath: "Form",
+            props: {
+              id: "sanction_fee_adjust_card_form"
+            },
+            children: {
+              apint: getCommonCard({ sanctionFeeAdjustmentDetails })
+  
+            },
+            visible: true
+          },
           reviewPdfSignDetails : reviewPdfSignDetails,
           fieldSummary: fieldSummary,
           fieldinspectionSummary: fieldinspectionSummary,

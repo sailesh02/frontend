@@ -136,6 +136,10 @@ const TriggerNOCContainer =  Loadable({
   loader: () => import("./TriggerNOCContainer"),
   loading: () => <Loading />
 });
+const BpaSanctionFeeCardContainer =  Loadable({
+  loader: () => import("./BpaSanctionFeeCardContainer"),
+  loading: () => <Loading />
+});
 
 export {
   CustomTabContainer,
@@ -163,5 +167,6 @@ export {
   DownloadFileContainerForFI,
   PreviewContainer,
   TextAreaContainer,
-  TriggerNOCContainer
+  TriggerNOCContainer,
+  BpaSanctionFeeCardContainer
 };

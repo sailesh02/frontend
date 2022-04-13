@@ -643,7 +643,6 @@ const callBackForPay = async (state, dispatch) => {
         "Payments[0].paymentDetails[0].receiptNumber",
         null
       );
-
       // Search NOC application and update action to PAY
       const consumerCode = getQueryArg(window.location, "consumerCode");
       const tenantId = getQueryArg(window.location, "tenantId");

@@ -39,6 +39,16 @@ const labelStyle = {
     outline: "none",
     alignItems: "right",
   };
+  const buttonStyleDisabled = {
+    lineHeight: "35px",
+    height: "100%",
+    backgroundColor: "gray",
+    boxShadow: "none",
+    border: "none",
+    borderRadius: "2px",
+    outline: "none",
+    alignItems: "right",
+  };
 const contentStyle = {
   width: "100%",
   maxWidth: "fit-content",
@@ -49,7 +59,7 @@ class EditOwnerDetailDialog extends Component {
       ownerMobileNumber:this.props.ownerDetail&& this.props.ownerDetail[0][4].value?this.props.ownerDetail[0][4].value:'',
     ownerNameError : '',
     ownerMobileNumberError :'',
-    
+    disabledAPiCal:false
     }
 
     
@@ -57,6 +67,17 @@ class EditOwnerDetailDialog extends Component {
         this.setState({[e.target.name] : e.target.value} , ()=>{
             this.checkError()
         })
+        if(this.props.ownerDetail&& this.props.ownerDetail[0][0].value !== this.state.ownerName&&this.props.ownerDetail&& this.props.ownerDetail[0][4].value !== this.state.ownerMobileNumber){
+          this.setState({disabledAPiCal:true})
+        }
+        else if(this.props.ownerDetail&& this.props.ownerDetail[0][0].value !== this.state.ownerName){
+          this.setState({disabledAPiCal:true})
+        }else if(this.props.ownerDetail&& this.props.ownerDetail[0][4].value !== this.state.ownerMobileNumber){
+          this.setState({disabledAPiCal:true})
+        }
+        else{
+          this.setState({disabledAPiCal:false})
+        }
     }
 
   
@@ -196,20 +217,32 @@ render() {
                       />
                  <div style={{color:"red"}}>{this.state.ownerMobileNumberError}</div>
                             </Grid>
-                            
-                          <Grid item xs= {12} >
-                            <Button
-                  className="update-ownerDetail"
-                  style={{float: "right"}}
-                  label={
-                    <Label buttonLabel={true} label="Update" color="#FFFFFF" fontSize="16px" height="40px" labelStyle={labelStyle} />
-                  }
-                  buttonStyle={buttonStyle}
-                  onClick={(e) => {
-                    this.UpdateDetails(e);
-                  }}
-                ></Button>
-                      </Grid>
+                            {this.state.disabledAPiCal == true?
+                              <Grid item xs= {12} >
+                               <Button
+                     className="update-ownerDetail"
+                     style={{float: "right"}}
+                     label={
+                       <Label buttonLabel={true} label="Update" color="#FFFFFF" fontSize="16px" height="40px" labelStyle={labelStyle} />
+                     }
+                     buttonStyle={buttonStyle}
+                     onClick={(e) => {
+                       this.UpdateDetails(e);
+                     }}
+                   ></Button>
+                         </Grid>
+                          :   <Grid item xs= {12} >
+                          <Button
+                className="update-ownerDetail"
+                style={{float: "right"}}
+                label={
+                  <Label buttonLabel={true} label="Update"  color="#FFFFFF" fontSize="16px" height="40px" labelStyle={labelStyle} />
+                }
+                buttonStyle={buttonStyleDisabled}
+              
+              ></Button>
+                    </Grid> }
+                       
                     </Grid>
         </div>
       ]}

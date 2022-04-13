@@ -336,7 +336,7 @@ const formConfig = {
       errorMessage: "PT_PROPERTY_OTHERDUES_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
-      pattern: /^[0-9+-]{0,49}?$/,
+      pattern: /^([0-9][0-9]{0,49})(\.\d{1,2})?$/,
       required: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         if(field && field.value && field.value != " " && field.value != 0){

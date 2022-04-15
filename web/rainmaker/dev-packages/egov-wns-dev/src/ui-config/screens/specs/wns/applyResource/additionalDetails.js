@@ -271,6 +271,31 @@ export const additionDetails = getCommonCard({
                 );
 
 
+                if(connectionCategory == "PERMANENT" && (usageCategory === "BPL" || usageCategory === "DOMESTIC")){
+                  dispatch(
+                    handleField(
+                      "apply",
+                      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+                      "visible",
+                      true
+                    )
+                  );
+                  getInstallmentCard(dispatch, state)
+                }
+
+                if(connectionCategory == "TEMPORARY" && usageCategory === "DOMESTIC"){
+                  dispatch(
+                    handleField(
+                      "apply",
+                      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer.children.cardContent.children.activeDetails.children.isInstallmentApplicable`,
+                      "visible",
+                      true
+                    )
+                  );
+                  getInstallmentCard(dispatch, state)
+                }
+
+
               }else{
 
                 if(connectionCategory == "PERMANENT" && (usageCategory === "BPL" || usageCategory === "DOMESTIC")){

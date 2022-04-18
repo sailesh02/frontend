@@ -406,9 +406,9 @@ const callBackForNext = async (state, dispatch) => {
       // }
     }
     prepareDocumentsUploadData(state, dispatch);
-    if(isModifyMode() && process.env.REACT_APP_NAME === "Employee"  && connectionCategory === 'PERMANENT' && connectionType === "Non Metered"){
+    if(isModifyMode() && process.env.REACT_APP_NAME === "Employee"  && connectionCategory === 'PERMANENT'){
       getInstallmentCard(dispatch, state);
-    }else if(isModifyMode() && process.env.REACT_APP_NAME === "Employee" && connectionCategory === 'TEMPORARY' && connectionType === "Non Metered"){
+    }else if(isModifyMode() && process.env.REACT_APP_NAME === "Employee" && connectionCategory === 'TEMPORARY'){
       getInstallmentCard(dispatch, state);
     }
     // else if(isModifyMode() && process.env.REACT_APP_NAME === "Employee" && connectionCategory === 'TEMPORARY' && connectionType === "Metered"){
@@ -483,9 +483,9 @@ const callBackForNext = async (state, dispatch) => {
     }
 
 
-if(!isModifyMode() && process.env.REACT_APP_NAME === "Employee" && connectionCategory === 'PERMANENT' && connectionType === "Non Metered"){
+if(!isModifyMode() && process.env.REACT_APP_NAME === "Employee" && connectionCategory === 'PERMANENT'){
   getInstallmentCard(dispatch, state);
-}else if(!isModifyMode() && process.env.REACT_APP_NAME === "Employee" && connectionCategory === 'TEMPORARY' && connectionType === "Non Metered"){
+}else if(!isModifyMode() && process.env.REACT_APP_NAME === "Employee" && connectionCategory === 'TEMPORARY'){
   getInstallmentCard(dispatch, state);
 }
 // else if(!isModifyMode() && process.env.REACT_APP_NAME === "Employee" && connectionCategory === 'TEMPORARY' && connectionType === "Metered"){
@@ -1195,7 +1195,7 @@ export const getInstallmentCard = (dispatch, state) => {
     let usageCategory = get(state, "screenConfiguration.preparedFinalObject.applyScreen.usageCategory")
     let isApartment = get(state, "screenConfiguration.preparedFinalObject.applyScreen.apartment")
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType")
-    
+    console.log(connectionCategory, usageCategory, isApartment, connectionType, "Nero connectionType")
       if(process.env.REACT_APP_NAME === "Employee"){
           if (waterData && waterData.length > 0){
             
@@ -1279,7 +1279,35 @@ export const getInstallmentCard = (dispatch, state) => {
          // showHideLabourAndScrutinyFeeFeilds(dispatch, "INITIALIZE", state);
 
 
+          }else if(connectionType === "Metered" && connectionCategory == "PERMANENT" && (!isApartment || isApartment=="No")){
+            dispatch(
+              handleField(
+                "apply",
+                `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.paymentDetailsContainer`,
+                "visible",
+                true
+              )
+            );
+            
+          if(usageCategory == "DOMESTIC"){
+
+            
+            showHideLabourAndScrutinyFeeFeilds(dispatch, "DO_NOTHING", state);
+          }else if(usageCategory == "BPL"){
+
+            
+            showHideLabourAndScrutinyFeeFeilds(dispatch, "HIDE_SCRUTINY", state);
+
           }else{
+
+            
+            showHideLabourAndScrutinyFeeFeilds(dispatch, "HIDE_FEE_CARD", state);  
+
+          }
+  
+          showHideLabourAndScrutinyFeeFeilds(dispatch, "INITIALIZE", state);
+  
+        }else{
             
             showHideLabourAndScrutinyFeeFeilds(dispatch, "HIDE_FEE_CARD", state);
           }

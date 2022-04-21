@@ -16,6 +16,21 @@
     }
 }
 
+.edit-owner-name{
+    box-shadow: none !important;
+    border: 2px solid rgb(254, 122, 81) !important;
+    background-color: transparent !important;
+    padding: 1px;
+    button{
+        height: 20px !important;
+        line-height: 0 !important;
+        background-color: transparent !important;
+    }
+}
+.view-history-button {
+    margin-left: 20px;
+}
+
 @media only screen and (max-width: 768px) {
     .transfer-ownership {
         button {
@@ -34,22 +49,3 @@
     }
   }
 
-  .edit-ownerShip{
-    border: 1px solid rgb(254, 122, 81);
-    background-color: transparent;
-    box-shadow: none !important;
-    button{
-        box-shadow: none !important;
-        div{
-            box-shadow: none !important;
-            div {
-                height: 30px;
-                background-color: transparent !important;
-                box-shadow: none !important;
-                span {
-                 
-                }
-            }
-        }
-    }
-  }

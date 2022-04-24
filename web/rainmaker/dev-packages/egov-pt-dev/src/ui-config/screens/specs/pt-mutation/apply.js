@@ -726,7 +726,10 @@ const screenConfig = {
       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
-
+    dispatch(prepareFinalObject(
+      "EmpApplyAppsForDemands",
+      "PT_ACTION_BUTTON_PLACEHOLDER"
+    ))
     return action;
   },
   components: {

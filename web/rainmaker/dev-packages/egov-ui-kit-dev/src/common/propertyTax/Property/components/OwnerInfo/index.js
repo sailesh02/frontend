@@ -464,17 +464,19 @@ let editOwnerData = [];
                     )}
                   </div>
                   {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>}
-                  {properties.ownershipCategory== "INDIVIDUAL.SINGLEOWNER"? viewOwnerDetail&&<div style={{marginLeft:"630px"}}>
+                  <div id="pt-header-button-container" className="header-button-container">
+                  {properties.ownershipCategory== "INDIVIDUAL.SINGLEOWNER"? viewOwnerDetail&&<div className="styleOwner">
                                 <EditOwenerNameAndPhone ownerDetail={ownerInfo} index={0} perOwner={ownerInfo[0].items} openDialogOwner= {this.openDialogOwner}/>
                               </div>:''
                               }
                   {/* Transfer ownership button and View History button */}
                   {(viewHistory || ownershipTransfer) && showTransferOwner && !!transferAllowed && (
-                    <div id="pt-header-button-container" className="header-button-container">
+                  <div style={{display:"flex"}}>
                       <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} />
                       <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />
-                    </div>
+                 </div>
                   )}
+                     </div>
                   {/* ------------------------- */}
                 </div>               
                 <div>

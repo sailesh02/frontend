@@ -44,6 +44,10 @@ export const resetFields = (state, dispatch) => {
     "ptDemandsSearchScreen.ids",
     ""
   ))
+  dispatch(prepareFinalObject(
+    "EmpApplyAppsForDemands",
+    "PT_ACTION_BUTTON_PLACEHOLDER"
+  ))
 }
 
 
@@ -58,7 +62,10 @@ const getAddress = (item) => {
 
 const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
-
+  dispatch(prepareFinalObject(
+    "EmpApplyAppsForDemands",
+    "PT_ACTION_BUTTON_PLACEHOLDER"
+  ))
 
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,

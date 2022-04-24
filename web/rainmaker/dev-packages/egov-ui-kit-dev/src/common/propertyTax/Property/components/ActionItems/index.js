@@ -9,6 +9,10 @@ const labelStyle = {
   fontWeight: "500",
   lineHeight: "40px",
 };
+const labelStyleEdit = {
+  fontWeight: "600",
+  marginTop:"-3px"
+}
 const buttonStyle = {
   lineHeight: "35px",
   height: "100%",
@@ -53,7 +57,7 @@ export const TransferOwnership = ({ ownershipTransfer, openDialog }) => {
       <Button
         className="transfer-ownership"
         label={
-          <Label buttonLabel={true} label="PT_OWNERSHIP_TRANSFER" color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />
+          <Label buttonLabel={true} label="PT_OWNERSHIP_TRANSFER" color="rgb(254, 122, 81)" fontSize="13px" height="40px" labelStyle={labelStyle} />
         }
         buttonStyle={buttonStyle}
         onClick={() => {
@@ -69,9 +73,9 @@ export const EditOwenerNameAndPhone = ({ ownerDetail, openDialogOwner , perOwner
   return (
     ownerDetail&&appName== true && (
       <Button
-        className="edit-ownerShip"
+        className="edit-owner-name"
         label={
-          <Label buttonLabel={true} label="PT_EDIT" color="rgb(254, 122, 81)" fontSize="16px" height="30px" labelStyle={labelStyle} />
+          <Label buttonLabel={true} label="PT_EDIT" color="rgb(254, 122, 81)" fontSize="13px" height="20px" labelStyle={labelStyleEdit}/>
         }
         // buttonStyle={buttonStyle}
         onClick={() => {

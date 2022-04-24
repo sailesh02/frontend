@@ -71,6 +71,10 @@ const header = getCommonContainer({
 });
 const beforeInitFn = (action, state, dispatch, consumerCode, tenantId, bService)=>{
   searchApiCall( dispatch, consumerCode, tenantId, bService)
+  dispatch(prepareFinalObject(
+    "EmpApplyAppsForDemands",
+    "PT_ACTION_BUTTON_PLACEHOLDER"
+  ))
 }
 
 const screenConfig = {

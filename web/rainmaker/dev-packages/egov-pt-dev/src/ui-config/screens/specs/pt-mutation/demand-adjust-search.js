@@ -67,6 +67,10 @@ const employeeSearchResults = {
     // resetFields(state, dispatch);
     dispatch(unMountScreen("search-preview"));
     getMDMSData(action, dispatch);
+    dispatch(prepareFinalObject(
+      "EmpApplyAppsForDemands",
+      "PT_ACTION_BUTTON_PLACEHOLDER"
+    ))
     return action;
   },
   components: {

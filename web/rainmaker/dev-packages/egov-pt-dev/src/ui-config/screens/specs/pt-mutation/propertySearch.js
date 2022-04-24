@@ -124,6 +124,10 @@ const screenConfig = {
     resetFields(state, dispatch);
     dispatch(unMountScreen("search-preview"));
     getMDMSData(action, dispatch);
+    dispatch(prepareFinalObject(
+      "EmpApplyAppsForDemands",
+      "PT_ACTION_BUTTON_PLACEHOLDER"
+    ))
     return action;
   },
 
@@ -156,26 +160,30 @@ const screenConfig = {
                   labelKey: "PT_HOME_SEARCH_ACTION_BUTTON"
                 },
                 placeholder: {
-                  labelName: "Select Action",
-                  labelKey: "PT_HOME_SEARCH_ACTION_BUTTON_PLACEHOLDER"
+                  labelName: "",
+                  labelKey: ""
                 },
-                jsonPath: "EmpApplyAppsFor",
+                jsonPath: "EmpApplyAppsForDemands",
                 props: {
                   className: "tl-trade-type"
                 },
                 data: roleCodes.includes("PT_APPROVER")&& roleCodes.includes('PT_DEMAND_CORRECTOR')?[{code: "PT_DEMAND_ADJUSTMENT_BUTTON", active: true},
-                showAddProperty?  {code: "PT_ADD_NEW_PROPERTY_BUTTON", active: true}:""]:
-                [ showAddProperty?  {code: "PT_ADD_NEW_PROPERTY_BUTTON", active: true}:""]
+                showAddProperty?  {code: "PT_ADD_NEW_PROPERTY_BUTTON", active: true}:"", {code: "PT_ACTION_BUTTON_PLACEHOLDER", active: true}]:
+                [ showAddProperty?  {code: "PT_ADD_NEW_PROPERTY_BUTTON", active: true}:"", {code: "PT_ACTION_BUTTON_PLACEHOLDER", active: true}]
               
               }),
                afterFieldChange: (action, state, dispatch) => {
 
                   if(action.value == "PT_ADD_NEW_PROPERTY_BUTTON"){
                     showHideAdhocPopup(state, dispatch, "propertySearch");
+
                   }else if(action.value == "PT_DEMAND_ADJUSTMENT_BUTTON"){
                     dispatch(
                       setRoute(`/pt-mutation/demand-adjust-search?purpose=DEMAND_ADJUST`)
                     )
+                  }
+                  else if(action.value =="PT_ACTION_BUTTON_PLACEHOLDER"){
+                    dispatch(setRoute(`/pt-mutation/propertySearch`))
                   }
 
                  

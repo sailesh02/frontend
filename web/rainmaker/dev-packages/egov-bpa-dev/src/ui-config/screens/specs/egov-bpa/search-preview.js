@@ -645,7 +645,7 @@ const setSearchResponse = async (
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.sanctionFeeAdjustFormCard.visible",
-    (appStatus && (appStatus == "APP_L1_VERIFICATION_INPROGRESS" || appStatus == "APP_L2_VERIFICATION_INPROGRESS" || appStatus == "APP_L3_VERIFICATION_INPROGRESS" || appStatus == "APPROVAL_INPROGRESS"))
+    (process.env.REACT_APP_NAME === "Employee" && appStatus && (appStatus == "APP_L1_VERIFICATION_INPROGRESS" || appStatus == "APP_L2_VERIFICATION_INPROGRESS" || appStatus == "APP_L3_VERIFICATION_INPROGRESS" || appStatus == "APPROVAL_INPROGRESS"))
   );
   let edcrRes = await edcrHttpRequest(
     "post",

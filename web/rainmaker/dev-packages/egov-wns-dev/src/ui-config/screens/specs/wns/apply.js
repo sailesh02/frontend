@@ -1094,6 +1094,17 @@ export const getData = async (action, state, dispatch) => {
           )
         );
       }else{
+        if(isModifyMode()){
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.connectionType.props",
+              "disabled",
+              true
+            )
+          );
+                                            
+        }
         dispatch(
           handleField(
             "apply",
@@ -1355,6 +1366,8 @@ export const getData = async (action, state, dispatch) => {
       let docs = get(state, "screenConfiguration.preparedFinalObject");
       await prefillDocuments(docs, "displayDocs", dispatch);
     }
+
+    
   }
   // else if (propertyID) {
   //   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];

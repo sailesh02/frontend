@@ -64,11 +64,12 @@ export const bpaLocationDetails = getCommonCard(
               [{ key: "tenantId", value: action.value }],
               {}
             );
-            const mohallaData =
-              payload &&
+
+            let boundries = payload &&
               payload.TenantBoundary[0] &&
               payload.TenantBoundary[0].boundary &&
-              payload.TenantBoundary[0].boundary.reduce((result, item) => {
+              payload.TenantBoundary[0].boundary.filter(item => item.name !== "Other")
+            const mohallaData = boundries.reduce((result, item) => {
                 result.push({
                   ...item,
                   name: `${action.value

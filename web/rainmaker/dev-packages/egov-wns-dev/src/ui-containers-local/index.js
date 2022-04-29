@@ -67,6 +67,10 @@ const MultiAutoSuggestContainer = Loadable({
   loader: () => import("./MultiAutoSuggestContainer"),
   loading: () => <Loading />
 }); 
+const AdvAnnualPaymentEstimateCardContainer = Loadable({
+  loader: () => import("./AdvAnnualPaymentEstimateCardContainer"),
+  loading: () => <Loading />
+});
 
 export {
   CustomTabContainer,
@@ -82,5 +86,6 @@ export {
   ModificationDocumentListContainer,
   CheckboxContainerConnHolder,
   AutosuggestContainer,
-  MultiAutoSuggestContainer
+  MultiAutoSuggestContainer,
+  AdvAnnualPaymentEstimateCardContainer
 };

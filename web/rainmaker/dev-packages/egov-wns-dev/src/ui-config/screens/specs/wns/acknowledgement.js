@@ -2,7 +2,7 @@ import {
   getCommonHeader,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { applicationSuccessFooter, DownloadAndPrint } from "./acknowledgementResource/applicationSuccessFooter";
+import { applicationSuccessFooter, DownloadAndPrint, applicationSuccessFooterForAdvAnnualBill } from "./acknowledgementResource/applicationSuccessFooter";
 import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
 import { approvalSuccessFooter } from "./acknowledgementResource/approvalSuccessFooter";
 import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
@@ -54,6 +54,12 @@ const headerRowInformationUpdate = getCommonContainer({
 const headerForMeterReplace = getCommonContainer({
   header: getCommonHeader({
     labelKey: "WS_APPLICATION_METER_REPLACEMENT_HEADER",
+  }),
+});
+
+const headerForAdvAnnualPayment = getCommonContainer({
+  header: getCommonHeader({
+    labelKey: "WS_ADV_ANNUAL_PAYMENT_HEADER",
   }),
 });
 
@@ -147,7 +153,9 @@ const connectionHeader = (state,
    purpose == "ownershipTransfer" ? headerForOwnershipTransfer :
    purpose == "triggerBillGenerationBatch" ? headerFortriggerBillGenerationBatch :
    purpose == "update"? headerRowInformationUpdate: 
+   purpose == "advAnnualPayment" ? headerForAdvAnnualPayment:
    purpose == "applymeterreplace" || "approve_meter_replace"? headerForMeterReplace: headerrow 
+   
 
  console.log(purpose, "purposepurpose")
   return getCommonContainer({
@@ -279,6 +287,95 @@ const getAcknowledgementCard = (
             //   labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
             // },
             // number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  }
+  else if (purpose === "advAnnualPayment" && status === "success") {
+    return {
+      commonHeader: connectionHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant,
+        purpose),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          // style: {
+          //   position: "absolute",
+          //   width: "95%"
+          // }
+        },
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Advanced Annual Payment applied successfully",
+              labelKey: "WS_ADV_ANNUAL_PAYMENT_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              // labelName:
+              //   " A notification regarding application submission has been sent at registered mobile no. Please note the application no. for future reference. ",
+              // labelKey: "WS_APPLICATION_SUCCESS_ACKO_MESSAGE_SUB"
+            },
+            // tailText: {
+            //   labelName: "Application Number.",
+            //   labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+            // },
+            // number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      applicationSuccessFooter: applicationSuccessFooterForAdvAnnualBill(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  }
+  else if (purpose === "advAnnualPayment" && status === "failure") {
+    return {
+      commonHeader: connectionHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant,
+        purpose),
+      
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelName: "Advanced Annual Payment has failed!",
+              //labelKey: "WS_ADV_ANNUAL_APPLY_FAILED"
+              labelKey: "Advanced Annual Payment has failed!"
+            },
+            body: {
+              labelName:
+                "Advanced Annual payment processing failed! Please try again.",
+              labelKey: "Advanced Annual payment processing failed! Please try again."
+            }
           })
         }
       },

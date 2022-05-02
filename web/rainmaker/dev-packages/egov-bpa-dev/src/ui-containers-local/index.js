@@ -131,6 +131,10 @@ const TextAreaContainer = Loadable({
   loader: () => import("./TextAreaContainer"),
   loading: () => <Loading />
 });
+const TextAreaContainerForBpa = Loadable({
+  loader: () => import("./TextAreaContainerForBpa"),
+  loading: () => <Loading />
+});
 
 const TriggerNOCContainer =  Loadable({
   loader: () => import("./TriggerNOCContainer"),
@@ -168,5 +172,6 @@ export {
   PreviewContainer,
   TextAreaContainer,
   TriggerNOCContainer,
-  BpaSanctionFeeCardContainer
+  BpaSanctionFeeCardContainer,
+  TextAreaContainerForBpa
 };

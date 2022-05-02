@@ -48,7 +48,7 @@ import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary
 import { fieldSummary } from "./summaryResource/fieldSummary";
 import { reviewPdfSignDetails } from './summaryResource/review-pdfSign.js'
 import { previewSummary } from "./summaryResource/previewSummary";
-import { scrutinySummary } from "./summaryResource/scrutinySummary";
+import { scrutinySummary ,commentsContainer, commentsContainerMultiLine} from "./summaryResource/scrutinySummary";
 import { nocDetailsSearchBPA} from "./noc";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
@@ -85,7 +85,17 @@ export const ifUserRoleExists = role => {
     return true;
   } else return false;
 };
-
+const isEditButtonVisible = () => {
+  let users = JSON.parse(getUserInfo());
+  const roleCodes =
+  users && users.roles
+    && users.roles.map((role) => {
+      return role.code;
+    })
+  const isRoleExist = roleCodes.includes("BPA1_APPROVER") || roleCodes.includes("BPA2_APPROVER") || roleCodes.includes("BPA3_APPROVER") ||
+  roleCodes.includes("BPA4_APPROVER")
+  return isRoleExist
+}
 const titlebar = {
   uiFramework: "custom-atoms",
   componentPath: "Div",
@@ -647,6 +657,63 @@ const setSearchResponse = async (
     "screenConfig.components.div.children.body.children.cardContent.children.sanctionFeeAdjustFormCard.visible",
     (process.env.REACT_APP_NAME === "Employee" && appStatus && (appStatus == "APP_L1_VERIFICATION_INPROGRESS" || appStatus == "APP_L2_VERIFICATION_INPROGRESS" || appStatus == "APP_L3_VERIFICATION_INPROGRESS" || appStatus == "APPROVAL_INPROGRESS"))
   );
+
+
+const otherConditionData = response.BPA[0].additionalDetails&&response.BPA[0].additionalDetails.otherConditionsForPermitCertificate 
+let BpaData = !type || isUserEmployee === "EMPLOYEE"? get(response, "BPA[0].businessService"):"";
+console.log(BpaData,"BpaData")
+const validitionStatusForRole= appStatus && (appStatus == "APPROVAL_INPROGRESS"|| appStatus=="APP_L1_VERIFICATION_INPROGRESS"||appStatus=="APP_L2_VERIFICATION_INPROGRESS"|| appStatus=="APP_L3_VERIFICATION_INPROGRESS" && ifUserRoleExists('BPA1_APPROVER') || 
+      ifUserRoleExists('BPA2_APPROVER') || ifUserRoleExists('BPA3_APPROVER') || ifUserRoleExists('BPA4_APPROVER') ||ifUserRoleExists("BPA2_APP_L1_VERIFIER")||ifUserRoleExists("BPA3_APP_L1_VERIFIER") || ifUserRoleExists("BPA4_APP_L1_VERIFIER")|| ifUserRoleExists("BPA4_APP_L2_VERIFIER")|| ifUserRoleExists("BPA4_APP_L3_VERIFIER"))  
+      && process.env.REACT_APP_NAME != 'Citizen'&& (BpaData=="BPA1"||BpaData== "BPA2"||BpaData=="BPA3"||BpaData=== "BPA4")
+console.log(validitionStatusForRole,"validitionStatusForRole")
+
+
+  if(validitionStatusForRole== true){
+  if(otherConditionData&&otherConditionData.length>0){
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.commentsContainer.visible",
+        true
+      )
+    
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.otherConditionsForPermitCertificate.visible",
+        false
+      )
+  }
+  else{
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.commentsContainer.visible",
+        false
+      )
+    
+    
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.otherConditionsForPermitCertificate.visible",
+        true
+      
+      );
+    
+  }
+}else{
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.commentsContainer.visible",
+      false
+    )
+  
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.otherConditionsForPermitCertificate.visible",
+      false
+    )
+}
+
+ 
+
   let edcrRes = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
@@ -1159,7 +1226,7 @@ const screenConfig = {
     );
 
     dispatch(prepareFinalObject("nocDocumentsDetailsRedux", {}));
-
+   
     return action;
   },
   components: {
@@ -1267,6 +1334,8 @@ const screenConfig = {
             },
             visible: true
           },
+          otherConditionsForPermitCertificate: commentsContainerMultiLine,
+          commentsContainer : commentsContainer,
           reviewPdfSignDetails : reviewPdfSignDetails,
           fieldSummary: fieldSummary,
           fieldinspectionSummary: fieldinspectionSummary,
@@ -1312,7 +1381,16 @@ const screenConfig = {
          },
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
-    }
+    },
+    commentsPopup :{
+      uiFramework: "custom-containers-local",
+      componentPath: "TextAreaContainerForBpa",
+      moduleName: "egov-bpa",
+      visible: true,
+      props: {
+        open:false
+      }
+    },
   }
 };
 

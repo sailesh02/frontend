@@ -1,19 +1,20 @@
 import {
     getBreak,
-
-
-
-
-
+    getCommonCaption,
     getCommonCard, getCommonContainer,
     getCommonGrayCard,
     getCommonSubHeader,
     getLabel,
-    getLabelWithValue
+    getLabelWithValue,
+    getCommonValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA } from "../../utils/index";
 import { changeStep } from "../applyResource/footer";
+import {
+    handleScreenConfigurationFieldChange as handleField,
+    prepareFinalObject
+  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const getHeader = label => {
     return {
@@ -354,3 +355,183 @@ export const scrutinySummary = getCommonGrayCard({
 
     })
 });
+
+    const onClick = async (state, dispatch) => {
+  
+        dispatch(
+            handleField("search-preview", "components.commentsPopup", "props.open", true)
+         );
+    }
+    // added different function for rejection/approval note to handle grid
+    export const getLabelWithValueForRejectNote = (label, value, props = {}) => {
+        return {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          gridDefination: {
+            xs: 12,
+            sm: 12
+          },
+          props: {
+            style: {
+            marginBottom: "16px",
+            whiteSpace: "pre-wrap",
+            },
+            ...props
+          },
+          children: {
+            label: getCommonCaption(label),
+            value: getCommonValue(value)
+          }
+        };
+      };
+export const commentsContainerMultiLine = getCommonGrayCard({
+    
+    header: {
+        uiFramework: "custom-atoms",
+        componentPath: "Container",
+        props: {
+            style: { marginBottom: "10px" }
+        },
+        children: {
+            header: {
+                gridDefination: {
+                    xs: 8
+                },
+                ...getCommonSubHeader({
+                    labelName: "BPA_APPROVAL_REJECTION_NOTE_HEADER",
+                    labelKey: "Other Conditions For Permit Certificate"
+                })
+            },
+            editSection: {
+                componentPath: "Button",
+                props: {
+                    color: "primary",
+                    style: {
+                        marginTop: "-10px",
+                        marginRight: "-18px"
+                    }
+                },
+                gridDefination: {
+                    xs: 4,
+                    align: "right"
+                },
+                children: {
+                    editIcon: {
+                        uiFramework: "custom-atoms",
+                        componentPath: "Icon",
+                        props: {
+                            iconName: "edit"
+                        }
+                    },
+                    buttonLabel: getLabel({
+                        labelName: "Edit",
+                        labelKey: "BPA_SUMMARY_EDIT"
+                    })
+                },
+                onClickDefination: {
+                    action: "condition",
+                    callBack: (state, dispatch) => {
+                        onClick(state, dispatch);
+                    }
+                }
+            }
+        }
+    },
+    comments: {
+        uiFramework: "custom-molecules-local",
+        moduleName: "egov-bpa",
+        componentPath: "Table",
+        props: {
+            isApprover : true,
+            className: "mymuitable",
+            jsonPath: "approverNoteBPAArray",
+            style: { marginBottom: 20 },
+            columns: {
+                "Other conditions Note": {}
+            },
+            title: "",
+            options: {
+                filterType: "dropdown",
+                responsive: "stacked",
+                selectableRows: false,
+                pagination: false,
+                selectableRowsHeader: false,
+                sortFilterList: false,
+                sort: false,
+                filter: false,
+                search: false,
+                print: false,
+                download: false,
+                viewColumns: false,
+                rowHover: false                                            
+            }
+        },
+        // visible:false
+    }
+    });
+
+export const commentsContainer = getCommonGrayCard({
+    header: {
+        uiFramework: "custom-atoms",
+        componentPath: "Container",
+        props: {
+            style: { marginBottom: "10px" }
+        },
+        children: {
+            header: {
+                gridDefination: {
+                    xs: 8
+                },
+                ...getCommonSubHeader({
+                    labelName: "BPA_APPROVAL_REJECTION_NOTE_HEADER",
+                    labelKey: "Other Conditions For Permit Certificate"
+                })
+            },
+            editSection: {
+                componentPath: "Button",
+                props: {
+                    color: "primary",
+                    style: {
+                        marginTop: "-10px",
+                        marginRight: "-18px"
+                    }
+                },
+                gridDefination: {
+                    xs: 4,
+                    align: "right"
+                },
+                children: {
+                    editIcon: {
+                        uiFramework: "custom-atoms",
+                        componentPath: "Icon",
+                        props: {
+                            iconName: "edit"
+                        }
+                    },
+                    buttonLabel: getLabel({
+                        labelName: "Edit",
+                        labelKey: "BPA_SUMMARY_EDIT"
+                    })
+                },
+                onClickDefination: {
+                    action: "condition",
+                    callBack: (state, dispatch) => {
+                        onClick(state, dispatch);
+                    }
+                }
+            }
+        }
+    },
+    comments: getCommonContainer({
+        commentsField: getLabelWithValueForRejectNote(
+            {
+                labelName: "",
+                labelKey: "Other conditions Note"
+            },
+            {
+                jsonPath: "BPA.additionalDetails.otherConditionsForPermitCertificate",
+                callBack: checkValueForNA
+            }
+        )
+    })
+    });   

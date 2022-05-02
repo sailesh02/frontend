@@ -9,6 +9,8 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { generateWSAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateWSAcknowledgement";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import cloneDeep from "lodash/cloneDeep";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import store from "ui-redux/store";
 const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -264,6 +266,71 @@ export const applicationSuccessFooter = (
   /* Mseva 2.0 changes */
   const redirectionURL = roleExists ? "/" : "/inbox";
   return getCommonApplyFooter({
+    gotoHome: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+        style: {
+          minWidth: "15%",
+          height: "48px",
+          marginRight: "16px"
+        }
+      },
+      children: {
+        downloadReceiptButtonLabel: getLabel({
+          labelName: "HOME",
+          labelKey: "WS_COMMON_BUTTON_HOME"
+        })
+      },
+      onClickDefination: {
+        action: "page_change",
+        path: redirectionURL
+      }
+    },
+  });
+};
+
+const gotoDownloadReceiptPage = (mode, state, dispatch) => {
+  
+  const url = `demand-adjust-search?purpose=PRINT_RECEIPT`
+    store.dispatch(setRoute(url));
+}
+export const applicationSuccessFooterForAdvAnnualBill = (
+  state,
+  dispatch,
+  applicationNumber,
+  tenant
+) => {
+  //const baseURL = getBaseURL();
+  const roleExists = ifUserRoleExists("CITIZEN");
+  // const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
+  /* Mseva 2.0 changes */
+  const redirectionURL = roleExists ? "/" : "/inbox";
+  return getCommonApplyFooter({
+    downloadButton: {
+      componentPath: "Button",
+      props: {
+        variant: "outlined",
+        color: "primary",
+        style: {
+          minWidth: "200px",
+          height: "48px",
+          marginRight: "16px"
+        }
+      },
+      children: {
+        downloadButton: getLabel({
+          labelKey: "WS_DOWNLOAD_RECEIPT"
+        })
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+          gotoDownloadReceiptPage(state, dispatch);
+        }
+      },
+    },
     gotoHome: {
       componentPath: "Button",
       props: {

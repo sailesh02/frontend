@@ -114,6 +114,15 @@ const ChipsInput = Loadable({
   loading: () => <Loading />
 })
 
+const AdvAnnualPaymentEstimateCard = Loadable({
+  loader: () => import("./AdvAnnualPaymentEstimateCard"),
+  loading: () => <Loading />
+})
+const netAdvAnnualPaymentEstimateCard = Loadable({
+  loader: () => import("./netAdvAnnualPaymentEstimateCard"),
+  loading: () => <Loading />
+})
+
 export {
   TestMolecules,
   Tooltip,
@@ -137,5 +146,7 @@ export {
   ActionFooter,
   ConfirmationDialog,
   ChipsInput,
-  DemandAdjustMent
+  DemandAdjustMent,
+  AdvAnnualPaymentEstimateCard,
+  netAdvAnnualPaymentEstimateCard
 };

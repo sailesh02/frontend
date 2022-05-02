@@ -133,6 +133,28 @@ export const getFeesEstimateCard = props => {
   };
 };
 
+export const getAdvAnnualPaymentEstimateCard = props => {
+  const { sourceJsonPath, ...rest } = props;
+  return {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-wns",
+    componentPath: "AdvAnnualPaymentEstimateCardContainer",
+    props: {
+      sourceJsonPath,
+      ...rest
+    }
+  };
+};
+export const getNetAdvAnnualPaymentEstimateCard = () => {
+  //const { sourceJsonPath, ...rest } = props;
+  return {
+    uiFramework: "custom-molecules-local",
+    moduleName: "egov-wns",
+    componentPath: "netAdvAnnualPaymentEstimateCard",
+    
+  };
+};
+
 const style = {
   textfieldIcon: {
     position: "relative",

@@ -82,7 +82,10 @@ const screenConfig = {
         totalAmount:{
           uiFramework: "custom-atoms-local",
           moduleName: "egov-wns",
-          componentPath: "TotalBill"
+          componentPath: "TotalBill",
+          props:{
+            label: "WS_COMMON_TOTAL_AMT"
+          }
         },
         
         viewTwo: {

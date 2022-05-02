@@ -3457,3 +3457,57 @@ export const handleApplicationNumberDisplayForMeterReplaceScreen = (dispatch, ap
     dispatch(handleField("replaceMeter", "components.div.children.headerDiv.children.header.children.applicationNumberWater", "visible", true));
     dispatch(handleField("replaceMeter", "components.div.children.headerDiv.children.header.children.applicationNumberWater", "props.number", applicationNumber));
 }
+
+export const getAdvAnnualPaymentEstimate = async(state, dispatch,tenantId, consumerCode) => {
+    let apiPayload = [
+      {
+        connectionNo: consumerCode,
+        tenantId: tenantId
+      }
+    ];
+  
+    try {
+      const response = await httpRequest("post", "ws-calculator/waterCalculator/annualAdvance/_estimate", "", [], { isconnectionCalculation: true, CalculationCriteria: apiPayload });
+      
+
+      if(response && response.annualPaymentDetails){
+        dispatch(handleField("advAnnualPayment", "components.div.children.advAnnualPaymentAlreadyAppliedCard", "visible", false));
+        dispatch(prepareFinalObject("advAnnualPaymentData", response.annualPaymentDetails));
+      }
+      return response;
+    } catch (error) {
+      
+    
+      
+      dispatch(handleField("advAnnualPayment", "components.div.children.viewBillFooter", "visible", false));
+      dispatch(handleField("advAnnualPayment", "components.div.children.viewBill.children.cardContent.children.estimate", "visible", false));
+      dispatch(handleField("advAnnualPayment", "components.div.children.viewBill.children.cardContent.children.netAnnualPayment", "visible", false));
+      dispatch(handleField("advAnnualPayment", "components.div.children.totalAmount", "visible", false));
+      
+      
+      
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: error.message, labelKey: error.message },
+          "error"
+        )
+      );
+      console.log(error.code, "fetxh");
+    }
+
+
+    
+    // let res = {
+    //     "tenantid": "od.cuttack",
+    //     "consumerCode": "WS/CTC/029640",
+    //     "waterCharge": 1319.70,
+    //     "sewerageCharge": 0.00,
+    //     "rebate": -65.99,
+    //     "netAnnualAdvancePayable": 1254
+    // };
+
+    
+
+    
+  }

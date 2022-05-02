@@ -58,7 +58,8 @@ class TotalBillContainer extends React.Component {
   }
 
   render() {
-    return <div style={styles}><LabelContainer labelKey="WS_COMMON_TOTAL_AMT" />: Rs {this.state.totalAmount} </div>;
+    let {label} = this.props;
+    return <div style={styles}><LabelContainer labelKey={label} />: Rs {this.state.totalAmount} </div>;
   }
 }
 

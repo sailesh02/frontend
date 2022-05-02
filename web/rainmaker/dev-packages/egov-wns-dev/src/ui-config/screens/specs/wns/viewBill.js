@@ -10,7 +10,7 @@ import {
   getFeesEstimateCard,
   showHideAdhocPopup
  } from "../utils";
-import { getProperty } from "./viewBillResource/propertyDetails";
+import { getProperty, getAdvAnualPaymentButton } from "./viewBillResource/propertyDetails";
 import { getOwner } from "./viewBillResource/ownerDetails";
 import { getService } from "./viewBillResource/serviceDetails";
 import { viewBillFooter } from "./viewBillResource/viewBillFooter";
@@ -112,6 +112,9 @@ const fetchMDMSForBillPeriod = async(action,state,dispatch) => {
             }]},
             { "moduleName": "ws-services-calculation", "masterDetails": [{
               "name":"Rebate"
+            },
+            {
+              "name":"AnnualAdvance"
             }]}
           ]
         }
@@ -119,6 +122,24 @@ const fetchMDMSForBillPeriod = async(action,state,dispatch) => {
   try{
     let response = await getDescriptionFromMDMS(requestBody,dispatch);
     dispatch(prepareFinalObject("billingPeriodMDMS", response.MdmsRes))
+  //   let AnnualAdvance = [
+  //     {
+  //         annualRebate: 5,
+  //         startingDay: 1650343262000,
+  //         endingDay: 1651212726000,
+  //         fromFy: "2022-23",
+  //         isActive: true
+  //     },
+  //     {
+  //         annualRebate: 5,
+  //         startingDay: 1650343262000,
+  //         endingDay: 1650602462000,
+  //         fromFy: "2020-21",
+  //         isActive: false
+  //     },
+  // ]
+
+  // dispatch(prepareFinalObject("AnnualAdvance", AnnualAdvance))
   } catch (error) {        
       console.log(error);
   }
@@ -204,6 +225,33 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
     }
   }
   createEstimateData(data, "screenConfiguration.preparedFinalObject.billData.billDetails", dispatch, {}, {});
+  const connectionType = getQueryArg(window.location.href, "connectionType");
+  if(connectionType == "Metered"){
+    
+    set(
+      action.screenConfig, "components.div.children.viewBill.children.cardContent.children.AdvAnualPaymentButton",
+      { visible: false }
+    );
+  }
+
+  let AnnualAdvanceConfig = get(state.screenConfiguration.preparedFinalObject, "billingPeriodMDMS.ws-services-calculation.AnnualAdvance");
+  let annualAdvActive = AnnualAdvanceConfig && AnnualAdvanceConfig.length > 0 && AnnualAdvanceConfig.filter((item) => item.isActive === true);
+  console.log(annualAdvActive, "Nero accct")
+
+  let startingDay = annualAdvActive && annualAdvActive[0].startingDay;
+  let endingDay = annualAdvActive && annualAdvActive[0].endingDay;
+  let DateObj = new Date();
+  let todayDate = DateObj.getTime();
+  console.log(startingDay, endingDay, todayDate, "Nero Consss")
+  if(startingDay < todayDate && todayDate < endingDay){
+    console.log("Nero hello")
+    
+  }else{
+    set(
+      action.screenConfig, "components.div.children.viewBill.children.cardContent.children.AdvAnualPaymentButton",
+      { visible: false }
+    );
+  }
 };
 
 const validatePropertyTaxName = (mdmsPropertyUsageType) => {
@@ -273,8 +321,9 @@ const estimate = getCommonGrayCard({
 const propertyDetails = getProperty();
 const ownerDetails = getOwner();
 const serviceDetails = getService();
+const AdvAnualPaymentButton = getAdvAnualPaymentButton();
 
-export const viewBill = getCommonCard({ estimate, serviceDetails, propertyDetails, ownerDetails });
+export const viewBill = getCommonCard({ AdvAnualPaymentButton, estimate, serviceDetails, propertyDetails, ownerDetails });
 
 const screenConfig = {
   uiFramework: "material-ui",

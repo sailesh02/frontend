@@ -177,6 +177,7 @@ export const getMdmsData = async (action, state, dispatch) => {
       { code: "CANADA", active: true },
       { code: "CHINA", active: true },
       { code: "ENGLAND", active: true },
+      { code: "FIJI", active: true },
       { code: "FINLAND", active: true },
       { code: "FRANCE", active: true },
       { code: "INDIA", active: true },
@@ -188,10 +189,12 @@ export const getMdmsData = async (action, state, dispatch) => {
       { code: "ROMANIA", active: true },
       { code: "SINGAPORE", active: true },
       { code: "SPAIN", active: true },
+      { code: "SWEDEN", active: true },
       { code: "UKRAINE", active: true },
       { code: "UNITED ARAB EMIRATES", active: true },
       { code: "UNITEDKINGDOM", active: true },
-      { code: "USA", active: true }
+      { code: "USA", active: true },
+
     ];
     payload.MdmsRes.MarriageRegistration.mrState = [{ code: "State 1", active: true }, { code: "State 2", active: true }, { code: "State 3", active: true }, { code: "State 4", active: true }, { code: "State 5", active: true }];
     payload.MdmsRes.MarriageRegistration.mrDistrict = [{ code: "District 1", active: true }, { code: "District 2", active: true }, { code: "District 3", active: true }, { code: "District 4", active: true }, { code: "District 5", active: true }];

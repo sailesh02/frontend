@@ -44,10 +44,11 @@ class TextFieldContainer extends React.Component {
       errorMessage,
       error,
       disabled=false,
-      multiline=true,
-      rows="3",
+      multiline=false,
+      rows="1",
       ...rest
     } = this.props;
+    console.log("thisProps", this.props)
     if (!isEmpty(iconObj) && iconObj.onClickDefination) {
       iconObj = {
         ...iconObj,

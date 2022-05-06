@@ -2,6 +2,8 @@ import { getBreak, getCommonContainer } from "egov-ui-framework/ui-config/screen
 import React from "react";
 import { BPAApplication } from "./bpaApplication";
 import {searchDigitalSignatureResults} from "../searchResource/searchResults"
+import {searchDigitalSignatureResultsForBPADoc} from "../searchResource/searchResults"
+
 
 export const pendingApprovals = {
   uiFramework: "custom-atoms",
@@ -101,6 +103,10 @@ export const showSearches = getCommonContainer({
         {
           tabButton: { labelName: "SEARCH APPLICATIONS", labelKey: "BPA_SEARCH_PENDING_DIGITALLY_SIGNED" },
           tabContent: { searchDigitalSignatureResults }
+        },
+        {
+          tabButton: { labelName: "DOWNLOAD BPA DOCUMENT", labelKey: "BPA_SEARCH_DOWNLOAD_BPA_DOC" },
+          tabContent: { searchDigitalSignatureResultsForBPADoc }
         }
       ],
       tabIndex : 0,

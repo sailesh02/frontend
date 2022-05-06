@@ -34,6 +34,33 @@ export const header = getCommonContainer({
   }
 });
 
+const headerForBpaSignedDocUpload = getCommonContainer({
+  header: getCommonHeader({
+    labelKey: "BPA_BPD_SIGNED_DOC_UPLOAD_HEADER",
+  }),
+});
+
+export const getCustomHeader = (state,
+  dispatch,
+  applicationNumber,
+  tenant,
+  purpose
+  ) => { 
+    const headerRow = purpose == 'bpd_signed_upload' ? headerForBpaSignedDocUpload : "";
+    return getCommonContainer({
+            header: {...headerRow},
+            applicationNumber: {
+              uiFramework: "custom-atoms-local",
+              moduleName: "egov-bpa",
+              componentPath: "ApplicationNoContainer",
+              props: {
+                number: getQueryArg(window.location.href, "applicationNumber")
+              },
+              visible: true
+            }
+          });
+}
+
 
 const getHeader=(applicationNumber)=>{
 return getCommonContainer({
@@ -701,6 +728,33 @@ const getAcknowledgementCard = (
               labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  } else if (purpose === "bpd_signed_upload" && status === "success") {
+    return {
+      header: getCustomHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant,
+        purpose),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application referred Successfully",
+              labelKey: "BPA_BPD_SIGNED_DOC_UPLOAD_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName: "Application has been referred successfully",
+              labelKey: "BPA_BPD_SIGNED_DOC_UPLOAD_SUCCESS"
+            }
           })
         }
       },

@@ -7,7 +7,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
-import {getPendingDigitallySignedApplications} from '../../ui-config/screens/specs/egov-bpa/searchResource/functions'
+import {getPendingDigitallySignedApplications, getPendingDigitallySignedApplicationsForBPADoc} from '../../ui-config/screens/specs/egov-bpa/searchResource/functions'
 
 class MultiItem extends React.Component {
   state = {
@@ -160,6 +160,9 @@ class MultiItem extends React.Component {
     const { state, dispatch, isDigitalSignature } = this.props;
     if(isDigitalSignature && tabIndex == 1){
       getPendingDigitallySignedApplications(state,dispatch)
+    }
+    if(isDigitalSignature && tabIndex == 2){
+      getPendingDigitallySignedApplicationsForBPADoc(state,dispatch)
     }
     if(isDigitalSignature && tabIndex == 0){
       dispatch(

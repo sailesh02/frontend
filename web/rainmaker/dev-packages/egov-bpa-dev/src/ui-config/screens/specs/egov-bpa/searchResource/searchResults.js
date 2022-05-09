@@ -16,8 +16,14 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import store from "ui-redux/store";
 import {
+  toggleSnackbar,
   handleScreenConfigurationFieldChange as handleField,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+//import { getAppSearchResults } from "../../../../ui-utils/commons";
+import { getAppSearchResults } from "../../../../../ui-utils/commons"
+import { getFileUrlFromAPI, getFileUrl } from "egov-ui-framework/ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+
 
 const getLocalTextFromCode = localCode => {
   return JSON.parse(getLocalization("localization_en_IN")).find(
@@ -280,6 +286,119 @@ export const searchDigitalSignatureResults = {
     }
   }
 }
+
+
+export const searchDigitalSignatureResultsForBPADoc = {
+  uiFramework: "custom-molecules",
+  componentPath: "Table",
+  visible: false,
+  props: {
+    columns: [
+      {
+        labelName: "Application No",
+        labelKey: "BPA_COMMON_TABLE_COL_APP_NO",
+        options: {
+          filter: false,
+        }
+      },
+      {
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
+      },
+      {
+        labelName: "BPA_COMMON_TABLE_COL_DOWNLOAD_ACTION_LABEL",
+        labelKey: "BPA_COMMON_TABLE_COL_DOWNLOAD_ACTION_LABEL",
+	      options: {
+          filter: false,
+          customBodyRender: (value, tableMeta) => (
+            <a href="javascript:void(0)" onClick={() => onDownloadClick(tableMeta.rowData)}><span style={{ color: '#fe7a51' }}>
+            {value}
+          </span></a>
+          )
+        }
+      },
+      {
+        labelName: "BPA_COMMON_TABLE_COL_UPLOAD_ACTION_LABEL",
+        labelKey: "BPA_COMMON_TABLE_COL_UPLOAD_ACTION_LABEL",
+	      options: {
+          filter: false,
+          customBodyRender: (value, tableMeta) => {
+          return  <a href="javascript:void(0)" onClick={() => goToUploadDocPage(tableMeta.rowData)}><span style={{ color: '#fe7a51' }}>
+            {value}
+          </span></a>
+        }
+        }
+      }
+    ],
+    title: {
+      labelName: "Search Results for Pending Digitally Signed Applications",
+      labelKey: "BPA_HOME_SEARCH_RESULTS_DIGITAL_SIGNATURE"
+    },
+    rows: "",
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      rowsPerPageOptions: [10, 15, 20]
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
+  }
+}
+
+
+const onDownloadClick = async (rowData) => {
+  let applicationNumber = rowData && rowData[0]
+  let tenantId = rowData && rowData[1]
+
+  const response = await getAppSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "applicationNo", value: applicationNumber }
+  ]);
+  console.log(response, "Nero single App")
+let filteredDoc = response && response.BPA && response.BPA.length > 0 && response.BPA[0].documents.filter( item => item.documentType === "BPD.BPL.BPL") 
+if(filteredDoc && filteredDoc.length > 0){
+  const fileUrls = await getFileUrlFromAPI(filteredDoc && filteredDoc[0].fileStoreId);
+  window.location = fileUrls[filteredDoc[0].fileStoreId];
+}else{
+  store.dispatch(
+    toggleSnackbar(
+      true,
+      {
+        labelName: "Sorry, BPD document was not uploaded, Please upload first",
+        labelKey: "BPA_BPD_DOC_WAS_NOT_UPLOADED"
+      },
+      "warning"
+    )
+  );
+}
+}
+
+const goToUploadDocPage = async (rowData) => {
+  let applicationNumber = rowData && rowData[0];
+  let tenantId = rowData && rowData[1];
+  let url = `upload-unsigned-doc?applicationNo=${applicationNumber}&tenantId=${tenantId}`
+  store.dispatch(setRoute(url));
+}
+
 
 const onPdfSignClick = rowData => {
   let applicationNumber = rowData && rowData[0]

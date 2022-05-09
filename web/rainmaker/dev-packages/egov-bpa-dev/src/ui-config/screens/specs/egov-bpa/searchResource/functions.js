@@ -3,7 +3,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { getBpaSearchResults } from "../../../../../ui-utils/commons";
 import { getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
-import { getTextToLocalMapping } from "../../utils";
+import { getDocList, getTextToLocalMapping } from "../../utils";
 import { convertDateToEpoch, convertEpochToDate } from "../../utils/index";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -14,6 +14,7 @@ import store from "ui-redux/store";
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   showHideDigitalSingedApplicationsTable(false);
+  showHideDigitalSingedApplicationsTable (false, "2")
   let tenantId = getTenantId();
   let queryObject = [
     {
@@ -228,6 +229,111 @@ export const getPendingDigitallySignedApplications = async () => {
   }
 }
 
+export const getDownloadDocLink = (item) => {
+  console.log(item, "Nero Items")
+  let filteredDoc = item && item.documents.filter( item => item.documentType === "BPD.BPL.BPL") 
+if(filteredDoc && filteredDoc.length > 0){
+  return "Download Unsigned Document";
+}else{
+  return "";
+}
+  
+}
+
+export const getUploadDocLink = (item) => {
+  console.log(item, "Nero Items")
+  let filteredDoc = item && item.documents.filter( item => item.documentType === "BPD.BPL.BPL") 
+if(filteredDoc && filteredDoc.length > 0){
+  return "Upload Signed Document";
+}else{
+  return "";
+}
+//return "Upload Signed Document";
+}
+
+export const getPendingDigitallySignedApplicationsForBPADoc = async () => {
+  showHideTable(false);
+  showHideDigitalSingedApplicationsTable (false, "2")
+  store.dispatch(showSpinner())
+  const userInfo = JSON.parse(getUserInfo());
+  const uuid = userInfo && userInfo.uuid
+
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: getTenantId()
+    },
+    { key: "status", value: "APPROVED" }
+  ];
+
+  try {
+    const response = await httpRequest(
+      "post",
+      "/bpa-services/v1/bpa/_search",
+      "",
+      queryObject
+    );
+       let data = []   
+    data = response && response.BPA && response.BPA.length > 0 &&
+    response.BPA.map(item => ({
+      ['BPA_COMMON_TABLE_COL_APP_NO']:
+        item.applicationNo || "-",
+      ['TENANT_ID']: item.tenantId || "-",
+      ['BPA_COMMON_TABLE_COL_DOWNLOAD_ACTION_LABEL'] : getDownloadDocLink(item),
+      ['BPA_COMMON_TABLE_COL_UPLOAD_ACTION_LABEL'] : getUploadDocLink(item)
+    })) || [];
+
+    store.dispatch(
+      handleField(
+        "search",
+        "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.searchDigitalSignatureResultsForBPADoc",
+        "props.data",
+        data
+      )
+    );
+    store.dispatch(
+      handleField(
+        "search",
+        "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.searchDigitalSignatureResultsForBPADoc",
+        "props.rows",
+        response.BPA && response.BPA.length || 0
+      )
+    );
+    showHideDigitalSingedApplicationsTable(true, "2");
+    store.dispatch(hideSpinner())
+    return response;
+
+  }catch(err){
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: err && err.message || "",
+          labelKey: err && err.message || ""
+        },
+        "error"
+      )
+    );
+    showHideDigitalSingedApplicationsTable(true, "2");
+    store.dispatch(
+      handleField(
+        "search",
+        "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.searchDigitalSignatureResultsForBPADoc",
+        "props.data",
+        []
+      )
+    );store.dispatch(
+      handleField(
+        "search",
+        "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.searchDigitalSignatureResultsForBPADoc",
+        "props.data",
+        []
+      )
+    );
+    store.dispatch(hideSpinner())
+  }
+}
+
 const showHideTable = (booleanHideOrShow, dispatch) => {
   store.dispatch(
     handleField(
@@ -239,15 +345,30 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
   );
 };
 
-const showHideDigitalSingedApplicationsTable = (value) => {
-  store.dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
-      "visible",
-      value
-    )
-  );
+const showHideDigitalSingedApplicationsTable = (value, tabIndex="1") => {
+
+  if(tabIndex !== "1"){
+    store.dispatch(
+      handleField(
+        "search",
+        `components.div.children.showSearches.children.showSearchScreens.props.tabs[${tabIndex}].tabContent.searchDigitalSignatureResultsForBPADoc`,
+        "visible",
+        value
+      )
+    );
+  }else{
+    store.dispatch(
+      handleField(
+        "search",
+        "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchDigitalSignatureResults",
+        "visible",
+        value
+      )
+    );
+  }
+  
+
+
   
 }
 

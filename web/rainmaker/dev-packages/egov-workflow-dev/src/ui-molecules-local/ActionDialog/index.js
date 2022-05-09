@@ -211,6 +211,8 @@ class ActionDialog extends React.Component {
                       onChange={e =>
                         handleFieldChange(`${dataPath}.comment`, e.target.value)
                       }
+                      multiline={true}
+                      rows='2'
                       jsonPath={`${dataPath}.comment`}
                       placeholder={fieldConfig.comments.placeholder}
                     />

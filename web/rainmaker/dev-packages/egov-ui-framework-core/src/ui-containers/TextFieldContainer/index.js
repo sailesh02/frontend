@@ -48,6 +48,7 @@ class TextFieldContainer extends React.Component {
       rows="1",
       ...rest
     } = this.props;
+    console.log("thisProps", this.props)
     if (!isEmpty(iconObj) && iconObj.onClickDefination) {
       iconObj = {
         ...iconObj,

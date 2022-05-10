@@ -711,26 +711,58 @@ class SignPdfContainer extends Component {
             'Accept': 'application/json'
           })
 
+
+
           if (response) {
             try {
               RequestInfo = { ...RequestInfo, "userInfo": customRequestInfo };
-              let body = Object.assign(
-                {},
-                {
-                  RequestInfo,
-                  "tenantId": getTenantId(),
-                  "responseData": null,
-                  "file": response.data && response.data.filestoreIds && response.data.filestoreIds[0],
-                  "fileName": key,
-                  "tokenDisplayName": token,
-                  "certificate": certificate,
-                  "keyId": certificate,
-                  "moduleName": moduleName,
-                  "reportName": key,
-                  "channelId": "ch4",
-                  "keyStorePassPhrase": password
-                }
-              );
+              let body;
+              let fileStoreId;
+              console.log(moduleName, "Nero module Name")
+              if(moduleName === "BPA"){
+                console.log(data, "Nero Module")
+                let add = data.Bpa && data.Bpa[0];
+                console.log(response, "PDF Res")
+                add.additionalDetails["permitFileStoreId"] = response.data && response.data.filestoreIds && response.data.filestoreIds[0]
+                
+                  console.log(add, "Nero Add")
+                  let mergeScrutinyApiRes = await httpRequest(
+                    "post",
+                    "/bpa-services/v1/bpa/_mergeScrutinyReportToPermit",
+                    "",
+                    [],
+                    { BPA: add }
+                    
+                  )
+
+                  console.log(mergeScrutinyApiRes, "Nero Merge")
+                  fileStoreId = mergeScrutinyApiRes && mergeScrutinyApiRes.files && mergeScrutinyApiRes.files[0].fileStoreId
+                
+              }else{
+                fileStoreId = response.data && response.data.filestoreIds && response.data.filestoreIds[0];
+                
+              }
+
+
+                body = Object.assign(
+                  {},
+                  {
+                    RequestInfo,
+                    "tenantId": getTenantId(),
+                    "responseData": null,
+                    "file": fileStoreId,
+                    "fileName": key,
+                    "tokenDisplayName": token,
+                    "certificate": certificate,
+                    "keyId": certificate,
+                    "moduleName": moduleName,
+                    "reportName": key,
+                    "channelId": "ch4",
+                    "keyStorePassPhrase": password
+                  }
+                );
+              
+               console.log(body, "Nero Body Final PDF")
 
               let encryptedData = await axios.post("/dsc-services/dsc/_pdfSignInput", body, { // send file store id to get encrypted data
                 'Content-Type': 'application/json',

@@ -5298,45 +5298,8 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
       { Bpa: [Bpa] }
     );
     fileStoreId = res.filestoreIds[0];
-
-//API details for new merge pdf API to merge the building permit pdf with shortened scrutiny report
-    if(res.key== "buildingpermit"){
-      let add = Bpa
-      add.additionalDetails["permitFileStoreId"] = fileStoreId
-      console.log("AdditionalDetails", add);
-     
-     try{
-      let responeBuildPremit = await httpRequest(
-        "post",
-        "/bpa-services/v1/bpa/_mergeScrutinyReportToPermit",
-        "",
-        [],
-        { BPA: add }
-        
-      )
-        let premitFileStoreId =responeBuildPremit&&responeBuildPremit.files&&responeBuildPremit.files[0].fileStoreId
-
-      let pdfDownload = await httpRequest(
-        "get",
-        `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${premitFileStoreId}`, []
-      );
-      if (mode && mode === "Download") {
-        window.open(pdfDownload[premitFileStoreId]);
-      }
-      else {
-        printPdf(pdfDownload[premitFileStoreId]);
-      }
-      
-     } catch(err){
-       console.log("errrr",err)
-     }
-     
-
     }
-    else {
 
-  fileStoreId = getFileStore(Bpa)
-  
   let pdfDownload = await httpRequest(
     "get",
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []
@@ -5348,63 +5311,25 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
     printPdf(pdfDownload[fileStoreId]);
   }
 
-      let data = wrapRequestBody({ BPA: detailsOfBpa });
-      axios({
-        url: '/bpa-services/v1/bpa/_permitorderedcr',
-        method: 'POST',
-        responseType: 'blob', data
-        // important
-      }).then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'permitorderedcr.pdf');
-        document.body.appendChild(link);
-        if (mode && mode === "Download") {
-          link.click();
-        } else {
-          printPdf(link);
-        }
-      });
+
+  let data = wrapRequestBody({ BPA: detailsOfBpa });
+  axios({
+    url: '/bpa-services/v1/bpa/_permitorderedcr',
+    method: 'POST',
+    responseType: 'blob', data
+    // important
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'permitorderedcr.pdf');
+    document.body.appendChild(link);
+    if (mode && mode === "Download") {
+      link.click();
+    } else {
+      printPdf(link);
     }
-  }
-
-  // console.log(res,"ssssssssssssssssss")
-  // if(key = buildingpermit)
-
-  // let permitFileStoreId;
-  // fileStoreId = getFileStore(Bpa )
-  
-  // let pdfDownload = await httpRequest(
-  //   "get",
-  //   `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []
-  // );
-  // if (mode && mode === "Download") {
-  //   window.open(pdfDownload[fileStoreId]);
-  // }
-  // else {
-  //   printPdf(pdfDownload[fileStoreId]);
-  // }
-
-
-  // let data = wrapRequestBody({ BPA: detailsOfBpa });
-  // axios({
-  //   url: '/bpa-services/v1/bpa/_permitorderedcr',
-  //   method: 'POST',
-  //   responseType: 'blob', data
-  //   // important
-  // }).then((response) => {
-  //   const url = window.URL.createObjectURL(new Blob([response.data]));
-  //   const link = document.createElement('a');
-  //   link.href = url;
-  //   link.setAttribute('download', 'permitorderedcr.pdf');
-  //   document.body.appendChild(link);
-  //   if (mode && mode === "Download") {
-  //     link.click();
-  //   } else {
-  //     printPdf(link);
-  //   }
-  // });
+  });
 }
 
 export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, mode = "Download") => {

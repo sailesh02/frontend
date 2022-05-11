@@ -180,7 +180,8 @@ class TextAreaContainerForBpa extends Component {
                     }}>
                       <TextFieldContainer
                         value= {this.state.comments}
-                        rows =  "4"
+                        rows =  "10"
+                        style={{width: "97%"}}
                         multiline = {true}
                         placeholder = {{
                           labelName: "",

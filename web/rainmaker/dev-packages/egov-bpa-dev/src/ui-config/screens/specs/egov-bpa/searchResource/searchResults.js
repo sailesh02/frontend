@@ -306,8 +306,8 @@ export const searchDigitalSignatureResultsForBPADoc = {
         labelKey: "TENANT_ID",
       },
       {
-        labelName: "BPA_COMMON_TABLE_COL_DOWNLOAD_ACTION_LABEL",
-        labelKey: "BPA_COMMON_TABLE_COL_DOWNLOAD_ACTION_LABEL",
+        labelName: "BPA_TABLE_COL_BPL_DOC_DOWNLOAD_ACTION_LABEL",
+        labelKey: "BPA_TABLE_COL_BPL_DOC_DOWNLOAD_ACTION_LABEL",
 	      options: {
           filter: false,
           customBodyRender: (value, tableMeta) => (
@@ -318,8 +318,8 @@ export const searchDigitalSignatureResultsForBPADoc = {
         }
       },
       {
-        labelName: "BPA_COMMON_TABLE_COL_UPLOAD_ACTION_LABEL",
-        labelKey: "BPA_COMMON_TABLE_COL_UPLOAD_ACTION_LABEL",
+        labelName: "BPA_TABLE_COL_BPL_DOC_UPLOAD_ACTION_LABEL",
+        labelKey: "BPA_TABLE_COL_BPL_DOC_UPLOAD_ACTION_LABEL",
 	      options: {
           filter: false,
           customBodyRender: (value, tableMeta) => {
@@ -332,7 +332,7 @@ export const searchDigitalSignatureResultsForBPADoc = {
     ],
     title: {
       labelName: "Search Results for Pending Digitally Signed Applications",
-      labelKey: "BPA_HOME_SEARCH_RESULTS_DIGITAL_SIGNATURE"
+      labelKey: "BPA_HOME_SEARCH_BPL_DOC_DIGITAL_SIGNATURE"
     },
     rows: "",
     options: {

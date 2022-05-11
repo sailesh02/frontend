@@ -212,7 +212,7 @@ class ActionDialog extends React.Component {
                         handleFieldChange(`${dataPath}.comment`, e.target.value)
                       }
                       multiline={true}
-                      rows='2'
+                      rows='5'
                       jsonPath={`${dataPath}.comment`}
                       placeholder={fieldConfig.comments.placeholder}
                     />

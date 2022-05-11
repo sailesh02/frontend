@@ -21,7 +21,7 @@ import { getCommonApplyFooter } from "../utils";
 //import { getAppSearchResults } from "../../../../../ui-utils/commons"
 import { getAppSearchResults } from "../../../../ui-utils/commons"
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-
+import store from "ui-redux/store";
 
 const callBackForNext = async (state, dispatch) => {
   
@@ -46,7 +46,14 @@ const callBackForNext = async (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux"
   );
-
+console.log(uploadedDocs, "Nero Hello")
+  if(uploadedDocs && !("documents" in uploadedDocs[0])){
+    store.dispatch(toggleSnackbar(true, {
+      labelName: "Sorry, document was not uploaded, Please upload first then submit",
+      labelKey: "Sorry, document was not uploaded, Please upload first then submit"
+    }, "error"));
+    return false;
+  }
   let doc = {};
   doc.documentType = uploadedDocs[0].documentType;
   doc.fileStoreId = uploadedDocs[0].documents[0].fileStoreId;
@@ -123,19 +130,19 @@ export const footer = getCommonApplyFooter({
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Apply for building permit`,
-    labelKey: "BPA_UPLOAD_BPD_DOCUMENT_HEADER"
+    labelKey: "BPA_UPLOAD_BPL_DOCUMENT_HEADER"
   })
 });
 
 export const documentDetails = getCommonCard({
   header: getCommonTitle(
-    { labelName: "Required Documents", labelKey: "BPA_BPD_DOCUMENT_DETAILS_HEADER" },
+    { labelName: "Required Documents", labelKey: "BPA_BPL_DOCUMENT_DETAILS_HEADER" },
     { style: { marginBottom: 18 } }
   ),
   subText: getCommonParagraph({
     labelName:
-      "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "BPA_BPD_DOCUMENT_DETAILS_SUBTEXT"
+      "Only one file can be uploaded for the document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
+    labelKey: "BPA_BPL_DOCUMENT_DETAILS_SUBTEXT"
   }),
   break: getBreak(),
   documentList: {

@@ -105,7 +105,7 @@ export const showSearches = getCommonContainer({
           tabContent: { searchDigitalSignatureResults }
         },
         {
-          tabButton: { labelName: "DOWNLOAD BPA DOCUMENT", labelKey: "BPA_SEARCH_DOWNLOAD_BPA_DOC" },
+          tabButton: { labelName: "DOWNLOAD BPA DOCUMENT", labelKey: "BPA_BPL_DOC_PENDING_DIGITALLY_SIGNED" },
           tabContent: { searchDigitalSignatureResultsForBPADoc }
         }
       ],

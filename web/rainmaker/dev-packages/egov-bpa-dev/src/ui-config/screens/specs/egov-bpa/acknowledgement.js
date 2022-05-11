@@ -36,7 +36,7 @@ export const header = getCommonContainer({
 
 const headerForBpaSignedDocUpload = getCommonContainer({
   header: getCommonHeader({
-    labelKey: "BPA_BPD_SIGNED_DOC_UPLOAD_HEADER",
+    labelKey: "BPA_BPL_SIGNED_DOC_UPLOAD_HEADER",
   }),
 });
 
@@ -748,12 +748,12 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Application referred Successfully",
-              labelKey: "BPA_BPD_SIGNED_DOC_UPLOAD_SUCCESS_MESSAGE_MAIN"
+              labelName: "Building plan document submitted Successfully",
+              labelKey: "BPA_BPL_SIGNED_DOC_UPLOAD_SUCCESS_MESSAGE_MAIN"
             },
             body: {
-              labelName: "Application has been referred successfully",
-              labelKey: "BPA_BPD_SIGNED_DOC_UPLOAD_SUCCESS"
+              labelName: "Building plan document submitted Successfully",
+              labelKey: "BPA_BPL_SIGNED_DOC_UPLOAD_SUCCESS"
             }
           })
         }

@@ -230,10 +230,9 @@ export const getPendingDigitallySignedApplications = async () => {
 }
 
 export const getDownloadDocLink = (item) => {
-  console.log(item, "Nero Items")
   let filteredDoc = item && item.documents.filter( item => item.documentType === "BPD.BPL.BPL") 
 if(filteredDoc && filteredDoc.length > 0){
-  return "Download Unsigned Document";
+  return "Download Document";
 }else{
   return "";
 }
@@ -241,12 +240,12 @@ if(filteredDoc && filteredDoc.length > 0){
 }
 
 export const getUploadDocLink = (item) => {
-  console.log(item, "Nero Items")
+
   let filteredDoc = item && item.documents.filter( item => item.documentType === "BPD.BPL.BPL") 
-if(filteredDoc && filteredDoc.length > 0){
-  return "Upload Signed Document";
-}else{
+if(filteredDoc && filteredDoc.length > 0 && "buildingPlanLayoutIsSigned" in item.additionalDetails){
   return "";
+}else if(filteredDoc && filteredDoc.length > 0){
+  return "Upload Signed Document";
 }
 //return "Upload Signed Document";
 }
@@ -279,8 +278,8 @@ export const getPendingDigitallySignedApplicationsForBPADoc = async () => {
       ['BPA_COMMON_TABLE_COL_APP_NO']:
         item.applicationNo || "-",
       ['TENANT_ID']: item.tenantId || "-",
-      ['BPA_COMMON_TABLE_COL_DOWNLOAD_ACTION_LABEL'] : getDownloadDocLink(item),
-      ['BPA_COMMON_TABLE_COL_UPLOAD_ACTION_LABEL'] : getUploadDocLink(item)
+      ['BPA_TABLE_COL_BPL_DOC_DOWNLOAD_ACTION_LABEL'] : getDownloadDocLink(item),
+      ['BPA_TABLE_COL_BPL_DOC_UPLOAD_ACTION_LABEL'] : getUploadDocLink(item)
     })) || [];
 
     store.dispatch(

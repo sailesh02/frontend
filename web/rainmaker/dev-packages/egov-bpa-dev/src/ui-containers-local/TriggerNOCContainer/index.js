@@ -173,7 +173,8 @@ class TriggerNOCContainer extends Component {
   onNmaFieldChange = (key,jsonPath,fieldName) => e => {
     switch(fieldName){
       case 'MonumentName':
-        store.dispatch(prepareFinalObject(`NewNocAdditionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`,e.target.value)) 
+       // store.dispatch(prepareFinalObject(`NewNocAdditionalDetails.thirdPartyNOC.NameOfTheNearestMonumentOrSite.State`,e.target.value))
+       store.dispatch(prepareFinalObject(`NewNocAdditionalDetails.thirdPartyNOC.NameOfTheNearestMonumentOrSite.State`, "Odisha")) 
         break;
       case 'DistanceFromMonument':
         if(e.target.value.match(numberPattern)){
@@ -238,7 +239,7 @@ class TriggerNOCContainer extends Component {
           talukaErr:false,
         })  
     }
-    store.dispatch(prepareFinalObject(`NewNocAdditionalDetails.thirdPartNOC.${jsonPath}`,e.target.value)) 
+    store.dispatch(prepareFinalObject(`NewNocAdditionalDetails.thirdPartyNOC.${jsonPath}`,e.target.value)) 
   };
 
 fireBuildingDropDOwn = async()=>{
@@ -439,7 +440,7 @@ FireStationsDropDown = async()=>{
                 required={true}
                 style={{ marginRight: "15px" }}
                 placeholder={fieldConfig.MonumentName.placeholder}
-                jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.MonumentName`}
+                jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.NameOfTheNearestMonumentOrSite.MonumentName`}
                 onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.MonumentName","MonumentName")}
               />{this.state.monumentNameErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
               </Grid>
@@ -456,7 +457,7 @@ FireStationsDropDown = async()=>{
                 value = "Odisha"
                 style={{ marginRight: "15px" }}
                 placeholder={fieldConfig.State.placeholder}
-                jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.State`}
+                jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.NameOfTheNearestMonumentOrSite.State`}
                 onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.State","State")}
               />{this.state.stateNameErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
             </Grid>
@@ -472,7 +473,7 @@ FireStationsDropDown = async()=>{
               <TextFieldContainer
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.District.placeholder}
-              jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.District`}
+              jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.NameOfTheNearestMonumentOrSite.District`}
               onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.District","District")}
               />{this.state.districtErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
             </Grid>
@@ -486,7 +487,7 @@ FireStationsDropDown = async()=>{
               <TextFieldContainer
                 style={{ marginRight: "15px" }}
                 placeholder={fieldConfig.Taluk.placeholder}
-                jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Taluk`}
+                jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.NameOfTheNearestMonumentOrSite.Taluk`}
                 onChange={ this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Taluk","Taluk")}
               />{this.state.talukaErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
             </Grid>
@@ -502,7 +503,7 @@ FireStationsDropDown = async()=>{
               <TextFieldContainer
                 style={{ marginRight: "15px" }}
                 placeholder={fieldConfig.Locality.placeholder}
-                jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.NameOfTheNearestMonumentOrSite.Locality`}
+                jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.NameOfTheNearestMonumentOrSite.Locality`}
                 onChange={this.onNmaFieldChange(key,"NameOfTheNearestMonumentOrSite.Locality","Locality")}
               />{this.state.localityErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
             </Grid>
@@ -528,7 +529,7 @@ FireStationsDropDown = async()=>{
               <TextFieldContainer
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.DistanceFromTheMainMonument.placeholder}
-              jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument`}
+              jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument`}
               onChange={this.onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheMainMonument","DistanceFromMonument")}
               />{this.state.distanceFromMonumentErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
             </Grid>
@@ -542,7 +543,7 @@ FireStationsDropDown = async()=>{
             <TextFieldContainer
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.DistanceFromTheProtectedBoundaryWall.placeholder}
-              jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall`}
+              jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall`}
               onChange={ this.onNmaFieldChange(key,"DistanceOfTheSiteOfTheConstructionFromProtectedBoundaryOfMonument.DistanceFromTheProtectedBoundaryWall","ProtectedBountryWall")}
             />{this.state.protectedBoundryErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
           </Grid>
@@ -569,7 +570,7 @@ FireStationsDropDown = async()=>{
                 type = "date"
                 style={{ marginRight: "15px" }}
                 placeholder={fieldConfig.ApproximateDateOfCommencementOfWorks.placeholder}
-                jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.ApproximateDateOfCommencementOfWorks`}
+                jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.ApproximateDateOfCommencementOfWorks`}
                 onChange={this.onNmaFieldChange(key,"ApproximateDateOfCommencementOfWorks")}
               />
             </Grid>
@@ -584,7 +585,7 @@ FireStationsDropDown = async()=>{
                 type = "date"
                 style={{ marginRight: "15px" }}
                 placeholder={fieldConfig.ApproximateDurationOfCommencementOfWorks.placeholder}
-                jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.ApproximateDurationOfCommencementOfWorks`}
+                jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.ApproximateDurationOfCommencementOfWorks`}
                 onChange={this.onNmaFieldChange(key,"ApproximateDurationOfCommencementOfWorks")}
               />
             </Grid>
@@ -601,7 +602,7 @@ FireStationsDropDown = async()=>{
               <TextFieldContainer
                 style={{ marginRight: "15px" }}
                 placeholder={fieldConfig.BasementIfAnyProposedWithDetails.placeholder}
-                jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.BasementIfAnyProposedWithDetails`}
+                jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.BasementIfAnyProposedWithDetails`}
                 onChange={this.onNmaFieldChange(key,"BasementIfAnyProposedWithDetails","BasementProposed")}
               />{this.state.basementProposedErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
             </Grid>
@@ -615,7 +616,7 @@ FireStationsDropDown = async()=>{
               <TextFieldContainer
                 style={{ marginRight: "15px" }}
                 placeholder={fieldConfig.DetailsOfRepairAndRenovation.placeholder}
-                jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.DetailsOfRepairAndRenovation`}
+                jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.DetailsOfRepairAndRenovation`}
                 onChange={this.onNmaFieldChange(key,"DetailsOfRepairAndRenovation","DetailsOfRepairAndRenovation")}
               />{this.state.renovationErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
             </Grid>
@@ -632,7 +633,7 @@ FireStationsDropDown = async()=>{
               <TextFieldContainer
                 style={{ marginRight: "15px" }}
                 placeholder={fieldConfig.PlotSurveyNo.placeholder}
-                jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.PlotSurveyNo`}
+                jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.PlotSurveyNo`}
                 onChange={this.onNmaFieldChange(key,"PlotSurveyNo","PlotSurveyNo")}
               />{this.state.surveryNoErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
             </Grid>
@@ -659,7 +660,7 @@ FireStationsDropDown = async()=>{
               <TextFieldContainer
                 style={{ marginRight: "15px" }}
                 placeholder={fieldConfig.NearTheMonument.placeholder}
-                jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument`}
+                jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument`}
                 onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheMonument","NearTheMonument")}
               />{this.state.nearTheMonumentErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
             </Grid>
@@ -673,7 +674,7 @@ FireStationsDropDown = async()=>{
               <TextFieldContainer
                 style={{ marginRight: "15px" }}
                 placeholder={fieldConfig.NearTheSiteConstructionRelatedActivity.placeholder}
-                jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity`}
+                jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity`}
                 onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.NearTheSiteConstructionRelatedActivity","NearTheSiteConstructionRelatedActivity")}
               />{this.state.nearTheConstructionErr && <span class="MuiFormLabel-asterisk">{this.state.numberErrMsg}</span>}
             </Grid>
@@ -713,7 +714,7 @@ FireStationsDropDown = async()=>{
               
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.WhetherMonumentIsLocatedWithinLimitOf.placeholder}
-              jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf`}
+              jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf`}
               onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherMonumentIsLocatedWithinLimitOf","WhetherMonumentIsLocatedWithinLimitOf")}
             />{this.state.monumentLocatedErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
           </Grid>
@@ -738,7 +739,7 @@ FireStationsDropDown = async()=>{
               optionLabel="label"
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage.placeholder}
-              jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage`}
+              jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage`}
               onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.DoesMasterPlanApprovedByConcernedAuthoritiesExistsForTheCityTownVillage")}
             />
           </Grid>
@@ -755,7 +756,7 @@ FireStationsDropDown = async()=>{
             <TextFieldContainer
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.StatusOfModernConstructions.placeholder}
-              jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions`}
+              jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions`}
               onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.StatusOfModernConstructions","StatusOfModernConstructions")}
             />{this.state.modernStatusErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
           </Grid>
@@ -769,7 +770,7 @@ FireStationsDropDown = async()=>{
             <TextFieldContainer          
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea.placeholder}
-              jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea`}
+              jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea`}
               onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.OpenSpaceOrParkOrGreenAreaCloseToProtectedMonumentOrProtectedArea","OpenSpaceOrPark")}
             />{this.state.openSpaceParkErr && <span class="MuiFormLabel-asterisk">{this.state.stringErrMsg}</span>}
           </Grid>
@@ -797,7 +798,7 @@ FireStationsDropDown = async()=>{
               optionLabel="label"
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction.placeholder}
-              jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction`}
+              jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction`}
               onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.WhetherAnyRoadExistsBetweenTheMonumentAndTheSiteOfConstruction")}
             />
           </Grid>
@@ -811,7 +812,7 @@ FireStationsDropDown = async()=>{
             <TextFieldContainer          
               style={{ marginRight: "15px" }}
               placeholder={fieldConfig.Remarks.placeholder}
-              jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks`}
+              jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks`}
               onChange={this.onNmaFieldChange(key,"MaximumHeightOfExistingModernBuildingInCloseVicinityOf.Remarks")}
             />
           </Grid>
@@ -820,7 +821,7 @@ FireStationsDropDown = async()=>{
           <Grid item xs={6}>
           <CheckboxContainer
             label={fieldConfig.TermAndCondition.label}
-            jsonPath = {`NewNocAdditionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition`}
+            jsonPath = {`NewNocAdditionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition`}
           />
           </Grid>
         </Grid>
@@ -1113,14 +1114,14 @@ FireStationsDropDown = async()=>{
         }
 
         
-        if(payload && payload.additionalDetails && payload.additionalDetails.thirdPartNOC && 
-          payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
-          payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
-            payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'Yes'
-        }else if(payload && payload.additionalDetails && payload.additionalDetails.thirdPartNOC && 
-          payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
-          !payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
-            payload.additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'No'
+        if(payload && payload.additionalDetails && payload.additionalDetails.thirdPartyNOC && 
+          payload.additionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
+          payload.additionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
+            payload.additionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'Yes'
+        }else if(payload && payload.additionalDetails && payload.additionalDetails.thirdPartyNOC && 
+          payload.additionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
+          !payload.additionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
+            payload.additionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'No'
         }
         let buildingTypes = null
         let fireDistricts = null
@@ -1137,16 +1138,16 @@ FireStationsDropDown = async()=>{
           updateNocPayload[0].documents = payloadDocumentFormat,
           updateNocPayload[0].additionalDetails.SubmittedOn = submittedOn
           if(nocType == 'NMA_NOC'|| nocType == "FIRE_NOC"){
-            updateNocPayload[0].additionalDetails.thirdPartNOC = updateNocPayload[0].additionalDetails.thirdPartNOC ? updateNocPayload[0].additionalDetails.thirdPartNOC : NewNocAdditionalDetails.thirdPartNOC
+            updateNocPayload[0].additionalDetails.thirdPartyNOC = updateNocPayload[0].additionalDetails.thirdPartyNOC ? updateNocPayload[0].additionalDetails.thirdPartyNOC : NewNocAdditionalDetails.thirdPartyNOC
           }
-          if(nocType == 'NMA_NOC' && updateNocPayload[0] && updateNocPayload[0].additionalDetails && updateNocPayload[0].additionalDetails.thirdPartNOC && 
-          updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
-          updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
-            updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'Yes'
-          }else if(nocType == 'NMA_NOC' && updateNocPayload[0] && updateNocPayload[0].additionalDetails && updateNocPayload[0].additionalDetails.thirdPartNOC && 
-          updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
-            !updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
-              updateNocPayload[0].additionalDetails.thirdPartNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'No'
+          if(nocType == 'NMA_NOC' && updateNocPayload[0] && updateNocPayload[0].additionalDetails && updateNocPayload[0].additionalDetails.thirdPartyNOC && 
+          updateNocPayload[0].additionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
+          updateNocPayload[0].additionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
+            updateNocPayload[0].additionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'Yes'
+          }else if(nocType == 'NMA_NOC' && updateNocPayload[0] && updateNocPayload[0].additionalDetails && updateNocPayload[0].additionalDetails.thirdPartyNOC && 
+          updateNocPayload[0].additionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf && 
+            !updateNocPayload[0].additionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition){
+              updateNocPayload[0].additionalDetails.thirdPartyNOC.MaximumHeightOfExistingModernBuildingInCloseVicinityOf.TermAndCondition = 'No'
           }
 
             if(nocType == "FIRE_NOC"){
@@ -1169,7 +1170,7 @@ FireStationsDropDown = async()=>{
           const fireDistrict =  fireDistricts[0]
           const fireStation=  fireStations[0]
             const identityProofType=  identityProofTypes[0]
-            updateNocPayload[0].additionalDetails.thirdPartNOC = {buildingType,fireDistrict, fireStation, identityProofType, identityProofNo}
+            updateNocPayload[0].additionalDetails.thirdPartyNOC = {buildingType,fireDistrict, fireStation, identityProofType, identityProofNo}
           }
           response = await updateNoc(updateNocPayload[0])
          }else{

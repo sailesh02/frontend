@@ -793,7 +793,7 @@ class NocDetailCardBPA extends Component {
   );
   }
   getFIREOCForm =(firekey, disabled,fireDetails)=>{
-    const data = fireDetails.thirdPartNOC
+    const data = fireDetails.thirdPartyNOC
       return (
         <React.Fragment>
          
@@ -946,13 +946,13 @@ class NocDetailCardBPA extends Component {
       }
     })
     if(requiredNoc && requiredNoc.length > 0 && requiredNoc[0].nocType == 'FIRE_NOC'){
-      if(requiredNoc[0].additionalDetails && requiredNoc[0].additionalDetails.thirdPartNOC){
+      if(requiredNoc[0].additionalDetails && requiredNoc[0].additionalDetails.thirdPartyNOC){
         allDocumentsUploaded = true
       }
     }
     
     if(requiredNoc && requiredNoc.length > 0 && requiredNoc[0].nocType == 'NMA_NOC'){
-      if(requiredNoc[0].additionalDetails && requiredNoc[0].additionalDetails.thirdPartNOC){
+      if(requiredNoc[0].additionalDetails && requiredNoc[0].additionalDetails.thirdPartyNOC){
         allDocumentsUploaded = true
       }
     }  
@@ -1209,10 +1209,10 @@ class NocDetailCardBPA extends Component {
                 />
                 </div>
             <div>{this.getCard(card, index)}</div>  
-            <div>{card.nocType == 'FIRE_NOC' && card && card.additionalDetails && card.additionalDetails.submissionDetails.thirdPartNOC&&
+            <div>{card.nocType == 'FIRE_NOC' && card && card.additionalDetails && card.additionalDetails.submissionDetails.thirdPartyNOC&&
             this.getFIREOCForm(index,disabled,card.additionalDetails.submissionDetails)}</div>
-            <div>{card.nocType == 'NMA_NOC' && card.nmaDetails && card.nmaDetails.thirdPartNOC && 
-            this.getNMANOCForm(index,disabled,card.nmaDetails.thirdPartNOC)}</div>
+            <div>{card.nocType == 'NMA_NOC' && card.nmaDetails && card.nmaDetails.thirdPartyNOC && 
+            this.getNMANOCForm(index,disabled,card.nmaDetails.thirdPartyNOC)}</div>
           </div>) : (
              <Grid style={{paddingTop:'18px',paddingRight:'22px',paddingBottom:'18px',paddingLeft:'10px',marginBottom:'10px',width:'100%',backgroundColor: "#FFFFFF"}} container>
                 <Grid style={{align:'center'}} item xs={11}>

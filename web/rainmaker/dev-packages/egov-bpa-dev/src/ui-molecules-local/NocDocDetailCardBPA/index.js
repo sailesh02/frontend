@@ -69,6 +69,7 @@ class NocDocDetailCardBPA extends Component {
   render(){
   const { classes, docItem, docIndex, name,disabled,...rest } = this.props;
 
+const whichApplication = process.env.REACT_APP_NAME;
   let submittedOn,
   satus = "";
   if(docItem.submissionDetails){
@@ -123,14 +124,15 @@ class NocDocDetailCardBPA extends Component {
             {docItem.readOnly ? (
               ""
             ) : (
+             whichApplication === "Citizen"? 
               <Button
-                disabled = {disabled}
+                disabled = {this.props.fromPage === "searchPreview"? false: disabled}
                 color="primary"
                 style={{ float: "right" }}
                 onClick={() => this.props.toggleEditClick(docIndex)}
               >
-                Upload
-              </Button>
+                Upload Required Data
+              </Button>:"" 
             )}
           </Grid>
           

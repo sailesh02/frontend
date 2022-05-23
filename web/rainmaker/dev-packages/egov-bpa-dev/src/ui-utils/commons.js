@@ -280,7 +280,6 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
     []
   );
-console.log(documentsUpdalod, "Nero documentsUpdalod")
   let BPADocs = get(
     state,
     "screenConfiguration.preparedFinalObject.BPA.documents",
@@ -833,6 +832,26 @@ export const prepareNOCUploadData = async (state, dispatch,filter) => {
       }
     })
     store.dispatch(prepareFinalObject("requiredNocToTrigger", nocArray));
+  }else{
+    let bpaApp = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
+    let nocTypesFromMDMS = get(
+      state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA,
+      "NocTypeMapping",
+      []
+    )
+
+    let applicationType = bpaApp.applicationType;
+    let serviceType = bpaApp.serviceType;
+    let activatedNocs = nocTypesFromMDMS && nocTypesFromMDMS.length > 0 && nocTypesFromMDMS.filter( noc => {
+      if(noc.applicationType == applicationType && noc.serviceType == serviceType && noc.riskType == "ALL"){
+        return noc.nocTypes;
+      }
+    }) || []
+    
+    activatedNocs = activatedNocs && activatedNocs.length > 0 && activatedNocs[0].nocTypes.map( noc => {
+      return {nocType: noc.type}
+    }) || []
+    store.dispatch(prepareFinalObject("requiredNocToTrigger", activatedNocs));
   }
 
 };
@@ -840,9 +859,15 @@ export const prepareNOCUploadData = async (state, dispatch,filter) => {
  * This method will be called to get teh noc documents matched with noctyps and applicationType
  */
 const getNocDocuments = (state) => {
+
   let applicationDocuments = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.NOC.DocumentTypeMapping",
+    []
+  );
+  let bpaStatus = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.status",
     []
   );
 
@@ -859,13 +884,16 @@ const getNocDocuments = (state) => {
         if (doc.applicationType === nocDoc.applicationType && doc.nocType === nocDoc.nocType) {
           let linkDetails = {};
           let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
-          let url = `${window.location.origin}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true`;
+          let url = `${window.location.origin}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true&bpaStatus=${bpaStatus}`;
           if (process.env.NODE_ENV === "production") {
             if (checkingApp) {
-              url = `${window.location.origin}/${checkingApp}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true`;
+              url = `${window.location.origin}/${checkingApp}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true&bpaStatus=${bpaStatus}`;
             }
           }
-          if (nocDoc.applicationStatus === "CREATED" || nocDoc.applicationStatus === null) {
+          // if (nocDoc.applicationStatus === "CREATED" || nocDoc.applicationStatus === null) {
+          //   url = "";
+          // }
+          if (nocDoc.applicationStatus === null) {
             url = "";
           }
           linkDetails.labelName = "Application Number"

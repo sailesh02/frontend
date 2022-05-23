@@ -364,14 +364,14 @@ if(!isMobileExistsResponse){
     let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
     let bpaApp = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
     let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
-    console.log(requiredNocs, "Nero NOCs in EDCR")
+    
     let nocTypesFromMDMS = get(
       state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA,
       "NocTypeMapping",
       []
     )
     //let nocTypesFromMDMS = [];
-    console.log(nocTypesFromMDMS, "nero Nocs in MDMS")
+    
     let applicationType = bpaApp.applicationType;
     let serviceType = bpaApp.serviceType;
 
@@ -387,7 +387,6 @@ if(!isMobileExistsResponse){
         return noc.nocTypes;
       }
     }) || []
-console.log(activatedNocs, "nero mdms Nocs")
     activatedNocs = activatedNocs && activatedNocs.length > 0 && activatedNocs[0].nocTypes.map( noc => {
       return noc.type
     }) || []
@@ -415,8 +414,6 @@ console.log(activatedNocs, "nero mdms Nocs")
     //     mergedNocs.push(noc)
     //   }
     // })
-    console.log(mergedNocs.join(), "Nero splits")
-    console.log(nocAlreadyCreated, "Nero Noc aleay created")
     mergedNocs && mergedNocs.length > 0 && mergedNocs.map( noc =>{
       if(nocAlreadyCreated && nocAlreadyCreated.includes(noc)){
         console.log("in noc already created")
@@ -427,34 +424,34 @@ console.log(activatedNocs, "nero mdms Nocs")
     })
 
     // to check NMA noc details if NMA NOC is required
-    if(requiredNocs && requiredNocs.length > 0 && requiredNocs.includes("NMA_NOC")){
-      let NMANoc = noc && noc.length > 0 && noc.filter( noc => {
-        if(noc.nocType == "NMA_NOC"){
-          return noc
-        }
-      })
-      if(NMANoc && NMANoc.length > 0 && !validateThirdPartyDetails(NMANoc[0].additionalDetails)){
-        isValid = false
-        dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName: "ERR_FILL_NMA_NOC_DETAILS",
-              labelKey: "Error in NMA",
-            },
-            "warning"
-          )
-        )
-        return
-      }else{
-       isValid = true
-      }
-    }
-    console.log(allRequiredNocsCreated, isValid, "Nero HEllo")
+    // if(requiredNocs && requiredNocs.length > 0 && requiredNocs.includes("NMA_NOC")){
+    //   let NMANoc = noc && noc.length > 0 && noc.filter( noc => {
+    //     if(noc.nocType == "NMA_NOC"){
+    //       return noc
+    //     }
+    //   })
+    //   if(NMANoc && NMANoc.length > 0 && !validateThirdPartyDetails(NMANoc[0].additionalDetails)){
+    //     isValid = false
+    //     dispatch(
+    //       toggleSnackbar(
+    //         true,
+    //         {
+    //           labelName: "ERR_FILL_NMA_NOC_DETAILS",
+    //           labelKey: "Error in NMA",
+    //         },
+    //         "warning"
+    //       )
+    //     )
+    //     return
+    //   }else{
+    //    isValid = true
+    //   }
+    // }
+  
     // to check if all required NOC's are triggered
    // if((noc.length == mergedNocs.length) && isValid){
-    if(allRequiredNocsCreated){
-      console.log("Nero in if")
+   // if(allRequiredNocsCreated){
+      
       const documentsFormat = Object.values(
         get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
       );
@@ -513,16 +510,16 @@ console.log(activatedNocs, "nero mdms Nocs")
       } else {
         getSummaryRequiredDetails(state, dispatch);
       }
-    }else{
-      console.log("Nero in Else")
-      let errorMessage = {
-        labelName: "Please trigger all required noc's",
-        //labelKey: "ERR_TRIGGER_REQUIRED_NOCS_TOAST"
-        labelKey: `Please trigger all required noc's. Noc's not created ${notCreatedNocsByBPA.join()}`
-      };
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
-      return
-    }
+    // }else{
+    //   
+    //   let errorMessage = {
+    //     labelName: "Please trigger all required noc's",
+    //     //labelKey: "ERR_TRIGGER_REQUIRED_NOCS_TOAST"
+    //     labelKey: `Please trigger all required noc's. Noc's not created ${notCreatedNocsByBPA.join()}`
+    //   };
+    //   dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    //   return
+    // }
 
     if (bpaObj && (bpaObj.landInfo.ownershipCategory.includes("INSTITUTIONALGOVERNMENT") || bpaObj.landInfo.ownershipCategory.includes("INSTITUTIONALPRIVATE") )) {
       dispatch(

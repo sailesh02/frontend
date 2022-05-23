@@ -9,6 +9,7 @@ import {
   getFileUrlFromAPI,
   handleFileUpload,
   getTransformedLocale,
+  getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import Button from '@material-ui/core/Button';
 import {
@@ -27,6 +28,7 @@ import { httpRequest } from "../../ui-utils/api";
 import { LinkAtom } from "../../ui-atoms-local"
 import store from "ui-redux/store";
 import { CheckboxContainer } from "../../ui-containers-local";
+import { createNoc } from "../../ui-utils/commons";
 
 const styles = {
   documentTitle: {
@@ -906,6 +908,7 @@ class NocDetailCardBPA extends Component {
             : (
               <NocDocDetailCardBPA
                 docItem={card}
+                fromPage={"searchPreview"}
                 docIndex={key}
                 key={key.toString()}
                 handleDocument={this.handleDocument}
@@ -1106,6 +1109,54 @@ class NocDetailCardBPA extends Component {
 
   };
 
+  initiateNoc = async(nocType,isUpdate) => {
+    let bPaappNo = getQueryArg(
+      window.location.href,
+      "applicationNumber", ""
+    );
+    let tenantId = getQueryArg(
+      window.location.href,
+      "tenantId", ""
+    );
+    let payload = {
+      "id": null,
+      "tenantId": tenantId,
+      "applicationNo": null,
+      "nocNo": null,
+      "applicationType": "NEW",
+      "nocType": nocType,
+      "accountId": null,
+      "source": "BPA",
+      "sourceRefId": bPaappNo,
+      "landId": null,
+      "status": null,
+      "applicationStatus": null,
+      "documents": null,
+      "workflow": null,
+      "auditDetails": null,
+      "additionalDetails": null
+  }
+   let response = await createNoc(payload);
+ 
+   if(response){
+    let nocSplits = nocType.split("_");
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName:  `${nocSplits[0]} ${nocSplits[1]} activated successfully. Please wait, while fetching updated data`,
+          labelKey:  `${nocSplits[0]} ${nocSplits[1]} activated successfully. Please wait, while fetching updated data`
+        },
+        "success"
+      )
+    )
+   // setTimeout(location.reload(), 5000);
+    setTimeout(function(){
+      window.location.reload(1);
+   }, 4000);
+  }
+  }
+
   triggerNoc = (nocType,isUpdate) => {
     this.setState({
       nocType : nocType
@@ -1221,12 +1272,13 @@ class NocDetailCardBPA extends Component {
                 </Grid>
              <Grid style={{align: "right"}} item xs={1}>
                <Button 
-                 onClick = {() => this.triggerNoc(card.nocType,false)}
+                // onClick = {() => this.triggerNoc(card.nocType,false)}
+                onClick = {() => this.initiateNoc(card.nocType,false)}
                  style = {{
                  color: "white",
                  backgroundColor: "rgb(254, 122, 81)",
                  borderRadius: "2px"}}>
-                 Trigger
+                 {`APPLY ${card.nocType.split("_")[0]} ${card.nocType.split("_")[1]}`}
                </Button>
              </Grid>
            </Grid>

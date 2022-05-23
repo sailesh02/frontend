@@ -139,6 +139,104 @@ const applicationOverview = getCommonContainer({
   }),
 });
 
+const nocInfo = getCommonContainer({
+  header: getCommonTitle(
+    {
+      labelName: "Application Overview",
+      labelKey: "NOC_UPDATE"
+    },
+    {
+      style: {
+        marginBottom: 18
+      }
+    }
+  ),
+  appOverViewDetailsContainer: getCommonContainer({
+    applicationNo: getLabelWithValue(
+      {
+        labelName: "Application No",
+        labelKey: "NOC_APP_NO_LABEL"
+      },
+      {
+        jsonPath: "Noc.applicationNo",
+        callBack: checkValueForNA
+      }
+    ),
+    module: getLabelWithValue(
+      {
+        labelName: "Module/Source",
+        labelKey: "NOC_TYPE_LABEL"
+      },
+      {
+        jsonPath: "Noc.nocType",
+        callBack: checkValueForNA
+      }
+    ),
+    status: getLabelWithValue(
+      {
+        labelName: "Status",
+        labelKey: "NOC_STATUS_LABEL"
+      },
+      {
+        jsonPath: "Noc.applicationStatus",
+        callBack: checkValueForNA
+      }
+    ),
+    viewApplication: {
+      componentPath: "Button",
+      gridDefination: {
+        xs: 12,
+        sm: 3
+      },
+      props: {
+        variant: "outlined",
+        style: {
+          color: "#FE7A51",
+          border: "#FE7A51 solid 1px",
+          borderRadius: "2px"
+        }
+      },
+      children: {
+        buttonLabel: getLabel({
+          labelName: "VIEW SOURCE APPLICATION",
+          labelKey: "NOC_EDIT_BUTTON"
+        })
+      },
+
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+          let nocData = get(state.screenConfiguration.preparedFinalObject, "Noc", "");
+          dispatch(handleField(
+            "search-preview",
+            "components.div.children.triggerNocContainer.props",
+            "open",
+             true
+          ))
+
+          dispatch(handleField(
+            "search-preview",
+            "components.div.children.triggerNocContainer.props",
+            "nocType",
+            nocData.nocType
+          )) 
+          
+          
+    
+          dispatch(handleField(
+            "search-preview",
+            "components.div.children.triggerNocContainer.props",
+            "type",
+            "trigger"
+          ))
+         
+        }
+      }
+
+    },
+  }),
+});
+
 const nocDetails = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",
@@ -194,6 +292,44 @@ const setSearchResponse = async (
     { key: "applicationNo", value: applicationNumber }
   ]);
   dispatch(prepareFinalObject("Noc", get(response, "Noc[0]", {})));
+  /********************/
+  let nocNewObject = {};
+  let thirdPartyData = get(response, "Noc[0].additionalDetails.thirdPartyNOC");
+  let NocApp = get(response, "Noc[0]", {});
+
+if(NocApp.nocType === "FIRE_NOC"){
+  for (var key in thirdPartyData) {
+    
+     if (thirdPartyData.hasOwnProperty(key)) {
+      if(key === "fireDistrict"){
+        nocNewObject.firedistricts = thirdPartyData[key].name;
+      }else if(key === "buildingType"){
+        nocNewObject.Buildingtypes = thirdPartyData[key].BuildingType;
+      }else if(key === "fireStation"){
+        nocNewObject.fireStations = thirdPartyData[key].name;
+      }else if( key=== "identityProofNo"){
+        nocNewObject[key] = thirdPartyData[key]  
+      }else{
+        nocNewObject[key] = thirdPartyData[key].name;
+      }
+     }
+}
+
+  dispatch(prepareFinalObject("NewNocAdditionalDetailsFire.thirdPartyNOC", nocNewObject));
+}else{
+  
+  dispatch(prepareFinalObject("NewNocAdditionalDetails.thirdPartyNOC", thirdPartyData));
+}
+let bpaStatus = getQueryArg(window.location.href, "bpaStatus");
+let bpaStatusArray = ["INITIATED", "CITIZEN_APPROVAL_INPROCESS", "PENDING_APPL_FEE", "INPROGRESS"];
+
+if((NocApp.applicationStatus == "CREATED") && !bpaStatusArray.includes(bpaStatus)){
+  dispatch(prepareFinalObject("ChangedNocAction", true));
+}else{
+  dispatch(prepareFinalObject("ChangedNocAction", false));
+}
+
+  /*****************/
   const queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "businessServices", value: get(response, "Noc[0].additionalDetails.workflowCode") }
@@ -227,6 +363,19 @@ const setSearchResponse = async (
   );
 
   requiredDocumentsData(state, dispatch, action);
+  let appStatus = get(response, "Noc[0].applicationStatus");
+  if(appStatus == "SUBMITED" || appStatus == "REJECTED" || appStatus == "APPROVED" || appStatus == "VOIDED"){
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.nocUpdateContainer",
+        "visible",
+        false
+      )
+    )
+  }
+  
+
 };
 
 const getRequiredMdmsDetails = async (state, dispatch, action) => {
@@ -407,9 +556,22 @@ const screenConfig = {
         applicationOverviewContainer: getCommonCard({
           applicationOverview: applicationOverview
         }),
+        nocUpdateContainer: getCommonCard({
+          nocOverview: nocInfo
+        }),
         body: getCommonCard({
           nocDetails: nocDetails
         }),
+        triggerNocContainer :{
+          uiFramework: "custom-containers-local",
+          componentPath: "TriggerNOCContainer",
+          moduleName: "egov-bpa",
+          visible: true,
+          props: {
+            open:false,
+            nocType:''
+          }
+        }
       }
     }
   }

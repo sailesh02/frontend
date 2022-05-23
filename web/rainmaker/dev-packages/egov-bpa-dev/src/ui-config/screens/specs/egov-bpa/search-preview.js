@@ -5,7 +5,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
+  prepareFinalObject,
+  toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getFileUrl, getFileUrlFromAPI,
@@ -37,6 +38,7 @@ import {
   compare,
   generateBillForSanctionFee
 } from "../utils/index";
+//import { spclArchitectsPicker } from "./searchResource/spclArchitects";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved } from "./searchResource/citizenFooter";
 import { applicantSummary, institutionSummary } from "./summaryResource/applicantSummary";
@@ -533,6 +535,9 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
             },
             {
               name: "RiskTypeComputation"
+            },
+            {
+              name: "NocTypeMapping"
             }
           ]
         },
@@ -556,6 +561,8 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
     mdmsBody
   );
   dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+  const spclArchs = [{code: "Neeraj"}, {code: "Tapojit"}, {code: "Jatindar"}, {code: "Prasun Naiya"}, {code: "Abishek"}]
+  dispatch(prepareFinalObject("specialArchitectList", spclArchs));
 }
 
 const setSearchResponse = async (
@@ -1008,6 +1015,30 @@ console.log(validitionStatusForRole,"validitionStatusForRole")
   );
 }
 
+if(process.env.REACT_APP_NAME === "Citizen"){
+  let thirdPartyDataExists = false;
+  if(payload && payload.Noc.length > 0){
+    payload && payload.Noc.forEach( (item) =>{
+      if(!("thirdPartyNOC" in item.additionalDetails)){
+        thirdPartyDataExists = true;
+        return;
+      }
+    })
+  }
+
+  if(thirdPartyDataExists){
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please upload required data for NOCs", labelKey: "Please upload required data for NOCs" },
+        "warning"
+      )
+    );
+  }
+}
+
+
+
 };
 
 export const getNocList = async (state,dispatch,filter) => {
@@ -1346,9 +1377,11 @@ const screenConfig = {
           additionalDocsInformation: additionalDocsInformation,
           previewSummary: previewSummary,
           nocDetailsApply: nocDetailsSearchBPA,
+        //  spclArchList: spclArchitectsPicker,
           declarationSummary: declarationSummary,
           permitConditions: permitConditions,
-          permitListSummary: permitListSummary
+          permitListSummary: permitListSummary,
+          
         }),
         triggerNocContainer :{
           uiFramework: "custom-containers-local",

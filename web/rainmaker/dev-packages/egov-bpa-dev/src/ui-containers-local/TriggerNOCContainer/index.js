@@ -17,6 +17,7 @@ import {DocumentListContainerNOC} from '..'
 import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
 import {
   getTransformedLocale,
+  getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../ui-utils/api";
 import {fireBuildingTypeDropDownApi,getFiredistrictsDropDownApi,getFireStationsDropDownApi, createNoc, updateNoc, validateThirdPartyDetails, getNocSearchResults, getAdditionalDetails,prepareNOCUploadData, validateFireNocDetails } from "../../ui-utils/commons"
@@ -1240,9 +1241,73 @@ FireStationsDropDown = async()=>{
   
   };
 
-  saveDetails = (nocType) => {
-    this.prepareDocumentsForPayload("")
-    this.createNoc(nocType)  
+  saveDetails = async (nocType) => {
+    const isFromBPA = getQueryArg(window.location.href, "isFromBPA");
+    if(isFromBPA){
+      let currentState = await store.getState();
+      let { ChangedNocAction, Noc, NewNocAdditionalDetailsFire, NewNocAdditionalDetails, FireNOcBuildingtype , FireNOcFiredistricts, FireNOcFireStation, identityProofTypeList} = currentState.screenConfiguration.preparedFinalObject
+      let buildingTypes = null;
+      let fireDistricts = null;
+      let fireStations = null;
+      let identityProofTypes = null;
+      let response = null;
+       if(Noc.nocType == "FIRE_NOC"){
+        buildingTypes = FireNOcBuildingtype&&FireNOcBuildingtype.length>0&&FireNOcBuildingtype.filter(data=>{
+         return data.BuildingType ==NewNocAdditionalDetailsFire.thirdPartyNOC.Buildingtypes
+       })
+       fireDistricts = FireNOcFiredistricts&& FireNOcFiredistricts.length>0&&FireNOcFiredistricts.filter(data=>{
+       return data.name === NewNocAdditionalDetailsFire.thirdPartyNOC.firedistricts
+         
+       })
+    
+        fireStations = FireNOcFireStation&&FireNOcFireStation.length >0 && FireNOcFireStation.filter(data=>{
+         return data.name == NewNocAdditionalDetailsFire.thirdPartyNOC.fireStations
+       })
+        identityProofTypes = identityProofTypeList&& identityProofTypeList.length>0 && identityProofTypeList.filter(item=>{
+       return item.name === NewNocAdditionalDetailsFire.thirdPartyNOC.identityProofType
+       })
+       const identityProofNo =  NewNocAdditionalDetailsFire.thirdPartyNOC.identityProofNo
+       const buildingType =   buildingTypes[0];
+       const fireDistrict =  fireDistricts[0];
+       const fireStation=  fireStations[0];
+       const identityProofType=  identityProofTypes[0];
+       let thirdPartyNOC = {buildingType,fireDistrict, fireStation, identityProofType, identityProofNo}
+    // }
+      Noc.additionalDetails.thirdPartyNOC = thirdPartyNOC;
+      }else{
+        Noc.additionalDetails.thirdPartyNOC = NewNocAdditionalDetails.thirdPartyNOC;
+      }
+     
+     if(ChangedNocAction){
+      Noc.workflow = {action: "INITIATE"};
+     }
+     console.log(Noc, "Nero Noc") 
+     response = await updateNoc(Noc);
+      if(response){
+          store.dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "NOC updated successfully",
+                labelKey: "BPA_NOC_UPDATED_SUCCESS_MSG",
+              },
+              "success"
+            )
+          )
+
+          store.dispatch(handleField(
+            "search-preview",
+            "components.div.children.triggerNocContainer.props",
+            "open",
+            false
+          ))
+        }
+
+    }else{
+      this.prepareDocumentsForPayload("")
+      this.createNoc(nocType)
+    }
+      
   }
 
   resetMessage = () => {

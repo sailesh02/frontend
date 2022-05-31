@@ -550,7 +550,6 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
   };
 
   createWorkFLow = async (label, isDocRequired) => {
-
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     let data = {};
 
@@ -648,7 +647,7 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
     }
   };
 
-  getRedirectUrl = (action, businessId, moduleName) => {
+  getRedirectUrl = (action, businessId, moduleName) => {  
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const { ProcessInstances, baseUrlTemp, bserviceTemp, preparedFinalObject } = this.props;
@@ -709,6 +708,10 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
     else if (!baseUrl && !bservice) {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
       bservice = "TL"
+    }
+    if(moduleName = "MRCORRECTION"&& action == "EDIT"){
+      baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "mr-citizen" : "mr";
+      return `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`
     }
     const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
     switch (action) {
@@ -863,7 +866,6 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
       "state.applicationStatus"
     );
     let actions = orderBy(filteredActions, ["action"], ["desc"]);
-
     actions = actions.map(item => {
       return {
         buttonLabel: item.action,
@@ -910,7 +912,6 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
       moduleName,
       preparedFinalObject
     } = this.props;
-
     if (ProcessInstances &&
       ProcessInstances.length > 0) {
 
@@ -938,7 +939,6 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
         }
       }
     }
-
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (

@@ -690,7 +690,7 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 };
 
 
-export const handleFileUpload = (event, handleDocument, props) => {
+export const handleFileUpload = (event, handleDocument, props, dispatch) => {
   const S3_BUCKET = {
     endPoint: "filestore/v1/files"
   };
@@ -719,7 +719,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
             file,
             commonConfig.tenantId
           );
-          handleDocument(file, fileStoreId);
+          handleDocument(file, fileStoreId, dispatch);
         } else {
           const fileStoreId = await uploadFile(
             S3_BUCKET.endPoint,
@@ -727,7 +727,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
             file,
             commonConfig.tenantId
           );
-          handleDocument(file, fileStoreId);
+          handleDocument(file, fileStoreId, dispatch);
         }
       }
     });

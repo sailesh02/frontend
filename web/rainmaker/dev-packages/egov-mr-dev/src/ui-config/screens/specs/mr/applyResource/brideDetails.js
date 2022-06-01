@@ -220,7 +220,7 @@ export const brideDetails = getCommonCard(
           labelName: "Enter Door/House No.",
           labelKey: "MR_ADDRESS_PLACEHOLDER"
         },
-        pattern: getPattern("Address"),
+        pattern: getPattern("mrAddress"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.address.addressLine1",
         required: true,
         // disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,

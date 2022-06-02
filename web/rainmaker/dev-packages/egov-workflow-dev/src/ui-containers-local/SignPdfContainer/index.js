@@ -718,31 +718,31 @@ class SignPdfContainer extends Component {
               RequestInfo = { ...RequestInfo, "userInfo": customRequestInfo };
               let body;
               let fileStoreId;
-              console.log(moduleName, "Nero module Name")
-              if(moduleName === "BPA"){
-                console.log(data, "Nero Module")
-                let add = data.Bpa && data.Bpa[0];
-                console.log(response, "PDF Res")
-                add.additionalDetails["permitFileStoreId"] = response.data && response.data.filestoreIds && response.data.filestoreIds[0]
+              // console.log(moduleName, "Nero module Name")
+              // if(moduleName === "BPA"){
+              //   console.log(data, "Nero Module")
+              //   let add = data.Bpa && data.Bpa[0];
+              //   console.log(response, "PDF Res")
+              //   add.additionalDetails["permitFileStoreId"] = response.data && response.data.filestoreIds && response.data.filestoreIds[0]
                 
-                  console.log(add, "Nero Add")
-                  let mergeScrutinyApiRes = await httpRequest(
-                    "post",
-                    "/bpa-services/v1/bpa/_mergeScrutinyReportToPermit",
-                    "",
-                    [],
-                    { BPA: add }
+              //     console.log(add, "Nero Add")
+              //     let mergeScrutinyApiRes = await httpRequest(
+              //       "post",
+              //       "/bpa-services/v1/bpa/_mergeScrutinyReportToPermit",
+              //       "",
+              //       [],
+              //       { BPA: add }
                     
-                  )
+              //     )
 
-                  console.log(mergeScrutinyApiRes, "Nero Merge")
-                  fileStoreId = mergeScrutinyApiRes && mergeScrutinyApiRes.files && mergeScrutinyApiRes.files[0].fileStoreId
+              //     console.log(mergeScrutinyApiRes, "Nero Merge")
+              //     fileStoreId = mergeScrutinyApiRes && mergeScrutinyApiRes.files && mergeScrutinyApiRes.files[0].fileStoreId
                 
-              }else{
-                fileStoreId = response.data && response.data.filestoreIds && response.data.filestoreIds[0];
+              // }else{
+              //   fileStoreId = response.data && response.data.filestoreIds && response.data.filestoreIds[0];
                 
-              }
-
+              // }
+              fileStoreId = response.data && response.data.filestoreIds && response.data.filestoreIds[0];
 
                 body = Object.assign(
                   {},

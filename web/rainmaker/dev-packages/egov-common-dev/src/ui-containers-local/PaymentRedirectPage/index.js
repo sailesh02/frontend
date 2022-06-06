@@ -83,14 +83,18 @@ class PaymentRedirect extends Component {
   componentDidMount = async () => {
     let { search } = this.props.location;
     const { reduxObj, prepareFinalObject } = this.props;
+    //gateway_txn_id
     const txnQuery = search.split('&')[0].replace('eg_pg_txnid', 'transactionId');
+    const gateway_txn_id = search.split('&')[1].split("&")[0];
     console.log(txnQuery, 'txnQuery');
+    console.log(search.split('&'), "Nero whole array")
+    console.log(gateway_txn_id, "nero gateway")
     const isPublicSearch = this.checkPublicSearch();
-
+    console.log(`pg-service/transaction/v1/_update${txnQuery}&${gateway_txn_id}`, "Nero Payment")
     try {
       let pgUpdateResponse = await httpRequest(
         "post",
-        "pg-service/transaction/v1/_update" + txnQuery,
+        "pg-service/transaction/v1/_update" + txnQuery+"&"+gateway_txn_id,
         "_update",
         [],
         {}

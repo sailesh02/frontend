@@ -1156,7 +1156,7 @@ export const tradeDetails = getCommonCard({
     //   }
     // },
 
-    tradeGSTNo: getTextField({
+    tradeGSTNo: getTextField({  
       label: {
         labelName: "Trade GST No.",
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
@@ -1218,7 +1218,7 @@ export const tradeDetails = getCommonCard({
         labelName: "Trade Purpose",
         labelKey: "TL_NEW_TRADE_PURPOSE_PLACEHOLDER"
       },
-      //pattern: getPattern("NoOfEmp"),
+      pattern: getPattern("DoorHouseNo"),
       jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.licensePurpose"
     })
   },

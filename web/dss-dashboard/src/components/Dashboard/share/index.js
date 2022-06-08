@@ -63,7 +63,7 @@ class CustomizedShare extends Component {
             anchorEl: null,
             //logo: this.props.mdmsData['tentantLogo'][`${localStorage.getItem('tenant-id')}`],
             //pdfHeader: this.props.mdmsData['tenantName'] +" "+ this.props.mdmsData['corpName']
-            // logo: this.props.globalFilter[1]['tentantLogo']['od.abohar']
+            // logo: this.props.globalFilter[1]['tentantLogo']['pb.abohar']
 
         }
 
@@ -120,7 +120,6 @@ class CustomizedShare extends Component {
                 APITransport(fileUploadAPI)
             } catch{ }
         }).catch(function (error) {
-            console.log(error);
             this.setState({
                 anchorEl: null
             })
@@ -163,7 +162,6 @@ class CustomizedShare extends Component {
                 APITransport(fileUploadAPI)
             } catch{ }
         }).catch(function (error) {
-            console.log(error);
             this.setState({
                 anchorEl: null
             })
@@ -233,9 +231,8 @@ class CustomizedShare extends Component {
                         fakeLink.click();
                     }
                     if (image && type === 'email') {
-                        fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
-                        fakeLink.setAttribute('target', '_top');
-                        fakeLink.click();
+                                           window.open(`mailto:?body=${encodeURIComponent(image)}`, "_blank");
+
                     }
                 })
             }
@@ -268,26 +265,26 @@ class CustomizedShare extends Component {
                         <ListItemIcon>
                             <DraftsIcon fontSize="small" style={{ color: Variables.email }} />
                         </ListItemIcon>
-                        <ListItemText primary="PDF" />
+                        <ListItemText primary={this.props.strings['DSS_DOWNLOAD_PDF'] || 'DSS_DOWNLOAD_PDF'} />
                     </StyledMenuItem>
-                    <StyledMenuItem onClick={this.shareEmailImage.bind(this)}>
+                    {/* <StyledMenuItem onClick={this.shareEmailImage.bind(this)}>
                         <ListItemIcon>
                             <DraftsIcon fontSize="small" style={{ color: Variables.email }} />
                         </ListItemIcon>
-                        <ListItemText primary="Image" />
-                    </StyledMenuItem>
+                        <ListItemText primary={this.props.strings['DSS_DOWNLOAD_IMAGE'] || 'DSS_DOWNLOAD_IMAGE'} />
+                    </StyledMenuItem> */}
                     <StyledMenuItem onClick={this.shareWhatsAppPDF.bind(this)}>
                         <ListItemIcon>
                             <WhatsappIcon fontSize="small" style={{ color: Variables.whatsApp }} />
                         </ListItemIcon>
-                        <ListItemText primary="PDF" />
+                        <ListItemText primary={this.props.strings['DSS_DOWNLOAD_PDF'] || 'DSS_DOWNLOAD_PDF'} />
                     </StyledMenuItem>
-                    <StyledMenuItem onClick={this.shareWhatsAppImage.bind(this)}>
+                    {/* <StyledMenuItem onClick={this.shareWhatsAppImage.bind(this)}>
                         <ListItemIcon>
                             <WhatsappIcon fontSize="small" style={{ color: Variables.whatsApp }} />
                         </ListItemIcon>
-                        <ListItemText primary="Image" />
-                    </StyledMenuItem>
+                        <ListItemText primary={this.props.strings['DSS_DOWNLOAD_IMAGE'] || 'DSS_DOWNLOAD_IMAGE'} />
+                    </StyledMenuItem> */}
                 </StyledMenu>
             </div>
         )

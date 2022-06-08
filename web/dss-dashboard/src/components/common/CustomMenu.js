@@ -112,7 +112,6 @@ class CustomizedMenus extends Component {
         downloadAsImage(this.props.strings[this.props.fileName] || this.props.fileName).then(function (success) {
             this.props.APITrans(false)
         }.bind(this)).catch(function (err) {
-            console.log(err);
             this.setState({
                 anchorEl: null
             })
@@ -132,7 +131,6 @@ class CustomizedMenus extends Component {
                 this.props.APITrans(false)
             } catch{ }
         }).catch(function (error) {
-            console.log(error);
             this.setState({
                 anchorEl: null
             })
@@ -151,7 +149,6 @@ class CustomizedMenus extends Component {
                 APITransport(fileUploadAPI)
             } catch{ }
         }).catch(function (error) {
-            console.log(error);
             this.setState({
                 anchorEl: null
             })
@@ -190,7 +187,6 @@ class CustomizedMenus extends Component {
                 APITransport(fileUploadAPI)
             } catch{ }
         }).catch(function (error) {
-            console.log(error);
             this.setState({
                 anchorEl: null
             })
@@ -271,10 +267,7 @@ class CustomizedMenus extends Component {
                         fakeLink.click();
                     }
                     if (image && type === 'email') {
-                        fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
-                        fakeLink.setAttribute('target', '_top');
-
-                        fakeLink.click();
+                     window.open(`mailto:?body=${encodeURIComponent(image)}`, "_blank");
                     }
                 })
             }
@@ -325,13 +318,13 @@ class CustomizedMenus extends Component {
                                 <ListItemIcon>
                                     <ImageIcon style={{ color: '#ff0000' }} />
                                 </ListItemIcon>
-                                <ListItemText primary="Image" />
+                                <ListItemText primary={this.props.strings['DSS_DOWNLOAD_IMAGE'] || 'DSS_DOWNLOAD_IMAGE'} />
                             </StyledMenuItem>
                             <StyledMenuItem button onClick={this.downloadPDF.bind(this)}>
                                 <ListItemIcon>
                                     <PdfIcon style={{ color: '#ff0000' }} />
                                 </ListItemIcon>
-                                <ListItemText primary="PDF" />
+                                <ListItemText  primary={this.props.strings['DSS_DOWNLOAD_PDF'] || 'DSS_DOWNLOAD_PDF'}  />
                             </StyledMenuItem>
                         </List>
                     </Collapse>
@@ -352,25 +345,25 @@ class CustomizedMenus extends Component {
                                 <ListItemIcon>
                                     <DraftsIcon style={{ color: Variables.email }} />
                                 </ListItemIcon>
-                                <ListItemText primary="PDF" />
+                                <ListItemText primary={this.props.strings['DSS_DOWNLOAD_PDF'] || 'DSS_DOWNLOAD_PDF'} />
                             </StyledMenuItem>
                             <StyledMenuItem button onClick={this.shareEmailImage.bind(this)}>
                                 <ListItemIcon>
                                     <DraftsIcon style={{ color: Variables.email }} />
                                 </ListItemIcon>
-                                <ListItemText primary="Image" />
+                                <ListItemText primary={this.props.strings['DSS_DOWNLOAD_IMAGE'] || 'DSS_DOWNLOAD_IMAGE'} />
                             </StyledMenuItem>
                             <StyledMenuItem button onClick={this.shareWhatsAppPDF.bind(this)}>
                                 <ListItemIcon>
                                     <WhatsappIcon style={{ color: Variables.whatsApp }} />
                                 </ListItemIcon>
-                                <ListItemText primary="PDF" />
+                                <ListItemText  primary={this.props.strings['DSS_DOWNLOAD_PDF'] || 'DSS_DOWNLOAD_PDF'}  />
                             </StyledMenuItem>
                             <StyledMenuItem button onClick={this.shareWhatsAppImage.bind(this)}>
                                 <ListItemIcon>
                                     <WhatsappIcon style={{ color: Variables.whatsApp }} />
                                 </ListItemIcon>
-                                <ListItemText primary="Image" />
+                                <ListItemText primary={this.props.strings['DSS_DOWNLOAD_IMAGE'] || 'DSS_DOWNLOAD_IMAGE'} />
                             </StyledMenuItem>
 
                         </List>

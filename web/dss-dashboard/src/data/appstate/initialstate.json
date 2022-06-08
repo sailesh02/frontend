@@ -101,518 +101,518 @@
                           "Phagwara-MC",
                           "Janaagraha-DDR" ],
             "master": { "Ferozepur-DDR":
-                               [ "od.abohar",
-                                 "od.arniwala",
-                                 "od.badhnikalan",
-                                 "od.baghapurana",
-                                 "od.dharamkot",
-                                 "od.faridkot",
-                                 "od.fatehgarhpanjtoor",
-                                 "od.fazilka",
-                                 "od.ferozepur",
-                                 "od.guruharsahai",
-                                 "od.jaitu",
-                                 "od.jalalabad",
-                                 "od.kotissekhan",
-                                 "od.kotkapura",
-                                 "od.makhu",
-                                 "od.mallanwala",
-                                 "od.mamdot",
-                                 "od.mudki",
-                                 "od.nihalsinghwala",
-                                 "od.talwandibhai",
-                                 "od.zira" ],
+                               [ "pb.abohar",
+                                 "pb.arniwala",
+                                 "pb.badhnikalan",
+                                 "pb.baghapurana",
+                                 "pb.dharamkot",
+                                 "pb.faridkot",
+                                 "pb.fatehgarhpanjtoor",
+                                 "pb.fazilka",
+                                 "pb.ferozepur",
+                                 "pb.guruharsahai",
+                                 "pb.jaitu",
+                                 "pb.jalalabad",
+                                 "pb.kotissekhan",
+                                 "pb.kotkapura",
+                                 "pb.makhu",
+                                 "pb.mallanwala",
+                                 "pb.mamdot",
+                                 "pb.mudki",
+                                 "pb.nihalsinghwala",
+                                 "pb.talwandibhai",
+                                 "pb.zira" ],
                               "Jalandhar-DDR":
-                               [ "od.adampur",
-                                 "od.alawalpur",
-                                 "od.balachaur",
-                                 "od.banga",
-                                 "od.begowal",
-                                 "od.bhogpur",
-                                 "od.bhulath",
-                                 "od.bilga",
-                                 "od.dasuya",
-                                 "od.dhilwan",
-                                 "od.garhdiwala",
-                                 "od.garhshankar",
-                                 "od.goraya",
-                                 "od.hariana",
-                                 "od.kapurthala",
-                                 "od.kartarpur",
-                                 "od.lohiankhas",
-                                 "od.mahilpur",
-                                 "od.mehatpur",
-                                 "od.mukerian",
-                                 "od.nadala",
-                                 "od.nakodar",
-                                 "od.nawanshahr",
-                                 "od.nurmahal",
-                                 "od.phillaur",
-                                 "od.rahon",
-                                 "od.shahkot",
-                                 "od.shamchurasi",
-                                 "od.sultanpurlodhi",
-                                 "od.talwara",
-                                 "od.urmartanda" ],
+                               [ "pb.adampur",
+                                 "pb.alawalpur",
+                                 "pb.balachaur",
+                                 "pb.banga",
+                                 "pb.begowal",
+                                 "pb.bhogpur",
+                                 "pb.bhulath",
+                                 "pb.bilga",
+                                 "pb.dasuya",
+                                 "pb.dhilwan",
+                                 "pb.garhdiwala",
+                                 "pb.garhshankar",
+                                 "pb.goraya",
+                                 "pb.hariana",
+                                 "pb.kapurthala",
+                                 "pb.kartarpur",
+                                 "pb.lohiankhas",
+                                 "pb.mahilpur",
+                                 "pb.mehatpur",
+                                 "pb.mukerian",
+                                 "pb.nadala",
+                                 "pb.nakodar",
+                                 "pb.nawanshahr",
+                                 "pb.nurmahal",
+                                 "pb.phillaur",
+                                 "pb.rahon",
+                                 "pb.shahkot",
+                                 "pb.shamchurasi",
+                                 "pb.sultanpurlodhi",
+                                 "pb.talwara",
+                                 "pb.urmartanda" ],
                               "Patiala-DDR":
-                               [ "od.ahmedgarh",
-                                 "od.amargarh",
-                                 "od.banur",
-                                 "od.barnala",
-                                 "od.bhadaur",
-                                 "od.bhadson",
-                                 "od.bhawanigarh",
-                                 "od.cheema",
-                                 "od.derabassi",
-                                 "od.dhanaula",
-                                 "od.dhuri",
-                                 "od.dirba",
-                                 "od.ghagga",
-                                 "od.ghanaur",
-                                 "od.handiaya",
-                                 "od.khanauri",
-                                 "od.kharar",
-                                 "od.kurali",
-                                 "od.lalru",
-                                 "od.lehragaga",
-                                 "od.longowal",
-                                 "od.malerkotla",
-                                 "od.moonak",
-                                 "od.nabha",
-                                 "od.nayagaon",
-                                 "od.patran",
-                                 "od.rajpura",
-                                 "od.samana",
-                                 "od.sanaur",
-                                 "od.sangrur",
-                                 "od.sunam",
-                                 "od.tapa",
-                                 "od.zirakpur" ],
+                               [ "pb.ahmedgarh",
+                                 "pb.amargarh",
+                                 "pb.banur",
+                                 "pb.barnala",
+                                 "pb.bhadaur",
+                                 "pb.bhadson",
+                                 "pb.bhawanigarh",
+                                 "pb.cheema",
+                                 "pb.derabassi",
+                                 "pb.dhanaula",
+                                 "pb.dhuri",
+                                 "pb.dirba",
+                                 "pb.ghagga",
+                                 "pb.ghanaur",
+                                 "pb.handiaya",
+                                 "pb.khanauri",
+                                 "pb.kharar",
+                                 "pb.kurali",
+                                 "pb.lalru",
+                                 "pb.lehragaga",
+                                 "pb.longowal",
+                                 "pb.malerkotla",
+                                 "pb.moonak",
+                                 "pb.nabha",
+                                 "pb.nayagaon",
+                                 "pb.patran",
+                                 "pb.rajpura",
+                                 "pb.samana",
+                                 "pb.sanaur",
+                                 "pb.sangrur",
+                                 "pb.sunam",
+                                 "pb.tapa",
+                                 "pb.zirakpur" ],
                               "Amritsar-DDR":
-                               [ "od.ajnala",
-                                 "od.batala",
-                                 "od.bhikhi",
-                                 "od.derababananak",
-                                 "od.dhariwal",
-                                 "od.dinanagar",
-                                 "od.fatehgarhchurian",
-                                 "od.gurdaspur",
-                                 "od.jandialaguru",
-                                 "od.khemkaran",
-                                 "od.majitha",
-                                 "od.narotjaimalsingh",
-                                 "od.patti",
-                                 "od.quadian",
-                                 "od.rajasansi",
-                                 "od.ramdass",
-                                 "od.rayya",
-                                 "od.srihargobindpur",
-                                 "od.sujanpur",
-                                 "od.tarntaran" ],
+                               [ "pb.ajnala",
+                                 "pb.batala",
+                                 "pb.bhikhi",
+                                 "pb.derababananak",
+                                 "pb.dhariwal",
+                                 "pb.dinanagar",
+                                 "pb.fatehgarhchurian",
+                                 "pb.gurdaspur",
+                                 "pb.jandialaguru",
+                                 "pb.khemkaran",
+                                 "pb.majitha",
+                                 "pb.narotjaimalsingh",
+                                 "pb.patti",
+                                 "pb.quadian",
+                                 "pb.rajasansi",
+                                 "pb.ramdass",
+                                 "pb.rayya",
+                                 "pb.srihargobindpur",
+                                 "pb.sujanpur",
+                                 "pb.tarntaran" ],
                               "Ludhiana-DDR":
-                               [ "od.amloh",
-                                 "od.anandpursahib",
-                                 "od.bassipathana",
-                                 "od.chamkaursahib",
-                                 "od.doraha",
-                                 "od.jagraon",
-                                 "od.khamano",
-                                 "od.khanna",
-                                 "od.kiratpur",
-                                 "od.machhiwara",
-                                 "od.maloud",
-                                 "od.mandigobindgarh",
-                                 "od.morinda",
-                                 "od.mullanpur",
-                                 "od.nangal",
-                                 "od.payal",
-                                 "od.raikot",
-                                 "od.ropar",
-                                 "od.sahnewal",
-                                 "od.samrala",
-                                 "od.sirhind" ],
-                              "Amritsar-MC": [ "od.amritsar" ],
+                               [ "pb.amloh",
+                                 "pb.anandpursahib",
+                                 "pb.bassipathana",
+                                 "pb.chamkaursahib",
+                                 "pb.doraha",
+                                 "pb.jagraon",
+                                 "pb.khamano",
+                                 "pb.khanna",
+                                 "pb.kiratpur",
+                                 "pb.machhiwara",
+                                 "pb.maloud",
+                                 "pb.mandigobindgarh",
+                                 "pb.morinda",
+                                 "pb.mullanpur",
+                                 "pb.nangal",
+                                 "pb.payal",
+                                 "pb.raikot",
+                                 "pb.ropar",
+                                 "pb.sahnewal",
+                                 "pb.samrala",
+                                 "pb.sirhind" ],
+                              "Amritsar-MC": [ "pb.amritsar" ],
                               "Bathinda-DDR":
-                               [ "od.balianwali",
-                                 "od.bareta",
-                                 "od.bariwala",
-                                 "od.bhagtabhai",
-                                 "od.bhairoopa",
-                                 "od.bhikhiwind",
-                                 "od.bhuchomandi",
-                                 "od.boha",
-                                 "od.budhlada",
-                                 "od.chaunke",
-                                 "od.gidderbaha",
-                                 "od.goniana",
-                                 "od.joga",
-                                 "od.kotfatta",
-                                 "od.kothaguru",
-                                 "od.kotshamir",
-                                 "od.lehramohabbat",
-                                 "od.malout",
-                                 "od.maluka",
-                                 "od.mandikalan",
-                                 "od.mansa",
-                                 "od.maur",
-                                 "od.mehraj",
-                                 "od.muktsar",
-                                 "od.nathana",
-                                 "od.raman",
-                                 "od.rampura",
-                                 "od.rampuraphul",
-                                 "od.sangatmandi",
-                                 "od.sardulgarh",
-                                 "od.talwandisabo" ],
-                              "Bathinda-MC": [ "od.bathinda" ],
-                              "Hoshiarpur-MC": [ "od.hoshiarpur" ],
-                              "Jalandhar-MC": [ "od.jalandhar" ],
-                              "Ludhiana-MC": [ "od.ludhiana" ],
-                              "Moga-MC": [ "od.moga" ],
-                              "Mohali-MC": [ "od.mohali" ],
-                              "Pathankot-MC": [ "od.pathankot" ],
-                              "Patiala-MC": [ "od.patiala" ],
-                              "Phagwara-MC": [ "od.phagwara" ],
-                              "Janaagraha-DDR": [ "od.janaagraha" ] }
-            ,"tentantLogo" : { "od.abohar":
+                               [ "pb.balianwali",
+                                 "pb.bareta",
+                                 "pb.bariwala",
+                                 "pb.bhagtabhai",
+                                 "pb.bhairoopa",
+                                 "pb.bhikhiwind",
+                                 "pb.bhuchomandi",
+                                 "pb.boha",
+                                 "pb.budhlada",
+                                 "pb.chaunke",
+                                 "pb.gidderbaha",
+                                 "pb.goniana",
+                                 "pb.joga",
+                                 "pb.kotfatta",
+                                 "pb.kothaguru",
+                                 "pb.kotshamir",
+                                 "pb.lehramohabbat",
+                                 "pb.malout",
+                                 "pb.maluka",
+                                 "pb.mandikalan",
+                                 "pb.mansa",
+                                 "pb.maur",
+                                 "pb.mehraj",
+                                 "pb.muktsar",
+                                 "pb.nathana",
+                                 "pb.raman",
+                                 "pb.rampura",
+                                 "pb.rampuraphul",
+                                 "pb.sangatmandi",
+                                 "pb.sardulgarh",
+                                 "pb.talwandisabo" ],
+                              "Bathinda-MC": [ "pb.bathinda" ],
+                              "Hoshiarpur-MC": [ "pb.hoshiarpur" ],
+                              "Jalandhar-MC": [ "pb.jalandhar" ],
+                              "Ludhiana-MC": [ "pb.ludhiana" ],
+                              "Moga-MC": [ "pb.moga" ],
+                              "Mohali-MC": [ "pb.mohali" ],
+                              "Pathankot-MC": [ "pb.pathankot" ],
+                              "Patiala-MC": [ "pb.patiala" ],
+                              "Phagwara-MC": [ "pb.phagwara" ],
+                              "Janaagraha-DDR": [ "pb.janaagraha" ] }
+            ,"tentantLogo" : { "pb.abohar":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.abohar/logo.png",
-                              "od.adampur":
+                              "pb.adampur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.adampur/logo.png",
-                              "od.ahmedgarh":
+                              "pb.ahmedgarh":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ahmedgarh/logo.png",
-                              "od.ajnala":
+                              "pb.ajnala":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ajnala/logo.png",
-                              "od.alawalpur":
+                              "pb.alawalpur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.alawalpur/logo.png",
-                              "od.amargarh":
+                              "pb.amargarh":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amargarh/logo.png",
-                              "od.amloh":
+                              "pb.amloh":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amloh/logo.png",
-                              "od.amritsar":
+                              "pb.amritsar":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png",
-                              "od.anandpursahib":
+                              "pb.anandpursahib":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.anandpursahib/logo.png",
-                              "od.arniwala":
+                              "pb.arniwala":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.arniwala/logo.png",
-                              "od.badhnikalan":
+                              "pb.badhnikalan":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.badhnikalan/logo.png",
-                              "od.baghapurana":
+                              "pb.baghapurana":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.baghapurana/logo.png",
-                              "od.balachaur":
+                              "pb.balachaur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.balachaur/logo.png",
-                              "od.balianwali":
+                              "pb.balianwali":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.balianwali/logo.png",
-                              "od.banga":
+                              "pb.banga":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.banga/logo.png",
-                              "od.banur":
+                              "pb.banur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.banur/logo.png",
-                              "od.bareta":
+                              "pb.bareta":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bareta/logo.png",
-                              "od.bariwala":
+                              "pb.bariwala":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bariwala/logo.png",
-                              "od.barnala":
+                              "pb.barnala":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.barnala/logo.png",
-                              "od.bassipathana":
+                              "pb.bassipathana":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bassipathana/logo.png",
-                              "od.batala":
+                              "pb.batala":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.batala/logo.png",
-                              "od.bathinda":
+                              "pb.bathinda":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bathinda/logo.png",
-                              "od.begowal":
+                              "pb.begowal":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.begowal/logo.png",
-                              "od.bhadaur":
+                              "pb.bhadaur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhadaur/logo.png",
-                              "od.bhadson":
+                              "pb.bhadson":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhadson/logo.png",
-                              "od.bhagtabhai":
+                              "pb.bhagtabhai":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhagtabhai/logo.png",
-                              "od.bhairoopa":
+                              "pb.bhairoopa":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhairoopa/logo.png",
-                              "od.bhawanigarh":
+                              "pb.bhawanigarh":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhawanigarh/logo.png",
-                              "od.bhikhi":
+                              "pb.bhikhi":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhikhi/logo.png",
-                              "od.bhikhiwind":
+                              "pb.bhikhiwind":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhikhiwind/logo.png",
-                              "od.bhogpur":
+                              "pb.bhogpur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhogpur/logo.png",
-                              "od.bhuchomandi":
+                              "pb.bhuchomandi":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhuchomandi/logo.png",
-                              "od.bhulath":
+                              "pb.bhulath":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhulath/logo.png",
-                              "od.bilga":
+                              "pb.bilga":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bilga/logo.png",
-                              "od.boha":
+                              "pb.boha":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.boha/logo.png",
-                              "od.budhlada":
+                              "pb.budhlada":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.budhlada/logo.png",
-                              "od.chamkaursahib":
+                              "pb.chamkaursahib":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.chamkaursahib/logo.png",
-                              "od.chaunke":
+                              "pb.chaunke":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.chaunke/logo.png",
-                              "od.cheema":
+                              "pb.cheema":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.cheema/logo.png",
-                              "od.dasuya":
+                              "pb.dasuya":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dasuya/logo.png",
-                              "od.derababananak":
+                              "pb.derababananak":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.derababananak/logo.png",
-                              "od.derabassi":
+                              "pb.derabassi":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.derabassi/logo.png",
-                              "od.dhanaula":
+                              "pb.dhanaula":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dhanaula/logo.png",
-                              "od.dharamkot":
+                              "pb.dharamkot":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dharamkot/logo.png",
-                              "od.dhariwal":
+                              "pb.dhariwal":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dhariwal/logo.png",
-                              "od.dhilwan":
+                              "pb.dhilwan":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dhilwan/logo.png",
-                              "od.dhuri":
+                              "pb.dhuri":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dhuri/logo.png",
-                              "od.dinanagar":
+                              "pb.dinanagar":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dinanagar/logo.png",
-                              "od.dirba":
+                              "pb.dirba":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dirba/logo.png",
-                              "od.doraha":
+                              "pb.doraha":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.doraha/logo.png",
-                              "od.faridkot":
+                              "pb.faridkot":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.faridkot/logo.png",
-                              "od.fatehgarhchurian":
+                              "pb.fatehgarhchurian":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.fatehgarhchurian/logo.png",
-                              "od.fatehgarhpanjtoor":
+                              "pb.fatehgarhpanjtoor":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.fatehgarhpanjtoor/logo.png",
-                              "od.fazilka":
+                              "pb.fazilka":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.fazilka/logo.png",
-                              "od.ferozepur":
+                              "pb.ferozepur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ferozepur/logo.png",
-                              "od.garhdiwala":
+                              "pb.garhdiwala":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.garhdiwala/logo.png",
-                              "od.garhshankar":
+                              "pb.garhshankar":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.garhshankar/logo.png",
-                              "od.ghagga":
+                              "pb.ghagga":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ghagga/logo.png",
-                              "od.ghanaur":
+                              "pb.ghanaur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ghanaur/logo.png",
-                              "od.gidderbaha":
+                              "pb.gidderbaha":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.gidderbaha/logo.png",
-                              "od.goniana":
+                              "pb.goniana":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.goniana/logo.png",
-                              "od.goraya":
+                              "pb.goraya":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.goraya/logo.png",
-                              "od.gurdaspur":
+                              "pb.gurdaspur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.gurdaspur/logo.png",
-                              "od.guruharsahai":
+                              "pb.guruharsahai":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.guruharsahai/logo.png",
-                              "od.handiaya":
+                              "pb.handiaya":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.handiaya/logo.png",
-                              "od.hariana":
+                              "pb.hariana":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.hariana/logo.png",
-                              "od.hoshiarpur":
+                              "pb.hoshiarpur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.hoshiarpur/logo.png",
-                              "od.jagraon":
+                              "pb.jagraon":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jagraon/logo.png",
-                              "od.jaitu":
+                              "pb.jaitu":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jaitu/logo.png",
-                              "od.jalalabad":
+                              "pb.jalalabad":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jalalabad/logo.png",
-                              "od.jalandhar":
+                              "pb.jalandhar":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jalandhar/logo.png",
-                              "od.jandialaguru":
+                              "pb.jandialaguru":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jandialaguru/logo.png",
-                              "od.joga":
+                              "pb.joga":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.joga/logo.png",
-                              "od.kapurthala":
+                              "pb.kapurthala":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kapurthala/logo.png",
-                              "od.kartarpur":
+                              "pb.kartarpur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kartarpur/logo.png",
-                              "od.khamano":
+                              "pb.khamano":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.khamano/logo.png",
-                              "od.khanauri":
+                              "pb.khanauri":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.khanauri/logo.png",
-                              "od.khanna":
+                              "pb.khanna":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.khanna/logo.png",
-                              "od.kharar":
+                              "pb.kharar":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kharar/logo.png",
-                              "od.khemkaran":
+                              "pb.khemkaran":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.khemkaran/logo.png",
-                              "od.kiratpur":
+                              "pb.kiratpur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kiratpur/logo.png",
-                              "od.kotfatta":
+                              "pb.kotfatta":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kotfatta/logo.png",
-                              "od.kothaguru":
+                              "pb.kothaguru":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kothaguru/logo.png",
-                              "od.kotissekhan":
+                              "pb.kotissekhan":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kotissekhan/logo.png",
-                              "od.kotkapura":
+                              "pb.kotkapura":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kotkapura/logo.png",
-                              "od.kotshamir":
+                              "pb.kotshamir":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kotshamir/logo.png",
-                              "od.kurali":
+                              "pb.kurali":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kurali/logo.png",
-                              "od.lalru":
+                              "pb.lalru":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.lalru/logo.png",
-                              "od.lehragaga":
+                              "pb.lehragaga":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.lehragaga/logo.png",
-                              "od.lehramohabbat":
+                              "pb.lehramohabbat":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.lehramohabbat/logo.png",
-                              "od.lohiankhas":
+                              "pb.lohiankhas":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.lohiankhas/logo.png",
-                              "od.longowal":
+                              "pb.longowal":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.longowal/logo.png",
-                              "od.ludhiana":
+                              "pb.ludhiana":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ludhiana/logo.png",
-                              "od.machhiwara":
+                              "pb.machhiwara":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.machhiwara/logo.png",
-                              "od.mahilpur":
+                              "pb.mahilpur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mahilpur/logo.png",
-                              "od.majitha":
+                              "pb.majitha":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.majitha/logo.png",
-                              "od.makhu":
+                              "pb.makhu":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.makhu/logo.png",
-                              "od.malerkotla":
+                              "pb.malerkotla":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.malerkotla/logo.png",
-                              "od.mallanwala":
+                              "pb.mallanwala":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mallanwala/logo.png",
-                              "od.maloud":
+                              "pb.maloud":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.maloud/logo.png",
-                              "od.malout":
+                              "pb.malout":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.malout/logo.png",
-                              "od.maluka":
+                              "pb.maluka":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.maluka/logo.png",
-                              "od.mamdot":
+                              "pb.mamdot":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mamdot/logo.png",
-                              "od.mandigobindgarh":
+                              "pb.mandigobindgarh":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mandigobindgarh/logo.png",
-                              "od.mandikalan":
+                              "pb.mandikalan":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mandikalan/logo.png",
-                              "od.mansa":
+                              "pb.mansa":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mansa/logo.png",
-                              "od.maur":
+                              "pb.maur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.maur/logo.png",
-                              "od.mehatpur":
+                              "pb.mehatpur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mehatpur/logo.png",
-                              "od.mehraj":
+                              "pb.mehraj":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mehraj/logo.png",
-                              "od.moga":
+                              "pb.moga":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.moga/logo.png",
-                              "od.mohali":
+                              "pb.mohali":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mohali/logo.png",
-                              "od.moonak":
+                              "pb.moonak":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.moonak/logo.png",
-                              "od.morinda":
+                              "pb.morinda":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.morinda/logo.png",
-                              "od.mudki":
+                              "pb.mudki":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mudki/logo.png",
-                              "od.mukerian":
+                              "pb.mukerian":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mukerian/logo.png",
-                              "od.muktsar":
+                              "pb.muktsar":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.muktsar/logo.png",
-                              "od.mullanpur":
+                              "pb.mullanpur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mullanpur/logo.png",
-                              "od.nabha":
+                              "pb.nabha":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nabha/logo.png",
-                              "od.nadala":
+                              "pb.nadala":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nadala/logo.png",
-                              "od.nakodar":
+                              "pb.nakodar":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nakodar/logo.png",
-                              "od.nangal":
+                              "pb.nangal":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nangal/logo.png",
-                              "od.narotjaimalsingh":
+                              "pb.narotjaimalsingh":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.narotjaimalsingh/logo.png",
-                              "od.nathana":
+                              "pb.nathana":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nathana/logo.png",
-                              "od.nawanshahr":
+                              "pb.nawanshahr":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nawanshahr/logo.png",
-                              "od.nayagaon":
+                              "pb.nayagaon":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nayagaon/logo.png",
-                              "od.nihalsinghwala":
+                              "pb.nihalsinghwala":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nihalsinghwala/logo.png",
-                              "od.nurmahal":
+                              "pb.nurmahal":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nurmahal/logo.png",
-                              "od.pathankot":
+                              "pb.pathankot":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.pathankot/logo.png",
-                              "od.patiala":
+                              "pb.patiala":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.patiala/logo.png",
-                              "od.patran":
+                              "pb.patran":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.patran/logo.png",
-                              "od.patti":
+                              "pb.patti":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.patti/logo.png",
-                              "od.payal":
+                              "pb.payal":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.payal/logo.png",
-                              "od.phagwara":
+                              "pb.phagwara":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.phagwara/logo.png",
-                              "od.phillaur":
+                              "pb.phillaur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.phillaur/logo.png",
-                              "od.punjab":
+                              "pb.punjab":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.punjab/logo.png",
-                              "od.quadian":
+                              "pb.quadian":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.quadian/logo.png",
-                              "od.rahon":
+                              "pb.rahon":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.rahon/logo.png",
-                              "od.raikot":
+                              "pb.raikot":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.raikot/logo.png",
-                              "od.rajasansi":
+                              "pb.rajasansi":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.rajasansi/logo.png",
-                              "od.rajpura":
+                              "pb.rajpura":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.rajpura/logo.png",
-                              "od.raman":
+                              "pb.raman":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.raman/logo.png",
-                              "od.ramdass":
+                              "pb.ramdass":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ramdass/logo.png",
-                              "od.rampura":
+                              "pb.rampura":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.rampura/logo.png",
-                              "od.rampuraphul":
+                              "pb.rampuraphul":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.rampuraphul/logo.png",
-                              "od.rayya":
+                              "pb.rayya":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.rayya/logo.png",
-                              "od.ropar":
+                              "pb.ropar":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ropar/logo.png",
-                              "od.sahnewal":
+                              "pb.sahnewal":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sahnewal/logo.png",
-                              "od.samana":
+                              "pb.samana":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.samana/logo.png",
-                              "od.samrala":
+                              "pb.samrala":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.samrala/logo.png",
-                              "od.sanaur":
+                              "pb.sanaur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sanaur/logo.png",
-                              "od.sangatmandi":
+                              "pb.sangatmandi":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sangatmandi/logo.png",
-                              "od.sangrur":
+                              "pb.sangrur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sangrur/logo.png",
-                              "od.sardulgarh":
+                              "pb.sardulgarh":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sardulgarh/logo.png",
-                              "od.shahkot":
+                              "pb.shahkot":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.shahkot/logo.png",
-                              "od.shamchurasi":
+                              "pb.shamchurasi":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.shamchurasi/logo.png",
-                              "od.sirhind":
+                              "pb.sirhind":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sirhind/logo.png",
-                              "od.srihargobindpur":
+                              "pb.srihargobindpur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.srihargobindpur/logo.png",
-                              "od.sujanpur":
+                              "pb.sujanpur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sujanpur/logo.png",
-                              "od.sultanpurlodhi":
+                              "pb.sultanpurlodhi":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sultanpurlodhi/logo.png",
-                              "od.sunam":
+                              "pb.sunam":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sunam/logo.png",
-                              "od.talwandibhai":
+                              "pb.talwandibhai":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.talwandibhai/logo.png",
-                              "od.talwandisabo":
+                              "pb.talwandisabo":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.talwandisabo/logo.png",
-                              "od.talwara":
+                              "pb.talwara":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.talwara/logo.png",
-                              "od.tapa":
+                              "pb.tapa":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.tapa/logo.png",
-                              "od.tarntaran":
+                              "pb.tarntaran":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.tarntaran/logo.png",
-                              "od.testing":
+                              "pb.testing":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.testing/logo.png",
-                              "od.urmartanda":
+                              "pb.urmartanda":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.urmartanda/logo.png",
-                              "od.zira":
+                              "pb.zira":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.zira/logo.png",
-                              "od.zirakpur":
+                              "pb.zirakpur":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.zirakpur/logo.png",
-                              "od.janaagraha":
+                              "pb.janaagraha":
                                "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.janaagraha/logo.png" 
                             }
         },
@@ -862,7 +862,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.goraya",
+                    "label": "pb.goraya",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -904,7 +904,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.sirhind",
+                    "label": "pb.sirhind",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -946,7 +946,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.abohar",
+                    "label": "pb.abohar",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -988,7 +988,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.derabassi",
+                    "label": "pb.derabassi",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1030,7 +1030,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.doraha",
+                    "label": "pb.doraha",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1072,7 +1072,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.ferozepur",
+                    "label": "pb.ferozepur",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1114,7 +1114,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.hoshiarpur",
+                    "label": "pb.hoshiarpur",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1180,7 +1180,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.mansa",
+                    "label": "pb.mansa",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1222,7 +1222,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.nurmahal",
+                    "label": "pb.nurmahal",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1264,7 +1264,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.zirakpur",
+                    "label": "pb.zirakpur",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1306,7 +1306,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.amritsar",
+                    "label": "pb.amritsar",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1348,7 +1348,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.bathinda",
+                    "label": "pb.bathinda",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1390,7 +1390,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.jalandhar",
+                    "label": "pb.jalandhar",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1432,7 +1432,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.ludhiana",
+                    "label": "pb.ludhiana",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1474,7 +1474,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.moga",
+                    "label": "pb.moga",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1516,7 +1516,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.mohali",
+                    "label": "pb.mohali",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1558,7 +1558,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.pathankot",
+                    "label": "pb.pathankot",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1600,7 +1600,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.patiala",
+                    "label": "pb.patiala",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"
@@ -1642,7 +1642,7 @@
                     "symbol": "text"
                 },
                 {
-                    "label": "od.phagwara",
+                    "label": "pb.phagwara",
                     "name": "Boundary",
                     "value": null,
                     "symbol": "text"

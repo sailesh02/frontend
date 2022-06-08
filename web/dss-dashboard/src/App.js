@@ -8,7 +8,7 @@ import { changeTheName } from '../src/actions/firstAction';
 import { updateLanguage } from './actions/languageChange';
 import './App.css';
 import variables from './styles/variables';
-import { fetchLocalisationRequest } from './utils/commons';
+import { fetchLocalisationRequest, getLocaleLabels, getTenantId } from './utils/commons';
 import Layout from './utils/Layout';
 import { loadUlbLogo } from './utils/block';
 
@@ -88,7 +88,7 @@ let dataL = {
     "DSS_DENOMINATION": "Denomination",
     "DSS_PDF": "PDF",
     "DSS_IMAGE": "Image",
-    "DSS_MORE_ACTIONS": "More Actions",
+    "DSS_MORE_ACTIONS": "DSS_MORE_ACTIONS",
     "DSS_VIEW_ALL": "VIEW_ALL",
     "DSS_BACK_TO_MY_DASHBOARD": "Back to MyDashboard",
     "DSS_ROWS": "Rows",
@@ -130,16 +130,16 @@ class App extends React.Component {
   }
  
   loadLocalisation = () => {
-    let language = localStorage.getItem("Employee.locale");
+    let language = localStorage.getItem("Employee.locale")||'en_IN';
     let localisationLabels = JSON.parse(localStorage.getItem(`localization_${language}`)) || [];
     if (localisationLabels.length == 0 || localisationLabels.filter(localisation => localisation.module == "rainmaker-dss").length == 0) {
       let localisationRequest = fetchLocalisationRequest(language);
       axios.post(localisationRequest.reqUrl, localisationRequest.reqBody, localisationRequest.reqHeaders)
         .then(response => {
+          localStorage.setItem(`localization_${language}`,JSON.stringify(response.data.messages));
           this.setLocalisation(response.data.messages);
         })
         .catch(error => {
-          console.log(error.response)
         });
     } else {
       this.setLocalisation(localisationLabels);
@@ -158,13 +158,18 @@ class App extends React.Component {
       'en': newIndex,
       'hi': {}
     }
+    getLocaleLabels("check",dataL?.en);
     this.props.updateLanguage(dataL);
   }
 
   componentDidMount() {
     document.title = "DSS Dashboard";
     this.loadLocalisation();
-    loadUlbLogo(localStorage.getItem('tenant-id'));
+    loadUlbLogo(getTenantId());
+    // if(process.env.NODE_ENV==="development"){
+    //   localStorage.setItem("Employee.token","ee8ddea4-eef5-4719-b467-a6cfaff25cb3")
+    //   localStorage.setItem("tenant-id","od.cuttack");
+    // }
   }
 
   changeTheName = (e) => {

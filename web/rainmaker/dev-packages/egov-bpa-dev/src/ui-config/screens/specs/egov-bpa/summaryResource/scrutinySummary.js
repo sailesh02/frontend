@@ -39,6 +39,7 @@ const getHeader = label => {
     window.scrollTo(0,document.body.scrollHeight);
 };
 const resubmitScrutiny = (state, dispatch) => {
+    
     let scrutinyObj = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", {})
     let applicationNo = get(state.screenConfiguration.preparedFinalObject, "BPA.applicationNo", {})
     let edcrNumber = get(state.screenConfiguration.preparedFinalObject, "BPA.edcrNumber", {})

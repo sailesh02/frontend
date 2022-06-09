@@ -149,7 +149,7 @@ export const buttonAfterApproved = () => {
   }
 };
 
-
+//Send to application Preview page 
 export const previewAndForwardApplication = async (state, dispatch, action) => {
 
   let payload = get(state, "screenConfiguration.preparedFinalObject.BPA");

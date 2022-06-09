@@ -197,4 +197,5 @@ export const gotoHomeFooter = getCommonApplyFooter({
   },
     visible : false
   }
+  
 });

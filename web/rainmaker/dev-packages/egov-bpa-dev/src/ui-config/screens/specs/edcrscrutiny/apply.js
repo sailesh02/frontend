@@ -16,6 +16,7 @@ import {fetchMDMSData, setValuesForRework} from "./functions";
 import {getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 
+
 //for displaying note in entire grid
 const getLabelWithValueNote = (label, value, props = {}) => {
   return {

@@ -140,8 +140,7 @@ class WorkFlowContainer extends React.Component {
       case "SENDBACK_TO_ARCHITECT_FOR_REWORK":
         return "purpose=sendback&status=success";    
       
-          
-    }
+     }
   };
 
   wfUpdate = async label => {

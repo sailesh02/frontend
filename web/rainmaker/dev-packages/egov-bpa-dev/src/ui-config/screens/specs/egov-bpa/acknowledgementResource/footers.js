@@ -467,7 +467,7 @@ export const previewAndSubmit = getCommonApplyFooter({
     children: {
       //downloadReceiptButtonLabel: getLabel
       goToHomeButtonLabel: getLabel({
-        labelName: "GO TO HOME",
+        labelName: "PREVIEW AND SUBMIT",
         labelKey: "BPA_PREVIEW_AND_SUBMIT_BUTTON"
       })
     },

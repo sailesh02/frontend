@@ -841,10 +841,6 @@ const screenConfig = {
       moduleName
     );
     set(action, "screenConfig.components.div.children", data);
-    // if(purpose && purpose === "rework_on_bpa"){
-    //   console.log(purpose, "Nero Purpose")
-    //   set(action, "screenConfig.components.div.children.previewAndSubmit.visible", true);
-    // }
     return action;
   }
 };

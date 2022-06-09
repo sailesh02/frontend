@@ -706,10 +706,19 @@ class SignPdfContainer extends Component {
         let tenantIdCityCode = tenantId && tenantId.split(".")[0]
         try {
           this.props.showSpinner()
-          let response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantId}`, data, {
+          let response;
+          let keysArray = ["buildingpermit", "buildingpermit-low"]
+          if(keysArray.includes(key) && moduleName === "BPA"){
+            response = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=${key}&tenantId=${tenantId}`, data, {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }) 
+          }else{
+           response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantId}`, data, {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           })
+        }
 
 
 

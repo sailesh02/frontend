@@ -337,5 +337,4 @@ const screenConfig = {
     return action;
   }
 };
-
 export default screenConfig;

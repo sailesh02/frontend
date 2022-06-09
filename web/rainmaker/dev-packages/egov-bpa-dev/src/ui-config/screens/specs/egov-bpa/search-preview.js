@@ -1483,7 +1483,7 @@ const screenConfig = {
         children: {
           popup: getCommonContainer({
             header: getCommonHeader({
-              labelName: "Forward Application",
+              labelName: "Scrutiny Header",
               labelKey: "BPA_SCRUTINY_HISTORY_HEADER"
             }),
             closePop: getCommonContainer({

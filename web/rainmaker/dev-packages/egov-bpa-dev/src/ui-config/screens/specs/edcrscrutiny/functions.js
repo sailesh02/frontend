@@ -712,21 +712,6 @@ export const setValuesForRework = (action, state, dispatch) =>{
     "screenConfig.components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.dropdown.props.value",
     tenantId
     )
-  
-  
-    // set(
-    //   action,
-    //   "screenConfig.components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.servicetype.props.value",
-      
-    //   serviceType
-    // )
-  
-  
-    // set(
-    //   action,
-    //   "screenConfig.components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.applicantName.props.value",
-    //   applicantName
-    // )
 
     dispatch(prepareFinalObject("scrutinyDetails.applicationSubType", serviceType));
     dispatch(prepareFinalObject("Scrutiny[0].applicantName", applicantName));

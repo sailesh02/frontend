@@ -227,6 +227,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
+    const scrutinyType = getQueryArg(window.location.href, "scrutinyType");
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -267,7 +268,33 @@ const screenConfig = {
                 false
               )
             )
-          } else if (purpose == "apply" && status == "success") {
+          }else if (purpose == "apply" && status == "success" && scrutinyType == "rework") {
+            dispatch(
+              handleField(
+                "acknowledgement",
+                "components.div.children.gotoHomeFooter.children.bpaCreateApp",
+                "visible",
+                false
+              )
+            )
+            dispatch(
+              handleField(
+                "acknowledgement",
+                "components.div.children.gotoHomeFooter.children.ocCreateApp",
+                "visible",
+                false
+              )
+            )
+            dispatch(
+              handleField(
+                "acknowledgement",
+                "components.div.children.gotoHomeFooter.children.updateBpaAppWithNewScrutiny",
+                "visible",
+                true
+              )
+            )
+          } 
+          else if (purpose == "apply" && status == "success") {
             dispatch(
               handleField(
                 "acknowledgement",

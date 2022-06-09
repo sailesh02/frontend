@@ -156,6 +156,11 @@ const BpaSanctionFeesCard = Loadable({
   loader: () => import("./BpaSanctionFeesCard"),
   loading: () => <Loading />
 });
+const CloseDialog = Loadable({
+  loader: () => import("./CloseDialog"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -189,5 +194,6 @@ export {
   BPAHowItWorks,
   TrainingTutorials,
   PBATrainingTutorials,
-  BpaSanctionFeesCard
+  BpaSanctionFeesCard,
+  CloseDialog
 };

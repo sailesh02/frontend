@@ -7,7 +7,8 @@ import {
   paymentSuccessFooter,
   gotoHomeFooter,
   approvalSuccessFooter,
-  paymentFailureFooter
+  paymentFailureFooter,
+  previewAndSubmit
 } from "./acknowledgementResource/footers";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -760,7 +761,38 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
+  }else if (purpose === "rework_on_bpa" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Submitted Successfully",
+              labelKey: "BPA_APPLICATION_LINKED_SCRUTINY_MSG"
+            },
+            body: {
+              labelName:
+                "A notification regarding Application Submission has been sent to building owner at registered Mobile No.",
+              labelKey: "BPA_APPLICATION_SUCCESS_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+     previewAndSubmit
+    };
   }
+
+
 };
 
 const getBpaDetails = async ( action, state, dispatch, applicationNumber, tenantId ) => {
@@ -809,6 +841,10 @@ const screenConfig = {
       moduleName
     );
     set(action, "screenConfig.components.div.children", data);
+    // if(purpose && purpose === "rework_on_bpa"){
+    //   console.log(purpose, "Nero Purpose")
+    //   set(action, "screenConfig.components.div.children.previewAndSubmit.visible", true);
+    // }
     return action;
   }
 };

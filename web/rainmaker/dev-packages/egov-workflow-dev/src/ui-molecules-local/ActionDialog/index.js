@@ -40,13 +40,25 @@ const fieldConfig = {
       labelName: "Enter Comments",
       labelKey: "WF_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
     }
-  }
+  },
+  reworkReason: {
+    label: {
+      labelName: "Rework reason",
+      labelKey: "WF_REWORK_REASON_LABEL"
+    },
+    placeholder: {
+      labelName: "Select rework reason",
+      labelKey: "WF_REWORK_REASON_PLACEHOLDER"
+    }
+  },
 };
 
 class ActionDialog extends React.Component {
   state = {
     employeeList: [],
-    roles: ""
+    roles: "",
+    isSelectedOtherOption: false,
+    reworkReasonValue: ""
   };
 
   // onEmployeeClick = e => {
@@ -84,6 +96,27 @@ class ActionDialog extends React.Component {
     }
   };
 
+  setBPAReworkReason = (value) => {
+    let {
+      
+      handleFieldChange,
+      
+      dataPath
+    } = this.props;
+    console.log(value, "Nero Event");
+    if(value === "Write other reason"){
+      this.setState({isSelectedOtherOption: true})
+    }else{
+      this.setState({isSelectedOtherOption: false})
+    }
+      
+    handleFieldChange(
+      `${dataPath}.workflow.comment`,
+      value
+    )
+    this.setState({reworkReasonValue: value})
+
+  }
   render() {
 
     let {
@@ -104,7 +137,7 @@ class ActionDialog extends React.Component {
     } = dialogData;
     const { getButtonLabelName } = this;
     let fullscreen = false;
-    const showAssignee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+    let showAssignee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     if (window.innerWidth <= 768) {
       fullscreen = true;
     }
@@ -131,8 +164,16 @@ class ActionDialog extends React.Component {
     } else {
       wfDocumentsPath = `${dataPath}.wfDocuments`
     }
-
+    
+    var isBPARework = false;
+    
+    if(dataPath === "BPA.workflow" && buttonLabel == "SENDBACK_TO_ARCHITECT_FOR_REWORK"){
+      isBPARework = true;
+      showAssignee = false;
+    }
     return (
+
+      
       <Dialog
         fullScreen={fullscreen}
         open={open}
@@ -176,6 +217,38 @@ class ActionDialog extends React.Component {
                   >
                     <CloseIcon />
                   </Grid>
+                  {(()=>{
+                    if(isBPARework){
+                     return <Grid
+                      item
+                      sm="12"
+                      style={{
+                        marginTop: 16
+                      }}
+                    >
+                     <TextFieldContainer
+                        select={true}
+                        style={{ marginRight: "15px" }}
+                        label={fieldConfig.reworkReason.label}
+                        placeholder={fieldConfig.reworkReason.placeholder}
+                        data={[{label: "Plot is being affected by CDP road/drain", value:"Plot is being affected by CDP road/drain"},
+                         {label: "Plot and road details are not matching with site inspection", value:"Plot and road details are not matching with site inspection"},
+                        {label: "Plot is being affected by road widening", value:"Plot is being affected by road widening"},
+                         
+                          {label: "Write other reason", value:"Write other reason"}]}
+                        optionValue="value"
+                        optionLabel="label"
+                        hasLocalization={false}
+                        
+                        onChange={e =>
+                          this.setBPAReworkReason(e.target.value)
+                        }
+                        
+                       value={this.state.reworkReasonValue}
+                      />
+                    </Grid>
+                    }
+                  })()}
                   {showEmployeeList && showAssignee && (
                     <Grid
                       item
@@ -205,17 +278,24 @@ class ActionDialog extends React.Component {
                     </Grid>
                   )}
                   <Grid item sm="12">
-                    <TextFieldContainer
-                      InputLabelProps={{ shrink: true }}
-                      label={fieldConfig.comments.label}
-                      onChange={e =>
-                        handleFieldChange(`${dataPath}.comment`, e.target.value)
+                    {(()=>{
+                      if(!this.state.isSelectedOtherOption){
+
+                      }else {
+                      return  <TextFieldContainer
+                          InputLabelProps={{ shrink: true }}
+                          label={fieldConfig.comments.label}
+                          onChange={e =>
+                            handleFieldChange(`${dataPath}.comment`, e.target.value)
+                          }
+                          multiline={true}
+                          rows='5'
+                          jsonPath={`${dataPath}.comment`}
+                          placeholder={fieldConfig.comments.placeholder}
+                        />
                       }
-                      multiline={true}
-                      rows='5'
-                      jsonPath={`${dataPath}.comment`}
-                      placeholder={fieldConfig.comments.placeholder}
-                    />
+                    })()}
+                    
                   </Grid>
                   <Grid item sm="12">
                     <Typography
@@ -231,11 +311,23 @@ class ActionDialog extends React.Component {
                       }}
                     >
                       <div className="rainmaker-displayInline">
-                      {moduleName != "MR" ?
+                      {(()=>{
+                        if(moduleName === "MR"){
+
+                        }else if(isBPARework){
+
+                        }else{
+                        return  <LabelContainer
+                          labelName="Supporting Documents"
+                          labelKey="WF_APPROVAL_UPLOAD_HEAD"
+                        />
+                        }
+                      })()}  
+                      {/* {moduleName != "MR"?
                         <LabelContainer
                           labelName="Supporting Documents"
                           labelKey="WF_APPROVAL_UPLOAD_HEAD"
-                        />: ''}
+                        />: ''} */}
                         {isDocRequired && (
                           <span style={{ marginLeft: 5, color: "red" }}>*</span>
                         )}
@@ -250,13 +342,42 @@ class ActionDialog extends React.Component {
                         lineHeight: "20px"
                       }}
                     >
-                      {moduleName != "MR" ?
+                      {(()=>{
+                        if(moduleName === "MR"){
+
+                        }else if(isBPARework){
+
+                        }else{
+                        return  <LabelContainer
+                        labelName="Only .jpg and .pdf files. 5MB max file size."
+                        labelKey="WF_APPROVAL_UPLOAD_SUBHEAD"
+                      />
+                        }
+                      })()}
+                      {/* {moduleName != "MR" ?
                       <LabelContainer
                         labelName="Only .jpg and .pdf files. 5MB max file size."
                         labelKey="WF_APPROVAL_UPLOAD_SUBHEAD"
-                      />: ""}
+                      />: ""} */}
                     </div>
-                    {moduleName != "MR" ?
+                    {(()=>{
+                        if(moduleName === "MR"){
+
+                        }else if(isBPARework){
+
+                        }else{
+                        return  <UploadMultipleFiles
+                          maxFiles={4}
+                          inputProps={{
+                            accept: "image/*, .pdf, .png, .jpeg"
+                          }}
+                          buttonLabel={{ labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON" }}
+                          jsonPath={wfDocumentsPath}
+                          maxFileSize={5000}
+                        />
+                        }
+                      })()}
+                    {/* {moduleName != "MR" ?
                     <UploadMultipleFiles
                       maxFiles={4}
                       inputProps={{
@@ -265,7 +386,7 @@ class ActionDialog extends React.Component {
                       buttonLabel={{ labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON" }}
                       jsonPath={wfDocumentsPath}
                       maxFileSize={5000}
-                    />:""}
+                    />:""} */}
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                       <Button
                         variant={"contained"}
@@ -296,6 +417,7 @@ class ActionDialog extends React.Component {
           }
         />
       </Dialog>
+        
     );
   }
 }

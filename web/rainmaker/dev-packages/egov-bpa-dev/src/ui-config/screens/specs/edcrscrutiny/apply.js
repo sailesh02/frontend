@@ -12,7 +12,9 @@ import {
 import { documentList } from "./documentList";
 import { resetFields, submitFields } from "./functions";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField, } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {fetchMDMSData} from "./functions";
+import {fetchMDMSData, setValuesForRework} from "./functions";
+import {getQueryArg
+} from "egov-ui-framework/ui-utils/commons";
 
 //for displaying note in entire grid
 const getLabelWithValueNote = (label, value, props = {}) => {
@@ -247,7 +249,12 @@ const buildingInfoCard = getCommonCard({
           disabled: true
         }
       }
-    }),
+    },
+    {
+      style:getQueryArg(window.location.href, "purpose") === "REWORK"? {"pointer-events":"none", "cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
+    
+    }
+    ),
     dummyDiv2: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
@@ -379,6 +386,7 @@ const screenConfig = {
     dispatch(prepareFinalObject("Note[0].message","kindly refer to the following link to get GIS and Comprehensive Development Plan, Airports Authority of India (AAI), National Monuments Authority (NMA) and other related information."))
     dispatch(prepareFinalObject("Note[0].link","https://bhubaneswarone.in/home/"))
     fetchMDMSData(action, state, dispatch);
+    setValuesForRework(action, state, dispatch);
     return action;
   },
   components: {

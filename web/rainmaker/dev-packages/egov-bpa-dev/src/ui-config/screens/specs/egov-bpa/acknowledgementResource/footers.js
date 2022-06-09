@@ -5,6 +5,7 @@ import "./index.css";
 import get from "lodash/get";
 import { stat } from "fs";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("CITIZEN")
@@ -326,6 +327,20 @@ export const paymentFailureFooter = (applicationNumber, tenant) => {
   });
 };
 
+const goForPreview = async(state, dispatch) => {
+  
+  let bpaApp = getQueryArg(window.location.href, "applicationNumber");
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let type = getQueryArg(window.location.href, "type");
+  let bservice = getQueryArg(window.location.href, "bservice");
+  
+
+  let url = `/egov-bpa/search-preview?applicationNumber=${bpaApp}&tenantId=${tenantId}&type=${type}&bservice=${bservice}`
+        dispatch(setRoute(url));
+  // let resubmitScrutinyURL = `/edcrscrutiny/apply?purpose=REWORK&tenantId=${tenantId}&applicantName=${applicantName}&serviceType=${serviceType}&bpaApp=${applicationNo}&oldEdcr=${edcrNumber}`
+  // dispatch(setRoute(resubmitScrutinyURL));  
+
+}
 //Function for payment success(Show buttons for download and print receipts)
 export const paymentSuccessFooter = () => {
   return getCommonApplyFooter({
@@ -410,3 +425,58 @@ export const paymentSuccessFooter = () => {
 };
 
 //Write a function using map to return buttons
+
+//Function for go to home button
+export const previewAndSubmit = getCommonApplyFooter({
+  gotoHome: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+       // minWidth: "200px",
+        height: "48px",
+        marginRight: "16px"
+      }
+    },
+    children: {
+      //downloadReceiptButtonLabel: getLabel
+      goToHomeButtonLabel: getLabel({
+        labelName: "GO TO HOME",
+        labelKey: "BPA_HOME_BUTTON"
+      })
+    },
+    // Check this onClickDefinition later again
+    onClickDefination: {
+      action: "page_change",
+      path: `${getRedirectionURL()}`
+    }
+  },
+  previewAndSubmit: {
+    componentPath: "Button",
+    visible: getQueryArg(window.location.href, "purpose") === "rework_on_bpa"? true: false,
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+       // minWidth: "200px",
+        height: "48px",
+        marginRight: "16px"
+      }
+    },
+    children: {
+      //downloadReceiptButtonLabel: getLabel
+      goToHomeButtonLabel: getLabel({
+        labelName: "PREVIEW AND SUBMIT",
+        labelKey: "BPA_PREVIEW_AND_SUBMIT_BUTTON"
+      })
+    },
+    // Check this onClickDefinition later again
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+          goForPreview(state, dispatch);
+      }
+  }
+  }
+});

@@ -137,9 +137,10 @@ class WorkFlowContainer extends React.Component {
         return "purpose=applymeterreplace&status=success";  
       case "METER_REPLACE_APPROVE_APPLICATION":
         return "purpose=approve_meter_replace&status=success";  
-  
-          
-    }
+      case "SENDBACK_TO_ARCHITECT_FOR_REWORK":
+        return "purpose=sendback&status=success";    
+      
+     }
   };
 
   wfUpdate = async label => {

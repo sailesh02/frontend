@@ -129,6 +129,16 @@ class DocumentList extends Component {
     });
   };
 
+  checkWidth = (width, height, uploadedDocuments, uploadedDocIndex, dispatch) => {
+    if(width > 190 || height > 190){
+      uploadedDocuments[uploadedDocIndex] = [{}]
+      dispatch(toggleSnackbar( true, {
+        labelName: "Please upload the image of width & height 5cm",
+        labelKey: "Please upload the image of width & height 5cm"
+      },"error"))
+    }   
+  }
+
   handleDocument = async (file, fileStoreId, dispatch) => {
     let { uploadedDocIndex, uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, tenantId } = this.props;
@@ -138,7 +148,24 @@ class DocumentList extends Component {
       const FILEURL = fileUrl.fileStoreIds[0].url.split(",")[0]
       const {width, height} = await this.getImageDimensions(FILEURL);
       console.log(`Image dimensions: ${width}px x ${height}px`);
-    
+      
+    if(uploadedDocIndex != 16){
+      uploadedDocuments = {
+        ...uploadedDocuments,
+        [uploadedDocIndex]: [
+          {
+            fileName: file.name,
+            fileStoreId,
+            fileUrl: Object.values(fileUrl)[0],
+            documentType: code,
+            tenantId,
+            width: width,
+            height: height 
+          }
+        ]
+      };
+    }
+  else{
     uploadedDocuments = {
       ...uploadedDocuments,
       [uploadedDocIndex]: [
@@ -149,10 +176,13 @@ class DocumentList extends Component {
           documentType: code,
           tenantId,
           width: width,
-          height: height 
+          height: height
         }
       ]
     };
+    this.checkWidth(width, height, uploadedDocuments, uploadedDocIndex,dispatch)
+  }
+    
     
     prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", {
       ...uploadedDocuments
@@ -167,21 +197,6 @@ class DocumentList extends Component {
       width: width,
       height: height 
     });
-    if(uploadedDocuments[16][0].height > 190 || uploadedDocuments[16][0].width > 190){
-      uploadedDocuments[16] = [{}]
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "Please upload the image of width 5cm & height 5cm",
-            labelKey: "Please upload the image of width 5cm & height 5cm"
-          },
-          "error"
-        )
-      );
-      
-    }
- 
     this.setState({ uploadedDocuments });
     this.getFileUploadStatus(true, uploadedDocIndex);
   };

@@ -48,7 +48,7 @@ class Layout extends Component {
                         <AppRouter />
                     </main>
                 </div>
-                <div className="employee-home-footer">
+                {/* <div className="employee-home-footer">
                     <img
                         alt="Powered by DIGIT"
                         src={`${sourceUrl}/digit-footer.png`}
@@ -57,7 +57,7 @@ class Layout extends Component {
                         onClick={() => {
                         window.open('https://www.digit.org/', '_blank').focus();
                         }}/>
-                </div>
+                </div> */}
             </div>
         )
 

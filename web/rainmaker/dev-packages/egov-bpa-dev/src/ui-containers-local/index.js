@@ -144,6 +144,10 @@ const BpaSanctionFeeCardContainer =  Loadable({
   loader: () => import("./BpaSanctionFeeCardContainer"),
   loading: () => <Loading />
 });
+const EdcrHistory =  Loadable({
+  loader: () => import("./EdcrHistory"),
+  loading: () => <Loading />
+});
 
 export {
   CustomTabContainer,
@@ -173,5 +177,6 @@ export {
   TextAreaContainer,
   TriggerNOCContainer,
   BpaSanctionFeeCardContainer,
-  TextAreaContainerForBpa
+  TextAreaContainerForBpa,
+  EdcrHistory
 };

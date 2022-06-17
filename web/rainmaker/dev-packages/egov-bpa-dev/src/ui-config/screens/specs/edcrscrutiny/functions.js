@@ -8,13 +8,14 @@ import {
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
-import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels, getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId, getUserInfo, getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { edcrHttpRequest } from "../../../../ui-utils/api";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import { convertDateToEpoch, getLicenseDetails, validateFields } from "../utils";
+
 const userTenant = getTenantId();
 const userUUid = get(JSON.parse(getUserInfo()), "uuid");
 export const fetchData = async (
@@ -154,7 +155,17 @@ const moveToSuccess = (state, dispatch, edcrDetail, isOCApp) => {
       );
     }
   }
-  let url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}`;
+
+  let scrutinyType = '';
+  if(getQueryArg(window.location.href, "purpose") === 'REWORK'){
+    let bpaApp = getQueryArg(window.location.href, "bpaApp");
+    let oldEdcr = getQueryArg(window.location.href, "oldEdcr");
+    let type = getQueryArg(window.location.href, "type");
+    let bservice = getQueryArg(window.location.href, "bservice");
+    scrutinyType = `&scrutinyType=rework&bpaApp=${bpaApp}&oldEdcr=${oldEdcr}&type=${type}&bservice=${bservice}`;
+  }
+
+  let url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}${scrutinyType}`;
   dispatch(
     setRoute(
       url
@@ -689,4 +700,22 @@ export const resetOCFields = (state, dispatch) => {
   dispatch(prepareFinalObject("Scrutiny[0].permitDate", ""));
   dispatch(prepareFinalObject("Scrutiny[0].permitNumber", ""));
   dispatch(prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux[0]", []));
+}
+
+export const setValuesForRework = (action, state, dispatch) =>{
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let applicantName = getQueryArg(window.location.href, "applicantName");
+  let serviceType = getQueryArg(window.location.href, "serviceType");
+  console.log(tenantId, "Nero tenant Id")
+  set(
+    action,
+    "screenConfig.components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.dropdown.props.value",
+    tenantId
+    )
+
+    dispatch(prepareFinalObject("scrutinyDetails.applicationSubType", serviceType));
+    dispatch(prepareFinalObject("Scrutiny[0].applicantName", applicantName));
+    dispatch(prepareFinalObject("Scrutiny[0].tenantId", tenantId));
+ 
+
 }

@@ -137,9 +137,10 @@ class WorkFlowContainer extends React.Component {
         return "purpose=applymeterreplace&status=success";  
       case "METER_REPLACE_APPROVE_APPLICATION":
         return "purpose=approve_meter_replace&status=success";  
-  
-          
-    }
+      case "SENDBACK_TO_ARCHITECT_FOR_REWORK":
+        return "purpose=sendback&status=success";    
+      
+     }
   };
 
   wfUpdate = async label => {
@@ -709,8 +710,12 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
       bservice = "TL"
     }
-    if(moduleName = "MRCORRECTION"&& action == "EDIT"){
+     if(moduleName === "MRCORRECTION" && action === "EDIT"){
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "mr-citizen" : "mr";
+      return `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`
+    }
+    else if(moduleName === "NewTL" && action === "EDIT"){
+      baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
       return `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`
     }
     const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
@@ -718,7 +723,7 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
       case "PAY": return bservice ? `${payUrl}&businessService=${bservice}` : payUrl;
       case "EDIT": return isAlreadyEdited
         ? `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-        : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
+        : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`; 
     }
   };
 

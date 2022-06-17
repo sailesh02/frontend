@@ -497,7 +497,7 @@ let BPADocs;
     }
 
     let reworkHistory = data.reWorkHistory && data.reWorkHistory.edcrHistory
-    if(reworkHistory.length > 2){
+    if(reworkHistory && reworkHistory.length > 2){
       toggleSnackbar(
         true,
         {

@@ -274,31 +274,31 @@ export const citizenFooter = getCommonApplyFooter({
       action : "FORWARD"
     }
   },
-  forwardAfterReworkButton: {
-    componentPath: "Button",
-    visible: false,
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "45px"
-      }
-    },
-    children: {
-      submitButtonLabel: getLabel({
-        labelName: "Approve",
-        labelKey: "BPA_REWORK_FORWARD_BUTTON"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: previewAndForwardApplication
-    },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      action : "FORWARD_TO_APPROVER"
-    }
-  }
+  // forwardAfterReworkButton: {
+  //   componentPath: "Button",
+  //   visible: false,
+  //   props: {
+  //     variant: "contained",
+  //     color: "primary",
+  //     style: {
+  //       minWidth: "200px",
+  //       height: "48px",
+  //       marginRight: "45px"
+  //     }
+  //   },
+  //   children: {
+  //     submitButtonLabel: getLabel({
+  //       labelName: "Approve",
+  //       labelKey: "BPA_REWORK_FORWARD_BUTTON"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: previewAndForwardApplication
+  //   },
+  //   roleDefination: {
+  //     rolePath: "user-info.roles",
+  //     action : "FORWARD_TO_APPROVER"
+  //   }
+  // }
 });

@@ -104,15 +104,15 @@ class ActionDialog extends React.Component {
       
       dataPath
     } = this.props;
-    console.log(value, "Nero Event");
-    if(value === "Write other reason"){
-      this.setState({isSelectedOtherOption: true})
-    }else{
-      this.setState({isSelectedOtherOption: false})
-    }
+    // console.log(value, "Nero Event");
+    // if(value === "Write other reason"){
+    //   this.setState({isSelectedOtherOption: true})
+    // }else{
+    //   this.setState({isSelectedOtherOption: false})
+    // }
       
     handleFieldChange(
-      `${dataPath}.workflow.comment`,
+      `${dataPath}.reworkReason`,
       value
     )
     this.setState({reworkReasonValue: value})
@@ -280,9 +280,7 @@ class ActionDialog extends React.Component {
                   )}
                   <Grid item sm="12">
                     {(()=>{
-                      if(!this.state.isSelectedOtherOption){
-
-                      }else {
+                      
                       return  <TextFieldContainer
                           InputLabelProps={{ shrink: true }}
                           label={fieldConfig.comments.label}
@@ -294,7 +292,7 @@ class ActionDialog extends React.Component {
                           jsonPath={`${dataPath}.comment`}
                           placeholder={fieldConfig.comments.placeholder}
                         />
-                      }
+                      
                     })()}
                     
                   </Grid>
@@ -314,8 +312,6 @@ class ActionDialog extends React.Component {
                       <div className="rainmaker-displayInline">
                       {(()=>{
                         if(moduleName === "MR"){
-
-                        }else if(isBPARework){
 
                         }else{
                         return  <LabelContainer
@@ -346,8 +342,6 @@ class ActionDialog extends React.Component {
                       {(()=>{
                         if(moduleName === "MR"){
 
-                        }else if(isBPARework){
-
                         }else{
                         return  <LabelContainer
                         labelName="Only .jpg and .pdf files. 5MB max file size."
@@ -363,8 +357,6 @@ class ActionDialog extends React.Component {
                     </div>
                     {(()=>{
                         if(moduleName === "MR"){
-
-                        }else if(isBPARework){
 
                         }else{
                         return  <UploadMultipleFiles

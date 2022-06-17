@@ -285,14 +285,14 @@ const screenConfig = {
                 false
               )
             )
-            dispatch(
-              handleField(
-                "acknowledgement",
-                "components.div.children.gotoHomeFooter.children.updateBpaAppWithNewScrutiny",
-                "visible",
-                true
-              )
-            )
+            // dispatch(
+            //   handleField(
+            //     "acknowledgement",
+            //     "components.div.children.gotoHomeFooter.children.updateBpaAppWithNewScrutiny",
+            //     "visible",
+            //     true
+            //   )
+            // )
           } 
           else if (purpose == "apply" && status == "success") {
             dispatch(

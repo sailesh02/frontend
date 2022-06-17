@@ -67,7 +67,7 @@ if(action && action === "GO_TO_HOME"){
     setRoute("/")
   );
 }else if(action && action === "GOTO_BPA_APP"){
-  let bpaAppUrl = `/egov-bpa/search-preview?applicationNumber=${bpaApp}&tenantId=${tenantId}&type=${type}&bservice=${bservice}`;
+  let bpaAppUrl = `/citizen/egov-bpa/search-preview?applicationNumber=${bpaApp}&tenantId=${tenantId}&type=${type}&bservice=${bservice}`;
   var win = window.open(bpaAppUrl, '_blank');
   if(win){
     win.focus();

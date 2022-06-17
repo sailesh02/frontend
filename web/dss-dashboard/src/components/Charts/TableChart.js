@@ -270,7 +270,7 @@ class TableChart extends Component {
   applyFilter = (visualcode, drillCode, drilfilters, tabName, rowData, event) => {
     let tempValue = rowData[drilfilters.column];
     tempValue = (typeof tempValue === 'object') ? tempValue[0] : tempValue;
-    tabName = tabName.toUpperCase();
+    tabName = tabName ? tabName.toUpperCase():'';
     let tempArr = [visualcode, drillCode, drilfilters, tabName, tempValue];
     let filterList = this.state.filterList;
 

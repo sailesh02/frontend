@@ -302,7 +302,7 @@ const mapStateToProps = state => {
   let tlStatus = get(Licenses[0], 'status', "");
   let userAction = getQueryArg(window.location.href, "action");
 
-  if (tlStatus && (tlStatus != "INITIATED") && userAction != "EDITRENEWAL") {
+  if (tlStatus && (tlStatus != "INITIATED" && tlStatus !="CITIZENACTIONPENDINGATDOCVERIFICATION") && (userAction != "EDITRENEWAL" && userAction != "edit")){
     hasAddItem = false
   }
   // if (userAction === "EDITRENEWAL" && (tlStatus == "APPROVED" || tlStatus == "EXPIRED" || tlStatus == "INITIATED")) {

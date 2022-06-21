@@ -311,14 +311,12 @@ class ActionDialog extends React.Component {
                     >
                       <div className="rainmaker-displayInline">
                       {(()=>{
-                        if(moduleName === "MR"){
-
-                        }else{
+                        
                         return  <LabelContainer
                           labelName="Supporting Documents"
                           labelKey="WF_APPROVAL_UPLOAD_HEAD"
                         />
-                        }
+
                       })()}  
                       {/* {moduleName != "MR"?
                         <LabelContainer
@@ -340,14 +338,12 @@ class ActionDialog extends React.Component {
                       }}
                     >
                       {(()=>{
-                        if(moduleName === "MR"){
-
-                        }else{
+                        
                         return  <LabelContainer
                         labelName="Only .jpg and .pdf files. 5MB max file size."
                         labelKey="WF_APPROVAL_UPLOAD_SUBHEAD"
                       />
-                        }
+                        
                       })()}
                       {/* {moduleName != "MR" ?
                       <LabelContainer
@@ -356,9 +352,7 @@ class ActionDialog extends React.Component {
                       />: ""} */}
                     </div>
                     {(()=>{
-                        if(moduleName === "MR"){
-
-                        }else{
+                        
                         return  <UploadMultipleFiles
                           maxFiles={4}
                           inputProps={{
@@ -368,7 +362,7 @@ class ActionDialog extends React.Component {
                           jsonPath={wfDocumentsPath}
                           maxFileSize={5000}
                         />
-                        }
+                        
                       })()}
                     {/* {moduleName != "MR" ?
                     <UploadMultipleFiles

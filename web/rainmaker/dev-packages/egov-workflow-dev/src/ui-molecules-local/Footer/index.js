@@ -85,7 +85,7 @@ class Footer extends React.Component {
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
     let employeeList = [];
-    if (item.moduleName == "MR") item.showEmployeeList = false;
+    if (item.moduleName == "MR") item.showEmployeeList = true;
     if (item.buttonLabel === "ACTIVATE_CONNECTION") {
       if (item.moduleName === "NewWS1" || item.moduleName === "NewSW1" || item.moduleName === "SWCloseConnection" ||
         item.moduleName === "SWDisconnection" || item.moduleName === "WSCloseConnection" || item.moduleName === "WSDisconnection" ||

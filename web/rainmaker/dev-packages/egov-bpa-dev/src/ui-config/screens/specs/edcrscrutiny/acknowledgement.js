@@ -234,7 +234,7 @@ const screenConfig = {
     );
     const tenant = getQueryArg(window.location.href, "tenantId");
 
-    getSearchResultsfromEDCRWithApplcationNo(applicationNumber, tenant)
+    getSearchResultsfromEDCRWithApplcationNo(applicationNumber, tenant, dispatch)
       .then(response => {
         if (response.data.edcrDetail.length > 0) {
           const data = getAcknowledgementCard(

@@ -45,7 +45,7 @@ const style = {
 export const downloadReportForRework=async(mode)=>{
   console.log(url, "Nero Heoo")
   let state = store.getState();
-  let scrutinyObj = get(state, "screenConfiguration.preparedFinalObject.scrutinyDetailsForHistory");
+  let scrutinyObj = get(state, "screenConfiguration.preparedFinalObject.submittedScurtinyDetails");
   console.log(scrutinyObj, "Nero Objecct")
   let url = scrutinyObj.planReport
   if (mode === 'download') {

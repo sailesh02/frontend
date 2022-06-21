@@ -422,7 +422,7 @@ export const formwizardFirstStep = {
   },
   children: {
     tradeLocationDetails,
-    primaryOwnerDetails,
+    //primaryOwnerDetails,
     brideDetails,
     groomDetails
 

@@ -152,17 +152,28 @@ dispatch(
 const populateActionDropDown = (action, state, dispatch) => {
   let downloadMenu = [];
   let gotoHome = {
-    label: { labelName: "GO TO HOME", labelKey: "BPA_GO_TO_HOME_BUTTON", },
+    label: { labelName: "GO TO HOME", labelKey: "BPA_HOME_BUTTON", },
     link: () => {
       callBackForReworkActions(state, dispatch, "GO_TO_HOME");
     },
   };
+
+  let status = getQueryArg(
+    window.location.href,
+    "status", ""
+  );
+  let purpose = getQueryArg(
+    window.location.href,
+    "purpose", ""
+  );
+  
   let forwardObject = {
     label: { labelName: "FORWARD", labelKey: "BPA_SUBMIT_BUTTON" },
     link: () => {
       callBackForReworkActions(state, dispatch, "FORWARD");
     },
   };
+  
   let goToBpaApp = {
     label: { labelName: "Go TO BPA APPLICATION", labelKey: "BPA_GOTO_BPA_APP_BUTTON" },
     link: () => {
@@ -175,7 +186,13 @@ const populateActionDropDown = (action, state, dispatch) => {
       callBackForReworkActions(state, dispatch, "GOTO_RESCRUTINY");
     },
   };
-  downloadMenu = [gotoHome, forwardObject, goToBpaApp, goForRescrutiny];
+
+  if(purpose === "apply" && status === "success"){
+    downloadMenu = [gotoHome, forwardObject, goToBpaApp, goForRescrutiny];
+  }else{
+    downloadMenu = [gotoHome, goToBpaApp, goForRescrutiny];
+  }
+  
   dispatch(
     handleField(
       "rework_acknowledgement",
@@ -259,6 +276,70 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
   dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
 }
 
+const setSuccessCards = (action, state, dispatch) => {
+  let status = getQueryArg(
+    window.location.href,
+    "status", ""
+  );
+  let purpose = getQueryArg(
+    window.location.href,
+    "purpose", ""
+  );
+  if(purpose === "apply" && status === "success"){
+
+    set(
+      action,
+      "screenConfig.components.div.children.applicationRejectedCard.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.applicationAbortedCard.visible",
+      false
+    );
+    setEdcrData(action, state, dispatch)
+  }else if (purpose === "apply" && status === "rejected"){
+    
+
+    set(
+      action,
+      "screenConfig.components.div.children.applicationSuccessCard.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.applicationAbortedCard.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.scrutinySummaryForHistory.visible",
+      false
+    );
+    
+  }else if (purpose === "apply" && status === "aborted"){
+    
+
+    set(
+      action,
+      "screenConfig.components.div.children.applicationSuccessCard.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.applicationRejectedCard.visible",
+      false
+    );
+
+    set(
+      action,
+      "screenConfig.components.div.children.scrutinySummaryForHistory.visible",
+      false
+    );
+
+    
+  }
+}
 const setEdcrAndBPAData = async(action, state, dispatch)=>{
   let tenantId = getQueryArg(
     window.location.href,
@@ -277,7 +358,7 @@ const setEdcrAndBPAData = async(action, state, dispatch)=>{
     { key: "applicationNo", value: applicationNumber }
   ]);
   dispatch(prepareFinalObject("BPA", response.BPA[0]));
-  setEdcrData(action, state, dispatch)
+  
   populateActionDropDown(action, state, dispatch);
 }
 const screenConfig = {
@@ -316,6 +397,45 @@ const screenConfig = {
           })
         }
       },
+
+      applicationRejectedCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelName: "Building plan eDCR is Not Accepted",
+              labelKey: "EDCR_REJECTION_MESSAGE"
+            },
+            body: {
+              labelName: "Please make corrections in the diagram and try again",
+              labelKey: "EDCR_REJECTION_COMMENT"
+            }
+          })
+        }
+      },
+
+      applicationAbortedCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelName: "Building plan eDCR is Aborted",
+              labelKey: "EDCR_ABORTED_MESSAGE"
+            },
+            body: {
+              labelName: "The uploaded plan is not drawn as per the standard's , please check the layers and colour coding standards and try again",
+              labelKey: "EDCR_ABORTED_COMMENT"
+            }
+          })
+        }
+      },
+      
       
         scrutinySummaryForHistory: scrutinySummaryForHistory,
         ReworkActionFooterForRework:ReworkActionFooterForRework
@@ -332,115 +452,9 @@ const screenConfig = {
     );
     const tenant = getQueryArg(window.location.href, "tenantId");
     setEdcrAndBPAData(action, state, dispatch);
-//     getSearchResultsfromEDCRWithApplcationNo(applicationNumber, tenant)
-//       .then(response => {
-//         if (response.data.edcrDetail.length > 0) {
-//           const data = getAcknowledgementCard(
-//             state,
-//             dispatch,
-//             purpose,
-//             status,
-//             response.data.edcrDetail[0].applicationNumber,
-//             tenant,
-//             response.data.edcrDetail[0].planReport,
-//             response.data.edcrDetail[0].edcrNumber
-//           );
-// if(scrutinyType){
-
-// }else{
-//   set(action, "screenConfig.components.div.children", data);
-//   dispatch(
-//     handleField("acknowledgement", "components.div", "children", data)
-//   );
-// }
-          
-
-//           if (purpose == "ocapply" && status == "success") {
-//             dispatch(
-//               handleField(
-//                 "acknowledgement",
-//                 "components.div.children.gotoHomeFooter.children.ocCreateApp",
-//                 "visible",
-//                 true
-//               )
-//             )
-//             dispatch(
-//               handleField(
-//                 "acknowledgement",
-//                 "components.div.children.gotoHomeFooter.children.bpaCreateApp",
-//                 "visible",
-//                 false
-//               )
-//             )
-//           }else if (purpose == "apply" && status == "success" && scrutinyType == "rework") {
-//             dispatch(
-//               handleField(
-//                 "acknowledgement",
-//                 "components.div.children.gotoHomeFooter.children.bpaCreateApp",
-//                 "visible",
-//                 false
-//               )
-//             )
-//             dispatch(
-//               handleField(
-//                 "acknowledgement",
-//                 "components.div.children.gotoHomeFooter.children.ocCreateApp",
-//                 "visible",
-//                 false
-//               )
-//             )
-//             dispatch(
-//               handleField(
-//                 "acknowledgement",
-//                 "components.div.children.gotoHomeFooter.children.updateBpaAppWithNewScrutiny",
-//                 "visible",
-//                 true
-//               )
-//             )
-
-                
-
-//           } 
-//           else if (purpose == "apply" && status == "success") {
-//             dispatch(
-//               handleField(
-//                 "acknowledgement",
-//                 "components.div.children.gotoHomeFooter.children.bpaCreateApp",
-//                 "visible",
-//                 true
-//               )
-//             )
-//             dispatch(
-//               handleField(
-//                 "acknowledgement",
-//                 "components.div.children.gotoHomeFooter.children.ocCreateApp",
-//                 "visible",
-//                 false
-//               )
-//             )
-//           } else {
-//             dispatch(
-//               handleField(
-//                 "acknowledgement",
-//                 "components.div.children.gotoHomeFooter.children.ocCreateApp",
-//                 "visible",
-//                 false
-//               )
-//             )
-//             dispatch(
-//               handleField(
-//                 "acknowledgement",
-//                 "components.div.children.gotoHomeFooter.children.bpaCreateApp",
-//                 "visible",
-//                 false
-//               )
-//             )
-//           }
-//         }
-//       })
-//       .catch(error => {
-//         console.error("error while searching " + error.message);
-//       });
+   let response =  getSearchResultsfromEDCRWithApplcationNo(applicationNumber, tenant, dispatch)
+   console.log(response, "Nero Resonse")
+    setSuccessCards(action, state, dispatch);   
     return action;
   }
 };

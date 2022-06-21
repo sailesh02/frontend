@@ -211,7 +211,8 @@ const getSearchResultsfromEDCR = async (action, state, dispatch) => {
 
 export const getSearchResultsfromEDCRWithApplcationNo = async (
   applicationNumber,
-  tenantId
+  tenantId,
+  dispatch
 ) => {
   try {
     let EDCRHost = "";
@@ -237,7 +238,7 @@ export const getSearchResultsfromEDCRWithApplcationNo = async (
       { headers: { "Content-Type": "application/json" } }
     );
 
-    
+    dispatch(prepareFinalObject("submittedScurtinyDetails", response.data.edcrDetail[0]));
     return response;
   } catch (error) {
     console.log(error);

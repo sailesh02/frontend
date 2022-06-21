@@ -133,8 +133,8 @@ class DocumentList extends Component {
     if(width > 190 || height > 190){
       uploadedDocuments[uploadedDocIndex] = [{}]
       dispatch(toggleSnackbar( true, {
-        labelName: "Please upload the image of width & height 5cm",
-        labelKey: "Please upload the image of width & height 5cm"
+        labelName: "Please upload the image of width & height 5cm in JPG/JPEG format only",
+        labelKey: "Please upload the image of width & height 5cm in JPG/JPEG format only"
       },"error"))
     }   
   }
@@ -144,10 +144,8 @@ class DocumentList extends Component {
     const { prepareFinalObject, documents, tenantId } = this.props;
     const { jsonPath, code } = documents[uploadedDocIndex];
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
+    const FILEURL = fileUrl.fileStoreIds[0].url.split(",")[0]
     
-      const FILEURL = fileUrl.fileStoreIds[0].url.split(",")[0]
-      const {width, height} = await this.getImageDimensions(FILEURL);
-      console.log(`Image dimensions: ${width}px x ${height}px`);
       
     if(uploadedDocIndex != 16){
       uploadedDocuments = {
@@ -158,14 +156,13 @@ class DocumentList extends Component {
             fileStoreId,
             fileUrl: Object.values(fileUrl)[0],
             documentType: code,
-            tenantId,
-            width: width,
-            height: height 
+            tenantId
           }
         ]
       };
     }
   else{
+    const {width, height} = await this.getImageDimensions(FILEURL);
     uploadedDocuments = {
       ...uploadedDocuments,
       [uploadedDocIndex]: [
@@ -174,9 +171,7 @@ class DocumentList extends Component {
           fileStoreId,
           fileUrl: Object.values(fileUrl)[0],
           documentType: code,
-          tenantId,
-          width: width,
-          height: height
+          tenantId
         }
       ]
     };
@@ -193,9 +188,7 @@ class DocumentList extends Component {
       fileStoreId,
       fileUrl: Object.values(fileUrl)[0],
       documentType: code,
-      tenantId,
-      width: width,
-      height: height 
+      tenantId
     });
     this.setState({ uploadedDocuments });
     this.getFileUploadStatus(true, uploadedDocIndex);

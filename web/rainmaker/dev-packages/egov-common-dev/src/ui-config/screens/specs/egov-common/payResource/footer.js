@@ -330,10 +330,12 @@ const callBackForZeroPay = async (state, dispatch) => {
   );
 console.log("RESSOPPONSEEEE", response);
   if (response.WaterConnection && response.WaterConnection.length > 0) {
+    console.log("Calling water API");
     let payload = response.WaterConnection[0];
     payload.action = "PAY"
     payload.processInstance.action = "PAY"
     let updateResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: payload });
+    console.log("updateResponseinWAterAPI", updateResponse);
     if (updateResponse.WaterConnection && updateResponse.WaterConnection.length > 0) {
     await updatePayAction(
       state,

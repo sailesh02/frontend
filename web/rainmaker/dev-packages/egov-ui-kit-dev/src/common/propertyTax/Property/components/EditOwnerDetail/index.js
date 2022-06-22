@@ -138,6 +138,7 @@ class EditOwnerDetailDialog extends Component {
                       "", 
                       [], 
                       { Property: payloadQuery });
+                      console.log("wrongupdatedetail3", updatePropertyResponse);
                   if(updatePropertyResponse.Properties.length>0){
                       this.props.closeDialogue(false)
                       

@@ -63,7 +63,7 @@ export const brideWitnessDetails = getCommonCard(
           labelName: "Enter Door/House No.",
           labelKey: "MR_ADDRESS_PLACEHOLDER"
         },
-        pattern: getPattern("Address"),
+        pattern: getPattern("mrAddress"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.witness.address",
         required: true,
         disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
@@ -234,7 +234,7 @@ export const groomWitnessDetails = getCommonCard(
           labelName: "Enter Door/House No.",
           labelKey: "MR_ADDRESS_PLACEHOLDER"
         },
-        pattern: getPattern("Address"),
+        pattern: getPattern("mrAddress"),
         jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.witness.address",
         required: true,
         disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,

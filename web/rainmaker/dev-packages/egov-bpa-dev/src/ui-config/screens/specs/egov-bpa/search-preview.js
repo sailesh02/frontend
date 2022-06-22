@@ -50,7 +50,7 @@ import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary
 import { fieldSummary } from "./summaryResource/fieldSummary";
 import { reviewPdfSignDetails } from './summaryResource/review-pdfSign.js'
 import { previewSummary } from "./summaryResource/previewSummary";
-import { scrutinySummary ,commentsContainer, commentsContainerMultiLine} from "./summaryResource/scrutinySummary";
+import { scrutinySummary ,commentsContainer, commentsContainerMultiLine, getEdcrHistory, scrutinySummaryForHistory} from "./summaryResource/scrutinySummary";
 import { nocDetailsSearchBPA} from "./noc";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
@@ -515,6 +515,16 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
 
 const stakeholerRoles = getStakeHolderRoles();
 
+const closeEdcrHistoryPopup = (refreshType) => {
+  store.dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.edcrHistory.props",
+      "openPdfSigningPopup",
+      false
+    )
+  )
+    }
 const getRequiredMdmsDetails = async (state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
@@ -836,6 +846,48 @@ let NoticeResponse = {
 }
 
   let appStatus = get(response, "BPA[0].status", '');
+  let edcrHistory = get(response, "BPA[0].reWorkHistory", '');
+  if(edcrHistory){
+  dispatch(prepareFinalObject(`edcrHistory`, edcrHistory.edcrHistory));
+  }else{
+    dispatch(prepareFinalObject(`edcrHistory`, []));
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.scrutinySummary.children.cardContent.children.header.children.edcrHistoryButton",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.edcrHistory",
+        "visible",
+        false
+      )
+    );
+    
+  }
+  if(process.env.REACT_APP_NAME == 'Citizen' && appStatus === "PENDING_ARCHITECT_ACTION_FOR_REWORK"){
+   dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.scrutinySummary.children.cardContent.children.header.children.scrutinyResubmitButton",
+        "visible",
+        true
+      )
+    );
+    
+  set(
+    action,
+    "screenConfig.components.div.children.citizenFooter.children.forwardAfterReworkButton.visible",
+    true
+  );
+
+  }
+
+  
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.estimateSummary.visible",
@@ -1579,7 +1631,9 @@ const screenConfig = {
           permitConditions: permitConditions,
           permitListSummary: permitListSummary,
          // generateShowCauseNotice: generateShowCauseNotice
-         scnHistory: getScnHistory
+         scnHistory: getScnHistory,
+        edcrHistory: getEdcrHistory,
+          
         }),
         triggerNocContainer :{
           uiFramework: "custom-containers-local",
@@ -1610,6 +1664,50 @@ const screenConfig = {
             popup: {}
           }
          },
+    popupForScrutinyDetail: {
+    componentPath: "Dialog",
+    isClose: true,
+    props: {
+      open: false,
+      maxWidth: "md"
+    },
+    children: {
+      dialogContent: {
+        componentPath: "DialogContent",
+        props: {
+          classes: {
+            root: "city-picker-dialog-style"
+          }
+        },
+        children: {
+          popup: getCommonContainer({
+            header: getCommonHeader({
+              labelName: "Scrutiny Header",
+              labelKey: "BPA_SCRUTINY_HISTORY_HEADER"
+            }),
+            closePop: getCommonContainer({
+              closeCompInfo: {
+                uiFramework: "custom-molecules-local",
+                moduleName: "egov-bpa",
+                componentPath: "CloseDialog",
+                required: true,
+                gridDefination: {
+                  xs: 12,
+                  sm: 12
+                },
+                props: {
+                  screen: "search-preview",
+                  jsonpath: "components.div.children.popupForScrutinyDetail"
+                }
+              },
+            }),
+            scrutinySummaryForHistory: scrutinySummaryForHistory,
+
+          })
+        }
+      }
+    }
+  },
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
     },

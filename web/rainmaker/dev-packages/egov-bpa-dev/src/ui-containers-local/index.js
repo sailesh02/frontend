@@ -153,6 +153,10 @@ const SignRandomPdfContainer =  Loadable({
   loading: () => <Loading />
 });
 
+const EdcrHistory =  Loadable({
+  loader: () => import("./EdcrHistory"),
+  loading: () => <Loading />
+});
 
 export {
   CustomTabContainer,
@@ -184,5 +188,6 @@ export {
   BpaSanctionFeeCardContainer,
   TextAreaContainerForBpa,
   ScnHistory,
-  SignRandomPdfContainer
+  SignRandomPdfContainer,
+  EdcrHistory
 };

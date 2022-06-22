@@ -8,13 +8,14 @@ import {
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
-import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels, getQueryArg, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId, getUserInfo, getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { edcrHttpRequest } from "../../../../ui-utils/api";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import { convertDateToEpoch, getLicenseDetails, validateFields } from "../utils";
+import { getBpaTextToLocalMapping } from "../utils/index";
 const userTenant = getTenantId();
 const userUUid = get(JSON.parse(getUserInfo()), "uuid");
 export const fetchData = async (
@@ -154,8 +155,22 @@ const moveToSuccess = (state, dispatch, edcrDetail, isOCApp) => {
       );
     }
   }
-  let url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}`;
-  dispatch(
+
+  let scrutinyType = '';
+  let url = '';
+  if(getQueryArg(window.location.href, "purpose") === 'REWORK'){
+    let bpaApp = getQueryArg(window.location.href, "bpaApp");
+    let oldEdcr = getQueryArg(window.location.href, "oldEdcr");
+    let type = getQueryArg(window.location.href, "type");
+    let bservice = getQueryArg(window.location.href, "bservice");
+    let applicantName = getQueryArg(window.location.href, "applicantName");
+    let serviceType = getQueryArg(window.location.href, "serviceType");
+    scrutinyType = `&scrutinyType=rework&bpaApp=${bpaApp}&oldEdcr=${oldEdcr}&type=${type}&bservice=${bservice}&applicantName=${applicantName}&serviceType=${serviceType}`;
+    url = `/edcrscrutiny/rework_acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}${scrutinyType}`;
+  }else{
+    url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}`;
+  } 
+ dispatch(
     setRoute(
       url
     )
@@ -196,7 +211,8 @@ const getSearchResultsfromEDCR = async (action, state, dispatch) => {
 
 export const getSearchResultsfromEDCRWithApplcationNo = async (
   applicationNumber,
-  tenantId
+  tenantId,
+  dispatch
 ) => {
   try {
     let EDCRHost = "";
@@ -221,12 +237,95 @@ export const getSearchResultsfromEDCRWithApplcationNo = async (
       },
       { headers: { "Content-Type": "application/json" } }
     );
+
+    dispatch(prepareFinalObject("submittedScurtinyDetails", response.data.edcrDetail[0]));
     return response;
   } catch (error) {
     console.log(error);
     return null;
   }
 };
+
+const getFloorDetails = (index) => {
+  let floorNo = ['Ground', 'First', 'Second', 'Third', 'Forth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth']
+  if (index) {
+    return `${floorNo[index]} floor`;
+  }
+};
+export const setEdcrData = async(action, state, dispatch) => {
+  let tenantId = getQueryArg(
+    window.location.href,
+    "tenantId", ""
+  );
+  let edcrNumber = getQueryArg(
+    window.location.href,
+    "edcrNumber", ""
+  );
+  let edcrRes = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+    "search", []
+  );
+  console.log(edcrRes, "Nero EDCR")
+  let edcrObj = edcrRes && edcrRes.edcrDetail[0];
+ let response = edcrObj && edcrObj.planDetail.blocks;
+    
+ let occupancyType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+    []
+  );
+  let BPA = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    {}
+  );
+
+  let subOccupancyType = occupancyType.filter(item => {
+    return item.active;
+  });
+
+  let tableData = [];
+  if (response && response.length > 0) {
+    for (var j = 0; j < response.length; j++) {
+      let title = `Block ${j + 1}`;
+      let floors = response[j] && response[j].building && response[j].building.floors;
+      let block = await floors.map((item, index) => (
+        {
+          [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
+          [getBpaTextToLocalMapping("Level")]: item.number,
+          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: getLocaleLabels("-", item.occupancies[0].type),//getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
+          [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
+          [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
+          [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0",
+        }));
+      let occupancyTypeCheck = [],
+        floorNo = response[j].number
+      if (BPA && BPA.landInfo && BPA.landInfo.unit && BPA.landInfo.unit[j] && BPA.landInfo.unit[j].usageCategory) {
+        let sOccupancyType = (BPA.landInfo.unit[j].usageCategory).split(",");
+        sOccupancyType.forEach(subOcData => {
+          occupancyTypeCheck.push({
+            value: subOcData,
+            label: getLocaleLabels("NA", `BPA_SUBOCCUPANCYTYPE_${getTransformedLocale(subOcData)}`, getLocalLabels)
+          });
+        });
+      }
+
+      if (occupancyTypeCheck && occupancyTypeCheck.length) {
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, occupancyType: occupancyTypeCheck, floorNo: floorNo });
+      } else {
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, floorNo: floorNo });
+      }
+
+    };
+    dispatch(prepareFinalObject("edcrForHistory.blockDetail", tableData));
+
+  }
+  dispatch(prepareFinalObject(`scrutinyDetailsForHistory`, edcrRes.edcrDetail[0]));
+//
+   // dispatch(prepareFinalObject(`scrutinyDetailsForHistory`, data[0]));
+  
+}
 
 const scrutinizePlan = async (state, dispatch) => {
   try {
@@ -689,4 +788,31 @@ export const resetOCFields = (state, dispatch) => {
   dispatch(prepareFinalObject("Scrutiny[0].permitDate", ""));
   dispatch(prepareFinalObject("Scrutiny[0].permitNumber", ""));
   dispatch(prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux[0]", []));
+}
+
+export const setValuesForRework = (action, state, dispatch) =>{
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let applicantName = getQueryArg(window.location.href, "applicantName");
+  let serviceType = getQueryArg(window.location.href, "serviceType");
+  console.log(tenantId, "Nero tenant Id")
+  set(
+    action,
+    "screenConfig.components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.dropdown.props.value",
+    tenantId
+    )
+
+    dispatch(prepareFinalObject("scrutinyDetails.applicationSubType", serviceType));
+    dispatch(prepareFinalObject("Scrutiny[0].applicantName", applicantName));
+    dispatch(prepareFinalObject("Scrutiny[0].tenantId", tenantId));
+ 
+
+}
+
+export const getEdcrDetails = async(edcrNo, tenantId) =>{
+  let edcrRes = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNo + "&tenantId=" + tenantId,
+    "search", []
+  );
+  return edcrRes && edcrRes.edcrDetail[0];
 }

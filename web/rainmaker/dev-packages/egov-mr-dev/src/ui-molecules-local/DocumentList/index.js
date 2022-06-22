@@ -8,6 +8,7 @@ import {
   getFileUrlFromAPI,
   getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { connect } from "react-redux";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { UploadSingleFile } from "../../ui-molecules-local";
@@ -116,11 +117,28 @@ class DocumentList extends Component {
     this.setState({ uploadedDocIndex });
   };
 
-  handleDocument = async (file, fileStoreId) => {
+  getImageDimensions = (url) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve({
+        width: img.width,
+        height: img.height,
+      });
+      img.onerror = (error) => reject(error);
+      img.src = url;
+    });
+  };
+
+  handleDocument = async (file, fileStoreId, dispatch) => {
     let { uploadedDocIndex, uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, tenantId } = this.props;
     const { jsonPath, code } = documents[uploadedDocIndex];
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
+    
+      const FILEURL = fileUrl.fileStoreIds[0].url.split(",")[0]
+      const {width, height} = await this.getImageDimensions(FILEURL);
+      console.log(`Image dimensions: ${width}px x ${height}px`);
+    
     uploadedDocuments = {
       ...uploadedDocuments,
       [uploadedDocIndex]: [
@@ -129,20 +147,41 @@ class DocumentList extends Component {
           fileStoreId,
           fileUrl: Object.values(fileUrl)[0],
           documentType: code,
-          tenantId
+          tenantId,
+          width: width,
+          height: height 
         }
       ]
     };
+    
     prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", {
       ...uploadedDocuments
     });
+    
     prepareFinalObject(jsonPath, {
       fileName: file.name,
       fileStoreId,
       fileUrl: Object.values(fileUrl)[0],
       documentType: code,
-      tenantId
+      tenantId,
+      width: width,
+      height: height 
     });
+    if(uploadedDocuments[16][0].height > 190 || uploadedDocuments[16][0].width > 190){
+      uploadedDocuments[16] = [{}]
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Please upload the image of width 5cm & height 5cm",
+            labelKey: "Please upload the image of width 5cm & height 5cm"
+          },
+          "error"
+        )
+      );
+      
+    }
+ 
     this.setState({ uploadedDocuments });
     this.getFileUploadStatus(true, uploadedDocIndex);
   };
@@ -182,7 +221,7 @@ class DocumentList extends Component {
     }
   };
   render() {
-    const { classes, documents, documentTypePrefix } = this.props;
+    const { classes, documents, documentTypePrefix, dispatch } = this.props;
 
     const { uploadedIndex } = this.state;
     return (
@@ -234,7 +273,7 @@ class DocumentList extends Component {
                       classes={this.props.classes}
                       id={`upload-button-${key}`}
                       handleFileUpload={e =>
-                        handleFileUpload(e, this.handleDocument, this.props.inputProps[key])
+                        handleFileUpload(e, this.handleDocument, this.props.inputProps[key], dispatch)
                       }
                       uploaded={uploadedIndex.indexOf(key) > -1}
                       removeDocument={() => this.removeDocument(key)}

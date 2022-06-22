@@ -314,7 +314,6 @@ class Footer extends React.Component {
       state,
       dispatch
     } = this.props;
-
     const { open, data, employeeList } = this.state;
     const { isDocRequired } = data;
     const appName = process.env.REACT_APP_NAME;
@@ -537,7 +536,7 @@ class Footer extends React.Component {
       //   `renewalPeriod`
       // );
 
-      if (status === "APPROVED" && ifUserRoleExists("MR_CEMP")) {
+      if ((status === "APPROVED" && ifUserRoleExists("MR_CEMP")) || (status === "APPROVED" && ifUserRoleExists("CITIZEN"))) {
         const editButton = {
           label: "Edit",
           labelKey: "WF_MR_CORRECTION_SUBMIT_BUTTON",
@@ -554,7 +553,7 @@ class Footer extends React.Component {
 
 
 
-        if (responseLength === 1) {
+        if (responseLength > 0) {
 
           downloadMenu && downloadMenu.push(editButton);
 

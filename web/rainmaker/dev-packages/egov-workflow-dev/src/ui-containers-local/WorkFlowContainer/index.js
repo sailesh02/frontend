@@ -145,7 +145,11 @@ class WorkFlowContainer extends React.Component {
       return "purpose=permit_revoked&status=success";
       case "SEND_TO":
       return "purpose=permit_sent_other_emp&status=success";    
-    }
+    
+      case "SENDBACK_TO_ARCHITECT_FOR_REWORK":
+        return "purpose=sendback&status=success";    
+      
+     }
   };
 
   wfUpdate = async label => {
@@ -158,6 +162,7 @@ class WorkFlowContainer extends React.Component {
       redirectQueryString,
       beforeSubmitHook
     } = this.props;
+    
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
     console.log(updateUrl, moduleName, dataPath)
@@ -228,8 +233,7 @@ class WorkFlowContainer extends React.Component {
       data.workflow.businessService = "BS.AMENDMENT";
       data.workflow.moduleName = "BS";
     }
-    console.log(moduleName, "Nero sss Modle")
-    console.log(data, "Nero data 1")
+    
     if (moduleName == "MR") {
       let apntDetails = [];
       let appointmentDetails = get(
@@ -329,7 +333,7 @@ class WorkFlowContainer extends React.Component {
 
     }
 
-    console.log(data, "Nero data 2 BPA")
+    
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -344,7 +348,7 @@ class WorkFlowContainer extends React.Component {
           data = beforeSubmitHook(data);
         }
       }
-console.log(moduleName, "Nero module")
+
 let bPAUploadedDocs;
 let BPADocs;
  
@@ -356,7 +360,7 @@ let BPADocs;
           []
         );
        // console.log(bPAUploadedDocs, "nero docssss")
-        console.log(bPAUploadedDocs, "Nero documentsss")
+        
         if(bPAUploadedDocs && bPAUploadedDocs.length > 0){
           for(let k=0;k<bPAUploadedDocs.length;k++){
            // if(bPAUploadedDocs[k].fileStoreId && !bPAUploadedDocs[k].documentType.includes(".")){
@@ -393,7 +397,7 @@ let BPADocs;
             documnts.push(documentsUpdalod[key])
           });
         }
-console.log(BPADocs, "bpa docs")
+
         let requiredDocuments = [];
         if (documnts && documnts.length > 0) {
           documnts.forEach(documents => {
@@ -441,9 +445,6 @@ console.log(BPADocs, "bpa docs")
 
       }
 
- console.log(data , "Nero h new")
-  
- 
  if(moduleName === "BPA"){
   let appStatus = data.status;
   if(appStatus && (appStatus == "APP_L1_VERIFICATION_INPROGRESS" || appStatus == "APP_L2_VERIFICATION_INPROGRESS" || appStatus == "APP_L3_VERIFICATION_INPROGRESS" || appStatus == "APPROVAL_INPROGRESS")){
@@ -463,7 +464,7 @@ console.log(BPADocs, "bpa docs")
       "additionalDetails.sanctionFeeCardEnabled",
       false
     );
-console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
+
   //  if(sanctionFeeCardEnabled && feeAmount !== "" && feeAmount !== undefined && feeAmountAdjustReason !== "" && feeAmountAdjustReason !== undefined){
       if(sanctionFeeCardEnabled && (feeAmount == "NODATA" || feeAmountAdjustReason == "NODATA")){
     // }else{
@@ -480,8 +481,47 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
     }
   }
  }
+ if(moduleName == "BPA" && label == "SENDBACK_TO_ARCHITECT_FOR_REWORK"){
+    let reworkReason = data.reworkReason;
+    let comment = data.workflow.comment;
+    if(comment){
+      data.workflow.comments = `${reworkReason} - ${comment}`;
+    }else if(reworkReason){
+      data.workflow.comments = `${reworkReason}`
+    }else if(reworkReason){
+      data.workflow.comments = ""
+    }
+    
+    if(!reworkReason){
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Documents Required",
+          labelKey: "Please select rework reason"
+        },
+        "error"
+      );
+      this.props.hideSpinner();
+      return false;
+    }
+
+    let reworkHistory = data.reWorkHistory && data.reWorkHistory.edcrHistory
+    if(reworkHistory && reworkHistory.length > 2){
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Documents Required",
+          labelKey: "BPA_REWORK_LIMIT_REACHED"
+        },
+        "error"
+      );
+      this.props.hideSpinner();
+      return false;
+    }
+    
+ }
  console.log(data , "Nero h new a")
- //return false;
+ 
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
@@ -556,7 +596,6 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
   };
 
   createWorkFLow = async (label, isDocRequired) => {
-
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     let data = {};
 
@@ -654,7 +693,7 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
     }
   };
 
-  getRedirectUrl = (action, businessId, moduleName) => {
+  getRedirectUrl = (action, businessId, moduleName) => {  
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const { ProcessInstances, baseUrlTemp, bserviceTemp, preparedFinalObject } = this.props;
@@ -715,6 +754,10 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
     else if (!baseUrl && !bservice) {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
       bservice = "TL"
+    }
+    if(moduleName = "MRCORRECTION"&& action == "EDIT"){
+      baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "mr-citizen" : "mr";
+      return `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`
     }
     const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
     switch (action) {
@@ -869,7 +912,6 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
       "state.applicationStatus"
     );
     let actions = orderBy(filteredActions, ["action"], ["desc"]);
-
     actions = actions.map(item => {
       return {
         buttonLabel: item.action,
@@ -916,7 +958,6 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
       moduleName,
       preparedFinalObject
     } = this.props;
-
     if (ProcessInstances &&
       ProcessInstances.length > 0) {
 
@@ -944,7 +985,6 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
         }
       }
     }
-
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (

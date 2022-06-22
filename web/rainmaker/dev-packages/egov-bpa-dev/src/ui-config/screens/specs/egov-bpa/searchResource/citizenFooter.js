@@ -8,12 +8,17 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+<<<<<<< HEAD
 import { httpRequest} from "../../../../../ui-utils/api"
 import {
   convertEpochToDate, getCommonCard,
   getCommonContainer,
   getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+=======
+import { httpRequest} from "../../../../../ui-utils/api" 
+
+>>>>>>> e4ac0b14b6b3540faad1e7c06fb5d3ad66949f0c
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let tenant = getQueryArg(window.location.href, "tenantId");
 
@@ -234,6 +239,29 @@ try {
 }
 
 }
+//Send to application Preview page 
+export const previewAndForwardApplication = async (state, dispatch, action) => {
+
+  let payload = get(state, "screenConfiguration.preparedFinalObject.BPA");
+  payload.workflow = {action: "FORWARD_TO_APPROVER"}
+  try {
+    let response = await httpRequest(
+      "post",
+      "bpa-services/v1/bpa/_update",
+      "",
+      [],
+      { BPA: payload }
+    );  
+    if(response){
+      let url = `/egov-bpa/acknowledgement?purpose=FORWARD&status=success&applicationNumber=${payload.applicationNo}&tenantId=${payload.tenantId}`
+      dispatch(setRoute(url));
+    }
+  } catch (error) {
+    console.log(error, "Error")
+  }
+  
+  }
+
 export const citizenFooter = getCommonApplyFooter({
   makePayment: {
     componentPath: "Button",
@@ -387,6 +415,33 @@ export const citizenFooter = getCommonApplyFooter({
     },
    
   }
+  // forwardAfterReworkButton: {
+  //   componentPath: "Button",
+  //   visible: false,
+  //   props: {
+  //     variant: "contained",
+  //     color: "primary",
+  //     style: {
+  //       minWidth: "200px",
+  //       height: "48px",
+  //       marginRight: "45px"
+  //     }
+  //   },
+  //   children: {
+  //     submitButtonLabel: getLabel({
+  //       labelName: "Approve",
+  //       labelKey: "BPA_REWORK_FORWARD_BUTTON"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: previewAndForwardApplication
+  //   },
+  //   roleDefination: {
+  //     rolePath: "user-info.roles",
+  //     action : "FORWARD_TO_APPROVER"
+  //   }
+  // }
 });
 
 export const generateShowCauseNotice = getCommonContainer({

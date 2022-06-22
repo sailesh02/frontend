@@ -1,8 +1,18 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels, getQueryArg, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import store from "ui-redux/store";
+import { getAppSearchResults } from "../../../../../ui-utils/commons"
+import set from "lodash/set"
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { httpRequest, edcrHttpRequest } from "../../../../../ui-utils/api"
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject,
+  toggleSnackbar
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {getBpaTextToLocalMapping } from "../../utils"
 
 const getCommonApplyFooter = children => {
   return {
@@ -46,6 +56,98 @@ const getRedirectionBPAURL = () => {
   return url;
 };
 
+const updateBpaAppWithNewScrutiny = async (state, dispatch) =>{
+  let edcrNumber = getQueryArg(window.location.href, "edcrNumber");
+  let bpaApp = getQueryArg(window.location.href, "bpaApp");
+  let oldEdcr = getQueryArg(window.location.href, "oldEdcr");
+  
+  let tenandId = getQueryArg(window.location.href, "tenantId");
+  let type = getQueryArg(window.location.href, "type");
+    let bservice = getQueryArg(window.location.href, "bservice");
+  const response = await getAppSearchResults([
+    {
+      key: "tenantId",
+      value: tenandId
+    },
+    { key: "applicationNo", value: bpaApp }
+  ]).then(async(res)=>{
+    try {
+      let payload = res && res.BPA[0];
+    set(payload, "edcrNumber", edcrNumber);
+    set(payload, "additionalDetails", {applicationType: "edcrNoUpdation"});
+    let reworkHistoryExist = payload && payload.reWorkHistory;
+    let edcrHistoryItem = {};
+    let dateObj = new Date();
+    
+    if(reworkHistoryExist){
+      edcrHistoryItem.edcrnumber = oldEdcr;
+      edcrHistoryItem.createdtime = dateObj.getTime()
+      reworkHistoryExist.edcrHistory.push(edcrHistoryItem);
+    }else{
+      edcrHistoryItem = {edcrHistory: [{edcrnumber: oldEdcr, createdtime: dateObj.getTime()}]}
+      reworkHistoryExist = edcrHistoryItem;
+    }
+    set(payload, "reWorkHistory", reworkHistoryExist);
+    
+   
+      let response = await httpRequest(
+        "post",
+        "bpa-services/v1/bpa/_update",
+        "",
+        [],
+        { BPA: payload }
+      );  
+      if(response){
+        let url = `/egov-bpa/acknowledgement?purpose=rework_on_bpa&status=success&applicationNumber=${payload.applicationNo}&tenantId=${payload.tenantId}&type=${type}&bservice=${bservice}`
+        dispatch(setRoute(url));
+      }
+    } catch (error) {
+      console.log(error, "Error")
+    }
+
+  })
+}
+
+export const reworkActionsContainer = () => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      style: { textAlign: "right", display: "flex" }
+    },
+    children: {
+      downloadMenu: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-bpa",
+        componentPath: "MenuButton",
+        props: {
+          data: {
+            label: {labelName : "Take Action" , labelKey :"WF_TAKE_ACTION"},
+            rightIcon: "arrow_drop_down",
+            props: { variant: "contained", style: { height: "60px", color : "#fff", backgroundColor: "#FE7A51", } },
+            menu: {}
+          }
+        }
+      },
+    },
+  }
+};
+
+export const ReworkActionFooterForRework = getCommonApplyFooter({
+  
+  reworkActions: {
+    uiFramework: "custom-atoms",
+              componentPath: "Container",
+              props: {
+                color: "primary",
+                style: { justifyContent: "flex-end" }
+              },
+              children: {
+                buttons : reworkActionsContainer()
+              },
+              visible: true
+  }
+});
 export const gotoHomeFooter = getCommonApplyFooter({
   gotoHome: {
     componentPath: "Button",
@@ -115,5 +217,30 @@ export const gotoHomeFooter = getCommonApplyFooter({
        path: getRedirectionBPAURL()
     },
     visible : false
-  }
+  },
+  // updateBpaAppWithNewScrutiny: {
+  //   componentPath: "Button",
+  //   props: {
+  //     variant: "contained",
+  //     color: "primary",
+  //     style: {
+  //       minWidth: "200px",
+  //       height: "48px",
+  //       marginRight: "16px"
+  //     },
+  //   },
+  //   children: {
+  //     downloadReceiptButtonLabel: getLabel({
+  //       labelName: "SUBMIT",
+  //       labelKey: "EDCR_UPDATE_BPA_WITH_NEW_SCRUNTINY_BUTTON"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: (state, dispatch) => {
+  //       updateBpaAppWithNewScrutiny(state, dispatch);
+  //     }
+  // },
+  //   visible : false
+  // }
 });

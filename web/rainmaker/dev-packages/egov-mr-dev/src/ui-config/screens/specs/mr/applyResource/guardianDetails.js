@@ -137,7 +137,7 @@ export const groomGuardianDetails = getCommonCard(
                     labelName: "Enter Door/House No.",
                     labelKey: "MR_ADDRESS_PLACEHOLDER"
                 },
-                pattern: getPattern("Address"),
+                pattern: getPattern("mrAddress"),
                 jsonPath: "MarriageRegistrations[0].coupleDetails[0].groom.guardianDetails.addressLine1",
                 required: true,
             }),
@@ -394,7 +394,7 @@ export const brideGuardianDetails = getCommonCard(
                     labelName: "Enter Door/House No.",
                     labelKey: "MR_ADDRESS_PLACEHOLDER"
                 },
-                pattern: getPattern("Address"),
+                pattern: getPattern("mrAddress"),
                 jsonPath: "MarriageRegistrations[0].coupleDetails[0].bride.guardianDetails.addressLine1",
                 required: true,
             }),

@@ -50,6 +50,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
   }
+  console.log("Nero 1333")
   const FETCHRECEIPT = {
     GET: {
       URL: "/collection-services/payments/_search",
@@ -171,6 +172,32 @@ export const getBpaSearchResults = async queryObject => {
     );
   }
 };
+
+export const getBpaAppsAssignedToMe = async () => {
+  try {
+    let userInfo = JSON.parse(getUserInfo());
+   // let queryObject = [{ key: "tenantId", value: "od.cuttack" }, { key: "assignee", value: userInfo.uuid }];
+    
+    const response = await httpRequest(
+      "post",
+      "/egov-workflow-v2/egov-wf/process/_nocriteriasearch?businessService=BPA5",
+      "",
+      []
+    );
+ 
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
+
+
 
 export const updateTradeDetails = async requestBody => {
   try {

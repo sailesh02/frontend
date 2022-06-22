@@ -2,13 +2,22 @@ import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config
 import { handleScreenConfigurationFieldChange as handleField, toggleSpinner,hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
-import { getBpaSearchResults, getSearchResults } from "../../../../ui-utils/commons";
+import set from "lodash/set";
+import { getBpaSearchResults, getSearchResults, getBpaAppsAssignedToMe } from "../../../../ui-utils/commons";
 import { getWorkFlowData, getWorkFlowDataForBPA } from "../bpastakeholder/searchResource/functions";
 import {
   getBpaTextToLocalMapping, getEpochForDate,
 
   getTextToLocalMapping, sortByEpoch
 } from "../utils";
+import {showSearches, tabsForArchOnly, tabsForSpclArchOnly} from "./citizenSearchResource/citizenFunctions"
+import {ifUserRoleExists} from "../../specs/utils"
+
+
+
+
+
+
 const header = getCommonHeader(
   {
     labelName: "My Applications",
@@ -43,17 +52,44 @@ export const getWfBusinessData = async (action, state, dispatch, businessService
 }
 
 const getAllBusinessServicesDataForStatus = async (action, state, dispatch) => {
-  let businessServices = ["BPA", "BPA_OC", "BPA1", "BPA2", "BPA3", "BPA4", "ARCHITECT"];
+  let businessServices = ["BPA", "BPA_OC", "BPA1", "BPA2", "BPA3", "BPA4", "BPA5", "ARCHITECT"];
   businessServices.forEach(service => {
     getWfBusinessData(action, state, dispatch, service)
   })
+}
+
+const showHideTabs = (action, state, dispatch) => {
+  set(
+    action,
+    "screenConfig.components.div.children.showSearches.children.showSearchScreens.props.tabs.visible",
+    false
+  );
+console.log("Nero I am here")
+  // dispatch(
+  //   handleField(
+  //     "my-applications-stakeholder",
+  //     "components.div.children.showSearches.children.showSearchScreens",
+  //     "props.visible",
+  //     false
+  //   ))
 }
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "my-applications-stakeholder",
   beforeInitScreen: (action, state, dispatch) => {
-    fetchData(action, state, dispatch);
+   // setTimeout(function(){
+     if(ifUserRoleExists("BPA_ARCHITECT") && ifUserRoleExists("BPA_ARC_APPROVER")){
+      fetchData(action, state, dispatch);
+      fetchApplicationAssignedToMe(action, state, dispatch);
+     }else if(ifUserRoleExists("BPA_ARCHITECT") || ifUserRoleExists("BPA_TECHNICALPERSON")){
+      fetchData(action, state, dispatch);
+     }else if(ifUserRoleExists("BPA_ARC_APPROVER")){
+      fetchApplicationAssignedToMe(action, state, dispatch);
+     }
+     // showHideTabs(action, state, dispatch);
+   //}, 2000);
+    
     return action;
   },
   components: {
@@ -62,94 +98,8 @@ const screenConfig = {
       componentPath: "Div",
       children: {
         header: header,
-        stakeholderMyappsConatiner: getCommonContainer({
-          myApplicationsCard: {
-            uiFramework: "custom-molecules",
-            name: "my-applications-stakeholder",
-            componentPath: "Table",
-            props: {
-              columns: [
-                {
-                  name: "Application No", labelKey: "BPA_COMMON_TABLE_COL_APP_NO"
-                },
-                {
-                  name: "Application Type", labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
-                },
-                {
-                  name: "Service type", labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"
-                },
-                {
-                  name: "Assigned To", labelKey: "BPA_COL_ASSIGNEDTO"
-                },
-                {
-                  name: "SLA(Days Remaining)", labelKey: "BPA_COMMON_SLA"
-                },
-                {
-                  name: "Status", labelKey: "BPA_COMMON_TABLE_COL_STATUS_LABEL"
-                },
-                {
-                  name: "tenantId",
-                  labelKey: "tenantId",
-                  options: {
-                    display: false
-                  }
-                },
-                {
-                  name: "serviceType",
-                  labelKey: "serviceType",
-                  options: {
-                    display: false
-                  }
-                },
-                {
-                  name: "type",
-                  labelKey: "type",
-                  options: {
-                    display: false
-                  }
-                },
-                {
-                  name: "appStatus", labelKey: "BPA_COMMON_TABLE_COL_APP_STATUS_LABEL",
-                  options: {
-                    display: false
-                  }
-                },
-              ],
-              title: {
-                labelName: "Search Results for BPA Applications",
-                labelKey: "BPA_SEARCH_RESULTS_FOR_APP"
-              },
-              rows: "",
-              options: {
-                filter: false,
-                download: false,
-                responsive: "stacked",
-                selectableRows: false,
-                hover: true,
-                viewColumns: false,
-                onRowClick: (row, index) => {
-                  onRowClick(row);
-                },
-                serverSide: false
-              },
-              customSortColumn: {
-                column: "Application Date",
-                sortingFn: (data, i, sortDateOrder) => {
-                  const epochDates = data.reduce((acc, curr) => {
-                    acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
-                    return acc;
-                  }, []);
-                  const order = sortDateOrder === "asc" ? true : false;
-                  const finalData = sortByEpoch(epochDates, !order).map(item => {
-                    item.pop();
-                    return item;
-                  });
-                  return { data: finalData, currentOrder: !order ? "asc" : "desc" };
-                }
-              }
-            }
-          }
-        })
+        showSearches: (ifUserRoleExists("BPA_ARCHITECT") && ifUserRoleExists("BPA_ARC_APPROVER")) ? showSearches: (ifUserRoleExists("BPA_ARCHITECT") || ifUserRoleExists("BPA_TECHNICALPERSON"))? tabsForArchOnly: tabsForSpclArchOnly,
+        
       }
     }
   }
@@ -165,6 +115,7 @@ export const fetchData = async (
   let sortConvertedArray = [];
   const bpaResponse = await getBpaSearchResults();
   const response = await getSearchResults();
+  
 
   if (bpaResponse && bpaResponse.BPA && bpaResponse.BPA.length > 0) {
     dispatch(toggleSpinner());
@@ -244,25 +195,74 @@ export const fetchData = async (
   sortConvertedArray = [].slice.call(searchConvertedArray).sort(function (a, b) {
     return new Date(b.modifiedTime) - new Date(a.modifiedTime) || a.sortNumber - b.sortNumber;
   });
+
+  setTimeout(function(){
   dispatch(
     handleField(
       "my-applications-stakeholder",
-      "components.div.children.stakeholderMyappsConatiner.children.myApplicationsCard",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.myApplicationsTableConfig",
       "props.data",
       sortConvertedArray
+    ));
+   
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.myApplicationsTableConfig",
+      "props.rows",
+      sortConvertedArray.length
+    )
+  );
+    }, 3000)
+  dispatch(hideSpinner());
+};
+
+export const fetchApplicationAssignedToMe = async (
+  action,
+  state,
+  dispatch
+) => {
+
+  let searchConvertedArray = [];
+  let sortConvertedArray = [];
+  const bpaResponse = await getBpaAppsAssignedToMe();
+  //console.log(bpaResponse, "Nero 3"); return false;
+ // const response = await getSearchResults();
+
+  if (bpaResponse && bpaResponse.ProcessInstances && bpaResponse.ProcessInstances.length > 0) {
+    dispatch(toggleSpinner());
+    //const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.BPA);
+    bpaResponse.ProcessInstances.forEach(element => {
+      let status = getTextToLocalMapping("WF_BPA_" + element.state.applicationStatus, "state", null);
+      searchConvertedArray.push({
+        ["BPA_COMMON_TABLE_COL_APP_NO"]: element.businessId || "-",
+        ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: status || "-",
+        tenantId: element.tenantId
+      })
+    });
+  }
+
+
+  
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.applicationAssignedToMe",
+      "props.data",
+      searchConvertedArray
     ));
   dispatch(hideSpinner());
   dispatch(
     handleField(
       "my-applications-stakeholder",
-      "components.div.children.stakeholderMyappsConatiner.children.myApplicationsCard",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.applicationAssignedToMe",
       "props.rows",
-      sortConvertedArray.length
+      searchConvertedArray.length
     )
   );
 };
 
-const onRowClick = rowData => {
+export const onRowClick = rowData => {
   const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
   const origin = process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
   if (rowData[7] === "BPAREG") {
@@ -273,7 +273,7 @@ const onRowClick = rowData => {
       default:
         window.location.assign(`${origin}${environment}/bpastakeholder/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`)
     }
-  } else if ((rowData[7] === "BPA") || (rowData[7] === "BPA1") || (rowData[7] === "BPA2") || (rowData[7] === "BPA3") || (rowData[7] === "BPA4") || rowData[7] == "BPA_LOW") {
+  } else if ((rowData[7] === "BPA") || (rowData[7] === "BPA1") || (rowData[7] === "BPA2") || (rowData[7] === "BPA3") || (rowData[7] === "BPA4") || (rowData[7] === "BPA5") || rowData[7] == "BPA_LOW") {
     switch (rowData[9]) {
       case "INITIATED":
         window.location.assign(`${origin}${environment}/egov-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);
@@ -301,4 +301,11 @@ const onRowClick = rowData => {
   }
 };
 
+
+export const onApplicationRowClick = rowData => {
+  const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
+  const origin = process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+
+  window.location.assign(`${origin}${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[2]}&type=LOW&bservice=BPA5`);
+};
 export default screenConfig;

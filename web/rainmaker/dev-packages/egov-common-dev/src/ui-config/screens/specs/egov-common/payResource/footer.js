@@ -181,6 +181,7 @@ export const callPGService = async (state, dispatch) => {
 };
 
 const moveToSuccess = (dispatch, receiptNumber) => {
+  console.log("moveToSuccess");
   const consumerCode = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
   const businessService = getQueryArg(window.location, "businessService");
@@ -318,7 +319,7 @@ const callBackForZeroPay = async (state, dispatch) => {
   const applicationNumber = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
   const businessService = getQueryArg(window.location, "businessService")
-  // console.log(businessService,"outsidebsPM")
+  console.log(businessService, "bussinessServiceAPICall")
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
 
   const response = await httpRequest(
@@ -327,12 +328,14 @@ const callBackForZeroPay = async (state, dispatch) => {
     "_search",
     queryObject
   );
-
+console.log("RESSOPPONSEEEE", response);
   if (response.WaterConnection && response.WaterConnection.length > 0) {
+    console.log("Calling water API");
     let payload = response.WaterConnection[0];
     payload.action = "PAY"
     payload.processInstance.action = "PAY"
     let updateResponse = await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: payload });
+    console.log("updateResponseinWAterAPI", updateResponse);
     if (updateResponse.WaterConnection && updateResponse.WaterConnection.length > 0) {
     await updatePayAction(
       state,
@@ -356,9 +359,10 @@ const callBackForZeroPay = async (state, dispatch) => {
       "_search",
       propertyQueryObject
     );
-    // console.log(responseProperty, "responseProperty")
+    console.log("responsePropertyyyyy", responseProperty )
 if(responseProperty.Properties&& responseProperty.Properties.length>0){
   let propertyId = responseProperty.Properties[0].propertyId
+  console.log("propertyIdddd", propertyId);
   if(propertyId != undefined ||propertyId != null){
     let propertyQueryObjectId =  [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyId }, {key:"audit", value:true}]
     const responsePropertyData = await httpRequest(
@@ -368,7 +372,7 @@ if(responseProperty.Properties&& responseProperty.Properties.length>0){
       propertyQueryObjectId
     );
     // property-services/property/_search?propertyIds=PT-NPD-1007518&tenantId=od.nuapada&audit=true
-    // console.log(responsePropertyData,"responsePropertyData")
+    console.log("responsePropertyData", responsePropertyData)
 if(responsePropertyData.Properties &&responsePropertyData.Properties.length>0 ){
   let payloadQuery = responsePropertyData.Properties[0]
   payloadQuery.workflow.action = "PAY"
@@ -382,8 +386,8 @@ if(responsePropertyData.Properties &&responsePropertyData.Properties.length>0 ){
     "", 
     [], 
     { Property: payloadQuery });
+    console.log("updatePropertyResponseeee", updatePropertyResponse);
   if (updatePropertyResponse.Properties && updatePropertyResponse.Properties.length > 0) {
-    console.log(updatePropertyResponse,"updatePropertyResponse")
   await updatePayAction(
     state,
     dispatch,

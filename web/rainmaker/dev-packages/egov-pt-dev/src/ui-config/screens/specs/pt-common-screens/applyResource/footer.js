@@ -31,6 +31,7 @@ const callBackForApply = async (state, dispatch) => {
           [],
           { Property: propertyPayload }
         );
+        console.log("updateWrongPayload", payload);
         if (payload) {
           store.dispatch(handleField("summary", "components.adhocDialog", "props.open", true));
           setTimeout(() => {

@@ -505,6 +505,7 @@ export const getBill = async (queryObject, dispatch) => {
       "",
       queryObject
     );
+    console.log("RESPONSEEEEEE_fetchbillAPI", response);
     return response;
   } catch (error) {
     if(!window.location.pathname.includes('acknowledgement')){
@@ -540,7 +541,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
       queryObject
     );
 
-    // Get Bill
+    console.log("searchbeforefetch", payload);
     const response = await getBill([
       {
         key: "tenantId",

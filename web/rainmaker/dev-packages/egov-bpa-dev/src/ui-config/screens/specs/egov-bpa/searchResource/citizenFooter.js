@@ -8,17 +8,13 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-<<<<<<< HEAD
 import { httpRequest} from "../../../../../ui-utils/api"
 import {
   convertEpochToDate, getCommonCard,
   getCommonContainer,
   getCommonHeader
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-=======
-import { httpRequest} from "../../../../../ui-utils/api" 
+} from "egov-ui-framework/ui-config/screens/specs/utils"; 
 
->>>>>>> e4ac0b14b6b3540faad1e7c06fb5d3ad66949f0c
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let tenant = getQueryArg(window.location.href, "tenantId");
 

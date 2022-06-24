@@ -92,7 +92,7 @@ class ScnHistory extends Component {
                     xs={3}
                     >
                   <LabelContainer labelName={"Digitally Sign Application"}
-                    labelKey={term.letterType} />
+                    labelKey={"BPA_"+term.letterType+"_TYPE_LABEL"} />
                  
 
                     </Grid>

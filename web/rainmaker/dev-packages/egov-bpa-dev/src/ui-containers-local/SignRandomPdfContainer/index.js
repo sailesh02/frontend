@@ -776,7 +776,7 @@ class SignRandomPdfContainer extends Component {
     let bpaAppNo = bpaObject && bpaObject.applicationNo;
     let letterNo = bpaObject && bpaObject.scnLetterNo;
     let singedFileStoreId = await this.getPdfDetails();
-    //let singedFileStoreId = "86ad036a-485f-4646-ae10-3f1ffc169bnk"
+   // let singedFileStoreId = "3935c89d-026b-4a8c-aeda-6b3383094f51"
    
     console.log(singedFileStoreId, "Nero Signed")
     let tenantId = getQueryArg(
@@ -820,14 +820,15 @@ let randomTime = new Date();
         payload.workflow = {action: action};
         let varificationDocs = [
           {
-            fileName: `${action}_${randomTime.getTime()}`,
+            fileName: `${action}_${randomTime.getTime()}.pdf`,
             fileStoreId: singedFileStoreId,
-            fileStore: singedFileStoreId
+            fileStore: singedFileStoreId,
+            documentType: `Document - 1`
           }
         ];
 
         payload.workflow.varificationDocuments = varificationDocs;
-
+        payload.riskType = "LOW";
         let response = await httpRequest(
           "post",
           "bpa-services/v1/bpa/_update",

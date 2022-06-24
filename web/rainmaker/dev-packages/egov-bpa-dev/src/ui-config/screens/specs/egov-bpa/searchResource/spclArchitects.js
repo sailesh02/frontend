@@ -10,7 +10,7 @@ import {
   export const spclArchitectsPicker = getCommonGrayCard({
     header: getCommonHeader({
       labelName: "Pick your city.",
-      labelKey: "BPA_SELECT_SPCL_ARCH_LABLE"
+      labelKey: "BPA_SPCL_ARCH_LABLE"
     }),
     spclArchitectsPicker: getCommonContainer({
       spclArchsDropdown: {
@@ -31,11 +31,11 @@ import {
           className: "citizen-city-picker",
           label: {
             labelName: "City",
-            labelKey: "BPA_SPCL_ARCHITECT_LABEL"
+            labelKey: "BPA_SPCL_ARCH_LABEL"
           },
           optionValue: "code",
           optionLabel: "uuid",
-          placeholder: { labelName: "Select City", labelKey: "BPA_SELECT_SPCL_ARCH_LABLE" },
+          placeholder: { labelName: "Select City", labelKey: "BPA_SELECT_SPCL_ARCH_PLACEHOLDER" },
           jsonPath: "selectedSpclArchitect",
           sourceJsonPath:
             "specialArchitectList",

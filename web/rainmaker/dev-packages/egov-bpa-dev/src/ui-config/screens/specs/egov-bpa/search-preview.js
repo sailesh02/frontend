@@ -751,8 +751,8 @@ if(process.env.REACT_APP_NAME === "Employee" && get(response, "BPA[0].status") =
   );
   
 }
-
-if(process.env.REACT_APP_NAME === "Employee" && get(response, "BPA[0].status") === "SHOW_CAUSE_REPLY_VERIFICATION_PENDING" && get(response, "BPA[0].businessService") == "BPA5" ){
+let appStatuses = ["SHOW_CAUSE_REPLY_VERIFICATION_PENDING", "SHOW_CAUSE_ISSUED", "PERMIT_REVOKED"];
+if(process.env.REACT_APP_NAME === "Employee" && appStatuses.includes(get(response, "BPA[0].status")) && get(response, "BPA[0].businessService") == "BPA5" ){
   // set(
   //   action,
   //   "screenConfig.components.div.children.body.children.cardContent.children.generateShowCauseNotice.children.generateShowCauseNotice.visible",
@@ -763,80 +763,30 @@ if(process.env.REACT_APP_NAME === "Employee" && get(response, "BPA[0].status") =
   //   "screenConfig.components.div.children.body.children.cardContent.children.generateShowCauseNotice.children.generateRevokeNotice.visible",
   //   true
   // );
-  // let noticeHistory = await httpRequest(
-  //   "post",
-  //   "/bpa-services/v1/notice/_search",
-  //   "_search",
-  //   [
-  //     {
-  //       key: "tenantid",
-  //       value: tenantId
-  //     },
-  //     { key: "businessid", value: applicationNumber }
-  //   ],
-  //   {}
-  // );
-
+  let noticeHistory = await httpRequest(
+    "post",
+    "/bpa-services/v1/notice/_search",
+    "_search",
+    [
+      {
+        key: "tenantid",
+        value: tenantId
+      },
+      { key: "businessid", value: applicationNumber }
+    ],
+    {}
+  );
+if(noticeHistory && noticeHistory.Notice && noticeHistory.Notice.length > 0){
+  
+  dispatch(prepareFinalObject("SCNHistory", noticeHistory.Notice))
+}else{
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.scnHistory.visible",
+   false
+  );
+}
  
-let NoticeResponse = {
-  "ResponseInfo": {
-  "apiId": "Rainmaker",
-  "ver": ".01",
-  "ts": 1513579888683,
-  "resMsgId": "uief87324",
-  "msgId": "20170310130900|en_IN",
-  "status": "successful"
-  },
-  "Notice": [{
-  "id": "b08c1b53-874c-47ab-b7f4-11d5dd228055",
-  "businessid": "BP-CTC-2022-04-21-000122",
-  "LetterNo": "BP-SCN-CTC-2022-04-21-000034",
-  "filestoreid": "041128c7-722f-41ae-8101-83491fbb88a0",
-  "letterType": "SCN",
-  "tenantid": "od.cuttack",
-  "auditDetails": {
-  "createdBy": "8bb091c6-d22d-43db-9260-856e23683d2d",
-  "lastModifiedBy": "8bb091c6-d22d-43db-9260-856e23683d2d",
-  "createdTime": 1655871636091,
-  "lastModifiedTime": 1655871636091
-  }
-  },
-  {
-  "id": "8f9b2b42-4dac-47d0-8d71-91402789f7b8",
-  "businessid": "BP-CTC-2022-04-21-000122",
-  "LetterNo": "BP-SCN-CTC-2022-04-21-000009",
-  "filestoreid": "041128c7-722f-41ae-8101-83491fbb88a0",
-  "letterType": "SCN",
-  "tenantid": "od.cuttack",
-  "auditDetails": {
-  "createdBy": "b111659f-7b4c-4cb8-acab-0187407d9d47",
-  "lastModifiedBy": "b111659f-7b4c-4cb8-acab-0187407d9d47",
-  "createdTime": 1655819415994,
-  "lastModifiedTime": 1655819415994
-  }
-  },
-  {
-  "id": "6c6d48da-1c26-45e6-9170-78324a45915f",
-  "businessid": "BP-CTC-2022-04-21-000122",
-  "LetterNo": "BP-SCN-CTC-2022-04-21-000098",
-  "filestoreid": "041128c7-722f-41ae-8101-83491fbb88a0",
-  "letterType": "SCN",
-  "tenantid": "od.cuttack",
-  "auditDetails": {
-  "createdBy": "b111659f-7b4c-4cb8-acab-0187407d9d47",
-  "lastModifiedBy": "b111659f-7b4c-4cb8-acab-0187407d9d47",
-  "createdTime": 1655816306956,
-  "lastModifiedTime": 1655816306956
-  }
-  
-  }
-  
-  
-  ]
-  }
-
-  dispatch(prepareFinalObject("SCNHistory", NoticeResponse.Notice))
-
 }else{
   set(
     action,

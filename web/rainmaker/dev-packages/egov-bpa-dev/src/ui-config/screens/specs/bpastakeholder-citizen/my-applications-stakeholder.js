@@ -196,7 +196,7 @@ export const fetchData = async (
     return new Date(b.modifiedTime) - new Date(a.modifiedTime) || a.sortNumber - b.sortNumber;
   });
 
-  setTimeout(function(){
+  
   dispatch(
     handleField(
       "my-applications-stakeholder",
@@ -213,7 +213,6 @@ export const fetchData = async (
       sortConvertedArray.length
     )
   );
-    }, 3000)
   dispatch(hideSpinner());
 };
 

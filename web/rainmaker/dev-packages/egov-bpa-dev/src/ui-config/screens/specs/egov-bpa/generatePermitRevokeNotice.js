@@ -3,7 +3,7 @@ import { handleScreenConfigurationFieldChange as handleField, toggleSpinner,hide
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
-import {getPermitRevokeNoticeForm, setMdmsData } from "./generateShowCauseNoticeResource/generateNotce"
+import {getPermitRevokeNoticeForm, setMdmsDataForRVK } from "./generateShowCauseNoticeResource/generateNotce"
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "ui-redux/store";
 import { getAppSearchResults } from "../../../../ui-utils/commons"
@@ -57,7 +57,7 @@ const screenConfig = {
   name: "generatePermitRevokeNotice",
   beforeInitScreen: (action, state, dispatch) => {
    getApplicationDetails(action, state, dispatch);
-   setMdmsData(action, state, dispatch);
+   setMdmsDataForRVK(action, state, dispatch);
    // dispatch(prepareFinalObject("showCuaseNoticeInfo", {}))
     return action;
   },

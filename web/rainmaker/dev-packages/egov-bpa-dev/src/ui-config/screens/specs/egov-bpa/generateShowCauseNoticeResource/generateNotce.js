@@ -448,7 +448,7 @@ export const setMdmsData = async (action, state, dispatch) => {
           masterDetails: [
             {
               name: "IdFormat",
-              filter: "[?(@.idname=='watercharges.metered.receipt.id')]",
+              filter: "[?(@.idname=='egov.idgen.bpa.scn')]",
             }
           ]
         }
@@ -466,3 +466,33 @@ export const setMdmsData = async (action, state, dispatch) => {
   console.log(payload, "Nero Payload")
   dispatch(prepareFinalObject("mdmsData", payload.MdmsRes));
 }
+
+export const setMdmsDataForRVK = async (action, state, dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "IdFormat",
+              filter: "[?(@.idname=='egov.idgen.bpa.rvk')]",
+            }
+          ]
+        }
+
+      ]
+    }
+  };
+  let payload = await httpRequest(
+    "post",
+    "/egov-mdms-service/v1/_search",
+    "_search",
+    [],
+    mdmsBody
+  );
+  console.log(payload, "Nero Payload")
+  dispatch(prepareFinalObject("mdmsData", payload.MdmsRes));
+}
+

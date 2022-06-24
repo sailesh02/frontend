@@ -497,6 +497,7 @@ export const getBill = async queryObject => {
       "",
       queryObject
     );
+    console.log("_fetchbillAPIIII", response);
     return response;
   } catch (error) {
     console.log(error);
@@ -510,6 +511,7 @@ export const calculateBill = async queryObject => {
       "",
       queryObject
     );
+    console.log("_getbillAPIIII", response);
     return response;
   } catch (error) {
     console.log(error);
@@ -2549,6 +2551,7 @@ export const updateOwnerShipEdit = async ( state, dispatch ) => {
 }
 
 export const pageResetAndChange = (state, dispatch, tenant) => {
+  console.log("PageResetandChange");
   dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
   dispatch(prepareFinalObject("LicensesTemp", []));
   dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));

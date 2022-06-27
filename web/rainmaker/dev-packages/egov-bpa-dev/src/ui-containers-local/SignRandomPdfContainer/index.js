@@ -530,6 +530,7 @@ class SignRandomPdfContainer extends Component {
   }
 
   getPdfDetails = async () => {
+    console.log("Nero I am here")
     let token = this.state.selectedToken
     let certificate = this.state.selectedCeritificate
     let password = this.state.password
@@ -553,6 +554,7 @@ class SignRandomPdfContainer extends Component {
          // if (response) {
             try {
               let state = store.getState();
+              console.log(state, "Nero State for PDF")
               let fileStoreId = get(
                 state,
                 "screenConfiguration.preparedFinalObject.generatedScnPdfFileStoreId",
@@ -560,6 +562,13 @@ class SignRandomPdfContainer extends Component {
               );
               RequestInfo = { ...RequestInfo, "userInfo": customRequestInfo };
               let body;
+              let key = "bpa-show-cause-notice"
+              if(getQueryArg(
+                window.location.href,
+                "PURPOSE", ""
+              ) === "GENREVOKE"){
+                key = "bpa-revocation-notice";
+              }
              // let fileStoreId = "cbd810a7-55ce-4083-a409-f27b9fb49817";
               
 
@@ -662,6 +671,7 @@ class SignRandomPdfContainer extends Component {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                       })
+                      console.log(singedFileStoreId, "Nero AFter api call res")
                       if ((singedFileStoreId.data && singedFileStoreId.data.emudhraErrorCode) && (singedFileStoreId.data && singedFileStoreId.data.dscErrorCode)) {
                         this.props.toggleSnackbarAndSetText(
                           true,
@@ -738,12 +748,12 @@ class SignRandomPdfContainer extends Component {
                   }
 
                 } catch (err) {
-                  console.log("Nero In first Catch 3")
+                  console.log(err, "Nero In Catch 3")
                     this.props.hideSpinner();
                   }
                 }
             } catch (err) {
-              console.log("Nero In first Catch 2")
+              console.log(err, "Nero In Catch 2")
                 this.props.hideSpinner();
               }
             
@@ -781,7 +791,7 @@ class SignRandomPdfContainer extends Component {
     let singedFileStoreId = await this.getPdfDetails();
    // let singedFileStoreId = "3935c89d-026b-4a8c-aeda-6b3383094f51"
    
-    console.log(singedFileStoreId, "Nero Signed")
+    console.log(singedFileStoreId, "Nero Signed in Calling")
     let tenantId = getQueryArg(
       window.location.href,
       "tenantId", ""

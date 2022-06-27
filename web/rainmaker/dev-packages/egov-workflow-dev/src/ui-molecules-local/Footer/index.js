@@ -83,7 +83,22 @@ class Footer extends React.Component {
   };
 
   openActionDialog = async item => {
+    console.log("Nero Hkkkkk", item)
     const { handleFieldChange, setRoute, dataPath } = this.props;
+    
+    const appNo = getQueryArg(window.location.href, "applicationNumber");
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    if(item.buttonLabel === "SHOW_CAUSE"){
+      const url = `/egov-bpa/generateShowCauseNotice?applicationNumber=${appNo}&tenantId=${tenantId}&PURPOSE=GENSCN`
+      setRoute(url);
+      
+    }
+    if(item.buttonLabel === "REVOKE"){
+      const url = `/egov-bpa/generatePermitRevokeNotice?applicationNumber=${appNo}&tenantId=${tenantId}&PURPOSE=GENREVOKE`
+      setRoute(url);
+    
+    }
+    
     let employeeList = [];
     if (item.moduleName == "MR") item.showEmployeeList = true;
     if (item.buttonLabel === "ACTIVATE_CONNECTION") {

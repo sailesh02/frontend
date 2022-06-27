@@ -150,6 +150,15 @@ const BpaSanctionFeeCardContainer =  Loadable({
   loader: () => import("./BpaSanctionFeeCardContainer"),
   loading: () => <Loading />
 });
+const ScnHistory =  Loadable({
+  loader: () => import("./ScnHistory"),
+  loading: () => <Loading />
+});
+const SignRandomPdfContainer =  Loadable({
+  loader: () => import("./SignRandomPdfContainer"),
+  loading: () => <Loading />
+});
+
 const EdcrHistory =  Loadable({
   loader: () => import("./EdcrHistory"),
   loading: () => <Loading />
@@ -185,5 +194,7 @@ export {
   TriggerNOCContainer,
   BpaSanctionFeeCardContainer,
   TextAreaContainerForBpa,
+  ScnHistory,
+  SignRandomPdfContainer,
   EdcrHistory
 };

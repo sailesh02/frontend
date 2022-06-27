@@ -761,6 +761,150 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
+  }else if (purpose === "show_cause_issued" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "BPA Approved Successfully",
+              labelKey: "BPA_SHOW_CAUSE_ISSUED_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding BPA Approval has been sent to building owner at registered Mobile No.",
+              labelKey: "BPA_SHOW_CAUSE_ISSUED_MESSAGE_SUB"
+            },
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  }else if (purpose === "REPLY" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "BPA Approved Successfully",
+              labelKey: "BPA_SHOW_CAUSE_NOICE_REPLIED_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding BPA Approval has been sent to building owner at registered Mobile No.",
+              labelKey: "BPA_SHOW_CAUSE_NOICE_REPLIED_MESSAGE_SUB"
+            },
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  }else if (purpose === "scn_reply_accepted" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "BPA Approved Successfully",
+              labelKey: "BPA_SCN_REPLY_ACCEPTED_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding BPA Approval has been sent to building owner at registered Mobile No.",
+              labelKey: "BPA_SCN_REPLY_ACCEPTED_MESSAGE_SUB"
+            },
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  }else if (purpose === "scn_reply_accepted" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "BPA Approved Successfully",
+              labelKey: "BPA_SCN_REPLY_ACCEPTED_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding BPA Approval has been sent to building owner at registered Mobile No.",
+              labelKey: "BPA_SCN_REPLY_ACCEPTED_MESSAGE_SUB"
+            },
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  }else if (purpose === "permit_revoked" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "BPA Approved Successfully",
+              labelKey: "BPA_PERMIT_REVOKED_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding BPA Approval has been sent to building owner at registered Mobile No.",
+              labelKey: "BPA_PERMIT_REVOKED_MESSAGE_SUB"
+            },
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  }else if (purpose === "permit_sent_other_emp" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "BPA Approved Successfully",
+              labelKey: "BPA_PERMIT_SENT_TO_EMP_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding BPA Approval has been sent to building owner at registered Mobile No.",
+              labelKey: "BPA_PERMIT_SENT_TO_EMP_MESSAGE_SUB"
+            },
+          })
+        }
+      },
+      gotoHomeFooter
+    };
   }else if (purpose === "rework_on_bpa" && status === "success") {
     return {
       header:getHeader(applicationNumber),

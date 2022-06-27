@@ -130,11 +130,11 @@ class DocumentList extends Component {
   };
 
   checkWidth = (width, height, uploadedDocuments, uploadedDocIndex, dispatch) => {
-    if(width > 190 || height > 190){
+    if(width > 310 || height > 200){
       uploadedDocuments[uploadedDocIndex] = [{}]
       dispatch(toggleSnackbar( true, {
-        labelName: "Please upload the image of width & height 5cm in JPG/JPEG format only",
-        labelKey: "Please upload the image of width & height 5cm in JPG/JPEG format only"
+        labelName: "Please upload the image less than of width 8cm & height 5cm in JPG/JPEG format only",
+        labelKey: "Please upload the image less than of width 8cm & height 5cm in JPG/JPEG format only"
       },"error"))
     }   
   }

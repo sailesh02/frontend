@@ -33,7 +33,7 @@ const styles = theme => ({
 });
 
 class LandingPage extends React.Component {
-  onCardCLick = route => {
+  onCardCLick = (route, routeObj) => {
     const {
       screenConfig,
       handleField,
@@ -43,7 +43,13 @@ class LandingPage extends React.Component {
       value
     } = this.props;
     if (typeof route === "string") {
-      setRoute(route);
+      
+      if(routeObj && routeObj.moduleName && routeObj.moduleName === "egov-bpa" && route === "my-applications-stakeholder"){
+        window.location.href = "/citizen/bpastakeholder-citizen/my-applications-stakeholder"
+      }else{
+        setRoute(route);
+      }
+     
     } else {
       if (moduleName === "fire-noc") {
         prepareFinalObject("FireNOCs", [
@@ -80,7 +86,7 @@ class LandingPage extends React.Component {
             >
               <Card
                 className={`${classes.paper} module-card-style`}
-                onClick={() => this.onCardCLick(obj.route)}
+                onClick={() => this.onCardCLick(obj.route, obj)}
               >
                 <CardContent classes={{ root: "card-content-style" }}>
                   {obj.icon}

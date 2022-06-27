@@ -38,9 +38,9 @@ import {
   compare,
   generateBillForSanctionFee
 } from "../utils/index";
-//import { spclArchitectsPicker } from "./searchResource/spclArchitects";
+import { spclArchitectsPicker } from "./searchResource/spclArchitects";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
-import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved } from "./searchResource/citizenFooter";
+import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved, generateShowCauseNotice, getScnHistory } from "./searchResource/citizenFooter";
 import { applicantSummary, institutionSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
@@ -95,7 +95,7 @@ const isEditButtonVisible = () => {
       return role.code;
     })
   const isRoleExist = roleCodes.includes("BPA1_APPROVER") || roleCodes.includes("BPA2_APPROVER") || roleCodes.includes("BPA3_APPROVER") ||
-  roleCodes.includes("BPA4_APPROVER")
+  roleCodes.includes("BPA4_APPROVER") || roleCodes.includes("BPA5_APPROVER")
   return isRoleExist
 }
 const titlebar = {
@@ -404,9 +404,13 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
   let paymentPayload = {}; 
   paymentPayload.Payments = [];
   if(riskType === "LOW") {
+    let feetype = "BPA.LOW_RISK_PERMIT_FEE"
+    if(service === "BPA5"){
+      feetype = "BPA.NC_SAN_FEE";
+    }
     let lowAppPaymentPayload = await httpRequest(
       "post",
-      getPaymentSearchAPI("BPA.LOW_RISK_PERMIT_FEE"),
+      getPaymentSearchAPI(feetype),
       "",
       queryObject
     );
@@ -571,8 +575,22 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
     mdmsBody
   );
   dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-  const spclArchs = [{code: "Neeraj"}, {code: "Tapojit"}, {code: "Jatindar"}, {code: "Prasun Naiya"}, {code: "Abishek"}]
-  dispatch(prepareFinalObject("specialArchitectList", spclArchs));
+
+  // let payloadarchList = await httpRequest(
+  //   "post",
+  //   "/user/_restrictedSearch",
+  //   "_modify",
+  //   [],
+  //   {
+  //   "roleCodes": ["BPA_ARC_APPROVER"],
+  //   "userType": "CITIZEN",
+  //   "tenantId": "od"
+  //   }
+  // );
+  // console.log(payloadarchList, "Nero payloadarchList")
+  // let preparingObj = [];
+  // payloadarchList && payloadarchList.user && payloadarchList.user.length > 0 && payloadarchList.user.forEach((userInfo)=>{ preparingObj.push({code: userInfo.name, uuid: userInfo.uuid})})
+  // dispatch(prepareFinalObject("specialArchitectList", preparingObj));
 }
 
 const setSearchResponse = async (
@@ -656,6 +674,127 @@ const setSearchResponse = async (
     );
   }
 
+  if (get(response, "BPA[0].status") == "SHOW_CAUSE_ISSUED" && ifUserRoleExists("CITIZEN") && ifUserRoleExists("BPA_ARC_APPROVER")) {
+
+
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.citizenFooter.children.scnReplyButton",
+        "visible",
+        true
+      )
+    );
+  }
+
+let proposedAppStatus = ["PENDING_FORWARD"];
+let businesIds = ["BPA5"]
+  if(!proposedAppStatus.includes(get(response, "BPA[0].status")) && !businesIds.includes(get(response, "BPA[0].businessService"))){
+    
+    
+
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.spclArchList.visible",
+      false
+    );  
+   }else if(!proposedAppStatus.includes(get(response, "BPA[0].status")) && businesIds.includes(get(response, "BPA[0].businessService"))){
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.spclArchList.visible",
+      false
+    );
+   }else{
+    let payloadarchList = await httpRequest(
+      "post",
+      "/user/_restrictedSearch",
+      "_modify",
+      [],
+      {
+      "roleCodes": ["BPA_ARC_APPROVER"],
+      "userType": "CITIZEN",
+      "tenantId": "od"
+      }
+    );
+    console.log(payloadarchList, "Nero payloadarchList")
+    let preparingObj = [];
+    payloadarchList && payloadarchList.user && payloadarchList.user.length > 0 && payloadarchList.user.forEach((userInfo)=>{ preparingObj.push({code: userInfo.name, uuid: userInfo.uuid})})
+    dispatch(prepareFinalObject("specialArchitectList", preparingObj));
+   }
+
+   if((get(response, "BPA[0].status") == "APPROVAL_INPROGRESS" || get(response, "BPA[0].status") == "PENDING_SANC_FEE_PAYMENT") && get(response, "BPA[0].businessService") == "BPA5"){
+    let questions = [{active: true, fieldType: "YES/NO/NA", question: "PLAN_AS_PER_THE_SITE"}];
+    let docs = [
+      {code: "FI.FIR", required: false},
+      {code: "FI.SINS", required: false},
+      {code: "FI.SISS", required: false},
+      {code: "FI.SIES", required: false},
+      {code: "FI.SIWS", required: false}
+    ]
+    dispatch(prepareFinalObject(`docsForSpclArchForInspectionReport.questions`, questions));  
+    dispatch(prepareFinalObject(`docsForSpclArchForInspectionReport.docTypes`, docs));  
+   }
+
+   if(process.env.REACT_APP_NAME === "Citizen" && (get(response, "BPA[0].status") == "APPROVAL_INPROGRESS") && get(response, "BPA[0].businessService") == "BPA5"){
+    set(
+      action,
+      "screenConfig.components.div.children.citizenFooter.children.spclArchApproveButton.visible",
+      true
+    );
+   }
+   
+if(process.env.REACT_APP_NAME === "Employee" && get(response, "BPA[0].status") === "APPROVED" && get(response, "BPA[0].businessService") == "BPA5" ){
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.generateShowCauseNotice.children.generateShowCauseNotice.visible",
+    true
+  );
+  
+}
+let appStatuses = ["SHOW_CAUSE_REPLY_VERIFICATION_PENDING", "SHOW_CAUSE_ISSUED", "PERMIT_REVOKED"];
+if(process.env.REACT_APP_NAME === "Employee" && appStatuses.includes(get(response, "BPA[0].status")) && get(response, "BPA[0].businessService") == "BPA5" ){
+  // set(
+  //   action,
+  //   "screenConfig.components.div.children.body.children.cardContent.children.generateShowCauseNotice.children.generateShowCauseNotice.visible",
+  //   true
+  // );
+  // set(
+  //   action,
+  //   "screenConfig.components.div.children.body.children.cardContent.children.generateShowCauseNotice.children.generateRevokeNotice.visible",
+  //   true
+  // );
+  let noticeHistory = await httpRequest(
+    "post",
+    "/bpa-services/v1/notice/_search",
+    "_search",
+    [
+      {
+        key: "tenantid",
+        value: tenantId
+      },
+      { key: "businessid", value: applicationNumber }
+    ],
+    {}
+  );
+if(noticeHistory && noticeHistory.Notice && noticeHistory.Notice.length > 0){
+  
+  dispatch(prepareFinalObject("SCNHistory", noticeHistory.Notice))
+}else{
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.scnHistory.visible",
+   false
+  );
+}
+ 
+}else{
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.scnHistory.visible",
+   false
+  );
+}
+
   let appStatus = get(response, "BPA[0].status", '');
   let edcrHistory = get(response, "BPA[0].reWorkHistory", '');
   if(edcrHistory){
@@ -722,8 +861,8 @@ const otherConditionData = response.BPA[0].additionalDetails&&response.BPA[0].ad
 let BpaData = !type || isUserEmployee === "EMPLOYEE"? get(response, "BPA[0].businessService"):"";
 console.log(BpaData,"BpaData")
 const validitionStatusForRole= appStatus && (appStatus == "APPROVAL_INPROGRESS"|| appStatus=="APP_L1_VERIFICATION_INPROGRESS"||appStatus=="APP_L2_VERIFICATION_INPROGRESS"|| appStatus=="APP_L3_VERIFICATION_INPROGRESS" && ifUserRoleExists('BPA1_APPROVER') || 
-      ifUserRoleExists('BPA2_APPROVER') || ifUserRoleExists('BPA3_APPROVER') || ifUserRoleExists('BPA4_APPROVER') ||ifUserRoleExists("BPA2_APP_L1_VERIFIER")||ifUserRoleExists("BPA3_APP_L1_VERIFIER") || ifUserRoleExists("BPA4_APP_L1_VERIFIER")|| ifUserRoleExists("BPA4_APP_L2_VERIFIER")|| ifUserRoleExists("BPA4_APP_L3_VERIFIER"))  
-      && process.env.REACT_APP_NAME != 'Citizen'&& (BpaData=="BPA1"||BpaData== "BPA2"||BpaData=="BPA3"||BpaData=== "BPA4")
+      ifUserRoleExists('BPA2_APPROVER') || ifUserRoleExists('BPA3_APPROVER') || ifUserRoleExists('BPA4_APPROVER') || ifUserRoleExists('BPA5_APPROVER') ||ifUserRoleExists("BPA2_APP_L1_VERIFIER")||ifUserRoleExists("BPA3_APP_L1_VERIFIER") || ifUserRoleExists("BPA4_APP_L1_VERIFIER")|| ifUserRoleExists("BPA4_APP_L2_VERIFIER")|| ifUserRoleExists("BPA4_APP_L3_VERIFIER"))  
+      && process.env.REACT_APP_NAME != 'Citizen'&& (BpaData=="BPA1"||BpaData== "BPA2"||BpaData=="BPA3"||BpaData=== "BPA4"||BpaData=== "BPA5")
 console.log(validitionStatusForRole,"validitionStatusForRole")
 
 
@@ -1233,6 +1372,15 @@ const screenConfig = {
       ];
 
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+     if(businessServicesValue != "BPA5"){
+    
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.spclArchList.visible",
+        false
+      );  
+     }
+     
     }
     //}
 
@@ -1307,7 +1455,6 @@ const screenConfig = {
       "components.div.children.body.children.cardContent.children.nocDetailsApply.visible",
       false
     );
-
     dispatch(prepareFinalObject("nocDocumentsDetailsRedux", {}));
    
     return action;
@@ -1429,11 +1576,13 @@ const screenConfig = {
           additionalDocsInformation: additionalDocsInformation,
           previewSummary: previewSummary,
           nocDetailsApply: nocDetailsSearchBPA,
-        //  spclArchList: spclArchitectsPicker,
+          spclArchList: spclArchitectsPicker,
           declarationSummary: declarationSummary,
           permitConditions: permitConditions,
           permitListSummary: permitListSummary,
-          edcrHistory: getEdcrHistory,
+         // generateShowCauseNotice: generateShowCauseNotice
+         scnHistory: getScnHistory,
+        edcrHistory: getEdcrHistory,
           
         }),
         triggerNocContainer :{

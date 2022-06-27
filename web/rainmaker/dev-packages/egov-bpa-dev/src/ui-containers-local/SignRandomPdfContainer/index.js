@@ -23,7 +23,9 @@ import TextField from "material-ui/TextField";
 import { getLocale, getTenantId,getAccessToken, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import axios from 'axios';
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels, getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
   const authToken = getAccessToken();
@@ -120,159 +122,7 @@ let RequestInfo = {};
 
 let customRequestInfo = JSON.parse(getUserInfo())
 
-const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
-  let queryObject = [
-    { key: "tenantId", value: tenantId },
-    { key: "applicationNumber", value: applicationNumber }
-  ];
-  switch(moduleName){
-    case 'BPA':
-        queryObject = [
-          { key: "tenantId", value: tenantId },
-          { key: "applicationNo", value: applicationNumber }
-        ]
-        try{
-          let bpaResult = await httpRequest(
-            "post",
-            "/bpa-services/v1/bpa/_search",
-            "",
-            queryObject
-          );
-          let edcrNumber = bpaResult && bpaResult.BPA && bpaResult.BPA.length > 0 && bpaResult.BPA[0].edcrNumber || ''
-
-          try {
-            let edcrResponse = await edcrHttpRequest(
-              "post",
-              "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
-              "search", []
-            );
-            let edcrDetails = edcrResponse.edcrDetail[0] || {}
-            let applicationDigitallySigned = bpaResult && bpaResult.BPA && bpaResult.BPA.length > 0 &&
-            bpaResult.BPA[0].dscDetails && bpaResult.BPA[0].dscDetails[0].documentId ? true : false
-            if(!applicationDigitallySigned){
-              let BPA = bpaResult.BPA[0]
-              BPA.edcrDetail = [edcrDetails]
-              return {
-                RequestInfo : RequestInfo,
-                "Bpa": [BPA]
-              }
-            }else{
-              return null
-            }
-          }catch(err){
-            return
-          }
-
-
-        }catch(err){
-          return
-        }
-
-      break
-    case 'NewTL':
-      try {
-        let tlSearchResult = await httpRequest(
-          "post",
-          "/tl-services/v1/_search",
-          "",
-          queryObject
-        );
-        let applicationDigitallySigned = tlSearchResult && tlSearchResult.Licenses && tlSearchResult.Licenses.length > 0 && tlSearchResult.Licenses[0].tradeLicenseDetail &&
-        tlSearchResult.Licenses[0].tradeLicenseDetail.dscDetails && tlSearchResult.Licenses[0].tradeLicenseDetail.dscDetails[0].documentId ? true : false
-        if(!applicationDigitallySigned){
-
-          let pdfOwnersNames = '';
-          let pdfTradeTypes = '';
-          if (tlSearchResult.Licenses[0].tradeLicenseDetail.owners && tlSearchResult.Licenses[0].tradeLicenseDetail.owners.length > 0) {
-            for (let i = 0; i < tlSearchResult.Licenses[0].tradeLicenseDetail.owners.length; i++) {
-              pdfOwnersNames += tlSearchResult.Licenses[0].tradeLicenseDetail.owners[i].name + ", ";
-            }
-            pdfOwnersNames = pdfOwnersNames.substring(0, pdfOwnersNames.length - 2);
-          }
-
-          if (tlSearchResult.Licenses[0].tradeLicenseDetail.tradeUnits && tlSearchResult.Licenses[0].tradeLicenseDetail.tradeUnits.length > 0) {
-            for (let i = 0; i < tlSearchResult.Licenses[0].tradeLicenseDetail.tradeUnits.length; i++) {
-              let tradeTypeLocale = '';
-
-              tradeTypeLocale = getLocaleLabels("TradeType", `TRADELICENSE_TRADETYPE_${tlSearchResult.Licenses[0].tradeLicenseDetail.tradeUnits[i].tradeType.replace(/\./g, '_')}`);
-              console.log(tradeTypeLocale, "Nero Locallll")
-              pdfTradeTypes += tradeTypeLocale + ", ";
-            }
-            pdfTradeTypes = pdfTradeTypes.substring(0, pdfTradeTypes.length - 2);
-          }
-
-          tlSearchResult.Licenses[0].additionalDetail = { ownerNames: pdfOwnersNames, tradeTypes: pdfTradeTypes };
-
-          return {
-            RequestInfo : RequestInfo,
-            "Licenses":tlSearchResult && tlSearchResult.Licenses
-          }
-        }else{
-          return null
-        }
-
-      }catch(error){
-        return
-      }
-
-    case 'MR':
-        try {
-          let mrSearchResult = await httpRequest(
-            "post",
-            "/mr-services/v1/_search",
-            "",
-            queryObject
-          );
-          let mrAplicationDigitallySigned = mrSearchResult && mrSearchResult.MarriageRegistrations && mrSearchResult.MarriageRegistrations.length > 0 &&
-          mrSearchResult.MarriageRegistrations[0].dscDetails && mrSearchResult.MarriageRegistrations[0].dscDetails[0].documentId ? true : false
-          if(!mrAplicationDigitallySigned){
-            return {
-              RequestInfo : RequestInfo,
-              "MarriageRegistrations":mrSearchResult && mrSearchResult.MarriageRegistrations
-            }
-          }else{
-            return null
-          }
-
-        }catch(error){
-          return
-        }
-       break
-    default:
-      return {
-        ...RequestInfo
-      }
-  }
-}
-
-const getKey = (data,moduleName) => {
-  let applicationType = moduleName && moduleName == 'NewTL' ? data && data.Licenses && data.Licenses[0].applicationType : ''
-  let pdfKey = "";
-  switch(moduleName){
-    case 'BPA':
-      let businessService = data && data.Bpa && data.Bpa.length > 0 && data.Bpa[0].businessService
-      pdfKey = "buildingpermit";
-      if(businessService && businessService === 'BPA_LOW'){
-        pdfKey = "buildingpermit-low"
-      }else if(businessService && (businessService == "BPA_OC" || businessService == "BPA_OC1" ||
-      businessService == "BPA_OC2" || businessService == "BPA_OC3" || businessService == "BPA_OC4")){
-        pdfKey = "occupancy-certificate"
-      }else{
-        pdfKey = "buildingpermit";
-      }
-    break;
-    case 'NewTL':
-      pdfKey = applicationType && applicationType == "RENEWAL" ? "tlrenewalcertificate" : "tlcertificate"
-      break;
-    case 'MR':
-     pdfKey = 'mrcertificate'
-     break;
-    default:
-      return pdfKey
-  }
-  return pdfKey
-}
-class SignPdfContainer extends Component {
+class SignRandomPdfContainer extends Component {
   state = {
     tokensArray : '',
     ceriticatesArray : '',
@@ -680,6 +530,7 @@ class SignPdfContainer extends Component {
   }
 
   getPdfDetails = async () => {
+    console.log("Nero I am here")
     let token = this.state.selectedToken
     let certificate = this.state.selectedCeritificate
     let password = this.state.password
@@ -689,70 +540,38 @@ class SignPdfContainer extends Component {
     if (this.state.selectedToken && this.state.selectedToken != " " &&
       this.state.selectedCeritificate && this.state.selectedCeritificate != " " &&
       this.state.password && this.state.password != " ") {
-      let data = await getPdfBody(moduleName, tenantId, applicationNumber)
-      if (!data) {
-        this.props.closePdfSigningPopup()
-        this.props.toggleSnackbarAndSetText(
-          true,
-          {
-            labelName: "COMMON_PDF_ALREADY_SIGNED",
-            labelKey: 'COMMON_PDF_ALREADY_SIGNED'
-          },
-          "warning"
-        );
-        return
-      } else {
-        let key = getKey(data, moduleName)
-        let tenantIdCityCode = tenantId && tenantId.split(".")[0]
-        try {
+     // let data = await getPdfBody(moduleName, tenantId, applicationNumber)
+      
+        //Todo
+        // 1. Get File store id from State and send to DSC service
+        
+        //try {
           this.props.showSpinner()
-          let response;
-          let keysArray = ["buildingpermit", "buildingpermit-low"]
-          if(keysArray.includes(key) && moduleName === "BPA"){
-            delete data[0].edcrDetail;
-            response = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=${key}&tenantId=${tenantId}`, data, {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            }) 
-          }else{
-           response = await axios.post(`/pdf-service/v1/_create?key=${key}&tenantId=${tenantId}`, data, {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          })
-        }
+          
 
 
 
-          if (response) {
+         // if (response) {
             try {
+              let state = store.getState();
+              console.log(state, "Nero State for PDF")
+              let fileStoreId = get(
+                state,
+                "screenConfiguration.preparedFinalObject.generatedScnPdfFileStoreId",
+                {}
+              );
               RequestInfo = { ...RequestInfo, "userInfo": customRequestInfo };
               let body;
-              let fileStoreId;
-              // console.log(moduleName, "Nero module Name")
-              // if(moduleName === "BPA"){
-              //   console.log(data, "Nero Module")
-              //   let add = data.Bpa && data.Bpa[0];
-              //   console.log(response, "PDF Res")
-              //   add.additionalDetails["permitFileStoreId"] = response.data && response.data.filestoreIds && response.data.filestoreIds[0]
-                
-              //     console.log(add, "Nero Add")
-              //     let mergeScrutinyApiRes = await httpRequest(
-              //       "post",
-              //       "/bpa-services/v1/bpa/_mergeScrutinyReportToPermit",
-              //       "",
-              //       [],
-              //       { BPA: add }
-                    
-              //     )
+              let key = "bpa-show-cause-notice"
+              if(getQueryArg(
+                window.location.href,
+                "PURPOSE", ""
+              ) === "GENREVOKE"){
+                key = "bpa-revocation-notice";
+              }
+             // let fileStoreId = "cbd810a7-55ce-4083-a409-f27b9fb49817";
+              
 
-              //     console.log(mergeScrutinyApiRes, "Nero Merge")
-              //     fileStoreId = mergeScrutinyApiRes && mergeScrutinyApiRes.files && mergeScrutinyApiRes.files[0].fileStoreId
-                
-              // }else{
-              //   fileStoreId = response.data && response.data.filestoreIds && response.data.filestoreIds[0];
-                
-              // }
-              fileStoreId = response.data && response.data.filestoreIds && response.data.filestoreIds[0];
 
                 body = Object.assign(
                   {},
@@ -852,6 +671,7 @@ class SignPdfContainer extends Component {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                       })
+                      console.log(singedFileStoreId, "Nero AFter api call res")
                       if ((singedFileStoreId.data && singedFileStoreId.data.emudhraErrorCode) && (singedFileStoreId.data && singedFileStoreId.data.dscErrorCode)) {
                         this.props.toggleSnackbarAndSetText(
                           true,
@@ -889,57 +709,16 @@ class SignPdfContainer extends Component {
                       } else if(singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId && (singedFileStoreId.data.responseString &&
                           (singedFileStoreId.data.responseString.includes('success') || singedFileStoreId.data.responseString.includes('Success')))) {
                           this.props.hideSpinner()
-                          if (moduleName == 'NewTL') {
-                            if (data && data.Licenses && data.Licenses.length > 0 && data.Licenses[0].tradeLicenseDetail && data.Licenses[0].tradeLicenseDetail.dscDetails && data.Licenses[0].tradeLicenseDetail.dscDetails.length > 0) {
-                              data.Licenses[0].tradeLicenseDetail.dscDetails[0].documentType = key
-                              data.Licenses[0].tradeLicenseDetail.dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                            }
-                            return data.Licenses
-                          }
-                          else if (moduleName == 'MR') {
-                            if (data && data.MarriageRegistrations && data.MarriageRegistrations.length > 0 && data.MarriageRegistrations[0].dscDetails && data.MarriageRegistrations[0].dscDetails.length > 0) {
-                              data.MarriageRegistrations[0].dscDetails[0].documentType = key
-                              data.MarriageRegistrations[0].dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                            }
-                            return data.MarriageRegistrations
-                          } else if (moduleName == 'BPA') {
-                            if (data && data.Bpa && data.Bpa[0].dscDetails && data.Bpa[0].dscDetails.length > 0) {
-                              data.Bpa[0].dscDetails[0].documentType = key
-                              data.Bpa[0].dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
-                            }
-                            delete data.Bpa[0].edcrDetail
-                            return data.Bpa && data.Bpa[0]
-                          }
-                          else {
-                            return data
-                          }
+                          console.log(singedFileStoreId, "Nero Signed")
+                            // if (data && data.Licenses && data.Licenses.length > 0 && data.Licenses[0].tradeLicenseDetail && data.Licenses[0].tradeLicenseDetail.dscDetails && data.Licenses[0].tradeLicenseDetail.dscDetails.length > 0) {
+                            //   data.Licenses[0].tradeLicenseDetail.dscDetails[0].documentType = key
+                            //   data.Licenses[0].tradeLicenseDetail.dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
+                            return singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId;
 
                         }
 
-                        // else {
-                        //   this.props.hideSpinner()
-                        //   let errorCode = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.responseString
-                        //   if (errorCode == 'Authentication Failure') {
-                        //     this.props.toggleSnackbarAndSetText(
-                        //       true,
-                        //       {
-                        //         labelName: "Authentication Failure!",
-                        //         labelKey: 'Authentication Failure'
-                        //       },
-                        //       "error"
-                        //     );
-                        //   } else {
-                        //     this.props.toggleSnackbarAndSetText(
-                        //       true,
-                        //       {
-                        //         labelName: "Issue during Digital Signature of the report (Error Code). Please contact system Administrator",
-                        //         labelKey: `Issue during Digital Signature of the report (${errorCode}). Please contact system Administrator`
-                        //       },
-                        //       "error"
-                        //     );
-                        //   }
-                        // }
                       } catch (error) {
+                        console.log("Nero Error")
                         this.props.hideSpinner();
                         if (!error.response) {
                           // network error
@@ -969,18 +748,21 @@ class SignPdfContainer extends Component {
                   }
 
                 } catch (err) {
+                  console.log(err, "Nero In Catch 3")
                     this.props.hideSpinner();
                   }
                 }
             } catch (err) {
+              console.log(err, "Nero In Catch 2")
                 this.props.hideSpinner();
               }
-            }
-        } catch (err) {
-            this.props.hideSpinner()
-            this.props.toggleSnackbarAndSetText(true, err.message, "error");
-          }
-        }
+            
+        // } catch (err) {
+        //   console.log("Nero In first Catch");
+        //     this.props.hideSpinner()
+        //     this.props.toggleSnackbarAndSetText(true, err.message, "error");
+        //   }
+        
 
     } else {
         this.props.toggleSnackbarAndSetText(
@@ -998,28 +780,81 @@ class SignPdfContainer extends Component {
 
   // sign the PDF
   saveDetails = async() => {
-    let data = await this.getPdfDetails()
-    let dataPath = this.props.dataPath
-    let updateUrl = this.props.updateUrl
+    let reduxState = store.getState();
+    let bpaObject = get(
+      reduxState,
+      "screenConfiguration.preparedFinalObject.BPAForSCN",
+      {}
+    );
+    let bpaAppNo = bpaObject && bpaObject.applicationNo;
+    let letterNo = bpaObject && bpaObject.scnLetterNo;
+    let singedFileStoreId = await this.getPdfDetails();
+   // let singedFileStoreId = "3935c89d-026b-4a8c-aeda-6b3383094f51"
+   
+    console.log(singedFileStoreId, "Nero Signed in Calling")
+    let tenantId = getQueryArg(
+      window.location.href,
+      "tenantId", ""
+    );
 
-    if(!data){
+    let letterType = "SCN";
+    let action = "SHOW_CAUSE";
+    let urlString = "purpose=show_cause_issued&status=success";
+    
+    if(getQueryArg(
+      window.location.href,
+      "PURPOSE", ""
+    ) === "GENREVOKE"){
+      letterType = "RVK";
+      action = "REVOKE";
+      urlString = "purpose=permit_revoked&status=success";
+    }
+
+let randomTime = new Date();
+
+
+    if(!singedFileStoreId){
       return
     }else{
     try{
+      let noticeData = {
+        "businessid":bpaAppNo,
+        "LetterNo":letterNo,
+        "filestoreid": singedFileStoreId,
+        "letterType":letterType,
+        "tenantid" :tenantId,
+      }
       this.props.showSpinner()
-      await httpRequest("post", this.props.updateUrl, "", [], {
-        [dataPath]: data
-      });
+      await httpRequest("post", "/bpa-services/v1/notice/_create", "_create", [], {
+        Notice: noticeData
+      }).then(async(res)=> {
+        let payload = bpaObject;
+        console.log(payload, "nero Payload")
+        payload.workflow = {action: action};
+        let varificationDocs = [
+          {
+            fileName: `${action}_${randomTime.getTime()}.pdf`,
+            fileStoreId: singedFileStoreId,
+            fileStore: singedFileStoreId,
+            documentType: `Document - 1`
+          }
+        ];
+
+        payload.workflow.varificationDocuments = varificationDocs;
+        payload.riskType = "LOW";
+        let response = await httpRequest(
+          "post",
+          "bpa-services/v1/bpa/_update",
+          "",
+          [],
+          { BPA: payload}
+        );
+
+      })
+      this.props.closePdfSigningPopup()
       this.props.hideSpinner()
-      this.props.toggleSnackbarAndSetText(
-        true,
-        {
-          labelName: "COMMON_PDF_SIGNED_SUCCESSFULLY",
-          labelKey: "COMMON_PDF_SIGNED_SUCCESSFULLY"
-        },
-        "success"
-      );
-      this.props.closePdfSigningPopup(this.props.refreshType)
+      store.dispatch(setRoute(`acknowledgement?${urlString}&applicationNumber=${bpaAppNo}&tenantId=${tenantId}`));
+     
     }catch(error){
       this.props.toggleSnackbarAndSetText(
         true,
@@ -1034,6 +869,8 @@ class SignPdfContainer extends Component {
       this.props.hideSpinner()
       }
     }
+    // this.props.closePdfSigningPopup();
+    // this.props.hideSpinner();
 
   }
 
@@ -1223,6 +1060,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     showSpinner: () => dispatch(showSpinner()),
     hideSpinner : () => dispatch(hideSpinner()),
+    setRoute: route => dispatch(setRoute(route)),
     toggleSnackbarAndSetText: (open, message, variant) => {
       dispatch(toggleSnackbarAndSetText(open, message, variant));
     }  };
@@ -1231,4 +1069,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SignPdfContainer);
+)(SignRandomPdfContainer);

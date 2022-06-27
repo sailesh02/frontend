@@ -33,6 +33,7 @@ class AutoSuggestor extends Component {
       localizationLabels,
       ...rest
     } = this.props;
+   // console.log("rest", rest.isClearable, rest.disabled, rest.inputLabelProps.shrink);
     let translatedLabel = getLocaleLabels(
       label.labelName,
       label.labelKey,

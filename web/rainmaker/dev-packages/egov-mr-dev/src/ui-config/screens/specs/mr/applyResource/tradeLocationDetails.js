@@ -154,6 +154,7 @@ export const tradeLocationDetails = getCommonCard(
           fullwidth: true,
           isClearable: true,
           required: true,
+          disabled:getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
           inputLabelProps: {
             shrink: true
           }
@@ -242,6 +243,7 @@ export const tradeLocationDetails = getCommonCard(
           jsonPath: "MarriageRegistrations[0].marriageDate",
 
           props: {
+            disabled: getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
 
             inputProps: {
 
@@ -271,7 +273,7 @@ export const tradeLocationDetails = getCommonCard(
       }),
     },
     {
-      style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
+      //style:getQueryArg(window.location.href, "action") === "CORRECTION"? {"pointer-events":"none"}:{}
     }
     ),
 

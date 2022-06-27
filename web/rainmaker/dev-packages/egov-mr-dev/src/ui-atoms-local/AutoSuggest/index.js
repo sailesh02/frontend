@@ -8,6 +8,7 @@ import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import "./index.css";
 import { sortDropdownLabels, sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 
 const getSuggestions = suggestions => {
@@ -93,6 +94,7 @@ function Control(props) {
       {...props.selectProps.textFieldProps}
       helperText={props.selectProps.helperText}
       error={props.selectProps.error}
+      disabled={getQueryArg(window.location.href, "action") === "CORRECTION"? true:false}
     />
   );
 }
@@ -107,6 +109,7 @@ function Option(props) {
         fontWeight: props.isSelected ? 500 : 400
       }}
       {...props.innerProps}
+      disabled={getQueryArg(window.location.href, "action") === "CORRECTION"? true:false}
     >
       {props.children}
     </MenuItem>

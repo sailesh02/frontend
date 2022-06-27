@@ -245,6 +245,8 @@ class CheckList extends Component {
 
     if(isEmployee) {
       this.prepareDocumentsInEmployee(checkListDocuments, bpaDetails);
+      }else{
+        this.prepareDocumentsInEmployee(checkListDocuments, bpaDetails);
       }
 
   };
@@ -275,6 +277,8 @@ class CheckList extends Component {
 
     if(isEmployee) {
       this.prepareDocumentsInEmployee(checkListDocuments, bpaDetails);
+    }else{
+      this.prepareDocumentsInEmployee(checkListDocuments, bpaDetails);
     }
        
   };
@@ -294,6 +298,8 @@ class CheckList extends Component {
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
 
     if(isEmployee) {
+      this.prepareDocumentsInEmployee(checkListDocuments, bpaDetails);
+    }else{
       this.prepareDocumentsInEmployee(checkListDocuments, bpaDetails);
     }
        

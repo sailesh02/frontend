@@ -8,6 +8,7 @@ import {
   convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { checkValueForNA } from "../../utils"
 
 const getHeader = label => {
   return {

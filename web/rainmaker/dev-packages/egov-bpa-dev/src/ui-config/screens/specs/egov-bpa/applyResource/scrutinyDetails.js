@@ -444,3 +444,156 @@ export const abstractProposedBuildingDetails = getCommonCard({
     }
   }
 });
+
+export const getBpaProcess = getCommonCard({
+  headertitle: getCommonTitle(
+    {
+      labelName: "Block wise occupancy /sub occupancy and usage details",
+      labelKey: "BPA_CHOOSE_BPA_PROCESS_TITLE"
+    },
+    {
+      style: {
+        marginBottom: 10
+      }
+    }
+  ),
+  chooseBPAHeaderDetails : getCommonContainer({
+    
+    chooseBPAType: {
+      ...getSelectField({
+        label: {
+          labelName: "Occupancy Type",
+          labelKey: "BPA_CHOOSE_BPA_TYPE"
+        },
+        placeholder: {
+          labelName: "Select Occupancy Type",
+          labelKey: "BPA_CHOOSE_BPA_TYPE_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "BPA",
+          masterName: "BPA_TYPE"
+        },
+        jsonPath: "BPA.businessService",
+        sourceJsonPath: "edcr.BPAType",
+        required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+        props: {
+          className: "tl-trade-type"
+        }
+      }),
+      beforeFieldChange: (action, state, dispatch) => {
+        if(action.value === "BPA5"){
+          dispatch(
+            handleField("apply", "components.div.children.formwizardSecondStep.children.getLowRiskConditions", "visible", true)
+          );
+        }else{
+          dispatch(
+            handleField("apply", "components.div.children.formwizardSecondStep.children.getLowRiskConditions", "visible", false)
+          ); 
+        }
+      }
+    },
+  })
+});
+
+export const getLowRiskConditions =
+getCommonCard({
+    header: getCommonSubHeader(
+      {
+        labelName: "Additional Details",
+        labelKey: "BPA_BPA5_CONDITIONS_DETAILS"
+      },
+      {
+        style: {
+          marginBottom: 18
+        }
+      }
+    ),
+    applicantCard: getCommonContainer({
+      Condition1: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
+        componentPath: "BpaCheckboxContainer",
+        jsonPath: "BPA.BPA5Condition1",
+
+        props: {
+          label: {
+            labelName: "Doc Type 1",
+            labelKey: "BPA_BPA5_CONDITION_1"
+          },
+          jsonPath: "BPA.BPA5Condition1",
+          required: true,
+        },
+        type: "array"
+      },
+      breakA: getBreak(),
+      Condition2: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
+        componentPath: "BpaCheckboxContainer",
+        jsonPath: "BPA.BPA5Condition2",
+
+        props: {
+          label: {
+            labelName: "Doc Type 1",
+            labelKey: "BPA_BPA5_CONDITION_2"
+          },
+          jsonPath: "BPA.BPA5Condition2",
+          required: true,
+        },
+        type: "array"
+      },
+      Condition3: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
+        componentPath: "BpaCheckboxContainer",
+        jsonPath: "BPA.BPA5Condition3",
+
+        props: {
+          label: {
+            labelName: "Doc Type 1",
+            labelKey: "BPA_BPA5_CONDITION_3"
+          },
+          jsonPath: "BPA.BPA5Condition3",
+          required: true,
+        },
+        type: "array"
+      },
+      Condition4: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
+        componentPath: "BpaCheckboxContainer",
+        jsonPath: "BPA.BPA5Condition4",
+
+        props: {
+          label: {
+            labelName: "Doc Type 1",
+            labelKey: "BPA_BPA5_CONDITION_4"
+          },
+          jsonPath: "BPA.BPA5Condition4",
+          required: true,
+        },
+        type: "array"
+      },
+      Condition5: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
+        componentPath: "BpaCheckboxContainer",
+        jsonPath: "BPA.BPA5Condition5",
+
+        props: {
+          label: {
+            labelName: "Doc Type 1",
+            labelKey: "BPA_BPA5_CONDITION_5"
+          },
+          jsonPath: "BPA.BPA5Condition5",
+          required: true,
+        },
+        type: "array"
+      }
+    })
+  })

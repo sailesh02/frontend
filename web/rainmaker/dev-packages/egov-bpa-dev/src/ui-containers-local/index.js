@@ -14,6 +14,12 @@ const TestContainer = Loadable({
   loading: () => <Loading />
 });
 
+const BlockContainer = Loadable({
+  loader: () => import("./BlockContainer"),
+  loading: () => <Loading />
+});
+
+
 const DocumentListContainer = Loadable({
   loader: () => import("./DocumentListContainer"),
   loading: () => <Loading />
@@ -152,6 +158,7 @@ const EdcrHistory =  Loadable({
 export {
   CustomTabContainer,
   LabelContainer,
+  BlockContainer,
   CheckboxContainer,
   DownloadFileContainer,
   DocumentSummaryContainer,

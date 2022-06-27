@@ -71,6 +71,14 @@ const cardItems = [
     },
     icon: <FormIcon />,
     route: displayView()
+  },
+  {
+    label: {
+      labelKey: "BPA_PREAPPROVE_PLAN",
+      labelName: "Apply for Pre-approved Plan"
+    },
+    icon: <FormIcon />,
+    route: 'preApprovedPlanDetails'
   }
 ];
 

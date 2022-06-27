@@ -15,7 +15,37 @@ import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField
 import {fetchMDMSData, setValuesForRework} from "./functions";
 import {getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import store from "ui-redux/store";
+const handleEligibilityCheckStatus = () => {
+  let url = "/bpastakeholder-citizen/preApprovedPlanDetails"
+  store.dispatch(setRoute(url));
+};
 
+const checkEligibility = (label, value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Href",
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+    },
+    props: {
+      onClick: handleEligibilityCheckStatus,
+      style: {
+        marginTop: "12px",
+        textAlign: "justify",
+        marginBottom: "30px",
+        color: "#0000EE",
+      },
+      ...props,
+    },
+    children: {
+      label: getCommonCaption(label),
+      value: getCommonValue(value),
+    },
+  };
+};
 
 //for displaying note in entire grid
 const getLabelWithValueNote = (label, value, props = {}) => {
@@ -209,6 +239,7 @@ const buildingInfoCard = getCommonCard({
           sm: 6
         }
       }),
+
       dummyDiv2: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -221,6 +252,15 @@ const buildingInfoCard = getCommonCard({
           disabled: true
         }
       },
+      link: checkEligibility(
+        {
+          labelName: "",
+          labelKey: "",
+        },
+        {
+          jsonPath: "Note[0].link1",
+        }
+      ),
       // serviceType: {
       //   ...getSelectField({
       //     label: {
@@ -386,6 +426,7 @@ const screenConfig = {
     dispatch(prepareFinalObject("LicensesTemp[0]", {}));
     dispatch(prepareFinalObject("Note[0].message","kindly refer to the following link to get GIS and Comprehensive Development Plan, Airports Authority of India (AAI), National Monuments Authority (NMA) and other related information."))
     dispatch(prepareFinalObject("Note[0].link","https://bhubaneswarone.in/home/"))
+    dispatch(prepareFinalObject("Note[0].link1","Check your eligibility for preapproved plan"))
     fetchMDMSData(action, state, dispatch);
     setValuesForRework(action, state, dispatch);
     return action;

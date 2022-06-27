@@ -290,6 +290,10 @@ const mapStateToProps = state => {
     hasAddItem = false;
   }
 
+  if(screenConfigKeys && screenConfigKeys.length > 0 && screenConfigKeys[0] == "preApprovedPlanApply"){
+    hasAddItem = false;
+  }
+  
   if(Licenses){
 
     

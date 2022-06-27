@@ -609,13 +609,13 @@ export const getMapLocator = textSchema => {
 
 export const showHideMapPopup = (state, dispatch) => {
   let toggle = get(
-    state.screenConfiguration.screenConfig["apply"],
+    state.screenConfiguration.screenConfig["preApprovedPlanApply"],
     "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.mapsDialog.props.open",
     false
   );
   dispatch(
     handleField(
-      "apply",
+      "preApprovedPlanApply",
       "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.mapsDialog",
       "props.open",
       !toggle
@@ -718,7 +718,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
           );
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocPropertyID",
               "props.value",
               ""
@@ -727,7 +727,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
         } else {
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
               "props.value",
               {
@@ -744,7 +744,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
           );
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.children.cityDropdown",
               "props.value",
               payload.Properties[0].address.tenantId
@@ -1258,7 +1258,7 @@ export const validateFields = (
   objectJsonPath,
   state,
   dispatch,
-  screen = "apply"
+  screen = "preApprovedPlanApply"
 ) => {
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
@@ -1649,7 +1649,7 @@ export const updateDropDowns = async (
         if (licenseeType == "ARCHITECT")
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children.counsilForArchNo",
               "visible",
               true
@@ -1658,7 +1658,7 @@ export const updateDropDowns = async (
         else
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children.counsilForArchNo",
               "visible",
               false
@@ -1846,7 +1846,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
     if (tradeOwnershipCat === "INDIVIDUAL") {
       dispatch(
         handleField(
-          "apply",
+          "preApprovedPlanApply",
           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
           "visible",
           true
@@ -1854,7 +1854,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
       );
       dispatch(
         handleField(
-          "apply",
+          "preApprovedPlanApply",
           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
           "visible",
           false
@@ -1863,7 +1863,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
     } else {
       dispatch(
         handleField(
-          "apply",
+          "preApprovedPlanApply",
           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
           "visible",
           false
@@ -1871,7 +1871,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
       );
       dispatch(
         handleField(
-          "apply",
+          "preApprovedPlanApply",
           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
           "visible",
           true
@@ -1888,7 +1888,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
       );
       dispatch(
         handleField(
-          "apply",
+          "preApprovedPlanApply",
           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
           "props.hasAddItem",
           false
@@ -1899,7 +1899,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
 
         dispatch(
           handleField(
-            "apply",
+            "preApprovedPlanApply",
             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
             "props.items",
             singleCard
@@ -1920,7 +1920,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
     if (tradeSubOwnershipCat === "INDIVIDUAL.MULTIPLEOWNERS") {
       dispatch(
         handleField(
-          "apply",
+          "preApprovedPlanApply",
           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
           "props.hasAddItem",
           true
@@ -2265,7 +2265,7 @@ export const setLicenseeSubTypeDropdownData = async (
   if (licenceType) {
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "props.value",
         null
@@ -2284,7 +2284,7 @@ export const setLicenseeSubTypeDropdownData = async (
   if (filterdTradeTypes.length == 0) {
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "props.disabled",
         false
@@ -2292,7 +2292,7 @@ export const setLicenseeSubTypeDropdownData = async (
     );
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "required",
         false
@@ -2300,7 +2300,7 @@ export const setLicenseeSubTypeDropdownData = async (
     );
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "visible",
         false
@@ -2316,7 +2316,7 @@ export const setLicenseeSubTypeDropdownData = async (
   } else {
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "props.disabled",
         false
@@ -2324,7 +2324,7 @@ export const setLicenseeSubTypeDropdownData = async (
     );
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "required",
         true
@@ -2332,7 +2332,7 @@ export const setLicenseeSubTypeDropdownData = async (
     );
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "visible",
         false
@@ -2350,7 +2350,7 @@ export const setLicenseeSubTypeDropdownData = async (
 export const fillOldLicenseData = async (state, dispatch) => {
   dispatch(
     initScreen(
-      "apply",
+      "preApprovedPlanApply",
       get(state.screenConfiguration, "screenConfig.apply", {})
     )
   );
@@ -3898,13 +3898,13 @@ export const getBpaMdmsData = async (action, state, dispatch, mdmsBody) => {
 
 export const showHideBpaMapPopup = (state, dispatch) => {
   let toggle = get(
-    state.screenConfiguration.screenConfig["apply"],
+    state.screenConfiguration.screenConfig["preApprovedPlanApply"],
     "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.mapsDialog.props.open",
     false
   );
   dispatch(
     handleField(
-      "apply",
+      "preApprovedPlanApply",
       "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.mapsDialog",
       "props.open",
       !toggle
@@ -3973,7 +3973,7 @@ export const geBpatDetailsFromProperty = async (state, dispatch) => {
           );
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocPropertyID",
               "props.value",
               ""
@@ -3982,7 +3982,7 @@ export const geBpatDetailsFromProperty = async (state, dispatch) => {
         } else {
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
               "props.value",
               {
@@ -3999,7 +3999,7 @@ export const geBpatDetailsFromProperty = async (state, dispatch) => {
           );
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.children.cityDropdown",
               "props.value",
               payload.Properties[0].address.tenantId
@@ -5764,15 +5764,15 @@ export const deviationValidation = (action, state, dispatch) => {
 
 export const showComparisonDialog = (state, dispatch) => {
   let toggle = get(
-    state.screenConfiguration.screenConfig["apply"],
+    state.screenConfiguration.screenConfig["preApprovedPlanApply"],
     "components.cityPickerDialogofComparison.props.open",
     false
   );
   dispatch(
-    handleField("apply", "components.cityPickerDialogofComparison", "props.open", !toggle)
+    handleField("preApprovedPlanApply", "components.cityPickerDialogofComparison", "props.open", !toggle)
   );
   dispatch(
-    handleField("apply", "components.cityPickerDialogofComparison.popup", "props.open", !toggle)
+    handleField("preApprovedPlanApply", "components.cityPickerDialogofComparison.popup", "props.open", !toggle)
   );
 
 };
@@ -5814,7 +5814,7 @@ const permitNumberLink = async (state, dispatch) => {
     }
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
         "props.linkDetail",
         linkDetail
@@ -5822,7 +5822,7 @@ const permitNumberLink = async (state, dispatch) => {
     );
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardThirdStep.children.summaryDetails.children.cardContent.children.scrutinySummary.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
         "props.linkDetail",
         linkDetail
@@ -5932,7 +5932,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     }
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.footer.children.nextButton",
         "props.disabled",
         true
@@ -5945,7 +5945,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     }
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.footer.children.nextButton",
         "props.disabled",
         false

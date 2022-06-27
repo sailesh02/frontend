@@ -709,6 +709,7 @@ class SignPdfContainer extends Component {
           let response;
           let keysArray = ["buildingpermit", "buildingpermit-low"]
           if(keysArray.includes(key) && moduleName === "BPA"){
+            delete data[0].edcrDetail;
             response = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=${key}&tenantId=${tenantId}`, data, {
               'Content-Type': 'application/json',
               'Accept': 'application/json'

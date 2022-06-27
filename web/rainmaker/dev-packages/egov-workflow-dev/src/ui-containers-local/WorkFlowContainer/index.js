@@ -520,7 +520,11 @@ let BPADocs;
     }
     
  }
- console.log(data , "Nero h new a")
+ console.log(data , "Nero App Payload in Workflow Module")
+if(moduleName == "BPA" && "edcrDetail" in data){
+   console.log("In If")
+  delete data.edcrDetail ;
+ }
  
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data

@@ -544,13 +544,13 @@ class SignRandomPdfContainer extends Component {
         //Todo
         // 1. Get File store id from State and send to DSC service
         
-        try {
+        //try {
           this.props.showSpinner()
           
 
 
 
-          if (response) {
+         // if (response) {
             try {
               let state = store.getState();
               let fileStoreId = get(
@@ -738,17 +738,20 @@ class SignRandomPdfContainer extends Component {
                   }
 
                 } catch (err) {
+                  console.log("Nero In first Catch 3")
                     this.props.hideSpinner();
                   }
                 }
             } catch (err) {
+              console.log("Nero In first Catch 2")
                 this.props.hideSpinner();
               }
-            }
-        } catch (err) {
-            this.props.hideSpinner()
-            this.props.toggleSnackbarAndSetText(true, err.message, "error");
-          }
+            
+        // } catch (err) {
+        //   console.log("Nero In first Catch");
+        //     this.props.hideSpinner()
+        //     this.props.toggleSnackbarAndSetText(true, err.message, "error");
+        //   }
         
 
     } else {

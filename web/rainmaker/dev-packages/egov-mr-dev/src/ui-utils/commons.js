@@ -58,6 +58,7 @@ export const getSearchResults = async queryObject => {
       "",
       queryObject
     );
+    console.log("RESPONSESEARCHRE", response);
     return response;
   } catch (error) {
     enableFieldAndHideSpinner('search', "components.div.children.tradeLicenseApplication.children.cardContent.children.button.children.buttonContainer.children.searchButton", store.dispatch);
@@ -77,6 +78,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
     "MarriageRegistrations[0].applicationDocuments",
     []
   );
+  console.log("ApplicationDocuments",applicationDocuments);
   /* To change the order of application documents similar order of mdms order*/
   const mdmsDocs = get(
     state.screenConfiguration.preparedFinalObject,
@@ -377,6 +379,7 @@ const getMultipleOwners = owners => {
 };
 
 export const applyTradeLicense = async (state, dispatch, activeIndex) => {
+  console.log("activeIndex", activeIndex);
   try {
 
     let queryObject = JSON.parse(
@@ -412,6 +415,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     // let documents = get(queryObject[0], "tradeLicenseDetail.applicationDocuments");
 
     set(queryObject[0], "wfDocuments", documents);
+    console.log("queryObject", queryObject[0]);
     let coupleDetails = [];
     if (queryObject[0] && queryObject[0].coupleDetails) {
       coupleDetails = get(
@@ -447,7 +451,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     }
 
     set(queryObject[0], "coupleDetails", coupleDetails);
-    console.log(queryObject[0], "Nero Couple Details");
+    console.log(queryObject[0], "Couple Details");
     const cityId = get(
       queryObject[0],
       "tenantId",
@@ -496,7 +500,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     }else if(activeIndex === 4){
       action = "FORWARD"
     }
-
+    console.log("importantdata", action, activeIndex, isCorrection);
       if (isCorrection && activeIndex === 3) {
         let renewalSearchQueryObject = [
           { key: "tenantId", value: queryObject[0].tenantId },
@@ -527,11 +531,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //if (!isEditFlow) {
 
 
-
+        console.log("queryObjectPayload", queryObject);
         updateResponse = await httpRequest("post", "/mr-services/v1/_update", "", [], {
           MarriageRegistrations: queryObject
         })
-
+        console.log("updateResponse", updateResponse);
 
       //}
       //Renewal flow

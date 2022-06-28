@@ -101,7 +101,7 @@ class ActionDialog extends React.Component {
         bpaDetails.assignees = [uuids];
         bpaDetails.assignee = [getId];
       }
-      if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "APPROVE") || (applicationAction === "FORWARD") || (applicationAction === "INTIMATE_CONSTRUCT_START")) {
+      if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "APPROVE") || (applicationAction === "FORWARD") || (applicationAction === "INTIMATE_CONSTRUCT_START") || (applicationAction === "REPLY")) {
         let response = await httpRequest(
           "post",
           "bpa-services/v1/bpa/_update",

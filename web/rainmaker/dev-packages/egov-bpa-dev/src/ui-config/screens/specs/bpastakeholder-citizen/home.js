@@ -70,7 +70,8 @@ const cardItems = [
       labelName: "My Applications"
     },
     icon: <FormIcon />,
-    route: displayView()
+    route: displayView(),
+    moduleName: "egov-bpa"
   },
   {
     label: {

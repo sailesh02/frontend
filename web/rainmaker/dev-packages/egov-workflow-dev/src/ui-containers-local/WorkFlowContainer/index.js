@@ -137,6 +137,15 @@ class WorkFlowContainer extends React.Component {
         return "purpose=applymeterreplace&status=success";  
       case "METER_REPLACE_APPROVE_APPLICATION":
         return "purpose=approve_meter_replace&status=success";  
+      case "SHOW_CAUSE":
+      return "purpose=show_cause_issued&status=success";
+      case "ACCEPT":
+      return "purpose=scn_reply_accepted&status=success";
+      case "REVOKE":
+      return "purpose=permit_revoked&status=success";
+      case "SEND_TO":
+      return "purpose=permit_sent_other_emp&status=success";    
+    
       case "SENDBACK_TO_ARCHITECT_FOR_REWORK":
         return "purpose=sendback&status=success";    
       
@@ -333,7 +342,7 @@ class WorkFlowContainer extends React.Component {
     let isDocsDropDownSelected = true;
     try {
       if (beforeSubmitHook) {
-        if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+        if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4' || moduleName === 'BPA5') {
           data = await beforeSubmitHook(data);
         } else {
           data = beforeSubmitHook(data);
@@ -343,7 +352,7 @@ class WorkFlowContainer extends React.Component {
 let bPAUploadedDocs;
 let BPADocs;
  
-      if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+      if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4' || moduleName === 'BPA5') {
         bPAUploadedDocs =  get(preparedFinalObject, "documentDetailsUploadRedux", []);
         BPADocs = get(
           preparedFinalObject,
@@ -511,7 +520,11 @@ let BPADocs;
     }
     
  }
- console.log(data , "Nero h new a")
+ console.log(data , "Nero App Payload in Workflow Module")
+if(moduleName == "BPA" && "edcrDetail" in data){
+   console.log("In If")
+  delete data.edcrDetail ;
+ }
  
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
@@ -701,9 +714,9 @@ let BPADocs;
     if (moduleName === "FIRENOC") {
       baseUrl = "fire-noc";
       bservice = "FIRENOC";
-    } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+    } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4' || moduleName === 'BPA5') {
       baseUrl = "egov-bpa";
-      if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+      if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4' || moduleName === 'BPA5') {
         bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
       } //else if (moduleName === "BPA_OC") {
       else {
@@ -965,7 +978,7 @@ let BPADocs;
 
     }
     let showFooter = true;
-    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4' || moduleName === 'BPA5') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     }
     if ((moduleName === 'Noc') && window.location.href.includes("isFromBPA=true")) {

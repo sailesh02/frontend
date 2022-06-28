@@ -9,8 +9,11 @@ import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils";
 import { getBpaSearchResults, getSearchResults } from "../../../../../ui-utils/commons";
 import { getWorkFlowData, getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
-import { getTextToLocalMapping } from "../../utils/index";
 
+import {getBpaTextToLocalMapping, getEpochForDate,getTextToLocalMapping, sortByEpoch} from "../../utils";
+import { getBreak, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {onRowClick} from "../my-applications-stakeholder"
+import {onApplicationRowClick} from "../my-applications-stakeholder"
 export const getMdmsData = async () => {
   let mdmsBody = {
     MdmsCriteria: {
@@ -245,4 +248,217 @@ const storeData = (data, dispatch, fromMyApplicationPage, fromStakeHolderPage) =
     );
   }
 }
+
+
+export const myApplicationsTableConfig =  {
+  
+  uiFramework: "custom-molecules",
+  name: "my-applications-stakeholder",
+  componentPath: "Table",
+  props: {
+    columns: [
+      {
+        name: "Application No", labelKey: "BPA_COMMON_TABLE_COL_APP_NO"
+      },
+      {
+        name: "Application Type", labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
+      },
+      {
+        name: "Service type", labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"
+      },
+      {
+        name: "Assigned To", labelKey: "BPA_COL_ASSIGNEDTO"
+      },
+      {
+        name: "SLA(Days Remaining)", labelKey: "BPA_COMMON_SLA"
+      },
+      {
+        name: "Status", labelKey: "BPA_COMMON_TABLE_COL_STATUS_LABEL"
+      },
+      {
+        name: "tenantId",
+        labelKey: "tenantId",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "serviceType",
+        labelKey: "serviceType",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "type",
+        labelKey: "type",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "appStatus", labelKey: "BPA_COMMON_TABLE_COL_APP_STATUS_LABEL",
+        options: {
+          display: false
+        }
+      },
+    ],
+    title: {
+      labelName: "Search Results for BPA Applications",
+      labelKey: "BPA_SEARCH_RESULTS_FOR_APP"
+    },
+    rows: "",
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      viewColumns: false,
+      onRowClick: (row, index) => {
+        onRowClick(row);
+      },
+      serverSide: false
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
+  }
+
+
+}
+
+export const applicationAssignedToMe =  {
+  
+  uiFramework: "custom-molecules",
+  name: "my-applications-stakeholder",
+  componentPath: "Table",
+  //visible: false,
+  props: {
+    columns: [
+      {
+        name: "Application No", labelKey: "BPA_COMMON_TABLE_COL_APP_NO"
+      },
+      {
+        name: "Status", labelKey: "BPA_COMMON_TABLE_COL_STATUS_LABEL"
+      },
+      {
+        name: "tenantId",
+        labelKey: "tenantId",
+        options: {
+          display: false
+        }
+      },
+      
+    ],
+    title: {
+      labelName: "Search Results for BPA Applications",
+      labelKey: "BPA_SEARCH_RESULTS_FOR_APP"
+    },
+    rows: "",
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      viewColumns: false,
+      onRowClick: (row, index) => {
+        onApplicationRowClick(row);
+      },
+      serverSide: false
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
+  }
+
+
+}
+
+export const showSearches = getCommonContainer({
+  showSearchScreens: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "CustomTabContainer",
+    props: {
+      tabs: [
+        {
+          tabButton: { labelName: "SEARCH APPLICATIONS", labelKey: "BPA_MY_APPLICATIONS" },
+          tabContent: { myApplicationsTableConfig }
+        },
+        {
+          tabButton: { labelName: "DOWNLOAD BPA DOCUMENT", labelKey: "BPA_APPLICATIONS_ASSIGNED_TO_ME" },
+          tabContent: { applicationAssignedToMe }
+        }
+      ],
+      tabIndex : 0
+     // isDigitalSignature : true,
+    },
+    type: "array"
+  }
+});
+
+export const tabsForArchOnly = getCommonContainer({
+  showSearchScreens: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "CustomTabContainer",
+    props: {
+      tabs: [
+        {
+          tabButton: { labelName: "SEARCH APPLICATIONS", labelKey: "BPA_MY_APPLICATIONS" },
+          tabContent: { myApplicationsTableConfig }
+        }
+      ],
+      tabIndex : 0
+     // isDigitalSignature : true,
+    },
+    type: "array"
+  }
+});
+
+export const tabsForSpclArchOnly = getCommonContainer({
+  showSearchScreens: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "CustomTabContainer",
+    props: {
+      tabs: [
+        
+        {
+          tabButton: { labelName: "DOWNLOAD BPA DOCUMENT", labelKey: "BPA_APPLICATIONS_ASSIGNED_TO_ME" },
+          tabContent: { applicationAssignedToMe }
+        }
+      ],
+      tabIndex : 0
+     // isDigitalSignature : true,
+    },
+    type: "array"
+  }
+});
 

@@ -14,7 +14,9 @@ import {
   blockWiseOccupancyAndUsageDetails,
   demolitiondetails,
   proposedBuildingDetails,
-  abstractProposedBuildingDetails
+  abstractProposedBuildingDetails,
+  getBpaProcess,
+  getLowRiskConditions
 } from "./applyResource/scrutinyDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
 import {
@@ -100,7 +102,9 @@ export const formwizardSecondStep = {
     buildingPlanScrutinyDetails,
     proposedBuildingDetails,
     demolitiondetails,
-    abstractProposedBuildingDetails
+    abstractProposedBuildingDetails,
+    getBpaProcess,
+    getLowRiskConditions
   },
   visible: false
 };
@@ -765,6 +769,17 @@ const screenConfig = {
         );
       }
     }
+
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardSecondStep.children.getLowRiskConditions.visible",
+      false
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardSecondStep.children.getBpaProcess.visible",
+      false
+    );
     return action;
   },
   components: {

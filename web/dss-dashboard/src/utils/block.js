@@ -9,7 +9,7 @@ import {
     isMobile
 } from "react-device-detect";
 import logoNotFound from '../components/Dashboard/download/logoNotFound.png';
-import logo from '../images/Digit.png';
+import logo from '../images/sujog.png';
 import { stateTenant } from './commons';
 
 

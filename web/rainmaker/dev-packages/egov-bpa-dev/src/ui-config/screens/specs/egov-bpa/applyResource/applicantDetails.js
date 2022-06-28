@@ -333,7 +333,7 @@ const institutionInformation = () => {
           labelName: "Enter Name of Institution",
           labelKey: "NOC_ENTER_INSTITUTION_PLACEHOLDER"
         },
-        pattern: getPattern("Name"),
+        pattern: getPattern("Address"),
         errorMessage: "Invalid Name",
         required: true,
         jsonPath:

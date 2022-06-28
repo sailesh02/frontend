@@ -39,7 +39,7 @@ const getRedirectionBPAURL = (state, dispatch) => {
   dispatch(setRoute(url));
 };
 // form validation
-const formValid = (action, state, dispatch) => {
+const formValid = (state,dispatch) => {
   let isFormValid = false;
   isFormValid = validateFields(
     "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.preApproveContent.children.plotDescription.children",
@@ -51,8 +51,8 @@ const formValid = (action, state, dispatch) => {
 };
 
 // get search preapproves list
-const getPreApproveList = async (action, state, dispatch) => {
-  let validate = formValid(action, state, dispatch);
+const getPreApproveList = async (state,dispatch) => {
+  let validate = formValid(state,dispatch);
   if (validate) {
     let plotDetails = get(
       state,
@@ -364,6 +364,17 @@ const preApprovedPlanSection = getCommonContainer({
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
             jsonPath: "Scrutiny[1].preApprove.plotDetails.abuttingRoadWidthInMt",
             required: true,
+            iconObj: {
+              iconName: "search",
+              position: "end",
+              color: "#FE7A51",
+              onClickDefination: {
+                action: "condition",
+                callBack: (state,dispatch) => {
+                  getPreApproveList(state,dispatch);
+                }
+              }
+            },
             gridDefination: {
               xs: 12,
               sm: 6,
@@ -381,118 +392,118 @@ const preApprovedPlanSection = getCommonContainer({
         },
         children: {},
       },
-      preapproveplanDesc: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-        },
-        props: {
-          style: {
-            marginTop: "30px",
-          },
-        },
-        children: {
-          paragraph: getCommonParagraph({
-            labelName:
-              "We can see that you have a standard plot for which we have prepared some pre-approved plan for use",
-            labelKey: "BPA_PREAPPROVED_PLAN_DESCRIPTION",
-          }),
-        },
-      },
-      chossePreapprovedPlan: {
-        uiFramework: "custom-containers",
-        componentPath: "RadioGroupContainer",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-        },
-        jsonPath: "Scrutiny[1].preApprove.choosePreApprove[0].choosePlan",
-        props: {
-          label: {
-            name: "Do you want to choose preapproved building plan?",
-            key: "BPA_CHOSSE_PLAN",
-          },
-          buttons: [
-            {
-              labelName: "Yes",
-              labelKey: "BPA_CHOOSE_YES_RADIOBUTTON",
-              value: "YES",
-            },
-            {
-              label: "No",
-              labelKey: "BPA_CHOOSE_NO_RADIOBUTTON",
-              value: "NO",
-            },
-          ],
-          jsonPath: "Scrutiny[1].preApprove.choosePreApprove[0].choosePlan",
-          required: true,
-        },
-        afterFieldChange: async (action, state, dispatch) => {
-          if (
-            state.screenConfiguration.preparedFinalObject.Scrutiny[1].preApprove
-              .choosePreApprove[0].choosePlan === "YES"
-          ) {
-            const res = await getPreApproveList(action, state, dispatch);
-            if (res) {
-              dispatch(prepareFinalObject("preapprovePlanList", res));
-              const arr = [];
-              res.preapprovedPlan.map((item, index) => {
-                const newObj = {};
-                newObj.drawingNo = item.drawingNo;
-                newObj.plotLength = item.plotLength;
-                newObj.plotWidth = item.plotWidth;
-                newObj.abuttingRoad = item.roadWidth;
-                arr.push({
-                  PREAPPROVE_BUILDING_PLAN: newObj.drawingNo,
-                  PREAPPROVE_PLOT_LENGTH: newObj.plotLength,
-                  PREAPPROVE_PLOT_WIDTH: newObj.plotWidth,
-                  PREAPPROVE_ABUTTING_ROAD: newObj.abuttingRoad,
-                  BPA_COMMON_TABLE_COL_ACTION_LABEL: item.documents || [],
-                });
-              });
+      // preapproveplanDesc: {
+      //   uiFramework: "custom-atoms",
+      //   componentPath: "Div",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 12,
+      //   },
+      //   props: {
+      //     style: {
+      //       marginTop: "30px",
+      //     },
+      //   },
+      //   children: {
+      //     paragraph: getCommonParagraph({
+      //       labelName:
+      //         "We can see that you have a standard plot for which we have prepared some pre-approved plan for use",
+      //       labelKey: "BPA_PREAPPROVED_PLAN_DESCRIPTION",
+      //     }),
+      //   },
+      // },
+      // chossePreapprovedPlan: {
+      //   uiFramework: "custom-containers",
+      //   componentPath: "RadioGroupContainer",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 12,
+      //   },
+      //   jsonPath: "Scrutiny[1].preApprove.choosePreApprove[0].choosePlan",
+      //   props: {
+      //     label: {
+      //       name: "Do you want to choose preapproved building plan?",
+      //       key: "BPA_CHOSSE_PLAN",
+      //     },
+      //     buttons: [
+      //       {
+      //         labelName: "Yes",
+      //         labelKey: "BPA_CHOOSE_YES_RADIOBUTTON",
+      //         value: "YES",
+      //       },
+      //       {
+      //         label: "No",
+      //         labelKey: "BPA_CHOOSE_NO_RADIOBUTTON",
+      //         value: "NO",
+      //       },
+      //     ],
+      //     jsonPath: "Scrutiny[1].preApprove.choosePreApprove[0].choosePlan",
+      //     required: true,
+      //   },
+      //   afterFieldChange: async (action, state, dispatch) => {
+      //     if (
+      //       state.screenConfiguration.preparedFinalObject.Scrutiny[1].preApprove
+      //         .choosePreApprove[0].choosePlan === "YES"
+      //     ) {
+      //       const res = await getPreApproveList(action, state, dispatch);
+      //       if (res) {
+      //         dispatch(prepareFinalObject("preapprovePlanList", res));
+      //         const arr = [];
+      //         res.preapprovedPlan.map((item, index) => {
+      //           const newObj = {};
+      //           newObj.drawingNo = item.drawingNo;
+      //           newObj.plotLength = item.plotLength;
+      //           newObj.plotWidth = item.plotWidth;
+      //           newObj.abuttingRoad = item.roadWidth;
+      //           arr.push({
+      //             PREAPPROVE_BUILDING_PLAN: newObj.drawingNo,
+      //             PREAPPROVE_PLOT_LENGTH: newObj.plotLength,
+      //             PREAPPROVE_PLOT_WIDTH: newObj.plotWidth,
+      //             PREAPPROVE_ABUTTING_ROAD: newObj.abuttingRoad,
+      //             BPA_COMMON_TABLE_COL_ACTION_LABEL: item.documents || [],
+      //           });
+      //         });
 
-              dispatch(
-                handleField(
-                  "preApprovedPlanDetails",
-                  "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.list.children.listOfPreAprrovedPlanList",
-                  "visible",
-                  true
-                )
-              );
-              dispatch(
-                handleField(
-                  "preApprovedPlanDetails",
-                  "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.list.children.listOfPreAprrovedPlanList",
-                  "props.data",
-                  arr
-                )
-              );
-              dispatch(
-                handleField(
-                  "preApprovedPlanDetails",
-                  "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.list.children.listOfPreAprrovedPlanList",
-                  "props.rows",
-                  arr.length
-                )
-              );
-            }
-          } else {
-            dispatch(prepareFinalObject("preapprovePlanList", null));
-            dispatch(
-              handleField(
-                "preApprovedPlanDetails",
-                "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.list.children.listOfPreAprrovedPlanList",
-                "visible",
-                false
-              )
-            );
-          }
-        },
-        required: true,
-        type: "array",
-      },
+      //         dispatch(
+      //           handleField(
+      //             "preApprovedPlanDetails",
+      //             "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.list.children.listOfPreAprrovedPlanList",
+      //             "visible",
+      //             true
+      //           )
+      //         );
+      //         dispatch(
+      //           handleField(
+      //             "preApprovedPlanDetails",
+      //             "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.list.children.listOfPreAprrovedPlanList",
+      //             "props.data",
+      //             arr
+      //           )
+      //         );
+      //         dispatch(
+      //           handleField(
+      //             "preApprovedPlanDetails",
+      //             "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.list.children.listOfPreAprrovedPlanList",
+      //             "props.rows",
+      //             arr.length
+      //           )
+      //         );
+      //       }
+      //     } else {
+      //       dispatch(prepareFinalObject("preapprovePlanList", null));
+      //       dispatch(
+      //         handleField(
+      //           "preApprovedPlanDetails",
+      //           "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.list.children.listOfPreAprrovedPlanList",
+      //           "visible",
+      //           false
+      //         )
+      //       );
+      //     }
+      //   },
+      //   required: true,
+      //   type: "array",
+      // },
       block: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",

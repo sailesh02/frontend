@@ -840,7 +840,7 @@ export const getObjectKeys = objData => {
   );
 };
 export const getMdmsJson = async (state, dispatch, reqObj) => {
-  let { setPath, setTransformPath, dispatchPath, moduleName, name, filter, screenName } = reqObj;
+  let { setPath, setTransformPath, dispatchPath, moduleName, name, filter, screenName, isTemp } = reqObj;
   const tenantId = getQueryArg(window.location.href, "tenantId");
 
 
@@ -849,10 +849,13 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
 
   if (moduleName === "TradeLicense") {
     if (screenName == "tradeSearchPage" || screenName == "tradeRateAddPage") {
-
+      if (isTemp) {
+        name = "TemporaryTradeType";
+      }
+      const tempTenantId = screenName == "tradeRateAddPage" ? tenantId : commonConfig.tenantId;
       mdmsBody = {
         MdmsCriteria: {
-          tenantId: commonConfig.tenantId,
+          tenantId: tempTenantId,
 
           moduleDetails: [
             {

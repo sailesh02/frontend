@@ -118,7 +118,7 @@ export const billingSlabReviewDetails = {
   reviewTradeRate: getLabelWithValue(
     {
       labelName: "Rate",
-      labelKey: "TL_TRADE_RATE_RATE_LABEL"
+      labelKey: "TL_TRADE_RATE_LABEL"
     },
     { jsonPath: "billingSlab[0].rate", callBack: checkValueForNA }
   )
@@ -229,7 +229,7 @@ const tradetypeDetails = {
   reviewTradeRate: getLabelWithValue(
     {
       labelName: "Rate",
-      labelKey: "TL_TRADE_RATE_RATE_LABEL"
+      labelKey: "TL_TRADE_RATE_LABEL"
     },
     { jsonPath: "tradeUnitsToShow[0].rate", callBack: checkValueForNA }
   )

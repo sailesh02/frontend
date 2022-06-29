@@ -145,7 +145,13 @@ export const searchApiCall = async (state, dispatch) => {
     }
   }
 };
-
+const getApprovedBy = (userInfo, uuid) => {
+  if(userInfo.uuid === uuid){
+    return  "Sign Pdf"
+  }else{
+    return ""
+  }
+}
 export const getPendingDigitallySignedApplications = async () => {
   showHideTable(false);
   showHideDigitalSingedApplicationsTable (false)
@@ -175,7 +181,7 @@ export const getPendingDigitallySignedApplications = async () => {
       ['BPA_COMMON_TABLE_COL_APP_NO']:
         item.applicationNo || "-",
       ['TENANT_ID']: item.tenantId || "-",
-      ['BPA_COMMON_TABLE_COL_ACTION_LABEL'] : "Sign Pdf"
+      ['BPA_COMMON_TABLE_COL_ACTION_LABEL'] : getApprovedBy(userInfo, item.approvedBy),
     })) || [];
 
     store.dispatch(

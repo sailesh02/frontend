@@ -241,9 +241,8 @@ export const tradeLocationDetails = getCommonCard(
 
           pattern: getPattern("Date"),
           jsonPath: "MarriageRegistrations[0].marriageDate",
-
+          disabled: getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
           props: {
-            disabled: getQueryArg(window.location.href, "action") === "CORRECTION"? true:false,
 
             inputProps: {
 

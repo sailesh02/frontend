@@ -465,11 +465,18 @@ const getMultipleOwners = owners => {
 export const addUpdateBillSlab = async (state, dispatch) => {
   try {
 
-    let queryObject = JSON.parse(
-      JSON.stringify(
-        get(state.screenConfiguration.preparedFinalObject, "billingSlab", [])
-      )
-    );
+    let billingSlabs = get(state.screenConfiguration.preparedFinalObject, "billingSlab", []);
+    let tradeUnits = get(state.screenConfiguration.preparedFinalObject, "tradeUnits", []);
+    let validTradeUnitList = tradeUnits.filter(eachItem => eachItem.isDeleted !== false)
+    
+    let queryObject = validTradeUnitList.map(eachUnit => {
+      const eachBillingSlab = {...billingSlabs[0]}
+      eachBillingSlab["rate"] = eachUnit["rate"] ? eachUnit["rate"] : null;
+      eachBillingSlab["fromUom"] = eachUnit["fromUom"] ? eachUnit["fromUom"] : null;
+      eachBillingSlab["toUom"] = eachUnit["toUom"] ? eachUnit["toUom"] : null;
+      return eachBillingSlab;
+    })
+
     const response = await httpRequest(
       "post",
       "/tl-calculator/billingslab/_create",

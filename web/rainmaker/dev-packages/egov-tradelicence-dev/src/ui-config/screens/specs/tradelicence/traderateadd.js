@@ -1,22 +1,38 @@
 import commonConfig from "config/common.js";
-import { getPattern, getCommonCard, getCommonGrayCard, getCommonSubHeader, getCommonContainer, getCommonHeader, getCommonParagraph, getCommonTitle, getStepperObject, getTextField, getSelectField } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  getPattern,
+  getCommonCard,
+  getCommonGrayCard,
+  getCommonSubHeader,
+  getCommonContainer,
+  getCommonHeader,
+  getCommonParagraph,
+  getCommonTitle,
+  getStepperObject,
+  getTextField,
+  getSelectField,
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject,
+  unMountScreen,
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
-import { getBoundaryData, updatePFOforSearchResults } from "../../../../ui-utils/commons";
-import { getAllDataFromBillingSlab, getCurrentFinancialYear, pageResetAndChange, updateMdmsDropDownsForBillingSlab } from "../utils";
-import { documentList } from "./applyResource/documentList";
-import { footer, getBillingSlabReviewDetails } from "./applyResourceTradeRateAdd/footer";
-
+import { updatePFOforSearchResults } from "../../../../ui-utils/commons";
 import {
-  
-  formwizardFourthStep,
-  
-} from "../tradelicence/apply";
-
+  getAllDataFromBillingSlab,
+  getCurrentFinancialYear,
+  updateMdmsDropDownsForBillingSlab,
+} from "../utils";
+import {
+  footer,
+  getBillingSlabReviewDetails,
+  getBillingSlabReviewMulti,
+} from "./applyResourceTradeRateAdd/footer";
+import { handleLicenseTypeFieldChange, handleTypeFieldChange, setFieldsOnAddItem, setSelectedBillingSlabData, updateUOMFieldDOM } from "./manageTradeResource/functions";
 
 const tradeTypeChange = (reqObj) => {
   try {
@@ -25,20 +41,21 @@ const tradeTypeChange = (reqObj) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 
 const tradeSubTypeChange = (reqObj) => {
   try {
-    let { moduleName, rootBlockSub, keyValue, value, state, dispatch, index } = reqObj;
-
+    let { value, dispatch, state } = reqObj;
 
     dispatch(prepareFinalObject(`billingSlab[0].tradeType`, value));
+    updateUOMFieldDOM(value,state,dispatch)
 
-    //dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tempUom`, currentObject[0].tempUom));
+    // dispatch(prepareFinalObject(`DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType`, value));
   } catch (e) {
     console.log(e);
   }
-}
+};
+
 const tradeUnitCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
@@ -49,7 +66,7 @@ const tradeUnitCard = {
     scheama: getCommonGrayCard({
       header: getCommonSubHeader(
         {
-          labelName: "Trade Unit  ",
+          labelName: "Trade Unit",
           labelKey: "TL_NEW_TRADE_DETAILS_TRADE_UNIT_HEADER"
         },
         {
@@ -60,148 +77,71 @@ const tradeUnitCard = {
       ),
       tradeUnitCardContainer: getCommonContainer(
         {
-          dynamicMdms: {
-            uiFramework: "custom-containers",
-            componentPath: "DynamicMdmsContainer",
-            props: {
-              dropdownFields: [
-
-                {
-                  key: 'tradeType',
-                  fieldType: "autosuggest",
-                  className: "applicant-details-error autocomplete-dropdown",
-                  callBack: tradeTypeChange,
-                  isRequired: false,
-                  requiredValue: true,
-                  isDisabled: false
-
-                },
-                {
-                  key: 'tradeSubType',
-                  callBack: tradeSubTypeChange,
-                  className: "applicant-details-error autocomplete-dropdown",
-                  fieldType: "autosuggest",
-                  isRequired: false,
-                  requiredValue: true,
-                  isDisabled: false
-                }
-              ],
-              moduleName: "TradeLicense",
-              masterName: "TradeType",
-              rootBlockSub: 'tradeUnits',
-              filter: "[?(@.type=='TL')]",
-              screenName: "tradeRateAddPage",
-              callBackEdit: updateMdmsDropDownsForBillingSlab,
-              //isDependency : "DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType"
-            }
-          },
-          tradeUOM: getSelectField({
-            label: {
-              labelName: "UOM (Unit of Measurement)",
-              labelKey: "TL_NEW_TRADE_DETAILS_UOM_LABEL"
-            },
-            placeholder: {
-              labelName: "UOM",
-              labelKey: "TL_NEW_TRADE_DETAILS_UOM_PLACEHOLDER"
-            },
-            required: true,
-            props: {
-              // disabled: true
-            },
-            data: [{ code: "NUMBEROFDAYS" }, { code: "GROSSUNITS" }],
-            jsonPath: "billingSlab[0].uom",
-            gridDefination: {
-              xs: 12,
-              sm: 6
-            }
-          }),
-
-          tradeRateType: {
-            ...getSelectField({
-              label: {
-                labelName: "City",
-                labelKey: "TL_RATE_TYPE_LABEL"
-              },
-
-              optionLabel: "name",
-              placeholder: { labelName: "Select City", labelKey: "TL_RATE_TYPE" },
-              //sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-              data: [{ code: "FLAT" }, { code: "NONFLAT" }],
-              jsonPath: "billingSlab[0].type",
-              required: true,
-              props: {
-                required: true,
-
-              }
-            }),
-
-          },
           tradeFromUOMValue: getTextField({
             label: {
-              labelName: "UOM Value",
-              labelKey: "TL_TRADE_RATE_FROM_UOM_VALUE_LABEL"
+              labelName: "UOM From",
+              labelKey: "TL_TRADE_RATE_FROM_UOM_VALUE_LABEL",
             },
             placeholder: {
-              labelName: "Enter UOM Value",
-              labelKey: "TL_TRADE_RATE_FROM_UOM_VALUE_PLACEHOLDER"
+              labelName: "Enter UOM From",
+              labelKey: "TL_TRADE_RATE_FROM_UOM_VALUE_PLACEHOLDER",
             },
             required: true,
             props: {
-              //disabled: true,
+              disabled: false,
               setDataInField: true,
-              jsonPath: "billingSlab[0].fromUom"
+              jsonPath: "tradeUnits[0].fromUom",
             },
             pattern: getPattern("UOMValue"),
-            jsonPath: "billingSlab[0].fromUom",
+            jsonPath: "tradeUnits[0].fromUom",
             gridDefination: {
               xs: 12,
-              sm: 6
-            }
+              sm: 6,
+            },
           }),
           tradeToUOMValue: getTextField({
             label: {
-              labelName: "UOM Value",
-              labelKey: "TL_TRADE_RATE_TO_UOM_VALUE_LABEL"
+              labelName: "UOM To",
+              labelKey: "TL_TRADE_RATE_TO_UOM_VALUE_LABEL",
             },
             placeholder: {
-              labelName: "Enter UOM Value",
-              labelKey: "TL_TRADE_RATE_TO_UOM_VALUE_PLACEHOLDER"
+              labelName: "Enter UOM To",
+              labelKey: "TL_TRADE_RATE_TO_UOM_VALUE_PLACEHOLDER",
             },
             required: true,
             props: {
-              //disabled: true,
+              disabled: false,
               setDataInField: true,
-              jsonPath: "billingSlab[0].toUom"
+              jsonPath: "tradeUnits[0].toUom",
             },
             pattern: getPattern("UOMValue"),
-            jsonPath: "billingSlab[0].toUom",
+            jsonPath: "tradeUnits[0].toUom",
             gridDefination: {
               xs: 12,
-              sm: 6
-            }
+              sm: 6,
+            },
           }),
-
           tradeRate: getTextField({
             label: {
-              labelName: "UOM Value",
-              labelKey: "TL_TRADE_RATE_RATE_LABEL"
+              labelName: "UOM Rate",
+              labelKey: "TL_TRADE_RATE_LABEL",
             },
             placeholder: {
-              labelName: "Enter UOM Value",
-              labelKey: "TL_TRADE_RATE_RATE_VALUE_PLACEHOLDER"
+              labelName: "Enter UOM Rate",
+              labelKey: "TL_TRADE_RATE_VALUE_PLACEHOLDER",
             },
             required: true,
             props: {
               //disabled: true,
               setDataInField: true,
-              jsonPath: "billingSlab[0].rate"
+              jsonPath: "tradeUnits[0].rate",
             },
             pattern: getPattern("UOMValue"),
-            jsonPath: "billingSlab[0].rate",
+            jsonPath: "tradeUnits[0].rate",
             gridDefination: {
               xs: 12,
-              sm: 6
-            }
+              sm: 6,
+            },
           }),
         },
         {
@@ -212,29 +152,34 @@ const tradeUnitCard = {
       )
     }),
     items: [],
-
+    addItemLabel: {
+      labelName: "ADD TRADE UNITS",
+      labelKey: "TL_ADD_TRADE_UNITS"
+    },
     headerName: "TradeUnits",
     headerJsonPath:
       "children.cardContent.children.header.children.head.children.Accessories.props.label",
-    sourceJsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits",
+    sourceJsonPath: "tradeUnits",
     prefixSourceJsonPath:
       "children.cardContent.children.tradeUnitCardContainer.children",
-
+    onMultiItemAdd: (state, muliItemContent) => {
+      return setFieldsOnAddItem(state, muliItemContent);
+    },
+    removeAddIcon: false
   },
   type: "array"
 };
 
-
 export const tradeDetails = getCommonCard({
   header: getCommonTitle(
     {
-      labelName: "Trade Details",
-      labelKey: "New Billing Slab"
+      labelName: "New Billing Slab",
+      labelKey: "TL_NEW_BILLINGSLAB_HDR",
     },
     {
       style: {
-        marginBottom: 18
-      }
+        marginBottom: 18,
+      },
     }
   ),
   tradeDetailsConatiner: getCommonContainer({
@@ -242,11 +187,11 @@ export const tradeDetails = getCommonCard({
       ...getSelectField({
         label: {
           labelName: "City",
-          labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+          labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL",
         },
         localePrefix: {
           moduleName: "TENANT",
-          masterName: "TENANTS"
+          masterName: "TENANTS",
         },
         optionLabel: "name",
         placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
@@ -255,76 +200,139 @@ export const tradeDetails = getCommonCard({
         required: true,
         props: {
           required: true,
-
-        }
+          disabled: true,
+        },
       }),
-
-    },
-    applicationType: {
-      ...getSelectField({
-        label: {
-          labelName: "License Type",
-          labelKey: "TL_TRADE_RATE_APPLICATION_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Select License Type",
-          labelKey: "TL_TRADE_RATE_APPLICATION_TYPE_PLACEHOLDER"
-        },
-        required: true,
-        jsonPath: "billingSlab[0].applicationType",
-        // localePrefix: {
-        //   moduleName: "TRADELICENSE",
-        //   masterName: "LICENSETYPE"
-        // },
-        visible: true,
-        props: {
-          //disabled: true,
-          //value: "PERMANENT",
-          className: "tl-trade-type"
-        },
-        //sourceJsonPath: "applyScreenMdmsData.TradeLicense.licenseType"
-        data: [{ code: "NEW" }, { code: "RENEWAL" }]
-      }),
-
     },
     tradeLicenseType: {
       ...getSelectField({
         label: {
           labelName: "License Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_LABEL"
+          labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_LABEL",
         },
         placeholder: {
           labelName: "Select License Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_PLACEHOLDER"
+          labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_PLACEHOLDER",
         },
         required: true,
         jsonPath: "billingSlab[0].licenseType",
         localePrefix: {
           moduleName: "TRADELICENSE",
-          masterName: "LICENSETYPE"
+          masterName: "LICENSETYPE",
         },
         visible: true,
         props: {
-          //disabled: true,
-          //value: "PERMANENT",
-          className: "tl-trade-type"
+          className: "tl-trade-type",
         },
-        //sourceJsonPath: "applyScreenMdmsData.TradeLicense.licenseType"
-        data: [{ code: "PERMANENT" }, { code: "TEMPORARY" }]
+        afterFieldChange: (action, state, dispatch) => {
+          handleLicenseTypeFieldChange(action.value, dispatch);
+        },
+        data: [{ code: "PERMANENT" }, { code: "TEMPORARY" }],
       }),
-
     },
+    applicationType: {
+      ...getSelectField({
+        label: {
+          labelName: "Application Type",
+          labelKey: "TL_BS_APPLICATION_TYPE_LABEL",
+        },
+        placeholder: {
+          labelName: "Select Application Type",
+          labelKey: "TL_BS_APPLICATION_TYPE_PLACEHOLDER",
+        },
+        required: true,
+        jsonPath: "billingSlab[0].applicationType",
+        visible: true,
+        props: {
+          className: "tl-trade-type",
+        },
+        data: [{ code: "NEW" }, { code: "RENEWAL" }],
+      }),
+    },
+    dynamicMdms: {
+      uiFramework: "custom-containers",
+      componentPath: "DynamicMdmsContainer",
+      props: {
+        dropdownFields: [
+          {
+            key: "tradeType",
+            fieldType: "autosuggest",
+            className: "applicant-details-error autocomplete-dropdown",
+            callBack: tradeTypeChange,
+            isRequired: false,
+            requiredValue: true,
+            isDisabled: false,
+          },
+          {
+            key: "tradeSubType",
+            callBack: tradeSubTypeChange,
+            className: "applicant-details-error autocomplete-dropdown",
+            fieldType: "autosuggest",
+            isRequired: false,
+            requiredValue: true,
+            isDisabled: false,
+          },
+        ],
+        moduleName: "TradeLicense",
+        masterName: "TradeType",
+        isTemp: false,
+        rootBlockSub: "tradeUnits",
+        filter: "[?(@.type=='TL')]",
+        screenName: "tradeRateAddPage",
+        callBackEdit: updateMdmsDropDownsForBillingSlab,
+        isDependency: "billingSlab[0].tradeType",
+      },
+    },
+    tradeRateType: {
+      ...getSelectField({
+        label: {
+          labelName: "Trade Type",
+          labelKey: "TL_RATE_TYPE_LABEL",
+        },
 
-  },
-
-  ),
-  tradeUnitCard
+        optionLabel: "name",
+        placeholder: {
+          labelName: "Select Trade Type",
+          labelKey: "TL_RATE_TYPE_PH",
+        },
+        data: [{ code: "FLAT" }, { code: "RANGE" }],
+        jsonPath: "billingSlab[0].type",
+        required: true,
+        props: {
+          required: true,
+        },
+        afterFieldChange: (action, state, dispatch) => {
+          handleTypeFieldChange(action.value, state, dispatch)
+        },
+      }),
+    },
+    tradeUOM: getSelectField({
+      label: {
+        labelName: "UOM (Unit of Measurement)",
+        labelKey: "TL_NEW_TRADE_DETAILS_UOM_LABEL",
+      },
+      placeholder: {
+        labelName: "UOM",
+        labelKey: "TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER",
+      },
+      required: true,
+      props: {
+        disabled: false,
+      },
+      sourceJsonPath: "uomOptions",
+      jsonPath: "billingSlab[0].uom",
+      gridDefination: {
+        xs: 12,
+        sm: 6,
+      },
+    })
+  }),
+  tradeUnitCard,
 });
 
 export const stepsData = [
   { labelName: "Trade Details", labelKey: "TL_COMMON_TR_DETAILS" },
-  
-  { labelName: "Summary", labelKey: "TL_COMMON_SUMMARY" }
+  { labelName: "Summary", labelKey: "TL_COMMON_SUMMARY" },
 ];
 export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
@@ -334,30 +342,31 @@ export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"
       ? getCommonHeader({
-        labelName: `Apply for New Trade License ${process.env.REACT_APP_NAME === "Citizen"
-          ? "(" + getCurrentFinancialYear() + ")"
-          : ""
+          labelName: `Apply for New Trade License ${
+            process.env.REACT_APP_NAME === "Citizen"
+              ? "(" + getCurrentFinancialYear() + ")"
+              : ""
           }`,
-        // dynamicArray: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? [getnextFinancialYear(getCurrentFinancialYear())]:[getCurrentFinancialYear()],
-        labelKey: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR" : "TL_COMMON_APPL_NEW_LICENSE_YEAR"
-
-      })
+          // dynamicArray: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? [getnextFinancialYear(getCurrentFinancialYear())]:[getCurrentFinancialYear()],
+          labelKey:
+            getQueryArg(window.location.href, "action") === "EDITRENEWAL"
+              ? "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR"
+              : "TL_COMMON_APPL_NEW_LICENSE_YEAR",
+        })
       : {},
   applicationNumber: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-tradelicence",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: "NA"
+      number: "NA",
     },
-    visible: false
-  }
+    visible: false,
+  },
 });
 
-
 export const getBillingSlabData = async (action, state, dispatch) => {
-
-  //let tenantId = getQueryArg(window.location.href, "tenantId");
+  let tenantId = getQueryArg(window.location.href, "tenantId");
   let licenseType = getQueryArg(window.location.href, "licenseType");
   let applicationType = getQueryArg(window.location.href, "applicationType");
   let tradeType = getQueryArg(window.location.href, "tradeType");
@@ -365,61 +374,58 @@ export const getBillingSlabData = async (action, state, dispatch) => {
   let uom = getQueryArg(window.location.href, "uom");
   let from = getQueryArg(window.location.href, "from");
   let to = getQueryArg(window.location.href, "to");
+  let rate = getQueryArg(window.location.href, "rate");
 
   try {
-
     let queryObject = [
       {
         key: "tenantId",
-        value: getTenantId()
+        value: tenantId,
       },
       {
         key: "licenseType",
-        value: licenseType
+        value: licenseType,
       },
       {
         key: "applicationType",
-        value: applicationType
+        value: applicationType,
       },
       {
         key: "tradeType",
-        value: tradeType
+        value: tradeType,
       },
       {
         key: "type",
-        value: type
+        value: type,
       },
       {
         key: "uom",
-        value: uom
+        value: uom,
       },
       {
         key: "from",
-        value: from
+        value: from,
       },
       {
         key: "to",
-        value: to
-      }
+        value: to,
+      },
     ];
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/tl-calculator/billingslab/_search",
+      "/tl-calculator/billingslab/_search", // search billingslab
       "",
       queryObject
     );
 
-    console.log(payload, "Nero Payload h")
     //return payload.billingSlab[0];
     dispatch(prepareFinalObject("billingSlab[0]", payload.billingSlab[0]));
   } catch (e) {
     console.log(e);
   }
-}
+};
 export const getMdmsData = async (action, state, dispatch) => {
-
-  let TenantIdAppliedFor = getQueryArg(window.location.href, "tenantId");
 
   let mdmsBody = {
     MdmsCriteria: {
@@ -427,46 +433,22 @@ export const getMdmsData = async (action, state, dispatch) => {
       moduleDetails: [
         {
           moduleName: "TradeLicense",
-          masterDetails: [
-
-            { name: "ApplicationType" },
-
-          ]
+          masterDetails: [{ name: "ApplicationType" }],
         },
         {
           moduleName: "common-masters",
-          masterDetails: [
-
-            { name: "UOM" },
-          ]
+          masterDetails: [{ name: "UOM" }],
         },
         {
           moduleName: "tenant",
           masterDetails: [
             {
-              name: "tenants"
-            }
-          ]
-        }
-      ]
-    }
-  };
-  let mdmsWardBody = {
-    MdmsCriteria: {
-      tenantId: TenantIdAppliedFor,
-      moduleDetails: [
-
-        {
-          moduleName: "Ward",
-          masterDetails: [
-            {
-              name: "Ward"
-            }
-          ]
+              name: "tenants",
+            },
+          ],
         },
-
-      ]
-    }
+      ],
+    },
   };
 
   try {
@@ -487,9 +469,7 @@ export const getMdmsData = async (action, state, dispatch) => {
       payload.MdmsRes.tenant.localities = localities;
     }
 
-
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-
   } catch (e) {
     console.log(e);
   }
@@ -502,28 +482,30 @@ export const getData = async (action, state, dispatch) => {
   const applicationNo = queryValue
     ? queryValue
     : get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].oldLicenseNumber",
-      null
-    );
+        state.screenConfiguration.preparedFinalObject,
+        "Licenses[0].oldLicenseNumber",
+        null
+      );
   await getMdmsData(action, state, dispatch);
   await getAllDataFromBillingSlab(getTenantId(), dispatch);
 
-
   if (applicationNo) {
     //Edit/Update Flow ----
-    const applicationType = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-      null
+    // const applicationType = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+    //   null
+    // );
+    // const isEditRenewal =
+    //   getQueryArg(window.location.href, "action") === "EDITRENEWAL";
+
+    await updatePFOforSearchResults(
+      action,
+      state,
+      dispatch,
+      applicationNo,
+      tenantId
     );
-    const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
-
-
-    // dispatch(prepareFinalObject("LicensesTemp", []));
-    await updatePFOforSearchResults(action, state, dispatch, applicationNo, tenantId);
-
-
   }
 };
 
@@ -531,35 +513,32 @@ export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: {
-    id: "apply_form1"
+    id: "apply_form1",
   },
   children: {
     tradeDetails
-  }
+  },
 };
 
-
-const billingSlabReviewDetails = getBillingSlabReviewDetails();
+const billingSlabReviewDetails = getBillingSlabReviewMulti();
 export const billingSlabReview = getCommonCard({
   header: getCommonTitle({
-    labelName: "Please review your Application and Submit",
-    labelKey: "Billing Slab Summary"
+    labelName: "Review And Submit Application",
+    labelKey: "TL_BILLINGSLAB_REVIEW_HDR",
   }),
-  
   billingSlabReviewDetails,
-  
 });
 
 export const formwizardSecondStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: {
-    id: "apply_form2"
+    id: "apply_form2",
   },
   children: {
-  billingSlabReview
+    billingSlabReview,
   },
-  visible: false
+  visible: false,
 };
 
 const screenConfig = {
@@ -567,21 +546,34 @@ const screenConfig = {
   name: "traderateadd",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
-    const billingSlabRecId = getQueryArg(window.location.href, "recordId");
-    // let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
     dispatch(unMountScreen("search"));
     dispatch(unMountScreen("tradesearch"));
     dispatch(unMountScreen("search-preview"));
-    const tenantId = getTenantId();
-    dispatch(prepareFinalObject("billingSlab", []));
-    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    getData(action, state, dispatch).then(responseAction => {
-      const queryObj = [{ key: "tenantId", value: tenantId }];
-      // getBoundaryData(action, state, dispatch, queryObj);
-
-    //  getBillingSlabData(action, state, dispatch, billingSlabRecId, tenantId)
-
-    });
+    let tenantId = getQueryArg(window.location.href, "tenantId");
+    let licenseType = getQueryArg(window.location.href, "licenseType");
+    let applicationType = getQueryArg(window.location.href, "applicationType");
+    let tradeType = getQueryArg(window.location.href, "tradeType");
+    let addNew = getQueryArg(window.location.href, "new");
+    if(addNew) {
+      const billingSlab = [
+        {
+          tenantId: tenantId,
+          licenseType: licenseType ? licenseType : "PERMANENT",
+          applicationType: applicationType ? applicationType : "NEW",
+          tradeType: tradeType,
+          type: null,
+          uom: null,
+        },
+      ];
+      dispatch(prepareFinalObject("billingSlab", billingSlab));
+      dispatch(prepareFinalObject("tradeUnits", []));
+      dispatch(prepareFinalObject("uomOptions", []));
+      dispatch(prepareFinalObject(`tradeUnitsToShow`, []));
+    } else {
+      setSelectedBillingSlabData(state, dispatch)
+    }
+    
+    getData(action, state, dispatch);
 
     return action;
   },
@@ -591,7 +583,7 @@ const screenConfig = {
       uiFramework: "custom-atoms",
       componentPath: "Div",
       props: {
-        className: "common-div-css"
+        className: "common-div-css",
       },
       children: {
         headerDiv: {
@@ -601,20 +593,19 @@ const screenConfig = {
             header: {
               gridDefination: {
                 xs: 12,
-                sm: 10
+                sm: 10,
               },
-              ...header
-            }
-          }
+              ...header,
+            },
+          },
         },
         stepper,
         formwizardFirstStep,
         formwizardSecondStep,
-        footer
-      }
+        footer,
+      },
     },
-
-  }
+  },
 };
 
 export default screenConfig;

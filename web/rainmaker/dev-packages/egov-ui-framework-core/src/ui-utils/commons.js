@@ -852,10 +852,10 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
       if (isTemp) {
         name = "TemporaryTradeType";
       }
-      const tempTenantId = screenName == "tradeRateAddPage" ? tenantId : commonConfig.tenantId;
+      const commonTenantId = screenName == "tradeRateAddPage" ? tenantId : commonConfig.tenantId;
       mdmsBody = {
         MdmsCriteria: {
-          tenantId: tempTenantId,
+          tenantId: commonTenantId,
 
           moduleDetails: [
             {

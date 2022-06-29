@@ -44,10 +44,10 @@ class DynamicMdmsContainer extends Component {
     //}
   }
   componentWillUpdate(nextProps) {
-    let { state, moduleName, rootBlockSub, isTemp } = this.props;
+    let { state, moduleName, rootBlockSub, isTemp, screenName } = this.props;
     const isMdmsApiTrigger = get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.apiTriggered`);
     const isMdmsData = get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`);
-    ((!isMdmsData && !isMdmsApiTrigger) || (nextProps.isTemp !== isTemp)) && this.triggerInitilaApi(nextProps.isTemp);
+    ((!isMdmsData && !isMdmsApiTrigger) || (nextProps.isTemp !== isTemp &&  screenName === "tradeRateAddPage")) && this.triggerInitilaApi(nextProps.isTemp);
   }
   onFieldChange = (screenKey, componentJsonpath, property, value) => {
     let { dispatch, dropdownFields, moduleName, rootBlockSub, index = 0 } = this.props;

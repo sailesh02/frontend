@@ -20,10 +20,10 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import {
-  createUpdateBpaApplication,
+  createUpdatePreApproveApplication,
   prepareDocumentsUploadData,
   prepareNOCUploadData,
-  submitBpaApplicationNOC,
+  submitPreApproveApplicationNOC,
   updateBpaApplicationNOC,
   getNocSearchResults,
   validateThirdPartyDetails,
@@ -561,7 +561,7 @@ const callBackForNext = async (state, dispatch) => {
             if (bpaStatus) {
               changeStep(state, dispatch);
             } else {
-              let response = await createUpdateBpaApplication(
+              let response = await createUpdatePreApproveApplication(
                 state,
                 dispatch,
                 "INITIATE"
@@ -603,7 +603,7 @@ const callBackForNext = async (state, dispatch) => {
               if (bpaStatus) {
                 changeStep(state, dispatch);
               } else {
-                let response = await createUpdateBpaApplication(
+                let response = await createUpdatePreApproveApplication(
                   state,
                   dispatch,
                   "INITIATE"
@@ -624,7 +624,7 @@ const callBackForNext = async (state, dispatch) => {
           if (bpaStatus) {
             changeStep(state, dispatch);
           } else {
-            let response = await createUpdateBpaApplication(
+            let response = await createUpdatePreApproveApplication(
               state,
               dispatch,
               "INITIATE"
@@ -740,7 +740,7 @@ export const changeStep = (
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
   const isNextButtonVisible = activeStep < 4 ? true : false;
-  const isSendToCitizenButtonVisible = activeStep === 4 ? true : false;
+  const ispreApprovedSubmitButtonVisible = activeStep === 4 ? true : false;
   const isSubmitButtonVisible = activeStep === 4 ? true : false;
 
   const actionDefination = [
@@ -765,9 +765,9 @@ export const changeStep = (
       value: isSubmitButtonVisible,
     },
     {
-      path: "components.div.children.footer.children.sendToCitizen",
+      path: "components.div.children.footer.children.preApprovedSubmit",
       property: "visible",
-      value: isSendToCitizenButtonVisible,
+      value: ispreApprovedSubmitButtonVisible,
     },
   ];
   dispatchMultipleFieldChangeAction(
@@ -983,7 +983,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: submitBpaApplicationNOC,
+      callBack: submitPreApproveApplicationNOC,
     },
     roleDefination: {
       rolePath: "user-info.roles",
@@ -991,7 +991,7 @@ export const footer = getCommonApplyFooter({
     },
     visible: false,
   },
-  sendToCitizen: {
+  preApprovedSubmit: {
     componentPath: "Button",
     props: {
       variant: "contained",
@@ -1003,11 +1003,11 @@ export const footer = getCommonApplyFooter({
       },
     },
     children: {
-      sendToCitizenLabel: getLabel({
-        labelName: "SEND TO CITIZEN",
-        labelKey: "BPA_SEND_TO_CITIZEN_BUTTON",
+      preApprovedSubmitLabel: getLabel({
+        labelName: "Submit",
+        labelKey: "BPA_COMMON_BUTTON_SUBMIT",
       }),
-      sendToCitizenIcon: {
+      preApprovedSubmitIcon: {
         uiFramework: "custom-atoms",
         componentPath: "Icon",
         props: {
@@ -1017,7 +1017,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: updateBpaApplicationNOC,
+      callBack: submitPreApproveApplicationNOC,
     },
     // roleDefination: {
     //   rolePath: "user-info.roles",

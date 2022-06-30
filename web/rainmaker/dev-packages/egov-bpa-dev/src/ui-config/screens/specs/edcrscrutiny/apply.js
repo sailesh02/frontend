@@ -28,16 +28,12 @@ const checkEligibility = (label, value, props = {}) => {
     componentPath: "Href",
     gridDefination: {
       xs: 12,
-      sm: 12,
+      sm: 6
     },
+    visible: true,
     props: {
+      disabled: true,
       onClick: handleEligibilityCheckStatus,
-      style: {
-        marginTop: "12px",
-        textAlign: "justify",
-        marginBottom: "30px",
-        color: "#0000EE",
-      },
       ...props,
     },
     children: {

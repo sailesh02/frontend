@@ -114,7 +114,7 @@ export const fetchData = async (
   let searchConvertedArray = [];
   let sortConvertedArray = [];
   const bpaResponse = await getBpaSearchResults();
-  const response = await getSearchResults();
+ // const response = await getSearchResults();
   
 
   if (bpaResponse && bpaResponse.BPA && bpaResponse.BPA.length > 0) {
@@ -135,12 +135,18 @@ export const fetchData = async (
       } else {
         type = "HIGH"
       }
-      let owners = get(element, "owners", [])
+      let owners = get(element, "landInfo.owners", [])
       owners.map(item => {
         if (item.isPrimaryOwner) {
           primaryowner = item.name;
         }
       });
+      // let owners = get(element, "landInfo", [])
+      // owners.map(item => {
+      //   if (item.isPrimaryOwner) {
+      //     primaryowner = item.name;
+      //   }
+      // });
       let bService = get(element, "businessService");
       let appType = getBpaTextToLocalMapping("WF_BPA_BUILDING_PLAN_SCRUTINY");
       let serType = getBpaTextToLocalMapping(`WF_BPA_NEW_CONSTRUCTION`);
@@ -160,37 +166,13 @@ export const fetchData = async (
         sortNumber: 1,
         serviceType: businessService,
         tenantId: get(element, "tenantId", null),
-        type: type
+        type: type,
+        ["BPA_OWNER_LABEL"] : primaryowner
       })
     });
   }
 
 
-  if (response && response.Licenses && response.Licenses.length > 0) {
-    const businessIdToOwnerMapping = await getWorkFlowData(response.Licenses);
-    response.Licenses.forEach(element => {
-      let service = getTextToLocalMapping("MODULE_" + get(element, "businessService"));
-      let status = getTextToLocalMapping("WF_ARCHITECT_" + get(element, "status"));
-      let modifiedTime = element.auditDetails.lastModifiedTime;
-      let licensetypeFull = element.tradeLicenseDetail.tradeUnits[0].tradeType;
-      if (licensetypeFull.split(".").length > 1) {
-        service += " - " + getTextToLocalMapping(`TRADELICENSE_TRADETYPE_${getTransformedLocale(licensetypeFull.split(".")[0])}`);
-      }
-      searchConvertedArray.push({
-        ["BPA_COMMON_TABLE_COL_APP_NO"]: element.applicationNumber || "-",
-        ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: status || "-",
-        ["BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"]: getBpaTextToLocalMapping("BPAREG_SERVICE"),
-        ["BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"]: service,
-        ["BPA_COMMON_SLA"]: get(businessIdToOwnerMapping[element.applicationNumber], "sla", null) || "-",
-        ["BPA_COL_ASSIGNEDTO"]: get(businessIdToOwnerMapping[element.applicationNumber], "assignee", null) || "-",
-        applicationType: getBpaTextToLocalMapping("BPAREG_SERVICE"),
-        modifiedTime: modifiedTime,
-        sortNumber: 0,
-        serviceType: "BPAREG",
-        tenantId: get(element, "tenantId", null)
-      })
-    });
-  }
 
   sortConvertedArray = [].slice.call(searchConvertedArray).sort(function (a, b) {
     return new Date(b.modifiedTime) - new Date(a.modifiedTime) || a.sortNumber - b.sortNumber;

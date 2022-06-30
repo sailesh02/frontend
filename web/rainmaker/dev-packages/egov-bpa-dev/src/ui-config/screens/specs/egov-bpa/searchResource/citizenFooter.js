@@ -8,12 +8,12 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest} from "../../../../../ui-utils/api"
+import { httpRequest } from "../../../../../ui-utils/api"
 import {
   convertEpochToDate, getCommonCard,
   getCommonContainer,
   getCommonHeader
-} from "egov-ui-framework/ui-config/screens/specs/utils"; 
+} from "egov-ui-framework/ui-config/screens/specs/utils";
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let tenant = getQueryArg(window.location.href, "tenantId");
@@ -40,11 +40,11 @@ export const bpaMakePayment = async (state, dispatch) => {
   let status = get(state.screenConfiguration.preparedFinalObject, "BPA.status");
   let riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.riskType");
   let billbService
-  if(riskType === "LOW") {
+  if (riskType === "LOW") {
     //billbService = "BPA.LOW_RISK_PERMIT_FEE"
-    billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
+    billbService = ((status == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
   } else {
-    billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
+    billbService = ((status == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
   }
   const makePaymentUrl = process.env.REACT_APP_SELF_RUNNING === "true"
     ? `/egov-ui-framework/egov-bpa/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`
@@ -63,7 +63,7 @@ export const openPopupToReplyScn = async (state, dispatch, action) => {
   dispatch(
     handleField("search-preview", "components.div.children.sendToArchPickerDialog.children.dialogContent.children.popup.children.header.children.key", "props.labelKey", "BPA_SCN_REPLY_HEADER")
   );
-  
+
   dispatch(
     handleField("search-preview", "components.div.children.sendToArchPickerDialog", "props.open", !toggle)
   );
@@ -77,7 +77,7 @@ export const updateBpaApplication = async (state, dispatch, action) => {
   let bpaPreparedObj = get(state, "screenConfiguration.preparedFinalObject.BPA");
   let isSpclArchSelected = bpaPreparedObj.workflow;
   let bservice = getQueryArg(window.location.href, "bservice");
-  if(bservice === "BPA5" && bpaStatus === "PENDING_FORWARD" && !isSpclArchSelected){
+  if (bservice === "BPA5" && bpaStatus === "PENDING_FORWARD" && !isSpclArchSelected) {
 
     dispatch(
       toggleSnackbar(
@@ -86,26 +86,26 @@ export const updateBpaApplication = async (state, dispatch, action) => {
         "error"
       )
     );
-  return false;
+    return false;
   }
   let bpaAction, isArchitect = false, isCitizen = false, isCitizenBack = false;
-  if(action && action === "SEND_TO_ARCHITECT") {
+  if (action && action === "SEND_TO_ARCHITECT") {
     bpaAction = "SEND_TO_ARCHITECT",
-    isArchitect = true;
+      isArchitect = true;
   }
-  if(action && action === "APPROVE") {
+  if (action && action === "APPROVE") {
     bpaAction = "APPROVE",
-    isCitizen = true;
+      isCitizen = true;
   }
- let bpaStatusAction = bpaStatus && bpaStatus.includes("CITIZEN_ACTION_PENDING")
-  if(bpaStatusAction) {
+  let bpaStatusAction = bpaStatus && bpaStatus.includes("CITIZEN_ACTION_PENDING")
+  if (bpaStatusAction) {
     bpaAction = "FORWARD",
-    isCitizenBack = true;
+      isCitizenBack = true;
   }
 
-  if(action && action === "INTIMATE_CONSTRUCT_START") {
+  if (action && action === "INTIMATE_CONSTRUCT_START") {
     bpaAction = action,
-    isCitizen = true;
+      isCitizen = true;
     isDeclared = true;
   }
 
@@ -114,14 +114,14 @@ export const updateBpaApplication = async (state, dispatch, action) => {
     "components.div.children.sendToArchPickerDialog.props.open",
     false
   );
-  
-  if(bservice && bservice === "BPA5"){
+
+  if (bservice && bservice === "BPA5") {
     let bpaStatusAction = bpaStatus && bpaStatus.includes("PENDING_FORWARD")
-    if(bpaStatusAction) {
+    if (bpaStatusAction) {
       bpaAction = "FORWARD",
-      isCitizenBack = true;
+        isCitizenBack = true;
     }
-  
+
 
     dispatch(
       handleField("search-preview", "components.div.children.sendToArchPickerDialog", "props.open", !toggle)
@@ -130,22 +130,22 @@ export const updateBpaApplication = async (state, dispatch, action) => {
       handleField("search-preview", "components.div.children.sendToArchPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.applicationAction", bpaAction)
     );
 
-  }else{
-  if((isDeclared && isCitizen ) || (isArchitect) || (isCitizenBack)){
-    dispatch(
-      handleField("search-preview", "components.div.children.sendToArchPickerDialog", "props.open", !toggle)
-    );
-    dispatch(
-      handleField("search-preview", "components.div.children.sendToArchPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.applicationAction", bpaAction)
-    );
   } else {
-    let errorMessage = {
-      labelName: "Please confirm the declaration!",
-      labelKey: "BPA_DECLARATION_COMMON_LABEL"
-    };
-    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    if ((isDeclared && isCitizen) || (isArchitect) || (isCitizenBack)) {
+      dispatch(
+        handleField("search-preview", "components.div.children.sendToArchPickerDialog", "props.open", !toggle)
+      );
+      dispatch(
+        handleField("search-preview", "components.div.children.sendToArchPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.applicationAction", bpaAction)
+      );
+    } else {
+      let errorMessage = {
+        labelName: "Please confirm the declaration!",
+        labelKey: "BPA_DECLARATION_COMMON_LABEL"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    }
   }
-}
 
 
 };
@@ -157,12 +157,12 @@ export const updateBpaApplicationAfterApproved = async (state, dispatch, action)
     "components.div.children.sendToArchPickerDialog.props.open",
     false
   );
-    dispatch(
-      handleField("search-preview", "components.div.children.sendToArchPickerDialog", "props.open", !toggle)
-    );
-    dispatch(
-      handleField("search-preview", "components.div.children.sendToArchPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.applicationAction", bpaAction)
-    );
+  dispatch(
+    handleField("search-preview", "components.div.children.sendToArchPickerDialog", "props.open", !toggle)
+  );
+  dispatch(
+    handleField("search-preview", "components.div.children.sendToArchPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.applicationAction", bpaAction)
+  );
 
 };
 export const sendToArchContainer = () => {
@@ -179,9 +179,9 @@ export const sendToArchContainer = () => {
         componentPath: "MenuButton",
         props: {
           data: {
-            label: {labelName : "Take Action" , labelKey :"WF_TAKE_ACTION"},
+            label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
             rightIcon: "arrow_drop_down",
-            props: { variant: "contained", style: { height: "60px", color : "#fff", backgroundColor: "#FE7A51", } },
+            props: { variant: "contained", style: { height: "60px", color: "#fff", backgroundColor: "#FE7A51", } },
             menu: {}
           }
         }
@@ -203,9 +203,9 @@ export const buttonAfterApproved = () => {
         componentPath: "MenuButton",
         props: {
           data: {
-            label: {labelName : "Take Action" , labelKey :"WF_TAKE_ACTION"},
+            label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
             rightIcon: "arrow_drop_down",
-            props: { variant: "contained", style: { height: "60px", color : "#fff", backgroundColor: "#FE7A51", } },
+            props: { variant: "contained", style: { height: "60px", color: "#fff", backgroundColor: "#FE7A51", } },
             menu: {}
           }
         }
@@ -216,30 +216,8 @@ export const buttonAfterApproved = () => {
 
 export const updateAndApproveSpclArchBpaApplication = async (state, dispatch, action) => {
 
-let payload = get(state, "screenConfiguration.preparedFinalObject.BPA");
-payload.workflow = {action: "APPROVE"}
-try {
-  let response = await httpRequest(
-    "post",
-    "bpa-services/v1/bpa/_update",
-    "",
-    [],
-    { BPA: payload }
-  );  
-  if(response){
-    let url = `/egov-bpa/acknowledgement?purpose=APPROVE&status=success&applicationNumber=${payload.applicationNo}&tenantId=${payload.tenantId}`
-    dispatch(setRoute(url));
-  }
-} catch (error) {
-  console.log(error, "Error")
-}
-
-}
-//Send to application Preview page 
-export const previewAndForwardApplication = async (state, dispatch, action) => {
-
   let payload = get(state, "screenConfiguration.preparedFinalObject.BPA");
-  payload.workflow = {action: "FORWARD_TO_APPROVER"}
+  payload.workflow = { action: "APPROVE" }
   try {
     let response = await httpRequest(
       "post",
@@ -247,17 +225,98 @@ export const previewAndForwardApplication = async (state, dispatch, action) => {
       "",
       [],
       { BPA: payload }
-    );  
-    if(response){
+    );
+    if (response) {
+      let url = `/egov-bpa/acknowledgement?purpose=APPROVE&status=success&applicationNumber=${payload.applicationNo}&tenantId=${payload.tenantId}`
+      dispatch(setRoute(url));
+    }
+  } catch (error) {
+    console.log(error, "Error")
+  }
+
+}
+//Send to application Preview page 
+export const previewAndForwardApplication = async (state, dispatch, action) => {
+
+  let payload = get(state, "screenConfiguration.preparedFinalObject.BPA");
+  payload.workflow = { action: "FORWARD_TO_APPROVER" }
+  try {
+    let response = await httpRequest(
+      "post",
+      "bpa-services/v1/bpa/_update",
+      "",
+      [],
+      { BPA: payload }
+    );
+    if (response) {
       let url = `/egov-bpa/acknowledgement?purpose=FORWARD&status=success&applicationNumber=${payload.applicationNo}&tenantId=${payload.tenantId}`
       dispatch(setRoute(url));
     }
   } catch (error) {
     console.log(error, "Error")
   }
-  
+
+}
+
+const bpaMakeInstallmentPayment = async (state, dispatch, action) => {
+  //console.log(state, "Nero State");
+  let selectedInstallments = get(state, "screenConfiguration.preparedFinalObject.selectedInstallments");
+  let notPaidInstallments = get(state, "screenConfiguration.preparedFinalObject.notPaidInstallments");
+  console.log(selectedInstallments, applicationNumber, "Nero Selected Installments")
+
+  /********Validations*********/
+
+  if(selectedInstallments && selectedInstallments.length < 1){
+
+    let errorMessage = {
+      labelName: "Please confirm the declaration!",
+      labelKey: "BPA_INSTALLMENT_NOT_SELECTED_ERR"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "error"));
+    return false;
+
   }
 
+  let isSelectedInstallmentsFromInitial = true;
+  let totalSelectedInstallments = selectedInstallments && selectedInstallments.length;
+  for (let i = 0; i < totalSelectedInstallments; i++) {
+    if (!selectedInstallments.includes(notPaidInstallments[i])) {
+      isSelectedInstallmentsFromInitial = false;
+      break;
+    }
+  }
+  if (!isSelectedInstallmentsFromInitial) {
+    let errorMessage = {
+      labelName: "Please confirm the declaration!",
+      labelKey: "BPA_SELECT_INSTALLMENT_SEQUENCE_ERR"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "error"));
+    return false;
+  }
+  //  const differenceAry = selectedInstallments.slice(1).map(function(n, i) { return n - selectedInstallments[i]; })
+  //  const isDifference= differenceAry.every(value => value == 1)
+  //  console.log(isDifference, "nERO Difference");
+  /****************/
+  //console.log(installmentsSequanceMaster, "Nero Master")
+  // let errorMessage = {
+  //   labelName: "Please confirm the declaration!",
+  //   labelKey: "BPA_SELECT_INSTALLMENT_SEQUENCE_ERR"
+  // };
+  // dispatch(toggleSnackbar(true, errorMessage, "error"));
+  // let fullPaymentInstallmentIds = [];
+  // for(let i=0; i<selectedInstallments.length; i++){
+  //   for(let j=0;j<selectedInstallments[i].length;j++){
+  //     console.log(selectedInstallments[i][j], "Nero iii")
+  //     fullPaymentInstallmentIds.push(selectedInstallments[i][j].installmentno);
+  //   }
+
+  // }
+  // let unsortedUniqueInstallmentNos = [...new Set(fullPaymentInstallmentIds)];
+  // //console.log(uniqueInstallmentNos, "Nero Final")
+  // let sortedUniqueInstallmentNos = unsortedUniqueInstallmentNos.sort(function(a, b){return a - b});
+  // console.log(sortedUniqueInstallmentNos, "sorted Insa")
+console.log(selectedInstallments, "Nero Final Installments for API")
+}
 export const citizenFooter = getCommonApplyFooter({
   makePayment: {
     componentPath: "Button",
@@ -266,8 +325,8 @@ export const citizenFooter = getCommonApplyFooter({
       color: "primary",
       style: {
         height: "48px",
-          marginRight: "45px"
-        }
+        marginRight: "45px"
+      }
     },
     children: {
       submitButtonLabel: getLabel({
@@ -286,27 +345,27 @@ export const citizenFooter = getCommonApplyFooter({
   },
   sendToArch: {
     uiFramework: "custom-atoms",
-              componentPath: "Container",
-              props: {
-                color: "primary",
-                style: { justifyContent: "flex-end" }
-              },
-              children: {
-                buttons : sendToArchContainer()
-              },
-              visible: false
+    componentPath: "Container",
+    props: {
+      color: "primary",
+      style: { justifyContent: "flex-end" }
+    },
+    children: {
+      buttons: sendToArchContainer()
+    },
+    visible: false
   },
   buttonAfterApproved: {
     uiFramework: "custom-atoms",
-              componentPath: "Container",
-              props: {
-                color: "primary",
-                style: { justifyContent: "flex-end" }
-              },
-              children: {
-                buttons : buttonAfterApproved()
-              },
-              visible: false
+    componentPath: "Container",
+    props: {
+      color: "primary",
+      style: { justifyContent: "flex-end" }
+    },
+    children: {
+      buttons: buttonAfterApproved()
+    },
+    visible: false
   },
   submitButton: {
     componentPath: "Button",
@@ -331,7 +390,7 @@ export const citizenFooter = getCommonApplyFooter({
     },
     roleDefination: {
       rolePath: "user-info.roles",
-      action : "APPLY"
+      action: "APPLY"
     }
   },
   forwardButton: {
@@ -357,7 +416,7 @@ export const citizenFooter = getCommonApplyFooter({
     },
     roleDefination: {
       rolePath: "user-info.roles",
-      action : "FORWARD"
+      action: "FORWARD"
     }
   },
   spclArchApproveButton: {
@@ -384,7 +443,7 @@ export const citizenFooter = getCommonApplyFooter({
     },
     roleDefination: {
       rolePath: "user-info.roles",
-      action : "APPROVE"
+      action: "APPROVE"
     }
   },
   scnReplyButton: {
@@ -409,7 +468,7 @@ export const citizenFooter = getCommonApplyFooter({
       action: "condition",
       callBack: openPopupToReplyScn
     },
-   
+
   }
   // forwardAfterReworkButton: {
   //   componentPath: "Button",
@@ -449,8 +508,8 @@ export const generateShowCauseNotice = getCommonContainer({
       color: "primary",
       style: {
         height: "48px",
-          marginRight: "45px"
-        }
+        marginRight: "45px"
+      }
     },
     children: {
       submitButtonLabel: getLabel({
@@ -474,8 +533,8 @@ export const generateShowCauseNotice = getCommonContainer({
       color: "primary",
       style: {
         height: "48px",
-          marginRight: "45px"
-        }
+        marginRight: "45px"
+      }
     },
     children: {
       submitButtonLabel: getLabel({
@@ -490,36 +549,65 @@ export const generateShowCauseNotice = getCommonContainer({
       }
     }
   },
-  
-  
+
+
 });
 
 export const getScnHistory = getCommonGrayCard({
-    
+
   header: {
-      uiFramework: "custom-atoms",
-      componentPath: "Container",
-      props: {
-          style: { marginBottom: "10px" }
-      },
-      children: {
-          header: {
-              gridDefination: {
-                  xs: 8
-              },
-              ...getCommonSubHeader({
-                  labelName: "BPA_SCN_HISTORY_HEADER",
-                  labelKey: "BPA_SCN_HISTORY_HEADER"
-              })
-          }
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: { marginBottom: "10px" }
+    },
+    children: {
+      header: {
+        gridDefination: {
+          xs: 8
+        },
+        ...getCommonSubHeader({
+          labelName: "BPA_SCN_HISTORY_HEADER",
+          labelKey: "BPA_SCN_HISTORY_HEADER"
+        })
       }
+    }
   },
   edcrShortSummary: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-bpa",
-      componentPath: "ScnHistory",
-      
-      
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "ScnHistory",
+
+
   }
 }
 );
+
+
+export const viewPaymentDetails = getCommonApplyFooter({
+  viewPaymentDetail: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        height: "48px",
+        marginRight: "45px"
+      }
+    },
+    children: {
+      submitButtonLabel: getLabel({
+        labelName: "MAKE PAYMENT",
+        labelKey: "BPA_CITIZEN_MAKE_PAYMENT"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: bpaMakeInstallmentPayment
+    },
+    // roleDefination: {
+    //   rolePath: "user-info.roles",
+    //   action: "PAY"
+    // }
+  }
+})

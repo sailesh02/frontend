@@ -302,6 +302,10 @@ export const myApplicationsTableConfig =  {
           display: false
         }
       },
+      {
+        name: "owner", labelKey: "BPA_OWNER_LABEL"
+        
+      },
     ],
     title: {
       labelName: "Search Results for BPA Applications",

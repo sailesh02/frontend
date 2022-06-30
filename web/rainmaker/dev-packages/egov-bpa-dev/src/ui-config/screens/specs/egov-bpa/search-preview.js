@@ -40,7 +40,7 @@ import {
 } from "../utils/index";
 import { spclArchitectsPicker } from "./searchResource/spclArchitects";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
-import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved, generateShowCauseNotice, getScnHistory } from "./searchResource/citizenFooter";
+import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved, generateShowCauseNotice, getScnHistory, viewPaymentDetails } from "./searchResource/citizenFooter";
 import { applicantSummary, institutionSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
@@ -403,74 +403,57 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
   
   let paymentPayload = {}; 
   paymentPayload.Payments = [];
-  if(riskType === "LOW") {
-    let feetype = "BPA.LOW_RISK_PERMIT_FEE"
-    if(service === "BPA5"){
-      feetype = "BPA.NC_SAN_FEE";
-    }
-    let lowAppPaymentPayload = await httpRequest(
-      "post",
-      getPaymentSearchAPI(feetype),
-      "",
-      queryObject
-    );
-    if(lowAppPaymentPayload && lowAppPaymentPayload.Payments && lowAppPaymentPayload.Payments.length > 0) paymentPayload.Payments.push(lowAppPaymentPayload.Payments[0]);
-  } else {
-    let businessServicesList = ["BPA.NC_APP_FEE", "BPA.NC_SAN_FEE" ];
-    for(let fee = 0; fee < businessServicesList.length; fee++ ) {
-      let lowAppPaymentPayload = await httpRequest(
+  // if(riskType === "LOW") {
+  //   let feetype = "BPA.LOW_RISK_PERMIT_FEE"
+  //   if(service === "BPA5"){
+  //     feetype = "BPA.NC_SAN_FEE";
+  //   }
+  //   let lowAppPaymentPayload = await httpRequest(
+  //     "post",
+  //     getPaymentSearchAPI(feetype),
+  //     "",
+  //     queryObject
+  //   );
+  //   if(lowAppPaymentPayload && lowAppPaymentPayload.Payments && lowAppPaymentPayload.Payments.length > 0) paymentPayload.Payments.push(lowAppPaymentPayload.Payments[0]);
+  // } else {
+  //   let businessServicesList = ["BPA.NC_APP_FEE", "BPA.NC_SAN_FEE" ];
+  //   for(let fee = 0; fee < businessServicesList.length; fee++ ) {
+  //     let lowAppPaymentPayload = await httpRequest(
+  //       "post",
+  //       getPaymentSearchAPI(businessServicesList[fee]),
+  //       "",
+  //       queryObject
+  //     );
+  //     if(lowAppPaymentPayload && lowAppPaymentPayload.Payments) paymentPayload.Payments.push(lowAppPaymentPayload.Payments[0]);
+  //   }
+  // }
+
+  let businessServicesList = ["BPA.NC_APP_FEE", "BPA.NC_SAN_FEE" ];
+    
+      let paymentsResponse = await httpRequest(
         "post",
-        getPaymentSearchAPI(businessServicesList[fee]),
+        getPaymentSearchAPI("-1"),
         "",
         queryObject
       );
-      if(lowAppPaymentPayload && lowAppPaymentPayload.Payments) paymentPayload.Payments.push(lowAppPaymentPayload.Payments[0]);
-    }
-  }
+      let paymentsCount = paymentsResponse && paymentsResponse.Payments.length;
 
-  /*if (riskType === "LOW") {
-    if (paymentPayload && paymentPayload.Payments.length == 1) {
-      downloadMenu.push(lowAppFeeDownloadObject);
-      printMenu.push(lowAppFeePrintObject);
-    }
-    switch (status) {
-      case "DOC_VERIFICATION_INPROGRESS":
-      case "FIELDINSPECTION_INPROGRESS":
-      case "NOC_VERIFICATION_INPROGRESS":
-      case "APPROVAL_INPROGRESS":
-      case "APPROVED":
-        downloadMenu.push(permitOrderDownloadObject);
-        printMenu.push(permitOrderDownloadObject);
-        downloadMenu = downloadMenu;
-        printMenu = printMenu;
-        break;
-      case "PERMIT REVOCATION":
-        downloadMenu.push(revocationPdfDownlaodObject);
-        printMenu.push(revocationPdfPrintObject);
-        downloadMenu = downloadMenu;
-        printMenu = printMenu;
-        break;
-      default:
-        downloadMenu = [];
-        printMenu = [];
-        break;
-    }
-  } else {*/
 
-    if (paymentPayload && paymentPayload.Payments.length == 1) {
-      if (get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_APP_FEE") {
-        downloadMenu.push(appFeeDownloadObject);
-        printMenu.push(appFeePrintObject);
-      } else if (get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_SAN_FEE") {
-        downloadMenu.push(sanFeeDownloadObject);
-        printMenu.push(sanFeePrintObject);
+    if(paymentsCount > 0){
+      for(let i=0; i<paymentsResponse.Payments.length;i++){
+        if(paymentsResponse && paymentsResponse.Payments[i].paymentDetails[0].businessService === "BPA.NC_APP_FEE"){
+          downloadMenu.push(appFeeDownloadObject);
+          printMenu.push(appFeePrintObject);
+        }
+        if(paymentsResponse && paymentsResponse.Payments[i].paymentDetails[0].businessService === "BPA.NC_SAN_FEE"){
+          downloadMenu.push(sanFeeDownloadObject);
+          printMenu.push(sanFeePrintObject);
+        } 
+
       }
-    } else if (paymentPayload && paymentPayload.Payments.length == 2) {
-      downloadMenu.push(appFeeDownloadObject);
-      downloadMenu.push(sanFeeDownloadObject);
-      printMenu.push(appFeePrintObject);
-      printMenu.push(sanFeePrintObject);
     }
+    
+
     switch (status) {
       case "DOC_VERIFICATION_INPROGRESS":
       case "FIELDINSPECTION_INPROGRESS":
@@ -1658,7 +1641,9 @@ const screenConfig = {
       }
     }
   },
-        citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
+        citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {},
+      //  viewPaymentDetails: process.env.REACT_APP_NAME === "Citizen" ? viewPaymentDetails : {},
+        
       }
     },
     commentsPopup :{

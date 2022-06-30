@@ -405,6 +405,12 @@ class GlobalFilter extends Component {
     }
 
     renderAutoComplete(target, hndlslected, defaultV, data, type) {
+        console.log("data=",data)
+        let q = 'odisha'
+        const index = data.findIndex(item => q.toLowerCase() === item.toLowerCase());
+        if (index > -1) { // only splice data when item is found
+            data.splice(index, 1); // 2nd parameter means remove one item only
+        }
         return (<AutoComplete
             logo={target}
             handleSelected={hndlslected}

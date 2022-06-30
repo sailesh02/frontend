@@ -4,4 +4,8 @@ const commonConfig = {
   // forgotPasswordTenant: "od.amritsar",
 };
 
+export const CONSTANTS = {
+  isUatVisible: false
+}
+
 export default commonConfig;

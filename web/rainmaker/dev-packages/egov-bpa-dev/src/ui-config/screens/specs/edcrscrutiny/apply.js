@@ -17,6 +17,7 @@ import {getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import store from "ui-redux/store";
+import { CONSTANTS } from "../../../../config/common";
 const handleEligibilityCheckStatus = () => {
   let url = "/bpastakeholder-citizen/preApprovedPlanDetails"
   store.dispatch(setRoute(url));
@@ -30,7 +31,7 @@ const checkEligibility = (label, value, props = {}) => {
       xs: 12,
       sm: 6
     },
-    visible: true,
+    visible: CONSTANTS.isUatVisible ? true : false,
     props: {
       disabled: true,
       onClick: handleEligibilityCheckStatus,

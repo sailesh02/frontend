@@ -8,15 +8,19 @@ import BPAStakeholderRegIcon from "../../../../ui-atoms-local/Icons/BPAStakehold
 import BPANewPermitIcon from "../../../../ui-atoms-local/Icons/BPANewPermitIcon";
 import { getStakeHolderRoles } from "../../../../ui-utils/commons";
 import "../utils/index.css";
+import { CONSTANTS } from "../../../../config/common";
+
+const visibleUat = CONSTANTS.isUatVisible;
+
 const header = getCommonHeader(
   {
     labelName: "Building Plan Approval",
-    labelKey: "BPA_CITIZEN_COMMON_TITLE"
+    labelKey: "BPA_CITIZEN_COMMON_TITLE",
   },
   {
     classes: {
-      root: "common-header-cont"
-    }
+      root: "common-header-cont",
+    },
   }
 );
 
@@ -28,60 +32,71 @@ const hideBPACard = () => {
 
 const displayView = () => {
   return hideBPACard() ? "my-applications" : "my-applications-stakeholder";
-}
+};
 
 const cardItems = [
   {
     label: {
       labelKey: "BPA_COMMON_APPL_NEW_LICENSE",
-      labelName: "Register Technical Person/Builder"
+      labelName: "Register Technical Person/Builder",
     },
     icon: <BPAStakeholderRegIcon />,
-    route: "apply"
+    route: "apply",
   },
   {
     label: {
       labelKey: "BPA_COMMON_APPL_NEW_CONSTRUCTION",
-      labelName: "Building Permit New Construction"
+      labelName: "Building Permit New Construction",
     },
     hide: hideBPACard(),
     icon: <BPANewPermitIcon />,
     route: {
       screenKey: "home",
       jsonPath: "components.cityPickerDialog",
-      value: "apply"
-    }
+      value: "apply",
+    },
   },
   {
     label: {
       labelKey: "BPA_OC_COMMON_APPL_NEW_CONSTRUCTION",
-      labelName: "Occupancy Certificate New Building Construction"
+      labelName: "Occupancy Certificate New Building Construction",
     },
     hide: hideBPACard(),
     icon: <BPANewPermitIcon />,
     route: {
       screenKey: "home",
-      jsonPath: "components.cityPickerDialogForOC"
-    }
+      jsonPath: "components.cityPickerDialogForOC",
+    },
   },
   {
     label: {
       labelKey: "BPA_MY_APPLICATIONS",
-      labelName: "My Applications"
+      labelName: "My Applications",
     },
     icon: <FormIcon />,
     route: displayView(),
-    moduleName: "egov-bpa"
+    moduleName: "egov-bpa",
   },
   {
     label: {
       labelKey: "BPA_PREAPPROVE_PLAN",
-      labelName: "Apply for Pre-approved Plan"
+      labelName: "Apply for Pre-approved Plan",
     },
     icon: <FormIcon />,
-    route: 'preApprovedPlanDetails'
-  }
+    route: "preApprovedPlanDetails",
+  },
 ];
+
+let cardList = []
+if (!visibleUat) {
+  cardList = cardItems.filter((item, index) => {
+    if (item.route != "preApprovedPlanDetails") {
+      return item;
+    }
+  });
+} else {
+  cardList = cardItems
+}
 
 const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",
@@ -103,21 +118,21 @@ const tradeLicenseSearchAndResult = {
           uiFramework: "custom-molecules",
           componentPath: "LandingPage",
           props: {
-            items: cardItems,
-            history: {}
-          }
+            items: cardList, //cardItems,
+            history: {},
+          },
         },
         listCard: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-bpa",
-          componentPath: "HowItWorks"
+          componentPath: "HowItWorks",
         },
         listCard1: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-bpa",
-          componentPath: "TrainingTutorials"
-        }
-      }
+          componentPath: "TrainingTutorials",
+        },
+      },
     },
     // div: {
     //   uiFramework: "custom-atoms",
@@ -198,44 +213,44 @@ const tradeLicenseSearchAndResult = {
       componentPath: "Dialog",
       props: {
         open: false,
-        maxWidth: "md"
+        maxWidth: "md",
       },
       children: {
         dialogContent: {
           componentPath: "DialogContent",
           props: {
             classes: {
-              root: "city-picker-dialog-style"
-            }
+              root: "city-picker-dialog-style",
+            },
             // style: { minHeight: "180px", minWidth: "365px" }
           },
           children: {
-            popup: cityPicker
-          }
-        }
-      }
+            popup: cityPicker,
+          },
+        },
+      },
     },
     cityPickerDialogForOC: {
       componentPath: "Dialog",
       props: {
         open: false,
-        maxWidth: "md"
+        maxWidth: "md",
       },
       children: {
         dialogContent: {
           componentPath: "DialogContent",
           props: {
             classes: {
-              root: "city-picker-dialog-style"
-            }
+              root: "city-picker-dialog-style",
+            },
           },
           children: {
-            popup: cityPicker
-          }
-        }
-      }
-    }
-  }
+            popup: cityPicker,
+          },
+        },
+      },
+    },
+  },
 };
 
 export default tradeLicenseSearchAndResult;

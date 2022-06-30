@@ -80,8 +80,8 @@ class LandingPage extends React.Component {
             <Grid
               className={classes.item}
               item
-              xs={12 / items.length}
-              sm={12 / items.length}
+              xs={12}
+              md
               align="center"
             >
               <Card

@@ -292,6 +292,10 @@ const mapStateToProps = state => {
     hasAddItem = false;
   }
 
+  if(screenConfigKeys && screenConfigKeys.length > 0 && screenConfigKeys[0] == "preApprovedPlanApply"){
+    hasAddItem = false;
+  }
+  
   if(Licenses){
     let subOwnershipValue = get(preparedFinalObject, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory", '');
     if(subOwnershipValue == "INDIVIDUAL.SINGLEOWNER"){

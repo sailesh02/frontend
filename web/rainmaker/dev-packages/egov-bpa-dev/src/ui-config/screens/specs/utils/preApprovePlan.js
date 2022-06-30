@@ -609,13 +609,13 @@ export const getMapLocator = textSchema => {
 
 export const showHideMapPopup = (state, dispatch) => {
   let toggle = get(
-    state.screenConfiguration.screenConfig["apply"],
+    state.screenConfiguration.screenConfig["preApprovedPlanApply"],
     "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.mapsDialog.props.open",
     false
   );
   dispatch(
     handleField(
-      "apply",
+      "preApprovedPlanApply",
       "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.mapsDialog",
       "props.open",
       !toggle
@@ -718,7 +718,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
           );
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocPropertyID",
               "props.value",
               ""
@@ -727,7 +727,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
         } else {
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
               "props.value",
               {
@@ -744,7 +744,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
           );
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.children.cityDropdown",
               "props.value",
               payload.Properties[0].address.tenantId
@@ -1258,7 +1258,7 @@ export const validateFields = (
   objectJsonPath,
   state,
   dispatch,
-  screen = "apply"
+  screen = "preApprovedPlanApply"
 ) => {
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
@@ -1649,7 +1649,7 @@ export const updateDropDowns = async (
         if (licenseeType == "ARCHITECT")
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children.counsilForArchNo",
               "visible",
               true
@@ -1658,7 +1658,7 @@ export const updateDropDowns = async (
         else
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children.counsilForArchNo",
               "visible",
               false
@@ -1846,7 +1846,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
     if (tradeOwnershipCat === "INDIVIDUAL") {
       dispatch(
         handleField(
-          "apply",
+          "preApprovedPlanApply",
           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
           "visible",
           true
@@ -1854,7 +1854,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
       );
       dispatch(
         handleField(
-          "apply",
+          "preApprovedPlanApply",
           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
           "visible",
           false
@@ -1863,7 +1863,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
     } else {
       dispatch(
         handleField(
-          "apply",
+          "preApprovedPlanApply",
           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
           "visible",
           false
@@ -1871,7 +1871,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
       );
       dispatch(
         handleField(
-          "apply",
+          "preApprovedPlanApply",
           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
           "visible",
           true
@@ -1888,7 +1888,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
       );
       dispatch(
         handleField(
-          "apply",
+          "preApprovedPlanApply",
           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
           "props.hasAddItem",
           false
@@ -1899,7 +1899,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
 
         dispatch(
           handleField(
-            "apply",
+            "preApprovedPlanApply",
             "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
             "props.items",
             singleCard
@@ -1920,7 +1920,7 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
     if (tradeSubOwnershipCat === "INDIVIDUAL.MULTIPLEOWNERS") {
       dispatch(
         handleField(
-          "apply",
+          "preApprovedPlanApply",
           "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
           "props.hasAddItem",
           true
@@ -2265,7 +2265,7 @@ export const setLicenseeSubTypeDropdownData = async (
   if (licenceType) {
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "props.value",
         null
@@ -2284,7 +2284,7 @@ export const setLicenseeSubTypeDropdownData = async (
   if (filterdTradeTypes.length == 0) {
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "props.disabled",
         false
@@ -2292,7 +2292,7 @@ export const setLicenseeSubTypeDropdownData = async (
     );
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "required",
         false
@@ -2300,7 +2300,7 @@ export const setLicenseeSubTypeDropdownData = async (
     );
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "visible",
         false
@@ -2316,7 +2316,7 @@ export const setLicenseeSubTypeDropdownData = async (
   } else {
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "props.disabled",
         false
@@ -2324,7 +2324,7 @@ export const setLicenseeSubTypeDropdownData = async (
     );
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "required",
         true
@@ -2332,7 +2332,7 @@ export const setLicenseeSubTypeDropdownData = async (
     );
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "visible",
         false
@@ -2350,7 +2350,7 @@ export const setLicenseeSubTypeDropdownData = async (
 export const fillOldLicenseData = async (state, dispatch) => {
   dispatch(
     initScreen(
-      "apply",
+      "preApprovedPlanApply",
       get(state.screenConfiguration, "screenConfig.apply", {})
     )
   );
@@ -3110,7 +3110,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       "&tenantId=" + tenantId,
       {}
     );
-   
+    console.log(payload, "Nero Payload")
     let bService = payload.edcrDetail[0].planDetail.planInformation.businessService;
     let queryObject = [
       {
@@ -3898,13 +3898,13 @@ export const getBpaMdmsData = async (action, state, dispatch, mdmsBody) => {
 
 export const showHideBpaMapPopup = (state, dispatch) => {
   let toggle = get(
-    state.screenConfiguration.screenConfig["apply"],
+    state.screenConfiguration.screenConfig["preApprovedPlanApply"],
     "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.mapsDialog.props.open",
     false
   );
   dispatch(
     handleField(
-      "apply",
+      "preApprovedPlanApply",
       "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.mapsDialog",
       "props.open",
       !toggle
@@ -3973,7 +3973,7 @@ export const geBpatDetailsFromProperty = async (state, dispatch) => {
           );
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocPropertyID",
               "props.value",
               ""
@@ -3982,7 +3982,7 @@ export const geBpatDetailsFromProperty = async (state, dispatch) => {
         } else {
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
               "props.value",
               {
@@ -3999,7 +3999,7 @@ export const geBpatDetailsFromProperty = async (state, dispatch) => {
           );
           dispatch(
             handleField(
-              "apply",
+              "preApprovedPlanApply",
               "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.children.cityDropdown",
               "props.value",
               payload.Properties[0].address.tenantId
@@ -4132,11 +4132,6 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
       let fieldInfoDocs = mdmsData.BPA.CheckList;
       prepareFieldDocumentsUploadData(state, dispatch, action, fieldInfoDocs, appWfState);
     }
-    if (wfState && wfState.businessService == "BPA5" && (wfState.state.state == "APPROVAL_PENDING" || wfState.state.state == "PENDING_SANC_FEE_PAYMENT")) {
-      
-      prepareFieldDocumentsUploadData(state, dispatch, action, [], appWfState);
-      ///console.log(fieldInfoDocs, "Nero fieldInfoDocs")
-    }
     let riskType = get(
       state,
       "screenConfiguration.preparedFinalObject.BPA.riskType", ""
@@ -4195,51 +4190,20 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
   let bpaAppDetails = get(state.screenConfiguration.preparedFinalObject, "BPA", {});
 
   let fieldInfo = []
-  if(bpaAppDetails && bpaAppDetails.businessService != "BPA5"){
-    fieldInfoDocs.forEach(wfDoc => {
-      if (wfDoc.WFState == appWfState && wfDoc.RiskType === bpaAppDetails.riskType && wfDoc.ServiceType === bpaAppDetails.serviceType && wfDoc.applicationType === bpaAppDetails.applicationType) {
-        fieldInfo.push({ "docTypes": wfDoc.docTypes, "questions": wfDoc.questions });
-        set(
-          action,
-          "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
-          true
-        );
-      }
-    });
-  }else{
-    let appStatuses = ["APPROVAL_INPROGRESS"];
+  fieldInfoDocs.forEach(wfDoc => {
+    if (wfDoc.WFState == appWfState && wfDoc.RiskType === bpaAppDetails.riskType && wfDoc.ServiceType === bpaAppDetails.serviceType && wfDoc.applicationType === bpaAppDetails.applicationType) {
+      fieldInfo.push({ "docTypes": wfDoc.docTypes, "questions": wfDoc.questions });
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
+        true
+      );
+    }
+  });
 
-  if(appStatuses.includes(bpaAppDetails.status) && bpaAppDetails.businessService === "BPA5"){
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
-      true
-    );
-  }
-  }
-  let fieldreqDocuments = '';
-  let applyFieldinspectionQstns = '';
+  let fieldreqDocuments = fieldInfo[0].docTypes;
+  let applyFieldinspectionQstns = fieldInfo[0].questions;
   let checklistSelect = [];
-console.log(bpaAppDetails.businessService, appState, "Nero app details")
-  if(bpaAppDetails.businessService === "BPA5" && (appState === "APPROVAL_INPROGRESS" || appState === "PENDING_SANC_FEE_PAYMENT")){
-    let questions = get(
-      state,
-      "screenConfiguration.preparedFinalObject.docsForSpclArchForInspectionReport.questions",
-      {}
-    );
-    let docTypes = get(
-      state,
-      "screenConfiguration.preparedFinalObject.docsForSpclArchForInspectionReport.docTypes",
-      {}
-    );
-    fieldreqDocuments = docTypes;
-    applyFieldinspectionQstns = questions;
-  }else{
-     fieldreqDocuments = fieldInfo[0].docTypes;
-     applyFieldinspectionQstns = fieldInfo[0].questions;
-    
-  
-  }
 
   if (applyFieldinspectionQstns && applyFieldinspectionQstns.length > 0) {
     checklistSelect = [
@@ -4395,16 +4359,6 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     dispatch(prepareFinalObject("fieldInspectionDocumentsDetailsPreview", fieldInspectionDocuments));
     dispatch(prepareFinalObject("fieldInspectionCheckListDetailsPreview", fieldInspectionsQstions));
   }
-let appStatuses = ["PENDING_SANC_FEE_PAYMENT", "SHOW_CAUSE_ISSUED", "SHOW_CAUSE_REPLY_VERIFICATION_PENDING"];
-
-  if(appStatuses.includes(BPA.status) && BPA.businessService === "BPA5"){
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.visible",
-      true
-    );
-  }
-
   let fileStoreIds = jp.query(allDocuments, "$.*.fileStoreId");
   let fileUrls =
     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
@@ -5810,15 +5764,15 @@ export const deviationValidation = (action, state, dispatch) => {
 
 export const showComparisonDialog = (state, dispatch) => {
   let toggle = get(
-    state.screenConfiguration.screenConfig["apply"],
+    state.screenConfiguration.screenConfig["preApprovedPlanApply"],
     "components.cityPickerDialogofComparison.props.open",
     false
   );
   dispatch(
-    handleField("apply", "components.cityPickerDialogofComparison", "props.open", !toggle)
+    handleField("preApprovedPlanApply", "components.cityPickerDialogofComparison", "props.open", !toggle)
   );
   dispatch(
-    handleField("apply", "components.cityPickerDialogofComparison.popup", "props.open", !toggle)
+    handleField("preApprovedPlanApply", "components.cityPickerDialogofComparison.popup", "props.open", !toggle)
   );
 
 };
@@ -5860,7 +5814,7 @@ const permitNumberLink = async (state, dispatch) => {
     }
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
         "props.linkDetail",
         linkDetail
@@ -5868,7 +5822,7 @@ const permitNumberLink = async (state, dispatch) => {
     );
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.formwizardThirdStep.children.summaryDetails.children.cardContent.children.scrutinySummary.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
         "props.linkDetail",
         linkDetail
@@ -5978,7 +5932,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     }
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.footer.children.nextButton",
         "props.disabled",
         true
@@ -5991,7 +5945,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     }
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.footer.children.nextButton",
         "props.disabled",
         false
@@ -6298,56 +6252,3 @@ export const createSanctionFeeData = (billDetails, feetype) => {
     });
   return fees;
 };
-
-export const setBPATypeData = async (state, dispatch, action, value) => {
-  let bServices = get(
-     state,
-     "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.planInformation.businessService",
-     []
-   );
-   if(bServices && bServices.includes("|")){
-     let bServicesObj = [];
-     let bServicesArray = bServices && bServices.split("|").forEach(item => bServicesObj.push({code: item}));
-     dispatch(prepareFinalObject("edcr.BPAType", bServicesObj));
-     dispatch(
-       handleField("apply", "components.div.children.formwizardSecondStep.children.getBpaProcess", "visible", true)
-     );
-   }
-   
-   let isApplicationCreated = getQueryArg(window.location.href, "applicationNumber");
-   if(isApplicationCreated){
-     let bServices = get(
-       state,
-       "screenConfiguration.preparedFinalObject.BPA.businessService",
-       []
-     );
-     if(bServices === "BPA5"){
-       dispatch(
-         handleField("apply", "components.div.children.formwizardSecondStep.children.getLowRiskConditions", "visible", true)
-       );
-     }
-   }
- 
- }
-export const validateBPA5Conditions = (state, dispatch) => {
-  let BPA = get(
-    state,
-    "screenConfiguration.preparedFinalObject.BPA",
-    []
-  );
-
-  if(BPA.businessService === "BPA5"){
-  
-    let BPA5Condition1 = BPA.BPA5Condition1;
-    let BPA5Condition2 = BPA.BPA5Condition2;
-    let BPA5Condition3 = BPA.BPA5Condition3;
-    let BPA5Condition4 = BPA.BPA5Condition4;
-    let BPA5Condition5 = BPA.BPA5Condition5;
-    if(BPA5Condition1 && BPA5Condition2 && BPA5Condition3 && BPA5Condition4 && BPA5Condition5){
-      return true;
-    }else{
-      return false;
-    }
-}
-
-}

@@ -11,6 +11,7 @@ import {
   getCommonParagraph,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 //import { resetFields, submitFields } from "./functions";
+import plotDetails from "egov-ui-kit/assets/images/plotDetails.jpg";
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField,
@@ -28,10 +29,12 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 const getRedirectionBPAURL = (state, dispatch) => {
   let drawingAppNo = get(
     state.screenConfiguration.preparedFinalObject,
-    "Scrutiny[1].preApprove.selectedPlot.drawingNo");
+    "Scrutiny[1].preApprove.selectedPlot.drawingNo"
+  );
   let tenantId = get(
     state.screenConfiguration.preparedFinalObject,
-    "Scrutiny[1].preApprove.selectedPlot.tenantId");
+    "Scrutiny[1].preApprove.selectedPlot.tenantId"
+  );
   if (!drawingAppNo) {
     return false;
   }
@@ -39,7 +42,7 @@ const getRedirectionBPAURL = (state, dispatch) => {
   dispatch(setRoute(url));
 };
 // form validation
-const formValid = (state,dispatch) => {
+const formValid = (state, dispatch) => {
   let isFormValid = false;
   isFormValid = validateFields(
     "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.preApproveContent.children.plotDescription.children",
@@ -51,8 +54,8 @@ const formValid = (state,dispatch) => {
 };
 
 // get search preapproves list
-const getPreApproveList = async (state,dispatch) => {
-  let validate = formValid(state,dispatch);
+const getPreApproveList = async (state, dispatch) => {
+  let validate = formValid(state, dispatch);
   if (validate) {
     let plotDetails = get(
       state,
@@ -74,10 +77,14 @@ const getPreApproveList = async (state,dispatch) => {
         [],
         queryObject
       );
-
-      const arr = [];
-      const res = await response;
-      return response;
+      const preApprovedPlanList = await response;
+      if (preApprovedPlanList) {
+        const list = preApprovedPlanList.preapprovedPlan.map((item, index) => {
+          item.selected = false;
+          return item;
+        });
+        dispatch(prepareFinalObject("preapprovePlanList", list));
+      }
     } catch (err) {
       console.log(err);
     }
@@ -226,7 +233,7 @@ const offsetGrid = () => {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     gridDefination: {
-      xs: 12,
+      xs: 6,
       sm: 6,
     },
     visible: true,
@@ -236,35 +243,13 @@ const offsetGrid = () => {
   };
 };
 
-// const generateBlocks = (length) => {
-//   const blocks = {};
-//   for (let i = 0; i <= 0; i++) {
-//     blocks["block" + i] = {
-//       uiFramework: "custom-atoms",
-//       componentPath: "Div",
-//       gridDefination: {
-//         xs: 2,
-//         sm: 2,
-//       },
-//       props: {
-//         style: {
-//           backgroundColor: "red",
-//           width: "40px",
-//           height: "20px",
-//         },
-//       },
-//     };
-//   }
-//   return getCommonContainer({ ...blocks });
-// };
-
 const preApprovedPlanSection = getCommonContainer({
   preApproveContent: {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     gridDefination: {
-      xs: 12,
-      sm: 8,
+      xs: 6,
+      sm: 6,
     },
     props: {
       style: {
@@ -273,333 +258,161 @@ const preApprovedPlanSection = getCommonContainer({
     },
     visible: true,
     children: {
-      plotDescription: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 8,
-        },
-        props: {
-          style: {
-            marginTop: "30px",
-          },
-        },
-        visible: true,
-        children: {
-          plotScheme: {
-            uiFramework: "custom-containers",
-            componentPath: "RadioGroupContainer",
-            gridDefination: {
-              xs: 12,
-              sm: 12,
-            },
-            jsonPath: "Scrutiny[1].preApprove.checkPlot[0].plotScheme",
-            props: {
-              label: {
-                name: "Whether Plot is part of government scheme(BDA/GA/OSHB) or private approved lay out?",
-                key: "BPA_PLOT_SCHEME",
-              },
-              buttons: [
-                {
-                  labelName: "Yes",
-                  labelKey: "BPA_YES_RADIOBUTTON",
-                  value: "YES",
-                },
-                {
-                  label: "No",
-                  labelKey: "BPA_NO_RADIOBUTTON",
-                  value: "NO",
-                },
-              ],
-              jsonPath: "Scrutiny[1].preApprove.checkPlot[0].plotScheme",
-              required: true,
-            },
-            required: true,
-            type: "array",
-          },
-          offsetDiv2: offsetGrid(),
-          lengthInFt: getTextField({
-            label: {
-              labelName: "Length of plot(in ft.)",
-              labelKey: "PREAPPROVE_PLOT_LENGTH_IN_FEET",
-            },
-            pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
-            props: {
-              disabled: false,
-              className: "tl-trade-type",
-            },
-            errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-            jsonPath: "Scrutiny[1].preApprove.plotDetails.lengthInFt",
-            required: true,
-            gridDefination: {
-              xs: 12,
-              sm: 6,
-            },
-          }),
-          widthInFt: getTextField({
-            label: {
-              labelName: "Width of plot(in ft.)",
-              labelKey: "PREAPPROVE_PLOT_WITH_IN_FEET",
-            },
-            pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
-            props: {
-              disabled: false,
-              className: "tl-trade-type",
-            },
-            errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-            jsonPath: "Scrutiny[1].preApprove.plotDetails.widthInFt",
-            required: true,
-            gridDefination: {
-              xs: 12,
-              sm: 6,
-            },
-          }),
-          abuttingRoadWidthInMt: getTextField({
-            label: {
-              labelName: "Abutting road width(in m.)",
-              labelKey: "PREAPPROVE_ABUTTING_ROAD",
-            },
-            pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
-            errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-            jsonPath: "Scrutiny[1].preApprove.plotDetails.abuttingRoadWidthInMt",
-            required: true,
-            iconObj: {
-              iconName: "search",
-              position: "end",
-              color: "#FE7A51",
-              onClickDefination: {
-                action: "condition",
-                callBack: (state,dispatch) => {
-                  getPreApproveList(state,dispatch);
-                }
-              }
-            },
-            gridDefination: {
-              xs: 12,
-              sm: 6,
-            },
-          }),
-          offsetDiv5: offsetGrid(),
-        },
-      },
-      plotDiagram: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 4,
-        },
-        children: {},
-      },
-      // preapproveplanDesc: {
+      // offsetDiv1: offsetGrid(),
+      // plotDiagram: {
       //   uiFramework: "custom-atoms",
       //   componentPath: "Div",
       //   gridDefination: {
-      //     xs: 12,
-      //     sm: 12,
-      //   },
-      //   props: {
-      //     style: {
-      //       marginTop: "30px",
-      //     },
+      //     xs: 6,
+      //     sm: 6,
       //   },
       //   children: {
-      //     paragraph: getCommonParagraph({
-      //       labelName:
-      //         "We can see that you have a standard plot for which we have prepared some pre-approved plan for use",
-      //       labelKey: "BPA_PREAPPROVED_PLAN_DESCRIPTION",
-      //     }),
-      //   },
-      // },
-      // chossePreapprovedPlan: {
-      //   uiFramework: "custom-containers",
-      //   componentPath: "RadioGroupContainer",
-      //   gridDefination: {
-      //     xs: 12,
-      //     sm: 12,
-      //   },
-      //   jsonPath: "Scrutiny[1].preApprove.choosePreApprove[0].choosePlan",
-      //   props: {
-      //     label: {
-      //       name: "Do you want to choose preapproved building plan?",
-      //       key: "BPA_CHOSSE_PLAN",
+      //     plotImage: {
+      //       uiFramework: "custom-atoms-local",
+      //       moduleName: "egov-bpa",
+      //       componentPath: "BoxImage",
+      //       props: {
+      //         src: plotDetails,
+      //       },
       //     },
-      //     buttons: [
-      //       {
-      //         labelName: "Yes",
-      //         labelKey: "BPA_CHOOSE_YES_RADIOBUTTON",
-      //         value: "YES",
-      //       },
-      //       {
-      //         label: "No",
-      //         labelKey: "BPA_CHOOSE_NO_RADIOBUTTON",
-      //         value: "NO",
-      //       },
-      //     ],
-      //     jsonPath: "Scrutiny[1].preApprove.choosePreApprove[0].choosePlan",
-      //     required: true,
       //   },
-      //   afterFieldChange: async (action, state, dispatch) => {
-      //     if (
-      //       state.screenConfiguration.preparedFinalObject.Scrutiny[1].preApprove
-      //         .choosePreApprove[0].choosePlan === "YES"
-      //     ) {
-      //       const res = await getPreApproveList(action, state, dispatch);
-      //       if (res) {
-      //         dispatch(prepareFinalObject("preapprovePlanList", res));
-      //         const arr = [];
-      //         res.preapprovedPlan.map((item, index) => {
-      //           const newObj = {};
-      //           newObj.drawingNo = item.drawingNo;
-      //           newObj.plotLength = item.plotLength;
-      //           newObj.plotWidth = item.plotWidth;
-      //           newObj.abuttingRoad = item.roadWidth;
-      //           arr.push({
-      //             PREAPPROVE_BUILDING_PLAN: newObj.drawingNo,
-      //             PREAPPROVE_PLOT_LENGTH: newObj.plotLength,
-      //             PREAPPROVE_PLOT_WIDTH: newObj.plotWidth,
-      //             PREAPPROVE_ABUTTING_ROAD: newObj.abuttingRoad,
-      //             BPA_COMMON_TABLE_COL_ACTION_LABEL: item.documents || [],
-      //           });
-      //         });
-
-      //         dispatch(
-      //           handleField(
-      //             "preApprovedPlanDetails",
-      //             "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.list.children.listOfPreAprrovedPlanList",
-      //             "visible",
-      //             true
-      //           )
-      //         );
-      //         dispatch(
-      //           handleField(
-      //             "preApprovedPlanDetails",
-      //             "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.list.children.listOfPreAprrovedPlanList",
-      //             "props.data",
-      //             arr
-      //           )
-      //         );
-      //         dispatch(
-      //           handleField(
-      //             "preApprovedPlanDetails",
-      //             "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.list.children.listOfPreAprrovedPlanList",
-      //             "props.rows",
-      //             arr.length
-      //           )
-      //         );
-      //       }
-      //     } else {
-      //       dispatch(prepareFinalObject("preapprovePlanList", null));
-      //       dispatch(
-      //         handleField(
-      //           "preApprovedPlanDetails",
-      //           "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.list.children.listOfPreAprrovedPlanList",
-      //           "visible",
-      //           false
-      //         )
-      //       );
-      //     }
-      //   },
-      //   required: true,
-      //   type: "array",
       // },
-      block: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-bpa",
-        componentPath: "BlockContainer",
-        props: {
-          labelsFromLocalisation: true,
-          // isClearable: true,
-          sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
-          jsonPath: "preapprovePlanList",
-        },
-        required: true,
-        jsonPath: "searchScreen.tenantId",
+      plotScheme: {
+        uiFramework: "custom-containers",
+        componentPath: "RadioGroupContainer",
         gridDefination: {
           xs: 12,
-          sm: 4,
+          sm: 12,
+        },
+        jsonPath: "Scrutiny[1].preApprove.checkPlot[0].plotScheme",
+        props: {
+          label: {
+            name: "Whether Plot is part of government scheme(BDA/GA/OSHB) or private approved lay out?",
+            key: "BPA_PLOT_SCHEME",
+          },
+          buttons: [
+            {
+              labelName: "Yes",
+              labelKey: "BPA_YES_RADIOBUTTON",
+              value: "YES",
+            },
+            {
+              label: "No",
+              labelKey: "BPA_NO_RADIOBUTTON",
+              value: "NO",
+            },
+          ],
+          jsonPath: "Scrutiny[1].preApprove.checkPlot[0].plotScheme",
+          required: true,
+        },
+        required: true,
+        type: "array",
+      },
+      lengthInFt: getTextField({
+        label: {
+          labelName: "Length of plot(in ft.)",
+          labelKey: "PREAPPROVE_PLOT_LENGTH_IN_FEET",
+        },
+        pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
+        props: {
+          disabled: false,
+          className: "tl-trade-type",
+        },
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "Scrutiny[1].preApprove.plotDetails.lengthInFt",
+        required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+        },
+      }),
+      widthInFt: getTextField({
+        label: {
+          labelName: "Width of plot(in ft.)",
+          labelKey: "PREAPPROVE_PLOT_WITH_IN_FEET",
+        },
+        pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
+        props: {
+          disabled: false,
+          className: "tl-trade-type",
+        },
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "Scrutiny[1].preApprove.plotDetails.widthInFt",
+        required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+        },
+      }),
+      abuttingRoadWidthInMt: getTextField({
+        label: {
+          labelName: "Abutting road width(in m.)",
+          labelKey: "PREAPPROVE_ABUTTING_ROAD",
+        },
+        pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "Scrutiny[1].preApprove.plotDetails.abuttingRoadWidthInMt",
+        required: true,
+        iconObj: {
+          iconName: "search",
+          position: "end",
+          color: "#FE7A51",
+          onClickDefination: {
+            action: "condition",
+            callBack: (state, dispatch) => {
+              getPreApproveList(state, dispatch);
+            },
+          },
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+        },
+      }),
+    },
+   
+  },
+  plotDiagram: {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 6,
+      sm: 6,
+    },
+    children: {
+      plotImage: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-bpa",
+        componentPath: "BoxImage",
+        props: {
+          src: plotDetails,
         },
       },
     },
   },
-
-  // blocks: generateBlocks(),
-  //list: getCommonContainer({ listOfPreAprrovedPlanList }),
+  block: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "BlockContainer",
+    props: {
+      labelsFromLocalisation: true,
+      // isClearable: true,
+      sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+      jsonPath: "preapprovePlanList",
+    },
+    required: true,
+    jsonPath: "searchScreen.tenantId",
+    gridDefination: {
+      xs: 12,
+      sm: 4,
+    },
+  },
 });
 
 const buildingInfoCard = getCommonCard({
   buildingPlanCardContainer: getCommonContainer({
     inputdetails: getCommonContainer(
       {
-        // dropdown,
-        // dummyDiv: {
-        //   uiFramework: "custom-atoms",
-        //   componentPath: "Div",
-        //   gridDefination: {
-        //     xs: 12,
-        //     sm: 6,
-        //   },
-        //   visible: true,
-        //   props: {
-        //     disabled: true,
-        //   },
-        // },
-        // applicantName: getTextField({
-        //   label: {
-        //     labelName: "Applicant Name",
-        //     labelKey: "EDCR_SCRUTINY_NAME_LABEL",
-        //   },
-        //   placeholder: {
-        //     labelName: "Enter Applicant Name",
-        //     labelKey: "EDCR_SCRUTINY_NAME_LABEL_PLACEHOLDER",
-        //   },
-        //   gridDefination: {
-        //     xs: 12,
-        //     sm: 6,
-        //   },
-        //   required: true,
-        //   pattern: getPattern("Name"),
-        //   jsonPath: "Scrutiny[0].applicantName",
-        // }),
-        // dummyDiv1: {
-        //   uiFramework: "custom-atoms",
-        //   componentPath: "Div",
-        //   gridDefination: {
-        //     xs: 12,
-        //     sm: 6,
-        //   },
-        //   visible: true,
-        //   props: {
-        //     disabled: true,
-        //   },
-        // },
-        // servicetype: getSelectField({
-        //   label: {
-        //     labelName: "Service type",
-        //     labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL",
-        //   },
-        //   placeholder: {
-        //     labelName: "Select Service Type",
-        //     labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_PLACEHOLDER",
-        //   },
-        //   localePrefix: {
-        //     moduleName: "WF",
-        //     masterName: "BPA",
-        //   },
-        //   props: {
-        //     // disabled: true,
-        //     className: "tl-trade-type",
-        //   },
-        //   required: true,
-        //   //jsonPath: "Scrutiny[0].applicationSubType",
-        //   jsonPath: "scrutinyDetails.applicationSubType",
-        //   sourceJsonPath: "applyScreenMdmsData.BPA.ServiceType",
-        //   gridDefination: {
-        //     xs: 12,
-        //     sm: 6,
-        //   },
-        // }),
         preApprovedPlanSection,
         dummyDiv2: {
           uiFramework: "custom-atoms",

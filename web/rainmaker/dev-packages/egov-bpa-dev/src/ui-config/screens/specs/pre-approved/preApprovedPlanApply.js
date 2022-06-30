@@ -649,16 +649,16 @@ const setTaskStatus = async (
         processInstances[processInstances.length - 1].action) ||
       "";
 
-    if (sendToArchitect == "SEND_TO_ARCHITECT") {
-      dispatch(
-        handleField(
-          "preApprovedPlanApply",
-          "components.div.children.taskStatus",
-          "visible",
-          true
-        )
-      );
-    }
+    // if (sendToArchitect == "SEND_TO_ARCHITECT") {
+    //   dispatch(
+    //     handleField(
+    //       "preApprovedPlanApply",
+    //       "components.div.children.taskStatus",
+    //       "visible",
+    //       true
+    //     )
+    //   );
+    // }
   }
 };
 

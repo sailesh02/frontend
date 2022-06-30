@@ -318,7 +318,7 @@ export const printDocument = (cityLogo, pdfHeader, name) => {
         //     let compon = document.getElementById("printFtable")
         //         // let elems = document.querySelectorAll('.elemClass');
         let elems = document.getElementById('divToPrint');
-        //In bellow addPags function cityLogo and pdfHeader has been reoved
+        //In bellow addPags function cityLogo and pdfHeader has been removed
         return addPages(elems, '', '').then(function (response) {
             response.save(name || 'DSS');
             return resolve(response);

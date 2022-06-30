@@ -10,9 +10,15 @@ const styles = {
     color: "black",
   },
   preApprove_blockpDetails: {
-    height: 20,
-    width: 40,
-    backgroundColor: "orange",
+    width: "300px",
+    height: "50px",
+    backgroundColor: "#FF851B",
+  },
+  selected_preApprove_blockpDetails: {
+    width: "300px",
+    height: "50px",
+    backgroundColor: "#FF851B",
+    border: "5px solid #AAAAAA",
   },
 };
 class BlockContainer extends Component {
@@ -26,7 +32,18 @@ class BlockContainer extends Component {
     window.location = fileUrls[fileStoreId];
   };
   setValue = (item) => {
-    this.setState({ item: item });
+    this.setState({ item: item, selected: true });
+    const { data } = this.props;
+    const list = data.map((listData, index) => {
+      listData.selected = false;
+      if (listData.drawingNo === item.drawingNo) {
+        if (!item.selected) {
+          listData.selected = true;
+        }
+      }
+      return listData;
+    });
+    this.props.updateList("preapprovePlanList", list);
     this.props.selectedPlot("Scrutiny[1].preApprove.selectedPlot", item);
   };
   render() {
@@ -35,25 +52,26 @@ class BlockContainer extends Component {
       <div>
         {data ? (
           <div>
-            {data.preapprovedPlan.length > 0 && (
+            {data.length > 0 && (
               <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
                   gap: "10px",
+                  marginBottom: "20px"
                 }}
               >
-                {data.preapprovedPlan.map((item, index) => (
+                {data.map((item, index) => (
                   <div
                     key={index}
                     className="preApprove_blockpDetails"
                     value={item}
                     onClick={() => this.setValue(item)}
-                    style={{
-                      width: "300px",
-                      height: "50px",
-                      backgroundColor: "orange",
-                    }}
+                    style={
+                      item.selected
+                        ? styles.selected_preApprove_blockpDetails
+                        : styles.preApprove_blockpDetails
+                    }
                   ></div>
                 ))}
               </div>
@@ -61,7 +79,7 @@ class BlockContainer extends Component {
           </div>
         ) : (
           <div>
-            <h3>Blocks Not Avlbl</h3>
+            <h3>Plots not Available</h3>
           </div>
         )}
 
@@ -70,18 +88,35 @@ class BlockContainer extends Component {
             style={{
               display: "flex",
               justifyContent: "flex-end",
+              flexDirection: "column",
               gap: "5",
               marginTop: "30px",
               fontSize: "14px",
             }}
           >
-            {this.state.item.documents.map((item, index) => (
-              <a
-                key={index}
-                style={{ padding: "10px" }}
-                onClick={()=>this.onDownloadClick(item.fileStoreId)}
-              >{`Documet ${index}`}</a>
-            ))}
+            <div>
+              <h3>Drawing Number</h3>
+              <h5>{this.state.item.drawingNo}</h5>
+            </div>
+            <div>
+              <h4>Documents(Please download the documents to preview drawing details)</h4>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  gap: "5",
+                  fontSize: "14px",
+                }}
+              >
+                {this.state.item.documents.map((item, index) => (
+                  <a
+                    key={index}
+                    style={{ paddingRight: "10px" }}
+                    onClick={() => this.onDownloadClick(item.fileStoreId)}
+                  >{`Documet ${index}`}</a>
+                ))}
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -104,6 +139,8 @@ const mapStateToProps = (state, ownprops) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     selectedPlot: (jsonPath, value) =>
+      dispatch(prepareFinalObject(jsonPath, value)),
+    updateList: (jsonPath, value) =>
       dispatch(prepareFinalObject(jsonPath, value)),
   };
 };

@@ -322,6 +322,8 @@ const callBackForZeroPay = async (state, dispatch) => {
   console.log(businessService, "bussinessServiceAPICall")
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
 
+  
+  if(businessService === "WS.ONE_TIME_FEE"){
   const response = await httpRequest(
     "post",
     "/ws-services/wc/_search",
@@ -346,12 +348,12 @@ console.log("RESSOPPONSEEEE", response);
     );
     }
   }
-
+} 
 
 
 
   
-  if(businessService == "PT.MUTATION"){
+  if(businessService == "PT.MUTATION"){ 
     let propertyQueryObject =  [{ key: "tenantId", value: tenantId }, { key: "acknowledgementIds", value: applicationNumber }]
     const responseProperty = await httpRequest(
       "post",

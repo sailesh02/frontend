@@ -277,7 +277,7 @@ export const groomGuardianDetails = getCommonCard(
             }),
         },
             {
-                style: getQueryArg(window.location.href, "action") === "CORRECTION" ? { "pointer-events": "none" } : {}
+                //style: getQueryArg(window.location.href, "action") === "CORRECTION" ? { "pointer-events": "none" } : {}
             }
         )
     },
@@ -533,7 +533,7 @@ export const brideGuardianDetails = getCommonCard(
             }),
         },
             {
-                style: getQueryArg(window.location.href, "action") === "CORRECTION" ? { "pointer-events": "none" } : {}
+               // style: getQueryArg(window.location.href, "action") === "CORRECTION" ? { "pointer-events": "none" } : {}
             }
         )
     },

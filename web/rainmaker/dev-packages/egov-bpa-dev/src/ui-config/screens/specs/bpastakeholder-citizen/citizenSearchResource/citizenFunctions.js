@@ -303,7 +303,7 @@ export const myApplicationsTableConfig =  {
         }
       },
       {
-        name: "owner", labelKey: "BPA_OWNER_LABEL"
+        name: "owner", labelKey: "BPA_OWNER_NAME_LABEL"
         
       },
     ],

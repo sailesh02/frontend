@@ -304,10 +304,11 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
   );
 
   let BPAData = get(state.screenConfiguration.preparedFinalObject,"BPA")
-  let applicationDigitallySigned = BPAData &&
-  BPAData.dscDetails && BPAData.dscDetails[0].documentId ? true :  BPAData &&
-  !BPAData.dscDetails ? true : false
-
+  // let applicationDigitallySigned = BPAData &&
+  // BPAData.dscDetails && BPAData.dscDetails[0].documentId ? true :  BPAData &&
+  // !BPAData.dscDetails ? true : false
+  
+  let applicationDigitallySigned = BPAData && BPAData.dscDetails && BPAData.dscDetails[0].documentId ? true : false
   let riskType = get(
     state,
     "screenConfiguration.preparedFinalObject.BPA.riskType"
@@ -462,6 +463,9 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
       case "PENDING_SANC_FEE_PAYMENT":
       case "REJECTED":
       case "CITIZEN_ACTION_PENDING_AT_DOC_VERIF":
+      case "APP_L1_VERIFICATION_INPROGRESS":
+      case "APP_L2_VERIFICATION_INPROGRESS":
+      case "APP_L3_VERIFICATION_INPROGRESS":  
         downloadMenu = downloadMenu
         printMenu = printMenu
         break;

@@ -359,7 +359,8 @@ let BPADocs;
           "BPA.documents",
           []
         );
-       // console.log(bPAUploadedDocs, "nero docssss")
+        console.log(bPAUploadedDocs, "nero New Uploaded Docs")
+        console.log(BPADocs, "nero Application Docs")
         
         if(bPAUploadedDocs && bPAUploadedDocs.length > 0){
           for(let k=0;k<bPAUploadedDocs.length;k++){
@@ -389,61 +390,62 @@ let BPADocs;
         );
         this.props.hideSpinner();
         return false;
-      }else if(moduleName === "BPA"){
-        let documnts = [];
-        let documentsUpdalod = bPAUploadedDocs;
-        if (documentsUpdalod) {
-          Object.keys(documentsUpdalod).forEach(function (key) {
-            documnts.push(documentsUpdalod[key])
-          });
-        }
+      }
+      // else if(moduleName === "BPA"){
+      //   let documnts = [];
+      //   let documentsUpdalod = bPAUploadedDocs;
+      //   if (documentsUpdalod) {
+      //     Object.keys(documentsUpdalod).forEach(function (key) {
+      //       documnts.push(documentsUpdalod[key])
+      //     });
+      //   }
 
-        let requiredDocuments = [];
-        if (documnts && documnts.length > 0) {
-          documnts.forEach(documents => {
+      //   let requiredDocuments = [];
+      //   if (documnts && documnts.length > 0) {
+      //     documnts.forEach(documents => {
             
-            if (documents && documents.documents) {
-              documents.documents.forEach(docItem => {
-                if (documents.dropDownValues && documents.dropDownValues.value) {
-                  let doc = {};
-                  doc.documentType = documents.dropDownValues.value;
-                  doc.fileStoreId = docItem.fileStoreId;
-                  doc.fileStore = docItem.fileStoreId;
-                  doc.fileName = docItem.fileName;
-                  doc.fileUrl = docItem.fileUrl;
-                  doc.additionalDetails = docItem.additionalDetails;
-                  BPADocs && BPADocs.length > 0 && BPADocs.forEach(bpaDc => {
-                    console.log(bpaDc)
-                    if (bpaDc.fileStoreId === docItem.fileStoreId) {
-                      console.log("Here I am")
-                      doc.id = bpaDc.id;
-                    }
-                  });
-                  requiredDocuments.push(doc);
-                }else{
-                  let doc = {};
-                  doc.documentType = docItem.title.split('_').join('.');;
-                  doc.fileStoreId = docItem.fileStoreId;
-                  doc.fileStore = docItem.fileStoreId;
-                  doc.fileName = docItem.fileName;
-                 // doc.fileUrl = docItem.fileUrl;
-                  doc.additionalDetails = docItem.additionalDetails;
+      //       if (documents && documents.documents) {
+      //         documents.documents.forEach(docItem => {
+      //           if (documents.dropDownValues && documents.dropDownValues.value) {
+      //             let doc = {};
+      //             doc.documentType = documents.dropDownValues.value;
+      //             doc.fileStoreId = docItem.fileStoreId;
+      //             doc.fileStore = docItem.fileStoreId;
+      //             doc.fileName = docItem.fileName;
+      //             doc.fileUrl = docItem.fileUrl;
+      //             doc.additionalDetails = docItem.additionalDetails;
+      //             BPADocs && BPADocs.length > 0 && BPADocs.forEach(bpaDc => {
+      //               console.log(bpaDc)
+      //               if (bpaDc.fileStoreId === docItem.fileStoreId) {
+      //                 console.log("Here I am")
+      //                 doc.id = bpaDc.id;
+      //               }
+      //             });
+      //             requiredDocuments.push(doc);
+      //           }else{
+      //             let doc = {};
+      //             doc.documentType = docItem.title.split('_').join('.');;
+      //             doc.fileStoreId = docItem.fileStoreId;
+      //             doc.fileStore = docItem.fileStoreId;
+      //             doc.fileName = docItem.fileName;
+      //            // doc.fileUrl = docItem.fileUrl;
+      //             doc.additionalDetails = docItem.additionalDetails;
                   
-                  requiredDocuments.push(doc);
-                }
-              })
-            }
-          });
-          data.documents = requiredDocuments;
-        }else{
+      //             requiredDocuments.push(doc);
+      //           }
+      //         })
+      //       }
+      //     });
+      //     data.documents = requiredDocuments;
+      //   }else{
           
-          if(BPADocs && BPADocs.length > 0){
-          data.documents = [...BPADocs];
-          }
-        }
+      //     if(BPADocs && BPADocs.length > 0){
+      //     data.documents = [...BPADocs];
+      //     }
+      //   }
         
 
-      }
+      // }
 
  if(moduleName === "BPA"){
   let appStatus = data.status;
@@ -522,10 +524,9 @@ let BPADocs;
  }
  console.log(data , "Nero App Payload in Workflow Module")
 if(moduleName == "BPA" && "edcrDetail" in data){
-   console.log("In If")
   delete data.edcrDetail ;
  }
- 
+// return false;
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });

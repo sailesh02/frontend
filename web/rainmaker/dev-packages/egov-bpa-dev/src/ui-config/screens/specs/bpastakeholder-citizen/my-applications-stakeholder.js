@@ -167,7 +167,7 @@ export const fetchData = async (
         serviceType: businessService,
         tenantId: get(element, "tenantId", null),
         type: type,
-        ["BPA_OWNER_LABEL"] : primaryowner
+        ["BPA_OWNER_NAME_LABEL"] : primaryowner
       })
     });
   }

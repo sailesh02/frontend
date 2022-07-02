@@ -168,7 +168,7 @@ const buildingInfoCard = getCommonCard({
           sm: 6
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getPattern("Address"),
         jsonPath: "Scrutiny[0].applicantName"
       }),
       dummyDiv1: {

@@ -33,8 +33,11 @@ const styles = {
   }
 };
 export const updateDemand = async (queryObject) => {
+
   let tenantId = getQueryArg(window.location.href, "tenantId");
   let connectionNumber = getQueryArg(window.location.href, "propertyId");
+ 
+  queryObject[0].demandDetails = queryObject[0].demandDetails.filter((a) => a.auditDetails == null)
 
   const response = await httpRequest(
     "post",
@@ -48,10 +51,8 @@ export const updateDemand = async (queryObject) => {
 
 }
 export const sumTaxHeads = (demandDetails) => {
-  // console.log(demandDetails, "Nero demandDetails")
   let holder = {}
   let demandDetailsArray = [];
-  // total tax amount cannot be less than collected amount
   let collectionHolder = {}
   demandDetails.forEach(function (d) {
 
@@ -144,7 +145,6 @@ class DemandAdjust extends React.Component {
   }
 
   handleChange = (e) => {
-    // console.log(e.target.value, e.target.name, "e.target.value",)
     if (e.target.name == "holdingtax") {
       this.setState({ holdingObj: "PT_HOLDING_TAX" })
     }
@@ -231,16 +231,12 @@ class DemandAdjust extends React.Component {
     return error;
   }
   onUpdateButtonCLick = async (index) => {
-    // console.log("apiplace........", index)
     let consumerCode = getQueryArg(window.location.href, "propertyId");
     const tenantId = getQueryArg(window.location.href, "tenantId")
     let newTaxHead = {
-      "id": null,
-      "collectionAmount": 0.00,
       "additionalDetails": null,
-      "auditDetails": null
+      "tenantId": tenantId
     }
-    // console.log(e.target, buttonLable, "Nero Event")
     let state = store.getState();
     let { screenConfiguration } = state;
 
@@ -271,7 +267,7 @@ class DemandAdjust extends React.Component {
       const datatotal = this.state.holdingtax > this.state.totalHoldingtax ? this.state.holdingtax - this.state.totalHoldingtax : this.state.holdingtax == this.state.totalHoldingtax ? 0.00 : this.state.holdingtax - this.state.totalHoldingtax;
        newTaxHead.taxAmount = parseInt(datatotal)
         newTaxHead.taxHeadMasterCode = "PT_HOLDING_TAX"
-        newTaxHead.demandId = editableDemandDetail[0].demandId
+        //newTaxHead.demandId = editableDemandDetail[0].demandId
       if(this.state.clickCount > 0){
         const filterDatasignleHolding = demands[0].demandDetails.filter(item=>item.id == null&&item.taxHeadMasterCode =="PT_HOLDING_TAX")
         if(filterDatasignleHolding.length==0){
@@ -293,13 +289,9 @@ class DemandAdjust extends React.Component {
       const dataTotalLight = this.state.lightTax > this.state.TotalLightTax ? this.state.lightTax - this.state.TotalLightTax : this.state.lightTax == this.state.TotalLightTax ? 0.00 : this.state.lightTax - this.state.TotalLightTax;
 
     let newObj = {
-      "id": null,
-      "demandId": editableDemandDetailLight[0].demandId,
       "taxHeadMasterCode": editableDemandDetailLight[0].taxHeadMasterCode,
       "taxAmount": parseInt(dataTotalLight),
-      "collectionAmount": 0.00,
       "additionalDetails": null,
-      "auditDetails": null,
       "tenantId": editableDemandDetailLight[0].tenantId
     }
     if(this.state.clickCount > 0){
@@ -320,13 +312,9 @@ class DemandAdjust extends React.Component {
    
       const dataTotalWater = this.state.waterTax > this.state.totalWaterTax ? this.state.waterTax - this.state.totalWaterTax : this.state.waterTax == this.state.totalWaterTax ? 0.00 : this.state.waterTax - this.state.totalWaterTax;
       let newObj1 = {
-        "id": null,
-        "demandId": editableDemandDetailWater[0].demandId,
         "taxHeadMasterCode": editableDemandDetailWater[0].taxHeadMasterCode,
         "taxAmount": parseInt(dataTotalWater),
-        "collectionAmount": 0.00,
         "additionalDetails": null,
-        "auditDetails": null,
         "tenantId": editableDemandDetailWater[0].tenantId
       }
 
@@ -348,13 +336,9 @@ class DemandAdjust extends React.Component {
       const dataTotalLatt = this.state.LatrineTax > this.state.totalLatrineTax ? this.state.LatrineTax - this.state.totalLatrineTax : this.state.LatrineTax == this.state.totalLatrineTax ? 0.00 : this.state.LatrineTax - this.state.totalLatrineTax;
     
       let newObj2 = {
-        "id": null,
-        "demandId": editableDemandDetailLatrineTax[0].demandId,
         "taxHeadMasterCode": editableDemandDetailLatrineTax[0].taxHeadMasterCode,
         "taxAmount": parseInt(dataTotalLatt),
-        "collectionAmount": 0.00,
         "additionalDetails": null,
-        "auditDetails": null,
         "tenantId": editableDemandDetailLatrineTax[0].tenantId
       }
 
@@ -377,13 +361,9 @@ class DemandAdjust extends React.Component {
       const dataTotalDrainageTax = this.state.DrainageTax > this.state.totalDrainageTax ? this.state.DrainageTax - this.state.totalDrainageTax : this.state.DrainageTax == this.state.totalDrainageTax ? 0.00 : this.state.DrainageTax - this.state.totalDrainageTax;
     
       let newObj3 = {
-        "id": null,
-        "demandId": editableDemandDetailDrainageTax[0].demandId,
         "taxHeadMasterCode": editableDemandDetailDrainageTax[0].taxHeadMasterCode,
         "taxAmount": parseInt(dataTotalDrainageTax),
-        "collectionAmount": 0.00,
         "additionalDetails": null,
-        "auditDetails": null,
         "tenantId": editableDemandDetailDrainageTax[0].tenantId
       }
 
@@ -407,13 +387,9 @@ class DemandAdjust extends React.Component {
       const dataTotalParkingTax = this.state.ParkingTax > this.state.totalParkingTax ? this.state.ParkingTax - this.state.totalParkingTax : this.state.ParkingTax == this.state.totalParkingTax ? 0.00 : this.state.ParkingTax - this.state.totalParkingTax;
     
       let newObj4 = {
-        "id": null,
-        "demandId": editableDemandDetailParkingTax[0].demandId,
         "taxHeadMasterCode": editableDemandDetailParkingTax[0].taxHeadMasterCode,
         "taxAmount": parseInt(dataTotalParkingTax),
-        "collectionAmount": 0.00,
         "additionalDetails": null,
-        "auditDetails": null,
         "tenantId": editableDemandDetailParkingTax[0].tenantId
       }
       if(this.state.clickCount > 0){
@@ -436,13 +412,9 @@ class DemandAdjust extends React.Component {
       const dataTotalSolidWasteUserCharges = this.state.SolidWasteUserCharges > this.state.totalSolidWasteUserCharges ? this.state.SolidWasteUserCharges - this.state.totalSolidWasteUserCharges : this.state.SolidWasteUserCharges == this.state.totalSolidWasteUserCharges ? 0.00 : this.state.SolidWasteUserCharges - this.state.totalSolidWasteUserCharges;
       
       let newObj5 = {
-        "id": null,
-        "demandId": editableDemandDetailSolidWasteUserCharges[0].demandId,
         "taxHeadMasterCode": editableDemandDetailSolidWasteUserCharges[0].taxHeadMasterCode,
         "taxAmount": parseInt(dataTotalSolidWasteUserCharges),
-        "collectionAmount": 0.00,
         "additionalDetails": null,
-        "auditDetails": null,
         "tenantId": editableDemandDetailSolidWasteUserCharges[0].tenantId
       }
       if(this.state.clickCount > 0){
@@ -466,13 +438,9 @@ class DemandAdjust extends React.Component {
       const dataTotalotherDues = this.state.otherDues > this.state.totalOtherDues ? this.state.otherDues - this.state.totalOtherDues : this.state.otherDues == this.state.totalOtherDues ? 0.00 : this.state.otherDues - this.state.totalOtherDues;
       
       let newObj6 = {
-        "id": null,
-        "demandId": editableDemandDetailotherDues[0].demandId,
         "taxHeadMasterCode": editableDemandDetailotherDues[0].taxHeadMasterCode,
         "taxAmount": parseInt(dataTotalotherDues),
-        "collectionAmount": 0.00,
         "additionalDetails": null,
-        "auditDetails": null,
         "tenantId": editableDemandDetailotherDues[0].tenantId
       }
       if(this.state.clickCount > 0){
@@ -495,13 +463,9 @@ class DemandAdjust extends React.Component {
       const dataTotalInterest = this.state.interest > this.state.totalInterest ? this.state.interest - this.state.totalInterest : this.state.interest == this.state.totalInterest ? 0.00 : this.state.interest - this.state.totalInterest;
      
       let newObj7 = {
-        "id": null,
-        "demandId": editableDemandDetailinterest[0].demandId,
         "taxHeadMasterCode": editableDemandDetailinterest[0].taxHeadMasterCode,
         "taxAmount": parseInt(dataTotalInterest),
-        "collectionAmount": 0.00,
         "additionalDetails": null,
-        "auditDetails": null,
         "tenantId": editableDemandDetailinterest[0].tenantId
       }
 
@@ -525,13 +489,9 @@ class DemandAdjust extends React.Component {
       const dataTotaltotalServiceTax = this.state.serviceTax > this.state.totalServiceTax ? this.state.serviceTax - this.state.totalServiceTax : this.state.serviceTax == this.state.totalServiceTax ? 0.00 : this.state.serviceTax - this.state.totalServiceTax;
     
       let newObj8 = {
-        "id": null,
-        "demandId": editableDemandDetailserviceTax[0].demandId,
         "taxHeadMasterCode": editableDemandDetailserviceTax[0].taxHeadMasterCode,
         "taxAmount": parseInt(dataTotaltotalServiceTax),
-        "collectionAmount": 0.00,
         "additionalDetails": null,
-        "auditDetails": null,
         "tenantId": editableDemandDetailserviceTax[0].tenantId
       }
 
@@ -555,13 +515,9 @@ class DemandAdjust extends React.Component {
       const dataTotaltotallUsageExemption = this.state.UsageExemption > this.state.totalUsageExemption ? this.state.UsageExemption - this.state.totalUsageExemption : this.state.UsageExemption == this.state.totalUsageExemption ? 100.00 : this.state.UsageExemption - this.state.totalUsageExemption;
     
       let newObj9 = {
-        "id": null,
-        "demandId": editableDemandDetailUsageExemption[0].demandId,
         "taxHeadMasterCode": editableDemandDetailUsageExemption[0].taxHeadMasterCode,
         "taxAmount": parseInt(dataTotaltotallUsageExemption),
-        "collectionAmount": 0.00,
         "additionalDetails": null,
-        "auditDetails": null,
         "tenantId": editableDemandDetailUsageExemption[0].tenantId
       }
       if(this.state.clickCount > 0){
@@ -583,13 +539,9 @@ class DemandAdjust extends React.Component {
       const dataTotaltotallOwnershipExemption = this.state.ownershipExemption > this.state.totalOwnershipExemption ? this.state.ownershipExemption - this.state.totalOwnershipExemption : this.state.ownershipExemption == this.state.totalOwnershipExemption ? 100.00 : this.state.ownershipExemption - this.state.totalOwnershipExemption;
     
       let newObj10 = {
-        "id": null,
-        "demandId": editableDemandDetailOwnershipExemption[0].demandId,
         "taxHeadMasterCode": editableDemandDetailOwnershipExemption[0].taxHeadMasterCode,
         "taxAmount": parseInt(dataTotaltotallOwnershipExemption),
-        "collectionAmount": 0.00,
         "additionalDetails": null,
-        "auditDetails": null,
         "tenantId": editableDemandDetailOwnershipExemption[0].tenantId
       }
       if(this.state.clickCount > 0){
@@ -611,13 +563,9 @@ class DemandAdjust extends React.Component {
       const dataTotaltotallRebate = this.state.rebate > this.state.totalRebate ? this.state.rebate - this.state.totalRebate : this.state.rebate == this.state.totalRebate ? 0.00 : this.state.rebate - this.state.totalRebate;
  
       let newObj11 = {
-        "id": null,
-        "demandId": editableDemandDetailRebate[0].demandId,
         "taxHeadMasterCode": editableDemandDetailRebate[0].taxHeadMasterCode,
         "taxAmount": parseInt(dataTotaltotallRebate),
-        "collectionAmount": 0.00,
         "additionalDetails": null,
-        "auditDetails": null,
         "tenantId": editableDemandDetailRebate[0].tenantId
       }
       if(this.state.clickCount > 0){
@@ -639,13 +587,9 @@ class DemandAdjust extends React.Component {
       const dataTotaltotallPenalty = this.state.penalty > this.state.totalPenalty ? this.state.penalty - this.state.totalPenalty : this.state.penalty == this.state.totalPenalty ? 0.00 : this.state.penalty - this.state.totalPenalty;
     
       let newObj12 = {
-        "id": null,
-        "demandId": editableDemandDetailPenalty[0].demandId,
         "taxHeadMasterCode": editableDemandDetailPenalty[0].taxHeadMasterCode,
         "taxAmount": parseInt(dataTotaltotallPenalty),
-        "collectionAmount": 0.00,
         "additionalDetails": null,
-        "auditDetails": null,
         "tenantId": editableDemandDetailPenalty[0].tenantId
       }
       if(this.state.clickCount > 0){
@@ -681,9 +625,9 @@ class DemandAdjust extends React.Component {
 
             "taxHeadMasterCode": this.state.lightTaxObj,
             "taxAmount": parseInt(dataTotalLightNew),
-            "collectionAmount": 0.00,
             "additionalDetails": null,
-            "auditDetails": null,
+            "tenantId": tenantId
+            
 
           }
           demands[0].demandDetails.push(newObjNew);
@@ -697,9 +641,8 @@ class DemandAdjust extends React.Component {
           let newObjNew1 = {
             "taxHeadMasterCode": this.state.waterTaxObj,
             "taxAmount": parseInt(dataTotalWaterNew),
-            "collectionAmount": 0.00,
             "additionalDetails": null,
-            "auditDetails": null,
+            "tenantId": tenantId
           }
           demands[0].demandDetails.push(newObjNew1);
         }
@@ -714,9 +657,8 @@ class DemandAdjust extends React.Component {
 
             "taxHeadMasterCode": this.state.DrainageTaxObj,
             "taxAmount": parseInt(dataTotalDrainageTaxNew),
-            "collectionAmount": 0.00,
             "additionalDetails": null,
-            "auditDetails": null,
+            "tenantId": tenantId
 
           }
           demands[0].demandDetails.push(newObjNew3);
@@ -731,9 +673,8 @@ class DemandAdjust extends React.Component {
           let newObjNew2 = {
             "taxHeadMasterCode": this.state.LatrineTaxObj,
             "taxAmount": parseInt(dataTotalLatNew),
-            "collectionAmount": 0.00,
             "additionalDetails": null,
-            "auditDetails": null,
+            "tenantId": tenantId
           }
           demands[0].demandDetails.push(newObjNew2);
         }
@@ -746,9 +687,8 @@ class DemandAdjust extends React.Component {
           let newObjNew4 = {
             "taxHeadMasterCode": this.state.ParkingTaxObj,
             "taxAmount": parseInt(dataTotalParkingTaxNew),
-            "collectionAmount": 0.00,
             "additionalDetails": null,
-            "auditDetails": null,
+            "tenantId": tenantId
           }
           demands[0].demandDetails.push(newObjNew4);
         }
@@ -762,9 +702,8 @@ class DemandAdjust extends React.Component {
 
             "taxHeadMasterCode": this.state.SolidWasteUserChargesObj,
             "taxAmount": parseInt(dataTotalSolidWasteUserChargesNew),
-            "collectionAmount": 0.00,
             "additionalDetails": null,
-            "auditDetails": null,
+            "tenantId": tenantId
 
           }
           demands[0].demandDetails.push(newObjNew5);
@@ -779,9 +718,8 @@ class DemandAdjust extends React.Component {
           let newObjNew6 = {
             "taxHeadMasterCode": this.state.interestObj,
             "taxAmount": parseInt(dataTotalInterestNew),
-            "collectionAmount": 0.00,
             "additionalDetails": null,
-            "auditDetails": null,
+            "tenantId": tenantId
 
           }
           demands[0].demandDetails.push(newObjNew6);
@@ -796,9 +734,8 @@ class DemandAdjust extends React.Component {
 
             "taxHeadMasterCode": this.state.serviceTaxObj,
             "taxAmount": parseInt(dataTotaltotalServiceTaxNew),
-            "collectionAmount": 0.00,
             "additionalDetails": null,
-            "auditDetails": null,
+            "tenantId": tenantId
 
           }
           demands[0].demandDetails.push(newObjNew7);
@@ -812,9 +749,8 @@ class DemandAdjust extends React.Component {
 
             "taxHeadMasterCode": this.state.otherDuesObj,
             "taxAmount": parseInt(dataTotalotherDuesNew),
-            "collectionAmount": 0.00,
             "additionalDetails": null,
-            "auditDetails": null,
+            "tenantId": tenantId
 
           }
           demands[0].demandDetails.push(newObjNew8);
@@ -828,9 +764,8 @@ class DemandAdjust extends React.Component {
 
             "taxHeadMasterCode": this.state.UsageExemptionObj,
             "taxAmount": parseInt(dataTotaltotallUsageExemptionNew),
-            "collectionAmount": 0.00,
             "additionalDetails": null,
-            "auditDetails": null,
+            "tenantId": tenantId
 
           }
           demands[0].demandDetails.push(newObj9);
@@ -843,9 +778,8 @@ class DemandAdjust extends React.Component {
           let newObjNew10 = {
             "taxHeadMasterCode": this.state.ownershipExemptionObj,
             "taxAmount": parseInt(dataTotaltotallOwnershipExemptionNew),
-            "collectionAmount": 0.00,
             "additionalDetails": null,
-            "auditDetails": null,
+            "tenantId": tenantId
 
           }
           demands[0].demandDetails.push(newObjNew10);
@@ -859,10 +793,8 @@ class DemandAdjust extends React.Component {
 
             "taxHeadMasterCode": this.state.penaltyObj,
             "taxAmount": parseInt(dataTotaltotallPenaltyNew),
-            "collectionAmount": 0.00,
             "additionalDetails": null,
-            "auditDetails": null,
-
+            "tenantId": tenantId
           }
           demands[0].demandDetails.push(newObjNew12);
         }
@@ -875,9 +807,8 @@ class DemandAdjust extends React.Component {
 
             "taxHeadMasterCode": this.state.rebateObj,
             "taxAmount": parseInt(dataTotaltotallRebateNew),
-            "collectionAmount": 0.00,
             "additionalDetails": null,
-            "auditDetails": null,
+            "tenantId": tenantId
 
           }
           demands[0].demandDetails.push(newObjNew11);
@@ -984,7 +915,6 @@ class DemandAdjust extends React.Component {
     const { Demands, onActionClick, classes, totalBillAmount } = this.props;
     let editVisiable = false;
     let { isEditVisible } = this.state;
-
 
     var currentYear = new Date().getFullYear()
 
@@ -1473,7 +1403,6 @@ const mapStateToProps = state => {
   for (let i = 0; i < Demands.length; i++) {
     newArray.push({ status: Demands[i].status, payername: Demands[i].payer.name, taxPeriodTo: Demands[i].taxPeriodTo, taxPeriodFrom: Demands[i].taxPeriodFrom, demandDetails: sumTaxHeads(Demands[i].demandDetails) })
   }
-  //console.log(newArray, "Nero Array")
   return { screenConfig, Demands: newArray, totalBillAmount };
 };
 const mapDispatchToProps = dispatch => {

@@ -83,6 +83,40 @@ class Footer extends React.Component {
   };
 
   openActionDialog = async item => {
+    let bPAUploadedDocs =
+      this.props.state.screenConfiguration.preparedFinalObject
+        .documentDetailsUploadRedux;
+    let isDocsDropDownSelected = true;
+    if (bPAUploadedDocs && bPAUploadedDocs.length > 0) {
+      for (const bPAUploadedDocs of bPAUploadedDocs) {
+        if (
+          bPAUploadedDocs &&
+          bPAUploadedDocs.documents &&
+          bPAUploadedDocs.documents.length > 0
+        ) {
+          for (const document of bPAUploadedDocs.documents) {
+            if (
+              document.fileUrl &&
+              !bPAUploadedDocs.dropDownValues.value
+            ) {
+              isDocsDropDownSelected = false;
+              break;
+            }
+          }
+        }
+      }
+    }
+    if (!isDocsDropDownSelected) {
+      this.props.toggleSnackbar(
+        true,
+        {
+          labelName: "Documents Required",
+          labelKey: "Please select Document Type first and Proceed",
+        },
+        "error"
+      );
+      return false;
+    }
     console.log("Nero Hkkkkk", item)
     const { handleFieldChange, setRoute, dataPath } = this.props;
     

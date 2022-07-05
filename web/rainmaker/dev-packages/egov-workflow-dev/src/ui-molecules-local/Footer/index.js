@@ -83,6 +83,56 @@ class Footer extends React.Component {
   };
 
   openActionDialog = async item => {
+    if (
+      item.moduleName === "BPA" ||
+      item.moduleName === "BPA_OC" ||
+      item.moduleName === "BPA_OC1" ||
+      item.moduleName === "BPA_OC2" ||
+      item.moduleName === "BPA_OC3" ||
+      item.moduleName === "BPA_OC4" ||
+      item.moduleName === "BPA_LOW" ||
+      item.moduleName === "BPA1" ||
+      item.moduleName === "BPA2" ||
+      item.moduleName === "BPA3" ||
+      item.moduleName === "BPA_LOW" ||
+      item.moduleName === "BPA1" ||
+      item.moduleName === "BPA2" ||
+      item.moduleName === "BPA3" ||
+      item.moduleName === "BPA4" ||
+      item.moduleName === "BPA5"
+    ) {
+      let bPAUploadedDocs =
+        this.props.state.screenConfiguration.preparedFinalObject
+          .documentDetailsUploadRedux;
+      let isDocsDropDownSelected = true;
+      if (bPAUploadedDocs && bPAUploadedDocs.length > 0) {
+        for (const bPAUploadedDocs of bPAUploadedDocs) {
+          if (
+            bPAUploadedDocs &&
+            bPAUploadedDocs.documents &&
+            bPAUploadedDocs.documents.length > 0
+          ) {
+            for (const document of bPAUploadedDocs.documents) {
+              if (document.fileUrl && !bPAUploadedDocs.dropDownValues.value) {
+                isDocsDropDownSelected = false;
+                break;
+              }
+            }
+          }
+        }
+      }
+      if (!isDocsDropDownSelected) {
+        this.props.toggleSnackbar(
+          true,
+          {
+            labelName: "Documents Required",
+            labelKey: "Please select Document Type first and Proceed",
+          },
+          "error"
+        );
+        return false;
+      }
+    }
     console.log("Nero Hkkkkk", item)
     const { handleFieldChange, setRoute, dataPath } = this.props;
     

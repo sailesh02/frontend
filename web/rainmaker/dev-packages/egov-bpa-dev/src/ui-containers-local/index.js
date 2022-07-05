@@ -164,6 +164,11 @@ const EdcrHistory =  Loadable({
   loading: () => <Loading />
 });
 
+const PreApproveDocumentListContainer = Loadable({
+  loader: () => import("./PreApproveDocumentListContainer"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -196,5 +201,6 @@ export {
   TextAreaContainerForBpa,
   ScnHistory,
   SignRandomPdfContainer,
-  EdcrHistory
+  EdcrHistory,
+  PreApproveDocumentListContainer
 };

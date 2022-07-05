@@ -306,7 +306,7 @@ export const setEdcrData = async(action, state, dispatch) => {
         sOccupancyType.forEach(subOcData => {
           occupancyTypeCheck.push({
             value: subOcData,
-            label: getLocaleLabels("NA", `BPA_SUBOCCUPANCYTYPE_${getTransformedLocale(subOcData)}`, getLocalLabels)
+            label: getLocaleLabels("NA", `BPA_SUBOCCUPANCYTYPE_${getTransformedLocale(subOcData)}`, null)
           });
         });
       }

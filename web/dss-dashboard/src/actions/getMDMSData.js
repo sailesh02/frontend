@@ -13,11 +13,11 @@ _.each(tenants,(v,k) => {
         tenantName = v.code;
     if(v.city.ddrName){     
         tenantId = v.code;
-        if(!_.isEmpty(tempDRRsObj,true) && typeof tempDRRsObj[v.city.districtTenantCode] != 'undefined'){
-            tempDRRsObj[v.city.districtTenantCode].push(tenantId);
+        if(!_.isEmpty(tempDRRsObj,true) && typeof tempDRRsObj[v.city.districtCode] != 'undefined'){
+            tempDRRsObj[v.city.districtCode].push(tenantId);
         }else{
-            tempDRRsObj[v.city.districtTenantCode] = [tenantId]
-            tempDDRs.push(v.city.districtTenantCode);
+            tempDRRsObj[v.city.districtCode] = [tenantId]
+            tempDDRs.push(v.city.districtCode);
         }
     }
 })

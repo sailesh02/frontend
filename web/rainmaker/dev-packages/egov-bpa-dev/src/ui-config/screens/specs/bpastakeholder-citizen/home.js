@@ -10,7 +10,7 @@ import { getStakeHolderRoles } from "../../../../ui-utils/commons";
 import "../utils/index.css";
 import { CONSTANTS } from "../../../../config/common";
 
-const visibleUat = CONSTANTS.isUatVisible;
+const visibleUat = CONSTANTS.features.isPreApprovedCitizen;
 
 const header = getCommonHeader(
   {

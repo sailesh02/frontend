@@ -31,7 +31,7 @@ const checkEligibility = (label, value, props = {}) => {
       xs: 12,
       sm: 6
     },
-    visible: CONSTANTS.isUatVisible ? true : false,
+    visible: CONSTANTS.features.isPreApprovedCitizen ? true : false,
     props: {
       disabled: true,
       onClick: handleEligibilityCheckStatus,

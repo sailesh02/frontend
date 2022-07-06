@@ -18,7 +18,6 @@ export const removeSignFromInsightData = (value = '') => {
 }
 let localisation={};
 export const getLocaleLabels = (key = "", strings = {}) => {
-    console.log("key=",key)
     if(strings&&Object.keys(strings).length>0){
         localisation=strings
     }

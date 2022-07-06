@@ -704,29 +704,24 @@ export const proposedBuildingDetails = getCommonCard({
 export const uploadDocuments = {
   uiFramework: "custom-containers-local",
   moduleName: "egov-bpa",
-  componentPath: "EDCRUploadCard",
+  componentPath: "PreApproveDocumentListContainer",
   props: {
     buttonLabel: {
       labelName: "UPLOAD FILE",
-      labelKey: "EDCR_BUTTON_UPLOAD_FILE",
-    },
-    description: {
-      labelName: "Only .dxf files. 150MB max file size.",
-      labelKey: "EDCR_UPLOAD_RESTRICTIONS",
+      labelKey: "PREAPPROVE_PLAN_UPLOAD_FILE",
     },
     inputProps: {
-      accept: "dxf",
-    },
-    documents: [
-      {
-        jsonPath: "Scrutiny[0].buildingPlan[0]",
-        name: "BUILDINGPLAN",
-        required: true,
+      accept: "image/*, .pdf, .png, .jpeg",
+      formatProps: {
+        accept: "image/*, .pdf, .png, .jpeg",
       },
-    ],
-    documentTypePrefix: "EDCR_",
-    maxFileSize: 150000,
+      multiple: false,
+      maxFileSize: 5000,
+    },
+    maxFileSize: 5000,
   },
+  type: "array",
+
 };
 
 // Configuration of footer section

@@ -5,14 +5,42 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     {
       code: "PREAPPROVE_BUILDING_PLAN_FILE",
       active: true,
+      validation: "only dxf file",
+      inputProps: {
+        accept: ".dxf",
+        formatProps: {
+          accept: ".dxf",
+        },
+        multiple: false,
+      },
+      maxFileSize: 5000,
     },
     {
       code: "PREAPPROVE_BUILDING_PLAN_PDF",
       active: true,
+      validation: "only pdf file",
+      inputProps: {
+        accept: ".pdf",
+        formatProps: {
+          accept: ".pdf",
+        },
+        multiple: false,
+      },
+      maxFileSize: 5000,
+
     },
     {
       code: "PREAPPROVE_BUILDING_PLAN_IMAGE",
       active: true,
+      validation: "only img file",
+      inputProps: {
+        accept: "image/*, .png, .jpeg",
+        formatProps: {
+          accept: "image/*, .png, .jpeg",
+        },
+        multiple: false,
+      },
+      maxFileSize: 5000,
     },
   ];
   documents = documents.filter((item) => {
@@ -34,6 +62,9 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     card["name"] = doc.code;
     card["code"] = doc.code;
     card["required"] = true;
+    card["inputProps"]=doc.inputProps;
+    card["validation"]=doc.validation;
+    card["maxFileSize"]=doc.maxFileSize
     tempDoc[doc.documentType].cards.push(card);
   });
   Object.keys(tempDoc).forEach((key) => {

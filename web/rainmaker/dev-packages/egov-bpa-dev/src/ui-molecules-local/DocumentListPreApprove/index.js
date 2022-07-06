@@ -63,7 +63,7 @@ const handleFileUpload = (event, handleDocument, props) => {
     endPoint: "filestore/v1/files"
   };
   let uploadDocument = true;
-  const { inputProps, maxFileSize, moduleName } = props;
+  const { inputProps, maxFileSize, moduleName, validation } = props;
   const input = event.target;
   if (input.files && input.files.length > 0) {
     const files = input.files;
@@ -72,7 +72,7 @@ const handleFileUpload = (event, handleDocument, props) => {
       const fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
       const isSizeValid = getFileSize(file) <= maxFileSize;
       if (!fileValid) {
-        alert(`Only image or pdf files can be uploaded`);
+        alert(`${validation}`);
         uploadDocument = false;
       }
       if (!isSizeValid) {
@@ -354,7 +354,7 @@ class DocumentListPreApprove extends Component {
           {card.required && requiredIcon}
           <Typography variant="caption">
             <LabelContainer
-              labelKey={getTransformedLocale("")}
+              labelKey={getTransformedLocale(card.validation)}
             />
           </Typography>
         </Grid>
@@ -384,7 +384,7 @@ class DocumentListPreApprove extends Component {
           <UploadSingleFile
             classes={this.props.classes}
             handleFileUpload={e =>
-              handleFileUpload(e, this.handleDocument, this.props)
+              handleFileUpload(e, this.handleDocument, card)
             }
             uploaded={
               bparegDocumentDetailsUploadRedux[key] && bparegDocumentDetailsUploadRedux[key].documents

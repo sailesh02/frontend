@@ -6,22 +6,12 @@ const commonConfig = {
 
 /**
  * Define Global Constants value for egov-bpa.
- * env --- use it for environment purpose
- * user --- type of user
  * features --- features you would like to make visible and hidden
  */
 
 export const CONSTANTS = {
-  env: {
-    UAT: "UAT",
-    PROD: "PROD",
-  },
-  user: {
-    CITIZEN: "CITIZEN",
-    EMPLOYEE: "EMPLOYEE",
-  },
   features: {
-    isPreApprovedCitizen: false,
+    isPreApprovedCitizenActiveActive: false,
   },
 };
 

@@ -199,6 +199,7 @@ export const proposedBuildingDetails = getCommonCard({
                 uiFramework: "custom-containers-local",
                 moduleName: "egov-bpa",
                 componentPath: "AutosuggestContainer",
+                disabled:true,
                 // required: true,
                 props: {
                   style: {
@@ -217,12 +218,13 @@ export const proposedBuildingDetails = getCommonCard({
                     moduleName: "BPA",
                     masterName: "SUBOCCUPANCYTYPE"
                   },
-                  jsonPath: "edcr.blockDetail[0].occupancyType",
+                  jsonPath: "edcr.blockDetail[0].suboccupancyData",
                   sourceJsonPath: "edcr.blockDetail[0].suboccupancyData",
                   labelsFromLocalisation: true,
                   suggestions: [],
                   fullwidth: true,
                   required: false,
+                  disabled:true,
                   isMulti: true,
                   inputLabelProps: {
                     shrink: true
@@ -230,10 +232,52 @@ export const proposedBuildingDetails = getCommonCard({
                 },
                 gridDefination: {
                   xs: 12,
-                  sm: 12,
+                  sm: 6,
                   md: 6
                 }
               },
+              frontSetback: getTextField({
+                label: {
+                  labelName: "Front setback",
+                  labelKey: "PREAPPROVE_FRONT_SETBACK",
+                },
+                errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                disabled: true,
+                jsonPath: "edcr.blockDetail[0].blockSetBack.frontSetback",
+                gridDefination: {
+                  xs: 12,
+                  sm: 6,
+                  md: 6,
+                },
+              }),
+              rearSetback: getTextField({
+                label: {
+                  labelName: "Rear setback",
+                  labelKey: "PREAPPROVE_REAR_SETBACK",
+                },
+                errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                disabled: true,
+                jsonPath: "edcr.blockDetail[0].blockSetBack.rearSetback",
+                gridDefination: {
+                  xs: 12,
+                  sm: 6,
+                  md: 6,
+                },
+              }),
+              sideSetback: getTextField({
+                label: {
+                  labelName: "Side setback",
+                  labelKey: "PREAPPROVE_SIDE_SETBACK",
+                },
+                errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                disabled: true,
+                jsonPath: "edcr.blockDetail[0].blockSetBack.sideSetback",
+                gridDefination: {
+                  xs: 12,
+                  sm: 6,
+                  md: 6,
+                },
+              }),
               proposedBuildingDetailsContainer: {
                 uiFramework: "custom-molecules-local",
                 moduleName: "egov-bpa",
@@ -249,6 +293,9 @@ export const proposedBuildingDetails = getCommonCard({
                     "Buildup Area": {},
                     "Floor Area": {},
                     "Carpet Area": {},
+                    "Front setback": {},
+                    "Rear setback": {},
+                    "Side setback": {}
                   },
                   title: "",
                   options: {

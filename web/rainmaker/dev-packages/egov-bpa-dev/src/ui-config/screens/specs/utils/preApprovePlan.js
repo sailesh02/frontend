@@ -5464,21 +5464,26 @@ export const setPreApprovedProposedBuildingData = async (state, dispatch, action
     for (var j = 0; j < response.length; j++) {
       let title = `Block ${j + 1}`;
       let floors = response[j] && response[j].building && response[j].building.floors;
+      let setBack = response[j] && response[j].building && response[j].building.setBack;
       let block = await floors.map((item, index) => (
         {
-          // "Floor Description": '-',//getFloorDetails((item.number).toString()) || '-',
-          // "Level": 1,//item.number,
-          // "Occupancy/Sub Occupancy": 'Dummy',//etLocaleLabels("-", item.occupancies[0].type),//getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
-          // "Buildup Area": item.occupancies[0].builtUpArea || "0",
-          // "Floor Area": item.occupancies[0].floorArea || "0",
-          // "Carpet Area": 0//item.occupancies[0].carpetArea || "0",
-          [getBpaTextToLocalMapping("Floor Description")]: '-',//getFloorDetails((item.number).toString()) || '-',
-          [getBpaTextToLocalMapping("Level")]: 1,//item.number,
-          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: 'Dummy',//etLocaleLabels("-", item.occupancies[0].type),//getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
+          [getBpaTextToLocalMapping("Floor Description")]: item.occupancies[0].floorDescription.toString(),//getFloorDetails((item.number).toString()) || '-',
+          [getBpaTextToLocalMapping("Level")]: parseInt(item.occupancies[0].number),
+          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: "Dummy",//getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),//getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
           [getBpaTextToLocalMapping("Buildup Area")]: parseInt(item.occupancies[0].builtUpArea) || "0",
           [getBpaTextToLocalMapping("Floor Area")]: parseInt(item.occupancies[0].floorArea) || "0",
-          [getBpaTextToLocalMapping("Carpet Area")]: 0//item.occupancies[0].carpetArea || "0",
+          [getBpaTextToLocalMapping("Carpet Area")]: parseInt(item.occupancies[0].carpetArea) || "0",
+          [getBpaTextToLocalMapping("Front setback")]: parseInt(item.occupancies[0].frontSetback) || "0",
+          [getBpaTextToLocalMapping("Rear setback")]: parseInt(item.occupancies[0].rearSetback) || "0",
+          [getBpaTextToLocalMapping("Side setback")]: parseInt(item.occupancies[0].sideSetback) || "0",
         }));
+      let blockSetBack = {}
+      setBack.forEach((item,index)=> {        
+        
+        blockSetBack.frontSetback=item.frontSetback,
+        blockSetBack.rearSetback= item.rearSetback,
+        blockSetBack.sideSetback= item.sideSetback
+      })
       let occupancyTypeCheck = [],
         floorNo = response[j].number
       if (BPA && BPA.landInfo && BPA.landInfo.unit && BPA.landInfo.unit[j] && BPA.landInfo.unit[j].usageCategory) {
@@ -5490,11 +5495,11 @@ export const setPreApprovedProposedBuildingData = async (state, dispatch, action
           });
         });
       }
-
+      
       if (occupancyTypeCheck && occupancyTypeCheck.length) {
         tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, occupancyType: occupancyTypeCheck, floorNo: floorNo });
       } else {
-        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, floorNo: floorNo });
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType,blockSetBack: blockSetBack, titleData: title, floorNo: floorNo });
       }
 
     };

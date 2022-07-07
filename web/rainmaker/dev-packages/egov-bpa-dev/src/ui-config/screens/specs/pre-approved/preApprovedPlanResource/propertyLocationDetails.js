@@ -139,12 +139,13 @@ export const bpaLocationDetails = getCommonCard(
         },
         props: {
           className: "applicant-details-error",
-          required:true
         },
         placeholder: {
           labelName: "Enter Building/Colony Name",
           labelKey: "BPA_DETAILS_BLDG_NAME_PLACEHOLDER"
         },
+        required: true,
+        visible: true,
         pattern: getPattern("BuildingStreet"),
         jsonPath: "BPA.landInfo.address.buildingName"
       }),
@@ -155,12 +156,13 @@ export const bpaLocationDetails = getCommonCard(
         },
         props: {
           className: "applicant-details-error",
-          required:true
         },
         placeholder: {
           labelName: "Enter Street Name",
           labelKey: "BPA_DETAILS_SRT_NAME_PLACEHOLDER"
         },
+        required: true,
+        visible: true,
         pattern: getPattern("BuildingStreet"),
         jsonPath: "BPA.landInfo.address.street"
       }),
@@ -206,12 +208,13 @@ export const bpaLocationDetails = getCommonCard(
         },
         props: {
           className: "applicant-details-error",
-          required:true
         },
         placeholder: {
           labelName: "Enter Pincode",
           labelKey: "BPA_DETAILS_PIN_PLACEHOLDER"
         },
+        required: true,
+        visible: true,
         pattern: getPattern("Pincode"),
         jsonPath: "BPA.landInfo.address.pincode"
       }),

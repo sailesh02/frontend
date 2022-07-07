@@ -169,6 +169,7 @@ const createPreApprovePlan = async (state, dispatch) => {
         parseInt(plotDetails.lengthInMt) * parseInt(plotDetails.widthInMt),
       serviceType: "NEW_CONSTRUCTION",
       applicationType: "BUILDING_PLAN_SCRUTINY",
+      occupancy: "Residential",
       totalBuitUpArea: buildingAbstract.totalBuildUpArea,
     };
     const blocks = [];
@@ -177,16 +178,28 @@ const createPreApprovePlan = async (state, dispatch) => {
       const floors = [];
       const building = {};
       const setBack = [];
+      setBack.push({
+        frontSetback: item.frontSetback,
+        rearSetback: item.rearSetback,
+        sideSetback: item.sideSetback,
+      });
+      building.setBack = [...setBack];
       item.blocks.forEach((block, index) => {
         const occupancies = [];
         const newObj = {};
-        newObj.type = "OCCUPANCY_B2";
+        newObj.type = item.suboccupancyData//"OCCUPANCY_B2";
         newObj.floorArea = block["Floor Area"];
         newObj.builtUpArea = block["Buildup Area"];
+        newObj.carpetArea = block["Carpet Area"];
+        newObj.number = block["Level"];
+        newObj.floorDescription = block["Floor Description"];
+        newObj.frontSetback = block["Front setback"];
+        newObj.rearSetback = block["Rear setback"];
+        newObj.sideSetback = block["Side setback"];
         occupancies.push({ ...newObj });
         floors.push({ occupancies: [...occupancies] });
         building.floors = [...floors];
-        building.setBack = setBack;
+       
         obj.building = { ...building };
         if (blocks[blockDetailsindex]) {
           blocks[blockDetailsindex].building.floors.push({
@@ -623,11 +636,55 @@ export const proposedBuildingDetails = getCommonCard({
                 },
                 gridDefination: {
                   xs: 12,
-                  sm: 12,
+                  sm: 6,
                   md: 6,
                 },
               },
-
+              frontSetback: getTextField({
+                label: {
+                  labelName: "Front setback",
+                  labelKey: "PREAPPROVE_FRONT_SETBACK",
+                },
+                pattern: "^[0-9]*$",
+                errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                required: true,
+                jsonPath: "edcr.blockDetail[0].frontSetback",
+                gridDefination: {
+                  xs: 12,
+                  sm: 6,
+                  md: 6,
+                },
+              }),
+              rearSetback: getTextField({
+                label: {
+                  labelName: "Rear setback",
+                  labelKey: "PREAPPROVE_REAR_SETBACK",
+                },
+                pattern: "^[0-9]*$",
+                errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                required: true,
+                jsonPath: "edcr.blockDetail[0].rearSetback",
+                gridDefination: {
+                  xs: 12,
+                  sm: 6,
+                  md: 6,
+                },
+              }),
+              sideSetback: getTextField({
+                label: {
+                  labelName: "Side setback",
+                  labelKey: "PREAPPROVE_SIDE_SETBACK",
+                },
+                pattern: "^[0-9]*$",
+                errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                required: true,
+                jsonPath: "edcr.blockDetail[0].sideSetback",
+                gridDefination: {
+                  xs: 12,
+                  sm: 6,
+                  md: 6,
+                },
+              }),
               proposedBuildingDetailsContainer: {
                 uiFramework: "custom-molecules-local",
                 moduleName: "egov-bpa",
@@ -639,10 +696,13 @@ export const proposedBuildingDetails = getCommonCard({
                   columns: {
                     "Floor Description": {},
                     Level: {},
-                    "Occupancy/Sub Occupancy": {},
+                    // "Occupancy/Sub Occupancy": {},
                     "Buildup Area": {},
                     "Floor Area": {},
                     "Carpet Area": {},
+                    "Front setback": {},
+                    "Rear setback": {},
+                    "Side setback": {},
                   },
                   title: "",
                   options: {

@@ -99,10 +99,13 @@ import {
       const newFloorDetails = {
         "Floor Description": blockDetail.floorDescription,
         Level: blockDetail.level,
-        "Occupancy/Sub Occupancy": "",
+        //"Occupancy/Sub Occupancy": "",
         "Buildup Area": blockDetail.buildUpArea,
         "Floor Area": blockDetail.carpetArea,
         "Carpet Area": blockDetail.floorArea,
+        "Front setback": blockDetail.frontSetback,
+        "Rear setback": blockDetail.rearSetback,
+        "Side setback": blockDetail.sideSetback,
       };
       if (edcrDetails.blockDetail.length > 0) {
         edcrDetails.blockDetail.forEach((element, index) => {
@@ -114,8 +117,8 @@ import {
                 titleData: "",
                 floorNo: "",
               };
-              newFloorDetails["Occupancy/Sub Occupancy"] =
-                edcrDetails.blockDetail[currentIndex].suboccupancyData.label;
+              // newFloorDetails["Occupancy/Sub Occupancy"] =
+              //   edcrDetails.blockDetail[currentIndex].suboccupancyData.label;
               newObj.suboccupancyData.label =
                 edcrDetails.blockDetail[currentIndex].suboccupancyData.label;
               newObj.suboccupancyData.value =
@@ -220,6 +223,51 @@ import {
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
           required: true,
           jsonPath: "blockDetail.carpetArea",
+          gridDefination: {
+            xs: 12,
+            sm: 6,
+            md: 6,
+          },
+        }),
+        frontSetback: getTextField({
+          label: {
+            labelName: "Front setback",
+            labelKey: "PREAPPROVE_FRONT_SETBACK",
+          },
+          pattern: "^[0-9]*$",
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          required: true,
+          jsonPath: "blockDetail.frontSetback",
+          gridDefination: {
+            xs: 12,
+            sm: 6,
+            md: 6,
+          },
+        }),
+        rearSetback: getTextField({
+          label: {
+            labelName: "Rear setback",
+            labelKey: "PREAPPROVE_REAR_SETBACK",
+          },
+          pattern: "^[0-9]*$",
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          required: true,
+          jsonPath: "blockDetail.rearSetback",
+          gridDefination: {
+            xs: 12,
+            sm: 6,
+            md: 6,
+          },
+        }),
+        sideSetback: getTextField({
+          label: {
+            labelName: "Side setback",
+            labelKey: "PREAPPROVE_SIDE_SETBACK",
+          },
+          pattern: "^[0-9]*$",
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          required: true,
+          jsonPath: "blockDetail.sideSetback",
           gridDefination: {
             xs: 12,
             sm: 6,

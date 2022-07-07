@@ -6130,6 +6130,9 @@ export const getPermitDetailForPc = async (state, dispatch, fieldInfo) => {
 
 export const createSacntionFeeBill = async (apiPayload, dispatch) => {
   console.log(apiPayload, "Nero apiPayload")
+  if(apiPayload && apiPayload[0].BPA.edcrDetail){
+    delete apiPayload[0].BPA.edcrDetail;
+  }
   try {
     const response = await httpRequest("post", "/bpa-services/v1/bpa/_estimate", "", [], { CalulationCriteria: apiPayload });
     return response;

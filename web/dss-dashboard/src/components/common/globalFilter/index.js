@@ -411,6 +411,11 @@ class GlobalFilter extends Component {
         if (index > -1) { // only splice data when item is found
             data.splice(index, 1); // 2nd parameter means remove one item only
         }
+        let pq = 'od'
+        const index2 = data.findIndex(item => pq.toLowerCase() === item.toLowerCase());
+        if (index2 > -1) { // only splice data when item is found
+            data.splice(index2, 1); // 2nd parameter means remove one item only
+        }
         return (<AutoComplete
             logo={target}
             handleSelected={hndlslected}

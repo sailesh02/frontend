@@ -4,6 +4,7 @@ import {
   getTextField,
   getCommonContainer,
   getPattern,
+  getCommonParagraph,
   getCommonGrayCard,
   getCommonSubHeader,
   getLabelWithValue,
@@ -490,15 +491,37 @@ export const getBpaProcess = getCommonCard({
           dispatch(
             handleField("apply", "components.div.children.formwizardSecondStep.children.getLowRiskConditions", "visible", true)
           );
+          dispatch(
+            handleField("apply", "components.div.children.formwizardSecondStep.children.accreditedPersonDetails", "visible", true)
+          );
         }else{
           dispatch(
             handleField("apply", "components.div.children.formwizardSecondStep.children.getLowRiskConditions", "visible", false)
-          ); 
+          );
+          dispatch(
+            handleField("apply", "components.div.children.formwizardSecondStep.children.accreditedPersonDetails", "visible", false)
+          );
         }
       }
     },
   })
 });
+
+export const accreditedPersonDetails = getCommonCard({
+  header: getCommonParagraph(
+    {
+      labelName:
+        "Accredited person is a technical person or an architect certified by authority to approve building permit of low risk buildings. Once selected the approver can not be changed",
+      labelKey: "Accredited person is a technical person or an architect certified by authority to approve building permit of low risk buildings. Once selected the approver can not be changed",
+    },
+    {
+      style: {
+        marginBottom: 18,
+      },
+    }
+  ),
+}
+);
 
 export const getLowRiskConditions =
 getCommonCard({

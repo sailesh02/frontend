@@ -97,6 +97,14 @@ export const updateBpaApplication = async (state, dispatch, action) => {
     bpaAction = "APPROVE",
       isCitizen = true;
   }
+  if (action && action === "SEND_TO_CITIZEN") {
+    bpaAction = "SEND_TO_CITIZEN",
+      isArchitect = true;
+  }
+  if (action && action === "REJECT") {
+    bpaAction = "REJECT",
+      isCitizen = true;
+  }
   let bpaStatusAction = bpaStatus && bpaStatus.includes("CITIZEN_ACTION_PENDING")
   if (bpaStatusAction) {
     bpaAction = "FORWARD",

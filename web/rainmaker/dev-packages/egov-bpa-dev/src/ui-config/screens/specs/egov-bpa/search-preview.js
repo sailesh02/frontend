@@ -94,8 +94,19 @@ const isEditButtonVisible = () => {
     && users.roles.map((role) => {
       return role.code;
     })
-  const isRoleExist = roleCodes.includes("BPA1_APPROVER") || roleCodes.includes("BPA2_APPROVER") || roleCodes.includes("BPA3_APPROVER") ||
+  const isRoleExist = roleCodes.includes("BPA_ARC_APPROVER") || roleCodes.includes("BPA2_APPROVER") || roleCodes.includes("BPA3_APPROVER") ||
   roleCodes.includes("BPA4_APPROVER") || roleCodes.includes("BPA5_APPROVER")
+  return isRoleExist
+}
+
+const isAcreditedPerson = () => {
+  let users = JSON.parse(getUserInfo());
+  const roleCodes =
+  users && users.roles
+    && users.roles.map((role) => {
+      return role.code;
+    })
+  const isRoleExist = roleCodes.includes("BPA_ARC_APPROVER")
   return isRoleExist
 }
 const titlebar = {
@@ -250,6 +261,37 @@ const prepareDocumentsView = async (state, dispatch) => {
 // const prepareDocumentsUploadRedux = (state, dispatch) => {
 //   dispatch(prepareFinalObject("documentsUploadRedux", documentsUploadRedux));
 // };
+
+const spclArchitechActions = (action, state, dispatch) => {
+  let downloadMenu = [];
+  let sendToArchObject = {
+    label: { labelName: "SEND TO CITIZEN", labelKey: "BPA_SEND_TO_CITIZEN_BUTTON", },
+    link: () => {
+      updateBpaApplication(state, dispatch, "SEND_TO_CITIZEN");
+    },
+  };
+  let ApproveObject = {
+    label: { labelName: "Approve", labelKey: "BPA_APPROVE_BUTTON" },
+    link: () => {
+      updateBpaApplication(state, dispatch, "APPROVE");
+    },
+  };
+  let RejectObject = {
+    label: { labelName: "Reject", labelKey: "REJECT" },
+    link: () => {
+      updateBpaApplication(state, dispatch, "REJECT");
+    },
+  };
+  downloadMenu = [sendToArchObject, ApproveObject,RejectObject];
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.citizenFooter.children.sendToArch.children.buttons.children.downloadMenu",
+      "props.data.menu",
+      downloadMenu
+    )
+  );
+}
 
 const sendToArchDownloadMenu = (action, state, dispatch) => {
   let downloadMenu = [];
@@ -725,9 +767,11 @@ let businesIds = ["BPA5"]
    if(process.env.REACT_APP_NAME === "Citizen" && (get(response, "BPA[0].status") == "APPROVAL_INPROGRESS") && get(response, "BPA[0].businessService") == "BPA5"){
     set(
       action,
-      "screenConfig.components.div.children.citizenFooter.children.spclArchApproveButton.visible",
+      "screenConfig.components.div.children.citizenFooter.children.sendToArch.visible",
       true
     );
+    //spclArchitechActions(action,state,dispatch)
+    //buttonAfterApprovedMenu(action, state, dispatch);
    }
    
 if(process.env.REACT_APP_NAME === "Employee" && get(response, "BPA[0].status") === "APPROVED" && get(response, "BPA[0].businessService") == "BPA5" ){
@@ -1128,6 +1172,13 @@ console.log(validitionStatusForRole,"validitionStatusForRole")
   requiredDocumentsData(state, dispatch, action);
   await setDownloadMenu(action, state, dispatch, applicationNumber, tenantId);
   sendToArchDownloadMenu(action, state, dispatch);
+  const bService = getQueryArg(
+    window.location.href,
+    "bservice"
+  );
+  if(bService === "BPA5" && isAcreditedPerson()){
+    spclArchitechActions(action, state, dispatch);
+  }
   buttonAfterApprovedMenu(action, state, dispatch);
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
   if (edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments && edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments.length < 1) {

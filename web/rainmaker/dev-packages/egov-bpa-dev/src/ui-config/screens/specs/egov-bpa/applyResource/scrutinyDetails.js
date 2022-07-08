@@ -512,7 +512,7 @@ export const accreditedPersonDetails = getCommonCard({
     {
       labelName:
         "Accredited person is a technical person or an architect certified by authority to approve building permit of low risk buildings. Once selected the approver can not be changed",
-      labelKey: "BPA_BPA5_ACCREDITED_PERSON_DETAILS",
+      labelKey: "Accredited person is a technical person or an architect certified by authority to approve building permit of low risk buildings. Once selected the approver can not be changed",
     },
     {
       style: {

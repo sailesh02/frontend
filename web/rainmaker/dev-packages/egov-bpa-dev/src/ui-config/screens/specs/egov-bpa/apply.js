@@ -16,7 +16,8 @@ import {
   proposedBuildingDetails,
   abstractProposedBuildingDetails,
   getBpaProcess,
-  getLowRiskConditions
+  getLowRiskConditions,
+  accreditedPersonDetails
 } from "./applyResource/scrutinyDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
 import {
@@ -104,6 +105,7 @@ export const formwizardSecondStep = {
     demolitiondetails,
     abstractProposedBuildingDetails,
     getBpaProcess,
+    accreditedPersonDetails,
     getLowRiskConditions
   },
   visible: false
@@ -770,6 +772,11 @@ const screenConfig = {
       }
     }
 
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardSecondStep.children.accreditedPersonDetails.visible",
+      false
+    );
     set(
       action.screenConfig,
       "components.div.children.formwizardSecondStep.children.getLowRiskConditions.visible",

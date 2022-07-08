@@ -48,6 +48,10 @@ export const getDrawingDetails = async (state, dispatch, fieldInfo=false) => {
           )
         );
         dispatch(
+          prepareFinalObject("scrutinyDetails.planDetail.planInformation.occupancy", data.drawingDetail.occupancy)
+        );
+        
+        dispatch(
           prepareFinalObject("BPA.serviceType", data.drawingDetail.serviceType)
         );
         dispatch(prepareFinalObject("BPA.businessService","BPA6"))

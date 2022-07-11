@@ -22,6 +22,22 @@ export const tradeDetailsConatinerScreenChng = (
   );
 };
 
+export const cityNameContainerScreenChng = (
+  eleId,
+  propKey,
+  propValue,
+  dispatch
+) => {
+  dispatch(
+    handleField(
+      "managetrade",
+      `components.div.children.billSlabSearchForm.children.cardContent.children.cityNameContainer.children.${eleId}`,
+      propKey,
+      propValue
+    )
+  );
+};
+
 export const handleFirstUOMFields = (eleId, propKey, propValue, dispatch) => {
   dispatch(
     handleField(
@@ -63,32 +79,43 @@ const setTypeFlat = (state, dispatch) => {
     []
   );
   if (tradeUnits.length) {
-    let newTradeUnit = [{ rate: tradeUnits[0]["rate"] }];
+    let newTradeUnit = [
+      { 
+        rate: tradeUnits[0]["rate"], 
+        id: tradeUnits[0] && tradeUnits[0]["id"] ? tradeUnits[0]["id"] : null  
+      }
+    ];
     dispatch(prepareFinalObject(`tradeUnits`, newTradeUnit));
   }
   // set isFalt: true (removes add new button)
-  dispatch(
-    handleField(
-      "traderateadd",
-      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard",
-      "props.removeAddIcon",
-      true
-    )
-  );
+  let addNew = getQueryArg(window.location.href, "new");
+  if (addNew) {
+    dispatch(
+      handleField(
+        "traderateadd",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard",
+        "props.removeAddIcon",
+        true
+      )
+    );
+  }
 };
 const setTypeRange = (state, dispatch) => {
   tradeDetailsConatinerScreenChng("tradeUOM", "visible", true, dispatch);
   handleFirstUOMFields("tradeToUOMValue", "visible", true, dispatch);
   handleFirstUOMFields("tradeFromUOMValue", "visible", true, dispatch);
   // set isFalt: false (show add new button)
-  dispatch(
-    handleField(
-      "traderateadd",
-      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard",
-      "props.removeAddIcon",
-      false
-    )
-  );
+  let addNew = getQueryArg(window.location.href, "new");
+  if (addNew) {
+    dispatch(
+      handleField(
+        "traderateadd",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard",
+        "props.removeAddIcon",
+        false
+      )
+    );
+  }
   let tradeUnits = get(
     state.screenConfiguration.preparedFinalObject,
     "tradeUnits",
@@ -126,6 +153,7 @@ const setTypeRange = (state, dispatch) => {
         rate: tradeUnits[0]["rate"],
         toUom: toUom,
         fromUom: fromUom,
+        id: tradeUnits[0] && tradeUnits[0]["id"] ? tradeUnits[0]["id"] : null
       },
     ];
     dispatch(prepareFinalObject(`tradeUnits`, newTradeUnit));
@@ -181,6 +209,57 @@ export const handleLicenseTypeFieldChange = (licenseType, dispatch) => {
   dispatch(prepareFinalObject("billingSlab[0].applicationType", "NEW"));
 };
 
+export const handleLicenseTypeForSearchScreen = (licenseType, dispatch) => {
+  if (licenseType === "PERMANENT") {
+    //  both NEW and RENEWAL options for application type and field enabled
+    cityNameContainerScreenChng(
+      "applicationType",
+      `props.data`,
+      [{ code: "NEW" }, { code: "RENEWAL" }],
+      dispatch
+    );
+    cityNameContainerScreenChng(
+      "applicationType",
+      `props.disabled`,
+      false,
+      dispatch
+    );
+
+    //  isTemp:false to show TradeType data
+    cityNameContainerScreenChng(
+      "dynamicMdms",
+      `props.isTemp`,
+      false,
+      dispatch
+    );
+  } else {
+    //  only NEW option for application type and field disabled
+    cityNameContainerScreenChng(
+      "applicationType",
+      `props.data`,
+      [{ code: "NEW" }],
+      dispatch
+    );
+    cityNameContainerScreenChng(
+      "applicationType",
+      `props.disabled`,
+      true,
+      dispatch
+    );
+
+    //  isTemp:true to show TemporaryTradeType data
+    cityNameContainerScreenChng(
+      "dynamicMdms",
+      `props.isTemp`,
+      true,
+      dispatch
+    );
+  }
+  
+  dispatch(prepareFinalObject("manageTrade.applicationType", "NEW"));
+  dispatch(prepareFinalObject("manageTrade.tradeType", ""));
+}
+
 export const handleTypeFieldChange = (value, state, dispatch) => {
   if (value === "FLAT") {
     setTypeFlat(state, dispatch);
@@ -211,7 +290,13 @@ export const updateUOMFieldDOM = (value, state, dispatch) => {
     );
     //  set UOM options and select the first one
     dispatch(prepareFinalObject(`uomOptions`, uomDataList));
-    dispatch(prepareFinalObject(`billingSlab[0].uom`, uomDataList[0].code));
+    let type = get(
+      state.screenConfiguration.preparedFinalObject,
+      "billingSlab[0].type",
+      []
+    );
+    let umoValue = type !== "FLAT" ? uomDataList[0].code : null;
+    dispatch(prepareFinalObject(`billingSlab[0].uom`, umoValue));
     // setTypeRange(state,dispatch);
   } else {
     //  when UOM options data is null
@@ -279,8 +364,8 @@ export const setSelectedBillingSlabData = async (state, dispatch) => {
         type:
           payload["billingSlab"].length === 1
             ? payload["billingSlab"][0]["type"]
-            : "RANGE",
-        uom: payload["billingSlab"][0]["uom"],
+            : "RATE",
+        uom: payload["billingSlab"].length !== 0 ? payload["billingSlab"][0]["uom"] : null,
       },
     ];
     const tradeUnits = payload["billingSlab"].map((eachItem) => {
@@ -288,10 +373,60 @@ export const setSelectedBillingSlabData = async (state, dispatch) => {
         rate: eachItem["rate"],
         fromUom: eachItem["fromUom"],
         toUom: eachItem["toUom"],
+        id: eachItem["id"],
       };
     });
-    console.log(payload, "*************************************************");
 
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: tenantId,
+
+        moduleDetails: [
+          {
+            moduleName: "TradeLicense",
+            masterDetails: [
+              {
+                name: licenseType === "PERMANENT" ? "TradeType" : "TemporaryTradeType",
+                filter: "[?(@.type=='TL')]"
+              }
+            ]
+          }
+        ]
+      }
+    };
+    let mdmsTradeTypeData = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    const tradeData = licenseType === "PERMANENT" ? mdmsTradeTypeData.MdmsRes.TradeLicense.TradeType : mdmsTradeTypeData.MdmsRes.TradeLicense.TemporaryTradeType;
+    const slctTradeData = tradeData.find(eachData => eachData.code === tradeType);
+    const tradeCodeInfo = {
+      tradeCode: slctTradeData.code.split(".")[0],
+      tradeSubCode: slctTradeData.name
+    }
+    dispatch(prepareFinalObject(`tradeCodeInfo`, tradeCodeInfo));
+
+    tradeDetailsConatinerScreenChng(
+      "tradeType",
+      "visible",
+      true,
+      dispatch
+    );
+    tradeDetailsConatinerScreenChng(
+      "tradeSubType",
+      "visible",
+      true,
+      dispatch
+    );
+    tradeDetailsConatinerScreenChng(
+      "dynamicMdms",
+      "visible",
+      false,
+      dispatch
+    );
     tradeDetailsConatinerScreenChng(
       "tradeLicenseType",
       "props.disabled",
@@ -305,30 +440,54 @@ export const setSelectedBillingSlabData = async (state, dispatch) => {
       dispatch
     );
     tradeDetailsConatinerScreenChng(
+      "tradeRateType",
+      "props.disabled",
+      true,
+      dispatch
+    );
+    tradeDetailsConatinerScreenChng(
+      "tradeUOM",
+      "props.disabled",
+      true,
+      dispatch
+    );
+    tradeDetailsConatinerScreenChng(
       "tradeUOM",
       "sourceJsonPath",
       "applyScreenMdmsData.common-masters.UOM",
       dispatch
     );
-
-    // tradeDetailsConatinerScreenChng("dynamicMdms.props.dropdownFields[0]","isDisabled", true, dispatch)
-    // tradeDetailsConatinerScreenChng("dynamicMdms.props.dropdownFields[1]","isDisabled", true, dispatch)
-    // tradeDetailsConatinerScreenChng("dynamicMdms","visible", false, dispatch);
-
-    // if (moduleName === "TradeLicense" && screenName == "tradeRateAddPage") {
-    //   dispatch(prepareFinalObject("DynamicMdms.TradeLicense.tradeUnits.selectedValues", [{
-    //     tradeSubType: "EATINGESTABLISHMENTS.TST3",
-    //     tradeType: "EATINGESTABLISHMENTS"
-    //   }]));
-    // }
+    const uomOpts = get(
+      state.screenConfiguration.preparedFinalObject,
+      "applyScreenMdmsData.common-masters.UOM",
+      []
+    );
 
     dispatch(prepareFinalObject("billingSlab", billingSlab));
     dispatch(prepareFinalObject("tradeUnits", tradeUnits));
-    dispatch(prepareFinalObject("uomOptions", []));
+    dispatch(prepareFinalObject("uomOptions", uomOpts));
     dispatch(prepareFinalObject(`tradeUnitsToShow`, []));
-    // if(billingSlab[0].type === "FLAT") {
-    //   setTypeFlat(state,dispatch)
-    // }
+    dispatch(
+      handleField(
+        "traderateadd",
+        "components.div.children.headerDiv.children.header.children.header.children.key",
+        "props.labelKey",
+        "TL_COMMON_UPDATE_LICENSE_HDR"
+      )
+    );
+    dispatch(
+      handleField(
+        "traderateadd",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.header.children.key",
+        "props.labelKey",
+        "TL_UPDATE_BILLINGSLAB_HDR"
+      )
+    );
+    if (billingSlab[0].type === "FLAT") {
+      setTypeFlat(state, dispatch)
+    } else {
+      setTypeRange(state, dispatch)
+    }
   } catch (e) {
     console.log(e);
   }

@@ -741,7 +741,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
 };
 
 const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
-  
+
   const tenant = getTenantId();
   switch (moduleName) {
     case "FireNoc":
@@ -797,7 +797,7 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
           dispatch(prepareFinalObject("Licenses", []));
           dispatch(prepareFinalObject("LicensesTemp", []));
           dispatch(prepareFinalObject("DynamicMdms", {}));
-          
+
           let applyUrl = '';
           if (legacyLicenseRenewal === "true") {
             applyUrl = `/tradelicence/apply?tenantId=${tenant}&licenseType=${applyTlfor}&legacyLicenseRenewal=true`;
@@ -840,7 +840,7 @@ export const getObjectKeys = objData => {
   );
 };
 export const getMdmsJson = async (state, dispatch, reqObj) => {
-  let { setPath, setTransformPath, dispatchPath, moduleName, name, filter, screenName, isTemp } = reqObj;
+  let { setPath, setTransformPath, dispatchPath, moduleName, name, filter, screenName, isTemp, screenTenantId } = reqObj;
   const tenantId = getQueryArg(window.location.href, "tenantId");
 
 
@@ -848,11 +848,14 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
 
 
   if (moduleName === "TradeLicense") {
-    if (screenName == "tradeSearchPage" || screenName == "tradeRateAddPage") {
+    if (screenName == "tradeSearchPage" || screenName == "tradeRateAddPage" || screenName == "tradeRateSearch") {
       if (isTemp) {
         name = "TemporaryTradeType";
       }
-      const commonTenantId = screenName == "tradeRateAddPage" ? tenantId : commonConfig.tenantId;
+      let commonTenantId = screenName === "tradeRateAddPage" ? tenantId : commonConfig.tenantId;
+      if (screenName == "tradeRateSearch") {
+        commonTenantId = screenTenantId ? screenTenantId : getTenantId();
+      }
       mdmsBody = {
         MdmsCriteria: {
           tenantId: commonTenantId,
@@ -925,6 +928,10 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
     dispatch(prepareFinalObject(dispatchPath, get(payload, dispatchPath, [])));
     //dispatch(prepareFinalObject(dispatchPath, payload.DynamicMdms));
     dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, false));
+    if (screenName == "tradeRateSearch") {
+      let slctVal = [{tradeType: 'none', tradeSubType: 'none'}];
+      dispatch(prepareFinalObject("DynamicMdms.TradeLicense.tradeUnits.selectedValues", slctVal))
+    }
   } catch (e) {
     console.log(e);
     dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, false));

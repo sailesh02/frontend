@@ -783,7 +783,7 @@ if(process.env.REACT_APP_NAME === "Employee" && get(response, "BPA[0].status") =
   
 }
 let appStatuses = ["SHOW_CAUSE_REPLY_VERIFICATION_PENDING", "SHOW_CAUSE_ISSUED", "PERMIT_REVOKED"];
-if(process.env.REACT_APP_NAME === "Employee" && appStatuses.includes(get(response, "BPA[0].status")) && get(response, "BPA[0].businessService") == "BPA5" ){
+if((process.env.REACT_APP_NAME === "Employee" || process.env.REACT_APP_NAME === "Citizen") && appStatuses.includes(get(response, "BPA[0].status")) && get(response, "BPA[0].businessService") == "BPA5" ){
   // set(
   //   action,
   //   "screenConfig.components.div.children.body.children.cardContent.children.generateShowCauseNotice.children.generateShowCauseNotice.visible",

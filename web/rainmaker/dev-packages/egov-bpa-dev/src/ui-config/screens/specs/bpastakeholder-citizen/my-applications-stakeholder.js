@@ -3,7 +3,7 @@ import { handleScreenConfigurationFieldChange as handleField, toggleSpinner,hide
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getBpaSearchResults, getSearchResults, getBpaAppsAssignedToMe } from "../../../../ui-utils/commons";
+import { getBpaSearchResults, getSearchResults, getBpaAppsAssignedToMe, getAppSearchResults } from "../../../../ui-utils/commons";
 import { getWorkFlowData, getWorkFlowDataForBPA } from "../bpastakeholder/searchResource/functions";
 import {
   getBpaTextToLocalMapping, getEpochForDate,
@@ -14,7 +14,46 @@ import {showSearches, tabsForArchOnly, tabsForSpclArchOnly} from "./citizenSearc
 import {ifUserRoleExists} from "../../specs/utils"
 
 
-
+const data = {
+  "ApprovedBy": [
+    {
+      "applicationNo": "BP-CTC-2022-07-08-002048",
+      "tenantId": "od.cuttack",
+      "applicationstatus": "SHOW_CAUSE_REPLY_VERIFICATION_PENDING",
+      "workflowstate": "PENDING_DEPT_VERIFICATION"
+    },
+    {
+      "applicationNo": "BP-CTC-2022-07-08-002039",
+      "tenantId": "od.cuttack",
+      "applicationstatus": "SHOW_CAUSE_ISSUED",
+      "workflowstate": "PENDING_SHOW_CAUSE_REPLY"
+    },
+    {
+      "applicationNo": "BP-CTC-2022-07-08-002030",
+      "tenantId": "od.cuttack",
+      "applicationstatus": "PENDING_SANC_FEE_PAYMENT",
+      "workflowstate": "PENDING_SANC_FEE_PAYMENT"
+    },
+    {
+      "applicationNo": "BP-CTC-2022-07-08-002025",
+      "tenantId": "od.cuttack",
+      "applicationstatus": "SHOW_CAUSE_ISSUED",
+      "workflowstate": "PENDING_SHOW_CAUSE_REPLY"
+    },
+    {
+      "applicationNo": "BP-CTC-2022-07-07-002021",
+      "tenantId": "od.cuttack",
+      "applicationstatus": "PERMIT_REVOKED",
+      "workflowstate": "REVOKED"
+    },
+    {
+      "applicationNo": "BP-CTC-2022-06-27-001855",
+      "tenantId": "od.cuttack",
+      "applicationstatus": "SHOW_CAUSE_REPLY_VERIFICATION_PENDING",
+      "workflowstate": "PENDING_DEPT_VERIFICATION"
+    },
+  ]
+}
 
 
 
@@ -82,11 +121,19 @@ const screenConfig = {
      if(ifUserRoleExists("BPA_ARCHITECT") && ifUserRoleExists("BPA_ARC_APPROVER")){
       fetchData(action, state, dispatch);
       fetchApplicationAssignedToMe(action, state, dispatch);
+      setTimeout(()=>{
+        fetchApprovedApplicationList(action, state, dispatch)
+       },1000)
      }else if(ifUserRoleExists("BPA_ARCHITECT") || ifUserRoleExists("BPA_TECHNICALPERSON")){
       fetchData(action, state, dispatch);
      }else if(ifUserRoleExists("BPA_ARC_APPROVER")){
       fetchApplicationAssignedToMe(action, state, dispatch);
+      setTimeout(()=>{
+        fetchApprovedApplicationList(action, state, dispatch)
+       },1000)
      }
+     
+     
      // showHideTabs(action, state, dispatch);
    //}, 2000);
     
@@ -207,20 +254,39 @@ export const fetchApplicationAssignedToMe = async (
   let searchConvertedArray = [];
   let sortConvertedArray = [];
   const bpaResponse = await getBpaAppsAssignedToMe();
-  //console.log(bpaResponse, "Nero 3"); return false;
- // const response = await getSearchResults();
-
+  
+ let serType = getBpaTextToLocalMapping(`WF_BPA_NEW_CONSTRUCTION`);
   if (bpaResponse && bpaResponse.ProcessInstances && bpaResponse.ProcessInstances.length > 0) {
     dispatch(toggleSpinner());
-    //const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.BPA);
-    bpaResponse.ProcessInstances.forEach(element => {
-      let status = getTextToLocalMapping("WF_BPA_" + element.state.applicationStatus, "state", null);
-      searchConvertedArray.push({
-        ["BPA_COMMON_TABLE_COL_APP_NO"]: element.businessId || "-",
+    
+    let arrayLength = bpaResponse.ProcessInstances.length;
+    for(let i=0; i<arrayLength;i++){
+      let primaryowner = "-";
+  let response = await getAppSearchResults([
+        {
+          key: "tenantId",
+          value: bpaResponse.ProcessInstances[i].tenantId
+        },
+        { key: "applicationNo", value: bpaResponse.ProcessInstances[i].businessId }
+      ]);
+      
+      let owners = get(response.BPA[0], "landInfo.owners", [])
+      owners.map(item => {
+        if (item.isPrimaryOwner) {
+          primaryowner = item.name;
+        }
+      });
+
+
+      let status = getTextToLocalMapping("WF_BPA_" + bpaResponse.ProcessInstances[i].state.applicationStatus, "state", null);
+        searchConvertedArray.push({
+        ["BPA_COMMON_TABLE_COL_APP_NO"]: bpaResponse.ProcessInstances[i].businessId || "-",
         ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: status || "-",
-        tenantId: element.tenantId
+        tenantId: bpaResponse.ProcessInstances[i].tenantId,
+        ["BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"]: serType,
+        ["BPA_OWNER_NAME_LABEL"] : primaryowner
       })
-    });
+    }
   }
 
 
@@ -242,6 +308,35 @@ export const fetchApplicationAssignedToMe = async (
     )
   );
 };
+
+
+export const fetchApprovedApplicationList = async (action,state,dispatch) => {
+  let approvedList = [];
+  data.ApprovedBy.forEach((item,index)=> {
+    approvedList.push({
+      ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNo,
+      ["BPA_COMMON_TABLE_COL_LINK"]: item,
+      ["BPA_COMMON_TABLE_COL_TENANT"]: item.tenantId || ''
+    })
+  })
+
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.listOfApprovedApplication",
+      "props.data",
+      approvedList
+    ));
+  dispatch(hideSpinner());
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.listOfApprovedApplication",
+      "props.rows",
+      approvedList.length
+    )
+  );
+}
 
 export const onRowClick = rowData => {
   const environment = process.env.NODE_ENV === "production" ? "citizen" : "";

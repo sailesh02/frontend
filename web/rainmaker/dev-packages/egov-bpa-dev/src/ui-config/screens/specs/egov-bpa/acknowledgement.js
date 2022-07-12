@@ -322,7 +322,40 @@ const getAcknowledgementCard = (
       //   tenant
       // )
     };
-  } else if (purpose === "APPROVE" && status === "success") {
+  } else if (purpose === "SEND_BACK_TO_CITIZEN" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Successfully Sent To Citizen",
+              labelKey: "BPA_APPLICATION_SENT_TO_CITIZEN_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "A notification has been sent to Architect",
+              labelKey: "BPA_APPROVAL_SENT_TO_CITIZEN_SUBHEAD"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      gotoHomeFooter
+    };
+  }else if (purpose === "APPROVE" && status === "success") {
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -540,7 +573,36 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  } else if (purpose === "application" && status === "revocated") {
+  } else if (purpose === "REJECT" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelName: "Application for permit order is rejected",
+              labelKey: "BPA_APPROVAL_REJECTED_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding BPA Rejection has been sent to building owner at registered Mobile No.",
+              labelKey: "BPA_APPROVAL_REJE_MESSAGE_SUBHEAD"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  }else if (purpose === "application" && status === "revocated") {
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -933,6 +995,62 @@ const getAcknowledgementCard = (
         }
       },
      previewAndSubmit
+    };
+  }else if ((purpose === "forward_to_accredited") && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Forwarded Successfully",
+              labelKey: "BPA_FORWARD_TO_ACCREDITTED_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName: "Application has been forward successfully",
+              labelKey: "BPA_APPLICATION_FORWARD_TO_ACCREDITTED_SUCCESSFULLY"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  }else if ((purpose === "approved_by_accredited") && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Forwarded Successfully",
+              labelKey: "BPA_APPROVED_BY_ACCREDITTED_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName: "Application has been forward successfully",
+              labelKey: "BPA_APPLICATION_APPROVED_BY_ACCREDITTED_SUCCESSFULLY"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      gotoHomeFooter
     };
   }
 

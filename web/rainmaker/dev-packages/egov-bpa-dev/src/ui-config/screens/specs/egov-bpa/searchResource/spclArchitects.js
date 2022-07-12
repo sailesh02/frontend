@@ -2,6 +2,7 @@ import {
     getCommonHeader,
     getCommonContainer,
     getLabel,
+    getTextField,
     getCommonGrayCard
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   //import { showCityPicker, applyForm } from "../utils";
@@ -28,10 +29,11 @@ import {
             width: "100%",
             cursor: "pointer"
           },
+          value: "",
           className: "citizen-city-picker",
           label: {
             labelName: "City",
-            labelKey: "BPA_SPCL_ARCH_LABEL"
+            labelKey: "BPA_SPCL_ARCH_LABLE"
           },
           optionValue: "code",
           optionLabel: "uuid",

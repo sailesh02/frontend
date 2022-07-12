@@ -4209,7 +4209,7 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
   }else{
     let appStatuses = ["APPROVAL_INPROGRESS"];
 
-  if(appStatuses.includes(bpaAppDetails.status) && bpaAppDetails.businessService === "BPA5"){
+  if(appStatuses.includes(bpaAppDetails.status) && bpaAppDetails.businessService === "BPA5" && ifUserRoleExists("BPA_ARC_APPROVER")){
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",

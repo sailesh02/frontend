@@ -76,6 +76,17 @@ export const updateBpaApplication = async (state, dispatch, action) => {
   let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
   let bpaPreparedObj = get(state, "screenConfiguration.preparedFinalObject.BPA");
   let isSpclArchSelected = bpaPreparedObj.workflow;
+  if (
+    bpaPreparedObj.additionalDetails &&
+    bpaPreparedObj.additionalDetails.assignes &&
+    bpaPreparedObj.additionalDetails.assignes.length > 0
+  ) {
+    let assigneInfo = {
+      assignes: [bpaPreparedObj.additionalDetails.assignes[0].uuid],
+    };
+
+    bpaPreparedObj.workflow = assigneInfo;
+  }
   let bservice = getQueryArg(window.location.href, "bservice");
   if (bservice === "BPA5" && bpaStatus === "PENDING_FORWARD" && !isSpclArchSelected) {
 
@@ -97,8 +108,8 @@ export const updateBpaApplication = async (state, dispatch, action) => {
     bpaAction = "APPROVE",
       isCitizen = true;
   }
-  if (action && action === "SEND_TO_CITIZEN") {
-    bpaAction = "SEND_TO_CITIZEN",
+  if (action && action === "SEND_BACK_TO_CITIZEN") {
+    bpaAction = "SEND_BACK_TO_CITIZEN",
       isArchitect = true;
   }
   if (action && action === "REJECT") {
@@ -235,7 +246,7 @@ export const updateAndApproveSpclArchBpaApplication = async (state, dispatch, ac
       { BPA: payload }
     );
     if (response) {
-      let url = `/egov-bpa/acknowledgement?purpose=APPROVE&status=success&applicationNumber=${payload.applicationNo}&tenantId=${payload.tenantId}`
+      let url = `/egov-bpa/acknowledgement?purpose=approved_by_accredited&status=success&applicationNumber=${payload.applicationNo}&tenantId=${payload.tenantId}`
       dispatch(setRoute(url));
     }
   } catch (error) {

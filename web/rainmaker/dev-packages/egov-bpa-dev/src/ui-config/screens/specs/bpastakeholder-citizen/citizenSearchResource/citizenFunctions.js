@@ -1,14 +1,18 @@
 import commonConfig from "config/common.js";
+import React from 'react';
+import axios from 'axios';
+import store from "ui-redux/store";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo,getAccessToken,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils";
 import { getBpaSearchResults, getSearchResults } from "../../../../../ui-utils/commons";
 import { getWorkFlowData, getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 
 import {getBpaTextToLocalMapping, getEpochForDate,getTextToLocalMapping, sortByEpoch} from "../../utils";
 import { getBreak, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
@@ -365,7 +369,12 @@ export const applicationAssignedToMe =  {
           display: false
         }
       },
-      
+      {
+        name: "serviceType", labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"
+      },
+      {
+        name: "OwnerName", labelKey: "BPA_OWNER_NAME_LABEL"
+      }
     ],
     title: {
       labelName: "Search Results for BPA Applications",
@@ -404,6 +413,159 @@ export const applicationAssignedToMe =  {
 
 }
 
+// get PDF body
+export const getPdfBody = async (applicationNo, tenantId) => {
+  const userInfo = JSON.parse(getUserInfo());
+  const authToken = getAccessToken();
+  // let uuid = userInfo.uuid;
+  // let userInfos = {
+  //   "id": uuid,
+  //   "tenantId": getTenantId()
+  // };
+  let RequestInfo = {
+    "apiId": "Rainmaker",
+    "ver": ".01",
+    "action": "_search",
+    "did": "1",
+    "key": "",
+    "msgId": "20170310130900|en_IN",
+    "requesterId": "",
+    authToken,
+    "userInfo": userInfo
+  };
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "applicationNo", value: applicationNo },
+  ];
+  try {
+    let bpaResult = await httpRequest(
+      "post",
+      "/bpa-services/v1/bpa/_search",
+      "",
+      queryObject
+    );
+    let edcrNumber =
+      (bpaResult &&
+        bpaResult.BPA &&
+        bpaResult.BPA.length > 0 &&
+        bpaResult.BPA[0].edcrNumber) ||
+      "";
+
+    try {
+      let applicationDigitallySigned =
+        bpaResult &&
+        bpaResult.BPA &&
+        bpaResult.BPA.length > 0 &&
+        bpaResult.BPA[0].dscDetails &&
+        bpaResult.BPA[0].dscDetails[0].documentId
+          ? true
+          : false;
+      if (!applicationDigitallySigned) {
+        let BPA = bpaResult.BPA[0];
+        BPA.businessService = "BPA1" //Need to remove this line once BPA5 is added from Backend side.
+        return {
+          RequestInfo: RequestInfo,
+          Bpa: [BPA],
+        };
+      } else {
+        return null;
+      }
+    } catch (err) {
+      return;
+    }
+  } catch (err) {
+    return;
+  }
+};
+
+export const onDownloadClick = async (tData) => {
+  let data = await getPdfBody(tData[1].applicationNo,tData[1].tenantId)
+  let payload = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=buildingpermit&tenantId=${tData[1].tenantId}`, data, {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  })
+  if(payload.data.message === "Success"){
+    store.dispatch(toggleSnackbarAndSetText(
+      true,
+      {
+        labelName: "Generate Permit Order",
+        labelKey: "COMMON_PERMIT_GENERATED_SUCCESSFULLY"
+      },
+      "success"
+    ));
+  }
+  
+  console.log(payload)
+}
+
+// Show all approved application details
+export const listOfApprovedApplication = {
+  uiFramework: "custom-molecules",
+  name: "my-applications-stakeholder",
+  componentPath: "Table",
+  //visible: false,
+  props: {
+    columns: [
+      {
+        name: "Application No",
+        labelKey: "BPA_COMMON_TABLE_COL_APP_NO",
+      },
+      {
+        name: "Status",
+        labelKey: "BPA_COMMON_TABLE_COL_LINK",
+        options: {
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <a
+              href="javascript:void(0)"
+              onClick={() => {
+                onDownloadClick(tableMeta.rowData);
+              }}
+            >
+              {"Link"}
+            </a>
+          ),
+        },
+      },
+      {
+        name: "tenantId",
+        labelKey: "BPA_COMMON_TABLE_COL_TENANT",
+        options: {
+          display: false,
+        },
+      },
+    ],
+    title: {
+      labelName: "Search Results for BPA Applications",
+      labelKey: "BPA_SEARCH_RESULTS_FOR_APP",
+    },
+    rows: "",
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      viewColumns: false,
+      serverSide: false,
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map((item) => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      },
+    },
+  },
+};
+
 export const showSearches = getCommonContainer({
   showSearchScreens: {
     uiFramework: "custom-containers-local",
@@ -418,6 +580,10 @@ export const showSearches = getCommonContainer({
         {
           tabButton: { labelName: "DOWNLOAD BPA DOCUMENT", labelKey: "BPA_APPLICATIONS_ASSIGNED_TO_ME" },
           tabContent: { applicationAssignedToMe }
+        },
+        {
+          tabButton: { labelName: "LIST OF APPROVED APPLICATION", labelKey: "BPA_APPLICATIONS_APPROVED" },
+          tabContent: { listOfApprovedApplication }
         }
       ],
       tabIndex : 0

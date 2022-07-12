@@ -101,7 +101,7 @@ class ActionDialog extends React.Component {
         bpaDetails.assignees = [uuids];
         bpaDetails.assignee = [getId];
       }
-      if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "SEND_TO_CITIZEN") || (applicationAction === "APPROVE") || (applicationAction === "FORWARD") || (applicationAction === "INTIMATE_CONSTRUCT_START") || (applicationAction === "REPLY")) {
+      if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "SEND_BACK_TO_CITIZEN") || (applicationAction === "REJECT") ||(applicationAction === "APPROVE") || (applicationAction === "FORWARD") || (applicationAction === "INTIMATE_CONSTRUCT_START") || (applicationAction === "REPLY")) {
         let response = await httpRequest(
           "post",
           "bpa-services/v1/bpa/_update",
@@ -117,6 +117,9 @@ class ActionDialog extends React.Component {
           get(response, "BPA[0].businessService") === "BPA_OC3" ||
           get(response, "BPA[0].businessService") === "BPA_OC4") {
             appPath = "oc-bpa"
+          }
+          if(bpaDetails.businessService === "BPA5" && applicationAction === "FORWARD"){
+            applicationAction = "forward_to_accredited";
           }
           const acknowledgementUrl =
             process.env.REACT_APP_SELF_RUNNING === "true"

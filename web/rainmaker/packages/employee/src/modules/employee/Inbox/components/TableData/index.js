@@ -592,7 +592,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
       maxCount = maxCount ;
       const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: maxCount > 500 ? Math.round(maxCount / 3) : maxCount }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
-      const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
+      const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]).filter((a) => a.state.applicationStatus != "INITIATED")
       if (maxCount > 500) {
         this.loadRemainingData([{ key: "tenantId", value: tenantId }, { key: "offset", value: Math.round(maxCount / 3) }, { key: "limit", value: Math.round(maxCount / 3) * 2 + 2 }], responseData)
       } else {
@@ -646,7 +646,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
       set(responseData, "ProcessInstances", [...responseData.ProcessInstances, ...response.ProcessInstances]);
 
-      const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
+      const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]).filter((a) => a.state.applicationStatus != "INITIATED")
       this.loadLocalityForAllData(allData);
 
       const convertedData = await this.prepareInboxDataRows(allData, true, false)

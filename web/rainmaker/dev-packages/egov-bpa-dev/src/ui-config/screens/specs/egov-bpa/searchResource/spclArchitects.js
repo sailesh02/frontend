@@ -3,7 +3,9 @@ import {
     getCommonContainer,
     getLabel,
     getTextField,
-    getCommonGrayCard
+    getCommonGrayCard,
+    getCommonSubHeader,
+    getLabelWithValue
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   //import { showCityPicker, applyForm } from "../utils";
   import get from "lodash/get";
@@ -74,4 +76,49 @@ import {
       
     })
   });
+
+  export const approvalAuthority = getCommonGrayCard({
+    header: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      props: {
+        style: { marginBottom: "10px" }
+      },
+      children: {
+        header: {
+          gridDefination: {
+            xs: 12,
+            md:12,
+            sm:12
+          },
+          ...getCommonSubHeader({
+            labelName: "Owner Information",
+            labelKey: "BPA_CHOOSE_BPA_PROCESS_TITLE"
+          })
+        },
+        approvalAuthority: getLabelWithValue(
+          {
+            labelName: "Mobile No.",
+            labelKey: "BPA_CHOOSE_BPA_PROCESS_TITLE"
+          },
+          {
+            jsonPath:
+              "approvalAuthorityDetail.approvalAuthority",
+             // callBack: checkValueForNA
+          }
+        ),
+        approvalPerson: getLabelWithValue(
+          {
+            labelName: "Mobile No.",
+            labelKey: "BPA_APPROVAL_PERSON_LABEL"
+          },
+          {
+            jsonPath:
+              "approvalAuthorityDetail.approvalPersonName",
+             // callBack: checkValueForNA
+          }
+        )
+      }
+    }
+  })
   

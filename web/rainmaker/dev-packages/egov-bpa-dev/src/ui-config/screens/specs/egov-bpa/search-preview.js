@@ -38,7 +38,7 @@ import {
   compare,
   generateBillForSanctionFee
 } from "../utils/index";
-import { spclArchitectsPicker } from "./searchResource/spclArchitects";
+import { spclArchitectsPicker, approvalAuthority } from "./searchResource/spclArchitects";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved, generateShowCauseNotice, getScnHistory, viewPaymentDetails } from "./searchResource/citizenFooter";
 import { applicantSummary, institutionSummary } from "./summaryResource/applicantSummary";
@@ -716,7 +716,43 @@ const setSearchResponse = async (
       )
     );
   }
+  if (get(response, "BPA[0].businessService") === "BPA5") {
+    let additionalDetails = get(response, "BPA[0].additionalDetails", null);
+    if (
+      additionalDetails &&
+      additionalDetails.assignes &&
+      additionalDetails.assignes[0].uuid
+    ) {
+      let payloadarchList = await httpRequest(
+        "post",
+        "/user/_search",
+        "_search",
+        [],
+        {
+          uuid: [additionalDetails.assignes[0].uuid],
+        }
+      );
 
+      let approvalAuthorityDetail = {
+        approvalAuthority: "Accredited Person",
+        approvalPersonName:
+          payloadarchList &&
+          payloadarchList.user &&
+          payloadarchList.user[0].name,
+      };
+      dispatch(
+        prepareFinalObject("approvalAuthorityDetail", approvalAuthorityDetail)
+      );
+    }
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.approvalAuthority",
+        "visible",
+        true
+      )
+    );
+  }
   let proposedAppStatus = ["PENDING_FORWARD"];
   let businesIds = ["BPA5"];
   if (
@@ -1677,6 +1713,11 @@ const screenConfig = {
       "components.div.children.body.children.cardContent.children.nocDetailsApply.visible",
       false
     );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.approvalAuthority.visible",
+      false
+    );
     dispatch(prepareFinalObject("nocDocumentsDetailsRedux", {}));
    
     return action;
@@ -1772,6 +1813,7 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
+          approvalAuthority: approvalAuthority,
           estimateSummary: estimateSummary,
           sanctionFeeSummary: sanctionFeeSummary,
           sanctionFeeAdjustFormCard: {

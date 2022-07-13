@@ -478,24 +478,33 @@ export const getPdfBody = async (applicationNo, tenantId) => {
   }
 };
 
+
+
 export const onDownloadClick = async (tData) => {
-  let data = await getPdfBody(tData[1].applicationNo,tData[1].tenantId)
-  let payload = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=buildingpermit&tenantId=${tData[1].tenantId}`, data, {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  })
-  if(payload.data.message === "Success"){
-    store.dispatch(toggleSnackbarAndSetText(
-      true,
-      {
-        labelName: "Generate Permit Order",
-        labelKey: "COMMON_PERMIT_GENERATED_SUCCESSFULLY"
-      },
-      "success"
-    ));
-  }
-  
-  console.log(payload)
+  store.dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      true
+    )
+  )
+  store.dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.pdfSigningPopup.props",
+      "applicationNumber",
+      tData[1].applicationNo
+    )
+  )
+  store.dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.pdfSigningPopup.props",
+      "tenantId",
+      tData[1].tenantId
+    )
+  )
 }
 
 // Show all approved application details

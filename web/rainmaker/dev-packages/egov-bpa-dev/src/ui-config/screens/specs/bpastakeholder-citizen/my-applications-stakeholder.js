@@ -10,6 +10,8 @@ import {
 
   getTextToLocalMapping, sortByEpoch
 } from "../utils";
+import store from "ui-redux/store";
+
 import {showSearches, tabsForArchOnly, tabsForSpclArchOnly} from "./citizenSearchResource/citizenFunctions"
 import {ifUserRoleExists} from "../../specs/utils"
 
@@ -113,6 +115,20 @@ console.log("Nero I am here")
   //   ))
 }
 
+const closePdfSigningPopup = (refreshType) => {
+  store.dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      false
+    )
+  )
+  if(refreshType == 'Table'){
+    getPendingDigitallySignedApplications()
+  }
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "my-applications-stakeholder",
@@ -147,6 +163,25 @@ const screenConfig = {
         header: header,
         showSearches: (ifUserRoleExists("BPA_ARCHITECT") && ifUserRoleExists("BPA_ARC_APPROVER")) ? showSearches: (ifUserRoleExists("BPA_ARCHITECT") || ifUserRoleExists("BPA_TECHNICALPERSON"))? tabsForArchOnly: tabsForSpclArchOnly,
         
+      }
+    },
+    pdfSigningPopup : {
+      uiFramework: 'custom-containers-local',
+      componentPath: 'SignPdfContainer',
+      moduleName: "egov-workflow",
+      props: {
+        openPdfSigningPopup: false,
+        closePdfSigningPopup : closePdfSigningPopup,
+        maxWidth: false,
+        moduleName : 'BPA',
+        okText :"BPA_SIGN_PDF",
+        resetText : "BPA_RESET_PDF",
+        dataPath : 'BPA',
+        updateUrl : '/bpa-services/v1/bpa/_updatedscdetails?',
+        refreshType : 'Table'
+      },
+      children: {
+        popup: {}
       }
     }
   }

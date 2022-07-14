@@ -78,28 +78,21 @@ console.log(uploadedDocs, "Nero Hello")
   console.log(applicationDocs, "Nero DOcuments")
   payload.documents = applicationDocs; 
   payload.additionalDetails.applicationType = "buildingPlanLayoutSignature";
-  let signDetails = {
-    signDetails: {
-      offLineSign: true,
-      digitalSignfeatureDeveloped: false,
-    },
-  };
-  payload.dscDetails[0].additionalDetails = signDetails;
+  
   console.log(payload, "Nero final payload")
 
   try {
     const response = await httpRequest(
       "post",
-      "/bpa-services/v1/bpa/_updatedscdetails",
+      "/bpa-services/v1/bpa/_update",
       "",
       [],
       {["BPA"]:payload}
     );
   console.log(response, "Nero response after updated")
-  if(response){
-    alert('Superb')
-  //   let url = `acknowledgement?purpose=bpd_signed_upload&status=success&applicationNumber=${applicationNo}&tenantId=${tenantId}`
-  // dispatch(setRoute(url));
+  if (response) {
+    let url = `acknowledgement?purpose=bpd_signed_upload&status=success&applicationNumber=${applicationNo}&tenantId=${tenantId}`;
+    dispatch(setRoute(url));
   }
   } catch (error) {
     //store.dispatch(toggleSnackbar(true, error.message, "error"));

@@ -48,7 +48,7 @@ const tradeSubTypeChange = (reqObj) => {
     let { value, dispatch, state } = reqObj;
 
     dispatch(prepareFinalObject(`billingSlab[0].tradeType`, value));
-    updateUOMFieldDOM(value,state,dispatch)
+    updateUOMFieldDOM(value, state, dispatch)
 
     // dispatch(prepareFinalObject(`DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType`, value));
   } catch (e) {
@@ -165,7 +165,7 @@ const tradeUnitCard = {
     onMultiItemAdd: (state, muliItemContent) => {
       return setFieldsOnAddItem(state, muliItemContent);
     },
-    removeAddIcon: false
+    removeAddIcon: true
   },
   type: "array"
 };
@@ -283,6 +283,44 @@ export const tradeDetails = getCommonCard({
         isDependency: "billingSlab[0].tradeType",
       },
     },
+    tradeType: getTextField({
+      label: {
+        labelName: "Trade Type",
+        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL"
+      },
+      required: true,
+      labelsFromLocalisation: true,
+      localePrefix: {
+        moduleName: "TRADELICENSE",
+        masterName: "TRADETYPE"
+      },
+      props: {
+        disabled: true,
+      },
+      visible: false,
+      jsonPath: "tradeCodeInfo.tradeCode",
+      gridDefination: {
+        xs: 12,
+        sm: 6,
+      },
+    }),
+    tradeSubType: getTextField({
+      label: {
+        labelName: "Trade Sub-Type",
+        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
+      },
+      required: true,
+      props: {
+        disabled: true,
+      },
+      visible: false,
+      sourceJsonPath: "uomOptions",
+      jsonPath: "tradeCodeInfo.tradeSubCode",
+      gridDefination: {
+        xs: 12,
+        sm: 6,
+      },
+    }),
     tradeRateType: {
       ...getSelectField({
         label: {
@@ -295,7 +333,7 @@ export const tradeDetails = getCommonCard({
           labelName: "Select Trade Type",
           labelKey: "TL_RATE_TYPE_PH",
         },
-        data: [{ code: "FLAT" }, { code: "RANGE" }],
+        data: [{ code: "FLAT" }, { code: "RATE" }],
         jsonPath: "billingSlab[0].type",
         required: true,
         props: {
@@ -342,17 +380,16 @@ export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"
       ? getCommonHeader({
-          labelName: `Apply for New Trade License ${
-            process.env.REACT_APP_NAME === "Citizen"
-              ? "(" + getCurrentFinancialYear() + ")"
-              : ""
+        labelName: `Apply for New Trade License ${process.env.REACT_APP_NAME === "Citizen"
+          ? "(" + getCurrentFinancialYear() + ")"
+          : ""
           }`,
-          // dynamicArray: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? [getnextFinancialYear(getCurrentFinancialYear())]:[getCurrentFinancialYear()],
-          labelKey:
-            getQueryArg(window.location.href, "action") === "EDITRENEWAL"
-              ? "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR"
-              : "TL_COMMON_APPL_NEW_LICENSE_YEAR",
-        })
+        // dynamicArray: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? [getnextFinancialYear(getCurrentFinancialYear())]:[getCurrentFinancialYear()],
+        labelKey:
+          getQueryArg(window.location.href, "action") === "EDITRENEWAL"
+            ? "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR"
+            : "TL_COMMON_APPL_NEW_LICENSE_YEAR",
+      })
       : {},
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -482,10 +519,10 @@ export const getData = async (action, state, dispatch) => {
   const applicationNo = queryValue
     ? queryValue
     : get(
-        state.screenConfiguration.preparedFinalObject,
-        "Licenses[0].oldLicenseNumber",
-        null
-      );
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].oldLicenseNumber",
+      null
+    );
   await getMdmsData(action, state, dispatch);
   await getAllDataFromBillingSlab(getTenantId(), dispatch);
 
@@ -554,7 +591,7 @@ const screenConfig = {
     let applicationType = getQueryArg(window.location.href, "applicationType");
     let tradeType = getQueryArg(window.location.href, "tradeType");
     let addNew = getQueryArg(window.location.href, "new");
-    if(addNew) {
+    if (addNew) {
       const billingSlab = [
         {
           tenantId: tenantId,
@@ -572,7 +609,6 @@ const screenConfig = {
     } else {
       setSelectedBillingSlabData(state, dispatch)
     }
-    
     getData(action, state, dispatch);
 
     return action;

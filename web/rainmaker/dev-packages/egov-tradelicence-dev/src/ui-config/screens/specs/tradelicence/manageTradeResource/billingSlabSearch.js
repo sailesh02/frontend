@@ -3,6 +3,7 @@ import {
   getCommonCard,
   getCommonTitle,
   getLabel,
+  getSelectField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -11,13 +12,27 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { handleLicenseTypeForSearchScreen } from "./functions";
 
-const getBillingSlabData = async (tenantId, dispatch) => {
+const getBillingSlabData = async (paramDetails, dispatch) => {
   try {
     let queryObject = [
       {
         key: "tenantId",
-        value: tenantId,
+        value: paramDetails.city,
+      },
+      {
+        key: "licenseType",
+        value: paramDetails.licenseType,
+      },
+      {
+        key: "applicationType",
+        value: paramDetails.applicationType,
+      },
+      {
+        key: "tradeType",
+        value: paramDetails.tradeType,
       },
     ];
     let payload = null;
@@ -91,20 +106,22 @@ const searchApiCall = async (state, dispatch) => {
     "manageTrade",
     {}
   );
-  if (!searchScreenObject.city) {
+  const isValid = searchScreenObject.city && searchScreenObject.licenseType && searchScreenObject.applicationType && searchScreenObject.tradeType;
+  if (!isValid) {
+    let errorMessage = {
+      labelName : "Please fill all mandatory fields and then search",
+      labelKey: "TL_BS_ERR_MANDATORY_FIELDS"
+    };
     dispatch(
       toggleSnackbar(
         true,
-        {
-          labelName: "Please select the city to start search",
-          labelKey: "Please select the city to start search",
-        },
+        errorMessage,
         "warning"
       )
     );
   } else {
     try {
-      getBillingSlabData(searchScreenObject.city, dispatch);
+      getBillingSlabData(searchScreenObject, dispatch);
     } catch (error) {
       console.log(error);
     }
@@ -121,7 +138,7 @@ const addNewBillingSlab = (state, dispatch) => {
     "manageTrade",
     {}
   );
-  if(tenant.city) {
+  if (tenant.city) {
     window.location.href = `traderateadd?new=true&tenantId=${tenant.city}`
   } else {
     dispatch(
@@ -134,6 +151,28 @@ const addNewBillingSlab = (state, dispatch) => {
         "warning"
       )
     );
+  }
+};
+
+const tradeTypeChange = (reqObj) => {
+  try {
+    let { dispatch, index } = reqObj;
+    // dispatch(prepareFinalObject(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tradeType`, ''));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const tradeSubTypeChange = (reqObj) => {
+  try {
+    let { value, dispatch, state } = reqObj;
+
+    dispatch(prepareFinalObject(`manageTrade.tradeType`, value));
+    // updateUOMFieldDOM(value, state, dispatch)
+
+    // dispatch(prepareFinalObject(`DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType`, value));
+  } catch (e) {
+    console.log(e);
   }
 };
 
@@ -170,6 +209,16 @@ const dropdown = {
     },
     // className: "tradelicense-mohalla-apply"
   },
+  afterFieldChange: (action, state, dispatch) => {
+    dispatch(
+      handleField(
+        "managetrade",
+        `components.div.children.billSlabSearchForm.children.cardContent.children.cityNameContainer.children.dynamicMdms`,
+        "props.screenTenantId",
+        action.value
+      )
+    );
+  },
   gridDefination: {
     xs: 12,
     sm: 6,
@@ -183,14 +232,122 @@ export const billSlabSearchForm = getCommonCard({
   }),
   cityNameContainer: getCommonContainer({
     tradeLocCity: dropdown,
+    tradeLicenseType: {
+      ...getSelectField({
+        label: {
+          labelName: "License Type",
+          labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_LABEL",
+        },
+        placeholder: {
+          labelName: "Select License Type",
+          labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_PLACEHOLDER",
+        },
+        required: true,
+        jsonPath: "manageTrade.licenseType",
+        localePrefix: {
+          moduleName: "TRADELICENSE",
+          masterName: "LICENSETYPE",
+        },
+        visible: true,
+        props: {
+          className: "tl-trade-type",
+        },
+        afterFieldChange: (action, state, dispatch) => {
+          handleLicenseTypeForSearchScreen(action.value, dispatch);
+        },
+        data: [{ code: "PERMANENT" }, { code: "TEMPORARY" }],
+      }),
+    },
+    applicationType: {
+      ...getSelectField({
+        label: {
+          labelName: "Application Type",
+          labelKey: "TL_BS_APPLICATION_TYPE_LABEL",
+        },
+        placeholder: {
+          labelName: "Select Application Type",
+          labelKey: "TL_BS_APPLICATION_TYPE_PLACEHOLDER",
+        },
+        required: true,
+        jsonPath: "manageTrade.applicationType",
+        visible: true,
+        props: {
+          className: "tl-trade-type",
+        },
+        data: [{ code: "NEW" }, { code: "RENEWAL" }],
+      }),
+    },
+    dynamicMdms: {
+      uiFramework: "custom-containers",
+      componentPath: "DynamicMdmsContainer",
+      props: {
+        dropdownFields: [
+          {
+            key: "tradeType",
+            fieldType: "autosuggest",
+            className: "applicant-details-error autocomplete-dropdown",
+            callBack: tradeTypeChange,
+            isRequired: false,
+            requiredValue: true,
+            isDisabled: false,
+          },
+          {
+            key: "tradeSubType",
+            callBack: tradeSubTypeChange,
+            className: "applicant-details-error autocomplete-dropdown",
+            fieldType: "autosuggest",
+            isRequired: false,
+            requiredValue: true,
+            isDisabled: false,
+          },
+        ],
+        screenTenantId: getTenantId(),
+        moduleName: "TradeLicense",
+        masterName: "TradeType",
+        isTemp: false,
+        rootBlockSub: "tradeUnits",
+        filter: "[?(@.type=='TL')]",
+        screenName: "tradeRateSearch",
+        // callBackEdit: updateMdmsDropDownsForBillingSlab,
+      },
+    },
   }),
   button: getCommonContainer({
     buttonContainer: getCommonContainer({
+      searchButton: {
+        componentPath: "Button",
+        gridDefination: {
+          xs: 12,
+          sm: 6,
+        },
+        props: {
+          variant: "contained",
+          style: {
+            color: "white",
+            margin: "8px",
+            backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+            borderRadius: "2px",
+            width: "220px",
+            height: "48px",
+            float: "right",
+          },
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "Search",
+            labelKey: "Search",
+          }),
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: searchApiCall,
+        },
+      },
       addButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 12,
+          sm: 6,
         },
         props: {
           variant: "outlined",
@@ -200,7 +357,7 @@ export const billSlabSearchForm = getCommonCard({
             width: "220px",
             height: "48px",
             margin: "8px",
-            float: "right",
+            // float: "right",
           },
         },
         children: {
@@ -214,34 +371,6 @@ export const billSlabSearchForm = getCommonCard({
           callBack: addNewBillingSlab,
         },
       },
-      // searchButton: {
-      //   componentPath: "Button",
-      //   gridDefination: {
-      //     xs: 12,
-      //     sm: 6,
-      //   },
-      //   props: {
-      //     variant: "contained",
-      //     style: {
-      //       color: "white",
-      //       margin: "8px",
-      //       backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
-      //       borderRadius: "2px",
-      //       width: "220px",
-      //       height: "48px",
-      //     },
-      //   },
-      //   children: {
-      //     buttonLabel: getLabel({
-      //       labelName: "Search",
-      //       labelKey: "Search",
-      //     }),
-      //   },
-      //   onClickDefination: {
-      //     action: "condition",
-      //     callBack: searchApiCall,
-      //   },
-      // },
     }),
   }),
 });
@@ -267,10 +396,16 @@ export const searchResults = {
       {
         name: "LicenseType",
         labelKey: "LicenseType",
+        options: {
+          display: false,
+        },
       },
       {
         name: "ApplicationType",
         labelKey: "ApplicationType",
+        options: {
+          display: false,
+        },
       },
       {
         name: "UOM-Units",

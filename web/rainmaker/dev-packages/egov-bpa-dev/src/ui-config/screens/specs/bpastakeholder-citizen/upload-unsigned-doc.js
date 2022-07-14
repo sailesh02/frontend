@@ -17,6 +17,8 @@ import {
 import { httpRequest } from "../../../../ui-utils/api";
 import get from "lodash/get";
 import { getTransformedLocale, getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+
 import { getCommonApplyFooter } from "../utils";
 //import { getAppSearchResults } from "../../../../../ui-utils/commons"
 import { getAppSearchResults } from "../../../../ui-utils/commons"
@@ -85,6 +87,8 @@ console.log(uploadedDocs, "Nero Hello")
     },
   };
   payload.dscDetails[0].additionalDetails = signDetails;
+  payload.dscDetails[0].documentType = "buildingpermit";
+  payload.dscDetails[0].documentId = uploadedDocs[0].documents[0].fileStoreId;
   console.log(payload, "Nero final payload")
 
   try {
@@ -93,17 +97,45 @@ console.log(uploadedDocs, "Nero Hello")
       "/bpa-services/v1/bpa/_updatedscdetails",
       "",
       [],
-      {["BPA"]:payload}
+      { ["BPA"]: payload }
     );
-  console.log(response, "Nero response after updated")
-  if(response){
-    alert('Superb')
-  //   let url = `acknowledgement?purpose=bpd_signed_upload&status=success&applicationNumber=${applicationNo}&tenantId=${tenantId}`
-  // dispatch(setRoute(url));
-  }
+    console.log(response, "Nero response after updated");
+    if (response) {
+      store.dispatch(
+        toggleSnackbarAndSetText(
+          true,
+          {
+            labelName: "Generate Permit Order",
+            labelKey: "COMMON_PERMIT_UPLOADED_SUCCESSFULLY",
+          },
+          "success"
+        )
+      );
+    } else {
+      store.dispatch(
+        toggleSnackbarAndSetText(
+          true,
+          {
+            labelName: "Generate Permit Order",
+            labelKey: "COMMON_PERMIT_UPLOADED_FAILED",
+          },
+          "error"
+        )
+      );
+    }
   } catch (error) {
     //store.dispatch(toggleSnackbar(true, error.message, "error"));
-    console.log(error, "Nero error")
+    console.log(error, "Nero error");
+    store.dispatch(
+      toggleSnackbarAndSetText(
+        true,
+        {
+          labelName: "Generate Permit Order",
+          labelKey: "COMMON_PERMIT_UPLOADED_FAILED",
+        },
+        "error"
+      )
+    );
   }
 
 }

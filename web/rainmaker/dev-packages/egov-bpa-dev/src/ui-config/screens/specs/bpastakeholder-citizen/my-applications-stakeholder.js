@@ -351,7 +351,8 @@ export const fetchApprovedApplicationList = async (action,state,dispatch) => {
     approvedList.push({
       ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNo,
       ["BPA_COMMON_TABLE_COL_LINK"]: item,
-      ["BPA_COMMON_TABLE_COL_TENANT"]: item.tenantId || ''
+      ["BPA_COMMON_TABLE_COL_UPLOAD"]: item || '',
+      ["BPA_COMMON_TABLE_COL_TENANT"]: item.tenantId || '',
     })
   })
 

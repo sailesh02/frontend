@@ -14,10 +14,13 @@ import { getBpaSearchResults, getSearchResults } from "../../../../../ui-utils/c
 import { getWorkFlowData, getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 
-import {getBpaTextToLocalMapping, getEpochForDate,getTextToLocalMapping, sortByEpoch} from "../../utils";
+import {getBpaTextToLocalMapping, getEpochForDate,getTextToLocalMapping, getUniqueItemsFromArray, sortByEpoch} from "../../utils";
 import { getBreak, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {onRowClick} from "../my-applications-stakeholder"
 import {onApplicationRowClick} from "../my-applications-stakeholder"
+import { getFileUrlFromAPI, getFileUrl } from "egov-ui-framework/ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+
 export const getMdmsData = async () => {
   let mdmsBody = {
     MdmsCriteria: {
@@ -481,30 +484,66 @@ export const getPdfBody = async (applicationNo, tenantId) => {
 
 
 export const onDownloadClick = async (tData) => {
-  store.dispatch(
-    handleField(
-      "my-applications-stakeholder",
-      "components.pdfSigningPopup.props",
-      "openPdfSigningPopup",
-      true
-    )
-  )
-  store.dispatch(
-    handleField(
-      "my-applications-stakeholder",
-      "components.pdfSigningPopup.props",
-      "applicationNumber",
-      tData[1].applicationNo
-    )
-  )
-  store.dispatch(
-    handleField(
-      "my-applications-stakeholder",
-      "components.pdfSigningPopup.props",
-      "tenantId",
-      tData[1].tenantId
-    )
-  )
+  let data = await getPdfBody(tData[1].applicationNo,tData[1].tenantId)
+  let response = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=buildingpermit&tenantId=${tData[1].tenantId}`, data, {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  })
+  if (
+    response &&
+    response.data.filestoreIds &&
+    response.data.filestoreIds.length > 0
+  ) {
+    const fileUrls = await getFileUrlFromAPI(response.data.filestoreIds[0],tData[1].tenantId);
+    window.location = fileUrls[response.data.filestoreIds[0]];  
+  }
+  // if (filteredDoc && filteredDoc.length > 0) {
+  //   const fileUrls = await getFileUrlFromAPI(
+  //     filteredDoc && filteredDoc[0].fileStoreId
+  //   );
+  //   window.location = fileUrls[filteredDoc[0].fileStoreId];
+  // }
+  // if(payload.data.message === "Success"){
+  //   store.dispatch(toggleSnackbarAndSetText(
+  //     true,
+  //     {
+  //       labelName: "Generate Permit Order",
+  //       labelKey: "COMMON_PERMIT_GENERATED_SUCCESSFULLY"
+  //     },
+  //     "success"
+  //   ));
+  // }
+  // store.dispatch(
+  //   handleField(
+  //     "my-applications-stakeholder",
+  //     "components.pdfSigningPopup.props",
+  //     "openPdfSigningPopup",
+  //     true
+  //   )
+  // )
+  // store.dispatch(
+  //   handleField(
+  //     "my-applications-stakeholder",
+  //     "components.pdfSigningPopup.props",
+  //     "applicationNumber",
+  //     tData[1].applicationNo
+  //   )
+  // )
+  // store.dispatch(
+  //   handleField(
+  //     "my-applications-stakeholder",
+  //     "components.pdfSigningPopup.props",
+  //     "tenantId",
+  //     tData[1].tenantId
+  //   )
+  // )
+}
+
+const onUploadClick = (tData) => {
+  let applicationNumber = tData && tData[1].applicationNo;
+  let tenantId = tData && tData[1].tenantId;
+  let url = `upload-unsigned-doc?applicationNo=${applicationNumber}&tenantId=${tenantId}`
+  store.dispatch(setRoute(url));
 }
 
 // Show all approved application details
@@ -520,7 +559,7 @@ export const listOfApprovedApplication = {
         labelKey: "BPA_COMMON_TABLE_COL_APP_NO",
       },
       {
-        name: "Status",
+        name: "Download Document",
         labelKey: "BPA_COMMON_TABLE_COL_LINK",
         options: {
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -530,7 +569,23 @@ export const listOfApprovedApplication = {
                 onDownloadClick(tableMeta.rowData);
               }}
             >
-              {"Sign pdf"}
+              <span style={{color: '#fe7a51'}}>{"Download Document"}</span>
+            </a>
+          ),
+        },
+      },
+      {
+        name: "Upload Document",
+        labelKey: "BPA_COMMON_TABLE_COL_UPLOAD",
+        options: {
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <a
+              href="javascript:void(0)"
+              onClick={() => {
+                onUploadClick(tableMeta.rowData);
+              }}
+            >
+              <span style={{color: '#fe7a51'}}>{"Upload Document"}</span>
             </a>
           ),
         },

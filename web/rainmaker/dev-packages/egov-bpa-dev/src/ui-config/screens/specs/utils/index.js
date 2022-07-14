@@ -6159,6 +6159,7 @@ export const generateBillForSanctionFee = async (bpaObject, edcrObject, dispatch
     if (applicationNumber && tenantId) {
       let riskType = edcrObject && edcrObject.planDetail.planInformation.riskType
       bpaObject.BPA[0].riskType = riskType;
+      bpaObject.BPA[0].edcrDetail = {};
       console.log(bpaObject, edcrObject, "Nero Edcr 12")
       let apiPayload = [
         {

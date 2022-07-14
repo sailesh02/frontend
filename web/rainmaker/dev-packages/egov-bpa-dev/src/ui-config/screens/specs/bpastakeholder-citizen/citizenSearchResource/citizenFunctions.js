@@ -530,7 +530,7 @@ export const listOfApprovedApplication = {
                 onDownloadClick(tableMeta.rowData);
               }}
             >
-              {"Link"}
+              {"Sign pdf"}
             </a>
           ),
         },

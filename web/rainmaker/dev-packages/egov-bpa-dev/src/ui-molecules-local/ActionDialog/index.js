@@ -5,6 +5,7 @@ import {
   LabelContainer,
   TextFieldContainer
 } from "egov-ui-framework/ui-containers";
+import {ifUserRoleExists} from '../../ui-config/screens/specs/utils'
 import CloseIcon from "@material-ui/icons/Close";
 import { withStyles } from "@material-ui/core/styles";
 import { UploadMultipleFiles } from "egov-ui-framework/ui-molecules";
@@ -120,6 +121,13 @@ class ActionDialog extends React.Component {
           }
           if(bpaDetails.businessService === "BPA5" && applicationAction === "FORWARD"){
             applicationAction = "forward_to_accredited";
+          }
+          if (
+            bpaDetails.businessService === "BPA5" &&
+            applicationAction === "APPROVE" &&
+            ifUserRoleExists("BPA_ARC_APPROVER")
+          ) {
+            applicationAction = "approved_by_accredited";
           }
           const acknowledgementUrl =
             process.env.REACT_APP_SELF_RUNNING === "true"

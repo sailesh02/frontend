@@ -79,6 +79,10 @@ const closePdfSigningPopup = (refreshType) => {
   }
 }
 
+const downloadRevocationLetter = () => {
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
   const roles = get(userInfo, "roles");
@@ -421,14 +425,14 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
   let revocationPdfDownlaodObject = {
     label: { labelName: "Revocation Letter", labelKey: "BPA_REVOCATION_PDF_LABEL" },
     link: () => {
-      revocationPdfDownload(action, state, dispatch, "Download");
+      downloadRevocationLetter(action, state, dispatch, "Download");
     },
     leftIcon: "assignment"
   };
   let revocationPdfPrintObject = {
     label: { labelName: "Revocation Letter", labelKey: "BPA_REVOCATION_PDF_LABEL" },
     link: () => {
-      revocationPdfDownload(action, state, dispatch, "Print");
+      downloadRevocationLetter(action, state, dispatch, "Print");
     },
     leftIcon: "assignment"
   };
@@ -516,6 +520,10 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
           downloadMenu.push(permitOrderDownloadObject);
           printMenu.push(permitOrderPrintObject);
         }
+        break;
+      case "PERMIT_REVOKED":
+        downloadMenu.push(revocationPdfDownlaodObject);
+        printMenu.push(revocationPdfPrintObject);
         break;
       default:
         downloadMenu = [];
@@ -1482,6 +1490,23 @@ const setSearchResponse = async (
           {
             labelName: "Please upload required data for NOCs",
             labelKey: "Please upload required data for NOCs",
+          },
+          "warning"
+        )
+      );
+    }
+    if (
+      response &&
+      response.BPA["0"] &&
+      response.BPA["0"].status === "PERMIT_REVOKED" &&
+      response.BPA["0"].businessService === "BPA5"
+    ) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Permit letter revocation information",
+            labelKey: "BPA_PERMIT_LETTER_REVOKATION_INFO",
           },
           "warning"
         )

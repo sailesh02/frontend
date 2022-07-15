@@ -259,6 +259,17 @@ let bpaObj = get(
       dispatch
     );
 
+    let isApprovalAuthorityValid = validateFields(
+      "components.div.children.formwizardSecondStep.children.getBpaProcess.children.cardContent.children.chooseBPAHeaderDetails.children",
+      state,
+      dispatch
+    );
+
+    if(!isApprovalAuthorityValid){
+      isFormValid = false;
+      hasFieldToaster = true;
+    }
+
     // let isabstractProposedBuildingDetailsCardValid = validateFields(
     //   "components.div.children.formwizardSecondStep.children.abstractProposedBuildingDetails.children.cardContent.children.proposedContainer.children.totalBuildUpAreaDetailsContainer.children",
     //   state,

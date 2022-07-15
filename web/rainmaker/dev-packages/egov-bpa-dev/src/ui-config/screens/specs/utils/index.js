@@ -4209,7 +4209,7 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
   }else{
     let appStatuses = ["APPROVAL_INPROGRESS"];
 
-  if(appStatuses.includes(bpaAppDetails.status) && bpaAppDetails.businessService === "BPA5"){
+  if(appStatuses.includes(bpaAppDetails.status) && bpaAppDetails.businessService === "BPA5" && ifUserRoleExists("BPA_ARC_APPROVER")){
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
@@ -6159,6 +6159,7 @@ export const generateBillForSanctionFee = async (bpaObject, edcrObject, dispatch
     if (applicationNumber && tenantId) {
       let riskType = edcrObject && edcrObject.planDetail.planInformation.riskType
       bpaObject.BPA[0].riskType = riskType;
+      bpaObject.BPA[0].edcrDetail = {};
       console.log(bpaObject, edcrObject, "Nero Edcr 12")
       let apiPayload = [
         {

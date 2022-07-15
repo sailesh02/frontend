@@ -32,7 +32,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
             amountArray.push(Number(value))
           }
         }
@@ -58,7 +58,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
             amountArray.push(Number(value))
           }
         }
@@ -84,7 +84,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
             amountArray.push(Number(value))
           }
         }
@@ -110,7 +110,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
             amountArray.push(Number(value))
           }
         }
@@ -136,7 +136,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
             amountArray.push(Number(value))
           }
         }
@@ -162,7 +162,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
             amountArray.push(Number(value))
           }
         }
@@ -188,7 +188,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
             amountArray.push(Number(value))
           }
         }
@@ -214,7 +214,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
             amountArray.push(Number(value))
           }
         }
@@ -240,7 +240,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
             amountArray.push(Number(value))
           }
         }
@@ -266,7 +266,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
             amountArray.push(Number(value))
           }
         }
@@ -292,7 +292,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
             amountArray.push(Number(value))
           }
         }
@@ -318,7 +318,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
             amountArray.push(Number(value))
           }
         }
@@ -350,7 +350,7 @@ const formConfig = {
         for (const [key, value] of Object.entries(additionalDetails)) {
           if(key == "usageExemption" || key == "ownershipExemption"){
             amountArray.push(Number(-value))
-          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+          }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
             amountArray.push(Number(value))
           }
         }
@@ -406,7 +406,7 @@ const formConfig = {
           for (const [key, value] of Object.entries(additionalDetails)) {
             if(key == "usageExemption" || key == "ownershipExemption"){
               amountArray.push(Number(-value))
-            }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom')){
+            }else if((key !== "previousPropertyUuid") && (key !== 'isRainwaterHarvesting') && (key !== 'pendingFrom') && (key !== 'reasonForTransfer') && (key !== 'documentDate') && (key !== 'documentNumber') && (key !== 'documentValue') && (key !== 'marketValue')){
               amountArray.push(Number(value))
             }
           }

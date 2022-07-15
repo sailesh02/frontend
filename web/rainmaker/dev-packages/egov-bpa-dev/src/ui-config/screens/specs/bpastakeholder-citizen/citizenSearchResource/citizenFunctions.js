@@ -540,10 +540,28 @@ export const onDownloadClick = async (tData) => {
 }
 
 const onUploadClick = (tData) => {
-  let applicationNumber = tData && tData[1].applicationNo;
-  let tenantId = tData && tData[1].tenantId;
+  let applicationNumber = tData && tData.applicationNo;
+  let tenantId = tData && tData.tenantId;
   let url = `upload-unsigned-doc?applicationNo=${applicationNumber}&tenantId=${tenantId}`
   store.dispatch(setRoute(url));
+}
+const setUpload = (tData) => {
+  if(tData.workflowstate === "APPROVED"){
+    return (
+        <a
+          href="javascript:void(0)"
+          onClick={() => {
+            onUploadClick(tData);
+          }}
+        >
+          <span style={{color: '#fe7a51'}}>{"Upload Document"}</span>
+        </a>
+    )
+  } else {
+    return (
+      ""
+    )
+  }
 }
 
 // Show all approved application details
@@ -578,16 +596,7 @@ export const listOfApprovedApplication = {
         name: "Upload Document",
         labelKey: "BPA_COMMON_TABLE_COL_UPLOAD",
         options: {
-          customBodyRender: (value, tableMeta, updateValue) => (
-            <a
-              href="javascript:void(0)"
-              onClick={() => {
-                onUploadClick(tableMeta.rowData);
-              }}
-            >
-              <span style={{color: '#fe7a51'}}>{"Upload Document"}</span>
-            </a>
-          ),
+          customBodyRender: (value, tableMeta) => setUpload(value, tableMeta),
         },
       },
       {

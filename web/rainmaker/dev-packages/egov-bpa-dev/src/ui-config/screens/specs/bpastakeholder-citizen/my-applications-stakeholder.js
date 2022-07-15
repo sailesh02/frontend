@@ -10,54 +10,12 @@ import {
 
   getTextToLocalMapping, sortByEpoch
 } from "../utils";
+import { httpRequest } from "../../../../ui-utils/api";
+
 import store from "ui-redux/store";
 
 import {showSearches, tabsForArchOnly, tabsForSpclArchOnly} from "./citizenSearchResource/citizenFunctions"
 import {ifUserRoleExists} from "../../specs/utils"
-
-
-const data = {
-  "ApprovedBy": [
-    {
-      "applicationNo": "BP-CTC-2022-07-08-002048",
-      "tenantId": "od.cuttack",
-      "applicationstatus": "SHOW_CAUSE_REPLY_VERIFICATION_PENDING",
-      "workflowstate": "PENDING_DEPT_VERIFICATION"
-    },
-    {
-      "applicationNo": "BP-CTC-2022-07-08-002039",
-      "tenantId": "od.cuttack",
-      "applicationstatus": "SHOW_CAUSE_ISSUED",
-      "workflowstate": "PENDING_SHOW_CAUSE_REPLY"
-    },
-    {
-      "applicationNo": "BP-CTC-2022-07-08-002030",
-      "tenantId": "od.cuttack",
-      "applicationstatus": "PENDING_SANC_FEE_PAYMENT",
-      "workflowstate": "PENDING_SANC_FEE_PAYMENT"
-    },
-    {
-      "applicationNo": "BP-CTC-2022-07-08-002025",
-      "tenantId": "od.cuttack",
-      "applicationstatus": "SHOW_CAUSE_ISSUED",
-      "workflowstate": "PENDING_SHOW_CAUSE_REPLY"
-    },
-    {
-      "applicationNo": "BP-CTC-2022-07-07-002021",
-      "tenantId": "od.cuttack",
-      "applicationstatus": "PERMIT_REVOKED",
-      "workflowstate": "REVOKED"
-    },
-    {
-      "applicationNo": "BP-CTC-2022-06-27-001855",
-      "tenantId": "od.cuttack",
-      "applicationstatus": "SHOW_CAUSE_REPLY_VERIFICATION_PENDING",
-      "workflowstate": "PENDING_DEPT_VERIFICATION"
-    },
-  ]
-}
-
-
 
 const header = getCommonHeader(
   {
@@ -347,7 +305,20 @@ export const fetchApplicationAssignedToMe = async (
 
 export const fetchApprovedApplicationList = async (action,state,dispatch) => {
   let approvedList = [];
-  data.ApprovedBy.forEach((item,index)=> {
+  
+  const data = await httpRequest(
+    "post",
+    "bpa-services/v1/bpa/_ApprovedByMe?tenantId=od&businessService=BPA5",
+    "_search",
+    [],
+    null
+  );
+  // setTenatId variable needs to be removed once we get tenantId value from backend
+  let setTenantId = data.ApprovedBy.map((item) => {
+    item.tenantId = "od.cuttack";
+    return item;
+  });
+  setTenantId.forEach((item,index)=> {
     approvedList.push({
       ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNo,
       ["BPA_COMMON_TABLE_COL_LINK"]: item,

@@ -160,6 +160,11 @@ const CloseDialog = Loadable({
   loader: () => import("./CloseDialog"),
   loading: () => <Loading />
 });
+const InstallmentDetail = Loadable({
+  loader: () => import("./InstallmentDetail"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -194,5 +199,6 @@ export {
   TrainingTutorials,
   PBATrainingTutorials,
   BpaSanctionFeesCard,
-  CloseDialog
+  CloseDialog,
+  InstallmentDetail
 };

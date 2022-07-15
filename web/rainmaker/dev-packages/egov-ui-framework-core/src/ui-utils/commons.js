@@ -991,3 +991,10 @@ export const sortDropdownLabels = (e1, e2) => {
     return 1;
   }
 }
+
+export const getSiteInfo = () => {
+  var currentURL = document.URL;
+  let site_url_origin = window.location.origin
+  var part = currentURL.replace(site_url_origin, "");
+  return part.split("/")[1];
+}

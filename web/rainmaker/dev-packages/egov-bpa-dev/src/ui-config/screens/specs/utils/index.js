@@ -5378,7 +5378,7 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
   });
 }
 
-export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, mode = "Download") => {
+export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, mode = "Download", txnNo = null) => {
   let bpaDetails = get(
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
@@ -5423,7 +5423,9 @@ export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, m
       }
 
       if (serviceCode === "BPA.NC_SAN_FEE") {
-        payments.push(paymentPayload.Payments[0]);
+       
+        payments.push(paymentPayload.Payments[paymentPayload.Payments.findIndex(x=>x.transactionNumber === txnNo)]);
+        //payments.push(paymentPayload.Payments[0]);
       }
     } else {
       payments.push(paymentPayload.Payments[0]);
@@ -6130,9 +6132,6 @@ export const getPermitDetailForPc = async (state, dispatch, fieldInfo) => {
 
 export const createSacntionFeeBill = async (apiPayload, dispatch) => {
   console.log(apiPayload, "Nero apiPayload")
-  if(apiPayload && apiPayload[0].BPA.edcrDetail){
-    delete apiPayload[0].BPA.edcrDetail;
-  }
   try {
     const response = await httpRequest("post", "/bpa-services/v1/bpa/_estimate", "", [], { CalulationCriteria: apiPayload });
     return response;
@@ -6354,4 +6353,92 @@ export const validateBPA5Conditions = (state, dispatch) => {
     }
 }
 
+}
+
+export const setInstallmentInfo = async(state, dispatch, action) =>{
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  var installmentsObj;
+  try {
+    let response = await httpRequest(
+      "post",
+      "bpa-services/v1/bpa/_getAllInstallments",
+      "",
+      [],
+      { InstallmentSearchCriteria: {
+        "consumerCode": applicationNumber
+    } }
+    );
+    if (response) {
+      console.log(response, "Nero response Hello This")
+      if(response && response.installments && response.installments.length > 0){
+        dispatch(handleField("search-preview", "components.div.children.citizenFooter.children.makePayment", "visible", false))
+        dispatch(handleField("search-preview", "components.div.children.citizenFooter.children.viewPaymentDetail", "visible", true))
+        
+        installmentsObj = response && response.installments;
+        let totalInstallments = installmentsObj.length;
+        if (totalInstallments > 0) {
+          for (let i = 0; i < totalInstallments; i++) {
+            for (let j = 0; j < installmentsObj[i].length; j++) {
+              if (!installmentsObj[i][j].isPaymentCompletedInDemand && installmentsObj[i][j].demandId) {
+                dispatch(prepareFinalObject("isDemandGeneratedAndNotPaid", true));
+              }
+              
+            }
+          }
+
+         // let unsortedUniqueNotPaidInstallments = [...new Set(notPaidInstallments)];
+         // let finalNotPaidInstallments = unsortedUniqueNotPaidInstallments.sort(function (a, b) { return a - b });
+         // dispatch(prepareFinalObject("notPaidInstallments", finalNotPaidInstallments));
+        }
+       // installmentsObj = { installments: installmentsObj };
+       // console.log("Nero here")
+      //dispatch(prepareFinalObject("searchPreviewInstallmentsInfo", installmentsObj));
+      }
+
+      if (response && response.fullPayment && response.fullPayment.length > 0) {
+        for(let i=0;i<response.fullPayment.length;i++){
+          if (!response.fullPayment[i].isPaymentCompletedInDemand && response.fullPayment[i].demandId) {
+            dispatch(prepareFinalObject("isDemandGeneratedAndNotPaid", true));
+          }
+        }
+
+        // console.log("Nero here 2")
+        // dispatch(prepareFinalObject("searchPreviewFullPaymentInfo", response.fullPayment));
+      }
+      
+    }
+  }catch(error){
+
+  }
+}
+
+export const getInstallmentInfoForInstallmentPage = async() =>{
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  try {
+    let response = await httpRequest(
+      "post",
+      "bpa-services/v1/bpa/_getAllInstallments",
+      "",
+      [],
+      { InstallmentSearchCriteria: {
+        "consumerCode": applicationNumber
+    } }
+    );
+    if (response) {
+      console.log(response, "Nero response")
+      //if(response && response.installments && response.installments.length > 0){
+       return response;
+      //}
+      
+    }
+  }catch(error){
+
+  }
+}
+
+export const getSiteInfo = () => {
+  var currentURL = document.URL;
+  let site_url_origin = window.location.origin
+  var part = currentURL.replace(site_url_origin, "");
+  return part.split("/")[1];
 }

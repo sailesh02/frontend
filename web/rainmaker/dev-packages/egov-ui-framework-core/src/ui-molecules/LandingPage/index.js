@@ -10,6 +10,7 @@ import get from "lodash/get";
 import LabelContainer from "../../ui-containers/LabelContainer";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
+import {getSiteInfo} from "../../ui-utils/commons";
 
 const styles = theme => ({
   root: {
@@ -45,7 +46,12 @@ class LandingPage extends React.Component {
     if (typeof route === "string") {
       
       if(routeObj && routeObj.moduleName && routeObj.moduleName === "egov-bpa" && route === "my-applications-stakeholder"){
-        window.location.href = "/citizen/bpastakeholder-citizen/my-applications-stakeholder"
+        let siteInfo = getSiteInfo();
+        if (siteInfo === "citizen") {
+          window.location.href = "/citizen/bpastakeholder-citizen/my-applications-stakeholder"
+        }else{
+          window.location.href = "/bpastakeholder-citizen/my-applications-stakeholder"
+        }
       }else{
         setRoute(route);
       }

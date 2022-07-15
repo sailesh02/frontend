@@ -36,11 +36,12 @@ import {
   setProposedBuildingData,
   prepareNocFinalCards,
   compare,
-  generateBillForSanctionFee
+  generateBillForSanctionFee,
+  setInstallmentInfo
 } from "../utils/index";
 import { spclArchitectsPicker, approvalAuthority } from "./searchResource/spclArchitects";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
-import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved, generateShowCauseNotice, getScnHistory, viewPaymentDetails } from "./searchResource/citizenFooter";
+import { citizenFooter, updateBpaApplication, updateBpaApplicationAfterApproved, generateShowCauseNotice, getScnHistory, viewPaymentDetails, viewPaymentDetail } from "./searchResource/citizenFooter";
 import { applicantSummary, institutionSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
@@ -331,7 +332,14 @@ const buttonAfterApprovedMenu = (action, state, dispatch) => {
     },
   };
 
-  downloadMenu = [sendToArchObject];
+  let viewPaymentInfo = {
+    label: { labelName: "BPA_CITIZEN_VIEW_PAYMENT", labelKey: "BPA_CITIZEN_VIEW_PAYMENT", },
+    link: () => {
+      viewPaymentDetail(state, dispatch);
+    },
+  };
+
+  downloadMenu = [sendToArchObject, viewPaymentInfo];
   dispatch(
     handleField(
       "search-preview",
@@ -493,8 +501,33 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
           printMenu.push(appFeePrintObject);
         }
         if(paymentsResponse && paymentsResponse.Payments[i].paymentDetails[0].businessService === "BPA.NC_SAN_FEE"){
-          downloadMenu.push(sanFeeDownloadObject);
-          printMenu.push(sanFeePrintObject);
+         // if(paymentsResponse && paymentsResponse.Payments.length > 1){
+
+            sanFeeDownloadObject.label.labelKey = `Sanction Fee Receipt - ${convertEpochToDate(paymentsResponse.Payments[i].transactionDate)}`
+            sanFeePrintObject.label.labelKey = `Sanction Fee Receipt - ${convertEpochToDate(paymentsResponse.Payments[i].transactionDate)}`
+          downloadMenu.push(
+            {
+              label: { labelName: "Sanction Fee Receipt", labelKey: `Sanction Fee Receipt - ${convertEpochToDate(paymentsResponse.Payments[i].transactionDate)}` },
+              link: () => {
+                downloadFeeReceipt(state, dispatch, status, "BPA.NC_SAN_FEE", "Download", paymentsResponse.Payments[i].transactionNumber);
+              },
+              leftIcon: "receipt"
+            }
+          )
+
+          printMenu.push(
+            {
+              label: { labelName: "Sanction Fee Receipt", labelKey: `Sanction Fee Receipt - ${convertEpochToDate(paymentsResponse.Payments[i].transactionDate)}` },
+              link: () => {
+                downloadFeeReceipt(state, dispatch, status, "BPA.NC_SAN_FEE", "Print", paymentsResponse.Payments[i].transactionNumber);
+              },
+              leftIcon: "receipt"
+            }
+          )
+          
+         // }
+         // downloadMenu.push(sanFeeDownloadObject);
+         // printMenu.push(sanFeePrintObject);
         } 
 
       }
@@ -1512,6 +1545,18 @@ const setSearchResponse = async (
         )
       );
     }
+
+    let isDemandGeneratedAndNotPaid = get(state.screenConfiguration.preparedFinalObject, "isDemandGeneratedAndNotPaid");
+    if(isDemandGeneratedAndNotPaid){
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "Your previous payment is pending please pay the same from Take Actions button.", labelKey: "BPA_PREVIOUS_PENDING_PAYMENT" },
+          "warning"
+        )
+      );
+    }
+
   }
 };
 
@@ -1663,7 +1708,13 @@ const screenConfig = {
         false
       );  
      }
-     
+
+    setInstallmentInfo(state, dispatch, action);
+    
+    
+
+
+
     }
     //}
 

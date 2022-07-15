@@ -14,6 +14,7 @@ import {
   getCommonContainer,
   getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {getSiteInfo} from "../../utils"
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let tenant = getQueryArg(window.location.href, "tenantId");
@@ -35,6 +36,43 @@ export const gotoGenerateShowCausePage = async (state, dispatch, button) => {
   let tenantId = get(state.screenConfiguration.preparedFinalObject, "BPA.tenantId");
   const url = `/egov-bpa/generateShowCauseNotice?applicationNumber=${appNo}&tenantId=${tenantId}&PURPOSE=${button}`
   dispatch(setRoute(url));
+}
+
+export const viewPaymentDetail = (state, dispatch) => {
+  let appNo = get(state.screenConfiguration.preparedFinalObject, "BPA.applicationNo");
+  let tenantId = get(state.screenConfiguration.preparedFinalObject, "BPA.tenantId");
+
+  let status = get(state.screenConfiguration.preparedFinalObject, "BPA.status");
+  let riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.riskType");
+  let isDemandGeneratedAndNotPaid = get(state.screenConfiguration.preparedFinalObject, "isDemandGeneratedAndNotPaid");
+  let billbService
+  if (riskType === "LOW") {
+    //billbService = "BPA.LOW_RISK_PERMIT_FEE"
+    billbService = ((status == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
+  } else {
+    billbService = ((status == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
+  }
+
+  let url;
+  let siteInfo = getSiteInfo();
+  console.log(getSiteInfo(), "Nero Hello")
+  if(siteInfo === "citizen"){
+    if(isDemandGeneratedAndNotPaid){
+      url = `/citizen/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`;
+    }else{
+      url = `/citizen/egov-bpa/view-installments?applicationNumber=${appNo}&tenantId=${tenantId}`
+    }
+    
+  }else{
+    if(isDemandGeneratedAndNotPaid){
+      url = `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`;
+    }else{
+    url = `/egov-bpa/view-installments?applicationNumber=${appNo}&tenantId=${tenantId}`
+    }
+  }
+  
+  //dispatch(setRoute(url));
+  window.location.href = url;
 }
 export const bpaMakePayment = async (state, dispatch) => {
   let status = get(state.screenConfiguration.preparedFinalObject, "BPA.status");
@@ -296,45 +334,48 @@ const bpaMakeInstallmentPayment = async (state, dispatch, action) => {
 
   }
 
-  let isSelectedInstallmentsFromInitial = true;
-  let totalSelectedInstallments = selectedInstallments && selectedInstallments.length;
-  for (let i = 0; i < totalSelectedInstallments; i++) {
-    if (!selectedInstallments.includes(notPaidInstallments[i])) {
-      isSelectedInstallmentsFromInitial = false;
-      break;
-    }
-  }
-  if (!isSelectedInstallmentsFromInitial) {
-    let errorMessage = {
-      labelName: "Please confirm the declaration!",
-      labelKey: "BPA_SELECT_INSTALLMENT_SEQUENCE_ERR"
-    };
-    dispatch(toggleSnackbar(true, errorMessage, "error"));
-    return false;
-  }
-  //  const differenceAry = selectedInstallments.slice(1).map(function(n, i) { return n - selectedInstallments[i]; })
-  //  const isDifference= differenceAry.every(value => value == 1)
-  //  console.log(isDifference, "nERO Difference");
-  /****************/
-  //console.log(installmentsSequanceMaster, "Nero Master")
-  // let errorMessage = {
-  //   labelName: "Please confirm the declaration!",
-  //   labelKey: "BPA_SELECT_INSTALLMENT_SEQUENCE_ERR"
-  // };
-  // dispatch(toggleSnackbar(true, errorMessage, "error"));
-  // let fullPaymentInstallmentIds = [];
-  // for(let i=0; i<selectedInstallments.length; i++){
-  //   for(let j=0;j<selectedInstallments[i].length;j++){
-  //     console.log(selectedInstallments[i][j], "Nero iii")
-  //     fullPaymentInstallmentIds.push(selectedInstallments[i][j].installmentno);
+  // let isSelectedInstallmentsFromInitial = true;
+  // let totalSelectedInstallments = selectedInstallments && selectedInstallments.length;
+  // for (let i = 0; i < totalSelectedInstallments; i++) {
+  //   if (!selectedInstallments.includes(notPaidInstallments[i])) {
+  //     isSelectedInstallmentsFromInitial = false;
+  //     break;
   //   }
-
   // }
-  // let unsortedUniqueInstallmentNos = [...new Set(fullPaymentInstallmentIds)];
-  // //console.log(uniqueInstallmentNos, "Nero Final")
-  // let sortedUniqueInstallmentNos = unsortedUniqueInstallmentNos.sort(function(a, b){return a - b});
-  // console.log(sortedUniqueInstallmentNos, "sorted Insa")
+  // if (!isSelectedInstallmentsFromInitial) {
+  //   let errorMessage = {
+  //     labelName: "Please confirm the declaration!",
+  //     labelKey: "BPA_SELECT_INSTALLMENT_SEQUENCE_ERR"
+  //   };
+  //   dispatch(toggleSnackbar(true, errorMessage, "error"));
+  //   return false;
+  // }
+  
 console.log(selectedInstallments, "Nero Final Installments for API")
+
+try {
+  let response = await httpRequest(
+    "post",
+    "bpa-services/v1/bpa/_generateDemandFromInstallments",
+    "",
+    [],
+    { InstallmentSearchCriteria: {
+      "consumerCode": applicationNumber,
+      "installmentNos":selectedInstallments
+  } }
+  );
+  if (response) {
+    let url = `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=BPA.NC_SAN_FEE`
+    dispatch(setRoute(url));
+  }
+} catch (error) {
+  console.log(error, "Error")
+  let errorMessage = {
+    labelName: "Please confirm the declaration!",
+    labelKey: error.message
+  };
+  dispatch(toggleSnackbar(true, errorMessage, "error"));
+}
 }
 export const citizenFooter = getCommonApplyFooter({
   makePayment: {
@@ -356,6 +397,32 @@ export const citizenFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: bpaMakePayment
+    },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      action: "PAY"
+    }
+  },
+  viewPaymentDetail: {
+    componentPath: "Button",
+    visible: false,
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        height: "48px",
+        marginRight: "45px"
+      }
+    },
+    children: {
+      submitButtonLabel: getLabel({
+        labelName: "MAKE PAYMENT",
+        labelKey: "BPA_CITIZEN_VIEW_PAYMENT"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: viewPaymentDetail
     },
     roleDefination: {
       rolePath: "user-info.roles",

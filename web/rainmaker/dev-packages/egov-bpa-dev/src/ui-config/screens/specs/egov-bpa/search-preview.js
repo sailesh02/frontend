@@ -1503,7 +1503,6 @@ const setSearchResponse = async (
       )
     );
   }
-
   if (process.env.REACT_APP_NAME === "Citizen") {
     let thirdPartyDataExists = false;
     if (payload && payload.Noc.length > 0) {

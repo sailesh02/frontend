@@ -264,8 +264,10 @@ let bpaObj = get(
       state,
       dispatch
     );
+    let accredited = get(state.screenConfiguration.preparedFinalObject, 'Accredited');
 
-    if(!isApprovalAuthorityValid){
+
+    if(!isApprovalAuthorityValid && accredited){
       isFormValid = false;
       hasFieldToaster = true;
     }

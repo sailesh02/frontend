@@ -6315,6 +6315,7 @@ export const setBPATypeData = async (state, dispatch, action, value) => {
      dispatch(
        handleField("apply", "components.div.children.formwizardSecondStep.children.getBpaProcess", "visible", true)
      );
+     dispatch(prepareFinalObject("Accredited", true));
    }
    
    let isApplicationCreated = getQueryArg(window.location.href, "applicationNumber");

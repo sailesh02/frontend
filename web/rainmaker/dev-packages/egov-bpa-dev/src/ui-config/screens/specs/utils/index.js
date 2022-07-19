@@ -5307,7 +5307,7 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
     ]);
     bpaDetails = response.BPA[0]
   }
-
+  
   let currentDate = new Date();
   set(bpaDetails, "additionalDetails.runDate", convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate()));
 
@@ -5345,10 +5345,19 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
     );
     fileStoreId = res.filestoreIds[0];
     }
-
+  let tenantIdDetails = "";
+  if (
+    bpaDetails.dscDetails[0].additionalDetails &&
+    bpaDetails.dscDetails[0].additionalDetails.signDetails &&
+    bpaDetails.dscDetails[0].additionalDetails.signDetails.offLineSign
+  ) {
+     tenantIdDetails = "od"
+  } else {
+    tenantIdDetails = bpaDetails.tenantId
+  }
   let pdfDownload = await httpRequest(
     "get",
-    `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []
+    `filestore/v1/files/url?tenantId=${tenantIdDetails}&fileStoreIds=${fileStoreId}`, []
   );
   if (mode && mode === "Download") {
     window.open(pdfDownload[fileStoreId]);

@@ -484,8 +484,8 @@ export const getPdfBody = async (applicationNo, tenantId) => {
 
 
 export const onDownloadClick = async (tData) => {
-  let data = await getPdfBody(tData[1].applicationNo,tData[1].tenantId)
-  let response = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=buildingpermit&tenantId=${tData[1].tenantId}`, data, {
+  let data = await getPdfBody(tData.applicationNo,tData.tenantId)
+  let response = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=buildingpermit&tenantId=${tData.tenantId}`, data, {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   })
@@ -494,7 +494,7 @@ export const onDownloadClick = async (tData) => {
     response.data.filestoreIds &&
     response.data.filestoreIds.length > 0
   ) {
-    const fileUrls = await getFileUrlFromAPI(response.data.filestoreIds[0],tData[1].tenantId);
+    const fileUrls = await getFileUrlFromAPI(response.data.filestoreIds[0],tData.tenantId);
     window.location = fileUrls[response.data.filestoreIds[0]];  
   }
   // if (filteredDoc && filteredDoc.length > 0) {
@@ -564,6 +564,25 @@ const setUpload = (tData) => {
   }
 }
 
+const setDownload = (tData) => {
+  if(tData.workflowstate === "APPROVED"){
+    return (
+      <a
+      href="javascript:void(0)"
+      onClick={() => {
+        onDownloadClick(tData);
+      }}
+    >
+      <span style={{color: '#fe7a51'}}>{"Download Document"}</span>
+    </a>
+    )
+  } else {
+    return (
+      ""
+    )
+  }
+}
+
 // Show all approved application details
 export const listOfApprovedApplication = {
   uiFramework: "custom-molecules",
@@ -580,16 +599,7 @@ export const listOfApprovedApplication = {
         name: "Download Document",
         labelKey: "BPA_COMMON_TABLE_COL_LINK",
         options: {
-          customBodyRender: (value, tableMeta, updateValue) => (
-            <a
-              href="javascript:void(0)"
-              onClick={() => {
-                onDownloadClick(tableMeta.rowData);
-              }}
-            >
-              <span style={{color: '#fe7a51'}}>{"Download Document"}</span>
-            </a>
-          ),
+          customBodyRender: (value, tableMeta) => setDownload(value, tableMeta),
         },
       },
       {

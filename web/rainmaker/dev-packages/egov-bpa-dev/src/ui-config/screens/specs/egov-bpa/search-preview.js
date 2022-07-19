@@ -37,7 +37,8 @@ import {
   prepareNocFinalCards,
   compare,
   generateBillForSanctionFee,
-  setInstallmentInfo
+  setInstallmentInfo,
+  openBpdDownloadDialog
 } from "../utils/index";
 import { spclArchitectsPicker, approvalAuthority } from "./searchResource/spclArchitects";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
@@ -361,7 +362,8 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
   // let applicationDigitallySigned = BPAData &&
   // BPAData.dscDetails && BPAData.dscDetails[0].documentId ? true :  BPAData &&
   // !BPAData.dscDetails ? true : false
-  
+  let bpdSigned = false; 
+  if(BPAData && BPAData.additionalDetails && BPAData.additionalDetails.buildingPlanLayoutIsSigned) bpdSigned = true;
   let applicationDigitallySigned = BPAData && BPAData.dscDetails && BPAData.dscDetails[0].documentId ? true : false
   let riskType = get(
     state,
@@ -444,6 +446,24 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     },
     leftIcon: "assignment"
   };
+
+
+  
+
+  let signedBPDDownloadObject = {
+    label: { labelName: "Permit Order Receipt", labelKey: "BPD_BPL_BPL" },
+    link: () => {
+      openBpdDownloadDialog(action, state, dispatch, "Download", "BPA_BPD_SIGNED");
+    },
+    leftIcon: "assignment"
+  };
+  // let signedBPDPrintObject = {
+  //   label: { labelName: "Permit Order Receipt", labelKey: "BPA_BPD_SIGNED" },
+  //   link: () => {
+  //     BpdDownload(action, state, dispatch, "Print", "BPA_BPD_SIGNED");
+  //   },
+  //   leftIcon: "assignment"
+  // };
 
   let queryObject = [
     {
@@ -553,6 +573,12 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
           downloadMenu.push(permitOrderDownloadObject);
           printMenu.push(permitOrderPrintObject);
         }
+        if(bpdSigned){
+          downloadMenu.push(signedBPDDownloadObject);
+          
+        }
+
+        
         break;
       case "PERMIT_REVOKED":
         downloadMenu.push(revocationPdfDownlaodObject);
@@ -1953,50 +1979,88 @@ const screenConfig = {
             popup: {}
           }
          },
-    popupForScrutinyDetail: {
-    componentPath: "Dialog",
-    isClose: true,
-    props: {
-      open: false,
-      maxWidth: "md"
-    },
-    children: {
-      dialogContent: {
-        componentPath: "DialogContent",
-        props: {
-          classes: {
-            root: "city-picker-dialog-style"
-          }
-        },
-        children: {
-          popup: getCommonContainer({
-            header: getCommonHeader({
-              labelName: "Scrutiny Header",
-              labelKey: "BPA_SCRUTINY_HISTORY_HEADER"
-            }),
-            closePop: getCommonContainer({
-              closeCompInfo: {
-                uiFramework: "custom-molecules-local",
-                moduleName: "egov-bpa",
-                componentPath: "CloseDialog",
-                required: true,
-                gridDefination: {
-                  xs: 12,
-                  sm: 12
-                },
-                props: {
-                  screen: "search-preview",
-                  jsonpath: "components.div.children.popupForScrutinyDetail"
+        popupForScrutinyDetail: {
+          componentPath: "Dialog",
+          isClose: true,
+          props: {
+            open: false,
+            maxWidth: "md"
+          },
+          children: {
+            dialogContent: {
+              componentPath: "DialogContent",
+              props: {
+                classes: {
+                  root: "city-picker-dialog-style"
                 }
               },
-            }),
-            scrutinySummaryForHistory: scrutinySummaryForHistory,
+              children: {
+                popup: getCommonContainer({
+                  header: getCommonHeader({
+                    labelName: "Scrutiny Header",
+                    labelKey: "BPA_SCRUTINY_HISTORY_HEADER"
+                  }),
+                  closePop: getCommonContainer({
+                    closeCompInfo: {
+                      uiFramework: "custom-molecules-local",
+                      moduleName: "egov-bpa",
+                      componentPath: "CloseDialog",
+                      required: true,
+                      gridDefination: {
+                        xs: 12,
+                        sm: 12
+                      },
+                      props: {
+                        screen: "search-preview",
+                        jsonpath: "components.div.children.popupForScrutinyDetail"
+                      }
+                    },
+                  }),
+                  scrutinySummaryForHistory: scrutinySummaryForHistory,
 
-          })
-        }
-      }
-    }
-  },
+                })
+              }
+            }
+          }
+        },
+        downloadBPDPickerDialog: {
+          componentPath: "Dialog",
+          props: {
+            open: false,
+            maxWidth: "md"
+          },
+          children: {
+            dialogContent: {
+              componentPath: "DialogContent",
+              props: {
+                classes: {
+                  root: "city-picker-dialog-style"
+                }
+              },
+              children: {
+                popup: getCommonContainer({
+                  header: getCommonHeader({
+                    labelName: "Forward Application",
+                    labelKey: "BPD_BPL_BPL"
+                  }),
+                  cityPicker: getCommonContainer({
+                    cityDropdown: {
+                      uiFramework: "custom-molecules-local",
+                      moduleName: "egov-bpa",
+                      componentPath: "DownloadDocuments",
+                      required: true,
+                      gridDefination: {
+                        xs: 12,
+                        sm: 12
+                      },
+                      props: {}
+                    },
+                  })
+                })
+              }
+            }
+          }
+        },
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {},
       //  viewPaymentDetails: process.env.REACT_APP_NAME === "Citizen" ? viewPaymentDetails : {},
         

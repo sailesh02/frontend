@@ -13,6 +13,8 @@ import Label from "egov-ui-kit/components/Label"
 import { Grid, Typography, Button } from "@material-ui/core";
 import InstallmentDetail from "../../ui-molecules-local/InstallmentDetail";
 import store from "ui-redux/store";
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
 const styles = {
   root: {
@@ -72,6 +74,25 @@ class DynamicCheckboxes extends React.Component {
     let isPaymentPeding = false;
     if (items && !items[0].isPaymentCompletedInDemand && items[0].demandId) isPaymentPeding = true
     return isPaymentPeding;
+  }
+
+  isDocumentUploaded = (items) => {
+    let isDocumentUploaded = false;
+    if (items && items[0].additionalDetails && items[0].additionalDetails.varificationDocuments[0].fileStoreId) isDocumentUploaded = true
+    return isDocumentUploaded;
+  }
+
+  downloadDoc = async(items) =>{
+    console.log(items[0], "Nero Items")
+    let tenantId = items && items[0].tenantId;
+    let fileStoreId = items && items[0].additionalDetails && items[0].additionalDetails.varificationDocuments[0].fileStoreId
+    let pdfDownload = await httpRequest(
+      "get",
+      `filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${fileStoreId}`, []
+    );
+  
+    window.open(pdfDownload[fileStoreId]);
+    
   }
   
   render() {
@@ -140,10 +161,32 @@ console.log(installmentsInfo, "Nero in checkk")
             </Grid>
           </Grid>
           {(() => {
-            if (this.isInstallmentPaid(option)) {
-              return <Grid item sm={3} md={3} style={{ marginTop: "40px", color: "green" }}>PAID</Grid>
+            if (this.isDocumentUploaded(option)) {
+              return <Grid sm={1} md={1}  style={{ marginTop: "34px"}} >
+              <Button title="Download Document"
+              color = "primary"
+              onClick={()=>{
+                this.downloadDoc(option)
+              }}
+              style={{
+                paddingBottom: "0px",
+                paddingTop: "0px"
+              }}
+              >
+                
+                <VisibilityIcon />
+              
+              </Button>
+              </Grid>
             } else {
-              return <Grid item sm={3} md={3} style={{ marginTop: "40px", color: "red" }}>NOT PAID</Grid>
+              return <Grid sm={1} md={1}  style={{ marginTop: "34px"}} ></Grid>
+            }
+          })()}
+          {(() => {
+            if (this.isInstallmentPaid(option)) {
+              return <Grid item sm={2} md={2} style={{ marginTop: "40px", color: "#2dd82d", fontWeight: "bold" }}>PAID</Grid>
+            } else {
+              return <Grid item sm={2} md={2} style={{ marginTop: "40px", color: "red", fontWeight: "bold" }}>NOT PAID</Grid>
             }
           })()}
 

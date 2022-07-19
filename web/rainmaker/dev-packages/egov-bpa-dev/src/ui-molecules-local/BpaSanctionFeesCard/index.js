@@ -79,8 +79,15 @@ function totalAmount(arr) {
 
 function BpaSanctionFeesCard(props) {
   const { classes, estimate } = props;
+ // console.log(bpaAppObj, "Nero Props")
   const total = totalAmount(estimate.fees);
+  let applicationStatus = estimate && estimate.bpaAppObj.status;
+  let bservice = estimate && estimate.bpaAppObj.businessService;
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
+  let isPaid = false;
+if(bservice === "BPA1"){
+   isPaid = (applicationStatus === 'INITIATED' || applicationStatus === 'CITIZEN_APPROVAL_INPROCESS' || applicationStatus === 'INPROGRESS' || applicationStatus === 'PENDING_APPL_FEE' || applicationStatus === "APPROVAL_INPROGRESS")?false:true;
+}
   return (
     <Grid container>
       <Grid item={true} xs={12} sm={7}>
@@ -170,6 +177,22 @@ function BpaSanctionFeesCard(props) {
         <Typography className={totalHeadClassName} align="right">
           Rs {total}
         </Typography>
+        { isPaid? (
+                    <Typography variant="body2" align="right"  style={{ color: 'green' }}>
+                      <LabelContainer
+                        labelName="Paid Successfully"
+                        labelKey="BPA_COMMON_PAID_SUCCESS"
+                      />
+                    </Typography>
+                    ):(
+                    <Typography variant="body2" align="right" style={{ color: 'red' }}>
+                      <LabelContainer
+                        labelName="Not Paid"
+                        labelKey="BPA_COMMON_NOT_PAID"
+                      />
+                      </Typography> 
+                    )
+                }
         {estimate.extra && estimate.extra.length !== 0 ? (
           <Card className={classes.whiteCard}>
             {estimate.extra.map((item, key) => {

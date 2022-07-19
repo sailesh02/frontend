@@ -12,9 +12,11 @@ class BpaSanctionFeeCardContainer extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
   const fees = get(screenConfiguration, "preparedFinalObject.applyScreenMdmsData.sanctionFeeCardData", []);
+  const bpaAppObj = get(screenConfiguration, "preparedFinalObject.BPA", []);
   const estimate = {
     header: { labelName: "Fee Estimate", labelKey: "BPA_SANCTION_FEE_SUMMARY" },
-    fees
+    fees,
+    bpaAppObj
   };
   return { estimate };
 };

@@ -4,7 +4,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
-import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping,setProposedBuildingData, generateBillForBPA, residentialType } from "../../utils";
+import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping,setProposedBuildingData, generateBillForBPA, residentialType, setBPATypeData } from "../../utils";
 import "./index.css";
 import { getQueryArg, getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
@@ -17,7 +17,7 @@ import {
   getNocSearchResults,
   validateThirdPartyDetails
 } from "../../../../../ui-utils/commons";
-import { prepareNocFinalCards, compare, checkOwnerAndArchitectMobileNo, checkIfMobileIsRegistered } from "../../../specs/utils/index";
+import { prepareNocFinalCards, compare, checkOwnerAndArchitectMobileNo, checkIfMobileIsRegistered, validateBPA5Conditions } from "../../../specs/utils/index";
 import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
@@ -231,6 +231,7 @@ let bpaObj = get(
     }
     setProposedBuildingData(state,dispatch);
     await residentialType(state, dispatch);
+    setBPATypeData(state, dispatch);
   }
 
   if (activeStep === 1) {
@@ -258,6 +259,19 @@ let bpaObj = get(
       dispatch
     );
 
+    let isApprovalAuthorityValid = validateFields(
+      "components.div.children.formwizardSecondStep.children.getBpaProcess.children.cardContent.children.chooseBPAHeaderDetails.children",
+      state,
+      dispatch
+    );
+    let accredited = get(state.screenConfiguration.preparedFinalObject, 'Accredited');
+
+
+    if(!isApprovalAuthorityValid && accredited){
+      isFormValid = false;
+      hasFieldToaster = true;
+    }
+
     // let isabstractProposedBuildingDetailsCardValid = validateFields(
     //   "components.div.children.formwizardSecondStep.children.abstractProposedBuildingDetails.children.cardContent.children.proposedContainer.children.totalBuildUpAreaDetailsContainer.children",
     //   state,
@@ -274,8 +288,14 @@ let bpaObj = get(
     //   isFormValid = false;
     //   hasFieldToaster = true;
     // }
-
-
+    if(bpaObj.businessService === "BPA5"){
+   let isConditionsValid = validateBPA5Conditions(state, dispatch);
+    console.log(isConditionsValid, "Nero Helo")
+    if(!isConditionsValid){
+        isFormValid = false;
+      hasFieldToaster = true;
+    }
+  }
   }
 
   if (activeStep === 2) {

@@ -219,7 +219,8 @@ class MultiItem extends React.Component {
       isReviewPage,
       disableDeleteIfKeyExists,
       preparedFinalObject,
-      sourceJsonPath
+      sourceJsonPath,
+      removeAddIcon
     } = this.props;
     const { addItem, removeItem, checkDisableDelete } = this;
     const { labelName, labelKey } = addItemLabel || "";
@@ -265,7 +266,7 @@ class MultiItem extends React.Component {
               );
             }
           })}
-        {hasAddItem !== false && moduleName !='WNS' && (
+        {hasAddItem !== false && moduleName !='WNS' && !removeAddIcon && (
           <Container style={{ marginTop: "8px" }}>
             <Item xs={12} align="right">
               <Button onClick={e => addItem()} color="primary" className="sss">
@@ -285,43 +286,44 @@ const mapStateToProps = state => {
   const { screenConfig, preparedFinalObject } = screenConfiguration;
   let hasAddItem = true;
   let Licenses = get(preparedFinalObject, "Licenses", null);
+  let traderateadd = get(preparedFinalObject, "tradeUnits", null)
   let screenConfigKeys = Object.keys(screenConfig);
-  if(screenConfigKeys && screenConfigKeys.length > 0 && screenConfigKeys[0] == "tradesearch" || screenConfigKeys && screenConfigKeys.length > 0 && screenConfigKeys[0] == "traderateadd"){
+  if(screenConfigKeys && screenConfigKeys.length > 0 && screenConfigKeys[0] == "tradesearch"){
     hasAddItem = false;
   }
 
+  if(screenConfigKeys && screenConfigKeys.length > 0 && screenConfigKeys[0] == "preApprovedPlanApply"){
+    hasAddItem = false;
+  }
+  
   if(Licenses){
-
-    
     let subOwnershipValue = get(preparedFinalObject, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory", '');
     if(subOwnershipValue == "INDIVIDUAL.SINGLEOWNER"){
       hasAddItem = false;
     }
+    let tlStatus = get(Licenses[0], 'status', "");
+    let userAction = getQueryArg(window.location.href, "action");
 
+    if (tlStatus && (tlStatus != "INITIATED") && userAction != "EDITRENEWAL") {
+      hasAddItem = false
+    }
+    // if (userAction === "EDITRENEWAL" && (tlStatus == "APPROVED" || tlStatus == "EXPIRED" || tlStatus == "INITIATED")) {
+    //   hasAddItem = false
+    // }
 
-  let tlStatus = get(Licenses[0], 'status', "");
-  let userAction = getQueryArg(window.location.href, "action");
+    if (tlStatus && !(tlStatus == "INITIATED" || tlStatus == "APPROVED" || tlStatus == "EXPIRED") && userAction === "EDITRENEWAL") {
+      hasAddItem = false
+    }
 
-  if (tlStatus && (tlStatus != "INITIATED") && userAction != "EDITRENEWAL") {
-    hasAddItem = false
-  }
-  // if (userAction === "EDITRENEWAL" && (tlStatus == "APPROVED" || tlStatus == "EXPIRED" || tlStatus == "INITIATED")) {
-  //   hasAddItem = false
-  // }
+    let tradeUnitJsonPath =
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items";
+    let tradeUnits = get(
+      state.screenConfiguration.screenConfig.apply,
+      tradeUnitJsonPath,
+      []
+    );
 
-  if (tlStatus && !(tlStatus == "INITIATED" || tlStatus == "APPROVED" || tlStatus == "EXPIRED") && userAction === "EDITRENEWAL") {
-    hasAddItem = false
-  }
-
-  let tradeUnitJsonPath =
-      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items";
-  let tradeUnits = get(
-    state.screenConfiguration.screenConfig.apply,
-    tradeUnitJsonPath,
-    []
-  );
-
-  let tradeCount = 0;
+    let tradeCount = 0;
     for (var j = 0; j < tradeUnits.length; j++) {
       if (tradeUnits[j].isDeleted !== false) {
         tradeCount++;
@@ -329,6 +331,25 @@ const mapStateToProps = state => {
     }
 
     if (tradeCount && tradeCount === 5) {
+      hasAddItem = false;
+    }
+  }
+  if(traderateadd){
+    let tradeUnitJsonPath =
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items";
+    let tradeUnits = get(
+      state.screenConfiguration.screenConfig.traderateadd,
+      tradeUnitJsonPath,
+      []
+    );
+    let tradeCount = 0;
+    for (var j = 0; j < tradeUnits.length; j++) {
+      if (tradeUnits[j].isDeleted !== false) {
+        tradeCount++;
+      }
+    }
+
+    if (tradeCount && tradeCount === 10) {
       hasAddItem = false;
     }
   }

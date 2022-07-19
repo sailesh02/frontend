@@ -40,7 +40,7 @@ import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import AdditionalInformation from "egov-ui-kit/common/propertyTax/Property/components/AdditionalInformation";
 
-const mode = getQueryArg(window.location.href, "mode");
+
 class FormWizard extends Component {
   state = {
     dialogueOpen: false,
@@ -73,7 +73,8 @@ class FormWizard extends Component {
     isAssesment: false,
     isReassesment: false,
     isCreate: true,
-    isUpdate: false
+    isUpdate: false,
+    mode:""
   };
 
   updateTotalAmount = (value, isFullPayment, errorText) => {
@@ -149,8 +150,8 @@ class FormWizard extends Component {
         ]
       };
   
-      const preparedForm = convertRawDataToFormConfig(propertyResponse,mode); //convertRawDataToFormConfig(responseee)
-      currentDraft = mode == "WORKFLOWEDIT" || mode == "editDemandDetails" ? {
+      const preparedForm = convertRawDataToFormConfig(propertyResponse, this.state.mode); //convertRawDataToFormConfig(responseee)
+      currentDraft = this.state.mode == "WORKFLOWEDIT" || this.state.mode == "editDemandDetails" ? {
         draftRecord: {
           ...preparedForm,
           selectedTabIndex: 5,
@@ -321,7 +322,8 @@ class FormWizard extends Component {
     showSpinner();
     const { selected } = this.state;
     let { resetForm } = this;
-
+    const mode1 = getQueryArg(window.location.href, "mode")
+    this.setState({ mode: mode1 });
     let isAssesment = getQueryValue(search, "purpose") == 'assess';
     let isReassesment = getQueryValue(search, "purpose") == 'reassess';
     const isModify = getQueryValue(search, "mode") == 'WORKFLOWEDIT';
@@ -617,7 +619,7 @@ class FormWizard extends Component {
 
   getButtonLabels(index) {
     let buttonLabel = "PT_COMMONS_NEXT";
-    if(mode == "WORKFLOWEDIT" || mode == "editDemandDetails"){
+    if(this.state.mode == "WORKFLOWEDIT" || this.state.mode == "editDemandDetails"){
       buttonLabel = "PT_ADD_DEMAND_DETAILS"
     }else{
       const { purpose } = this.state;
@@ -2058,7 +2060,6 @@ class FormWizard extends Component {
         return null;
     }
   };
-
   render() {
     const {
       renderStepperContent,
@@ -2091,13 +2092,13 @@ class FormWizard extends Component {
         </div>
         <WizardComponent
           downloadAcknowledgementForm={this.downloadAcknowledgementForm}
-          content={(mode == "WORKFLOWEDIT" || mode == "editDemandDetails") ? renderStepperContentWorkflow(selected, fromReviewPage): renderStepperContent(selected, fromReviewPage)}
+          content={(this.state.mode == "WORKFLOWEDIT" || this.state.mode == "editDemandDetails") ? renderStepperContentWorkflow(selected, fromReviewPage): renderStepperContent(selected, fromReviewPage)}
           onTabClick={this.onTabClick}
           selected={selected}
           header={getHeaderLabel(selected, "employee")}
           footer={null}
           formValidIndexArray={formValidIndexArray}
-          updateIndex={mode == "WORKFLOWEDIT" ? this.updateDemandDetails : mode == "editDemandDetails" ? this.updateDemandDetailsForAsmt : this.updateIndex}
+          updateIndex={this.state.mode == "WORKFLOWEDIT" ? this.updateDemandDetails : this.state.mode == "editDemandDetails" ? this.updateDemandDetailsForAsmt : this.updateIndex}
           backLabel="PT_COMMONS_GO_BACK"
           nextLabel={this.getButtonLabels(selected)}
           ownerInfoArr={ownerInfoArr}
@@ -2106,6 +2107,7 @@ class FormWizard extends Component {
           history={history}
           onPayButtonClick={onPayButtonClick}
           nextButtonEnabled={nextButtonEnabled}
+          mode={this.state.mode}
         />
       </div>
     );

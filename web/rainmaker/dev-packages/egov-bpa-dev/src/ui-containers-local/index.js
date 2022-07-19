@@ -144,8 +144,25 @@ const BpaSanctionFeeCardContainer =  Loadable({
   loader: () => import("./BpaSanctionFeeCardContainer"),
   loading: () => <Loading />
 });
+const ScnHistory =  Loadable({
+  loader: () => import("./ScnHistory"),
+  loading: () => <Loading />
+});
+const SignRandomPdfContainer =  Loadable({
+  loader: () => import("./SignRandomPdfContainer"),
+  loading: () => <Loading />
+});
+
 const EdcrHistory =  Loadable({
   loader: () => import("./EdcrHistory"),
+  loading: () => <Loading />
+});
+const DynamicCheckboxes =  Loadable({
+  loader: () => import("./DynamicCheckboxes"),
+  loading: () => <Loading />
+});
+const FullPaymentContainer =  Loadable({
+  loader: () => import("./FullPaymentContainer"),
   loading: () => <Loading />
 });
 
@@ -178,5 +195,9 @@ export {
   TriggerNOCContainer,
   BpaSanctionFeeCardContainer,
   TextAreaContainerForBpa,
-  EdcrHistory
+  ScnHistory,
+  SignRandomPdfContainer,
+  EdcrHistory,
+  DynamicCheckboxes,
+  FullPaymentContainer
 };

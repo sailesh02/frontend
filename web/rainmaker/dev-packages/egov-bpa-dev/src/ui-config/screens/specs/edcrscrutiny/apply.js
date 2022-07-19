@@ -15,7 +15,34 @@ import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField
 import {fetchMDMSData, setValuesForRework} from "./functions";
 import {getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import store from "ui-redux/store";
+import { CONSTANTS } from "../../../../config/common";
+const handleEligibilityCheckStatus = () => {
+  let url = "/bpastakeholder-citizen/preApprovedPlanDetails"
+  store.dispatch(setRoute(url));
+};
 
+const checkEligibility = (label, value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Href",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
+    visible: CONSTANTS.features.isPreApprovedCitizenActive ? true : false,
+    props: {
+      disabled: true,
+      onClick: handleEligibilityCheckStatus,
+      ...props,
+    },
+    children: {
+      label: getCommonCaption(label),
+      value: getCommonValue(value),
+    },
+  };
+};
 
 //for displaying note in entire grid
 const getLabelWithValueNote = (label, value, props = {}) => {
@@ -168,7 +195,7 @@ const buildingInfoCard = getCommonCard({
           sm: 6
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getPattern("Address"),
         jsonPath: "Scrutiny[0].applicantName"
       }),
       dummyDiv1: {
@@ -209,6 +236,7 @@ const buildingInfoCard = getCommonCard({
           sm: 6
         }
       }),
+
       dummyDiv2: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -221,6 +249,15 @@ const buildingInfoCard = getCommonCard({
           disabled: true
         }
       },
+      link: checkEligibility(
+        {
+          labelName: "",
+          labelKey: "",
+        },
+        {
+          jsonPath: "Note[0].link1",
+        }
+      ),
       // serviceType: {
       //   ...getSelectField({
       //     label: {
@@ -386,6 +423,7 @@ const screenConfig = {
     dispatch(prepareFinalObject("LicensesTemp[0]", {}));
     dispatch(prepareFinalObject("Note[0].message","kindly refer to the following link to get GIS and Comprehensive Development Plan, Airports Authority of India (AAI), National Monuments Authority (NMA) and other related information."))
     dispatch(prepareFinalObject("Note[0].link","https://bhubaneswarone.in/home/"))
+    dispatch(prepareFinalObject("Note[0].link1","Check your eligibility for preapproved plan"))
     fetchMDMSData(action, state, dispatch);
     setValuesForRework(action, state, dispatch);
     return action;

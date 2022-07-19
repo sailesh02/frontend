@@ -2,13 +2,21 @@ import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config
 import { handleScreenConfigurationFieldChange as handleField, toggleSpinner,hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
-import { getBpaSearchResults, getSearchResults } from "../../../../ui-utils/commons";
+import set from "lodash/set";
+import { getBpaSearchResults, getSearchResults, getBpaAppsAssignedToMe, getAppSearchResults } from "../../../../ui-utils/commons";
 import { getWorkFlowData, getWorkFlowDataForBPA } from "../bpastakeholder/searchResource/functions";
 import {
   getBpaTextToLocalMapping, getEpochForDate,
 
   getTextToLocalMapping, sortByEpoch
 } from "../utils";
+import { httpRequest } from "../../../../ui-utils/api";
+
+import store from "ui-redux/store";
+
+import {showSearches, tabsForArchOnly, tabsForSpclArchOnly} from "./citizenSearchResource/citizenFunctions"
+import {ifUserRoleExists} from "../../specs/utils"
+
 const header = getCommonHeader(
   {
     labelName: "My Applications",
@@ -43,17 +51,66 @@ export const getWfBusinessData = async (action, state, dispatch, businessService
 }
 
 const getAllBusinessServicesDataForStatus = async (action, state, dispatch) => {
-  let businessServices = ["BPA", "BPA_OC", "BPA1", "BPA2", "BPA3", "BPA4", "ARCHITECT"];
+  let businessServices = ["BPA", "BPA_OC", "BPA1", "BPA2", "BPA3", "BPA4", "BPA5", "ARCHITECT"];
   businessServices.forEach(service => {
     getWfBusinessData(action, state, dispatch, service)
   })
+}
+
+const showHideTabs = (action, state, dispatch) => {
+  set(
+    action,
+    "screenConfig.components.div.children.showSearches.children.showSearchScreens.props.tabs.visible",
+    false
+  );
+console.log("Nero I am here")
+  // dispatch(
+  //   handleField(
+  //     "my-applications-stakeholder",
+  //     "components.div.children.showSearches.children.showSearchScreens",
+  //     "props.visible",
+  //     false
+  //   ))
+}
+
+const closePdfSigningPopup = (refreshType) => {
+  store.dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      false
+    )
+  )
+  if(refreshType == 'Table'){
+    getPendingDigitallySignedApplications()
+  }
 }
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "my-applications-stakeholder",
   beforeInitScreen: (action, state, dispatch) => {
-    fetchData(action, state, dispatch);
+   // setTimeout(function(){
+     if(ifUserRoleExists("BPA_ARCHITECT") && ifUserRoleExists("BPA_ARC_APPROVER")){
+      fetchData(action, state, dispatch);
+      fetchApplicationAssignedToMe(action, state, dispatch);
+      setTimeout(()=>{
+        fetchApprovedApplicationList(action, state, dispatch)
+       },1000)
+     }else if(ifUserRoleExists("BPA_ARCHITECT") || ifUserRoleExists("BPA_TECHNICALPERSON")){
+      fetchData(action, state, dispatch);
+     }else if(ifUserRoleExists("BPA_ARC_APPROVER")){
+      fetchApplicationAssignedToMe(action, state, dispatch);
+      setTimeout(()=>{
+        fetchApprovedApplicationList(action, state, dispatch)
+       },1000)
+     }
+     
+     
+     // showHideTabs(action, state, dispatch);
+   //}, 2000);
+    
     return action;
   },
   components: {
@@ -62,94 +119,27 @@ const screenConfig = {
       componentPath: "Div",
       children: {
         header: header,
-        stakeholderMyappsConatiner: getCommonContainer({
-          myApplicationsCard: {
-            uiFramework: "custom-molecules",
-            name: "my-applications-stakeholder",
-            componentPath: "Table",
-            props: {
-              columns: [
-                {
-                  name: "Application No", labelKey: "BPA_COMMON_TABLE_COL_APP_NO"
-                },
-                {
-                  name: "Application Type", labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
-                },
-                {
-                  name: "Service type", labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"
-                },
-                {
-                  name: "Assigned To", labelKey: "BPA_COL_ASSIGNEDTO"
-                },
-                {
-                  name: "SLA(Days Remaining)", labelKey: "BPA_COMMON_SLA"
-                },
-                {
-                  name: "Status", labelKey: "BPA_COMMON_TABLE_COL_STATUS_LABEL"
-                },
-                {
-                  name: "tenantId",
-                  labelKey: "tenantId",
-                  options: {
-                    display: false
-                  }
-                },
-                {
-                  name: "serviceType",
-                  labelKey: "serviceType",
-                  options: {
-                    display: false
-                  }
-                },
-                {
-                  name: "type",
-                  labelKey: "type",
-                  options: {
-                    display: false
-                  }
-                },
-                {
-                  name: "appStatus", labelKey: "BPA_COMMON_TABLE_COL_APP_STATUS_LABEL",
-                  options: {
-                    display: false
-                  }
-                },
-              ],
-              title: {
-                labelName: "Search Results for BPA Applications",
-                labelKey: "BPA_SEARCH_RESULTS_FOR_APP"
-              },
-              rows: "",
-              options: {
-                filter: false,
-                download: false,
-                responsive: "stacked",
-                selectableRows: false,
-                hover: true,
-                viewColumns: false,
-                onRowClick: (row, index) => {
-                  onRowClick(row);
-                },
-                serverSide: false
-              },
-              customSortColumn: {
-                column: "Application Date",
-                sortingFn: (data, i, sortDateOrder) => {
-                  const epochDates = data.reduce((acc, curr) => {
-                    acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
-                    return acc;
-                  }, []);
-                  const order = sortDateOrder === "asc" ? true : false;
-                  const finalData = sortByEpoch(epochDates, !order).map(item => {
-                    item.pop();
-                    return item;
-                  });
-                  return { data: finalData, currentOrder: !order ? "asc" : "desc" };
-                }
-              }
-            }
-          }
-        })
+        showSearches: (ifUserRoleExists("BPA_ARCHITECT") && ifUserRoleExists("BPA_ARC_APPROVER")) ? showSearches: (ifUserRoleExists("BPA_ARCHITECT") || ifUserRoleExists("BPA_TECHNICALPERSON"))? tabsForArchOnly: tabsForSpclArchOnly,
+        
+      }
+    },
+    pdfSigningPopup : {
+      uiFramework: 'custom-containers-local',
+      componentPath: 'SignPdfContainer',
+      moduleName: "egov-workflow",
+      props: {
+        openPdfSigningPopup: false,
+        closePdfSigningPopup : closePdfSigningPopup,
+        maxWidth: false,
+        moduleName : 'BPA',
+        okText :"BPA_SIGN_PDF",
+        resetText : "BPA_RESET_PDF",
+        dataPath : 'BPA',
+        updateUrl : '/bpa-services/v1/bpa/_updatedscdetails?',
+        refreshType : 'Table'
+      },
+      children: {
+        popup: {}
       }
     }
   }
@@ -164,7 +154,8 @@ export const fetchData = async (
   let searchConvertedArray = [];
   let sortConvertedArray = [];
   const bpaResponse = await getBpaSearchResults();
-  const response = await getSearchResults();
+ // const response = await getSearchResults();
+  
 
   if (bpaResponse && bpaResponse.BPA && bpaResponse.BPA.length > 0) {
     dispatch(toggleSpinner());
@@ -184,12 +175,18 @@ export const fetchData = async (
       } else {
         type = "HIGH"
       }
-      let owners = get(element, "owners", [])
+      let owners = get(element, "landInfo.owners", [])
       owners.map(item => {
         if (item.isPrimaryOwner) {
           primaryowner = item.name;
         }
       });
+      // let owners = get(element, "landInfo", [])
+      // owners.map(item => {
+      //   if (item.isPrimaryOwner) {
+      //     primaryowner = item.name;
+      //   }
+      // });
       let bService = get(element, "businessService");
       let appType = getBpaTextToLocalMapping("WF_BPA_BUILDING_PLAN_SCRUTINY");
       let serType = getBpaTextToLocalMapping(`WF_BPA_NEW_CONSTRUCTION`);
@@ -209,60 +206,146 @@ export const fetchData = async (
         sortNumber: 1,
         serviceType: businessService,
         tenantId: get(element, "tenantId", null),
-        type: type
+        type: type,
+        ["BPA_OWNER_NAME_LABEL"] : primaryowner
       })
     });
   }
 
 
-  if (response && response.Licenses && response.Licenses.length > 0) {
-    const businessIdToOwnerMapping = await getWorkFlowData(response.Licenses);
-    response.Licenses.forEach(element => {
-      let service = getTextToLocalMapping("MODULE_" + get(element, "businessService"));
-      let status = getTextToLocalMapping("WF_ARCHITECT_" + get(element, "status"));
-      let modifiedTime = element.auditDetails.lastModifiedTime;
-      let licensetypeFull = element.tradeLicenseDetail.tradeUnits[0].tradeType;
-      if (licensetypeFull.split(".").length > 1) {
-        service += " - " + getTextToLocalMapping(`TRADELICENSE_TRADETYPE_${getTransformedLocale(licensetypeFull.split(".")[0])}`);
-      }
-      searchConvertedArray.push({
-        ["BPA_COMMON_TABLE_COL_APP_NO"]: element.applicationNumber || "-",
-        ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: status || "-",
-        ["BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"]: getBpaTextToLocalMapping("BPAREG_SERVICE"),
-        ["BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"]: service,
-        ["BPA_COMMON_SLA"]: get(businessIdToOwnerMapping[element.applicationNumber], "sla", null) || "-",
-        ["BPA_COL_ASSIGNEDTO"]: get(businessIdToOwnerMapping[element.applicationNumber], "assignee", null) || "-",
-        applicationType: getBpaTextToLocalMapping("BPAREG_SERVICE"),
-        modifiedTime: modifiedTime,
-        sortNumber: 0,
-        serviceType: "BPAREG",
-        tenantId: get(element, "tenantId", null)
-      })
-    });
-  }
 
   sortConvertedArray = [].slice.call(searchConvertedArray).sort(function (a, b) {
     return new Date(b.modifiedTime) - new Date(a.modifiedTime) || a.sortNumber - b.sortNumber;
   });
+
+  
   dispatch(
     handleField(
       "my-applications-stakeholder",
-      "components.div.children.stakeholderMyappsConatiner.children.myApplicationsCard",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.myApplicationsTableConfig",
       "props.data",
       sortConvertedArray
+    ));
+   
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.myApplicationsTableConfig",
+      "props.rows",
+      sortConvertedArray.length
+    )
+  );
+  dispatch(hideSpinner());
+};
+
+export const fetchApplicationAssignedToMe = async (
+  action,
+  state,
+  dispatch
+) => {
+
+  let searchConvertedArray = [];
+  let sortConvertedArray = [];
+  const bpaResponse = await getBpaAppsAssignedToMe();
+  
+ let serType = getBpaTextToLocalMapping(`WF_BPA_NEW_CONSTRUCTION`);
+  if (bpaResponse && bpaResponse.ProcessInstances && bpaResponse.ProcessInstances.length > 0) {
+    dispatch(toggleSpinner());
+    
+    let arrayLength = bpaResponse.ProcessInstances.length;
+    for(let i=0; i<arrayLength;i++){
+      let primaryowner = "-";
+  let response = await getAppSearchResults([
+        {
+          key: "tenantId",
+          value: bpaResponse.ProcessInstances[i].tenantId
+        },
+        { key: "applicationNo", value: bpaResponse.ProcessInstances[i].businessId }
+      ]);
+      
+      let owners = get(response.BPA[0], "landInfo.owners", [])
+      owners.map(item => {
+        if (item.isPrimaryOwner) {
+          primaryowner = item.name;
+        }
+      });
+
+
+      let status = getTextToLocalMapping("WF_BPA_" + bpaResponse.ProcessInstances[i].state.applicationStatus, "state", null);
+        searchConvertedArray.push({
+        ["BPA_COMMON_TABLE_COL_APP_NO"]: bpaResponse.ProcessInstances[i].businessId || "-",
+        ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: status || "-",
+        tenantId: bpaResponse.ProcessInstances[i].tenantId,
+        ["BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"]: serType,
+        ["BPA_OWNER_NAME_LABEL"] : primaryowner
+      })
+    }
+  }
+
+
+  
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.applicationAssignedToMe",
+      "props.data",
+      searchConvertedArray
     ));
   dispatch(hideSpinner());
   dispatch(
     handleField(
       "my-applications-stakeholder",
-      "components.div.children.stakeholderMyappsConatiner.children.myApplicationsCard",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.applicationAssignedToMe",
       "props.rows",
-      sortConvertedArray.length
+      searchConvertedArray.length
     )
   );
 };
 
-const onRowClick = rowData => {
+
+export const fetchApprovedApplicationList = async (action,state,dispatch) => {
+  let approvedList = [];
+  
+  const data = await httpRequest(
+    "post",
+    "bpa-services/v1/bpa/_ApprovedByMe?tenantId=od&businessService=BPA5",
+    "_search",
+    [],
+    null
+  );
+  // setTenatId variable needs to be removed once we get tenantId value from backend
+  let setTenantId = data.ApprovedBy.map((item) => {
+    item.tenantId = "od.cuttack";
+    return item;
+  });
+  setTenantId.forEach((item,index)=> {
+    approvedList.push({
+      ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNo,
+      ["BPA_COMMON_TABLE_COL_LINK"]: item,
+      ["BPA_COMMON_TABLE_COL_UPLOAD"]: item || '',
+      ["BPA_COMMON_TABLE_COL_TENANT"]: item.tenantId || '',
+    })
+  })
+
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.listOfApprovedApplication",
+      "props.data",
+      approvedList
+    ));
+  dispatch(hideSpinner());
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.listOfApprovedApplication",
+      "props.rows",
+      approvedList.length
+    )
+  );
+}
+
+export const onRowClick = rowData => {
   const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
   const origin = process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
   if (rowData[7] === "BPAREG") {
@@ -273,7 +356,7 @@ const onRowClick = rowData => {
       default:
         window.location.assign(`${origin}${environment}/bpastakeholder/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`)
     }
-  } else if ((rowData[7] === "BPA") || (rowData[7] === "BPA1") || (rowData[7] === "BPA2") || (rowData[7] === "BPA3") || (rowData[7] === "BPA4") || rowData[7] == "BPA_LOW") {
+  } else if ((rowData[7] === "BPA") || (rowData[7] === "BPA1") || (rowData[7] === "BPA2") || (rowData[7] === "BPA3") || (rowData[7] === "BPA4") || (rowData[7] === "BPA5") || rowData[7] == "BPA_LOW") {
     switch (rowData[9]) {
       case "INITIATED":
         window.location.assign(`${origin}${environment}/egov-bpa/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);
@@ -301,4 +384,11 @@ const onRowClick = rowData => {
   }
 };
 
+
+export const onApplicationRowClick = rowData => {
+  const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
+  const origin = process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+
+  window.location.assign(`${origin}${environment}/egov-bpa/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[2]}&type=LOW&bservice=BPA5`);
+};
 export default screenConfig;

@@ -215,6 +215,9 @@ const onRowClick = rowData => {
     if(rowData[5] == "BPA_LOW") {
       type = "LOW"
     }
+    if(rowData[5] == "BPA5") {
+      type = "LOW"
+    }
     switch (state) {
       case "INITIATED":
         window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`;

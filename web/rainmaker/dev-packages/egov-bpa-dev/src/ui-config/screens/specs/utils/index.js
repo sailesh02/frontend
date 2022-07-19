@@ -3110,7 +3110,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       "&tenantId=" + tenantId,
       {}
     );
-    console.log(payload, "Nero Payload")
+   
     let bService = payload.edcrDetail[0].planDetail.planInformation.businessService;
     let queryObject = [
       {
@@ -4132,6 +4132,11 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
       let fieldInfoDocs = mdmsData.BPA.CheckList;
       prepareFieldDocumentsUploadData(state, dispatch, action, fieldInfoDocs, appWfState);
     }
+    if (wfState && wfState.businessService == "BPA5" && (wfState.state.state == "APPROVAL_PENDING" || wfState.state.state == "PENDING_SANC_FEE_PAYMENT")) {
+      
+      prepareFieldDocumentsUploadData(state, dispatch, action, [], appWfState);
+      ///console.log(fieldInfoDocs, "Nero fieldInfoDocs")
+    }
     let riskType = get(
       state,
       "screenConfiguration.preparedFinalObject.BPA.riskType", ""
@@ -4190,20 +4195,51 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
   let bpaAppDetails = get(state.screenConfiguration.preparedFinalObject, "BPA", {});
 
   let fieldInfo = []
-  fieldInfoDocs.forEach(wfDoc => {
-    if (wfDoc.WFState == appWfState && wfDoc.RiskType === bpaAppDetails.riskType && wfDoc.ServiceType === bpaAppDetails.serviceType && wfDoc.applicationType === bpaAppDetails.applicationType) {
-      fieldInfo.push({ "docTypes": wfDoc.docTypes, "questions": wfDoc.questions });
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
-        true
-      );
-    }
-  });
+  if(bpaAppDetails && bpaAppDetails.businessService != "BPA5"){
+    fieldInfoDocs.forEach(wfDoc => {
+      if (wfDoc.WFState == appWfState && wfDoc.RiskType === bpaAppDetails.riskType && wfDoc.ServiceType === bpaAppDetails.serviceType && wfDoc.applicationType === bpaAppDetails.applicationType) {
+        fieldInfo.push({ "docTypes": wfDoc.docTypes, "questions": wfDoc.questions });
+        set(
+          action,
+          "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
+          true
+        );
+      }
+    });
+  }else{
+    let appStatuses = ["APPROVAL_INPROGRESS"];
 
-  let fieldreqDocuments = fieldInfo[0].docTypes;
-  let applyFieldinspectionQstns = fieldInfo[0].questions;
+  if(appStatuses.includes(bpaAppDetails.status) && bpaAppDetails.businessService === "BPA5" && ifUserRoleExists("BPA_ARC_APPROVER")){
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
+      true
+    );
+  }
+  }
+  let fieldreqDocuments = '';
+  let applyFieldinspectionQstns = '';
   let checklistSelect = [];
+console.log(bpaAppDetails.businessService, appState, "Nero app details")
+  if(bpaAppDetails.businessService === "BPA5" && (appState === "APPROVAL_INPROGRESS" || appState === "PENDING_SANC_FEE_PAYMENT")){
+    let questions = get(
+      state,
+      "screenConfiguration.preparedFinalObject.docsForSpclArchForInspectionReport.questions",
+      {}
+    );
+    let docTypes = get(
+      state,
+      "screenConfiguration.preparedFinalObject.docsForSpclArchForInspectionReport.docTypes",
+      {}
+    );
+    fieldreqDocuments = docTypes;
+    applyFieldinspectionQstns = questions;
+  }else{
+     fieldreqDocuments = fieldInfo[0].docTypes;
+     applyFieldinspectionQstns = fieldInfo[0].questions;
+    
+  
+  }
 
   if (applyFieldinspectionQstns && applyFieldinspectionQstns.length > 0) {
     checklistSelect = [
@@ -4359,6 +4395,16 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     dispatch(prepareFinalObject("fieldInspectionDocumentsDetailsPreview", fieldInspectionDocuments));
     dispatch(prepareFinalObject("fieldInspectionCheckListDetailsPreview", fieldInspectionsQstions));
   }
+let appStatuses = ["PENDING_SANC_FEE_PAYMENT", "SHOW_CAUSE_ISSUED", "SHOW_CAUSE_REPLY_VERIFICATION_PENDING"];
+
+  if(appStatuses.includes(BPA.status) && BPA.businessService === "BPA5"){
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.visible",
+      true
+    );
+  }
+
   let fileStoreIds = jp.query(allDocuments, "$.*.fileStoreId");
   let fileUrls =
     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
@@ -5332,7 +5378,7 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
   });
 }
 
-export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, mode = "Download") => {
+export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, mode = "Download", txnNo = null) => {
   let bpaDetails = get(
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
@@ -5377,7 +5423,9 @@ export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, m
       }
 
       if (serviceCode === "BPA.NC_SAN_FEE") {
-        payments.push(paymentPayload.Payments[0]);
+       
+        payments.push(paymentPayload.Payments[paymentPayload.Payments.findIndex(x=>x.transactionNumber === txnNo)]);
+        //payments.push(paymentPayload.Payments[0]);
       }
     } else {
       payments.push(paymentPayload.Payments[0]);
@@ -5415,6 +5463,94 @@ const getFloorDetails = (index) => {
     return `${floorNo[index]} floor`;
   }
 };
+
+export const setPreApprovedProposedBuildingData = async (state, dispatch, action, value) => {
+
+  let response, occupancyType, BPA;
+  let getLocalLabels = get(state, "app.localizationLabels");
+
+  if (value == "ocApply") {
+    response = get(
+      state,
+      "screenConfiguration.preparedFinalObject.ocScrutinyDetails.planDetail.blocks",
+      []
+    );
+    occupancyType = get(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+      []
+    );
+    BPA = get(
+      state,
+      "screenConfiguration.preparedFinalObject.BPA",
+      {}
+    );
+  } else {
+    response = get(
+      state,
+      "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
+      []
+    );
+    occupancyType = get(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+      []
+    );
+    BPA = get(
+      state,
+      "screenConfiguration.preparedFinalObject.BPA",
+      {}
+    );
+  }
+
+  let subOccupancyType = occupancyType.filter(item => {
+    return item.active;
+  });
+
+  let tableData = [];
+  if (response && response.length > 0) {
+    for (var j = 0; j < response.length; j++) {
+      let title = `Block ${j + 1}`;
+      let floors = response[j] && response[j].building && response[j].building.floors;
+      let block = await floors.map((item, index) => (
+        {
+          // "Floor Description": '-',//getFloorDetails((item.number).toString()) || '-',
+          // "Level": 1,//item.number,
+          // "Occupancy/Sub Occupancy": 'Dummy',//etLocaleLabels("-", item.occupancies[0].type),//getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
+          // "Buildup Area": item.occupancies[0].builtUpArea || "0",
+          // "Floor Area": item.occupancies[0].floorArea || "0",
+          // "Carpet Area": 0//item.occupancies[0].carpetArea || "0",
+          [getBpaTextToLocalMapping("Floor Description")]: '-',//getFloorDetails((item.number).toString()) || '-',
+          [getBpaTextToLocalMapping("Level")]: 1,//item.number,
+          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: 'Dummy',//etLocaleLabels("-", item.occupancies[0].type),//getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
+          [getBpaTextToLocalMapping("Buildup Area")]: parseInt(item.occupancies[0].builtUpArea) || "0",
+          [getBpaTextToLocalMapping("Floor Area")]: parseInt(item.occupancies[0].floorArea) || "0",
+          [getBpaTextToLocalMapping("Carpet Area")]: 0//item.occupancies[0].carpetArea || "0",
+        }));
+      let occupancyTypeCheck = [],
+        floorNo = response[j].number
+      if (BPA && BPA.landInfo && BPA.landInfo.unit && BPA.landInfo.unit[j] && BPA.landInfo.unit[j].usageCategory) {
+        let sOccupancyType = (BPA.landInfo.unit[j].usageCategory).split(",");
+        sOccupancyType.forEach(subOcData => {
+          occupancyTypeCheck.push({
+            value: subOcData,
+            label: getLocaleLabels("NA", `BPA_SUBOCCUPANCYTYPE_${getTransformedLocale(subOcData)}`, getLocalLabels)
+          });
+        });
+      }
+
+      if (occupancyTypeCheck && occupancyTypeCheck.length) {
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, occupancyType: occupancyTypeCheck, floorNo: floorNo });
+      } else {
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, floorNo: floorNo });
+      }
+
+    };
+    dispatch(prepareFinalObject("edcr.blockDetail", tableData));
+
+    return tableData;
+  }
+}
 
 export const setProposedBuildingData = async (state, dispatch, action, value) => {
 
@@ -6022,6 +6158,7 @@ export const generateBillForSanctionFee = async (bpaObject, edcrObject, dispatch
     if (applicationNumber && tenantId) {
       let riskType = edcrObject && edcrObject.planDetail.planInformation.riskType
       bpaObject.BPA[0].riskType = riskType;
+      bpaObject.BPA[0].edcrDetail = {};
       console.log(bpaObject, edcrObject, "Nero Edcr 12")
       let apiPayload = [
         {
@@ -6164,3 +6301,145 @@ export const createSanctionFeeData = (billDetails, feetype) => {
     });
   return fees;
 };
+
+export const setBPATypeData = async (state, dispatch, action, value) => {
+  let bServices = get(
+     state,
+     "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.planInformation.businessService",
+     []
+   );
+   if(bServices && bServices.includes("|")){
+     let bServicesObj = [];
+     let bServicesArray = bServices && bServices.split("|").forEach(item => bServicesObj.push({code: item}));
+     dispatch(prepareFinalObject("edcr.BPAType", bServicesObj));
+     dispatch(
+       handleField("apply", "components.div.children.formwizardSecondStep.children.getBpaProcess", "visible", true)
+     );
+     dispatch(prepareFinalObject("Accredited", true));
+   }
+   
+   let isApplicationCreated = getQueryArg(window.location.href, "applicationNumber");
+   if(isApplicationCreated){
+     let bServices = get(
+       state,
+       "screenConfiguration.preparedFinalObject.BPA.businessService",
+       []
+     );
+     if(bServices === "BPA5"){
+       dispatch(
+         handleField("apply", "components.div.children.formwizardSecondStep.children.getLowRiskConditions", "visible", true)
+       );
+     }
+   }
+ 
+ }
+export const validateBPA5Conditions = (state, dispatch) => {
+  let BPA = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    []
+  );
+
+  if(BPA.businessService === "BPA5"){
+  
+    let BPA5Condition1 = BPA.BPA5Condition1;
+    let BPA5Condition2 = BPA.BPA5Condition2;
+    let BPA5Condition3 = BPA.BPA5Condition3;
+    let BPA5Condition4 = BPA.BPA5Condition4;
+    let BPA5Condition5 = BPA.BPA5Condition5;
+    if(BPA5Condition1 && BPA5Condition2 && BPA5Condition3 && BPA5Condition4 && BPA5Condition5){
+      return true;
+    }else{
+      return false;
+    }
+}
+
+}
+
+export const setInstallmentInfo = async(state, dispatch, action) =>{
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  var installmentsObj;
+  try {
+    let response = await httpRequest(
+      "post",
+      "bpa-services/v1/bpa/_getAllInstallments",
+      "",
+      [],
+      { InstallmentSearchCriteria: {
+        "consumerCode": applicationNumber
+    } }
+    );
+    if (response) {
+      console.log(response, "Nero response Hello This")
+      if(response && response.installments && response.installments.length > 0){
+        dispatch(handleField("search-preview", "components.div.children.citizenFooter.children.makePayment", "visible", false))
+        dispatch(handleField("search-preview", "components.div.children.citizenFooter.children.viewPaymentDetail", "visible", true))
+        
+        installmentsObj = response && response.installments;
+        let totalInstallments = installmentsObj.length;
+        if (totalInstallments > 0) {
+          for (let i = 0; i < totalInstallments; i++) {
+            for (let j = 0; j < installmentsObj[i].length; j++) {
+              if (!installmentsObj[i][j].isPaymentCompletedInDemand && installmentsObj[i][j].demandId) {
+                dispatch(prepareFinalObject("isDemandGeneratedAndNotPaid", true));
+              }
+              
+            }
+          }
+
+         // let unsortedUniqueNotPaidInstallments = [...new Set(notPaidInstallments)];
+         // let finalNotPaidInstallments = unsortedUniqueNotPaidInstallments.sort(function (a, b) { return a - b });
+         // dispatch(prepareFinalObject("notPaidInstallments", finalNotPaidInstallments));
+        }
+       // installmentsObj = { installments: installmentsObj };
+       // console.log("Nero here")
+      //dispatch(prepareFinalObject("searchPreviewInstallmentsInfo", installmentsObj));
+      }
+
+      if (response && response.fullPayment && response.fullPayment.length > 0) {
+        for(let i=0;i<response.fullPayment.length;i++){
+          if (!response.fullPayment[i].isPaymentCompletedInDemand && response.fullPayment[i].demandId) {
+            dispatch(prepareFinalObject("isDemandGeneratedAndNotPaid", true));
+          }
+        }
+
+        // console.log("Nero here 2")
+        // dispatch(prepareFinalObject("searchPreviewFullPaymentInfo", response.fullPayment));
+      }
+      
+    }
+  }catch(error){
+
+  }
+}
+
+export const getInstallmentInfoForInstallmentPage = async() =>{
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  try {
+    let response = await httpRequest(
+      "post",
+      "bpa-services/v1/bpa/_getAllInstallments",
+      "",
+      [],
+      { InstallmentSearchCriteria: {
+        "consumerCode": applicationNumber
+    } }
+    );
+    if (response) {
+      console.log(response, "Nero response")
+      //if(response && response.installments && response.installments.length > 0){
+       return response;
+      //}
+      
+    }
+  }catch(error){
+
+  }
+}
+
+export const getSiteInfo = () => {
+  var currentURL = document.URL;
+  let site_url_origin = window.location.origin
+  var part = currentURL.replace(site_url_origin, "");
+  return part.split("/")[1];
+}

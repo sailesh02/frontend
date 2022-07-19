@@ -97,7 +97,7 @@ const commonApplicantInformation = () => {
           labelKey: "BPA_ENTER_APPLICANT_NAME_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getPattern("Address"),
         errorMessage: "Invalid Name",
         jsonPath: "BPA.landInfo.owners[0].name",
         props: {
@@ -333,7 +333,7 @@ const institutionInformation = () => {
           labelName: "Enter Name of Institution",
           labelKey: "NOC_ENTER_INSTITUTION_PLACEHOLDER"
         },
-        pattern: getPattern("Name"),
+        pattern: getPattern("Address"),
         errorMessage: "Invalid Name",
         required: true,
         jsonPath:

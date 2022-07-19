@@ -4,6 +4,7 @@ import {
   getTextField,
   getCommonContainer,
   getPattern,
+  getCommonParagraph,
   getCommonGrayCard,
   getCommonSubHeader,
   getLabelWithValue,
@@ -444,3 +445,241 @@ export const abstractProposedBuildingDetails = getCommonCard({
     }
   }
 });
+
+export const getBpaProcess = getCommonCard({
+  headertitle: getCommonTitle(
+    {
+      labelName: "Block wise occupancy /sub occupancy and usage details",
+      labelKey: "BPA_CHOOSE_BPA_PROCESS_TITLE"
+    },
+    {
+      style: {
+        marginBottom: 10
+      }
+    }
+  ),
+  chooseBPAHeaderDetails : getCommonContainer({
+    
+    chooseBPAType: {
+      ...getSelectField({
+        label: {
+          labelName: "Occupancy Type",
+          labelKey: "BPA_CHOOSE_BPA_TYPE"
+        },
+        placeholder: {
+          labelName: "Select Occupancy Type",
+          labelKey: "BPA_CHOOSE_BPA_TYPE_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "BPA",
+          masterName: "BPA_TYPE"
+        },
+        jsonPath: "BPA.businessService",
+        sourceJsonPath: "edcr.BPAType",
+        required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+        props: {
+          className: "tl-trade-type"
+        }
+      }),
+      beforeFieldChange: (action, state, dispatch) => {
+        if(action.value === "BPA5"){
+          dispatch(
+            handleField("apply", "components.div.children.formwizardSecondStep.children.getLowRiskConditions", "visible", true)
+          );
+          dispatch(
+            handleField("apply", "components.div.children.formwizardSecondStep.children.accreditedPersonDetails", "visible", true)
+          );
+        }else{
+          dispatch(
+            handleField("apply", "components.div.children.formwizardSecondStep.children.getLowRiskConditions", "visible", false)
+          );
+          dispatch(
+            handleField("apply", "components.div.children.formwizardSecondStep.children.accreditedPersonDetails", "visible", false)
+          );
+        }
+      }
+    },
+  })
+});
+
+export const accreditedPersonDetails = getCommonCard({
+  header: getCommonParagraph(
+    {
+      labelName:
+        "Accredited person is a technical person or an architect certified by authority to approve building permit of low risk buildings. Once selected the approver can not be changed",
+      labelKey: "Accredited person is a technical person or an architect certified by authority to approve building permit of low risk buildings. Once selected the approver can not be changed",
+    },
+    {
+      style: {
+        marginBottom: 18,
+      },
+    }
+  ),
+  spclArchitectsPicker: getCommonContainer({
+    spclArchsDropdown: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "AutosuggestContainer",
+      jsonPath: "selectedSpclArchitect",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12
+      },
+      props: {
+        style: {
+          width: "100%",
+          cursor: "pointer"
+        },
+        className: "citizen-city-picker",
+        label: {
+          labelName: "City",
+          labelKey: "BPA_SPCL_ARCH_LABEL"
+        },
+        optionValue: "code",
+        optionLabel: "uuid",
+        placeholder: { labelName: "Select City", labelKey: "BPA_SELECT_SPCL_ARCH_PLACEHOLDER" },
+        jsonPath: "selectedSpclArchitect",
+        sourceJsonPath:
+          "specialArchitectList",
+        labelsFromLocalisation: true,
+        isClearable: true,
+        fullwidth: true,
+        required: true,
+        inputLabelProps: {
+          shrink: true
+        }
+      },
+      beforeFieldChange: (action, state, dispatch) => {
+
+        let bpaAppObj = get(
+          state,
+          "screenConfiguration.preparedFinalObject.BPA",
+          []
+        );
+        let allListedSpclArchs = get(
+          state,
+          "screenConfiguration.preparedFinalObject.specialArchitectList",
+          []
+        );
+        
+        let selectedArch =
+          allListedSpclArchs &&
+          allListedSpclArchs.filter((item) => item.code === action.value);
+        
+        let processIns = {};
+        let selectedAccredited = selectedArch.map((item,index)=> {
+          return {uuid:item.uuid,selected:true}
+        })
+        let assignes = selectedAccredited//[{uuid:selectedArch[0].uuid,selected:true}];
+        processIns.assignes = assignes
+        bpaAppObj.additionalDetails = processIns; 
+      }
+    },
+    
+  })
+}
+);
+
+export const getLowRiskConditions =
+getCommonCard({
+    header: getCommonSubHeader(
+      {
+        labelName: "Additional Details",
+        labelKey: "BPA_BPA5_CONDITIONS_DETAILS"
+      },
+      {
+        style: {
+          marginBottom: 18
+        }
+      }
+    ),
+    applicantCard: getCommonContainer({
+      Condition1: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
+        componentPath: "BpaCheckboxContainer",
+        jsonPath: "BPA.BPA5Condition1",
+
+        props: {
+          label: {
+            labelName: "Doc Type 1",
+            labelKey: "BPA_BPA5_CONDITION_1"
+          },
+          jsonPath: "BPA.BPA5Condition1",
+          required: true,
+        },
+        type: "array"
+      },
+      breakA: getBreak(),
+      Condition2: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
+        componentPath: "BpaCheckboxContainer",
+        jsonPath: "BPA.BPA5Condition2",
+
+        props: {
+          label: {
+            labelName: "Doc Type 1",
+            labelKey: "BPA_BPA5_CONDITION_2"
+          },
+          jsonPath: "BPA.BPA5Condition2",
+          required: true,
+        },
+        type: "array"
+      },
+      Condition3: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
+        componentPath: "BpaCheckboxContainer",
+        jsonPath: "BPA.BPA5Condition3",
+
+        props: {
+          label: {
+            labelName: "Doc Type 1",
+            labelKey: "BPA_BPA5_CONDITION_3"
+          },
+          jsonPath: "BPA.BPA5Condition3",
+          required: true,
+        },
+        type: "array"
+      },
+      Condition4: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
+        componentPath: "BpaCheckboxContainer",
+        jsonPath: "BPA.BPA5Condition4",
+
+        props: {
+          label: {
+            labelName: "Doc Type 1",
+            labelKey: "BPA_BPA5_CONDITION_4"
+          },
+          jsonPath: "BPA.BPA5Condition4",
+          required: true,
+        },
+        type: "array"
+      },
+      Condition5: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
+        componentPath: "BpaCheckboxContainer",
+        jsonPath: "BPA.BPA5Condition5",
+
+        props: {
+          label: {
+            labelName: "Doc Type 1",
+            labelKey: "BPA_BPA5_CONDITION_5"
+          },
+          jsonPath: "BPA.BPA5Condition5",
+          required: true,
+        },
+        type: "array"
+      }
+    })
+  })

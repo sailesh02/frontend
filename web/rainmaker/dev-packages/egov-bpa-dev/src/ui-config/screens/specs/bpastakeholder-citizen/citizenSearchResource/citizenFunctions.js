@@ -1,15 +1,25 @@
 import commonConfig from "config/common.js";
+import React from 'react';
+import axios from 'axios';
+import store from "ui-redux/store";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo,getAccessToken,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils";
 import { getBpaSearchResults, getSearchResults } from "../../../../../ui-utils/commons";
 import { getWorkFlowData, getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
-import { getTextToLocalMapping } from "../../utils/index";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+
+import {getBpaTextToLocalMapping, getEpochForDate,getTextToLocalMapping, getUniqueItemsFromArray, sortByEpoch} from "../../utils";
+import { getBreak, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {onRowClick} from "../my-applications-stakeholder"
+import {onApplicationRowClick} from "../my-applications-stakeholder"
+import { getFileUrlFromAPI, getFileUrl } from "egov-ui-framework/ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 export const getMdmsData = async () => {
   let mdmsBody = {
@@ -245,4 +255,453 @@ const storeData = (data, dispatch, fromMyApplicationPage, fromStakeHolderPage) =
     );
   }
 }
+
+
+export const myApplicationsTableConfig =  {
+  
+  uiFramework: "custom-molecules",
+  name: "my-applications-stakeholder",
+  componentPath: "Table",
+  props: {
+    columns: [
+      {
+        name: "Application No", labelKey: "BPA_COMMON_TABLE_COL_APP_NO"
+      },
+      {
+        name: "Application Type", labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
+      },
+      {
+        name: "Service type", labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"
+      },
+      {
+        name: "Assigned To", labelKey: "BPA_COL_ASSIGNEDTO"
+      },
+      {
+        name: "SLA(Days Remaining)", labelKey: "BPA_COMMON_SLA"
+      },
+      {
+        name: "Status", labelKey: "BPA_COMMON_TABLE_COL_STATUS_LABEL"
+      },
+      {
+        name: "tenantId",
+        labelKey: "tenantId",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "serviceType",
+        labelKey: "serviceType",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "type",
+        labelKey: "type",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "appStatus", labelKey: "BPA_COMMON_TABLE_COL_APP_STATUS_LABEL",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "owner", labelKey: "BPA_OWNER_NAME_LABEL"
+        
+      },
+    ],
+    title: {
+      labelName: "Search Results for BPA Applications",
+      labelKey: "BPA_SEARCH_RESULTS_FOR_APP"
+    },
+    rows: "",
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      viewColumns: false,
+      onRowClick: (row, index) => {
+        onRowClick(row);
+      },
+      serverSide: false
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
+  }
+
+
+}
+
+export const applicationAssignedToMe =  {
+  
+  uiFramework: "custom-molecules",
+  name: "my-applications-stakeholder",
+  componentPath: "Table",
+  //visible: false,
+  props: {
+    columns: [
+      {
+        name: "Application No", labelKey: "BPA_COMMON_TABLE_COL_APP_NO"
+      },
+      {
+        name: "Status", labelKey: "BPA_COMMON_TABLE_COL_STATUS_LABEL"
+      },
+      {
+        name: "tenantId",
+        labelKey: "tenantId",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "serviceType", labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"
+      },
+      {
+        name: "OwnerName", labelKey: "BPA_OWNER_NAME_LABEL"
+      }
+    ],
+    title: {
+      labelName: "Search Results for BPA Applications",
+      labelKey: "BPA_SEARCH_RESULTS_FOR_APP"
+    },
+    rows: "",
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      viewColumns: false,
+      onRowClick: (row, index) => {
+        onApplicationRowClick(row);
+      },
+      serverSide: false
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
+  }
+
+
+}
+
+// get PDF body
+export const getPdfBody = async (applicationNo, tenantId) => {
+  const userInfo = JSON.parse(getUserInfo());
+  const authToken = getAccessToken();
+  // let uuid = userInfo.uuid;
+  // let userInfos = {
+  //   "id": uuid,
+  //   "tenantId": getTenantId()
+  // };
+  let RequestInfo = {
+    "apiId": "Rainmaker",
+    "ver": ".01",
+    "action": "_search",
+    "did": "1",
+    "key": "",
+    "msgId": "20170310130900|en_IN",
+    "requesterId": "",
+    authToken,
+    "userInfo": userInfo
+  };
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "applicationNo", value: applicationNo },
+  ];
+  try {
+    let bpaResult = await httpRequest(
+      "post",
+      "/bpa-services/v1/bpa/_search",
+      "",
+      queryObject
+    );
+    let edcrNumber =
+      (bpaResult &&
+        bpaResult.BPA &&
+        bpaResult.BPA.length > 0 &&
+        bpaResult.BPA[0].edcrNumber) ||
+      "";
+
+    try {
+      let applicationDigitallySigned =
+        bpaResult &&
+        bpaResult.BPA &&
+        bpaResult.BPA.length > 0 &&
+        bpaResult.BPA[0].dscDetails &&
+        bpaResult.BPA[0].dscDetails[0].documentId
+          ? true
+          : false;
+      if (!applicationDigitallySigned) {
+        let BPA = bpaResult.BPA[0];
+        BPA.businessService = "BPA1" //Need to remove this line once BPA5 is added from Backend side.
+        return {
+          RequestInfo: RequestInfo,
+          Bpa: [BPA],
+        };
+      } else {
+        return null;
+      }
+    } catch (err) {
+      return;
+    }
+  } catch (err) {
+    return;
+  }
+};
+
+
+
+export const onDownloadClick = async (tData) => {
+  let data = await getPdfBody(tData[1].applicationNo,tData[1].tenantId)
+  let response = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=buildingpermit&tenantId=${tData[1].tenantId}`, data, {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  })
+  if (
+    response &&
+    response.data.filestoreIds &&
+    response.data.filestoreIds.length > 0
+  ) {
+    const fileUrls = await getFileUrlFromAPI(response.data.filestoreIds[0],tData[1].tenantId);
+    window.location = fileUrls[response.data.filestoreIds[0]];  
+  }
+  // if (filteredDoc && filteredDoc.length > 0) {
+  //   const fileUrls = await getFileUrlFromAPI(
+  //     filteredDoc && filteredDoc[0].fileStoreId
+  //   );
+  //   window.location = fileUrls[filteredDoc[0].fileStoreId];
+  // }
+  // if(payload.data.message === "Success"){
+  //   store.dispatch(toggleSnackbarAndSetText(
+  //     true,
+  //     {
+  //       labelName: "Generate Permit Order",
+  //       labelKey: "COMMON_PERMIT_GENERATED_SUCCESSFULLY"
+  //     },
+  //     "success"
+  //   ));
+  // }
+  // store.dispatch(
+  //   handleField(
+  //     "my-applications-stakeholder",
+  //     "components.pdfSigningPopup.props",
+  //     "openPdfSigningPopup",
+  //     true
+  //   )
+  // )
+  // store.dispatch(
+  //   handleField(
+  //     "my-applications-stakeholder",
+  //     "components.pdfSigningPopup.props",
+  //     "applicationNumber",
+  //     tData[1].applicationNo
+  //   )
+  // )
+  // store.dispatch(
+  //   handleField(
+  //     "my-applications-stakeholder",
+  //     "components.pdfSigningPopup.props",
+  //     "tenantId",
+  //     tData[1].tenantId
+  //   )
+  // )
+}
+
+const onUploadClick = (tData) => {
+  let applicationNumber = tData && tData.applicationNo;
+  let tenantId = tData && tData.tenantId;
+  let url = `upload-unsigned-doc?applicationNo=${applicationNumber}&tenantId=${tenantId}`
+  store.dispatch(setRoute(url));
+}
+const setUpload = (tData) => {
+  if(tData.workflowstate === "APPROVED"){
+    return (
+        <a
+          href="javascript:void(0)"
+          onClick={() => {
+            onUploadClick(tData);
+          }}
+        >
+          <span style={{color: '#fe7a51'}}>{"Upload Document"}</span>
+        </a>
+    )
+  } else {
+    return (
+      ""
+    )
+  }
+}
+
+// Show all approved application details
+export const listOfApprovedApplication = {
+  uiFramework: "custom-molecules",
+  name: "my-applications-stakeholder",
+  componentPath: "Table",
+  //visible: false,
+  props: {
+    columns: [
+      {
+        name: "Application No",
+        labelKey: "BPA_COMMON_TABLE_COL_APP_NO",
+      },
+      {
+        name: "Download Document",
+        labelKey: "BPA_COMMON_TABLE_COL_LINK",
+        options: {
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <a
+              href="javascript:void(0)"
+              onClick={() => {
+                onDownloadClick(tableMeta.rowData);
+              }}
+            >
+              <span style={{color: '#fe7a51'}}>{"Download Document"}</span>
+            </a>
+          ),
+        },
+      },
+      {
+        name: "Upload Document",
+        labelKey: "BPA_COMMON_TABLE_COL_UPLOAD",
+        options: {
+          customBodyRender: (value, tableMeta) => setUpload(value, tableMeta),
+        },
+      },
+      {
+        name: "tenantId",
+        labelKey: "BPA_COMMON_TABLE_COL_TENANT",
+        options: {
+          display: false,
+        },
+      },
+    ],
+    title: {
+      labelName: "Search Results for BPA Applications",
+      labelKey: "BPA_SEARCH_RESULTS_FOR_APP",
+    },
+    rows: "",
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      viewColumns: false,
+      serverSide: false,
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map((item) => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      },
+    },
+  },
+};
+
+export const showSearches = getCommonContainer({
+  showSearchScreens: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "CustomTabContainer",
+    props: {
+      tabs: [
+        {
+          tabButton: { labelName: "SEARCH APPLICATIONS", labelKey: "BPA_MY_APPLICATIONS" },
+          tabContent: { myApplicationsTableConfig }
+        },
+        {
+          tabButton: { labelName: "DOWNLOAD BPA DOCUMENT", labelKey: "BPA_APPLICATIONS_ASSIGNED_TO_ME" },
+          tabContent: { applicationAssignedToMe }
+        },
+        {
+          tabButton: { labelName: "LIST OF APPROVED APPLICATION", labelKey: "BPA_APPLICATIONS_APPROVED" },
+          tabContent: { listOfApprovedApplication }
+        }
+      ],
+      tabIndex : 0
+     // isDigitalSignature : true,
+    },
+    type: "array"
+  }
+});
+
+export const tabsForArchOnly = getCommonContainer({
+  showSearchScreens: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "CustomTabContainer",
+    props: {
+      tabs: [
+        {
+          tabButton: { labelName: "SEARCH APPLICATIONS", labelKey: "BPA_MY_APPLICATIONS" },
+          tabContent: { myApplicationsTableConfig }
+        }
+      ],
+      tabIndex : 0
+     // isDigitalSignature : true,
+    },
+    type: "array"
+  }
+});
+
+export const tabsForSpclArchOnly = getCommonContainer({
+  showSearchScreens: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "CustomTabContainer",
+    props: {
+      tabs: [
+        
+        {
+          tabButton: { labelName: "DOWNLOAD BPA DOCUMENT", labelKey: "BPA_APPLICATIONS_ASSIGNED_TO_ME" },
+          tabContent: { applicationAssignedToMe }
+        }
+      ],
+      tabIndex : 0
+     // isDigitalSignature : true,
+    },
+    type: "array"
+  }
+});
 

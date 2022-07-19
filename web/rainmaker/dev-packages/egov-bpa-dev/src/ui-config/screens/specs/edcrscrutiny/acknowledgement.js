@@ -234,7 +234,7 @@ const screenConfig = {
     );
     const tenant = getQueryArg(window.location.href, "tenantId");
 
-    getSearchResultsfromEDCRWithApplcationNo(applicationNumber, tenant)
+    getSearchResultsfromEDCRWithApplcationNo(applicationNumber, tenant, dispatch)
       .then(response => {
         if (response.data.edcrDetail.length > 0) {
           const data = getAcknowledgementCard(
@@ -285,14 +285,14 @@ const screenConfig = {
                 false
               )
             )
-            dispatch(
-              handleField(
-                "acknowledgement",
-                "components.div.children.gotoHomeFooter.children.updateBpaAppWithNewScrutiny",
-                "visible",
-                true
-              )
-            )
+            // dispatch(
+            //   handleField(
+            //     "acknowledgement",
+            //     "components.div.children.gotoHomeFooter.children.updateBpaAppWithNewScrutiny",
+            //     "visible",
+            //     true
+            //   )
+            // )
           } 
           else if (purpose == "apply" && status == "success") {
             dispatch(

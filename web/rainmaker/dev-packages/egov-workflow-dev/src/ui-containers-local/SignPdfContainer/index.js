@@ -141,17 +141,17 @@ const getPdfBody = async(moduleName,tenantId,applicationNumber) => {
           let edcrNumber = bpaResult && bpaResult.BPA && bpaResult.BPA.length > 0 && bpaResult.BPA[0].edcrNumber || ''
 
           try {
-            let edcrResponse = await edcrHttpRequest(
-              "post",
-              "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
-              "search", []
-            );
-            let edcrDetails = edcrResponse.edcrDetail[0] || {}
+            // let edcrResponse = await edcrHttpRequest(
+            //   "post",
+            //   "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+            //   "search", []
+            // );
+            // let edcrDetails = edcrResponse.edcrDetail[0] || {}
             let applicationDigitallySigned = bpaResult && bpaResult.BPA && bpaResult.BPA.length > 0 &&
             bpaResult.BPA[0].dscDetails && bpaResult.BPA[0].dscDetails[0].documentId ? true : false
             if(!applicationDigitallySigned){
               let BPA = bpaResult.BPA[0]
-              BPA.edcrDetail = [edcrDetails]
+             // BPA.edcrDetail = [edcrDetails] // EdcrDetail not need in PDF payload so Commented
               return {
                 RequestInfo : RequestInfo,
                 "Bpa": [BPA]
@@ -709,6 +709,7 @@ class SignPdfContainer extends Component {
           let response;
           let keysArray = ["buildingpermit", "buildingpermit-low"]
           if(keysArray.includes(key) && moduleName === "BPA"){
+           // delete data[0].edcrDetail;
             response = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=${key}&tenantId=${tenantId}`, data, {
               'Content-Type': 'application/json',
               'Accept': 'application/json'
@@ -906,7 +907,7 @@ class SignPdfContainer extends Component {
                               data.Bpa[0].dscDetails[0].documentType = key
                               data.Bpa[0].dscDetails[0].documentId = singedFileStoreId && singedFileStoreId.data && singedFileStoreId.data.fileStoreId
                             }
-                            delete data.Bpa[0].edcrDetail
+                           // delete data.Bpa[0].edcrDetail
                             return data.Bpa && data.Bpa[0]
                           }
                           else {
@@ -939,6 +940,7 @@ class SignPdfContainer extends Component {
                         //   }
                         // }
                       } catch (error) {
+                        console.log("Nero in Catch 1", error)
                         this.props.hideSpinner();
                         if (!error.response) {
                           // network error
@@ -968,14 +970,17 @@ class SignPdfContainer extends Component {
                   }
 
                 } catch (err) {
+                  console.log("Nero in Catch 3", err)
                     this.props.hideSpinner();
                   }
                 }
             } catch (err) {
+              console.log("Nero in Catch 2", err)
                 this.props.hideSpinner();
               }
             }
         } catch (err) {
+          console.log("Nero in Catch 1", err)
             this.props.hideSpinner()
             this.props.toggleSnackbarAndSetText(true, err.message, "error");
           }

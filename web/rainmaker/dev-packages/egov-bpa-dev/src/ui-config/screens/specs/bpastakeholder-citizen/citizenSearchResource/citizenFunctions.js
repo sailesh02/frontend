@@ -455,24 +455,30 @@ export const getPdfBody = async (applicationNo, tenantId) => {
       "";
 
     try {
-      let applicationDigitallySigned =
-        bpaResult &&
-        bpaResult.BPA &&
-        bpaResult.BPA.length > 0 &&
-        bpaResult.BPA[0].dscDetails &&
-        bpaResult.BPA[0].dscDetails[0].documentId
-          ? true
-          : false;
-      if (!applicationDigitallySigned) {
-        let BPA = bpaResult.BPA[0];
-        BPA.businessService = "BPA1" //Need to remove this line once BPA5 is added from Backend side.
-        return {
-          RequestInfo: RequestInfo,
-          Bpa: [BPA],
-        };
-      } else {
-        return null;
-      }
+      let BPA = bpaResult.BPA[0];
+      //BPA.businessService = "BPA1" //Need to remove this line once BPA5 is added from Backend side.
+      return {
+        RequestInfo: RequestInfo,
+        Bpa: [BPA],
+      };
+      // let applicationDigitallySigned =
+      //   bpaResult &&
+      //   bpaResult.BPA &&
+      //   bpaResult.BPA.length > 0 &&
+      //   bpaResult.BPA[0].dscDetails &&
+      //   bpaResult.BPA[0].dscDetails[0].documentId
+      //     ? true
+      //     : false;
+      // if (!applicationDigitallySigned) {
+      //   let BPA = bpaResult.BPA[0];
+      //   //BPA.businessService = "BPA1" //Need to remove this line once BPA5 is added from Backend side.
+      //   return {
+      //     RequestInfo: RequestInfo,
+      //     Bpa: [BPA],
+      //   };
+      // } else {
+      //   return null;
+      // }
     } catch (err) {
       return;
     }

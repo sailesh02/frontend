@@ -313,12 +313,7 @@ export const fetchApprovedApplicationList = async (action,state,dispatch) => {
     [],
     null
   );
-  // setTenatId variable needs to be removed once we get tenantId value from backend
-  let setTenantId = data.ApprovedBy.map((item) => {
-    item.tenantId = "od.cuttack";
-    return item;
-  });
-  setTenantId.forEach((item,index)=> {
+  data.ApprovedBy.forEach((item,index)=> {
     approvedList.push({
       ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNo,
       ["BPA_COMMON_TABLE_COL_LINK"]: item,

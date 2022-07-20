@@ -445,6 +445,18 @@ let mrgDateObj = null;
     }
 
     if (isFormValid) {
+      let queryObject = JSON.parse(
+        JSON.stringify(
+          get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations", [])
+        )
+      );
+      let docList = [...queryObject[0].applicationDocuments];
+      let revisedList = docList.filter(eachItem => eachItem && eachItem.fileName);
+      queryObject[0].applicationDocuments = revisedList;
+      let test = [];
+      test = await httpRequest("post", "/mr-services/v1/_update", "", [], {
+        MarriageRegistrations: queryObject
+      });
       if (getQueryArg(window.location.href, "action") === "edit") {
         //EDIT FLOW
         const businessId = getQueryArg(
@@ -741,6 +753,49 @@ export const getActionDefinationForStepper = path => {
   return actionDefination;
 };
 
+const setIsDivyangFields = (state, dispatch) => {
+  const isBrideDivyang = get(
+    state.screenConfiguration.preparedFinalObject,
+    "MarriageRegistrations[0].coupleDetails[0].bride.isDivyang",
+    []
+  );
+  const isGroomDivyang = get(
+    state.screenConfiguration.preparedFinalObject,
+    "MarriageRegistrations[0].coupleDetails[0].groom.isDivyang",
+    []
+  );
+  if (isBrideDivyang === true) {
+    dispatch(handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.brideDetails.children.cardContent.children.brideDetailsConatiner.children.isBrideDisabled",
+      "props.value",
+      "Yes"
+    ));
+  } else if (isBrideDivyang === false) {
+    dispatch(handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.brideDetails.children.cardContent.children.brideDetailsConatiner.children.isBrideDisabled",
+      "props.value",
+      "No"
+    ));
+  }
+  if (isGroomDivyang === true) {
+    dispatch(handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.groomDetails.children.cardContent.children.groomDetailsConatiner.children.isGroomDisabled",
+      "props.value",
+      "Yes"
+    ));
+  } else if (isGroomDivyang === false) {
+    dispatch(handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.groomDetails.children.cardContent.children.groomDetailsConatiner.children.isGroomDisabled",
+      "props.value",
+      "No"
+    ));
+  }
+}
+
 export const callBackForPrevious = (state, dispatch) => {
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
@@ -820,6 +875,7 @@ export const callBackForPrevious = (state, dispatch) => {
 
       dispatchMultipleFieldChangeAction("apply", resetGroomGrndFields, dispatch);
     }
+    setIsDivyangFields(state, dispatch);
   }
 
   if (activeStep === 2) {

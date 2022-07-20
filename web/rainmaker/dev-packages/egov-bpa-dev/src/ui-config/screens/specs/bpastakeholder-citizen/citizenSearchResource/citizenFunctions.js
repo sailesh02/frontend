@@ -420,11 +420,6 @@ export const applicationAssignedToMe =  {
 export const getPdfBody = async (applicationNo, tenantId) => {
   const userInfo = JSON.parse(getUserInfo());
   const authToken = getAccessToken();
-  // let uuid = userInfo.uuid;
-  // let userInfos = {
-  //   "id": uuid,
-  //   "tenantId": getTenantId()
-  // };
   let RequestInfo = {
     "apiId": "Rainmaker",
     "ver": ".01",
@@ -461,24 +456,6 @@ export const getPdfBody = async (applicationNo, tenantId) => {
         RequestInfo: RequestInfo,
         Bpa: [BPA],
       };
-      // let applicationDigitallySigned =
-      //   bpaResult &&
-      //   bpaResult.BPA &&
-      //   bpaResult.BPA.length > 0 &&
-      //   bpaResult.BPA[0].dscDetails &&
-      //   bpaResult.BPA[0].dscDetails[0].documentId
-      //     ? true
-      //     : false;
-      // if (!applicationDigitallySigned) {
-      //   let BPA = bpaResult.BPA[0];
-      //   //BPA.businessService = "BPA1" //Need to remove this line once BPA5 is added from Backend side.
-      //   return {
-      //     RequestInfo: RequestInfo,
-      //     Bpa: [BPA],
-      //   };
-      // } else {
-      //   return null;
-      // }
     } catch (err) {
       return;
     }
@@ -490,8 +467,8 @@ export const getPdfBody = async (applicationNo, tenantId) => {
 
 
 export const onDownloadClick = async (tData) => {
-  let data = await getPdfBody(tData.applicationNo,tData.tenantId)
-  let response = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=buildingpermit&tenantId=${tData.tenantId}`, data, {
+  let data = await getPdfBody(tData.dscDetails.applicationNo,tData.dscDetails.tenantId)
+  let response = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=buildingpermit&tenantId=${tData.dscDetails.tenantId}`, data, {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   })
@@ -500,59 +477,22 @@ export const onDownloadClick = async (tData) => {
     response.data.filestoreIds &&
     response.data.filestoreIds.length > 0
   ) {
-    const fileUrls = await getFileUrlFromAPI(response.data.filestoreIds[0],tData.tenantId);
+    const fileUrls = await getFileUrlFromAPI(response.data.filestoreIds[0],tData.dscDetails.tenantId);
     window.location = fileUrls[response.data.filestoreIds[0]];  
   }
-  // if (filteredDoc && filteredDoc.length > 0) {
-  //   const fileUrls = await getFileUrlFromAPI(
-  //     filteredDoc && filteredDoc[0].fileStoreId
-  //   );
-  //   window.location = fileUrls[filteredDoc[0].fileStoreId];
-  // }
-  // if(payload.data.message === "Success"){
-  //   store.dispatch(toggleSnackbarAndSetText(
-  //     true,
-  //     {
-  //       labelName: "Generate Permit Order",
-  //       labelKey: "COMMON_PERMIT_GENERATED_SUCCESSFULLY"
-  //     },
-  //     "success"
-  //   ));
-  // }
-  // store.dispatch(
-  //   handleField(
-  //     "my-applications-stakeholder",
-  //     "components.pdfSigningPopup.props",
-  //     "openPdfSigningPopup",
-  //     true
-  //   )
-  // )
-  // store.dispatch(
-  //   handleField(
-  //     "my-applications-stakeholder",
-  //     "components.pdfSigningPopup.props",
-  //     "applicationNumber",
-  //     tData[1].applicationNo
-  //   )
-  // )
-  // store.dispatch(
-  //   handleField(
-  //     "my-applications-stakeholder",
-  //     "components.pdfSigningPopup.props",
-  //     "tenantId",
-  //     tData[1].tenantId
-  //   )
-  // )
 }
 
 const onUploadClick = (tData) => {
-  let applicationNumber = tData && tData.applicationNo;
-  let tenantId = tData && tData.tenantId;
+  let applicationNumber = tData && tData.dscDetails.applicationNo;
+  let tenantId = tData && tData.dscDetails.tenantId;
   let url = `upload-unsigned-doc?applicationNo=${applicationNumber}&tenantId=${tenantId}`
   store.dispatch(setRoute(url));
 }
 const setUpload = (tData) => {
-  if(tData.workflowstate === "APPROVED"){
+  let documentId =
+  tData &&
+  tData.dscDetails.documentId;
+  if(tData.workflowstate === "APPROVED" && documentId === null){
     return (
         <a
           href="javascript:void(0)"
@@ -588,6 +528,55 @@ const setDownload = (tData) => {
     )
   }
 }
+
+// // set building plan layout document Link
+// const getDownloadDocLink = (tData) => {
+//   let filteredDoc =
+//     tData &&
+//     tData.documents.filter((item) => item.documentType === "BPD.BPL.BPL");
+//   if (filteredDoc && filteredDoc.length > 0) {
+//     return (
+//       <a
+//       href="javascript:void(0)"
+//       onClick={() => {
+//         onDownloadClick(tData);
+//       }}
+//     >
+//       <span style={{color: '#fe7a51'}}>{"Download Document"}</span>
+//     </a>
+//     )
+//   } else {
+//     return (
+//       ""
+//     );
+//   }
+// };
+
+// // set building plan layout document upload Link
+// const getUploadDocLink = (tData) => {
+//   let filteredDoc =
+//   tData &&
+//   tData.documents.filter((item) => item.documentType === "BPD.BPL.BPL");
+//   if (
+//     filteredDoc &&
+//     filteredDoc.length > 0
+//   ) {
+//     return (
+//       ""
+//     );
+//   } else if (filteredDoc && filteredDoc.length > 0) {
+//     return (
+//       <a
+//         href="javascript:void(0)"
+//         onClick={() => {
+//           onUploadClick(tData);
+//         }}
+//       >
+//         <span style={{color: '#fe7a51'}}>{"Upload Document"}</span>
+//       </a>
+//   )
+//   }
+// };
 
 // Show all approved application details
 export const listOfApprovedApplication = {
@@ -655,6 +644,72 @@ export const listOfApprovedApplication = {
   },
 };
 
+export const listOfBuildingPlanLayout = {
+  uiFramework: "custom-molecules",
+  name: "my-applications-stakeholder",
+  componentPath: "Table",
+  //visible: false,
+  props: {
+    columns: [
+      {
+        name: "Application No",
+        labelKey: "BPA_COMMON_TABLE_COL_APP_NO",
+      },
+      {
+        name: "Download Document",
+        labelKey: "BPA_COMMON_TABLE_COL_LINK",
+        options: {
+          customBodyRender: (value, tableMeta) => setDownload(value, tableMeta),
+        },
+      },
+      {
+        name: "Upload Document",
+        labelKey: "BPA_COMMON_TABLE_COL_UPLOAD",
+        options: {
+          customBodyRender: (value, tableMeta) => setUpload(value, tableMeta),
+        },
+      },
+      {
+        name: "tenantId",
+        labelKey: "BPA_COMMON_TABLE_COL_TENANT",
+        options: {
+          display: false,
+        },
+      },
+    ],
+    title: {
+      labelName: "Search Results for BPA Applications",
+      labelKey: "BPA_SEARCH_RESULTS_FOR_APP",
+    },
+    rows: "",
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      viewColumns: false,
+      serverSide: false,
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map((item) => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      },
+    },
+  },
+};
+
+
 export const showSearches = getCommonContainer({
   showSearchScreens: {
     uiFramework: "custom-containers-local",
@@ -673,6 +728,10 @@ export const showSearches = getCommonContainer({
         {
           tabButton: { labelName: "LIST OF APPROVED APPLICATION", labelKey: "BPA_APPLICATIONS_APPROVED" },
           tabContent: { listOfApprovedApplication }
+        },
+        {
+          tabButton: { labelName: "LIST OF BUILDING PLAN LAYOUT", labelKey: "BPA_APPLICATIONS_BUILDING_PLAN_LAYOUT" },
+          tabContent: { listOfBuildingPlanLayout }
         }
       ],
       tabIndex : 0

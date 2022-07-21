@@ -6452,3 +6452,35 @@ export const getSiteInfo = () => {
   var part = currentURL.replace(site_url_origin, "");
   return part.split("/")[1];
 }
+
+export const openBpdDownloadDialog = async(action, state, dispatch, mode = "Download", type) => {
+  dispatch(
+    handleField("search-preview", "components.div.children.downloadBPDPickerDialog", "props.open", true)
+  );
+  // let bpaDetails = get(
+  //   state.screenConfiguration.preparedFinalObject, "BPA"
+  // );
+  
+  // let fileStoreId;
+  //  if(type == "BPA_BPD_UNSIGNED"){
+  //  let filteredDoc =  bpaDetails && bpaDetails.documents.filter( item => item.documentType === "BPD.BPL.BPL")
+  //    fileStoreId = filteredDoc && filteredDoc[0].fileStoreId;
+  // }else{
+  //  let filteredDoc =  bpaDetails && bpaDetails.documents.filter( item => item.documentType === "BPD.BPL.BPL")
+  //   fileStoreId = filteredDoc && filteredDoc[0].fileStoreId;
+  //  // fileStoreId = bpaDetails && bpaDetails.additionalDetail.fileStoreId;
+  // }
+  
+  // //console.log(filteredDoc, "Nero filter doc")
+
+  
+  // let pdfDownload = await httpRequest(
+  //   "get",
+  //   `filestore/v1/files/url?tenantId=od&fileStoreIds=${fileStoreId}`, []
+  // );
+  // if (mode && mode === "Download") {
+  //   window.open(pdfDownload[fileStoreId]);
+  // } else {
+  //   printPdf(pdfDownload[fileStoreId]);
+  // }
+}

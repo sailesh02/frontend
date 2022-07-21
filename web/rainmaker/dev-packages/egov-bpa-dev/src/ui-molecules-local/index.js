@@ -164,6 +164,15 @@ const InstallmentDetail = Loadable({
   loader: () => import("./InstallmentDetail"),
   loading: () => <Loading />
 });
+const GenerateInstallmentsDemandDialog = Loadable({
+  loader: () => import("./GenerateInstallmentsDemandDialog"),
+  loading: () => <Loading />
+});
+const DownloadDocuments = Loadable({
+  loader: () => import("./DownloadDocuments"),
+  loading: () => <Loading />
+});
+
 
 export {
   TestMolecules,
@@ -200,5 +209,7 @@ export {
   PBATrainingTutorials,
   BpaSanctionFeesCard,
   CloseDialog,
-  InstallmentDetail
+  InstallmentDetail,
+  GenerateInstallmentsDemandDialog,
+  DownloadDocuments
 };

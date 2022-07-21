@@ -892,7 +892,8 @@ const setSearchResponse = async (
   if (
     process.env.REACT_APP_NAME === "Citizen" &&
     get(response, "BPA[0].status") == "APPROVAL_INPROGRESS" &&
-    get(response, "BPA[0].businessService") == "BPA5"
+    get(response, "BPA[0].businessService") == "BPA5" &&
+    ifUserRoleExists("BPA_ARC_APPROVER")
   ) {
     set(
       action,

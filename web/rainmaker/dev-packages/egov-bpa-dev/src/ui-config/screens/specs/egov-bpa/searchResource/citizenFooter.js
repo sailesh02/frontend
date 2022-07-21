@@ -1,5 +1,7 @@
 import { getLabel, getCommonGrayCard, getCommonSubHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { ifUserRoleExists } from "../../utils";
+
 import get from "lodash/get";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { createUpdateBpaApplication, submitBpaApplicationNOC } from "../../../../../ui-utils/commons";
@@ -114,17 +116,20 @@ export const updateBpaApplication = async (state, dispatch, action) => {
   let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
   let bpaPreparedObj = get(state, "screenConfiguration.preparedFinalObject.BPA");
   let isSpclArchSelected = bpaPreparedObj.workflow;
-  if (
-    bpaPreparedObj.additionalDetails &&
-    bpaPreparedObj.additionalDetails.assignes &&
-    bpaPreparedObj.additionalDetails.assignes.length > 0
-  ) {
-    let assigneInfo = {
-      assignes: [bpaPreparedObj.additionalDetails.assignes[0].uuid],
-    };
-
-    bpaPreparedObj.workflow = assigneInfo;
+  if(ifUserRoleExists("BPA_ARCHITECT") && bservice === "BPA5" && bpaStatus === "PENDING_FORWARD"){
+    if (
+      bpaPreparedObj.additionalDetails &&
+      bpaPreparedObj.additionalDetails.assignes &&
+      bpaPreparedObj.additionalDetails.assignes.length > 0
+    ) {
+      let assigneInfo = {
+        assignes: [bpaPreparedObj.additionalDetails.assignes[0].uuid],
+      };
+  
+      bpaPreparedObj.workflow = assigneInfo;
+    }
   }
+  
   let bservice = getQueryArg(window.location.href, "bservice");
   if (bservice === "BPA5" && bpaStatus === "PENDING_FORWARD" && !isSpclArchSelected) {
 

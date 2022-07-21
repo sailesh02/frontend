@@ -87,7 +87,6 @@ export const getAssessmentSearchResults = async (queryObject, requestBody) => {
 };
 
 export const getSearchResults = async (queryObject, requestBody) => {
-  console.log("wrongPG2", queryObject);
   try {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(

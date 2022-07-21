@@ -88,7 +88,7 @@ class DynamicCheckboxes extends React.Component {
     let fileStoreId = items && items[0].additionalDetails && items[0].additionalDetails.varificationDocuments[0].fileStoreId
     let pdfDownload = await httpRequest(
       "get",
-      `filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${fileStoreId}`, []
+      `filestore/v1/files/url?tenantId=od&fileStoreIds=${fileStoreId}`, []
     );
   
     window.open(pdfDownload[fileStoreId]);

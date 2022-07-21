@@ -38,27 +38,27 @@ class ActionDialog extends React.Component {
 
   };
 
-  downloadDoc = async(bpaDetails, type) => {
+  downloadDoc = async (bpaDetails, type) => {
     console.log(bpaDetails, "Nero consolessss")
     let fileStoreId;
-   if(type == "BPA_BPD_UNSIGNED"){
-   let filteredDoc =  bpaDetails && bpaDetails.additionalDetail.unsignedBuildingPlanLayoutDetails
-     fileStoreId = filteredDoc && filteredDoc.fileStoreId;
-  }else{
-   let filteredDoc =  bpaDetails && bpaDetails.documents.filter( item => item.documentType === "BPD.BPL.BPL")
-    fileStoreId = filteredDoc && filteredDoc[0].fileStoreId;
-  }
-  
-  let pdfDownload = await httpRequest(
-    "get",
-    `filestore/v1/files/url?tenantId=od&fileStoreIds=${fileStoreId}`, []
-  );
-  window.open(pdfDownload[fileStoreId]);
-  // if (mode && mode === "Download") {
-  //   window.open(pdfDownload[fileStoreId]);
-  // } else {
-  //   printPdf(pdfDownload[fileStoreId]);
-  // }
+    if (type == "BPA_BPD_UNSIGNED") {
+      let filteredDoc = bpaDetails && bpaDetails.additionalDetails.unsignedBuildingPlanLayoutDetails
+      fileStoreId = filteredDoc && filteredDoc.fileStoreId;
+    } else {
+      let filteredDoc = bpaDetails && bpaDetails.documents.filter(item => item.documentType === "BPD.BPL.BPL")
+      fileStoreId = filteredDoc && filteredDoc[0].fileStoreId;
+    }
+
+    let pdfDownload = await httpRequest(
+      "get",
+      `filestore/v1/files/url?tenantId=od&fileStoreIds=${fileStoreId}`, []
+    );
+    window.open(pdfDownload[fileStoreId]);
+    // if (mode && mode === "Download") {
+    //   window.open(pdfDownload[fileStoreId]);
+    // } else {
+    //   printPdf(pdfDownload[fileStoreId]);
+    // }
   }
   render() {
 
@@ -76,9 +76,9 @@ class ActionDialog extends React.Component {
       store.dispatch(
         handleField("search-preview", "components.div.children.downloadBPDPickerDialog", "props.open", false)
       );
-      
-    }
 
+    }
+    console.log(bpaDetails, "Nero bpa Details")
 
     return (
       <Grid
@@ -102,18 +102,22 @@ class ActionDialog extends React.Component {
         >
           <CloseIcon />
         </Grid>
+
+        
         <Grid
           container="true"
           spacing={2}
-         style={{
-          marginTop:'29px'
-        }}
+          style={{
+            marginTop: '29px'
+          }}
         >
+          <Grid container="true">
           <Grid
 
             item
-            sm={6}
-            xs={6}
+            sm={8}
+            xs={8}
+            md={8}
           >
 
             <LabelContainer labelName={"Digitally Sign Application"}
@@ -124,14 +128,14 @@ class ActionDialog extends React.Component {
 
 
           <Grid
-          sm={6}
-          xs={6}
-          md={6}
-          item
+            sm={4}
+            xs={4}
+            md={4}
+            item
           >
             <Button
               color="primary"
-              onClick={()=>{
+              onClick={() => {
                 this.downloadDoc(bpaDetails, "BPA_BPD_SIGNED")
               }}
               style={{
@@ -148,46 +152,56 @@ class ActionDialog extends React.Component {
               />
             </Button>
           </Grid>
-          <Grid
-
-            item
-            sm={6}
-            xs={6}
-            md={6}
-          >
-
-            <LabelContainer labelName={"Digitally Sign Application"}
-              labelKey={"Building plan layout document"} />
-
-
           </Grid>
+          {(() => {
+            if (bpaDetails && bpaDetails.additionalDetails && "unsignedBuildingPlanLayoutDetails" in bpaDetails.additionalDetails) {
+              return <Grid container="true">
+                <Grid
+
+                  item
+                  sm={8}
+                  xs={8}
+                  md={8}
+                >
+
+                  <LabelContainer labelName={"Digitally Sign Application"}
+                    labelKey={"Building plan layout document"} />
 
 
-          <Grid
-          sm={6}
-          xs={6}
-          md={6}
-          item
-          >
-            <Button
-              color="primary"
-              onClick={()=>{
-                this.downloadDoc(bpaDetails, "BPA_BPD_UNSIGNED")
-              }}
-              style={{
-                paddingBottom: "0px",
-                paddingTop: "0px"
-              }}
-            >
+                </Grid>
 
 
-              <LabelContainer
-                labelName={"BPA_VIEW_BUTTON"}
-                labelKey=
-                {"View File"}
-              />
-            </Button>
-          </Grid>
+                <Grid
+                  sm={4}
+                  xs={4}
+                  md={4}
+                  item
+                >
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      this.downloadDoc(bpaDetails, "BPA_BPD_UNSIGNED")
+                    }}
+                    style={{
+                      paddingBottom: "0px",
+                      paddingTop: "0px"
+                    }}
+                  >
+
+
+                    <LabelContainer
+                      labelName={"BPA_VIEW_BUTTON"}
+                      labelKey=
+                      {"View File"}
+                    />
+                  </Button>
+                </Grid>
+              </Grid>
+            }
+          })()}
+
+
+
         </Grid>
 
 
@@ -198,14 +212,14 @@ class ActionDialog extends React.Component {
 
 const mapStateToProps = (state, ownprops) => {
   const { screenConfiguration } = state;
-  
+
   const bpaDetails = get(
     screenConfiguration.preparedFinalObject,
     "BPA",
     {}
   );
-  
-  return {bpaDetails};
+
+  return { bpaDetails };
 };
 
 // const mapDispatchToProps = dispatch => {

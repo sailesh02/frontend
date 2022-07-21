@@ -769,10 +769,12 @@ const setSearchResponse = async (
     );
   }
 
+  
   if (
     get(response, "BPA[0].status") == "SHOW_CAUSE_ISSUED" &&
-    ifUserRoleExists("CITIZEN") &&
-    ifUserRoleExists("BPA_ARC_APPROVER")
+    ifUserRoleExists("CITIZEN") 
+    //&&
+    //(ifUserRoleExists("BPA_ARC_APPROVER") || ifUserRoleExists("BPA_ARCHITECT") || ifUserRoleExists("CITIZEN"))
   ) {
     dispatch(
       handleField(

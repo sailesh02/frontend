@@ -312,7 +312,7 @@ export const fetchApprovedApplicationList = async (action,state,dispatch) => {
     "_search",
     [],
     null
-  );  
+  );
   data.ApprovedBy.forEach((item,index)=> {
     approvedList.push({
       ["BPA_COMMON_TABLE_COL_APP_NO"]: item.dscDetails.applicationNo,

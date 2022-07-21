@@ -283,6 +283,107 @@ export const searchApplicationTable = {
   }
 };
 
+export const searchReassessmentTable = {
+  uiFramework: "custom-molecules",
+  componentPath: "Table",
+  visible: false,
+  props: {
+    className: "appTab",
+    columns: [
+      {
+        labelName: "Reassessment No",
+        labelKey: "PT_ASSESSMENT_NO",
+        options: {
+          filter: false,
+          customBodyRender: value => 
+          (
+            <a href="javascript:void(0)"
+              onClick={() => reassessmentNumberClick(value)}
+            >
+              {value.assessmentNumber}
+            </a>
+          )
+        }
+      },
+      {
+        labelName: "Unique Property ID",
+        labelKey: "PT_COMMON_TABLE_COL_PT_ID",
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <a href="javascript:void(0)"
+              onClick={() => propertyIdClick(value) }
+            >
+              {value.propertyId}
+            </a>
+          )
+        }
+      },
+      {labelName: "Assessment Date", labelKey: "PT_HISTORY_ASSESSMENT_DATE"},
+      {labelName: "Financial Year", labelKey: "reports.pt.financialYear"},
+      {
+        labelName: "Status",
+        labelKey: "PT_COMMON_TABLE_COL_STATUS_LABEL",
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <LabelContainer
+              style={
+                value === "ACTIVE" ? { color: "green" } : { color: "red" }
+              }
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
+          )
+        }
+      },
+      {
+        labelName: "tenantId",
+        labelKey: "tenantId",
+        options: {
+          display: false,
+        }
+      }, {
+        name: "temporary",
+
+        options: {
+          display: false,
+
+
+        }
+      }
+    ],
+    title: {labelKey:"PT_HOME_ASSESSMENT_RESULTS_TABLE_HEADING", labelName:"Search Results for Property Assessment"},
+    rows:"",
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      rowsPerPageOptions: [10, 15, 20],
+      onRowClick: (row, index, dispatch) => {
+        // onApplicationTabClick(row,index, dispatch);
+      }
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
+  }
+};
+
 
 
 const onPropertyTabClick = (tableMeta) => {
@@ -298,6 +399,7 @@ const onPropertyTabClick = (tableMeta) => {
 
 
 const applicationNumberClick = async (item) => {
+  console.log("ITEMS!!!!", item);
 
   const businessService = await getApplicationType(item && item.acknowldgementNumber, item.tenantId, item.creationReason);
   if (businessService == 'PT.MUTATION') {
@@ -310,6 +412,15 @@ const applicationNumberClick = async (item) => {
     navigate(propertyInformationScreenLink(item.propertyId,item.tenantId));
   }
 
+}
+
+const reassessmentNumberClick = async (item) => {
+  console.log("ITEEEM", item);
+  const businessService = await getApplicationType(item && item.assessmentNumber, item.tenantId);
+  if(businessService == 'ASMT'){
+    navigate (`/pt-assessment/search-preview?applicationNumber=${item.assessmentNumber}&tenantId=${item.tenantId}&type=assessment`)
+  }
+  console.log("BUSSSINESSSERVICE", businessService);
 }
 
 const propertyIdClick = (item) => {

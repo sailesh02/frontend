@@ -31,6 +31,8 @@ import store from "ui-redux/store";
 const callBackForNext = async (state, dispatch) => {
   const applicationNo = getQueryArg(window.location.href, "applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
+  const type = getQueryArg(window.location.href, "type");
+
 
   const response = await getAppSearchResults([
     {
@@ -73,43 +75,61 @@ const callBackForNext = async (state, dispatch) => {
 
   let indexNo;
   let bpdDocAlreadyExist = false;
-  for (let i = 0; i < applicationDocs.length; i++) {
-    if (applicationDocs[i].documentType === "BPD.BPL.BPL") {
-      indexNo = i;
-      bpdDocAlreadyExist = true;
+  
+  // update service payload update
+  if(type==="update" ){
+    for (let i = 0; i < applicationDocs.length; i++) {
+      if (applicationDocs[i].documentType === "BPD.BPL.BPL") {
+        indexNo = i;
+        bpdDocAlreadyExist = true;
+      }
     }
+    if (bpdDocAlreadyExist) {
+      //applicationDocs.splice(indexNo, 1)
+      applicationDocs[indexNo].fileStoreId =
+        uploadedDocs[0].documents[0].fileStoreId;
+    } else {
+      applicationDocs.push(doc);
+    }
+    console.log(applicationDocs, "Nero DOcuments");
+    payload.documents = applicationDocs;
+    payload.additionalDetails.applicationType = "buildingPlanLayoutSignature";
+  }  
+  // dscUpdate service payload update
+  if(type==="dscUpdate"){
+    let signDetails = {
+      signDetails: {
+        offLineSign: true,
+        digitalSignfeatureDeveloped: false,
+      },
+    };
+    payload.dscDetails[0].additionalDetails = signDetails;
+    payload.dscDetails[0].documentType = "buildingpermit";
+    payload.dscDetails[0].documentId = uploadedDocs[0].documents[0].fileStoreId;
   }
-  if (bpdDocAlreadyExist) {
-    //applicationDocs.splice(indexNo, 1)
-    applicationDocs[indexNo].fileStoreId =
-      uploadedDocs[0].documents[0].fileStoreId;
-  } else {
-    applicationDocs.push(doc);
-  }
-  console.log(applicationDocs, "Nero DOcuments");
-  payload.documents = applicationDocs;
-  payload.additionalDetails.applicationType = "buildingPlanLayoutSignature";
-  let signDetails = {
-    signDetails: {
-      offLineSign: true,
-      digitalSignfeatureDeveloped: false,
-    },
-  };
-  payload.dscDetails[0].additionalDetails = signDetails;
-  payload.dscDetails[0].documentType = "buildingpermit";
-  payload.dscDetails[0].documentId = uploadedDocs[0].documents[0].fileStoreId;
   console.log(payload, "Nero final payload");
-
+  let res;
   try {
-    const response = await httpRequest(
-      "post",
-      "/bpa-services/v1/bpa/_updatedscdetails",
-      "",
-      [],
-      { ["BPA"]: payload }
-    );
-    console.log(response, "Nero response after updated");
-    if (response) {
+    if(type==="dscUpdate" ){
+      res = await httpRequest(
+        "post",
+        "/bpa-services/v1/bpa/_updatedscdetails",
+        "",
+        [],
+        { ["BPA"]: payload }
+      );
+    }else if(type==="update"){
+      res = await httpRequest(
+        "post",
+        "/bpa-services/v1/bpa/_update",
+        "",
+        [],
+        { ["BPA"]: payload }
+      );
+    }
+    
+    console.log(res, "Nero response after updated");
+    if (res) {
       let url = `acknowledgement?purpose=bpd_signed_upload&status=success&applicationNumber=${applicationNo}&tenantId=${tenantId}`;
       dispatch(setRoute(url));
     } else {

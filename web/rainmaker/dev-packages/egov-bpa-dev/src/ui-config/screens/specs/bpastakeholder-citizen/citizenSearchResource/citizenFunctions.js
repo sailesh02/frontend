@@ -487,7 +487,14 @@ export const onDownloadClick = async (tData) => {
 const onUploadClick = (tData) => {
   let applicationNumber = tData && tData.dscDetails.applicationNo;
   let tenantId = tData && tData.dscDetails.tenantId;
-  let url = `upload-unsigned-doc?applicationNo=${applicationNumber}&tenantId=${tenantId}`
+  let url = `upload-unsigned-doc?applicationNo=${applicationNumber}&tenantId=${tenantId}&type=dscUpdate`
+  store.dispatch(setRoute(url));
+}
+
+const onUploadClickBuildLayout = (tData) => {
+  let applicationNumber = tData && tData.dscDetails.applicationNo;
+  let tenantId = tData && tData.dscDetails.tenantId;
+  let url = `upload-unsigned-doc?applicationNo=${applicationNumber}&tenantId=${tenantId}&type=update`
   store.dispatch(setRoute(url));
 }
 const setUpload = (tData) => {
@@ -577,7 +584,7 @@ const setUploadBuildingLayout = (tData) => {
       <a
         href="javascript:void(0)"
         onClick={() => {
-          onUploadClick(tData);
+          onUploadClickBuildLayout(tData);
         }}
       >
         <span style={{ color: "#fe7a51" }}>{"Upload Document"}</span>

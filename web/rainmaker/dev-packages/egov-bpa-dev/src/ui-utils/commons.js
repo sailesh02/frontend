@@ -681,6 +681,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 
     set(payload, "landInfo.owners", authOwners);
     let response;
+    set(payload, "edcrNumber", payload.edcrNumber.trim());
     if (method === "CREATE") {
       response = await httpRequest(
         "post",

@@ -336,13 +336,18 @@ class EnhancedTable extends React.Component {
                     :
                     <div style={{ marginTop: "-8px", whiteSpace: "nowrap" }}>
                       <React.Fragment>
-                        <Tooltip title={`${sign}${value}% from last ${filterValue}`} placement="top" arrow classes={{ tooltip: classes.lightTooltip }}>
+                        <Tooltip title={(this.props.excelName!='Tax Heads' && this.props.filters['modulelevel']=='PT') ? `${sign}${value}% from last ${filterValue}` : ''} placement="top" arrow classes={{ tooltip: classes.lightTooltip }}>
                           <span style={{ cursor: 'pointer' }}>
                             <span className={"table-value"}>{n[d]}</span>
                             <span style={{ marginLeft: "2vh", fontSize: 'initial', paddingRight: "8px" }}>
-                              <img src={insightIcon} style={{ height: "12px", color: insightColor }} />
-                            </span>
-                            <span style={{ color: insightColor, fontSize: '14px' }}>{value < 10 ? ' ' : ''}{value}%</span>
+                             {
+                              (this.props.excelName!='Tax Heads' && this.props.filters['modulelevel']=='PT') ? <img src={(this.props.excelName!='Tax Heads' && this.props.filters['modulelevel']=='PT') ? insightIcon : ''} style={{ height: "12px", color: (this.props.excelName!='Tax Heads' && this.props.filters['modulelevel']=='PT') ? insightColor: '' }} /> : ''
+                             }
+                              
+                            </span>{
+                              (this.props.excelName!='Tax Heads' && this.props.filters['modulelevel']=='PT') ? <span style={{ color: (this.props.excelName!='Tax Heads' && this.props.filters['modulelevel']=='PT') ? insightColor : '', fontSize: '14px' }}>{value < 10 ? ' ' : ''}{value}%</span> : ''
+                            }
+                            
                           </span>
                         </Tooltip>
 

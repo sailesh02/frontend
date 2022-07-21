@@ -82,6 +82,7 @@ dispatch(
 
   let currentEdcrInfo = get(state, "screenConfiguration.preparedFinalObject.scrutinyDetailsForHistory");
   let OldEdcrDetail = await getEdcrDetails(oldEdcr, tenantId);
+  //TODOs: Need to compare with BPA Business service not with Edcr Detail
   let currentEdcrBService = get(currentEdcrInfo, "planDetail.planInformation.businessService")
   let oldEdcrBService = get(OldEdcrDetail, "planDetail.planInformation.businessService")
   console.log(currentEdcrBService, oldEdcrBService, "Nero Bservice")

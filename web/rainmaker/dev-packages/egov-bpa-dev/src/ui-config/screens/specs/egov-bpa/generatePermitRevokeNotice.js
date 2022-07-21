@@ -7,7 +7,8 @@ import {getPermitRevokeNoticeForm, setMdmsDataForRVK } from "./generateShowCause
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "ui-redux/store";
 import { getAppSearchResults } from "../../../../ui-utils/commons"
-
+import { httpRequest } from "../../../../ui-utils";
+import { commentsContainerMultiLine } from "./summaryResource/scrutinySummary";
 
 const closePdfSigningPopup = (refreshType) => {
   store.dispatch(
@@ -52,12 +53,41 @@ if(response && response.BPA && response.BPA.length > 0) dispatch(prepareFinalObj
 //console.log(response, "Nero Res")
 }
 
+const setLastSCNDetail = async(action, state, dispatch) => {
+  let applicationNumber = getQueryArg(
+    window.location.href,
+    "applicationNumber", ""
+  );
+  let tenantId = getQueryArg(
+    window.location.href,
+    "tenantId", ""
+  );
+  let noticeHistory = await httpRequest(
+    "post",
+    "/bpa-services/v1/notice/_search",
+    "_search",
+    [
+      {
+        key: "tenantid",
+        value: tenantId
+      },
+      { key: "businessid", value: applicationNumber }
+    ],
+    {}
+  );
+console.log(noticeHistory, "Nero Notice History")
+if(noticeHistory && noticeHistory.Notice && noticeHistory.Notice.length > 0){
+  
+  dispatch(prepareFinalObject("lastSCNDetail", noticeHistory.Notice[noticeHistory.Notice.length-1]))
+}
+}
 const screenConfig = {
   uiFramework: "material-ui",
   name: "generatePermitRevokeNotice",
   beforeInitScreen: (action, state, dispatch) => {
    getApplicationDetails(action, state, dispatch);
    setMdmsDataForRVK(action, state, dispatch);
+   setLastSCNDetail(action, state, dispatch)
    // dispatch(prepareFinalObject("showCuaseNoticeInfo", {}))
     return action;
   },

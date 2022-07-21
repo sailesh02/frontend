@@ -17,6 +17,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get"
 import commonConfig from "config/common.js";
 import set from "lodash/set"
+import {getEdcrDetails} from "../../edcrscrutiny/functions"
 
 
 
@@ -70,6 +71,7 @@ const generatePdf = async (state, dispatch) => {
     "screenConfiguration.preparedFinalObject.BPAForSCN",
     {}
   );
+  let edcrDetail = await getEdcrDetails(bpaDetails.edcrNumber, bpaDetails.tenantId);
   let mdmsData = get(
     state,
     "screenConfiguration.preparedFinalObject.mdmsData.common-masters",
@@ -112,6 +114,7 @@ const generatePdf = async (state, dispatch) => {
 
     if(apiRes && apiRes.idResponses){
       set(bpaDetails, "scnLetterNo", apiRes.idResponses[0].id)
+      set(bpaDetails, "edcrDetail", edcrDetail.planDetail.planInformation)
     }
     let res = await httpRequest(
       "post",
@@ -154,6 +157,14 @@ const generatePdfForPermitRevoke = async (state, dispatch) => {
     "screenConfiguration.preparedFinalObject.BPAForSCN",
     {}
   );
+  let lastSCNDetail = get(
+    state,
+    "screenConfiguration.preparedFinalObject.lastSCNDetail",
+    {}
+  );
+
+  let edcrDetail = await getEdcrDetails(bpaDetails.edcrNumber, bpaDetails.tenantId);
+  
   let mdmsData = get(
     state,
     "screenConfiguration.preparedFinalObject.mdmsData.common-masters",
@@ -196,6 +207,10 @@ const generatePdfForPermitRevoke = async (state, dispatch) => {
 
     if(apiRes && apiRes.idResponses){
       set(bpaDetails, "scnLetterNo", apiRes.idResponses[0].id)
+      set(bpaDetails, "lastSCNDetail.LetterNo", lastSCNDetail.LetterNo)
+      set(bpaDetails, "lastSCNDetail.createdTime", lastSCNDetail.auditDetails.createdTime)
+      set(bpaDetails, "edcrDetail", edcrDetail.planDetail.planInformation)
+      
     }
     let res = await httpRequest(
       "post",

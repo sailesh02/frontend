@@ -7,7 +7,6 @@ import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-const mode = getQueryArg(window.location.href, "mode");
 
 
 
@@ -57,6 +56,7 @@ const WizardComponent = ({
   nextLabel,
   history,
   nextButtonEnabled,
+  mode
 }) => {
   ((selected == 5 || selected == 7)
     ? ((selected == 5) ? (backLabel = 'PT_APPLICATION_BUTTON_DOWN_CONF') : (backLabel = 'PT_ASSESS_PAY_FOR_NEW_YEAR'))

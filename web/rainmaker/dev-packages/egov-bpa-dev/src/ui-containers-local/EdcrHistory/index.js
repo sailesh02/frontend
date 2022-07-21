@@ -106,7 +106,7 @@ let edcrObj = edcrRes && edcrRes.edcrDetail[0];
         sOccupancyType.forEach(subOcData => {
           occupancyTypeCheck.push({
             value: subOcData,
-            label: getLocaleLabels("NA", `BPA_SUBOCCUPANCYTYPE_${getTransformedLocale(subOcData)}`, getLocalLabels)
+            label: getLocaleLabels("NA", `BPA_SUBOCCUPANCYTYPE_${getTransformedLocale(subOcData)}`, null)
           });
         });
       }

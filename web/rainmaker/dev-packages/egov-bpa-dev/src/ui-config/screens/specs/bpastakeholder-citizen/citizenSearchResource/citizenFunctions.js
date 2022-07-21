@@ -3,6 +3,7 @@ import React from 'react';
 import axios from 'axios';
 import store from "ui-redux/store";
 import {
+  toggleSnackbar,
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -13,6 +14,7 @@ import { httpRequest } from "../../../../../ui-utils";
 import { getBpaSearchResults, getSearchResults } from "../../../../../ui-utils/commons";
 import { getWorkFlowData, getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { getAppSearchResults } from "../../../../../ui-utils/commons"
 
 import {getBpaTextToLocalMapping, getEpochForDate,getTextToLocalMapping, getUniqueItemsFromArray, sortByEpoch} from "../../utils";
 import { getBreak, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
@@ -529,54 +531,92 @@ const setDownload = (tData) => {
   }
 }
 
-// // set building plan layout document Link
-// const getDownloadDocLink = (tData) => {
-//   let filteredDoc =
-//     tData &&
-//     tData.documents.filter((item) => item.documentType === "BPD.BPL.BPL");
-//   if (filteredDoc && filteredDoc.length > 0) {
-//     return (
-//       <a
-//       href="javascript:void(0)"
-//       onClick={() => {
-//         onDownloadClick(tData);
-//       }}
-//     >
-//       <span style={{color: '#fe7a51'}}>{"Download Document"}</span>
-//     </a>
-//     )
-//   } else {
-//     return (
-//       ""
-//     );
-//   }
-// };
+const onDownloadClickBuildingLayout = async (tData) => {
+  let applicationNumber = tData && tData.dscDetails.applicationNo;
+  let tenantId = tData && tData.dscDetails.tenantId;
 
-// // set building plan layout document upload Link
-// const getUploadDocLink = (tData) => {
-//   let filteredDoc =
-//   tData &&
-//   tData.documents.filter((item) => item.documentType === "BPD.BPL.BPL");
-//   if (
-//     filteredDoc &&
-//     filteredDoc.length > 0
-//   ) {
-//     return (
-//       ""
-//     );
-//   } else if (filteredDoc && filteredDoc.length > 0) {
-//     return (
-//       <a
-//         href="javascript:void(0)"
-//         onClick={() => {
-//           onUploadClick(tData);
-//         }}
-//       >
-//         <span style={{color: '#fe7a51'}}>{"Upload Document"}</span>
-//       </a>
-//   )
-//   }
-// };
+  const response = await getAppSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId,
+    },
+    { key: "applicationNo", value: applicationNumber },
+  ]);
+  console.log(response, "Nero single App");
+  let filteredDoc =
+    response &&
+    response.BPA &&
+    response.BPA.length > 0 &&
+    response.BPA[0].documents.filter(
+      (item) => item.documentType === "BPD.BPL.BPL"
+    );
+  if (filteredDoc && filteredDoc.length > 0) {
+    const fileUrls = await getFileUrlFromAPI(
+      filteredDoc && filteredDoc[0].fileStoreId
+    );
+    window.location = fileUrls[filteredDoc[0].fileStoreId];
+  } else {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName:
+            "Sorry, BPD document was not uploaded, Please upload first",
+          labelKey: "BPA_BPD_DOC_WAS_NOT_UPLOADED",
+        },
+        "warning"
+      )
+    );
+  }
+};
+
+const setUploadBuildingLayout = (tData) => {
+  let filteredDoc = tData && tData.documents.filter( item => item.documentType === "BPD.BPL.BPL") 
+  if (filteredDoc && filteredDoc.length > 0) {
+    return (
+      <a
+        href="javascript:void(0)"
+        onClick={() => {
+          onUploadClick(tData);
+        }}
+      >
+        <span style={{ color: "#fe7a51" }}>{"Upload Document"}</span>
+      </a>
+    );
+  } else if (
+    filteredDoc &&
+    filteredDoc.length > 0 &&
+    tData.buildingAdditionalDetails &&
+    tData.buildingAdditionalDetails.hasOwnProperty("buildingPlanLayoutIsSigned")
+  ) {
+    return (
+      ""
+    );
+  } else {
+    return (
+      ""
+    )
+  }
+}
+const setDownloadBuildingLayout = (tData) => {
+  let filteredDoc = tData && tData.documents.filter( item => item.documentType === "BPD.BPL.BPL") 
+  if(filteredDoc && filteredDoc.length > 0){
+    return (
+      <a
+      href="javascript:void(0)"
+      onClick={() => {
+        onDownloadClickBuildingLayout(tData);
+      }}
+    >
+      <span style={{color: '#fe7a51'}}>{"Download Document"}</span>
+    </a>
+    )
+  } else {
+    return (
+      ""
+    )
+  }
+}
 
 // Show all approved application details
 export const listOfApprovedApplication = {
@@ -659,14 +699,14 @@ export const listOfBuildingPlanLayout = {
         name: "Download Document",
         labelKey: "BPA_COMMON_TABLE_COL_LINK",
         options: {
-          customBodyRender: (value, tableMeta) => setDownload(value, tableMeta),
+          customBodyRender: (value, tableMeta) => setDownloadBuildingLayout(value, tableMeta),
         },
       },
       {
         name: "Upload Document",
         labelKey: "BPA_COMMON_TABLE_COL_UPLOAD",
         options: {
-          customBodyRender: (value, tableMeta) => setUpload(value, tableMeta),
+          customBodyRender: (value, tableMeta) => setUploadBuildingLayout(value, tableMeta),
         },
       },
       {

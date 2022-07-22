@@ -162,7 +162,7 @@ const createPreApprovePlan = async (state, dispatch) => {
       plotWidth: plotDetails.widthInMt,
       roadWidth: plotDetails.abuttingRoadWidthInMt,
       active: false,
-      floorDescription: buildingAbstract.totalFloorNo
+      floorDescription: `G+${buildingAbstract.totalFloorNo}`
     };
     // Drawing Details Section Start
     const drawingDetail = {
@@ -594,41 +594,53 @@ export const proposedBuildingDetails = getCommonCard({
         jsonPath: "residentialOccupacy.description",
       }
     ),
-    subOccupancyType: getCommonContainer({
-      ulb: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-bpa",
-        componentPath: "AutosuggestContainer",
-        props: {
-          label: {
-            labelName: "Sub Occupancy Type",
-            labelKey: "BPA_SUB_OCCUP_TYPE_LABEL",
-          },
-          placeholder: {
-            labelName: "Select Sub Occupancy Type",
-            labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER",
-          },
-          localePrefix: {
-            moduleName: "BPA",
-            masterName: "SUBOCCUPANCYTYPE",
-          },
-          required: true,
-          labelsFromLocalisation: true,
-          // isClearable: true,
-          jsonPath: "edcr.blockDetail[0].suboccupancyData",
-          sourceJsonPath: "applyScreenMdmsData.BPA.SubOccupancyType",
-          labelsFromLocalisation: true,
-          isMulti: false,
+    dummyDiv2: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6,
+      },
+      visible: true,
+      props: {
+        disabled: true,
+      },
+    },
+    subOccupancyType: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-bpa",
+      componentPath: "AutosuggestContainer",
+      props: {
+        label: {
+          labelName: "Sub Occupancy Type",
+          labelKey: "BPA_SUB_OCCUP_TYPE_LABEL",
+        },
+        placeholder: {
+          labelName: "Select Sub Occupancy Type",
+          labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER",
+        },
+        localePrefix: {
+          moduleName: "BPA",
+          masterName: "SUBOCCUPANCYTYPE",
         },
         required: true,
+        labelsFromLocalisation: true,
+        // isClearable: true,
         jsonPath: "edcr.blockDetail[0].suboccupancyData",
+        sourceJsonPath: "applyScreenMdmsData.BPA.SubOccupancyType",
+        labelsFromLocalisation: true,
         isMulti: false,
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        }
       },
-    })
+      required: true,
+      jsonPath: "edcr.blockDetail[0].suboccupancyData",
+      isMulti: false,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6,
+      },
+    },
   }),
   proposedContainer: {
     uiFramework: "custom-atoms",
@@ -776,29 +788,32 @@ export const proposedBuildingDetails = getCommonCard({
                   },
                 },
               },
-              addBuildingDetails: {
-                componentPath: "Button",
-                props: {
-                  variant: "contained",
-                  color: "primary",
-                  style: {
-                    minWidth: "200px",
-                    height: "48px",
-                    marginRight: "45px",
-                    marginTop: "20px",
+              addButton: getCommonContainer({
+                addBuildingDetails: {
+                  componentPath: "Button",
+                  props: {
+                    variant: "contained",
+                    color: "primary",
+                    style: {
+                      minWidth: "200px",
+                      height: "48px",
+                      marginRight: "45px",
+                      marginTop: "20px",
+                    },
+                  },
+                  children: {
+                    nextButtonLabel: getLabel({
+                      labelName: "Add Data",
+                      labelKey: "PREAPPROVE_ADD_DETAILS",
+                    }),
+                  },
+                  onClickDefination: {
+                    action: "condition",
+                    callBack: openAddBuildinfDetailsPopUp,
                   },
                 },
-                children: {
-                  nextButtonLabel: getLabel({
-                    labelName: "Add Data",
-                    labelKey: "PREAPPROVE_ADD_DETAILS",
-                  }),
-                },
-                onClickDefination: {
-                  action: "condition",
-                  callBack: openAddBuildinfDetailsPopUp,
-                },
-              },
+              }),
+              
             }),
           }),
           items: [],

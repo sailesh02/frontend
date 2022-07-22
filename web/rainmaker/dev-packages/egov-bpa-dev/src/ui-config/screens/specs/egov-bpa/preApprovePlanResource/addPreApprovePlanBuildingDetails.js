@@ -114,12 +114,6 @@ const addBuildingDetails = async (state, dispatch, type) => {
             titleData: "",
             floorNo: "",
           };
-          // newFloorDetails["Occupancy/Sub Occupancy"] =
-          //   edcrDetails.blockDetail[currentIndex].suboccupancyData.label;
-          // newObj.suboccupancyData.label =
-          //   edcrDetails.blockDetail[currentIndex].suboccupancyData.label;
-          // newObj.suboccupancyData.value =
-          //   edcrDetails.blockDetail[currentIndex].suboccupancyData.value;
           newObj.blocks.push(newFloorDetails);
           newObj.titleData = `Block ${parseInt(currentIndex) + 1}`;
           newObj.floorNo = newFloorDetails.Level;
@@ -129,7 +123,6 @@ const addBuildingDetails = async (state, dispatch, type) => {
             edcrDetails.blockDetail[currentIndex].blocks = newObj.blocks;
           }
           edcrDetails.blockDetail[currentIndex].titleData = newObj.titleData;
-          edcrDetails.blockDetail[currentIndex].titleData = newObj.floorNo;
         }
       });
     }

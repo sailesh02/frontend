@@ -15,6 +15,7 @@ import { applyTradeLicense, checkValidOwners, getNextFinancialYearForRenewal } f
 import { createEstimateData, downloadCertificateForm, getButtonVisibility, getCommonApplyFooter, getDocList, setMultiOwnerForApply, setValidToFromVisibilityForApply, validateFields, downloadProvisionalCertificateForm } from "../../utils";
 import "./index.css";
 import { brideAddressDetails } from "./brideAddress";
+import { updateApplicationDocsValues } from "../../../../../ui-utils/commons";
 
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
@@ -453,10 +454,13 @@ let mrgDateObj = null;
       let docList = [...queryObject[0].applicationDocuments];
       let revisedList = docList.filter(eachItem => eachItem && eachItem.fileName);
       queryObject[0].applicationDocuments = revisedList;
-      let test = [];
-      test = await httpRequest("post", "/mr-services/v1/_update", "", [], {
+      let updateResponse = [];
+      updateResponse = await httpRequest("post", "/mr-services/v1/_update", "", [], {
         MarriageRegistrations: queryObject
       });
+      let updtdDocsList = updateResponse["MarriageRegistrations"][0]["applicationDocuments"];
+      updateApplicationDocsValues(updtdDocsList, state, dispatch);
+      
       if (getQueryArg(window.location.href, "action") === "edit") {
         //EDIT FLOW
         const businessId = getQueryArg(

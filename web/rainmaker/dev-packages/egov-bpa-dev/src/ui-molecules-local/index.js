@@ -160,11 +160,14 @@ const CloseDialog = Loadable({
   loader: () => import("./CloseDialog"),
   loading: () => <Loading />
 });
+const DocumentListPreApprove = Loadable({
+  loader: () => import("./DocumentListPreApprove"),
+  loading: () => <Loading />
+});
 const InstallmentDetail = Loadable({
   loader: () => import("./InstallmentDetail"),
   loading: () => <Loading />
 });
-
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -200,5 +203,6 @@ export {
   PBATrainingTutorials,
   BpaSanctionFeesCard,
   CloseDialog,
-  InstallmentDetail
+  DocumentListPreApprove,
+  InstallmentDetail,
 };

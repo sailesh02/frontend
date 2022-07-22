@@ -379,7 +379,7 @@ const getMultipleOwners = owners => {
   return mergedOwners;
 };
 
-const updateApplicationDocsValues = async (applicationDocs, state, dispatch) => {
+export const updateApplicationDocsValues = async (applicationDocs, state, dispatch) => {
   /* To change the order of application documents similar order of mdms order*/
   const mdmsDocs = get(
     state.screenConfiguration.preparedFinalObject,
@@ -399,40 +399,46 @@ const updateApplicationDocsValues = async (applicationDocs, state, dispatch) => 
   dispatch(
     prepareFinalObject("MarriageRegistrations[0].applicationDocuments", applicationDocs)
   );
-  
-    let uploadedDocuments = {};
-    let fileStoreIds =
-      applicationDocs &&
-      applicationDocs.map(item => item.fileStoreId).join(",");
-    const fileUrlPayload =
-      fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
-    applicationDocs &&
-      applicationDocs.forEach((item, index) => {
-        uploadedDocuments[index] = [
-          {
-            fileName:
-              (fileUrlPayload &&
-                fileUrlPayload[item.fileStoreId] &&
-                decodeURIComponent(
-                  getFileUrl(fileUrlPayload[item.fileStoreId])
-                    .split("?")[0]
-                    .split("/")
-                    .pop()
-                    .slice(13)
-                )) ||
-              `Document - ${index + 1}`,
-            fileStoreId: item.fileStoreId,
-            // fileUrl: Object.values(fileUrlPayload)[index],
-            fileUrl: fileUrlPayload[item.fileStoreId],
-            documentType: item.documentType,
-            tenantId: item.tenantId,
-            id: item.id
-          }
-        ];
-      });
-    dispatch(
-      prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", uploadedDocuments)
-    );
+  const reduxDocsData = get(
+    state.screenConfiguration.preparedFinalObject,
+    "LicensesTemp[0].uploadedDocsInRedux",
+    []
+  );
+  let updtdReduxDocsData = {};
+  Object.values(reduxDocsData).forEach(eachItem => {
+    updtdReduxDocsData[eachItem[0]["fileStoreId"]] = {
+      fileStoreId: eachItem[0]["fileStoreId"],
+      fileUrl: eachItem[0]["fileUrl"],
+    };
+  })
+
+  let uploadedDocuments = {};
+  applicationDocs &&
+    applicationDocs.forEach((item, index) => {
+      uploadedDocuments[index] = [
+        {
+          fileName:
+            (updtdReduxDocsData[item.fileStoreId] &&
+              updtdReduxDocsData[item.fileStoreId]["fileUrl"] &&
+              decodeURIComponent(
+                getFileUrl(updtdReduxDocsData[item.fileStoreId]["fileUrl"])
+                  .split("?")[0]
+                  .split("/")
+                  .pop()
+                  .slice(13)
+              )) ||
+            `Document - ${index + 1}`,
+          fileStoreId: item.fileStoreId,
+          fileUrl: updtdReduxDocsData[item.fileStoreId]["fileUrl"],
+          documentType: item.documentType,
+          tenantId: item.tenantId,
+          id: item.id
+        }
+      ];
+    });
+  dispatch(
+    prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", uploadedDocuments)
+  );
 }
 
 export const applyTradeLicense = async (state, dispatch, activeIndex) => {

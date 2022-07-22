@@ -103,44 +103,64 @@ import {
         "Buildup Area": blockDetail.buildUpArea,
         "Floor Area": blockDetail.carpetArea,
         "Carpet Area": blockDetail.floorArea,
-        "Front setback": blockDetail.frontSetback,
-        "Rear setback": blockDetail.rearSetback,
-        "Side setback": blockDetail.sideSetback,
+        "Floor Height": blockDetail.floorHeight,
       };
       if (edcrDetails.blockDetail.length > 0) {
         edcrDetails.blockDetail.forEach((element, index) => {
-          if (element.hasOwnProperty("suboccupancyData")) {
-            if (currentIndex === index.toString()) {
-              const newObj = {
-                blocks: [],
-                suboccupancyData: { label: "", value: "" },
-                titleData: "",
-                floorNo: "",
-              };
-              // newFloorDetails["Occupancy/Sub Occupancy"] =
-              //   edcrDetails.blockDetail[currentIndex].suboccupancyData.label;
-              newObj.suboccupancyData.label =
-                edcrDetails.blockDetail[currentIndex].suboccupancyData.label;
-              newObj.suboccupancyData.value =
-                edcrDetails.blockDetail[currentIndex].suboccupancyData.value;
-              newObj.blocks.push(newFloorDetails);
-              newObj.titleData = `Block ${parseInt(currentIndex) + 1}`;
-              newObj.floorNo = newFloorDetails.Level;
-              if (
-                edcrDetails.blockDetail[currentIndex].hasOwnProperty("blocks")
-              ) {
-                edcrDetails.blockDetail[currentIndex].blocks.push(
-                  newFloorDetails
-                );
-              } else {
-                edcrDetails.blockDetail[currentIndex].blocks = newObj.blocks;
-              }
-              edcrDetails.blockDetail[currentIndex].titleData = newObj.titleData;
-              edcrDetails.blockDetail[currentIndex].titleData = newObj.floorNo;
+          if (currentIndex === index.toString()) {
+            const newObj = {
+              blocks: [],
+              suboccupancyData: { label: "", value: "" },
+              titleData: "",
+              floorNo: "",
+            };
+            newObj.blocks.push(newFloorDetails);
+            newObj.titleData = `Block ${parseInt(currentIndex) + 1}`;
+            newObj.floorNo = newFloorDetails.Level;
+            if (
+              edcrDetails.blockDetail[currentIndex].hasOwnProperty("blocks")
+            ) {
+              edcrDetails.blockDetail[currentIndex].blocks.push(
+                newFloorDetails
+              );
+            } else {
+              edcrDetails.blockDetail[currentIndex].blocks = newObj.blocks;
             }
-          } else {
-            alert("Please fill Sub Occupacy Details");
+            edcrDetails.blockDetail[currentIndex].titleData = newObj.titleData;
+            edcrDetails.blockDetail[currentIndex].titleData = newObj.floorNo;
           }
+          // if (element.hasOwnProperty("suboccupancyData")) {
+          //   if (currentIndex === index.toString()) {
+          //     const newObj = {
+          //       blocks: [],
+          //       suboccupancyData: { label: "", value: "" },
+          //       titleData: "",
+          //       floorNo: "",
+          //     };
+          //     // newFloorDetails["Occupancy/Sub Occupancy"] =
+          //     //   edcrDetails.blockDetail[currentIndex].suboccupancyData.label;
+          //     newObj.suboccupancyData.label =
+          //       edcrDetails.blockDetail[currentIndex].suboccupancyData.label;
+          //     newObj.suboccupancyData.value =
+          //       edcrDetails.blockDetail[currentIndex].suboccupancyData.value;
+          //     newObj.blocks.push(newFloorDetails);
+          //     newObj.titleData = `Block ${parseInt(currentIndex) + 1}`;
+          //     newObj.floorNo = newFloorDetails.Level;
+          //     if (
+          //       edcrDetails.blockDetail[currentIndex].hasOwnProperty("blocks")
+          //     ) {
+          //       edcrDetails.blockDetail[currentIndex].blocks.push(
+          //         newFloorDetails
+          //       );
+          //     } else {
+          //       edcrDetails.blockDetail[currentIndex].blocks = newObj.blocks;
+          //     }
+          //     edcrDetails.blockDetail[currentIndex].titleData = newObj.titleData;
+          //     edcrDetails.blockDetail[currentIndex].titleData = newObj.floorNo;
+          //   }
+          // } else {
+          //   alert("Please fill Sub Occupacy Details");
+          // }
         });
       }
       dispatch(prepareFinalObject("edcr", edcrDetails));
@@ -229,51 +249,21 @@ import {
             md: 6,
           },
         }),
-        frontSetback: getTextField({
+        floorHeight: getTextField({
           label: {
-            labelName: "Front setback",
-            labelKey: "PREAPPROVE_FRONT_SETBACK",
+            labelName: "Floor Height",
+            labelKey: "PREAPPROVE_FLOOR_HEIGHT",
           },
           pattern: "^[0-9]*$",
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
           required: true,
-          jsonPath: "blockDetail.frontSetback",
+          jsonPath: "blockDetail.floorHeight",
           gridDefination: {
             xs: 12,
             sm: 6,
             md: 6,
           },
-        }),
-        rearSetback: getTextField({
-          label: {
-            labelName: "Rear setback",
-            labelKey: "PREAPPROVE_REAR_SETBACK",
-          },
-          pattern: "^[0-9]*$",
-          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-          required: true,
-          jsonPath: "blockDetail.rearSetback",
-          gridDefination: {
-            xs: 12,
-            sm: 6,
-            md: 6,
-          },
-        }),
-        sideSetback: getTextField({
-          label: {
-            labelName: "Side setback",
-            labelKey: "PREAPPROVE_SIDE_SETBACK",
-          },
-          pattern: "^[0-9]*$",
-          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-          required: true,
-          jsonPath: "blockDetail.sideSetback",
-          gridDefination: {
-            xs: 12,
-            sm: 6,
-            md: 6,
-          },
-        }),
+        })
       }),
     },
     {

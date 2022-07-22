@@ -45,6 +45,7 @@ const screenConfig = {
     getData(action, state, dispatch);
     dispatch(prepareFinalObject("plotDetails", {}));
     dispatch(prepareFinalObject("buildingAbstract", {}));
+    dispatch(prepareFinalObject("drawingDetails", []));
     prepareDocumentsUploadData(state, dispatch);
     return action;
   },

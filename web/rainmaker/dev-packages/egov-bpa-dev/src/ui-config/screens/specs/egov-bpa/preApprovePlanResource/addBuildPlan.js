@@ -162,6 +162,7 @@ const createPreApprovePlan = async (state, dispatch) => {
       plotWidth: plotDetails.widthInMt,
       roadWidth: plotDetails.abuttingRoadWidthInMt,
       active: false,
+      floorDescription: buildingAbstract.totalFloorNo
     };
     // Drawing Details Section Start
     const drawingDetail = {
@@ -170,7 +171,9 @@ const createPreApprovePlan = async (state, dispatch) => {
       serviceType: "NEW_CONSTRUCTION",
       applicationType: "BUILDING_PLAN_SCRUTINY",
       occupancy: "Residential",
-      totalBuitUpArea: buildingAbstract.totalBuildUpArea,
+      subOccupancy: edcrDetails.blockDetail[0].suboccupancyData,
+      totalBuitUpArea: parseInt(buildingAbstract.totalBuildUpArea),
+      totalCarpetArea: parseInt(buildingAbstract.totalCarpetArea)
     };
     const blocks = [];
     edcrDetails.blockDetail.forEach((item, blockDetailsindex) => {
@@ -181,29 +184,28 @@ const createPreApprovePlan = async (state, dispatch) => {
       setBack.push({
         frontSetback: item.frontSetback,
         rearSetback: item.rearSetback,
-        sideSetback: item.sideSetback,
+        rightSetback: item.rightSetback,
+        leftSetback: item.leftSetback
       });
       building.setBack = [...setBack];
+      building.buildingHeight = item.buildingHeight;
+      building.actualBuildingHeight = item.actualBuildingHeight;
       item.blocks.forEach((block, index) => {
         const occupancies = [];
         const newObj = {};
-        newObj.type = item.suboccupancyData//"OCCUPANCY_B2";
         newObj.floorArea = block["Floor Area"];
         newObj.builtUpArea = block["Buildup Area"];
         newObj.carpetArea = block["Carpet Area"];
-        newObj.number = block["Level"];
-        newObj.floorDescription = block["Floor Description"];
-        newObj.frontSetback = block["Front setback"];
-        newObj.rearSetback = block["Rear setback"];
-        newObj.sideSetback = block["Side setback"];
-        occupancies.push({ ...newObj });
-        floors.push({ occupancies: [...occupancies] });
+        newObj.floorNo = block["Level"];
+        newObj.floorName = block["Floor Description"];
+        newObj.floorHeight = block["Floor Height"];
+        floors.push({ ...newObj });
         building.floors = [...floors];
        
         obj.building = { ...building };
         if (blocks[blockDetailsindex]) {
           blocks[blockDetailsindex].building.floors.push({
-            occupancies: [...occupancies],
+            ...newObj
           });
           blocks[blockDetailsindex].building["totalFloors"] =
             blocks[blockDetailsindex].building.floors.length;
@@ -495,6 +497,21 @@ export const buildingAbstract = getCommonCard({
         md: 6,
       },
     }),
+    totalCarpetArea: getTextField({
+      label: {
+        labelName: "Total carpet Area",
+        labelKey: "PREAPPROVE_TOTAL_CARPET_AREA",
+      },
+      pattern: "^[0-9]*$",
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "buildingAbstract.totalCarpetArea",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 6,
+        md: 6,
+      },
+    }),
     totalFloorNo: getTextField({
       label: {
         labelName: "Total No. of Floors",
@@ -504,7 +521,6 @@ export const buildingAbstract = getCommonCard({
         label: "G+1 ",
         position: "start",
       },
-      pattern: "^[0-9]*$",
       jsonPath: "buildingAbstract.totalFloorNo",
       required: true,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
@@ -578,6 +594,41 @@ export const proposedBuildingDetails = getCommonCard({
         jsonPath: "residentialOccupacy.description",
       }
     ),
+    subOccupancyType: getCommonContainer({
+      ulb: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
+        componentPath: "AutosuggestContainer",
+        props: {
+          label: {
+            labelName: "Sub Occupancy Type",
+            labelKey: "BPA_SUB_OCCUP_TYPE_LABEL",
+          },
+          placeholder: {
+            labelName: "Select Sub Occupancy Type",
+            labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER",
+          },
+          localePrefix: {
+            moduleName: "BPA",
+            masterName: "SUBOCCUPANCYTYPE",
+          },
+          required: true,
+          labelsFromLocalisation: true,
+          // isClearable: true,
+          jsonPath: "edcr.blockDetail[0].suboccupancyData",
+          sourceJsonPath: "applyScreenMdmsData.BPA.SubOccupancyType",
+          labelsFromLocalisation: true,
+          isMulti: false,
+        },
+        required: true,
+        jsonPath: "edcr.blockDetail[0].suboccupancyData",
+        isMulti: false,
+        gridDefination: {
+          xs: 12,
+          sm: 4
+        }
+      },
+    })
   }),
   proposedContainer: {
     uiFramework: "custom-atoms",
@@ -601,45 +652,36 @@ export const proposedBuildingDetails = getCommonCard({
                   marginTop: "5px",
                 },
               }),
-              subOccupancyType: {
-                uiFramework: "custom-containers-local",
-                moduleName: "egov-bpa",
-                componentPath: "AutosuggestContainer",
-                // required: true,
-                props: {
-                  style: {
-                    width: "100%",
-                    cursor: "pointer",
-                  },
-                  label: {
-                    labelName: "Sub Occupancy Type",
-                    labelKey: "BPA_SUB_OCCUP_TYPE_LABEL",
-                  },
-                  placeholder: {
-                    labelName: "Select Sub Occupancy Type",
-                    labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER",
-                  },
-                  localePrefix: {
-                    moduleName: "BPA",
-                    masterName: "SUBOCCUPANCYTYPE",
-                  },
-                  jsonPath: "edcr.blockDetail[0].suboccupancyData",
-                  sourceJsonPath: "applyScreenMdmsData.BPA.SubOccupancyType",
-                  labelsFromLocalisation: true,
-                  suggestions: [],
-                  fullwidth: true,
-                  required: false,
-                  isMulti: false,
-                  inputLabelProps: {
-                    shrink: true,
-                  },
+              buildingHeight: getTextField({
+                label: {
+                  labelName: "Building Height",
+                  labelKey: "PREAPPROVE_BUILDING_HEIGHT",
                 },
+                pattern: "^[0-9]*$",
+                errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                required: true,
+                jsonPath: "edcr.blockDetail[0].buildingHeight",
                 gridDefination: {
                   xs: 12,
                   sm: 6,
                   md: 6,
                 },
-              },
+              }),
+              actualBuildingHeight: getTextField({
+                label: {
+                  labelName: "Actual Building Height",
+                  labelKey: "PREAPPROVE_ACTUAL_BUILDING_HEIGHT",
+                },
+                pattern: "^[0-9]*$",
+                errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                required: true,
+                jsonPath: "edcr.blockDetail[0].actualBuildingHeight",
+                gridDefination: {
+                  xs: 12,
+                  sm: 6,
+                  md: 6,
+                },
+              }),
               frontSetback: getTextField({
                 label: {
                   labelName: "Front setback",
@@ -670,15 +712,30 @@ export const proposedBuildingDetails = getCommonCard({
                   md: 6,
                 },
               }),
-              sideSetback: getTextField({
+              rightSetback: getTextField({
                 label: {
-                  labelName: "Side setback",
-                  labelKey: "PREAPPROVE_SIDE_SETBACK",
+                  labelName: "Right setback",
+                  labelKey: "PREAPPROVE_RIGHT_SETBACK",
                 },
                 pattern: "^[0-9]*$",
                 errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
                 required: true,
-                jsonPath: "edcr.blockDetail[0].sideSetback",
+                jsonPath: "edcr.blockDetail[0].rightSetback",
+                gridDefination: {
+                  xs: 12,
+                  sm: 6,
+                  md: 6,
+                },
+              }),
+              leftSetback: getTextField({
+                label: {
+                  labelName: "Left setback",
+                  labelKey: "PREAPPROVE_LEFT_SETBACK",
+                },
+                pattern: "^[0-9]*$",
+                errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                required: true,
+                jsonPath: "edcr.blockDetail[0].leftSetback",
                 gridDefination: {
                   xs: 12,
                   sm: 6,
@@ -696,18 +753,15 @@ export const proposedBuildingDetails = getCommonCard({
                   columns: {
                     "Floor Description": {},
                     Level: {},
-                    // "Occupancy/Sub Occupancy": {},
                     "Buildup Area": {},
                     "Floor Area": {},
                     "Carpet Area": {},
-                    "Front setback": {},
-                    "Rear setback": {},
-                    "Side setback": {},
+                    "Floor Height": {},
                   },
                   title: "",
                   options: {
                     filterType: "dropdown",
-                    responsive: "stacked",
+                    responsive: "responsive",
                     selectableRows: false,
                     pagination: false,
                     selectableRowsHeader: false,

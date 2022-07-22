@@ -3,20 +3,19 @@ import { handleScreenConfigurationFieldChange as handleField, toggleSpinner,hide
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getBpaSearchResults, getSearchResults, getBpaAppsAssignedToMe } from "../../../../ui-utils/commons";
+import { getBpaSearchResults, getSearchResults, getBpaAppsAssignedToMe, getAppSearchResults } from "../../../../ui-utils/commons";
 import { getWorkFlowData, getWorkFlowDataForBPA } from "../bpastakeholder/searchResource/functions";
 import {
   getBpaTextToLocalMapping, getEpochForDate,
 
   getTextToLocalMapping, sortByEpoch
 } from "../utils";
+import { httpRequest } from "../../../../ui-utils/api";
+
+import store from "ui-redux/store";
+
 import {showSearches, tabsForArchOnly, tabsForSpclArchOnly} from "./citizenSearchResource/citizenFunctions"
-import {ifUserRoleExists} from "../../specs/utils"
-
-
-
-
-
+import {ifUserRoleExists} from "../../specs/utils";
 
 const header = getCommonHeader(
   {
@@ -74,6 +73,20 @@ console.log("Nero I am here")
   //   ))
 }
 
+const closePdfSigningPopup = (refreshType) => {
+  store.dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.pdfSigningPopup.props",
+      "openPdfSigningPopup",
+      false
+    )
+  )
+  if(refreshType == 'Table'){
+    getPendingDigitallySignedApplications()
+  }
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "my-applications-stakeholder",
@@ -82,11 +95,19 @@ const screenConfig = {
      if(ifUserRoleExists("BPA_ARCHITECT") && ifUserRoleExists("BPA_ARC_APPROVER")){
       fetchData(action, state, dispatch);
       fetchApplicationAssignedToMe(action, state, dispatch);
+      setTimeout(()=>{
+        fetchApprovedApplicationList(action, state, dispatch)
+       },1000)
      }else if(ifUserRoleExists("BPA_ARCHITECT") || ifUserRoleExists("BPA_TECHNICALPERSON")){
       fetchData(action, state, dispatch);
      }else if(ifUserRoleExists("BPA_ARC_APPROVER")){
       fetchApplicationAssignedToMe(action, state, dispatch);
+      setTimeout(()=>{
+        fetchApprovedApplicationList(action, state, dispatch)
+       },1000)
      }
+     
+     
      // showHideTabs(action, state, dispatch);
    //}, 2000);
     
@@ -100,6 +121,25 @@ const screenConfig = {
         header: header,
         showSearches: (ifUserRoleExists("BPA_ARCHITECT") && ifUserRoleExists("BPA_ARC_APPROVER")) ? showSearches: (ifUserRoleExists("BPA_ARCHITECT") || ifUserRoleExists("BPA_TECHNICALPERSON"))? tabsForArchOnly: tabsForSpclArchOnly,
         
+      }
+    },
+    pdfSigningPopup : {
+      uiFramework: 'custom-containers-local',
+      componentPath: 'SignPdfContainer',
+      moduleName: "egov-workflow",
+      props: {
+        openPdfSigningPopup: false,
+        closePdfSigningPopup : closePdfSigningPopup,
+        maxWidth: false,
+        moduleName : 'BPA',
+        okText :"BPA_SIGN_PDF",
+        resetText : "BPA_RESET_PDF",
+        dataPath : 'BPA',
+        updateUrl : '/bpa-services/v1/bpa/_updatedscdetails?',
+        refreshType : 'Table'
+      },
+      children: {
+        popup: {}
       }
     }
   }
@@ -207,20 +247,39 @@ export const fetchApplicationAssignedToMe = async (
   let searchConvertedArray = [];
   let sortConvertedArray = [];
   const bpaResponse = await getBpaAppsAssignedToMe();
-  //console.log(bpaResponse, "Nero 3"); return false;
- // const response = await getSearchResults();
-
+  
+ let serType = getBpaTextToLocalMapping(`WF_BPA_NEW_CONSTRUCTION`);
   if (bpaResponse && bpaResponse.ProcessInstances && bpaResponse.ProcessInstances.length > 0) {
     dispatch(toggleSpinner());
-    //const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.BPA);
-    bpaResponse.ProcessInstances.forEach(element => {
-      let status = getTextToLocalMapping("WF_BPA_" + element.state.applicationStatus, "state", null);
-      searchConvertedArray.push({
-        ["BPA_COMMON_TABLE_COL_APP_NO"]: element.businessId || "-",
+    
+    let arrayLength = bpaResponse.ProcessInstances.length;
+    for(let i=0; i<arrayLength;i++){
+      let primaryowner = "-";
+  let response = await getAppSearchResults([
+        {
+          key: "tenantId",
+          value: bpaResponse.ProcessInstances[i].tenantId
+        },
+        { key: "applicationNo", value: bpaResponse.ProcessInstances[i].businessId }
+      ]);
+      
+      let owners = get(response.BPA[0], "landInfo.owners", [])
+      owners.map(item => {
+        if (item.isPrimaryOwner) {
+          primaryowner = item.name;
+        }
+      });
+
+
+      let status = getTextToLocalMapping("WF_BPA_" + bpaResponse.ProcessInstances[i].state.applicationStatus, "state", null);
+        searchConvertedArray.push({
+        ["BPA_COMMON_TABLE_COL_APP_NO"]: bpaResponse.ProcessInstances[i].businessId || "-",
         ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: status || "-",
-        tenantId: element.tenantId
+        tenantId: bpaResponse.ProcessInstances[i].tenantId,
+        ["BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"]: serType,
+        ["BPA_OWNER_NAME_LABEL"] : primaryowner
       })
-    });
+    }
   }
 
 
@@ -242,6 +301,61 @@ export const fetchApplicationAssignedToMe = async (
     )
   );
 };
+
+
+export const fetchApprovedApplicationList = async (action,state,dispatch) => {
+  let approvedList = [];
+  
+  const data = await httpRequest(
+    "post",
+    "bpa-services/v1/bpa/_ApprovedByMe?tenantId=od&businessService=BPA5",
+    "_search",
+    [],
+    null
+  );
+  data.ApprovedBy.forEach((item,index)=> {
+    approvedList.push({
+      ["BPA_COMMON_TABLE_COL_APP_NO"]: item.dscDetails.applicationNo,
+      ["BPA_COMMON_TABLE_COL_LINK"]: item,
+      ["BPA_COMMON_TABLE_COL_UPLOAD"]: item || '',
+      ["BPA_COMMON_TABLE_COL_TENANT"]: item.dscDetails.tenantId || '',
+    })
+  })
+
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.listOfApprovedApplication",
+      "props.data",
+      approvedList
+    ));
+  dispatch(hideSpinner());
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.listOfApprovedApplication",
+      "props.rows",
+      approvedList.length
+    )
+  );
+
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[3].tabContent.listOfBuildingPlanLayout",
+      "props.data",
+      approvedList
+    ));
+  dispatch(hideSpinner());
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[3].tabContent.listOfBuildingPlanLayout",
+      "props.rows",
+      approvedList.length
+    )
+  );
+}
 
 export const onRowClick = rowData => {
   const environment = process.env.NODE_ENV === "production" ? "citizen" : "";

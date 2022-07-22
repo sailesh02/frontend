@@ -14,12 +14,6 @@ const TestContainer = Loadable({
   loading: () => <Loading />
 });
 
-const BlockContainer = Loadable({
-  loader: () => import("./BlockContainer"),
-  loading: () => <Loading />
-});
-
-
 const DocumentListContainer = Loadable({
   loader: () => import("./DocumentListContainer"),
   loading: () => <Loading />
@@ -163,6 +157,14 @@ const EdcrHistory =  Loadable({
   loader: () => import("./EdcrHistory"),
   loading: () => <Loading />
 });
+const DynamicCheckboxes =  Loadable({
+  loader: () => import("./DynamicCheckboxes"),
+  loading: () => <Loading />
+});
+const FullPaymentContainer =  Loadable({
+  loader: () => import("./FullPaymentContainer"),
+  loading: () => <Loading />
+});
 
 const PreApproveDocumentListContainer = Loadable({
   loader: () => import("./PreApproveDocumentListContainer"),
@@ -172,7 +174,6 @@ const PreApproveDocumentListContainer = Loadable({
 export {
   CustomTabContainer,
   LabelContainer,
-  BlockContainer,
   CheckboxContainer,
   DownloadFileContainer,
   DocumentSummaryContainer,
@@ -202,5 +203,7 @@ export {
   ScnHistory,
   SignRandomPdfContainer,
   EdcrHistory,
-  PreApproveDocumentListContainer
+  PreApproveDocumentListContainer,
+  DynamicCheckboxes,
+  FullPaymentContainer
 };

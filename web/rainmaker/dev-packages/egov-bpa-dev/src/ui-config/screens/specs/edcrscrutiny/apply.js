@@ -31,7 +31,7 @@ const checkEligibility = (label, value, props = {}) => {
       xs: 12,
       sm: 6
     },
-    visible: CONSTANTS.isUatVisible ? true : false,
+    visible: CONSTANTS.features.isPreApprovedCitizenActive ? true : false,
     props: {
       disabled: true,
       onClick: handleEligibilityCheckStatus,
@@ -195,7 +195,7 @@ const buildingInfoCard = getCommonCard({
           sm: 6
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getPattern("Address"),
         jsonPath: "Scrutiny[0].applicantName"
       }),
       dummyDiv1: {

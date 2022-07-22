@@ -60,20 +60,23 @@ const theme = createMuiTheme({
 });
 
 const localaliseTenant = ((tenant, type) => {
-    let prefix = 'DDR_'
-    if (type == "DDRS") {
-        prefix = `DDR_` ;
-    } else if (type == "ULBS") {
-        prefix = `TENANT_TENANTS_` ; 
+    if(tenant) {
+        let prefix = 'DDR_'
+        if (type == "DDRS") {
+            prefix = `DDR_` ;
+        } else if (type == "ULBS") {
+            prefix = `TENANT_TENANTS_` ; 
+        }
+        return getLocaleLabels(`${prefix}${getTransformedLocale(tenant)}`);
     }
-    return getLocaleLabels(`${prefix}${getTransformedLocale(tenant)}`);
+    
 })
 
 
 const getTransformedLocale = label => {
-    if (typeof label === "number") return label;
-    label=label?.trim();
-    return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
+        if (typeof label === "number") return label;
+        label=label?.trim();
+        return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
 };
 class CheckboxesTags extends React.Component {
     constructor(props) {

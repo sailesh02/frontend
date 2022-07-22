@@ -1597,7 +1597,7 @@ export const validateFields = (
             `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${isIndex}].${item.key}`,
             ''
           );
-          if (isValid == '' || isValid == 'none') {
+          if ((isValid == '' || isValid == 'none') && (fields[variable].props.screenName !== "tradeRateAddPage")) {
             isFormValid = false;
             dispatch(
               handleField(

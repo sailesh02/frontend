@@ -7,6 +7,13 @@ export const removeSignFromInsightData = (value = '') => {
     else if (value.startsWith('+')) {
         value = value.replace('+', '');
     }
+    var txt = value;
+    var numb = txt.match(/\d/g);
+    numb = numb.join("");
+    
+    if(numb > 100) {
+        value = value.replace(numb, "100");
+    }
     return value;
 }
 let localisation={};

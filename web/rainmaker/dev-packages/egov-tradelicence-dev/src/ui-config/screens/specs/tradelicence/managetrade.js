@@ -1,6 +1,7 @@
 import commonConfig from "config/common.js";
 import { getCommonHeader, getBreak } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
+  handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   unMountScreen,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -9,7 +10,7 @@ import get from "lodash/get";
 import { httpRequest } from "../../../../ui-utils";
 import { getAllDataFromBillingSlab } from "../utils";
 import { billSlabSearchForm } from "./manageTradeResource/billingSlabSearch";
-import {searchResults} from "./manageTradeResource/billingSlabSearch";
+import { searchResults } from "./manageTradeResource/billingSlabSearch";
 
 const getMdmsData = async (action, state, dispatch) => {
   let mdmsBody = {
@@ -77,7 +78,22 @@ const screenConfig = {
     dispatch(unMountScreen("search"));
     dispatch(unMountScreen("tradesearch"));
     dispatch(unMountScreen("search-preview"));
-    dispatch(prepareFinalObject("manageTrade", {}));
+    const cityName = getTenantId();
+    dispatch(
+      handleField(
+        "managetrade",
+        `components.div.children.billSlabSearchForm.children.cardContent.children.cityNameContainer.children.tradeLocCity`,
+        "props.value",
+        cityName
+      )
+    );
+    const manageTrade = {
+      city: cityName,
+      licenseType: "PERMANENT",
+      applicationType: "NEW",
+      tradeType: ""
+    }
+    dispatch(prepareFinalObject("manageTrade", manageTrade));
     getData(action, state, dispatch);
 
     return action;
@@ -106,8 +122,8 @@ const screenConfig = {
           },
         },
         billSlabSearchForm,
-        // breakAfterSearch: getBreak(),
-        // searchResults,
+        breakAfterSearch: getBreak(),
+        searchResults,
       },
     },
   },

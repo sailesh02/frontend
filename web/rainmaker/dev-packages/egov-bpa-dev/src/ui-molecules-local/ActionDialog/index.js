@@ -5,6 +5,7 @@ import {
   LabelContainer,
   TextFieldContainer
 } from "egov-ui-framework/ui-containers";
+import {ifUserRoleExists} from '../../ui-config/screens/specs/utils'
 import CloseIcon from "@material-ui/icons/Close";
 import { withStyles } from "@material-ui/core/styles";
 import { UploadMultipleFiles } from "egov-ui-framework/ui-molecules";
@@ -101,7 +102,7 @@ class ActionDialog extends React.Component {
         bpaDetails.assignees = [uuids];
         bpaDetails.assignee = [getId];
       }
-      if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "APPROVE") || (applicationAction === "FORWARD") || (applicationAction === "INTIMATE_CONSTRUCT_START") || (applicationAction === "REPLY")) {
+      if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "SEND_BACK_TO_CITIZEN") || (applicationAction === "REJECT") ||(applicationAction === "APPROVE") || (applicationAction === "FORWARD") || (applicationAction === "INTIMATE_CONSTRUCT_START") || (applicationAction === "REPLY")) {
         let response = await httpRequest(
           "post",
           "bpa-services/v1/bpa/_update",
@@ -117,6 +118,16 @@ class ActionDialog extends React.Component {
           get(response, "BPA[0].businessService") === "BPA_OC3" ||
           get(response, "BPA[0].businessService") === "BPA_OC4") {
             appPath = "oc-bpa"
+          }
+          if(bpaDetails.businessService === "BPA5" && applicationAction === "FORWARD"){
+            applicationAction = "forward_to_accredited";
+          }
+          if (
+            bpaDetails.businessService === "BPA5" &&
+            applicationAction === "APPROVE" &&
+            ifUserRoleExists("BPA_ARC_APPROVER")
+          ) {
+            applicationAction = "approved_by_accredited";
           }
           const acknowledgementUrl =
             process.env.REACT_APP_SELF_RUNNING === "true"

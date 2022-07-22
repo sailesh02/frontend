@@ -16,7 +16,8 @@ import {
   proposedBuildingDetails,
   abstractProposedBuildingDetails,
   getBpaProcess,
-  getLowRiskConditions
+  getLowRiskConditions,
+  accreditedPersonDetails
 } from "./applyResource/scrutinyDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
 import {
@@ -104,6 +105,7 @@ export const formwizardSecondStep = {
     demolitiondetails,
     abstractProposedBuildingDetails,
     getBpaProcess,
+    accreditedPersonDetails,
     getLowRiskConditions
   },
   visible: false
@@ -593,6 +595,24 @@ const setTaskStatus = async (state, applicationNumber, tenantId, dispatch, compo
   }
 }
 
+const getSpclArchitectList = async (state,dispatch,action) => {
+  let payloadarchList = await httpRequest(
+    "post",
+    "/user/_restrictedSearch",
+    "_modify",
+    [],
+    {
+    "roleCodes": ["BPA_ARC_APPROVER"],
+    "userType": "CITIZEN",
+    "tenantId": "od"
+    }
+  );
+  console.log(payloadarchList, "Nero payloadarchList")
+  let preparingObj = [];
+  payloadarchList && payloadarchList.user && payloadarchList.user.length > 0 && payloadarchList.user.forEach((userInfo)=>{ preparingObj.push({code: userInfo.name, uuid: userInfo.uuid})})
+  dispatch(prepareFinalObject("specialArchitectList", preparingObj));
+}
+
 const setMohallaIfNotSet = async (
   state,
   dispatch,
@@ -666,6 +686,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch, componentJsonpath) => {
     getNocList(state,dispatch)
     dispatch(prepareFinalObject("BPA", {}));
+    getSpclArchitectList(state,dispatch,action);
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -770,6 +791,11 @@ const screenConfig = {
       }
     }
 
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardSecondStep.children.accreditedPersonDetails.visible",
+      false
+    );
     set(
       action.screenConfig,
       "components.div.children.formwizardSecondStep.children.getLowRiskConditions.visible",

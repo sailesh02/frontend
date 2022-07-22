@@ -164,6 +164,10 @@ const DocumentListPreApprove = Loadable({
   loader: () => import("./DocumentListPreApprove"),
   loading: () => <Loading />
 });
+const InstallmentDetail = Loadable({
+  loader: () => import("./InstallmentDetail"),
+  loading: () => <Loading />
+});
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -199,5 +203,6 @@ export {
   PBATrainingTutorials,
   BpaSanctionFeesCard,
   CloseDialog,
-  DocumentListPreApprove
+  DocumentListPreApprove,
+  InstallmentDetail,
 };

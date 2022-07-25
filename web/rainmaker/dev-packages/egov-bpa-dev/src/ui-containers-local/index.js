@@ -166,6 +166,11 @@ const FullPaymentContainer =  Loadable({
   loading: () => <Loading />
 });
 
+const PreApproveDocumentListContainer = Loadable({
+  loader: () => import("./PreApproveDocumentListContainer"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -198,6 +203,7 @@ export {
   ScnHistory,
   SignRandomPdfContainer,
   EdcrHistory,
+  PreApproveDocumentListContainer,
   DynamicCheckboxes,
   FullPaymentContainer
 };

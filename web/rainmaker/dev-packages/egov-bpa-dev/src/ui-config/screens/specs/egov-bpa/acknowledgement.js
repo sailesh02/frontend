@@ -355,6 +355,39 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
+  }else if (purpose === "PRE_APPROVED" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Pre approved plan Successfully created",
+              labelKey: "BPA_PRE_APPROVED_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "Pre approved plan Successfully created",
+              labelKey: "BPA_PRE_APPROVED_SUCCESS_MESSAGE_MAIN"
+            },
+            tailText: {
+              labelName: "Drawing No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_DRAWING_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      gotoHomeFooter
+    };
   }else if (purpose === "APPROVE" && status === "success") {
     return {
       header:getHeader(applicationNumber),

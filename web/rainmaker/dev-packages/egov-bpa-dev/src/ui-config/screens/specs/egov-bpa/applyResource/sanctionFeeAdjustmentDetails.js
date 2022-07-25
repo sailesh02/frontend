@@ -193,7 +193,7 @@ export const sanctionFeeAdjustmentDetails = getCommonGrayCard(
         },
         required: true,
         jsonPath: "BPA.additionalDetails.sanctionFeeAdjustmentAmount",
-
+        pattern: getPattern("Amount"),
       }),
       modificationReasonSanctionFeeAdjustmentAmount: getTextField({
         gridDefination: {

@@ -64,7 +64,7 @@ const getDummyResponse = () => {
         "consumerCode": "BP-CTC-2022-07-07-002019",
         "taxHeadCode": "BPA_SANC_SANC_FEE",
         "taxAmount": 2475.0,
-        "demandId": '7uusdf77878sd7fs',
+        "demandId": null,
         "isPaymentCompletedInDemand": false,
         "auditDetails": {
           "createdBy": "52476c81-d588-4395-bf63-f605b19783ee",
@@ -104,7 +104,7 @@ const getDummyResponse = () => {
           "consumerCode": "BP-CTC-2022-07-07-002019",
           "taxHeadCode": "BPA_SANC_PUR_FAR",
           "taxAmount": 0.0,
-          "demandId": null,
+          "demandId": "dsdsdsdsd",
           "isPaymentCompletedInDemand": true,
           "auditDetails": {
             "createdBy": "52476c81-d588-4395-bf63-f605b19783ee",
@@ -112,7 +112,15 @@ const getDummyResponse = () => {
             "createdTime": 1657194641357,
             "lastModifiedTime": 1657194641357
           },
-          "additionalDetails": null
+          "additionalDetails": {
+            "varificationDocuments": [
+              {
+                "fileName": "1657866882733consolidatedreceipt-1657866881182.pdf",
+                "fileStoreId": "169b778a-95aa-46c4-9354-40c3a5e763b7",
+                "documentType": "Document - 1"
+              }
+            ]
+          }
         },
         {
           "id": "fb2882b6-7e61-4376-9f2e-b618a6ee0fb3",
@@ -122,7 +130,7 @@ const getDummyResponse = () => {
           "consumerCode": "BP-CTC-2022-07-07-002019",
           "taxHeadCode": "BPA_SANC_SECURITY_DEPOSIT",
           "taxAmount": 0.0,
-          "demandId": null,
+          "demandId": "dsdsdsdsd",
           "isPaymentCompletedInDemand": true,
           "auditDetails": {
             "createdBy": "52476c81-d588-4395-bf63-f605b19783ee",
@@ -130,7 +138,15 @@ const getDummyResponse = () => {
             "createdTime": 1657194641357,
             "lastModifiedTime": 1657194641357
           },
-          "additionalDetails": null
+          "additionalDetails": {
+            "varificationDocuments": [
+              {
+                "fileName": "1657866882733consolidatedreceipt-1657866881182.pdf",
+                "fileStoreId": "169b778a-95aa-46c4-9354-40c3a5e763b7",
+                "documentType": "Document - 1"
+              }
+            ]
+          }
         },
         {
           "id": "dc0bb772-b802-41f5-a6a9-3c016a44d8d4",
@@ -140,15 +156,23 @@ const getDummyResponse = () => {
           "consumerCode": "BP-CTC-2022-07-07-002019",
           "taxHeadCode": "BPA_SANC_WORKER_WELFARE_CESS",
           "taxAmount": 10778.0,
-          "demandId": null,
-          "isPaymentCompletedInDemand": false,
+          "demandId": "dsdsdsdsd",
+          "isPaymentCompletedInDemand": true,
           "auditDetails": {
             "createdBy": "52476c81-d588-4395-bf63-f605b19783ee",
             "lastModifiedBy": "52476c81-d588-4395-bf63-f605b19783ee",
             "createdTime": 1657194641357,
             "lastModifiedTime": 1657194641357
           },
-          "additionalDetails": null
+          "additionalDetails": {
+            "varificationDocuments": [
+              {
+                "fileName": "1657866882733consolidatedreceipt-1657866881182.pdf",
+                "fileStoreId": "169b778a-95aa-46c4-9354-40c3a5e763b7",
+                "documentType": "Document - 1"
+              }
+            ]
+          }
         },
         
       ],
@@ -232,7 +256,7 @@ export const getInstallmentsDetails = async (action, state, dispatch) => {
     //     }
     //   }
     // );
-  //  response = getDummyResponse();
+   // response = getDummyResponse();
     response = await getInstallmentInfoForInstallmentPage();
     console.log(response, "Nero hhhhh")
     if (response) {
@@ -591,6 +615,44 @@ console.log(state, "Nero State")
                   }),
                   installmentsInfo: installmentsInfo,
 
+                })
+              }
+            }
+          }
+        },
+        sendToArchPickerDialog: {
+          componentPath: "Dialog",
+          props: {
+            open: false,
+            maxWidth: "md"
+          },
+          children: {
+            dialogContent: {
+              componentPath: "DialogContent",
+              props: {
+                classes: {
+                  root: "city-picker-dialog-style"
+                }
+              },
+              children: {
+                popup: getCommonContainer({
+                  header: getCommonHeader({
+                    labelName: "Forward Application",
+                    labelKey: "BPA_UPLOAD_PREVIOUS_INSTALLMENT_BILL"
+                  }),
+                  cityPicker: getCommonContainer({
+                    cityDropdown: {
+                      uiFramework: "custom-molecules-local",
+                      moduleName: "egov-bpa",
+                      componentPath: "GenerateInstallmentsDemandDialog",
+                      required: true,
+                      gridDefination: {
+                        xs: 12,
+                        sm: 12
+                      },
+                      props: {}
+                    },
+                  })
                 })
               }
             }

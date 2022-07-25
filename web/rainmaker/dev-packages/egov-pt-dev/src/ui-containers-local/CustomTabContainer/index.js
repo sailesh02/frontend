@@ -16,10 +16,17 @@ class MultiItem extends React.Component {
     if (value === "PT_SEARCH_PROPERTY") {
       dispatch(handleField("propertySearch", "components.div.children.searchPropertyTable", "visible", false));
       dispatch(handleField("propertySearch", "components.div.children.searchApplicationTable", "visible", false));
+      dispatch(handleField("propertySearch", "components.div.children.searchReassessmentTable", "visible", false));
       } 
-      else {
+    else if(value === "PT_SEARCH_APPLICATION"){
       dispatch(handleField("propertySearch", "components.div.children.searchApplicationTable", "visible", false));
       dispatch(handleField("propertySearch", "components.div.children.searchPropertyTable", "visible", false));
+      dispatch(handleField("propertySearch", "components.div.children.searchReassessmentTable", "visible", false));
+      }
+      else{
+        dispatch(handleField("propertySearch", "components.div.children.searchApplicationTable", "visible", false));
+        dispatch(handleField("propertySearch", "components.div.children.searchPropertyTable", "visible", false));
+        dispatch(handleField("propertySearch", "components.div.children.searchReassessmentTable", "visible", false));
       }
       dispatch(prepareFinalObject("searchScreen.mobileNumber", ""));
       dispatch(prepareFinalObject("searchScreen.ids", ""));
@@ -34,6 +41,9 @@ class MultiItem extends React.Component {
       case 1:
         this.setInstrumentType("PT_SEARCH_APPLICATION", dispatch);
         break;
+      case 2:
+        this.setInstrumentType("SEARCH_ASSESSMENT", dispatch)
+        break;  
       default:
         this.setInstrumentType("PT_SEARCH_PROPERTY", dispatch);
         break;

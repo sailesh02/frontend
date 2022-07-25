@@ -213,7 +213,6 @@ export {
   CloseDialog,
   DocumentListPreApprove,
   InstallmentDetail,
-  InstallmentDetail,
   GenerateInstallmentsDemandDialog,
   DownloadDocuments
 };

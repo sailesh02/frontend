@@ -3,7 +3,7 @@ import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } f
 import { disableField, enableField } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import React from "react";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getAssessmentSearchResults, getSearchResults } from "../../../../ui-utils/commons";
 import { validateFields } from "../utils/index";
 
 export const propertySearch = async (state, dispatch) => {
@@ -12,6 +12,10 @@ export const propertySearch = async (state, dispatch) => {
 
 export const applicationSearch = async (state, dispatch) => {
   searchApiCall(state, dispatch, 1)
+}
+
+export const reassessmentSearch = async (state, dispatch) => {
+  searchApiCall(state, dispatch, 2)
 }
 
 const removeValidation = (state, dispatch, index) => {
@@ -114,6 +118,22 @@ const removeValidation = (state, dispatch, index) => {
       true
     )
   );
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails.children.cardContent.children.appNumberContainer.children.propertyTaxReassessmentNo",
+      "isFieldValid",
+      true
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails.children.cardContent.children.appNumberContainer.children.reassessmentPropertyTaxUniqueId",
+      "isFieldValid",
+      true
+    )
+  );
 
 }
 
@@ -129,6 +149,7 @@ const getAddress = (item) => {
 const searchApiCall = async (state, dispatch, index) => {
   showHideTable(false, dispatch, 0);
   showHideTable(false, dispatch, 1);
+  showHideTable(false, dispatch, 2);
 
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
@@ -151,7 +172,7 @@ const searchApiCall = async (state, dispatch, index) => {
   }
 
   let query = { "tenantId": searchScreenObject.tenantId };
-  if (index == 1 && process.env.REACT_APP_NAME == "Citizen") {
+  if (index == 1 && process.env.REACT_APP_NAME == "Citizen"){
     query = {}
   }
 
@@ -160,7 +181,12 @@ const searchApiCall = async (state, dispatch, index) => {
     if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '') {
       formValid = true;
     }
-  } else {
+  } else if(index == 1) {
+    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.acknowledgementIds != '') {
+      formValid = true;
+    }
+  }
+  else{
     if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.acknowledgementIds != '') {
       formValid = true;
     }
@@ -180,6 +206,7 @@ const searchApiCall = async (state, dispatch, index) => {
   }
   let form1 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails", state, dispatch, "propertySearch");
   let form2 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails", state, dispatch, "propertySearch");
+  let form3 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails", state, dispatch, "propertySearch");
   // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails"
   // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails"
   // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo"
@@ -236,11 +263,35 @@ const searchApiCall = async (state, dispatch, index) => {
     dispatch,
     "propertySearch"
   ) || searchScreenObject.ids == '';
+  const isSearchBoxFirstRowAssessValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails.children.cardContent.children.appNumberContainer.children",
+    state,
+    dispatch,
+    "propertySearch"
+  );
+
+  const isownerCityRowAssessValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails.children.cardContent.children.appNumberContainer.children.ulbCity",
+    state,
+    dispatch,
+    "propertySearch"
+  );
+
+  const ispropertyTaxReassessmentidRowValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails.children.cardContent.children.appNumberContainer.children.propertyTaxReassessmentNo",
+    state,
+    dispatch,
+    "propertySearch"
+  ) || searchScreenObject.acknowledgementIds == '';
+  const isAssessmentPropertyRowValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails.children.cardContent.children.appNumberContainer.children.reassessmentPropertyTaxUniqueId",
+    state,
+    dispatch,
+    "propertySearch"
+  ) || searchScreenObject.ids == '';
 
 
-
-
-  if (!(isSearchBoxFirstRowValid)) {
+  if (!isSearchBoxFirstRowValid) {
     dispatch(
       toggleSnackbar(
         true,
@@ -278,6 +329,19 @@ const searchApiCall = async (state, dispatch, index) => {
     );
     return;
   }
+  else if (index == 2 && !(isownerCityRowAssessValid && isSearchBoxFirstRowAssessValid && ispropertyTaxReassessmentidRowValid && isAssessmentPropertyRowValid) ) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill at least one field along with city",
+          labelKey: "PT_INVALID_INPUT"
+        },
+        "error"
+      )
+    );
+    return;
+  }
 
 
   if (
@@ -300,6 +364,7 @@ const searchApiCall = async (state, dispatch, index) => {
   else {
 
     removeValidation(state, dispatch, index);
+    if(index == 0 || index ==1){
     for (var key in searchScreenObject) {
       if (
         searchScreenObject.hasOwnProperty(key) &&
@@ -316,6 +381,28 @@ const searchApiCall = async (state, dispatch, index) => {
         }
       }
     }
+  }
+  else{
+    for (var key in searchScreenObject) {
+      if (
+        searchScreenObject.hasOwnProperty(key) &&
+        searchScreenObject[key].trim() !== ""
+      ) {
+        if (key === "tenantId") {
+
+        }
+        else if (key === "acknowledgementIds") {
+          query["assessmentNumbers"] = searchScreenObject[key].trim();
+        }
+        else if (key === "ids") {
+          query["propertyIds"] = searchScreenObject[key].trim();
+        }
+        else {
+          query[key] = searchScreenObject[key].trim();
+        }
+      }
+    }
+  }
     let queryObject = [];
     Object.keys(query).map(key => {
       queryObject.push({
@@ -325,78 +412,119 @@ const searchApiCall = async (state, dispatch, index) => {
     try {
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
-      const response = await getSearchResults(queryObject);
+      disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
+      let response = {}
 
-      // const response = searchSampleResponse();
+      if(index == 0 || index ==1){
+        response = await getSearchResults(queryObject)
+        let propertyData = response.Properties.map(item => ({
+          ["PT_COMMON_TABLE_COL_PT_ID"]:
+            item.propertyId || "-",
+          ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
+          ["PT_GUARDIAN_NAME"]:
+            item.owners[0].fatherOrHusbandName || "-",
+          ["PT_COMMON_COL_EXISTING_PROP_ID"]:
+            item.oldPropertyId || "-",
+          ["PT_COMMON_COL_ADDRESS"]:
+            getAddress(item) || "-",
+          ["TENANT_ID"]: item.tenantId,
+          ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-"
+        }));
 
-      let propertyData = response.Properties.map(item => ({
-        ["PT_COMMON_TABLE_COL_PT_ID"]:
-          item.propertyId || "-",
-        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
-        ["PT_GUARDIAN_NAME"]:
-          item.owners[0].fatherOrHusbandName || "-",
-        ["PT_COMMON_COL_EXISTING_PROP_ID"]:
-          item.oldPropertyId || "-",
-        ["PT_COMMON_COL_ADDRESS"]:
-          getAddress(item) || "-",
-        ["TENANT_ID"]: item.tenantId,
-        ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-"
-      }));
+        let applicationData = response.Properties.map(item => ({
+          ["PT_COMMON_TABLE_COL_APP_NO"]:
+            item || "-",
+          ["PT_COMMON_TABLE_COL_PT_ID"]: item || "-",
+          ["PT_COMMON_TABLE_COL_APP_TYPE"]:
+            item.creationReason ? <LabelContainer labelName={"PT." + item.creationReason} labelKey={"PT." + item.creationReason} /> : "NA",
+          ["PT_COMMON_TABLE_COL_OWNER_NAME"]:
+            item.owners[0].name || "-",
+          ["PT_COMMON_COL_ADDRESS"]:
+            getAddress(item) || "-",
+          ["TENANT_ID"]: item.tenantId,
+          ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
+          temporary: item
+        }));
 
-      let applicationData = response.Properties.map(item => ({
-        ["PT_COMMON_TABLE_COL_APP_NO"]:
-          item || "-",
-        ["PT_COMMON_TABLE_COL_PT_ID"]: item || "-",
-        ["PT_COMMON_TABLE_COL_APP_TYPE"]:
-          item.creationReason ? <LabelContainer labelName={"PT." + item.creationReason} labelKey={"PT." + item.creationReason} /> : "NA",
-        ["PT_COMMON_TABLE_COL_OWNER_NAME"]:
-          item.owners[0].name || "-",
-        ["PT_COMMON_COL_ADDRESS"]:
-          getAddress(item) || "-",
-        ["TENANT_ID"]: item.tenantId,
-        ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
-        temporary: item
-      }));
+        dispatch(
+          handleField(
+            "propertySearch",
+            "components.div.children.searchPropertyTable",
+            "props.data",
+            propertyData
+          )
+        );
+        dispatch(
+          handleField(
+            "propertySearch",
+            "components.div.children.searchPropertyTable",
+            "props.rows",
+            response.Properties.length
+          )
+        );
+
+        dispatch(
+          handleField(
+            "propertySearch",
+            "components.div.children.searchApplicationTable",
+            "props.data",
+            applicationData
+          )
+        );
+        dispatch(
+          handleField(
+            "propertySearch",
+            "components.div.children.searchApplicationTable",
+            "props.rows",
+            response.Properties.length
+          )
+        );
+      }
+      else{
+         response = await getAssessmentSearchResults(queryObject);
+         console.log("qqqqqqqqqqq", response);
+         let reassessmentData = response.Assessments.map((item)=>({
+
+          ["PT_ASSESSMENT_NO"]:
+            item || "-",
+          ["PT_COMMON_TABLE_COL_PT_ID"]: item || "-",
+          ["TENANT_ID"]: item.tenantId,
+          ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
+          ["PT_HISTORY_ASSESSMENT_DATE"] : new Date(item.assessmentDate).toLocaleDateString() || "-",
+          ["reports.pt.financialYear"]: item.financialYear || "-",
+          temporary: item
+    
+  }))
+
+      dispatch(
+        handleField(
+          "propertySearch",
+          "components.div.children.searchReassessmentTable",
+          "props.data",
+          reassessmentData
+        )
+      );
+      dispatch(
+        handleField(
+          "propertySearch",
+          "components.div.children.searchReassessmentTable",
+          "props.rows",
+          response.Assessments.length
+        )
+      );
+}
       enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
-      dispatch(
-        handleField(
-          "propertySearch",
-          "components.div.children.searchPropertyTable",
-          "props.data",
-          propertyData
-        )
-      );
-      dispatch(
-        handleField(
-          "propertySearch",
-          "components.div.children.searchPropertyTable",
-          "props.rows",
-          response.Properties.length
-        )
-      );
-      dispatch(
-        handleField(
-          "propertySearch",
-          "components.div.children.searchApplicationTable",
-          "props.data",
-          applicationData
-        )
-      );
-      dispatch(
-        handleField(
-          "propertySearch",
-          "components.div.children.searchApplicationTable",
-          "props.rows",
-          response.Properties.length
-        )
-      );
+      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
+   
+ 
       //showHideProgress(false, dispatch);
       showHideTable(true, dispatch, index);
     } catch (error) {
       //showHideProgress(false, dispatch);
       enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
+      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       dispatch(
         toggleSnackbar(
           true,
@@ -419,11 +547,21 @@ const showHideTable = (booleanHideOrShow, dispatch, index) => {
       )
     );
   }
-  else {
+  else if(index == 1){
     dispatch(
       handleField(
         "propertySearch",
         "components.div.children.searchApplicationTable",
+        "visible",
+        booleanHideOrShow
+      )
+    );
+  }
+  else {
+    dispatch(
+      handleField(
+        "propertySearch",
+        "components.div.children.searchReassessmentTable",
         "visible",
         booleanHideOrShow
       )

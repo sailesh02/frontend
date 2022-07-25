@@ -9,34 +9,44 @@ import { compose } from "recompose";
 import { getFormattedDate } from "../../../../../../../utils/PTCommon";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { Card } from "components";
 
-export const getFullRow = (labelKey, labelValue, rowGrid = 12) => {
+export const getFullRow = (labelKey, labelValue, rowGrid = 12, col) => {
     let subRowGrid = 1;
     if (rowGrid == 6) {
         subRowGrid = 2;
     }
-    return (<div className={`col-sm-${rowGrid} col-xs-12`} style={{ marginBottom: 1, marginTop: 1 }}>
-        <div className={`col-sm-${2 * subRowGrid} col-xs-4`} style={{ padding: "3px 0px 0px 0px" }}>
+    return (
+        <div className={`col-sm-${rowGrid} col-xs-12`} style={{ marginBottom: 1, marginTop: 1 }}>
+            <div className={`col-sm-${2 * subRowGrid} col-xs-4`} style={{ padding: "3px 0px 0px 0px" }}>
             <Label
                 labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px !important" }}
                 label={labelKey}
                 fontSize="14px"
             />
-        </div>
-        <div className={`col-sm-${4 * subRowGrid} col-xs-8`} style={{ padding: "3px 0px 0px 0px", paddingLeft: rowGrid == 12 ? '10px' : '15px' }}>
+            </div>
+            <div className={`col-sm-${4 * subRowGrid} col-xs-8`} style={{ padding: "3px 0px 0px 0px", paddingLeft: rowGrid == 12 ? '10px' : '15px' }}>
+            {col ? 
             <Label
-                labelStyle={{ letterSpacing: "0.47px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px !important" }}
-                label={labelValue}
-                fontSize="14px"
+            labelStyle={{ letterSpacing: "0.47px", fontWeight: "400", lineHeight: "19px !important" }}
+            color={"rgba(254, 122, 81)"}
+            label={labelValue}
+            fontSize="14px"
+            /> :
+            <Label
+            labelStyle={{ letterSpacing: "0.47px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px !important" }}
+            label={labelValue}
+            fontSize="14px"
             />
+            }
+           
+            </div>
         </div>
-    </div>)
+    )
 }
 
 
 class AssessmentHistory extends Component {
-
-
 
     constructor(props) {
         super(props);
@@ -87,7 +97,7 @@ class AssessmentHistory extends Component {
                 return role.code;
             })
             : [];
-            
+        const latestAssessment = this.getLatestAssessments(Assessments)
         // to check if owner belongs to the same property
         let owners = this.props && this.props.selPropertyDetails && this.props.selPropertyDetails.owners || []        
         const isSameOwner = owners && owners.some( ele => {
@@ -96,45 +106,38 @@ class AssessmentHistory extends Component {
         
         const reassessAllowed = (roleCodes.includes("CITIZEN") && isSameOwner) || roleCodes.includes("PT_DOC_VERIFIER") || roleCodes.includes("PT_FIELD_INSPECTOR")
 
-        const assessmentHistoryItems = this.getLatestAssessments(Assessments).map((Assessment,index) => {
+        const assessmentHistoryItems = Assessments.map((Assessment,index) => {
             return (
+                <Card 
+                style={{ backgroundColor: "rgb(255, 255, 255)", boxShadow: "none" }}
+                textChildren={
                 <div>
-                    {getFullRow("PT_HISTORY_ASSESSMENT_DATE", Assessment.assessmentDate ? getFormattedDate(Assessment.assessmentDate) : "NA", 12)}
-                    {getFullRow("PT_ASSESSMENT_NO", Assessment.assessmentNumber ? Assessment.assessmentNumber : "NA", 12)}
-                    {getFullRow("PT_ASSESSMENT_YEAR", Assessment.financialYear ? Assessment.financialYear : "NA", 6)}
+                    {getFullRow("PT_HISTORY_ASSESSMENT_DATE", Assessment.assessmentDate ? getFormattedDate(Assessment.assessmentDate) : "NA", 12, false)}
+                    {getFullRow("PT_ASSESSMENT_NO", Assessment.assessmentNumber ? Assessment.assessmentNumber : "NA", 12, false)}
+                    {getFullRow("PT_ASSESSMENT_YEAR", Assessment.financialYear ? Assessment.financialYear : "NA", 6, false)}
+                    {(latestAssessment[0].assessmentNumber == Assessment.assessmentNumber) && Assessment.status != "ACTIVE" && getFullRow("PT_COMMON_TABLE_COL_STATUS_LABEL", Assessment.status ? Assessment.status : "NA", 12, true)}
 
-                    {!!reassessAllowed && index == 0 && (<div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
+                    {!!reassessAllowed && ((latestAssessment[0].assessmentNumber == Assessment.assessmentNumber) && Assessment.status == "ACTIVE") && (<div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div className="assess-history" style={{ float: "right" }}>
                             <Button
                                 label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.REASSESS].parentButton} color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
-                                    if (this.props.selPropertyDetails.status != "ACTIVE") {
-                                        this.props.toggleSnackbarAndSetText(
-                                            true,
-                                            { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
-                                            "error"
-                                        );
-                                    }else if(Assessment.status != "ACTIVE") {
-                                        this.props.toggleSnackbarAndSetText(
-                                            true,
-                                            { labelName: "Re-assess application is already in workflow", labelKey: "ERROR_REASSESS_IN_WORKFLOW" },
-                                            "error"
-                                        );    
-                                    }
-                                    else {
-                                        history &&
-                                            history.push(getPropertyLink(propertyId, Assessment.tenantId, PROPERTY_FORM_PURPOSE.ASSESS, Assessment.financialYear, Assessment.assessmentNumber)
+                                    history && history.push(getPropertyLink(propertyId, Assessment.tenantId, PROPERTY_FORM_PURPOSE.ASSESS, Assessment.financialYear, Assessment.assessmentNumber)
                                             );
-                                    }
-                                    // lastElement.onClick();
                                 }}
                             ></Button>
                         </div>
 
                     </div >)}
 
-                </div>)
+                </div>
+                }
+                />
+                
+        
+            )
+                
 
         })
         return assessmentHistoryItems;

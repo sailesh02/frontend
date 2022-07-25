@@ -160,11 +160,22 @@ const CloseDialog = Loadable({
   loader: () => import("./CloseDialog"),
   loading: () => <Loading />
 });
+const DocumentListPreApprove = Loadable({
+  loader: () => import("./DocumentListPreApprove"),
+  loading: () => <Loading />
+});
 const InstallmentDetail = Loadable({
   loader: () => import("./InstallmentDetail"),
   loading: () => <Loading />
 });
-
+const GenerateInstallmentsDemandDialog = Loadable({
+  loader: () => import("./GenerateInstallmentsDemandDialog"),
+  loading: () => <Loading />
+});
+const DownloadDocuments = Loadable({
+  loader: () => import("./DownloadDocuments"),
+  loading: () => <Loading />
+});
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -200,5 +211,8 @@ export {
   PBATrainingTutorials,
   BpaSanctionFeesCard,
   CloseDialog,
-  InstallmentDetail
+  DocumentListPreApprove,
+  InstallmentDetail,
+  GenerateInstallmentsDemandDialog,
+  DownloadDocuments
 };

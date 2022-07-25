@@ -21,6 +21,8 @@ import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { feetToMeterConversion } from "./functions";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+
 var Time = Date.now();
 const styles = {
   container: {
@@ -254,6 +256,13 @@ const createPreApprovePlan = async (state, dispatch) => {
         [],
         queryObject
       );
+      if(response && response.preapprovedPlan && response.preapprovedPlan.length>0){
+        const applicationNumber = response.preapprovedPlan[0].drawingNo;
+        const tenantId = response.preapprovedPlan[0].tenantId;
+        const acknowledgementUrl =          
+            `/egov-bpa/acknowledgement?purpose=PRE_APPROVED&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        dispatch(setRoute(acknowledgementUrl));
+      }
     } catch (err) {
       console.log(err);
     }

@@ -149,10 +149,10 @@ class Dashboard extends Component {
   goback() {
     //let pageId = _.get(this.props, 'match.params.pageId');
     //this.props.history.push(`/${pageId}`);
-
-    this.setState({
-      viewAll: undefined
-    })
+    window.location.reload();
+    // this.setState({
+    //   viewAll: undefined
+    // })
   }
   tabChanged(value, v) {
     this.setState({

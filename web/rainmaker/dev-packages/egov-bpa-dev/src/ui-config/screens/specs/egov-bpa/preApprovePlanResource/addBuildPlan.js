@@ -167,9 +167,10 @@ const createPreApprovePlan = async (state, dispatch) => {
       floorDescription: `G+${buildingAbstract.totalFloorNo}`
     };
     // Drawing Details Section Start
+    let PArea = plotDetails.lengthInMt*plotDetails.widthInMt
     const drawingDetail = {
       plotArea:
-        parseInt(plotDetails.lengthInMt) * parseInt(plotDetails.widthInMt),
+        parseFloat(PArea).toFixed(2),
       serviceType: "NEW_CONSTRUCTION",
       applicationType: "BUILDING_PLAN_SCRUTINY",
       occupancy: "Residential",

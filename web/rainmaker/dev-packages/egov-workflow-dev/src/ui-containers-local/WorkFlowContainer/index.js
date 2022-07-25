@@ -137,6 +137,15 @@ class WorkFlowContainer extends React.Component {
         return "purpose=applymeterreplace&status=success";  
       case "METER_REPLACE_APPROVE_APPLICATION":
         return "purpose=approve_meter_replace&status=success";  
+      case "SHOW_CAUSE":
+      return "purpose=show_cause_issued&status=success";
+      case "ACCEPT":
+      return "purpose=scn_reply_accepted&status=success";
+      case "REVOKE":
+      return "purpose=permit_revoked&status=success";
+      case "SEND_TO":
+      return "purpose=permit_sent_other_emp&status=success";    
+    
       case "SENDBACK_TO_ARCHITECT_FOR_REWORK":
         return "purpose=sendback&status=success";    
       
@@ -153,6 +162,7 @@ class WorkFlowContainer extends React.Component {
       redirectQueryString,
       beforeSubmitHook
     } = this.props;
+    
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
     console.log(updateUrl, moduleName, dataPath)
@@ -223,8 +233,7 @@ class WorkFlowContainer extends React.Component {
       data.workflow.businessService = "BS.AMENDMENT";
       data.workflow.moduleName = "BS";
     }
-    console.log(moduleName, "Nero sss Modle")
-    console.log(data, "Nero data 1")
+    
     if (moduleName == "MR") {
       let apntDetails = [];
       let appointmentDetails = get(
@@ -324,7 +333,7 @@ class WorkFlowContainer extends React.Component {
 
     }
 
-    console.log(data, "Nero data 2 BPA")
+    
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -333,25 +342,26 @@ class WorkFlowContainer extends React.Component {
     let isDocsDropDownSelected = true;
     try {
       if (beforeSubmitHook) {
-        if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+        if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4' || moduleName === 'BPA5') {
           data = await beforeSubmitHook(data);
         } else {
           data = beforeSubmitHook(data);
         }
       }
-console.log(moduleName, "Nero module")
+
 let bPAUploadedDocs;
 let BPADocs;
  
-      if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+      if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4' || moduleName === 'BPA5') {
         bPAUploadedDocs =  get(preparedFinalObject, "documentDetailsUploadRedux", []);
         BPADocs = get(
           preparedFinalObject,
           "BPA.documents",
           []
         );
-       // console.log(bPAUploadedDocs, "nero docssss")
-        console.log(bPAUploadedDocs, "Nero documentsss")
+        console.log(bPAUploadedDocs, "nero New Uploaded Docs")
+        console.log(BPADocs, "nero Application Docs")
+        
         if(bPAUploadedDocs && bPAUploadedDocs.length > 0){
           for(let k=0;k<bPAUploadedDocs.length;k++){
            // if(bPAUploadedDocs[k].fileStoreId && !bPAUploadedDocs[k].documentType.includes(".")){
@@ -380,65 +390,63 @@ let BPADocs;
         );
         this.props.hideSpinner();
         return false;
-      }else if(moduleName === "BPA"){
-        let documnts = [];
-        let documentsUpdalod = bPAUploadedDocs;
-        if (documentsUpdalod) {
-          Object.keys(documentsUpdalod).forEach(function (key) {
-            documnts.push(documentsUpdalod[key])
-          });
-        }
-console.log(BPADocs, "bpa docs")
-        let requiredDocuments = [];
-        if (documnts && documnts.length > 0) {
-          documnts.forEach(documents => {
+      }
+      // else if(moduleName === "BPA"){
+      //   let documnts = [];
+      //   let documentsUpdalod = bPAUploadedDocs;
+      //   if (documentsUpdalod) {
+      //     Object.keys(documentsUpdalod).forEach(function (key) {
+      //       documnts.push(documentsUpdalod[key])
+      //     });
+      //   }
+
+      //   let requiredDocuments = [];
+      //   if (documnts && documnts.length > 0) {
+      //     documnts.forEach(documents => {
             
-            if (documents && documents.documents) {
-              documents.documents.forEach(docItem => {
-                if (documents.dropDownValues && documents.dropDownValues.value) {
-                  let doc = {};
-                  doc.documentType = documents.dropDownValues.value;
-                  doc.fileStoreId = docItem.fileStoreId;
-                  doc.fileStore = docItem.fileStoreId;
-                  doc.fileName = docItem.fileName;
-                  doc.fileUrl = docItem.fileUrl;
-                  doc.additionalDetails = docItem.additionalDetails;
-                  BPADocs && BPADocs.length > 0 && BPADocs.forEach(bpaDc => {
-                    console.log(bpaDc)
-                    if (bpaDc.fileStoreId === docItem.fileStoreId) {
-                      console.log("Here I am")
-                      doc.id = bpaDc.id;
-                    }
-                  });
-                  requiredDocuments.push(doc);
-                }else{
-                  let doc = {};
-                  doc.documentType = docItem.title.split('_').join('.');;
-                  doc.fileStoreId = docItem.fileStoreId;
-                  doc.fileStore = docItem.fileStoreId;
-                  doc.fileName = docItem.fileName;
-                 // doc.fileUrl = docItem.fileUrl;
-                  doc.additionalDetails = docItem.additionalDetails;
+      //       if (documents && documents.documents) {
+      //         documents.documents.forEach(docItem => {
+      //           if (documents.dropDownValues && documents.dropDownValues.value) {
+      //             let doc = {};
+      //             doc.documentType = documents.dropDownValues.value;
+      //             doc.fileStoreId = docItem.fileStoreId;
+      //             doc.fileStore = docItem.fileStoreId;
+      //             doc.fileName = docItem.fileName;
+      //             doc.fileUrl = docItem.fileUrl;
+      //             doc.additionalDetails = docItem.additionalDetails;
+      //             BPADocs && BPADocs.length > 0 && BPADocs.forEach(bpaDc => {
+      //               console.log(bpaDc)
+      //               if (bpaDc.fileStoreId === docItem.fileStoreId) {
+      //                 console.log("Here I am")
+      //                 doc.id = bpaDc.id;
+      //               }
+      //             });
+      //             requiredDocuments.push(doc);
+      //           }else{
+      //             let doc = {};
+      //             doc.documentType = docItem.title.split('_').join('.');;
+      //             doc.fileStoreId = docItem.fileStoreId;
+      //             doc.fileStore = docItem.fileStoreId;
+      //             doc.fileName = docItem.fileName;
+      //            // doc.fileUrl = docItem.fileUrl;
+      //             doc.additionalDetails = docItem.additionalDetails;
                   
-                  requiredDocuments.push(doc);
-                }
-              })
-            }
-          });
-          data.documents = requiredDocuments;
-        }else{
+      //             requiredDocuments.push(doc);
+      //           }
+      //         })
+      //       }
+      //     });
+      //     data.documents = requiredDocuments;
+      //   }else{
           
-          if(BPADocs && BPADocs.length > 0){
-          data.documents = [...BPADocs];
-          }
-        }
+      //     if(BPADocs && BPADocs.length > 0){
+      //     data.documents = [...BPADocs];
+      //     }
+      //   }
         
 
-      }
+      // }
 
- console.log(data , "Nero h new")
-  
- 
  if(moduleName === "BPA"){
   let appStatus = data.status;
   if(appStatus && (appStatus == "APP_L1_VERIFICATION_INPROGRESS" || appStatus == "APP_L2_VERIFICATION_INPROGRESS" || appStatus == "APP_L3_VERIFICATION_INPROGRESS" || appStatus == "APPROVAL_INPROGRESS")){
@@ -458,7 +466,7 @@ console.log(BPADocs, "bpa docs")
       "additionalDetails.sanctionFeeCardEnabled",
       false
     );
-console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
+
   //  if(sanctionFeeCardEnabled && feeAmount !== "" && feeAmount !== undefined && feeAmountAdjustReason !== "" && feeAmountAdjustReason !== undefined){
       if(sanctionFeeCardEnabled && (feeAmount == "NODATA" || feeAmountAdjustReason == "NODATA")){
     // }else{
@@ -475,8 +483,50 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
     }
   }
  }
- console.log(data , "Nero h new a")
- //return false;
+ if(moduleName == "BPA" && label == "SENDBACK_TO_ARCHITECT_FOR_REWORK"){
+    let reworkReason = data.reworkReason;
+    let comment = data.workflow.comment;
+    if(comment){
+      data.workflow.comments = `${reworkReason} - ${comment}`;
+    }else if(reworkReason){
+      data.workflow.comments = `${reworkReason}`
+    }else if(reworkReason){
+      data.workflow.comments = ""
+    }
+    
+    if(!reworkReason){
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Documents Required",
+          labelKey: "Please select rework reason"
+        },
+        "error"
+      );
+      this.props.hideSpinner();
+      return false;
+    }
+
+    let reworkHistory = data.reWorkHistory && data.reWorkHistory.edcrHistory
+    if(reworkHistory && reworkHistory.length > 2){
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Documents Required",
+          labelKey: "BPA_REWORK_LIMIT_REACHED"
+        },
+        "error"
+      );
+      this.props.hideSpinner();
+      return false;
+    }
+    
+ }
+ console.log(data , "Nero App Payload in Workflow Module")
+if(moduleName == "BPA" && "edcrDetail" in data){
+  delete data.edcrDetail ;
+ }
+// return false;
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
@@ -665,9 +715,9 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
     if (moduleName === "FIRENOC") {
       baseUrl = "fire-noc";
       bservice = "FIRENOC";
-    } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+    } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC" || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4' || moduleName === 'BPA5') {
       baseUrl = "egov-bpa";
-      if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+      if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4' || moduleName === 'BPA5') {
         bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
       } //else if (moduleName === "BPA_OC") {
       else {
@@ -929,7 +979,7 @@ console.log(sanctionFeeCardEnabled, feeAmount, feeAmountAdjustReason, "Nero WF")
 
     }
     let showFooter = true;
-    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4') {
+    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC' || moduleName === "BPA_OC1" || moduleName === "BPA_OC2" || moduleName === "BPA_OC3" || moduleName === "BPA_OC4" || moduleName === 'BPA1' || moduleName === 'BPA2' || moduleName === 'BPA3' || moduleName === 'BPA4' || moduleName === 'BPA5') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     }
     if ((moduleName === 'Noc') && window.location.href.includes("isFromBPA=true")) {

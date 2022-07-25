@@ -78,7 +78,7 @@ console.log(uploadedDocs, "Nero Hello")
   console.log(applicationDocs, "Nero DOcuments")
   payload.documents = applicationDocs; 
   payload.additionalDetails.applicationType = "buildingPlanLayoutSignature";
-
+  
   console.log(payload, "Nero final payload")
 
   try {
@@ -90,9 +90,9 @@ console.log(uploadedDocs, "Nero Hello")
       {["BPA"]:payload}
     );
   console.log(response, "Nero response after updated")
-  if(response){
-    let url = `acknowledgement?purpose=bpd_signed_upload&status=success&applicationNumber=${applicationNo}&tenantId=${tenantId}`
-  dispatch(setRoute(url));
+  if (response) {
+    let url = `acknowledgement?purpose=bpd_signed_upload&status=success&applicationNumber=${applicationNo}&tenantId=${tenantId}`;
+    dispatch(setRoute(url));
   }
   } catch (error) {
     //store.dispatch(toggleSnackbar(true, error.message, "error"));

@@ -50,6 +50,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
   }
+  console.log("Nero 1333")
   const FETCHRECEIPT = {
     GET: {
       URL: "/collection-services/payments/_search",
@@ -172,6 +173,32 @@ export const getBpaSearchResults = async queryObject => {
   }
 };
 
+export const getBpaAppsAssignedToMe = async () => {
+  try {
+    let userInfo = JSON.parse(getUserInfo());
+   // let queryObject = [{ key: "tenantId", value: "od.cuttack" }, { key: "assignee", value: userInfo.uuid }];
+    
+    const response = await httpRequest(
+      "post",
+      "/egov-workflow-v2/egov-wf/process/_nocriteriasearch?businessService=BPA5",
+      "",
+      []
+    );
+ 
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
+
+
+
 export const updateTradeDetails = async requestBody => {
   try {
     const payload = await httpRequest(
@@ -267,6 +294,214 @@ export const getAppSearchResults = async (queryObject, dispatch) => {
 //     throw error;
 //   }
 // };
+
+export const createUpdatePreApproveApplication = async (state, dispatch, status) => {
+  let applicationId = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.id"
+  );
+  let method = applicationId ? "UPDATE" : "CREATE";
+
+  let documentsUpdalod = get(
+    state,
+    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
+    []
+  );
+  let BPADocs = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.documents",
+    []
+  );
+
+  let documnts = [];
+  if (documentsUpdalod) {
+    Object.keys(documentsUpdalod).forEach(function (key) {
+      documnts.push(documentsUpdalod[key])
+    });
+  }
+
+  let nocDocumentsUpload = get(
+    state,
+    "screenConfiguration.preparedFinalObject.nocDocumentsUploadRedux"
+  );
+
+  if (nocDocumentsUpload) {
+    Object.keys(nocDocumentsUpload).forEach(function (key) {
+      documnts.push(nocDocumentsUpload[key])
+    });
+  }
+
+  let requiredDocuments = [];
+  if (documnts && documnts.length > 0) {
+    documnts.forEach(documents => {
+      if (documents && documents.documents) {
+        documents.documents.forEach(docItem => {
+          if (documents.dropDownValues && documents.dropDownValues.value) {
+            let doc = {};
+            doc.documentType = documents.dropDownValues.value;
+            doc.fileStoreId = docItem.fileStoreId;
+            doc.fileStore = docItem.fileStoreId;
+            doc.fileName = docItem.fileName;
+            doc.fileUrl = docItem.fileUrl;
+            doc.additionalDetails = docItem.additionalDetails;
+            BPADocs && BPADocs.forEach(bpaDc => {
+              if (bpaDc.fileStoreId === docItem.fileStoreId) {
+                doc.id = bpaDc.id;
+              }
+            });
+            requiredDocuments.push(doc);
+          }
+        })
+      }
+    });
+
+    documnts.forEach(documents => {
+      if (documents && documents.previewdocuments) {
+        documents.previewdocuments.forEach(pDoc => {
+          let doc = {};
+          // if(documents.dropDownValues) {
+          // doc.documentType = documents.dropDownValues.value;
+          // }
+          doc.documentType = pDoc.dropDownValues;
+          doc.fileStoreId = pDoc.fileStoreId;
+          doc.fileStore = pDoc.fileStoreId;
+          doc.fileName = pDoc.fileName;
+          doc.fileUrl = pDoc.fileUrl;
+          BPADocs && BPADocs.forEach(bpaDc => {
+            if (bpaDc.fileStoreId === pDoc.fileStoreId) {
+              doc.id = bpaDc.id;
+            }
+          });
+          requiredDocuments.push(doc);
+        })
+      }
+    });
+
+  }
+
+
+  let subOccupancyData = get(
+    state, "screenConfiguration.preparedFinalObject.edcr.blockDetail"
+  );
+  let BPADetails = get(
+    state, "screenConfiguration.preparedFinalObject.BPA"
+  );
+  let blocks = [];
+  subOccupancyData.forEach((block, index) => {
+    let arry = [];
+    block && block.occupancyType && block.occupancyType.length &&
+      block.occupancyType.forEach(occType => {
+        arry.push(occType.value);
+      })
+    blocks[index] = {};
+    blocks[index].blockIndex = index;
+    blocks[index].usageCategory = {};
+    blocks[index].usageCategory = arry.join();
+    blocks[index].floorNo = block.floorNo;
+    blocks[index].unitType = "Block";
+    if (BPADetails.landInfo.unit && BPADetails.landInfo.unit[index] && BPADetails.landInfo.unit[index].id) {
+      blocks[index].id = BPADetails.landInfo.unit[index].id;
+    }
+  })
+
+  try {
+    let payload = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
+    let tenantId =
+      get(state, "screenConfiguration.preparedFinalObject.BPA.landInfo.address.city") ||
+      getQueryArg(window.location.href, "tenantId") ||
+      getTenantId();
+    let userInfo = JSON.parse(getUserInfo());
+    let accountId = get(userInfo, "uuid");
+    set(payload, "tenantId", tenantId);
+    set(payload, "landInfo.tenantId", tenantId);
+    set(payload, "workflow.action", status);
+    set(payload, "accountId", accountId);
+
+    // set(payload, "additionalDetails", null);
+    // set(payload, "units", null);
+    set(payload, "landInfo.unit", blocks);
+
+    let documents;
+    if (requiredDocuments && requiredDocuments.length > 0) {
+      documents = requiredDocuments;
+    } else {
+      documents = null;
+    }
+
+    let wfDocuments;
+    // if (method === "UPDATE") {
+    //   if (status === "APPLY") {
+    //     documents = payload.documents
+    //   } else {
+    //     documents = payload.documents;
+    //     documents = requiredDocuments;
+    //   }
+    //   set(payload, "documents", documents);
+    //   set(payload, "workflow.varificationDocuments", null);
+    // } else if (method === 'CREATE') {
+    //   documents = null;
+    // }
+
+    payload.documents = documents;
+
+    // // Set Channel and Financial Year
+    // process.env.REACT_APP_NAME === "Citizen"
+    //   ? set(payload[0], "BPA.channel", "CITIZEN")
+    //   : set(payload[0], "BPA.channel", "COUNTER");
+    // set(payload[0], "BPA.financialYear", "2019-20");
+
+    // Set Dates to Epoch
+
+    let owners = get(payload, "landInfo.owners", []);
+    owners.forEach((owner, index) => {
+      set(
+        payload,
+        `landInfo.owners[${index}].dob`,
+        convertDateToEpoch(get(owner, "dob"))
+      );
+    });
+
+    let authOwners = [];
+    let multiOwners = get(payload, "landInfo.owners", []);
+    if (multiOwners && multiOwners.length > 0) {
+      multiOwners.forEach(owner => {
+        if (owner && owner.isDeleted != false) {
+          authOwners.push(owner);
+        }
+      })
+    }
+
+    set(payload, "landInfo.owners", authOwners);
+    let response;
+    if (method === "CREATE") {
+      response = await httpRequest(
+        "post",
+        "bpa-services/v1/bpa/_create",
+        "",
+        [],
+        { BPA: payload }
+      );
+      // response = prepareOwnershipType(response);
+      dispatch(prepareFinalObject("BPA", response.BPA[0]));
+      setApplicationNumberBox(state, dispatch);
+      await edcrDetailsToBpaDetails(state, dispatch);
+    } else if (method === "UPDATE") {
+      response = await httpRequest(
+        "post",
+        "bpa-services/v1/bpa/_update",
+        "",
+        [],
+        { BPA: payload }
+      );
+      // response = prepareOwnershipType(response);
+      dispatch(prepareFinalObject("BPA", response.BPA[0]));
+    }
+    return { status: "success", message: response };
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+    return { status: "failure", message: error };
+  }
+}
 
 export const createUpdateBpaApplication = async (state, dispatch, status) => {
   let applicationId = get(
@@ -1547,6 +1782,12 @@ const updateNocApplicationBPA = async (state, dispatch, bpaAction) => {
   }
 };
 
+export const submitPreApproveApplication = async (state, dispatch) => {
+  const bpaAction = "APPLY";
+  let nocRespose = await nocapplicationUpdate(state);
+  let response = await createUpdatePreApproveApplication(state, dispatch, bpaAction);
+}
+
 export const submitBpaApplication = async (state, dispatch) => {
   const bpaAction = "APPLY";
   let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
@@ -1582,6 +1823,13 @@ export const submitBpaApplication = async (state, dispatch) => {
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
 };
+
+export const submitPreApproveApplicationNOC = async (state, dispatch) => {
+  const bpaAction = "APPLY";
+  let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
+  let nocRespose = await nocapplicationUpdateBPA(state);
+  let response = await createUpdatePreApproveApplication(state, dispatch, bpaAction);
+}
 
 // to submit BPA application with NOC update API (NOC update to fetch documents from NOC search preview)
 export const submitBpaApplicationNOC = async (state, dispatch) => {

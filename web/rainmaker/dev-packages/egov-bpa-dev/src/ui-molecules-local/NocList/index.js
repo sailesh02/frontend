@@ -232,7 +232,11 @@ class NocList extends Component {
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex, nocDocumentsUploadRedux } = this.state;
-    const { prepareFinalObject, bpaDetails, wfState } = this.props;
+    const { prepareFinalObject, bpaDetails, wfState, roles } = this.props;
+    let isSpclArch = false;
+    roles && roles.forEach( (roleInfo) => {
+      if(roleInfo.code === "BPA_ARC_APPROVER") isSpclArch=true;
+    })
     const fileUrl = getFileUrlFromAPI(fileStoreId).then(fileUrl);
     let nocDocuments = {};
     if (nocDocumentsUploadRedux[uploadedDocIndex] && nocDocumentsUploadRedux[uploadedDocIndex].documents) {
@@ -275,6 +279,8 @@ class NocList extends Component {
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
 
     if (isEmployee) {
+      this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
+    }else{
       this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
     }
 
@@ -393,8 +399,9 @@ NocList.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { screenConfiguration } = state;
+  const { screenConfiguration, auth } = state;
   const { moduleName } = screenConfiguration;
+  const { userInfo } = auth;
   const bpaDetails = get(
     screenConfiguration.preparedFinalObject,
     "BPA",
@@ -404,7 +411,8 @@ const mapStateToProps = state => {
     screenConfiguration.preparedFinalObject.applicationProcessInstances,
     "state"
   );
-  return { moduleName, bpaDetails, wfState };
+  const roles = get(userInfo, "roles", []);
+  return { moduleName, bpaDetails, wfState, roles };
 };
 
 const mapDispatchToProps = dispatch => {

@@ -20,14 +20,16 @@ class DownloadFileContainerForFI extends React.Component {
 
     let { docs, documentData, bpaDetails, ...rest } = this.props;
     let fiDocumentsPreview = [];
-    docs && docs.forEach(fiDoc => {    
-      fiDocumentsPreview.push({
-        documentCode: (fiDoc.documentType).split('.')[0]+"_"+(fiDoc.documentType).split('.')[1],
-        title: getTransformedLocale(fiDoc.documentType),
-        fileStoreId: fiDoc.fileStoreId,
-        linkText: "View",
-        additionalDetails: fiDoc.additionalDetails
-      });
+    docs && docs.forEach(fiDoc => { 
+    if("documentType" in fiDoc){
+        fiDocumentsPreview.push({
+          documentCode: (fiDoc && fiDoc.documentType).split('.')[0]+"_"+(fiDoc && fiDoc.documentType).split('.')[1],
+          title: getTransformedLocale(fiDoc.documentType),
+          fileStoreId: fiDoc.fileStoreId,
+          linkText: "View",
+          additionalDetails: fiDoc.additionalDetails
+        });
+      }
     })
   
     let fileStoreIds = jp.query(fiDocumentsPreview, "$.*.fileStoreId");

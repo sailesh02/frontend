@@ -46,6 +46,9 @@ const remoteConfigPath = (path, screenKey) => {
     case "edcrscrutiny":
       config = require(`egov-bpa/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
+    case "pre-approved":
+      config = require(`egov-bpa/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
     case "wns":
     case "wns-citizen":
       config = require(`egov-wns/ui-config/screens/specs/${path}/${screenKey}`).default;

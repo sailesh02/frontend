@@ -1,5 +1,5 @@
 import { download } from "egov-common/ui-utils/commons";
-import { dispatchMultipleFieldChangeAction, getLabel, getLabelWithValue, getCommonGrayCard, getCommonContainer, getCommonCard, getCommonTitle, getCommonSubHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { dispatchMultipleFieldChangeAction, getLabel, getLabelWithValue, getCommonGrayCard, getCommonContainer, getCommonCard, getCommonTitle, getCommonSubHeader, getDivider } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject, toggleSnackbar, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
@@ -17,16 +17,16 @@ import { createEstimateData, downloadCertificateForm, getButtonVisibility, getCo
 export const billingSlabReviewDetails = {
   reviewCity: getLabelWithValue(
     {
-      labelName: "Application Type",
+      labelName: "City",
       labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
     },
     {
       jsonPath:
         "billingSlab[0].tenantId",
-      // localePrefix: {
-      //   moduleName: "TradeLicense",
-      //   masterName: "ApplicationType"
-      // },
+        localePrefix: {
+          moduleName: "TENANT",
+          masterName: "TENANTS",
+        },
     }
   ),
 
@@ -87,7 +87,13 @@ export const billingSlabReviewDetails = {
       callBack: checkValueForNA
     }
   ),
-
+  reviewRateType: getLabelWithValue(
+    {
+      labelName: "Type",
+      labelKey: "TL_BS_TYPE_LABEL"
+    },
+    { jsonPath: "billingSlab[0].type", callBack: checkValueForNA }
+  ),
   reviewTradeUOM: getLabelWithValue(
     {
       labelName: "UOM (Unit of Measurement)",
@@ -95,62 +101,170 @@ export const billingSlabReviewDetails = {
     },
     { jsonPath: "billingSlab[0].uom", callBack: checkValueForNA }
   ),
-  reviewRateType: getLabelWithValue(
-    {
-      labelName: "UOM (Unit of Measurement)",
-      labelKey: "Rate Type"
-    },
-    { jsonPath: "billingSlab[0].type", callBack: checkValueForNA }
-  ),
   reviewFromUom: getLabelWithValue(
     {
-      labelName: "UOM (Unit of Measurement)",
-      labelKey: "Rate Type"
+      labelName: "UOM From",
+      labelKey: "TL_TRADE_RATE_FROM_UOM_VALUE_LABEL"
     },
     { jsonPath: "billingSlab[0].fromUom", callBack: checkValueForNA }
   ),
   reviewToUom: getLabelWithValue(
     {
-      labelName: "UOM (Unit of Measurement)",
-      labelKey: "Rate Type"
+      labelName: "UOM To",
+      labelKey: "TL_TRADE_RATE_TO_UOM_VALUE_LABEL"
     },
     { jsonPath: "billingSlab[0].toUom", callBack: checkValueForNA }
   ),
   reviewTradeRate: getLabelWithValue(
     {
-      labelName: "UOM Value",
-      labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL"
+      labelName: "Rate",
+      labelKey: "TL_TRADE_RATE_LABEL"
     },
     { jsonPath: "billingSlab[0].rate", callBack: checkValueForNA }
   )
-
 }
 
+export const billingSlabCommonDtls = {
+  reviewCity: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+    },
+    {
+      jsonPath:
+        "billingSlab[0].tenantId",
+        localePrefix: {
+          moduleName: "TENANT",
+          masterName: "TENANTS",
+        },
+    }
+  ),
+  reviewApplicationType: getLabelWithValue(
+    {
+      labelName: "Application Type",
+      labelKey: "TL_APPLICATION_TYPE"
+    },
+    {
+      jsonPath:
+        "billingSlab[0].applicationType",
+      localePrefix: {
+        moduleName: "TradeLicense",
+        masterName: "ApplicationType"
+      },
+    }
+  ),
+  reviewLicenceType: getLabelWithValue(
+    {
+      labelName: "Licence Type",
+      labelKey: "TL_COMMON_TABLE_COL_LICENSE_TYPE"
+    },
+    {
+      jsonPath: "billingSlab[0].licenseType",
+      localePrefix: {
+        moduleName: "TRADELICENSE",
+        masterName: "LICENSETYPE"
+      },
+    }
+  ),
+  reviewTradeType: getLabelWithValue(
+    {
+      labelName: "Trade Type",
+      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL"
+    },
+    {
+      jsonPath: "billingSlab[0].tradeType",
+      localePrefix: {
+        moduleName: "TRADELICENSE",
+        masterName: "TRADETYPE"
+      },
+      callBack: value => {
+        return value ? value.split(".")[0] : "NA";
+      }
+    }
+  ),
+  reviewTradeSubtype: getLabelWithValue(
+    {
+      labelName: "Trade Sub-Type",
+      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
+    },
+    {
+      jsonPath: "billingSlab[0].tradeType",
+      localePrefix: {
+        moduleName: "TRADELICENSE",
+        masterName: "TRADETYPE"
+      },
+      callBack: checkValueForNA
+    }
+  ),
+  reviewRateType: getLabelWithValue(
+    {
+      labelName: "Type",
+      labelKey: "TL_BS_TYPE_LABEL"
+    },
+    { jsonPath: "billingSlab[0].type", callBack: checkValueForNA }
+  ),
+  reviewTradeUOM: getLabelWithValue(
+    {
+      labelName: "UOM (Unit of Measurement)",
+      labelKey: "TL_NEW_TRADE_DETAILS_UOM_LABEL"
+    },
+    { jsonPath: "billingSlab[0].uom", callBack: checkValueForNA }
+  ),
+}
+const tradetypeDetails = {
+  reviewFromUom: getLabelWithValue(
+    {
+      labelName: "UOM From",
+      labelKey: "TL_TRADE_RATE_FROM_UOM_VALUE_LABEL"
+    },
+    { jsonPath: "tradeUnitsToShow[0].fromUom", callBack: checkValueForNA }
+  ),
+  reviewToUom: getLabelWithValue(
+    {
+      labelName: "UOM To",
+      labelKey: "TL_TRADE_RATE_TO_UOM_VALUE_LABEL"
+    },
+    { jsonPath: "tradeUnitsToShow[0].toUom", callBack: checkValueForNA }
+  ),
+  reviewTradeRate: getLabelWithValue(
+    {
+      labelName: "Rate",
+      labelKey: "TL_TRADE_RATE_LABEL"
+    },
+    { jsonPath: "tradeUnitsToShow[0].rate", callBack: checkValueForNA }
+  )
+}
+const tradeTypeCard = {
+  uiFramework: "custom-containers",
+  componentPath: "MultiItem",
+  props: {
+    className: "review-trade-search-preview",
+    scheama: getCommonGrayCard({
+      tradeTypeCardContainer: getCommonContainer(tradetypeDetails)
+    }),
+    items: [],
+    hasAddItem: false,
+    removeAddIcon: true,
+    isReviewPage: true,
+    sourceJsonPath: "tradeUnitsToShow",
+    prefixSourceJsonPath:
+      "children.cardContent.children.tradeTypeCardContainer.children",
+    afterPrefixJsonPath: "children.value.children.key"
+  },
+  type: "array"
+}
+
+export const getBillingSlabReviewMulti = () => {
+  return getCommonGrayCard({
+    viewOne: getCommonContainer(billingSlabCommonDtls),
+    div1: getDivider(),
+    viewTwo: tradeTypeCard,
+  });
+}
 
 export const getBillingSlabReviewDetails = (isEditable = true) => {
   return getCommonGrayCard({
-    headerDiv: {
-      uiFramework: "custom-atoms",
-      componentPath: "Container",
-      props: {
-        style: { marginBottom: "10px" }
-      },
-      children: {
-        header: {
-          gridDefination: {
-            xs: 12,
-            sm: 10
-          },
-          ...getCommonSubHeader({
-            labelName: "Trade Details",
-            labelKey: "Billing Slab Summary"
-          })
-        },
-
-      }
-    },
     viewOne: getCommonContainer(billingSlabReviewDetails),
-
   });
 };
 
@@ -169,6 +283,29 @@ const moveToSuccess = (dispatch) => {
 
 
 export const callBackForNext = async (state, dispatch) => {
+  let allTradeUnits = get(state.screenConfiguration.preparedFinalObject, "tradeUnits", []);
+  let validTradeUnitList = allTradeUnits.filter(eachItem => eachItem.isDeleted !== false)
+  dispatch(prepareFinalObject(`tradeUnitsToShow`, validTradeUnitList));
+  let items = get(
+    state.screenConfiguration,
+    "screenConfig.traderateadd.components.div.children.formwizardSecondStep.children.billingSlabReview.children.cardContent.children.billingSlabReviewDetails.children.cardContent.children.viewTwo.props.items",
+    []
+  );
+  for (let index = 0; index < items.length; index++) {
+    if(index < validTradeUnitList.length) {
+      delete items[index].isDeleted
+    } else {
+      items[index]["isDeleted"] = false;
+    }
+  }
+  dispatch(
+    handleField(
+      "traderateadd",
+      "components.div.children.formwizardSecondStep.children.billingSlabReview.children.cardContent.children.billingSlabReviewDetails.children.cardContent.children.viewTwo",
+      "props.items",
+      items
+    )
+  );
 
   let activeStep = get(
     state.screenConfiguration.screenConfig["traderateadd"],
@@ -176,7 +313,6 @@ export const callBackForNext = async (state, dispatch) => {
     0
   );
 
-  console.log(activeStep, "Nero active step")
   var isFormValid = true;
   let queryObject = JSON.parse(
     JSON.stringify(
@@ -190,7 +326,6 @@ export const callBackForNext = async (state, dispatch) => {
     dispatch,
     "traderateadd"
   );
-  console.log(isCityDetailValid, "Nero City valied")
   // const isTradeLocationValid = validateFields(
   //   "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children",
   //   state,
@@ -207,8 +342,9 @@ export const callBackForNext = async (state, dispatch) => {
   );
   let isTradeUnitValid = true;
   //"components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer"
-  console.log(tradeUnits, "Nero trade Units")
   for (var j = 0; j < tradeUnits.length; j++) {
+  const deletedListValidation = j !== 0 ? allTradeUnits[j] && allTradeUnits[j]["isDeleted"] !== false : true;
+
     if (
 
       !validateFields(
@@ -216,7 +352,7 @@ export const callBackForNext = async (state, dispatch) => {
         state,
         dispatch,
         "traderateadd"
-      )
+      ) && deletedListValidation
     )
       isTradeUnitValid = false;
   }
@@ -225,7 +361,6 @@ export const callBackForNext = async (state, dispatch) => {
     isFormValid = false;
   }
 
-  console.log(queryObject, "Nero query boss")
   if (activeStep !== 2) {
     if (isFormValid) {
       changeStep(state, dispatch);
@@ -399,7 +534,7 @@ export const footer = getCommonApplyFooter({
     },
     children: {
       submitButtonLabel: getLabel({
-        labelName: "Submit",
+        labelName: "Next",
         labelKey: "TL_COMMON_BUTTON_NEXT"
       }),
       submitButtonIcon: {

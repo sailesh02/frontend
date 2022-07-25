@@ -10,6 +10,7 @@ import get from "lodash/get";
 import LabelContainer from "../../ui-containers/LabelContainer";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
+import {getSiteInfo} from "../../ui-utils/commons";
 
 const styles = theme => ({
   root: {
@@ -33,7 +34,7 @@ const styles = theme => ({
 });
 
 class LandingPage extends React.Component {
-  onCardCLick = route => {
+  onCardCLick = (route, routeObj) => {
     const {
       screenConfig,
       handleField,
@@ -43,7 +44,18 @@ class LandingPage extends React.Component {
       value
     } = this.props;
     if (typeof route === "string") {
-      setRoute(route);
+      
+      if(routeObj && routeObj.moduleName && routeObj.moduleName === "egov-bpa" && route === "my-applications-stakeholder"){
+        let siteInfo = getSiteInfo();
+        if (siteInfo === "citizen") {
+          window.location.href = "/citizen/bpastakeholder-citizen/my-applications-stakeholder"
+        }else{
+          window.location.href = "/bpastakeholder-citizen/my-applications-stakeholder"
+        }
+      }else{
+        setRoute(route);
+      }
+     
     } else {
       if (moduleName === "fire-noc") {
         prepareFinalObject("FireNOCs", [
@@ -74,13 +86,13 @@ class LandingPage extends React.Component {
             <Grid
               className={classes.item}
               item
-              xs={12 / items.length}
-              sm={12 / items.length}
+              xs={12}
+              md
               align="center"
             >
               <Card
                 className={`${classes.paper} module-card-style`}
-                onClick={() => this.onCardCLick(obj.route)}
+                onClick={() => this.onCardCLick(obj.route, obj)}
               >
                 <CardContent classes={{ root: "card-content-style" }}>
                   {obj.icon}

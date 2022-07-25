@@ -12,7 +12,7 @@ class DynamicMdmsContainer extends Component {
     const isMdmsData = get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`);
     (!isMdmsData && !isMdmsApiTrigger) && this.triggerInitilaApi();
   }
-  triggerInitilaApi = async () => {
+  triggerInitilaApi = async (argObj) => {
     let { rootBlockSub, state, moduleName, masterName, filter, dispatch, callBackEdit, isDependency, dropdownFields, index = 0, screenName } = this.props;
     const isDependencyCheck = isDependency ? get(state.screenConfiguration.preparedFinalObject, isDependency, false) : true;
    // if (isDependencyCheck) {
@@ -22,9 +22,11 @@ class DynamicMdmsContainer extends Component {
         dispatchPath: `DynamicMdms.${moduleName}.${rootBlockSub}`,
         moduleName,
         name: masterName,
+        isTemp: argObj && argObj.isTemp ? argObj.isTemp : null,
         rootBlockSub,
         filter,
-        screenName
+        screenName,
+        screenTenantId: argObj && argObj.screenTenantId ? argObj.screenTenantId : null
       }
       dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, true));
       
@@ -33,7 +35,6 @@ class DynamicMdmsContainer extends Component {
       if (getQueryArg(window.location.href, "purpose") == "billingslabrate" || getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL" || getQueryArg(window.location.href, "applicationNumber") != null) {
         callBackEdit(state, dispatch);
       } else {
-        
         dropdownFields && dropdownFields.forEach((entry, i) => {
           if (entry.defaultValue) {
             let componentJSONPath = `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${entry.key}`;
@@ -43,11 +44,17 @@ class DynamicMdmsContainer extends Component {
       }
     //}
   }
-  componentWillUpdate() {
-    let { state, moduleName, rootBlockSub } = this.props;
+  componentWillUpdate(nextProps) {
+    let { state, moduleName, rootBlockSub, isTemp, screenName, screenTenantId } = this.props;
     const isMdmsApiTrigger = get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.apiTriggered`);
     const isMdmsData = get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`);
-    (!isMdmsData && !isMdmsApiTrigger) && this.triggerInitilaApi();
+    if(
+      (!isMdmsData && !isMdmsApiTrigger) 
+      || (nextProps.isTemp !== isTemp && (screenName === "tradeRateAddPage" || screenName === "tradeRateSearch")) 
+      || (nextProps.screenTenantId !== screenTenantId && screenName === "tradeRateSearch")
+      ) {
+      this.triggerInitilaApi({isTemp: nextProps.isTemp, screenTenantId: nextProps.screenTenantId});
+    }
   }
   onFieldChange = (screenKey, componentJsonpath, property, value) => {
     let { dispatch, dropdownFields, moduleName, rootBlockSub, index = 0 } = this.props;

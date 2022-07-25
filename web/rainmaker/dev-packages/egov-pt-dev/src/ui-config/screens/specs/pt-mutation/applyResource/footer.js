@@ -265,6 +265,7 @@ const callBackForApply = async (state, dispatch) => {
       { Property: propertyPayload }
 
     );
+    console.log("PAYLoadupdatewrongpage", payload);
     // dispatch(prepareFinalObject("Properties", payload.Properties));
     // dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
     if (payload) {

@@ -98,6 +98,11 @@ const NocNumber = Loadable({
   loading: () => <Loading />
 });
 
+const BoxImage = Loadable({
+  loader: () => import("./BoxImage"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
   AutoSuggest,
@@ -117,5 +122,6 @@ export {
   UploadedDocument,
   ocPermitNumber,
   LinkAtom,
-  NocNumber
+  NocNumber,
+  BoxImage
 };

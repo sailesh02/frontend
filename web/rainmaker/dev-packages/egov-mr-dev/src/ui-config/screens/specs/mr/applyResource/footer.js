@@ -15,6 +15,7 @@ import { applyTradeLicense, checkValidOwners, getNextFinancialYearForRenewal } f
 import { createEstimateData, downloadCertificateForm, getButtonVisibility, getCommonApplyFooter, getDocList, setMultiOwnerForApply, setValidToFromVisibilityForApply, validateFields, downloadProvisionalCertificateForm } from "../../utils";
 import "./index.css";
 import { brideAddressDetails } from "./brideAddress";
+import { updateApplicationDocsValues } from "../../../../../ui-utils/commons";
 
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
@@ -445,6 +446,21 @@ let mrgDateObj = null;
     }
 
     if (isFormValid) {
+      let queryObject = JSON.parse(
+        JSON.stringify(
+          get(state.screenConfiguration.preparedFinalObject, "MarriageRegistrations", [])
+        )
+      );
+      let docList = [...queryObject[0].applicationDocuments];
+      let revisedList = docList.filter(eachItem => eachItem && eachItem.fileName);
+      queryObject[0].applicationDocuments = revisedList;
+      let updateResponse = [];
+      updateResponse = await httpRequest("post", "/mr-services/v1/_update", "", [], {
+        MarriageRegistrations: queryObject
+      });
+      let updtdDocsList = updateResponse["MarriageRegistrations"][0]["applicationDocuments"];
+      updateApplicationDocsValues(updtdDocsList, state, dispatch);
+      
       if (getQueryArg(window.location.href, "action") === "edit") {
         //EDIT FLOW
         const businessId = getQueryArg(
@@ -741,6 +757,49 @@ export const getActionDefinationForStepper = path => {
   return actionDefination;
 };
 
+const setIsDivyangFields = (state, dispatch) => {
+  const isBrideDivyang = get(
+    state.screenConfiguration.preparedFinalObject,
+    "MarriageRegistrations[0].coupleDetails[0].bride.isDivyang",
+    []
+  );
+  const isGroomDivyang = get(
+    state.screenConfiguration.preparedFinalObject,
+    "MarriageRegistrations[0].coupleDetails[0].groom.isDivyang",
+    []
+  );
+  if (isBrideDivyang === true) {
+    dispatch(handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.brideDetails.children.cardContent.children.brideDetailsConatiner.children.isBrideDisabled",
+      "props.value",
+      "Yes"
+    ));
+  } else if (isBrideDivyang === false) {
+    dispatch(handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.brideDetails.children.cardContent.children.brideDetailsConatiner.children.isBrideDisabled",
+      "props.value",
+      "No"
+    ));
+  }
+  if (isGroomDivyang === true) {
+    dispatch(handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.groomDetails.children.cardContent.children.groomDetailsConatiner.children.isGroomDisabled",
+      "props.value",
+      "Yes"
+    ));
+  } else if (isGroomDivyang === false) {
+    dispatch(handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.groomDetails.children.cardContent.children.groomDetailsConatiner.children.isGroomDisabled",
+      "props.value",
+      "No"
+    ));
+  }
+}
+
 export const callBackForPrevious = (state, dispatch) => {
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
@@ -820,6 +879,7 @@ export const callBackForPrevious = (state, dispatch) => {
 
       dispatchMultipleFieldChangeAction("apply", resetGroomGrndFields, dispatch);
     }
+    setIsDivyangFields(state, dispatch);
   }
 
   if (activeStep === 2) {

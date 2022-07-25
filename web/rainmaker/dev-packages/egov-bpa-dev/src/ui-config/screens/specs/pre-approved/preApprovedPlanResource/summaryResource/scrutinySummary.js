@@ -85,106 +85,6 @@ export const scrutinySummary = getCommonGrayCard({
           labelKey: "BPA_SCRUNITY_SUMMARY",
         }),
       },
-      // editSection: {
-      //     componentPath: "Button",
-      //     props: {
-      //         color: "primary",
-      //         style: {
-      //             marginTop: "-10px",
-      //             marginRight: "-18px"
-      //         }
-      //     },
-      //     gridDefination: {
-      //         xs: 2,
-      //         align: "right"
-      //     },
-      //     children: {
-      //         editIcon: {
-      //             uiFramework: "custom-atoms",
-      //             componentPath: "Icon",
-      //             props: {
-      //                 iconName: "edit"
-      //             }
-      //         },
-      //         buttonLabel: getLabel({
-      //             labelName: "Edit",
-      //             labelKey: "BPA_SUMMARY_EDIT"
-      //         })
-      //     },
-      //     onClickDefination: {
-      //         action: "condition",
-      //         callBack: (state, dispatch) => {
-      //             changeStep(state, dispatch, "", 1);
-      //         }
-      //     }
-      // },
-      // edcrHistoryButton: {
-      //     componentPath: "Button",
-      //     props: {
-      //         color: "primary",
-      //         style: {
-      //             marginTop: "-10px",
-      //             marginRight: "-18px"
-      //         }
-      //     },
-      //     gridDefination: {
-      //         xs: 2,
-      //         align: "right"
-      //     },
-      //     children: {
-      //         editIcon: {
-      //             uiFramework: "custom-atoms",
-      //             componentPath: "Icon",
-      //             props: {
-      //                 iconName: "history"
-      //             }
-      //         },
-      //         buttonLabel: getLabel({
-      //             labelName: "Edit",
-      //             labelKey: "BPA_SCRUTINY_HISTORY"
-      //         })
-      //     },
-      //     onClickDefination: {
-      //         action: "condition",
-      //         callBack: (state, dispatch) => {
-      //             viewHistoryDialog(state, dispatch);
-      //         }
-      //     }
-      // },
-      // scrutinyResubmitButton: {
-      //     componentPath: "Button",
-      //     visible: false,
-      //     props: {
-      //         color: "primary",
-      //         style: {
-      //             marginTop: "-10px",
-      //             marginRight: "-18px"
-      //         }
-      //     },
-      //     gridDefination: {
-      //         xs: 2,
-      //         align: "right"
-      //     },
-      //     children: {
-      //         editIcon: {
-      //             uiFramework: "custom-atoms",
-      //             componentPath: "Icon",
-      //             props: {
-      //                 iconName: "construction"
-      //             }
-      //         },
-      //         buttonLabel: getLabel({
-      //             labelName: "RESUBMIT SCRUTINY",
-      //             labelKey: "BPA_REWORK_RESUBMIT_SCRUTINY"
-      //         })
-      //     },
-      //     onClickDefination: {
-      //         action: "condition",
-      //         callBack: (state, dispatch) => {
-      //             resubmitScrutiny(state, dispatch);
-      //         }
-      //     }
-      // }
     },
   },
   buildingPlanScrutinyHeaderDetails: getHeader({
@@ -202,50 +102,6 @@ export const scrutinySummary = getCommonGrayCard({
         jsonPath: "scrutinyDetails.edcrNumber",
       }
     ),
-    // uploadedfile: {
-    //   uiFramework: "custom-atoms-local",
-    //   moduleName: "egov-bpa",
-    //   componentPath: "downloadFile",
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 12,
-    //     md: 3,
-    //   },
-    //   props: {
-    //     label: {
-    //       labelName: "Uploaded Diagram",
-    //       labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM",
-    //     },
-    //     linkDetail: {
-    //       labelName: "uploadedDiagram.dxf",
-    //       labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM_DXF",
-    //     },
-    //     jsonPath: "scrutinyDetails.updatedDxfFile",
-    //   },
-    //   type: "array",
-    // },
-    // scrutinyreport: {
-    //   uiFramework: "custom-atoms-local",
-    //   moduleName: "egov-bpa",
-    //   componentPath: "downloadFile",
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 12,
-    //     md: 3,
-    //   },
-    //   props: {
-    //     label: {
-    //       labelName: "Scrutiny Report",
-    //       labelKey: "BPA_BASIC_DETAILS_SCRUTINY_REPORT",
-    //     },
-    //     linkDetail: {
-    //       labelName: "ScrutinyReport.pdf",
-    //       labelKey: "BPA_BASIC_DETAILS_SCRUTINY_REPORT_PDF",
-    //     },
-    //     jsonPath: "scrutinyDetails.planReport",
-    //   },
-    //   type: "array",
-    // },
   }),
   proposedBuildingDetailsHeadr: getHeader({
     labelName: "Proposed Building Details",
@@ -271,30 +127,37 @@ export const scrutinySummary = getCommonGrayCard({
         }),
       },
     },
-    occupancy: {
-      uiFramework: "custom-atoms",
-      componentPath: "Container",
-      props: {
-        className: "occupancytypeblock",
+    occupancyType: getLabelWithValue(
+      {
+        labelName: "Occupancy Type",
+        labelKey: "BPA_OCCUPANCY_TYPE",
       },
-      children: {
-        occupancyType: getLabelWithValue(
-          {
-            labelName: "Occupancy Type",
-            labelKey: "BPA_OCCUPANCY_TYPE",
-          },
-          {
-            localePrefix: {
-              moduleName: "BPA",
-              masterName: "OCCUPANCYTYPE",
-            },
-            jsonPath:
-              "scrutinyDetails.planDetail.occupancies[0].typeHelper.type.code",
-            callBack: checkValueForNA,
-          }
-        ),
+      {
+        jsonPath: "BPA.occupancyType",
+      }
+    ),    
+    dummyDiv2: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6,
+      },
+      visible: true,
+      props: {
+        disabled: true,
       },
     },
+    subOccupancyType: getLabelWithValue(
+      {
+        labelName: "Sub Occupancy Type",
+        labelKey: "BPA_SUB_OCCUP_TYPE_LABEL",
+      },
+      {
+        jsonPath: "PA.subOccupancy",
+      }
+    ),
     proposedContainer: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
@@ -318,49 +181,6 @@ export const scrutinySummary = getCommonGrayCard({
                     marginLeft: "7px",
                   },
                 }),
-                subOccupancyType: getLabelWithValue(
-                  {
-                    labelName: "Sub Occupancy Type",
-                    labelKey: "BPA_SUB_OCCUP_TYPE_LABEL",
-                  },
-                  {
-                    jsonPath: `edcr.blockDetail[0]`,
-                    callBack: (value) => {
-                      let returnVAlue;
-                      if (
-                        value &&
-                        value.occupancyType &&
-                        value.occupancyType.length
-                      ) {
-                        returnVAlue = "";
-                        let occupancy = value.occupancyType;
-                        for (let tp = 0; tp < occupancy.length; tp++) {
-                          if (tp === occupancy.length - 1) {
-                            returnVAlue += getLocaleLabels(
-                              getTransformedLocale(
-                                `BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`
-                              ),
-                              getTransformedLocale(
-                                `BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`
-                              )
-                            ); //occupancy[tp].label;
-                          } else {
-                            returnVAlue +=
-                              getLocaleLabels(
-                                getTransformedLocale(
-                                  `BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`
-                                ),
-                                getTransformedLocale(
-                                  `BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`
-                                )
-                              ) + ","; //occupancy[tp].label + ",";
-                          }
-                        }
-                      }
-                      return returnVAlue || "NA";
-                    },
-                  }
-                ),
                 proposedBuildingDetailsContainer: {
                   uiFramework: "custom-molecules-local",
                   moduleName: "egov-bpa",
@@ -372,10 +192,10 @@ export const scrutinySummary = getCommonGrayCard({
                     columns: {
                       "Floor Description": {},
                       Level: {},
-                      "Occupancy/Sub Occupancy": {},
                       "Buildup Area": {},
                       "Floor Area": {},
                       "Carpet Area": {},
+                      "Floor Height": {},
                     },
                     title: "",
                     options: {
@@ -412,70 +232,6 @@ export const scrutinySummary = getCommonGrayCard({
     },
   }),
   break4: getBreak(),
-//   DemolitionDetails: getHeader({
-//     labelName: "Demolition Details",
-//     labelKey: "BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL",
-//   }),
-//   break1: getBreak(),
-//   demolitionDetailsContainer: getCommonContainer({
-//     demolitionArea: getLabelWithValue(
-//       {
-//         labelName: "Demolition Area",
-//         labelKey: "BPA_APPLICATION_DEMOLITION_AREA_LABEL",
-//       },
-//       {
-//         jsonPath: "scrutinyDetails.planDetail.planInformation.demolitionArea",
-//         callBack: (value) => {
-//           if (value) {
-//             return value;
-//           } else if (value == "0") {
-//             return "0";
-//           } else {
-//             return checkValueForNA;
-//           }
-//         },
-//       }
-//     ),
-//   }),
-//   proposedBuildingDetails1: getHeader({
-//     labelName: "Proposed Building Abstract",
-//     labelKey: "BPA_PROPOSED_BUILDING_ABSTRACT_HEADER",
-//   }),
-//   brk: getBreak(),
-
-//   totalBuildUpAreaDetailsContainer: getCommonContainer({
-//     buitUpArea: getLabelWithValue(
-//       {
-//         labelName: "Total Buildup Area (sq.mtrs)",
-//         labelKey: "BPA_APPLICATION_TOTAL_BUILDUP_AREA",
-//       },
-//       {
-//         jsonPath: "scrutinyDetails.planDetail.virtualBuilding.totalBuitUpArea",
-//         callBack: checkValueForNA,
-//       }
-//     ),
-//     totalFloors: getLabelWithValue(
-//       {
-//         labelName: "Number Of Floors",
-//         labelKey: "BPA_APPLICATION_NO_OF_FLOORS",
-//       },
-//       {
-//         jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalFloors",
-//         callBack: checkValueForNA,
-//       }
-//     ),
-//     buildingHeight: getLabelWithValue(
-//       {
-//         labelName: "High From Ground Level From Mumty (In Mtrs)",
-//         labelKey: "BPA_APPLICATION_HIGH_FROM_GROUND",
-//       },
-//       {
-//         jsonPath:
-//           "scrutinyDetails.planDetail.blocks[0].building.buildingHeight",
-//         callBack: checkValueForNA,
-//       }
-//     ),
-//   }),
 });
 
 const onClick = async (state, dispatch) => {

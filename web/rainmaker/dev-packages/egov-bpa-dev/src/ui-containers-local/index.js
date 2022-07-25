@@ -165,6 +165,10 @@ const FullPaymentContainer =  Loadable({
   loader: () => import("./FullPaymentContainer"),
   loading: () => <Loading />
 });
+const BlockContainer = Loadable({
+  loader: () => import("./BlockContainer"),
+  loading: () => <Loading />
+});
 
 export {
   CustomTabContainer,
@@ -199,5 +203,6 @@ export {
   SignRandomPdfContainer,
   EdcrHistory,
   DynamicCheckboxes,
-  FullPaymentContainer
+  FullPaymentContainer,
+  BlockContainer
 };

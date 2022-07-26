@@ -75,7 +75,7 @@ export const getDrawingDetails = async (state, dispatch, fieldInfo=false) => {
         dispatch(
           prepareFinalObject("BPAs.appdate", data.auditDetails.createdTime)
         );
-        dispatch(prepareFinalObject("BPA.documents", data.documents));
+        // dispatch(prepareFinalObject("BPA.documents", data.documents));
         dispatch(
           prepareFinalObject(
             "scrutinyDetails.planDetail.plot.area",

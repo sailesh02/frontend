@@ -1468,16 +1468,16 @@ const setSearchResponse = async (
   //   }
   // }
   //only architech can add noc
-  if (ifUserRoleExists("BPA_ARCHITECT")) {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.nocDetailsApply.children.cardContent.children.headerDiv.children.header.children.addNocButton",
-        "visible",
-        true
-      )
-    );
-  }
+  // if (ifUserRoleExists("BPA_ARCHITECT") && response.BPA["0"].businessService != "BPA6") {
+  //   dispatch(
+  //     handleField(
+  //       "search-preview",
+  //       "components.div.children.body.children.cardContent.children.nocDetailsApply.children.cardContent.children.headerDiv.children.header.children.addNocButton",
+  //       "visible",
+  //       true
+  //     )
+  //   );
+  // }
 
   if (
     response &&
@@ -1560,6 +1560,18 @@ const setSearchResponse = async (
       );
     }
 
+  }
+  if(get(response, "BPA[0].businessService") == "BPA6"){
+    if(get(response, "BPA[0].status") == "PENDING_APPL_FEE" && ifUserRoleExists("BPA_ARCHITECT")){
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.citizenFooter.children.makePayment",
+          "visible",
+          true
+        )
+      );
+    }
   }
 };
 
@@ -1785,11 +1797,11 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.declarationSummary.children.headers.visible",
       false
     );
-    set(
-      action,
-      "components.div.children.body.children.cardContent.children.nocDetailsApply.visible",
-      false
-    );
+    // set(
+    //   action,
+    //   "components.div.children.body.children.cardContent.children.nocDetailsApply.visible",
+    //   false
+    // );
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.approvalAuthority.visible",
@@ -1916,7 +1928,7 @@ const screenConfig = {
           institutionSummary: institutionSummary,
           additionalDocsInformation: additionalDocsInformation,
           previewSummary: previewSummary,
-          nocDetailsApply: nocDetailsSearchBPA,
+          //nocDetailsApply: nocDetailsSearchBPA,
           spclArchList: spclArchitectsPicker,
           declarationSummary: declarationSummary,
           permitConditions: permitConditions,

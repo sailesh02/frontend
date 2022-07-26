@@ -109,6 +109,7 @@ export const scrutinySummary = getCommonGrayCard({
   }),
   break3: getBreak(),
   proposedBuildingDetailsSummary: getCommonCard({
+    buildingheaderDetails : getCommonContainer({
     header: {
       uiFramework: "custom-atoms",
       componentPath: "Container",
@@ -126,6 +127,11 @@ export const scrutinySummary = getCommonGrayCard({
           labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL",
         }),
       },
+      gridDefination: {
+        xs: 12,
+        sm: 6,
+        md: 6,
+      },
     },
     occupancyType: getLabelWithValue(
       {
@@ -133,15 +139,22 @@ export const scrutinySummary = getCommonGrayCard({
         labelKey: "BPA_OCCUPANCY_TYPE",
       },
       {
-        jsonPath: "BPA.occupancyType",
+        jsonPath: "PA.preApprovedPlanDetails.drawingDetail.occupancy",
+      },
+      {
+        gridDefination: {
+          xs: 12,
+          sm: 6,
+          md: 6,
+        },
       }
-    ),    
+    ),
     dummyDiv2: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
       gridDefination: {
         xs: 12,
-        sm: 12,
+        sm: 6,
         md: 6,
       },
       visible: true,
@@ -156,6 +169,13 @@ export const scrutinySummary = getCommonGrayCard({
       },
       {
         jsonPath: "PA.subOccupancy",
+      },
+      {
+        gridDefination: {
+          xs: 12,
+          sm: 6,
+          md: 6,
+        },
       }
     ),
     proposedContainer: {
@@ -176,7 +196,7 @@ export const scrutinySummary = getCommonGrayCard({
                 header: getLabel("Block", "", {
                   jsonPath: "edcr.blockDetail[0].titleData",
                   style: {
-                    width: "50%",
+                    width: "100%",
                     marginTop: "5px",
                     marginLeft: "7px",
                   },
@@ -200,7 +220,7 @@ export const scrutinySummary = getCommonGrayCard({
                     title: "",
                     options: {
                       filterType: "dropdown",
-                      responsive: "stacked",
+                      responsive: "scroll",
                       selectableRows: false,
                       pagination: false,
                       selectableRowsHeader: false,
@@ -230,6 +250,7 @@ export const scrutinySummary = getCommonGrayCard({
         breakP2: getBreak(),
       },
     },
+  }),
   }),
   break4: getBreak(),
 });

@@ -385,6 +385,7 @@ try {
 export const citizenFooter = getCommonApplyFooter({
   makePayment: {
     componentPath: "Button",
+    visible:false,
     props: {
       variant: "contained",
       color: "primary",
@@ -403,10 +404,10 @@ export const citizenFooter = getCommonApplyFooter({
       action: "condition",
       callBack: bpaMakePayment
     },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      action: "PAY"
-    }
+    // roleDefination: {
+    //   rolePath: "user-info.roles",
+    //   action: "PAY"
+    // }
   },
   viewPaymentDetail: {
     componentPath: "Button",

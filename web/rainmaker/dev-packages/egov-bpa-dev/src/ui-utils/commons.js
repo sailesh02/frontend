@@ -1827,10 +1827,24 @@ export const submitBpaApplication = async (state, dispatch) => {
 
 export const submitPreApproveApplicationNOC = async (state, dispatch) => {
   const bpaAction = "APPLY";
-  let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
-  let nocRespose = await nocapplicationUpdateBPA(state);
-  let response = await createUpdatePreApproveApplication(state, dispatch, bpaAction);
-}
+  let response = await createUpdatePreApproveApplication(
+    state,
+    dispatch,
+    bpaAction
+  );
+  const applicationNumber = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.applicationNo"
+  );
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  if (get(response, "status", "") === "success") {
+    const acknowledgementUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/egov-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
+  }
+};
 
 // to submit BPA application with NOC update API (NOC update to fetch documents from NOC search preview)
 export const submitBpaApplicationNOC = async (state, dispatch) => {

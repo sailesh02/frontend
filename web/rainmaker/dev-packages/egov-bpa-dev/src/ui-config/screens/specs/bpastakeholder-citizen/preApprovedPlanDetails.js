@@ -258,25 +258,6 @@ const preApprovedPlanSection = getCommonContainer({
     },
     visible: true,
     children: {
-      // offsetDiv1: offsetGrid(),
-      // plotDiagram: {
-      //   uiFramework: "custom-atoms",
-      //   componentPath: "Div",
-      //   gridDefination: {
-      //     xs: 6,
-      //     sm: 6,
-      //   },
-      //   children: {
-      //     plotImage: {
-      //       uiFramework: "custom-atoms-local",
-      //       moduleName: "egov-bpa",
-      //       componentPath: "BoxImage",
-      //       props: {
-      //         src: plotDetails,
-      //       },
-      //     },
-      //   },
-      // },
       plotScheme: {
         uiFramework: "custom-containers",
         componentPath: "RadioGroupContainer",
@@ -396,12 +377,9 @@ const preApprovedPlanSection = getCommonContainer({
     componentPath: "BlockContainer",
     props: {
       labelsFromLocalisation: true,
-      // isClearable: true,
-      sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
       jsonPath: "preapprovePlanList",
     },
     required: true,
-    jsonPath: "searchScreen.tenantId",
     gridDefination: {
       xs: 12,
       sm: 4,

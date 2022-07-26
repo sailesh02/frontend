@@ -2968,17 +2968,21 @@ export const getRiskType = (state, dispatch, forBPA) => {
     path = false;
   }
   let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
-  let occupancyType = get(
+  // let occupancyType = get(
+  //   state.screenConfiguration.preparedFinalObject,
+  //   `${scrutinytype}.planDetail.virtualBuilding.occupancyTypes[0].type.name`
+  // );
+  // let plotArea = get(
+  //   state.screenConfiguration.preparedFinalObject,
+  //   `${scrutinytype}.planDetail.plot.area`
+  // );
+  let preapprovedDetails = get(
     state.screenConfiguration.preparedFinalObject,
-    `${scrutinytype}.planDetail.virtualBuilding.occupancyTypes[0].type.name`
-  );
-  let plotArea = get(
-    state.screenConfiguration.preparedFinalObject,
-    `${scrutinytype}.planDetail.plot.area`
+    `PA.preApprovedPlanDetails`
   );
   let buildingBlocks = get(
     state.screenConfiguration.preparedFinalObject,
-    `${scrutinytype}.planDetail.blocks`
+    `PA.preApprovedPlanDetails.drawingDetail.blocks`
   );
   let blocks = buildingBlocks.map(item => {
     return item && item.building && item.building.buildingHeight;
@@ -2989,15 +2993,6 @@ export const getRiskType = (state, dispatch, forBPA) => {
     "applyScreenMdmsData.BPA.RiskTypeComputation"
   );
 
-
-  let lowRiskBuilding = get(
-    state.screenConfiguration.preparedFinalObject,
-    `${scrutinytype}.planDetail.planInformation.lowRiskBuilding`
-  );
-  let block = get(
-    state.screenConfiguration.preparedFinalObject,
-    `${scrutinytype}.planDetail.blocks[0].building.occupancies[0].typeHelper.type`, []
-  );
   // dispatch(prepareFinalObject("BPA.blocks", [block]));
   let scrutinyRiskType;
   // if (
@@ -3023,11 +3018,8 @@ export const getRiskType = (state, dispatch, forBPA) => {
   //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
   // }
 
-  if (lowRiskBuilding) {
-    scrutinyRiskType = "LOW"
-  } else {
-    scrutinyRiskType = "OTHER"
-  }
+  scrutinyRiskType = "LOW"
+  
 
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
   return scrutinyRiskType;
@@ -5464,21 +5456,26 @@ export const setPreApprovedProposedBuildingData = async (state, dispatch, action
     for (var j = 0; j < response.length; j++) {
       let title = `Block ${j + 1}`;
       let floors = response[j] && response[j].building && response[j].building.floors;
-      let block = await floors.map((item, index) => (
-        {
-          // "Floor Description": '-',//getFloorDetails((item.number).toString()) || '-',
-          // "Level": 1,//item.number,
-          // "Occupancy/Sub Occupancy": 'Dummy',//etLocaleLabels("-", item.occupancies[0].type),//getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
-          // "Buildup Area": item.occupancies[0].builtUpArea || "0",
-          // "Floor Area": item.occupancies[0].floorArea || "0",
-          // "Carpet Area": 0//item.occupancies[0].carpetArea || "0",
-          [getBpaTextToLocalMapping("Floor Description")]: '-',//getFloorDetails((item.number).toString()) || '-',
-          [getBpaTextToLocalMapping("Level")]: 1,//item.number,
-          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: 'Dummy',//etLocaleLabels("-", item.occupancies[0].type),//getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
-          [getBpaTextToLocalMapping("Buildup Area")]: parseInt(item.occupancies[0].builtUpArea) || "0",
-          [getBpaTextToLocalMapping("Floor Area")]: parseInt(item.occupancies[0].floorArea) || "0",
-          [getBpaTextToLocalMapping("Carpet Area")]: 0//item.occupancies[0].carpetArea || "0",
+      let setBack = response[j] && response[j].building && response[j].building.setBack;
+      let height = {
+        actualBuildingHeight: response[j] && response[j].building && response[j].building.actualBuildingHeight,
+        buildingHeight: response[j] && response[j].building && response[j].building.buildingHeight
+      }
+      let block = await floors.map((item, index) => (        {
+          [getBpaTextToLocalMapping("Floor Description")]: item.floorName.toString(),//getFloorDetails((item.number).toString()) || '-',
+          [getBpaTextToLocalMapping("Level")]: parseInt(item.floorNo),
+          [getBpaTextToLocalMapping("Buildup Area")]: parseInt(item.builtUpArea) || "0",
+          [getBpaTextToLocalMapping("Floor Area")]: parseInt(item.floorArea) || "0",
+          [getBpaTextToLocalMapping("Carpet Area")]: parseInt(item.carpetArea) || "0",
+          [getBpaTextToLocalMapping("Floor Height")]: parseInt(item.floorHeight) || "0",
         }));
+      let blockSetBack = {}
+      setBack.forEach((item,index)=> {
+        blockSetBack.frontSetback=item.frontSetback,
+        blockSetBack.rearSetback= item.rearSetback,
+        blockSetBack.leftSetback= item.leftSetback,
+        blockSetBack.rightSetback= item.rightSetback
+      })
       let occupancyTypeCheck = [],
         floorNo = response[j].number
       if (BPA && BPA.landInfo && BPA.landInfo.unit && BPA.landInfo.unit[j] && BPA.landInfo.unit[j].usageCategory) {
@@ -5490,11 +5487,11 @@ export const setPreApprovedProposedBuildingData = async (state, dispatch, action
           });
         });
       }
-
+      
       if (occupancyTypeCheck && occupancyTypeCheck.length) {
         tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, occupancyType: occupancyTypeCheck, floorNo: floorNo });
       } else {
-        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, floorNo: floorNo });
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType,blockSetBack: blockSetBack, titleData: title, floorNo: floorNo ,height:height});
       }
 
     };

@@ -117,8 +117,10 @@ export const updateBpaApplication = async (state, dispatch, action) => {
   let bpaStatus = get(state, "screenConfiguration.preparedFinalObject.BPA.status");
   let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
   let bpaPreparedObj = get(state, "screenConfiguration.preparedFinalObject.BPA");
+  let bservice = getQueryArg(window.location.href, "bservice");
+
   let isSpclArchSelected = bpaPreparedObj.workflow;
-  if(ifUserRoleExists("BPA_ARCHITECT") && bservice === "BPA5" && bpaStatus === "PENDING_FORWARD"){
+  if(ifUserRoleExists("BPA_ARCHITECT") && bservice === "BPA5" && (bpaStatus === "PENDING_FORWARD" || bpaStatus === "CITIZEN_ACTION_PENDING_AT_APPROVAL")){
     if (
       bpaPreparedObj.additionalDetails &&
       bpaPreparedObj.additionalDetails.assignes &&
@@ -132,7 +134,6 @@ export const updateBpaApplication = async (state, dispatch, action) => {
     }
   }
   
-  let bservice = getQueryArg(window.location.href, "bservice");
   if (bservice === "BPA5" && bpaStatus === "PENDING_FORWARD" && !isSpclArchSelected) {
 
     dispatch(

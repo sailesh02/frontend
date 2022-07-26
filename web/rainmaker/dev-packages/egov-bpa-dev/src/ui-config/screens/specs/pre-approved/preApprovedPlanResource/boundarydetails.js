@@ -28,7 +28,7 @@ export const detailsofplot = getCommonCard({
                     labelKey: "BPA_BOUNDARY_PLOT_AREA_LABEL"
                 },
                 required: true,
-                jsonPath: "scrutinyDetails.planDetail.plot.area",
+                jsonPath: "BPA.additionalDetails.planDetail.plot.area",
                 props: {
                     disabled: 'true',
                     className : "tl-trade-type"
@@ -56,7 +56,7 @@ export const detailsofplot = getCommonCard({
                     className : "tl-trade-type"
                   },
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "scrutinyDetails.planDetail.planInformation.khataNo",
+                jsonPath: "BPA.additionalDetails.planDetail.planInformation.khataNo",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -74,7 +74,7 @@ export const detailsofplot = getCommonCard({
                     labelName: "Enter Holding No.",
                     labelKey: "BPA_BOUNDARY_HOLDING_NO_PLACEHOLDER"
                 },
-                jsonPath: "BPA.additionalDetails.holdingNo",
+                jsonPath: "BPA.additionalDetails.planDetail.planInformation.holdingNo",
                 gridDefination: {
                     xs: 12,
                     sm: 12,

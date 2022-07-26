@@ -37,6 +37,11 @@ const styles = {
   },
 };
 
+// Reset page 
+const resetPage = (state, dispatch) => {
+  window.location.reload()
+}
+
 // Validate upload files
 const validateUploadFiles = (requiredFiles) => {
   let acceptedfiles = ["image", "pdf", "png", "jpeg", "dxf"];
@@ -812,7 +817,7 @@ export const footer = getCommonCard({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            preparingDocumentsReview(state, dispatch);
+            resetPage(state, dispatch);
           },
         },
       },

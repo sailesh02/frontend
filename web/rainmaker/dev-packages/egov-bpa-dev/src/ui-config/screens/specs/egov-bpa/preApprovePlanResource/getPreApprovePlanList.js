@@ -30,10 +30,10 @@ export const getPreApproveList = async (action, state, dispatch) => {
         PREAPPROVE_ABUTTING_ROAD: newObj.abuttingRoad,
         PREAPPROVE_PLOT_AREA: newObj.plotArea,
         PREAPPROVE_BUILD_UP_AREA: newObj.buildUpArea,
-        PREAPPROVE_FLOORS: "",
-        PREAPPROVE_FRONT_SETBACK: "",
-        PREAPPROVE_REAR_SETBACK: "",
-        PREAPPROVE_SIDE_SETBACK: "",
+        // PREAPPROVE_FLOORS: "",
+        // PREAPPROVE_FRONT_SETBACK: "",
+        // PREAPPROVE_REAR_SETBACK: "",
+        // PREAPPROVE_SIDE_SETBACK: "",
         BPA_COMMON_TABLE_COL_ACTION_LABEL: item.documents || [],
       });
     });

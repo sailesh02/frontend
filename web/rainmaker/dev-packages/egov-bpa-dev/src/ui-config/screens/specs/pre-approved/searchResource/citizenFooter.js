@@ -17,11 +17,9 @@ import {
   getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {getSiteInfo} from "../../utils"
-import store from "ui-redux/store";
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let tenant = getQueryArg(window.location.href, "tenantId");
-
 
 const getCommonApplyFooter = children => {
   return {
@@ -117,10 +115,8 @@ export const updateBpaApplication = async (state, dispatch, action) => {
   let bpaStatus = get(state, "screenConfiguration.preparedFinalObject.BPA.status");
   let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
   let bpaPreparedObj = get(state, "screenConfiguration.preparedFinalObject.BPA");
-  let bservice = getQueryArg(window.location.href, "bservice");
-
   let isSpclArchSelected = bpaPreparedObj.workflow;
-  if(ifUserRoleExists("BPA_ARCHITECT") && bservice === "BPA5" && (bpaStatus === "PENDING_FORWARD" || bpaStatus === "CITIZEN_ACTION_PENDING_AT_APPROVAL")){
+  if(ifUserRoleExists("BPA_ARCHITECT") && bservice === "BPA5" && bpaStatus === "PENDING_FORWARD"){
     if (
       bpaPreparedObj.additionalDetails &&
       bpaPreparedObj.additionalDetails.assignes &&
@@ -134,6 +130,7 @@ export const updateBpaApplication = async (state, dispatch, action) => {
     }
   }
   
+  let bservice = getQueryArg(window.location.href, "bservice");
   if (bservice === "BPA5" && bpaStatus === "PENDING_FORWARD" && !isSpclArchSelected) {
 
     dispatch(
@@ -323,28 +320,8 @@ export const previewAndForwardApplication = async (state, dispatch, action) => {
 
 }
 
-const openDialogForGenerateDemand = async (state, dispatch, action) => {
-  let selectedInstallments = get(state, "screenConfiguration.preparedFinalObject.selectedInstallments");
-  if(selectedInstallments && selectedInstallments.length < 1){
-
-    let errorMessage = {
-      labelName: "Please confirm the declaration!",
-      labelKey: "BPA_INSTALLMENT_NOT_SELECTED_ERR"
-    };
-    store.dispatch(toggleSnackbar(true, errorMessage, "error"));
-    return false;
-
-  }
-  dispatch(
-    handleField("view-installments", "components.div.children.sendToArchPickerDialog", "props.open", true)
-  );
-}
-export const bpaMakeInstallmentPayment = async () => {
+const bpaMakeInstallmentPayment = async (state, dispatch, action) => {
   //console.log(state, "Nero State");
-  let state = store.getState();
-  console.log(state, "Nero Sattttt")
-  
-  let InstallmentsDocs = get(state, "screenConfiguration.preparedFinalObject.InstallmentsDocs");
   let selectedInstallments = get(state, "screenConfiguration.preparedFinalObject.selectedInstallments");
   let notPaidInstallments = get(state, "screenConfiguration.preparedFinalObject.notPaidInstallments");
   console.log(selectedInstallments, applicationNumber, "Nero Selected Installments")
@@ -357,7 +334,7 @@ export const bpaMakeInstallmentPayment = async () => {
       labelName: "Please confirm the declaration!",
       labelKey: "BPA_INSTALLMENT_NOT_SELECTED_ERR"
     };
-    store.dispatch(toggleSnackbar(true, errorMessage, "error"));
+    dispatch(toggleSnackbar(true, errorMessage, "error"));
     return false;
 
   }
@@ -380,24 +357,21 @@ export const bpaMakeInstallmentPayment = async () => {
   // }
   
 console.log(selectedInstallments, "Nero Final Installments for API")
-let payloadObject = {
-  "consumerCode": applicationNumber,
-  "installmentNos":selectedInstallments,
-  "additionalDetails" : InstallmentsDocs
-};
-console.log(payloadObject, "Nero Payload Object")
-//return false;
+
 try {
   let response = await httpRequest(
     "post",
     "bpa-services/v1/bpa/_generateDemandFromInstallments",
     "",
     [],
-    { InstallmentSearchCriteria: payloadObject }
+    { InstallmentSearchCriteria: {
+      "consumerCode": applicationNumber,
+      "installmentNos":selectedInstallments
+  } }
   );
   if (response) {
     let url = `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=BPA.NC_SAN_FEE`
-    store.dispatch(setRoute(url));
+    dispatch(setRoute(url));
   }
 } catch (error) {
   console.log(error, "Error")
@@ -405,12 +379,13 @@ try {
     labelName: "Please confirm the declaration!",
     labelKey: error.message
   };
-  store.dispatch(toggleSnackbar(true, errorMessage, "error"));
+  dispatch(toggleSnackbar(true, errorMessage, "error"));
 }
 }
 export const citizenFooter = getCommonApplyFooter({
   makePayment: {
     componentPath: "Button",
+    visible:false,
     props: {
       variant: "contained",
       color: "primary",
@@ -429,10 +404,10 @@ export const citizenFooter = getCommonApplyFooter({
       action: "condition",
       callBack: bpaMakePayment
     },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      action: "PAY"
-    }
+    // roleDefination: {
+    //   rolePath: "user-info.roles",
+    //   action: "PAY"
+    // }
   },
   viewPaymentDetail: {
     componentPath: "Button",
@@ -720,8 +695,7 @@ export const viewPaymentDetails = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-    //  callBack: bpaMakeInstallmentPayment
-    callBack: openDialogForGenerateDemand
+      callBack: bpaMakeInstallmentPayment
     },
     // roleDefination: {
     //   rolePath: "user-info.roles",

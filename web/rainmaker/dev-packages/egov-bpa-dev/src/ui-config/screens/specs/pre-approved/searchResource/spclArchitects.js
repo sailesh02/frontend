@@ -68,12 +68,7 @@ import {
           
           let processIns = {};
           let assignes = [selectedArch[0].uuid];
-          let selectedAccredited = selectedArch.map((item,index)=> {
-            return {uuid:item.uuid,selected:true}
-          })
-          let accredited = {};
-          accredited.assignes = selectedAccredited
-          bpaAppObj.additionalDetails = accredited; 
+          
           processIns.assignes = assignes
           bpaAppObj.workflow = processIns; 
         }

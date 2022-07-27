@@ -111,10 +111,14 @@ const generatePdf = async (state, dispatch) => {
     }
   ).then( async(apiRes)=>{
     console.log(apiRes, "Nero IdGen")
-
+    let todayDateObj = new Date();
+    let todayDate = `${todayDateObj.getDate()}-${todayDateObj.getMonth()+1}-${todayDateObj.getFullYear()}`
+    
+    
     if(apiRes && apiRes.idResponses){
       set(bpaDetails, "scnLetterNo", apiRes.idResponses[0].id)
       set(bpaDetails, "edcrDetail", edcrDetail.planDetail.planInformation)
+      set(bpaDetails, "digitallySignDate", todayDate);
     }
     let res = await httpRequest(
       "post",
@@ -204,13 +208,15 @@ const generatePdfForPermitRevoke = async (state, dispatch) => {
     }
   ).then( async(apiRes)=>{
     console.log(apiRes, "Nero IdGen")
-
+    let todayDateObj = new Date();
+    let todayDate = `${todayDateObj.getDate()}-${todayDateObj.getMonth()+1}-${todayDateObj.getFullYear()}`
+    
     if(apiRes && apiRes.idResponses){
       set(bpaDetails, "scnLetterNo", apiRes.idResponses[0].id)
       set(bpaDetails, "lastSCNDetail.LetterNo", lastSCNDetail.LetterNo)
       set(bpaDetails, "lastSCNDetail.createdTime", lastSCNDetail.auditDetails.createdTime)
       set(bpaDetails, "edcrDetail", edcrDetail.planDetail.planInformation)
-      
+      set(bpaDetails, "digitallySignDate", todayDate);
     }
     let res = await httpRequest(
       "post",

@@ -24,5 +24,5 @@ export const bpaSummaryDetails = getCommonCard({
   applicantSummary: applicantSummary,
   //institutionSummary: institutionSummary,
   applyDocSummary: applyDocSummary,
-  nocDetailsApply: nocDetailsApplyBPA,
+  //nocDetailsApply: nocDetailsApplyBPA,
 });

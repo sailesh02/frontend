@@ -193,22 +193,121 @@ export const scrutinySummary = getCommonGrayCard({
             hasAddItem: false,
             scheama: getCommonContainer({
               blocksContainer: getCommonContainer({
-                header: getLabel("Block", "", {
-                  jsonPath: "edcr.blockDetail[0].titleData",
-                  style: {
-                    width: "100%",
-                    marginTop: "5px",
-                    marginLeft: "7px",
+                header: getLabel(
+                  "Block",
+                  "",
+                  {
+                    jsonPath: "edcr.blockDetail[0].titleData",
+                    style: {
+                      width: "50%",
+                      marginTop: "5px"
+                    }
+                  }
+                ),
+                buildingHeight: getTextField({
+                  label: {
+                    labelName: "Building Height",
+                    labelKey: "PREAPPROVE_BUILDING_HEIGHT",
+                  },
+                  pattern: "^[0-9]*$",
+                  errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                  disabled: true,
+                  jsonPath: "edcr.blockDetail[0].height.buildingHeight",
+                  gridDefination: {
+                    xs: 12,
+                    sm: 6,
+                    md: 6,
+                  },
+                }),
+                actualBuildingHeight: getTextField({
+                  label: {
+                    labelName: "Actual Building Height",
+                    labelKey: "PREAPPROVE_ACTUAL_BUILDING_HEIGHT",
+                  },
+                  pattern: "^[0-9]*$",
+                  errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                  disabled: true,
+                  jsonPath: "edcr.blockDetail[0].height.actualBuildingHeight",
+                  gridDefination: {
+                    xs: 12,
+                    sm: 6,
+                    md: 6,
+                  },
+                }),
+                frontSetback: getTextField({
+                  label: {
+                    labelName: "Front setback",
+                    labelKey: "PREAPPROVE_FRONT_SETBACK",
+                  },
+                  errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                  disabled: true,
+                  jsonPath: "edcr.blockDetail[0].blockSetBack.frontSetback",
+                  gridDefination: {
+                    xs: 12,
+                    sm: 6,
+                    md: 6,
+                  },
+                }),
+                rearSetback: getTextField({
+                  label: {
+                    labelName: "Rear setback",
+                    labelKey: "PREAPPROVE_REAR_SETBACK",
+                  },
+                  errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                  disabled: true,
+                  jsonPath: "edcr.blockDetail[0].blockSetBack.rearSetback",
+                  gridDefination: {
+                    xs: 12,
+                    sm: 6,
+                    md: 6,
+                  },
+                }),
+                rightSetback: getTextField({
+                  label: {
+                    labelName: "Right setback",
+                    labelKey: "PREAPPROVE_RIGHT_SETBACK",
+                  },
+                  errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                  disabled: true,
+                  jsonPath: "edcr.blockDetail[0].blockSetBack.rightSetback",
+                  gridDefination: {
+                    xs: 12,
+                    sm: 6,
+                    md: 6,
+                  },
+                }),
+                leftSetback: getTextField({
+                  label: {
+                    labelName: "Left setback",
+                    labelKey: "PREAPPROVE_LEFT_SETBACK",
+                  },
+                  errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                  disabled: true,
+                  jsonPath: "edcr.blockDetail[0].blockSetBack.rightSetback",
+                  gridDefination: {
+                    xs: 12,
+                    sm: 6,
+                    md: 6,
                   },
                 }),
                 proposedBuildingDetailsContainer: {
                   uiFramework: "custom-molecules-local",
                   moduleName: "egov-bpa",
                   componentPath: "Table",
+                  gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 12,
+                  },
                   props: {
                     className: "mymuitable",
                     jsonPath: "edcr.blockDetail[0].blocks",
                     style: { marginBottom: 20 },
+                    gridDefination: {
+                      xs: 12,
+                      sm: 12,
+                      md: 12,
+                    },
                     columns: {
                       "Floor Description": {},
                       Level: {},

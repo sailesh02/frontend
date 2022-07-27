@@ -1105,7 +1105,7 @@ const setSearchResponse = async (
   console.log(validitionStatusForRole, "validitionStatusForRole");
   const citizenOtherConditionValidationRole =
     appStatus &&
-    appStatus == "APPROVAL_INPROGRESS" && ifUserRoleExists("BPA_ARC_APPROVER") && BpaData === "BPA5" &&
+    appStatus == "APPROVAL_INPROGRESS" && ifUserRoleExists("BPA_ARC_APPROVER") && get(response, "BPA[0].businessService") === "BPA5" &&
     process.env.REACT_APP_NAME == "Citizen";
   if (validitionStatusForRole == true) {
     if (otherConditionData && otherConditionData.length > 0) {

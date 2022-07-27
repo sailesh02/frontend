@@ -46,7 +46,7 @@ const commonApplicantInformation = () => {
           labelName: "Enter Mobile No.",
           labelKey: "BPA_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER"
         },
-        required: false,
+        required: true,
         props: {
           className: "applicant-details-error"
         },
@@ -96,7 +96,7 @@ const commonApplicantInformation = () => {
           labelName: "Enter Name",
           labelKey: "BPA_ENTER_APPLICANT_NAME_PLACEHOLDER"
         },
-        required: false,
+        required: true,
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
         jsonPath: "BPA.landInfo.owners[0].name",
@@ -118,7 +118,7 @@ const commonApplicantInformation = () => {
           labelName: "Select Gender",
           labelKey: "BPA_APPLICANT_GENDER_PLACEHOLDER"
         },
-        required: false,
+        required: true,
         optionValue: "code",
         optionLabel: "label",
         jsonPath: "BPA.landInfo.owners[0].gender",
@@ -152,7 +152,7 @@ const commonApplicantInformation = () => {
             labelName: "DD/MM/YYYY",
             labelKey: "BPA_ENTER_APPLICANT_DOB_PLACEHOLDER"
           },
-          required: false,
+          required: true,
           pattern: getPattern("Date"),
           isDOB: true,
           errorMessage: "BPA_DOB_ERROR_MESSAGE",
@@ -200,7 +200,7 @@ const commonApplicantInformation = () => {
           labelName: "Enter Guardian Name",
           labelKey: "BPA_APPLICANT_GUARDIAN_NAME_PLACEHOLDER"
         },
-        required: false,
+        required: true,
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
         jsonPath:
@@ -278,7 +278,7 @@ const commonApplicantInformation = () => {
           labelName: "Enter Correspondence Address",
           labelKey: "BPA_ENTER_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
         },
-        required: false,
+        required: true,
         pattern: getPattern("Address"),
         errorMessage: "BPA_INVALID_ADDRESS",
         jsonPath:

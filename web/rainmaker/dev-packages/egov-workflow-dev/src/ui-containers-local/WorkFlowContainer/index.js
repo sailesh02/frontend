@@ -480,28 +480,6 @@ let BPADocs;
         "error"
       );
       return;
-    }else if(sanctionFeeCardEnabled && (feeAmount == "" || feeAmountAdjustReason == "")){
-      this.props.hideSpinner();
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Documents Required",
-          labelKey: "Please enter valid sanction fee amount details"
-        },
-        "error"
-      );
-      return;
-    }else if(isNaN(feeAmount)){
-      this.props.hideSpinner();
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Documents Required",
-          labelKey: "Please enter valid sanction fee amount details"
-        },
-        "error"
-      );
-      return;
     }
   }
  }
@@ -795,7 +773,7 @@ if(moduleName == "BPA" && "edcrDetail" in data){
       case "PAY": return bservice ? `${payUrl}&businessService=${bservice}` : payUrl;
       case "EDIT": return isAlreadyEdited
         ? `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-        : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`; 
+        : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
     }
   };
 

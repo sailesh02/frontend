@@ -148,7 +148,7 @@ export const formwizardFourthStep = {
   children: {
     documentDetails,
     additionalDocsInformation,
-    nocDetailsApplyBPA,
+    //nocDetailsApplyBPA,
   },
   visible: false,
 };

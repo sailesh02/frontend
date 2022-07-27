@@ -698,10 +698,20 @@ export const proposedBuildingDetails = getCommonCard({
                 uiFramework: "custom-molecules-local",
                 moduleName: "egov-bpa",
                 componentPath: "Table",
+                gridDefination: {
+                  xs: 12,
+                  sm: 12,
+                  md: 12,
+                },
                 props: {
                   className: "mymuitable",
                   jsonPath: "edcr.blockDetail[0].blocks",
                   style: { marginBottom: 20 },
+                  gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 12,
+                  },
                   columns: {
                     "Floor Description": {},
                     Level: {},

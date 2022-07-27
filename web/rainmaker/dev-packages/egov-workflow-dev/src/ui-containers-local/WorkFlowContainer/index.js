@@ -165,7 +165,6 @@ class WorkFlowContainer extends React.Component {
     
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
-    console.log(updateUrl, moduleName, dataPath)
     if (moduleName === "NewTL") {
       if (getQueryArg(window.location.href, "edited")) {
 
@@ -359,8 +358,6 @@ let BPADocs;
           "BPA.documents",
           []
         );
-        console.log(bPAUploadedDocs, "nero New Uploaded Docs")
-        console.log(BPADocs, "nero Application Docs")
         
         if(bPAUploadedDocs && bPAUploadedDocs.length > 0){
           for(let k=0;k<bPAUploadedDocs.length;k++){
@@ -368,7 +365,6 @@ let BPADocs;
             if(bPAUploadedDocs[k] && bPAUploadedDocs[k].documents && bPAUploadedDocs[k].documents.length > 0 ){
                 for(let j=0;j<bPAUploadedDocs[k].documents.length;j++){
                   if(bPAUploadedDocs[k].documents[j].fileUrl && !bPAUploadedDocs[k].dropDownValues.value){
-                      console.log("Nero Hellosss")
                       isDocsDropDownSelected = false; 
                       break;
                   }
@@ -544,15 +540,41 @@ let BPADocs;
     }
     
  }
- console.log(data , "Nero App Payload in Workflow Module")
+
 if(moduleName == "BPA" && "edcrDetail" in data){
   delete data.edcrDetail ;
  }
-// return false;
+
+if(moduleName == "PT.MUTATION" && label == 'FORWARD' && (!data.additionalDetails.mutationCharge || data.additionalDetails.mutationCharge == 0 )){
+
+    let confirmAction = confirm("You haven't specified mutation fee. Do you want to proceed with 0 mutation fee? Press Ok to Confirm.")
+    if (confirmAction) {
+      this.setState({
+        open: false
+      });
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
+      if(payload){
+      this.props.hideSpinner();
+      const licenseNumber = get(payload, "Licenses[0].licenseNumber", "");
+      this.props.setRoute(`acknowledgement?${this.getPurposeString(
+        label
+      )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`);
+    }} else {
+      this.setState({
+        open: false
+      });
+      this.props.hideSpinner();
+      this.props.setRoute(`search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}`)
+      
+    }
 
+}
+else{
+      let payload = await httpRequest("post", updateUrl, "", [], {
+        [dataPath]: data
+      });
       this.setState({
         open: false
       });
@@ -597,8 +619,10 @@ if(moduleName == "BPA" && "edcrDetail" in data){
           )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`);
         }
       }
+    }
+    
     } catch (e) {
-      console.log(e, "Neero Error")
+
       this.props.hideSpinner();
       if (moduleName === "BPA") {
         toggleSnackbar(
@@ -696,7 +720,6 @@ if(moduleName == "BPA" && "edcrDetail" in data){
             this.wfUpdate(label);
           }
         } else {
-          console.log(label, "Nero Label Action");
           this.wfUpdate(label);
         }
 
@@ -882,7 +905,6 @@ if(moduleName == "BPA" && "edcrDetail" in data){
       || moduleName === "ModifySWConnection" || moduleName === "ModifyWSConnection" || moduleName === "SWOwnershipChange" || moduleName === "WSOwnershipChange") {
       state.isStateUpdatable = false;
     }
-    console.log(applicationState, "Nero State Status")
 
     if (moduleName === "ModifySWConnection" || moduleName === "ModifyWSConnection"){
       if(applicationState != "PENDING_FOR_APPROVAL")

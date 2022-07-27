@@ -243,9 +243,7 @@ const commonApplicantInformation = () => {
           ],
           jsonPath:
             "BPA.landInfo.owners[0].relationship",
-          required: true
         },
-        required: true,
         type: "array"
       },
       applicantPan: getTextField({

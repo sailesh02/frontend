@@ -165,6 +165,10 @@ const FullPaymentContainer =  Loadable({
   loader: () => import("./FullPaymentContainer"),
   loading: () => <Loading />
 });
+const BlockContainer = Loadable({
+  loader: () => import("./BlockContainer"),
+  loading: () => <Loading />
+});
 
 const PreApproveDocumentListContainer = Loadable({
   loader: () => import("./PreApproveDocumentListContainer"),
@@ -205,5 +209,6 @@ export {
   EdcrHistory,
   PreApproveDocumentListContainer,
   DynamicCheckboxes,
-  FullPaymentContainer
+  FullPaymentContainer,
+  BlockContainer
 };

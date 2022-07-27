@@ -37,6 +37,11 @@ const styles = {
   },
 };
 
+// Reset page 
+const resetPage = (state, dispatch) => {
+  window.location.reload()
+}
+
 // Validate upload files
 const validateUploadFiles = (requiredFiles) => {
   let acceptedfiles = ["image", "pdf", "png", "jpeg", "dxf"];
@@ -164,7 +169,6 @@ const createPreApprovePlan = async (state, dispatch) => {
       plotWidth: plotDetails.widthInMt,
       roadWidth: plotDetails.abuttingRoadWidthInMt,
       active: false,
-      floorDescription: `G+${buildingAbstract.totalFloorNo}`
     };
     // Drawing Details Section Start
     let PArea = plotDetails.lengthInMt*plotDetails.widthInMt
@@ -174,6 +178,7 @@ const createPreApprovePlan = async (state, dispatch) => {
       serviceType: "NEW_CONSTRUCTION",
       applicationType: "BUILDING_PLAN_SCRUTINY",
       occupancy: "Residential",
+      floorDescription: `G+${buildingAbstract.totalFloorNo}`,
       subOccupancy: edcrDetails.blockDetail[0].suboccupancyData,
       totalBuitUpArea: parseInt(buildingAbstract.totalBuildUpArea),
       totalCarpetArea: parseInt(buildingAbstract.totalCarpetArea)
@@ -415,66 +420,6 @@ export const plotDetails = getCommonCard({
         md: 6,
       },
     }),
-    frontSetBackInMt: getTextField({
-      label: {
-        labelName: "Front set back(in m.)",
-        labelKey: "PREAPPROVE_FRONT_SET_BACK",
-      },
-      pattern: "^[0-9]*$",
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "plotDetails.frontSetBackInMt",
-      required: true,
-      gridDefination: {
-        xs: 12,
-        sm: 6,
-        md: 6,
-      },
-    }),
-    rearSetBackInMt: getTextField({
-      label: {
-        labelName: "Rear set back(in m.)",
-        labelKey: "PREAPPROVE_REAR_SET_BACK",
-      },
-      pattern: "^[0-9]*$",
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      required: true,
-      jsonPath: "plotDetails.rearSetBackInMt",
-      gridDefination: {
-        xs: 12,
-        sm: 6,
-        md: 6,
-      },
-    }),
-    rightSetBackInMt: getTextField({
-      label: {
-        labelName: "Right set back(in m.)",
-        labelKey: "PREAPPROVE_RIGHT_SET_BACK",
-      },
-      pattern: "^[0-9]*$",
-      jsonPath: "plotDetails.rightSetBackInMt",
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      required: true,
-      gridDefination: {
-        xs: 12,
-        sm: 6,
-        md: 6,
-      },
-    }),
-    leftSetBackInMt: getTextField({
-      label: {
-        labelName: "Left set back(in m.)",
-        labelKey: "PREAPPROVE_LEFT_SET_BACK",
-      },
-      pattern: "^[0-9]*$",
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "plotDetails.leftSetBackInMt",
-      required: true,
-      gridDefination: {
-        xs: 12,
-        sm: 6,
-        md: 6,
-      },
-    }),
   }),
 });
 
@@ -534,21 +479,6 @@ export const buildingAbstract = getCommonCard({
       jsonPath: "buildingAbstract.totalFloorNo",
       required: true,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      gridDefination: {
-        xs: 12,
-        sm: 6,
-        md: 6,
-      },
-    }),
-    totalFar: getTextField({
-      label: {
-        labelName: "Total FAR",
-        labelKey: "PREAPPROVE_TOTAL_FAR",
-      },
-      pattern: "^[0-9]*$",
-      jsonPath: "buildingAbstract.totalFar",
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      required: true,
       gridDefination: {
         xs: 12,
         sm: 6,
@@ -887,7 +817,7 @@ export const footer = getCommonCard({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            preparingDocumentsReview(state, dispatch);
+            resetPage(state, dispatch);
           },
         },
       },

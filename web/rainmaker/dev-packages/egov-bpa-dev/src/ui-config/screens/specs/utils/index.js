@@ -5468,9 +5468,12 @@ export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, m
 
 const getFloorDetails = (index) => {
   let floorNo = ['Ground', 'First', 'Second', 'Third', 'Forth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth']
-  if (index) {
+  if (floorNo[index]) {
     return `${floorNo[index]} floor`;
+  }else {
+    return `Basement`
   }
+  
 };
 
 export const setPreApprovedProposedBuildingData = async (state, dispatch, action, value) => {

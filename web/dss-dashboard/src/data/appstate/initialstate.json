@@ -33,9 +33,9 @@
             "label_locale": "DSS_DENOMINATION",
             "type": "switch",
             "values": [
-                "Cr",
+                "Unit",
                 "Lac",
-                "Unit"
+                "Cr"
             ]
         }
     ],
@@ -67,9 +67,9 @@
             "label_locale": "DSS_DENOMINATION",
             "type": "switch",
             "values": [
-                "Cr",
+                "Unit",
                 "Lac",
-                "Unit"
+                "Cr"
             ]
         }
     ],
@@ -807,9 +807,9 @@
             "label_locale": "DSS_DENOMINATION",
             "type": "switch",
             "values": [
-                "Cr",
+                "Unit",
                 "Lac",
-                "Unit"
+                "Cr"
             ]
         }
     ],

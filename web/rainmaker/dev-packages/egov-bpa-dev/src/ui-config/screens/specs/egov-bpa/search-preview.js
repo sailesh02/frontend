@@ -1101,12 +1101,11 @@ const setSearchResponse = async (
     (BpaData == "BPA1" ||
       BpaData == "BPA2" ||
       BpaData == "BPA3" ||
-      BpaData === "BPA4" ||
-      BpaData === "BPA5");
+      BpaData === "BPA4");
   console.log(validitionStatusForRole, "validitionStatusForRole");
   const citizenOtherConditionValidationRole =
     appStatus &&
-    appStatus == "APPROVAL_INPROGRESS" && ifUserRoleExists("BPA_ARC_APPROVER") &&
+    appStatus == "APPROVAL_INPROGRESS" && ifUserRoleExists("BPA_ARC_APPROVER") && get(response, "BPA[0].businessService") === "BPA5" &&
     process.env.REACT_APP_NAME == "Citizen";
   if (validitionStatusForRole == true) {
     if (otherConditionData && otherConditionData.length > 0) {
@@ -1152,13 +1151,6 @@ const setSearchResponse = async (
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.otherConditionsForPermitCertificate.visible",
       true
-    );
-  }
-  if(process.env.REACT_APP_NAME === "Employee"){
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.otherConditionsForPermitCertificate.visible",
-      false
     );
   }
   let edcrRes = await edcrHttpRequest(

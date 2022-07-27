@@ -15,7 +15,7 @@ import { httpRequest } from "../../../../ui-utils/api";
 import store from "ui-redux/store";
 
 import {showSearches, tabsForArchOnly, tabsForSpclArchOnly} from "./citizenSearchResource/citizenFunctions"
-import {ifUserRoleExists} from "../../specs/utils"
+import {ifUserRoleExists} from "../../specs/utils";
 
 const header = getCommonHeader(
   {
@@ -313,17 +313,12 @@ export const fetchApprovedApplicationList = async (action,state,dispatch) => {
     [],
     null
   );
-  // setTenatId variable needs to be removed once we get tenantId value from backend
-  let setTenantId = data.ApprovedBy.map((item) => {
-    item.tenantId = "od.cuttack";
-    return item;
-  });
-  setTenantId.forEach((item,index)=> {
+  data.ApprovedBy.forEach((item,index)=> {
     approvedList.push({
-      ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNo,
+      ["BPA_COMMON_TABLE_COL_APP_NO"]: item.dscDetails.applicationNo,
       ["BPA_COMMON_TABLE_COL_LINK"]: item,
       ["BPA_COMMON_TABLE_COL_UPLOAD"]: item || '',
-      ["BPA_COMMON_TABLE_COL_TENANT"]: item.tenantId || '',
+      ["BPA_COMMON_TABLE_COL_TENANT"]: item.dscDetails.tenantId || '',
     })
   })
 
@@ -339,6 +334,23 @@ export const fetchApprovedApplicationList = async (action,state,dispatch) => {
     handleField(
       "my-applications-stakeholder",
       "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.listOfApprovedApplication",
+      "props.rows",
+      approvedList.length
+    )
+  );
+
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[3].tabContent.listOfBuildingPlanLayout",
+      "props.data",
+      approvedList
+    ));
+  dispatch(hideSpinner());
+  dispatch(
+    handleField(
+      "my-applications-stakeholder",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[3].tabContent.listOfBuildingPlanLayout",
       "props.rows",
       approvedList.length
     )

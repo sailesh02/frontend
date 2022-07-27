@@ -122,7 +122,8 @@ const setDocsForEditFlow = async (state, dispatch) => {
               )) ||
             `Document - ${index + 1}`,
           fileStoreId: item.fileStoreId,
-          fileUrl: Object.values(fileUrlPayload)[index],
+          // fileUrl: Object.values(fileUrlPayload)[index],
+          fileUrl: fileUrlPayload[item.fileStoreId],
           documentType: item.documentType,
           tenantId: item.tenantId,
           id: item.id
@@ -378,6 +379,68 @@ const getMultipleOwners = owners => {
   return mergedOwners;
 };
 
+export const updateApplicationDocsValues = async (applicationDocs, state, dispatch) => {
+  /* To change the order of application documents similar order of mdms order*/
+  const mdmsDocs = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.MarriageRegistration.documentObj[0].allowedDocs",
+    []
+  );
+  let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
+    let applicationDocument = {}
+    applicationDocs && applicationDocs.map(appDoc => {
+      if (appDoc.documentType == mdmsDoc.documentType) {
+        applicationDocument = { ...appDoc }
+      }
+    })
+    return applicationDocument;
+  }).filter(docObj => Object.keys(docObj).length > 0)
+  applicationDocs = [...orderedApplicationDocuments];
+  dispatch(
+    prepareFinalObject("MarriageRegistrations[0].applicationDocuments", applicationDocs)
+  );
+  const reduxDocsData = get(
+    state.screenConfiguration.preparedFinalObject,
+    "LicensesTemp[0].uploadedDocsInRedux",
+    []
+  );
+  let updtdReduxDocsData = {};
+  Object.values(reduxDocsData).forEach(eachItem => {
+    updtdReduxDocsData[eachItem[0]["fileStoreId"]] = {
+      fileStoreId: eachItem[0]["fileStoreId"],
+      fileUrl: eachItem[0]["fileUrl"],
+    };
+  })
+
+  let uploadedDocuments = {};
+  applicationDocs &&
+    applicationDocs.forEach((item, index) => {
+      uploadedDocuments[index] = [
+        {
+          fileName:
+            (updtdReduxDocsData[item.fileStoreId] &&
+              updtdReduxDocsData[item.fileStoreId]["fileUrl"] &&
+              decodeURIComponent(
+                getFileUrl(updtdReduxDocsData[item.fileStoreId]["fileUrl"])
+                  .split("?")[0]
+                  .split("/")
+                  .pop()
+                  .slice(13)
+              )) ||
+            `Document - ${index + 1}`,
+          fileStoreId: item.fileStoreId,
+          fileUrl: updtdReduxDocsData[item.fileStoreId]["fileUrl"],
+          documentType: item.documentType,
+          tenantId: item.tenantId,
+          id: item.id
+        }
+      ];
+    });
+  dispatch(
+    prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", uploadedDocuments)
+  );
+}
+
 export const applyTradeLicense = async (state, dispatch, activeIndex) => {
   console.log("activeIndex", activeIndex);
   try {
@@ -552,6 +615,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         ];
 
         setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
+        const applicationDocs = get(
+          updateResponse,
+          `MarriageRegistrations[0].applicationDocuments`
+        );
+        updateApplicationDocsValues(applicationDocs, state, dispatch);
       } else {
         updatedApplicationNo = queryObject[0].applicationNumber;
         updatedTenant = queryObject[0].tenantId;

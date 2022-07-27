@@ -1,5 +1,7 @@
 import { getLabel, getCommonGrayCard, getCommonSubHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { ifUserRoleExists } from "../../utils";
+
 import get from "lodash/get";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { createUpdateBpaApplication, submitBpaApplicationNOC } from "../../../../../ui-utils/commons";
@@ -15,9 +17,11 @@ import {
   getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {getSiteInfo} from "../../utils"
+import store from "ui-redux/store";
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let tenant = getQueryArg(window.location.href, "tenantId");
+
 
 const getCommonApplyFooter = children => {
   return {
@@ -114,17 +118,20 @@ export const updateBpaApplication = async (state, dispatch, action) => {
   let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
   let bpaPreparedObj = get(state, "screenConfiguration.preparedFinalObject.BPA");
   let isSpclArchSelected = bpaPreparedObj.workflow;
-  if (
-    bpaPreparedObj.additionalDetails &&
-    bpaPreparedObj.additionalDetails.assignes &&
-    bpaPreparedObj.additionalDetails.assignes.length > 0
-  ) {
-    let assigneInfo = {
-      assignes: [bpaPreparedObj.additionalDetails.assignes[0].uuid],
-    };
-
-    bpaPreparedObj.workflow = assigneInfo;
+  if(ifUserRoleExists("BPA_ARCHITECT") && bservice === "BPA5" && bpaStatus === "PENDING_FORWARD"){
+    if (
+      bpaPreparedObj.additionalDetails &&
+      bpaPreparedObj.additionalDetails.assignes &&
+      bpaPreparedObj.additionalDetails.assignes.length > 0
+    ) {
+      let assigneInfo = {
+        assignes: [bpaPreparedObj.additionalDetails.assignes[0].uuid],
+      };
+  
+      bpaPreparedObj.workflow = assigneInfo;
+    }
   }
+  
   let bservice = getQueryArg(window.location.href, "bservice");
   if (bservice === "BPA5" && bpaStatus === "PENDING_FORWARD" && !isSpclArchSelected) {
 
@@ -315,8 +322,28 @@ export const previewAndForwardApplication = async (state, dispatch, action) => {
 
 }
 
-const bpaMakeInstallmentPayment = async (state, dispatch, action) => {
+const openDialogForGenerateDemand = async (state, dispatch, action) => {
+  let selectedInstallments = get(state, "screenConfiguration.preparedFinalObject.selectedInstallments");
+  if(selectedInstallments && selectedInstallments.length < 1){
+
+    let errorMessage = {
+      labelName: "Please confirm the declaration!",
+      labelKey: "BPA_INSTALLMENT_NOT_SELECTED_ERR"
+    };
+    store.dispatch(toggleSnackbar(true, errorMessage, "error"));
+    return false;
+
+  }
+  dispatch(
+    handleField("view-installments", "components.div.children.sendToArchPickerDialog", "props.open", true)
+  );
+}
+export const bpaMakeInstallmentPayment = async () => {
   //console.log(state, "Nero State");
+  let state = store.getState();
+  console.log(state, "Nero Sattttt")
+  
+  let InstallmentsDocs = get(state, "screenConfiguration.preparedFinalObject.InstallmentsDocs");
   let selectedInstallments = get(state, "screenConfiguration.preparedFinalObject.selectedInstallments");
   let notPaidInstallments = get(state, "screenConfiguration.preparedFinalObject.notPaidInstallments");
   console.log(selectedInstallments, applicationNumber, "Nero Selected Installments")
@@ -329,7 +356,7 @@ const bpaMakeInstallmentPayment = async (state, dispatch, action) => {
       labelName: "Please confirm the declaration!",
       labelKey: "BPA_INSTALLMENT_NOT_SELECTED_ERR"
     };
-    dispatch(toggleSnackbar(true, errorMessage, "error"));
+    store.dispatch(toggleSnackbar(true, errorMessage, "error"));
     return false;
 
   }
@@ -352,21 +379,24 @@ const bpaMakeInstallmentPayment = async (state, dispatch, action) => {
   // }
   
 console.log(selectedInstallments, "Nero Final Installments for API")
-
+let payloadObject = {
+  "consumerCode": applicationNumber,
+  "installmentNos":selectedInstallments,
+  "additionalDetails" : InstallmentsDocs
+};
+console.log(payloadObject, "Nero Payload Object")
+//return false;
 try {
   let response = await httpRequest(
     "post",
     "bpa-services/v1/bpa/_generateDemandFromInstallments",
     "",
     [],
-    { InstallmentSearchCriteria: {
-      "consumerCode": applicationNumber,
-      "installmentNos":selectedInstallments
-  } }
+    { InstallmentSearchCriteria: payloadObject }
   );
   if (response) {
     let url = `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=BPA.NC_SAN_FEE`
-    dispatch(setRoute(url));
+    store.dispatch(setRoute(url));
   }
 } catch (error) {
   console.log(error, "Error")
@@ -374,7 +404,7 @@ try {
     labelName: "Please confirm the declaration!",
     labelKey: error.message
   };
-  dispatch(toggleSnackbar(true, errorMessage, "error"));
+  store.dispatch(toggleSnackbar(true, errorMessage, "error"));
 }
 }
 export const citizenFooter = getCommonApplyFooter({
@@ -689,7 +719,8 @@ export const viewPaymentDetails = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: bpaMakeInstallmentPayment
+    //  callBack: bpaMakeInstallmentPayment
+    callBack: openDialogForGenerateDemand
     },
     // roleDefination: {
     //   rolePath: "user-info.roles",

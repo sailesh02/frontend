@@ -147,9 +147,9 @@ class FullPaymentContainer extends React.Component {
           </Grid>
           {(() => {
             if (this.isInstallmentPaid(fullPaymentInfo)) {
-              return <Grid item sm={3} md={3} style={{ marginTop: "40px", color: "green" }}>PAID</Grid>
+              return <Grid item sm={3} md={3} style={{ marginTop: "40px", color: "#2dd82d", fontWeight: "bold" }}>PAID</Grid>
             } else {
-              return <Grid item sm={3} md={3} style={{ marginTop: "40px", color: "red" }}>NOT PAID</Grid>
+              return <Grid item sm={3} md={3} style={{ marginTop: "40px", color: "red", fontWeight: "bold" }}>NOT PAID</Grid>
             }
           })()}
 

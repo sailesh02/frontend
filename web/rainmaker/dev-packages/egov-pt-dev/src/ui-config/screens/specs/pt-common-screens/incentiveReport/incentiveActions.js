@@ -59,6 +59,7 @@ const getIncentiveReport = async (paramDetails, dispatch) => {
       let data = payload.IncentiveInfo.Incentives.map((eachItem, index) => {
         return paramDetails.module === "PropertyTax"
           ? {
+              "Sr. No.": index + 1,
               "Name of Jal Saathi": eachItem["employeeName"],
               "Jal Saathi Employee ID": eachItem["employeeId"],
               "Total Number of Transactions": eachItem["totalNoOfTransaction"],
@@ -74,15 +75,16 @@ const getIncentiveReport = async (paramDetails, dispatch) => {
               "Total Incentive": eachItem["totalIncentive"],
             }
           : {
+              "Sr. No.": index + 1,
               "Name of Jal Saathi": eachItem["employeeName"],
               "Jal Saathi Employee ID": eachItem["employeeId"],
               "Total Number of Transactions": eachItem["totalNoOfTransaction"],
               "Collection towards Arrears- Water Charges":
-                eachItem["totalCollection"],
+                eachItem["collectionTowardsArrear"],
               "Collection towards Current Demand- Water Charges":
-                eachItem["totalIncentiveOnArrear"],
+                eachItem["collectionTowardsCurrent"],
               "Total Water Charges Collection":
-                eachItem["totalIncentiveOnCurrent"],
+                eachItem["totalCollection"],
               "Incentive on Total Water Charges Collection":
                 eachItem["totalIncentive"],
             };
@@ -94,6 +96,10 @@ const getIncentiveReport = async (paramDetails, dispatch) => {
               "components.div.children.searchResults",
               "props.columns",
               [
+                {
+                  name: "Sr. No.",
+                  labelKey: "Sr. No.",
+                },
                 {
                   name: "Name of Jal Saathi",
                   labelKey: "Name of Jal Saathi",
@@ -138,6 +144,10 @@ const getIncentiveReport = async (paramDetails, dispatch) => {
               "components.div.children.searchResults",
               "props.columns",
                 [
+                  {
+                    name: "Sr. No.",
+                    labelKey: "Sr. No.",
+                  },
                   {
                     name: "Name of Jal Saathi",
                     labelKey: "Name of Jal Saathi",

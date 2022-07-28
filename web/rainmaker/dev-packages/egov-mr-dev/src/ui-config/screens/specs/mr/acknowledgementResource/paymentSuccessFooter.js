@@ -23,7 +23,7 @@ export const paymentSuccessFooter = (
   const roleExists = ifUserRoleExists("CITIZEN");
   // const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
   /* Mseva 2.0 changes */
-  const redirectionURL = roleExists ? "/" : "/inbox";
+  const redirectionURL = roleExists ? "/mr-citizen/home" : "/mr/search";
 
   /** MenuButton data based on status */
   let downloadMenu = [];

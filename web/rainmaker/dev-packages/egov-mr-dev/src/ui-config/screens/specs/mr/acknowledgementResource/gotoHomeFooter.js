@@ -15,10 +15,7 @@ const getCommonApplyFooter = children => {
 
 const getRedirectionURL = () => {
   /* Mseva 2.0 changes */
-  const redirectionURL = ifUserRoleExists("CITIZEN")
-    ? // ? "/tradelicense-citizen/home"
-      "/"
-    : "/inbox";
+  const redirectionURL = ifUserRoleExists("CITIZEN") ? "/mr-citizen/home" : "/mr/search";
   return redirectionURL;
 };
 

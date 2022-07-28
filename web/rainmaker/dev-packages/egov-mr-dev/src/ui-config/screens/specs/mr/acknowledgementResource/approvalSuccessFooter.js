@@ -92,7 +92,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "page_change",
-      path: `/inbox`
+      path: `/mr/search`
     }
   },
 

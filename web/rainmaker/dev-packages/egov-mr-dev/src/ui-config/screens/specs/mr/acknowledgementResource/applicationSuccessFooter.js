@@ -128,7 +128,7 @@ export const applicationSuccessFooter = (
   const roleExists = ifUserRoleExists("CITIZEN");
   // const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
   /* Mseva 2.0 changes */
-  const redirectionURL = roleExists ? "/" : "/inbox";
+  const redirectionURL = roleExists ? "/mr-citizen/home" : "/mr/search";
   return getCommonApplyFooter({
     gotoHome: {
       componentPath: "Button",

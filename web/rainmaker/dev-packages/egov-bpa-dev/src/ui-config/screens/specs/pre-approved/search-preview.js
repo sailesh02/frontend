@@ -1571,6 +1571,15 @@ const setSearchResponse = async (
           true
         )
       );
+    } else if(get(response, "BPA[0].status") == "PENDING_APPL_FEE" && ifUserRoleExists("PENDING_SANC_FEE_PAYMENT")){
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.citizenFooter.children.viewPaymentDetail",
+          "visible",
+          true
+        )
+      );
     }
   }
 };

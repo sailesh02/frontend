@@ -162,7 +162,6 @@ class WorkFlowContainer extends React.Component {
       redirectQueryString,
       beforeSubmitHook
     } = this.props;
-    
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
     if (moduleName === "NewTL") {
@@ -525,7 +524,7 @@ if(moduleName == "BPA" && "edcrDetail" in data){
 
 if(moduleName == "PT.MUTATION" && label == 'FORWARD' && (!data.additionalDetails.mutationCharge || data.additionalDetails.mutationCharge == 0 )){
 
-    let confirmAction = confirm("You haven't specified mutation fee. Do you want to proceed with 0 mutation fee? Press Ok to Confirm.")
+    let confirmAction = confirm("Do you want to proceed with zero mutation fee? Press OK to confirm.")
     if (confirmAction) {
       this.setState({
         open: false

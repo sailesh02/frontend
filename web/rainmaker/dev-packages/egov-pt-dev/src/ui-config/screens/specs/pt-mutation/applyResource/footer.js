@@ -256,6 +256,7 @@ const callBackForApply = async (state, dispatch) => {
     ];
     propertyPayload.owners =propertyPayload.owners.filter(owner=>owner.isDeleted!==false);
     propertyPayload.creationReason = 'MUTATION';
+    propertyPayload.additionalDetails.mutationCharge = "0";
     let payload = null;
     payload = await httpRequest(
       "post",
@@ -265,7 +266,7 @@ const callBackForApply = async (state, dispatch) => {
       { Property: propertyPayload }
 
     );
-    console.log("PAYLoadupdatewrongpage", payload);
+   
     // dispatch(prepareFinalObject("Properties", payload.Properties));
     // dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
     if (payload) {

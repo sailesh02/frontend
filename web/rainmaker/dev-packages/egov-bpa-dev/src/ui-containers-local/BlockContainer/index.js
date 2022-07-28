@@ -52,13 +52,13 @@ class BlockContainer extends Component {
       <div>
         {data ? (
           <div>
-            {data.length > 0 && (
+            {data.length > 0 ? (
               <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
                   gap: "10px",
-                  marginBottom: "20px"
+                  marginBottom: "20px",
                 }}
               >
                 {data.map((item, index) => (
@@ -74,6 +74,10 @@ class BlockContainer extends Component {
                     }
                   ></div>
                 ))}
+              </div>
+            ): (
+              <div>
+                <h3>No Plots available with these search details</h3>
               </div>
             )}
           </div>
@@ -99,21 +103,34 @@ class BlockContainer extends Component {
               <h5>{this.state.item.drawingNo}</h5>
             </div>
             <div>
-              <h4>Documents(Please download the documents to preview drawing details)</h4>
+              <h4>
+                Documents(Please download the documents to preview drawing
+                details)
+              </h4>
               <div
                 style={{
                   display: "flex",
                   justifyContent: "flex-start",
                   gap: "5",
                   fontSize: "14px",
+                  marginBottom: "20px"
                 }}
               >
                 {this.state.item.documents.map((item, index) => (
                   <a
                     key={index}
-                    style={{ paddingRight: "10px" }}
+                    style={{
+                      padding: "10px",
+                      border: "2px solid",
+                      color: "#FF851B",
+                      fontWeight: "500",
+                      background: "transparent",
+                      background: "lightgoldenrodyellow",
+                    }}
                     onClick={() => this.onDownloadClick(item.fileStoreId)}
-                  >{`Documet ${index}`}</a>
+                  >{`Documet-${index + 1} : ${
+                    item.additionalDetails.title
+                  }`}</a>
                 ))}
               </div>
             </div>

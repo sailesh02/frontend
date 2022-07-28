@@ -25,6 +25,7 @@ const remoteConfigPath = (path, screenKey) => {
       break;
     case "egov-bpa":
     case "oc-bpa":
+    case "pre-approved":
       config = require(`egov-bpa/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "fire-noc":

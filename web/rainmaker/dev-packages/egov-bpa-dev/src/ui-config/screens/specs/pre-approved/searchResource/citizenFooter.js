@@ -62,14 +62,14 @@ export const viewPaymentDetail = (state, dispatch) => {
     if(isDemandGeneratedAndNotPaid){
       url = `/citizen/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`;
     }else{
-      url = `/citizen/egov-bpa/view-installments?applicationNumber=${appNo}&tenantId=${tenantId}`
+      url = `/citizen/pre-approved/view-installments?applicationNumber=${appNo}&tenantId=${tenantId}`
     }
     
   }else{
     if(isDemandGeneratedAndNotPaid){
       url = `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`;
     }else{
-    url = `/egov-bpa/view-installments?applicationNumber=${appNo}&tenantId=${tenantId}`
+    url = `/pre-approved/view-installments?applicationNumber=${appNo}&tenantId=${tenantId}`
     }
   }
   
@@ -430,10 +430,10 @@ export const citizenFooter = getCommonApplyFooter({
       action: "condition",
       callBack: viewPaymentDetail
     },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      action: "PAY"
-    }
+    // roleDefination: {
+    //   rolePath: "user-info.roles",
+    //   action: "PAY"
+    // }
   },
   sendToArch: {
     uiFramework: "custom-atoms",

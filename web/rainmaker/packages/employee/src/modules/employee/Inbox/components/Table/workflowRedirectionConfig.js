@@ -31,7 +31,13 @@ export const getWFConfig = (module, businessService) => {
           INITIATED: "/oc-bpa/search-preview",
           DEFAULT: "/oc-bpa/search-preview",
         };
-      } else {
+      } else if(businessService === "BPA6"){
+        return {
+          INITIATED: "/pre-approved/search-preview",
+          DEFAULT: "/pre-approved/search-preview",
+        };
+      } 
+      else{
         return {
           INITIATED: "/egov-bpa/search-preview",
           DEFAULT: "/egov-bpa/search-preview",

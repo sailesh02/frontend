@@ -101,6 +101,8 @@ const preparingDocumentsReview = async (state, dispatch) => {
         obj.additionalDetails = {
           uploadedBy: getLoggedinUserRole(""),
           uploadedTime: new Date().getTime(),
+          fileName: docDetail.fileName,
+          title: getTransformedLocale(doc.documentCode)
         };
         documentsPreview.push(obj);
       });
@@ -568,7 +570,7 @@ export const proposedBuildingDetails = getCommonCard({
         labelsFromLocalisation: true,
         // isClearable: true,
         jsonPath: "edcr.blockDetail[0].suboccupancyData",
-        sourceJsonPath: "applyScreenMdmsData.BPA.SubOccupancyType",
+        sourceJsonPath: "subOccupancyPa",
         labelsFromLocalisation: true,
         isMulti: false,
       },

@@ -220,7 +220,85 @@ let bpaObj = get(
       state,
       dispatch
     );
+/*********************Revision Application Validation*******************************/
+    let revisionInfo = get(
+      state,
+      "screenConfiguration.preparedFinalObject.revision",
+      {}
+    );
+    let permitExpired = revisionInfo && revisionInfo.permitExpired;
+    let isSujogExistingApplication = revisionInfo && revisionInfo.isSujogExistingApplication;
+    console.log(isSujogExistingApplication, "Nero Sujog")
+    if(permitExpired != "YES" && isSujogExistingApplication && !isSujogExistingApplication){
+      console.log("Nero Hello")
+    let revisionInfoCardValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children",
+      state,
+      dispatch
+    )
+    if(!revisionInfoCardValid){
+     let errorMessage = {
+        labelName:
+          "Please fill all mandatory fields for Basic Details, then proceed!",
+        labelKey: "Please fill all mandatory fields for Basic Details, then proceed!"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      return false;
+    }
 
+    const documentsFormat = Object.values(
+      get(state.screenConfiguration.preparedFinalObject, "documentsUploadReduxRvsn")
+    );
+
+    let requiredDocsFound = true;
+
+    if (documentsFormat && documentsFormat.length) {
+      for (let i = 0; i < documentsFormat.length; i++) {
+        let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+        let isDocumentTypeRequired = get(
+          documentsFormat[i],
+          "isDocumentTypeRequired"
+        );
+
+        let documents = get(documentsFormat[i], "documents", "DOCUMENTSNOTFOUND");
+        
+        if (isDocumentRequired) {
+          if(documents === "DOCUMENTSNOTFOUND"){
+            
+            requiredDocsFound = false;
+            break;
+          }else if(documents && documents.length < 1) {
+            
+            requiredDocsFound = false;
+            break;
+
+          }
+        } 
+      }
+      
+    }
+    if(!requiredDocsFound){
+      
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "Please uplaod mandatory documents!", labelKey: "Please uplaod mandatory documents!" },
+          "warning"
+        )
+      );
+      return false;
+    }
+    }
+    if(permitExpired === "YES"){
+     let errorMessage = {
+        labelName:
+          "Please fill all mandatory fields for Basic Details, then proceed!",
+        labelKey: "BPA_REVSION_PERMIT_EXPIRD_MSG"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "error"));
+      return false;
+    }
+/***********************************************************************/
     if (
       !isBasicDetailsCardValid ||
       !isLocationDetailsCardValid ||

@@ -114,10 +114,16 @@ export const uuidv4 = () => {
 
 const moveToSuccess = (state, dispatch, edcrDetail, isOCApp) => {
   const applicationNo = edcrDetail.transactionNumber;
-
+console.log(state, "Nero State in edcr")
   const tenantId = edcrDetail.tenantId;
   const edcrNumber = get(edcrDetail, "edcrNumber");
-
+  const isRevisionApp = get(state, "screenConfiguration.preparedFinalObject.Scrutiny[0].isRevisionActive", "NO");
+  console.log(isRevisionApp, "Nero revision")
+  let yesNo = "NO"
+  if (isRevisionApp) {
+    yesNo = "YES"
+  }
+//isRevisionApp = isRevisionApp[0].isRevisionActive
   const purpose = isOCApp ? "ocapply" : "apply";
   let status = edcrDetail.status === "Accepted" ? "success" : "rejected";
   if (edcrDetail.status == "Aborted") {
@@ -168,7 +174,7 @@ const moveToSuccess = (state, dispatch, edcrDetail, isOCApp) => {
     scrutinyType = `&scrutinyType=rework&bpaApp=${bpaApp}&oldEdcr=${oldEdcr}&type=${type}&bservice=${bservice}&applicantName=${applicantName}&serviceType=${serviceType}`;
     url = `/edcrscrutiny/rework_acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}${scrutinyType}`;
   }else{
-    url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}`;
+    url = `/edcrscrutiny/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&edcrNumber=${edcrNumber}&isRevisionApp=${yesNo}`;
   } 
  dispatch(
     setRoute(
@@ -373,12 +379,15 @@ const scrutinizePlan = async (state, dispatch) => {
     const permitNumber = get(preparedFinalObject, "Scrutiny[0].permitNumber");
     const permitDate = get(preparedFinalObject, "bpaDetails.approvalDate");
     const comparisonEdcrNumber = get(preparedFinalObject, "bpaDetails.edcrNumber");
+   // const isRevisionApp = get(state, "screenConfiguration.preparedFinalObject.Scrutiny[0].isRevisionActive", "NO");
+    const isRevisionApplication = get(preparedFinalObject, "Scrutiny[0].isRevisionActive", false);
 
     edcrRequest = { ...edcrRequest, tenantId };
     edcrRequest = { ...edcrRequest, transactionNumber };
     edcrRequest = { ...edcrRequest, applicantName };
     edcrRequest = { ...edcrRequest, appliactionType };
     edcrRequest = { ...edcrRequest, applicationSubType };
+    edcrRequest = { ...edcrRequest, isRevisionApplication };
 
     let url = `/edcr/rest/dcr/scrutinize?tenantId=${tenantId}`;
     if (isOCApp) {

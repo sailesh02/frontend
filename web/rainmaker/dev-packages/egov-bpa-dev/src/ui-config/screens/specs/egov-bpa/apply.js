@@ -8,6 +8,7 @@ import {
 import { getScrutinyDetails } from "../utils";
 import { footer, showApplyLicencePicker } from "./applyResource/footer";
 import { basicDetails } from "./applyResource/basicDetails";
+import { getRevisionDetails, applicantSummary, searchPermitInfoFoundMsg, revisionDocumentUploadCard, prepareRevisionDocumentsUploadData, revisionInfoFormCard } from "./applyResource/revisionDetail";
 import { bpaLocationDetails } from "./applyResource/propertyLocationDetails";
 import {
   buildingPlanScrutinyDetails,
@@ -43,7 +44,7 @@ import {
   prepareNOCUploadData,
   getAppSearchResults
 } from "../../../../ui-utils/commons";
-import { getTodaysDateInYYYMMDD, getTenantMdmsData, setProposedBuildingData, edcrDetailsToBpaDetails } from "../utils";
+import { getTodaysDateInYYYMMDD, getTenantMdmsData, setProposedBuildingData, edcrDetailsToBpaDetails, setRevisionAppCard } from "../utils";
 import jp from "jsonpath";
 import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
 import { changeStep } from "./applyResource/footer";
@@ -89,7 +90,13 @@ export const formwizardFirstStep = {
   children: {
     basicDetails,
     bpaLocationDetails,
-    detailsofplot
+    detailsofplot,
+    getRevisionDetails,
+    searchPermitInfoFoundMsg,
+    applicantSummary,
+    revisionInfoFormCard,
+    revisionDocumentUploadCard
+    
   }
 };
 
@@ -285,6 +292,7 @@ const setSearchResponse = async (
   );
 
   dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0]));
+  setRevisionAppCard(edcrRes.edcrDetail[0], dispatch);
   await edcrDetailsToBpaDetails(state, dispatch);
 
   const riskType = get(
@@ -686,7 +694,9 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch, componentJsonpath) => {
     getNocList(state,dispatch)
     dispatch(prepareFinalObject("BPA", {}));
+    dispatch(prepareFinalObject("revision", {}));
     getSpclArchitectList(state,dispatch,action);
+    prepareRevisionDocumentsUploadData(state,dispatch)
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -806,6 +816,27 @@ const screenConfig = {
       "components.div.children.formwizardSecondStep.children.getBpaProcess.visible",
       false
     );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.applicantSummary.visible",
+      false
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg.visible",
+      false
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.revisionDocumentUploadCard.visible",
+      false
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.visible",
+      false
+    );
+    
     return action;
   },
   components: {

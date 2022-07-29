@@ -169,9 +169,16 @@ const BlockContainer = Loadable({
   loader: () => import("./BlockContainer"),
   loading: () => <Loading />
 });
-
 const PreApproveDocumentListContainer = Loadable({
   loader: () => import("./PreApproveDocumentListContainer"),
+  loading: () => <Loading />
+});
+const RevisionDocumentListContainer =  Loadable({
+  loader: () => import("./RevisionDocumentListContainer"),
+  loading: () => <Loading />
+});
+const RevisionDocsPreviewContainer =  Loadable({
+  loader: () => import("./RevisionDocsPreviewContainer"),
   loading: () => <Loading />
 });
 
@@ -210,5 +217,7 @@ export {
   PreApproveDocumentListContainer,
   DynamicCheckboxes,
   FullPaymentContainer,
-  BlockContainer
+  BlockContainer,
+  RevisionDocumentListContainer,
+  RevisionDocsPreviewContainer
 };

@@ -249,6 +249,38 @@ const buildingInfoCard = getCommonCard({
           disabled: true
         }
       },
+      isRevisionApplication: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
+        componentPath: "BpaCheckboxContainer",
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+       // jsonPath: "scrutinyDetails.isRevisionActive",
+        visible: CONSTANTS.features.isRevisionActive ? true : false,
+        props: {
+          label: {
+            labelName: "Doc Type 1",
+            labelKey: "BPA_IS_REVISION_APPLICATION"
+          },
+          jsonPath: "Scrutiny[0].isRevisionActive",
+          required: true,
+        },
+        type: "array"
+      },
+      dummyDiv3: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        visible: true,
+        props: {
+          disabled: true
+        }
+      },
       link: checkEligibility(
         {
           labelName: "",
@@ -258,6 +290,8 @@ const buildingInfoCard = getCommonCard({
           jsonPath: "Note[0].link1",
         }
       ),
+      
+      
       // serviceType: {
       //   ...getSelectField({
       //     label: {

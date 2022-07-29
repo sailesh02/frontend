@@ -682,6 +682,14 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     set(payload, "landInfo.owners", authOwners);
     let response;
     set(payload, "edcrNumber", payload.edcrNumber.trim());
+    let revisionInfo = get(
+      state,
+      "screenConfiguration.preparedFinalObject.revision",
+      {}
+    );
+    if (revisionInfo && revisionInfo.refPermitNo) {
+      set(payload, "isRevisionApplication", true)
+    }
     if (method === "CREATE") {
       response = await httpRequest(
         "post",
@@ -694,6 +702,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       dispatch(prepareFinalObject("BPA", response.BPA[0]));
       setApplicationNumberBox(state, dispatch);
       await edcrDetailsToBpaDetails(state, dispatch);
+      await createUpdateRevisionInfo(state, dispatch, response.BPA[0])
     } else if (method === "UPDATE") {
       response = await httpRequest(
         "post",
@@ -711,6 +720,82 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     return { status: "failure", message: error };
   }
 };
+
+export const createUpdateRevisionInfo = async (state, dispatch, BPA) => {
+  let documentsUpdalod = get(
+    state,
+    "screenConfiguration.preparedFinalObject.documentsUploadReduxRvsn",
+    []
+  );
+  let payload = get(
+    state,
+    "screenConfiguration.preparedFinalObject.revision",
+    {}
+  );
+
+
+  let documnts = [];
+  if (documentsUpdalod) {
+    Object.keys(documentsUpdalod).forEach(function (key) {
+      documnts.push(documentsUpdalod[key])
+    });
+  }
+
+  console.log(documnts, "Nero Docs")
+
+  let requiredDocuments = [];
+  if (documnts && documnts.length > 0) {
+    documnts.forEach(documents => {
+      if (documents && documents.documents) {
+        documents.documents.forEach(docItem => {
+
+          let doc = {};
+          doc.documentType = documents.documentType;
+          doc.fileStoreId = docItem.fileStoreId;
+          doc.fileStore = docItem.fileStoreId;
+          doc.fileName = docItem.fileName;
+          doc.fileUrl = docItem.fileUrl;
+          doc.additionalDetails = {};
+          requiredDocuments.push(doc);
+
+        })
+      }
+    });
+  }
+
+  console.log(requiredDocuments, "Nero Re")
+  let documents;
+  if (requiredDocuments && requiredDocuments.length > 0) {
+    documents = requiredDocuments;
+  } else {
+    documents = null;
+  }
+  payload.documents = documents;
+  payload.bpaApplicationId = BPA && BPA.id;
+  payload.bpaApplicationNo = BPA && BPA.applicationNo;
+  
+  let permitDate = payload && payload.refPermitDate;
+  if ( typeof permitDate === "string" && permitDate.includes("-")) {
+    let permDateArray = permitDate.split("-");
+    var permitDateObject = new Date(permDateArray[0], permDateArray[1] - 1, permDateArray[2]);
+    payload.refPermitDate = permitDateObject.getTime();
+  }
+  payload.refPermitExpiryDate = parseInt(payload.refPermitExpiryDate)
+  console.log(payload, "Nero Payload rvsn")
+ let response = await httpRequest(
+    "post",
+    "bpa-services/v1/revision/_create",
+    "",
+    [],
+    { revision: payload }
+  );
+  if(response && response.revision){
+    return true;
+  }else{
+    return false;
+  }
+
+}
 
 export const prepareDocumentsUploadData = (state, dispatch, isOC) => {
   let applicationDocuments = get(

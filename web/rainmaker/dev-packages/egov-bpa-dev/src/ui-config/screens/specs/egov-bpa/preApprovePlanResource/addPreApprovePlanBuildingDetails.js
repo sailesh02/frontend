@@ -2,6 +2,7 @@ import {
   getLabel,
   getCommonContainer,
   getCommonCard,
+  getSelectField,
   getTextField,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import store from "ui-redux/store";
@@ -13,6 +14,19 @@ import {
   handleScreenConfigurationFieldChange as handleField,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
+const floorDetails = [
+  { code: "Basement", label: -1 },
+  { code: "Ground", label: 0 },
+  { code: "First", label: 1 },
+  { code: "Second", label: 2 },
+  { code: "Third", label: 3 },
+  { code: "Fourth", label: 4 },
+  { code: "Fifth", label: 5 },
+  { code: "Sixth", label: 6 },
+  { code: "Seventh", label: 7 },
+  { code: "Eighth", label: 8 },
+  { code: "Nineth", label: 9 },
+];
 // Close the add building details pop up and reset the form
 const closeAddBuildinfDetailsPopUp = () => {
   store.dispatch(
@@ -135,27 +149,64 @@ const addBuildingDetails = async (state, dispatch, type) => {
 export const addPreApprovePlan = getCommonCard(
   {
     buildingAbstractContainer: getCommonContainer({
-      floorDescription: getTextField({
+      // floorDescription: getTextField({
+      //   label: {
+      //     labelName: "Floor Description",
+      //     labelKey: "PREAPPROVE_FLOOR_DESCRIPTION",
+      //   },
+      //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      //   jsonPath: "blockDetail.floorDescription",
+      //   required: true,
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 6,
+      //     md: 6,
+      //   },
+      //   props: {
+      //     value: ""
+      //   }
+      // }),
+      floorDescription: getSelectField({
         label: {
           labelName: "Floor Description",
           labelKey: "PREAPPROVE_FLOOR_DESCRIPTION",
         },
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "blockDetail.floorDescription",
+        placeholder: {
+          labelName: "Select Floor",
+          labelKey: "PREAPPROVED_SELECT_FLOOR"
+        },
         required: true,
+        visible: true,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "blockDetail.floorDescription",        
         gridDefination: {
           xs: 12,
           sm: 6,
           md: 6,
         },
-        props: {
-          value: ""
+        data: floorDetails,
+        beforeFieldChange: (action, state, dispatch) => {
+          floorDetails.forEach((item)=> {
+            if(item.code === action.value){
+              dispatch(
+                handleField(
+                  "preapprovedplan",
+                  "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.level",
+                  "props.value",
+                  `${item.label}`
+                )
+              );
+            }
+          })
         }
       }),
       level: getTextField({
         label: {
           labelName: "Level",
           labelKey: "PREAPPROVE_LEVEL",
+        },
+        props: {
+          disabled: true
         },
         pattern: "^[0-9]*$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",

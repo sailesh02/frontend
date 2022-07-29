@@ -241,6 +241,63 @@ const getAcknowledgementCard = (
       },
       approvalSuccessFooter
     };
+  } else if (purpose === "sendback" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application sent back Successfully",
+              labelKey: "BPA_SENDBACK_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName: "Application has been sent back successfully",
+              labelKey: "BPA_APPLICATION_SENDBACK_SUCCESS"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  } else if (purpose === "application" && status === "rejected" && moduleName !== "Noc") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelName: "Application for permit order is rejected",
+              labelKey: "BPA_APPROVAL_REJECTED_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding BPA Rejection has been sent to building owner at registered Mobile No.",
+              labelKey: "BPA_APPROVAL_REJE_MESSAGE_SUBHEAD"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
   }
 
 

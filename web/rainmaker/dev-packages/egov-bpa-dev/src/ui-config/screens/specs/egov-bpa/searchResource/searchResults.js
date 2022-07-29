@@ -198,9 +198,9 @@ const onRowClick = rowData => {
   const state = rowData[3];
   const applicationNumber = rowData[0];
   const tenantId = rowData[4];
-  if(rowData[5] == "BPA_OC" || rowData[5] == "BPA_OC1" || rowData[5] == "BPA_OC2" || rowData[5] == "BPA_OC3" || rowData[5] == "BPA_OC4") {
-    const environment = process.env.NODE_ENV === "production" ? "employee" : "";
-    const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+  const environment = process.env.NODE_ENV === "production" ? "employee" : "";
+  const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+  if(rowData[5] == "BPA_OC" || rowData[5] == "BPA_OC1" || rowData[5] == "BPA_OC2" || rowData[5] == "BPA_OC3" || rowData[5] == "BPA_OC4") {    
     switch (state) {
       case "INITIATED":
         window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
@@ -210,7 +210,9 @@ const onRowClick = rowData => {
         );
         break;
     }
-  } else {
+  } else if(rowData[5] == "BPA6"){
+    window.location.assign(`${origin}${environment}/pre-approved/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&bservice=${rowData[5]}`);
+  }else {
     let type = "HIGH";
     if(rowData[5] == "BPA_LOW") {
       type = "LOW"

@@ -249,26 +249,31 @@ const buildingInfoCard = getCommonCard({
           disabled: true
         }
       },
-      isRevisionApplication: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-bpa",
-        componentPath: "BpaCheckboxContainer",
+      isRevisionApplication: getSelectField({
+        label: {
+          labelName: "Service type",
+          labelKey: "BPA_IS_REVISION_APPLICATION"
+        },
+        placeholder: {
+          labelName: "Select Service Type",
+          labelKey: "BPA_IS_REVISION_APPLICATION"
+        },
+        
+        props:{
+          // disabled: true,
+          className : "tl-trade-type"
+        },
+        required: true,
+        jsonPath: "Scrutiny[0].isRevisionActive",
+        
+        //jsonPath: "scrutinyDetails.applicationSubType",
+        data: [{value: true, code: "YES"}, {value: false, code: "NO"}],
+        //sourceJsonPath: "applyScreenMdmsData.BPA.ServiceType",
         gridDefination: {
           xs: 12,
           sm: 6
-        },
-       // jsonPath: "scrutinyDetails.isRevisionActive",
-        visible: CONSTANTS.features.isRevisionActive ? true : false,
-        props: {
-          label: {
-            labelName: "Doc Type 1",
-            labelKey: "BPA_IS_REVISION_APPLICATION"
-          },
-          jsonPath: "Scrutiny[0].isRevisionActive",
-          required: true,
-        },
-        type: "array"
-      },
+        }
+      }),
       dummyDiv3: {
         uiFramework: "custom-atoms",
         componentPath: "Div",

@@ -117,7 +117,7 @@ const moveToSuccess = (state, dispatch, edcrDetail, isOCApp) => {
 console.log(state, "Nero State in edcr")
   const tenantId = edcrDetail.tenantId;
   const edcrNumber = get(edcrDetail, "edcrNumber");
-  const isRevisionApp = get(state, "screenConfiguration.preparedFinalObject.Scrutiny[0].isRevisionActive", "NO");
+  const isRevisionApp = get(edcrDetail, "planDetail.planInformation.isRevisionApplication", false);
   console.log(isRevisionApp, "Nero revision")
   let yesNo = "NO"
   if (isRevisionApp) {
@@ -380,8 +380,11 @@ const scrutinizePlan = async (state, dispatch) => {
     const permitDate = get(preparedFinalObject, "bpaDetails.approvalDate");
     const comparisonEdcrNumber = get(preparedFinalObject, "bpaDetails.edcrNumber");
    // const isRevisionApp = get(state, "screenConfiguration.preparedFinalObject.Scrutiny[0].isRevisionActive", "NO");
-    const isRevisionApplication = get(preparedFinalObject, "Scrutiny[0].isRevisionActive", false);
-
+    const reviApp = get(preparedFinalObject, "Scrutiny[0].isRevisionActive", false);
+   let isRevisionApplication = false;
+    if(reviApp === "YES"){
+      isRevisionApplication = true;
+    }
     edcrRequest = { ...edcrRequest, tenantId };
     edcrRequest = { ...edcrRequest, transactionNumber };
     edcrRequest = { ...edcrRequest, applicantName };

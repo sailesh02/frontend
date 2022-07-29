@@ -59,7 +59,7 @@ import commonConfig from "config/common.js";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { additionalDocsInformation } from "./applyResource/documentDetails";
 import { sanctionFeeAdjustmentDetails } from "./applyResource/sanctionFeeAdjustmentDetails";
-import { revisionSummary, revisionDocsSummary } from "./applyResource/revisionDetail";
+import { revisionSummary, revisionDocsSummary, notSujogPermitRevisionSummary } from "./applyResource/revisionDetail";
 
 const closePdfSigningPopup = (refreshType) => {
   store.dispatch(
@@ -1606,12 +1606,7 @@ const prepareRevisionObject = async(state, dispatch, bpa) => {
     if(response && response.revision && response.revision.length > 0){
     dispatch(prepareFinalObject("revision", response.revision[0]));
     
-    dispatch(handleField(
-      "search-preview",
-      "components.div.children.body.children.cardContent.children.revisionSummary",
-      "visible",
-      true
-    ))
+    
 
     if(!response.revision[0].isSujogExistingApplication){
       prepareRevsionDocumentPreview(state, dispatch);
@@ -1621,7 +1616,19 @@ const prepareRevisionObject = async(state, dispatch, bpa) => {
         "visible",
         true
       ))
-      
+      dispatch(handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.notSujogPermitRevisionSummary",
+        "visible",
+        true
+      ))
+    }else{
+      dispatch(handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.revisionSummary",
+        "visible",
+        true
+      ))
     }
     }
     
@@ -1940,6 +1947,12 @@ const screenConfig = {
     );
     set(
       action,
+      "screenConfig.components.div.children.body.children.cardContent.children.notSujogPermitRevisionSummary.visible",
+      false
+    );
+    
+    set(
+      action,
       "screenConfig.components.div.children.body.children.cardContent.children.revisionDocsSummary.visible",
       false
     );
@@ -2043,6 +2056,7 @@ const screenConfig = {
         body: getCommonCard({
           approvalAuthority: approvalAuthority,
           revisionSummary: revisionSummary,
+          notSujogPermitRevisionSummary: notSujogPermitRevisionSummary,
           estimateSummary: estimateSummary,
           sanctionFeeSummary: sanctionFeeSummary,
           sanctionFeeAdjustFormCard: {

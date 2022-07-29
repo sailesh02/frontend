@@ -14,7 +14,7 @@ import {
   getBreak,
   getCommonParagraph
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getTodaysDateInYMD, getPermitDetails, checkValueForNA } from "../../utils";
+import { getTodaysDateInYMD, getPermitDetails, checkValueForNA, getSiteInfo } from "../../utils";
 import "./index.css";
 import get from "lodash/get";
 import { getTransformedLocale, getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -23,7 +23,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import {getAppSearchResults} from "../../../../../ui-utils/commons"
 
 
 
@@ -82,7 +82,7 @@ export const getRevisionDetails = getCommonCard({
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg', "visible", true));
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.applicantSummary', "visible", false));
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.revisionDocumentUploadCard', "visible", false));
-                dispatch(handleField("apply", "components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg.children.cardContent.children.permitNoRecordFound.children.key.props", "labelKey", "No record found for given permit number, you can still create application"));
+                dispatch(handleField("apply", "components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg.children.cardContent.children.permitNoRecordFound.children.key.props", "labelKey", "BPA_REVISION_NO_RECORD_FOUND_HEADER"));
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.revisionDocumentUploadCard', "visible", true));
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.revisionInfoFormCard', "visible", true));
                 revision.isSujogExistingApplication = false;
@@ -103,7 +103,7 @@ export const getRevisionDetails = getCommonCard({
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg', "visible", true));
                
                 if (Difference_In_Days > (365 * 3)) {
-                  dispatch(handleField("apply", "components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg.children.cardContent.children.permitNoRecordFound.children.key.props", "labelKey", "Your permit expired"));
+                  dispatch(handleField("apply", "components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg.children.cardContent.children.permitNoRecordFound.children.key.props", "labelKey", "BPA_REVISION_PERMIT_EXPIRED_HEADER"));
                   dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.applicantSummary', "visible", false));
                   dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.revisionDocumentUploadCard', "visible", false));
                   dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.revisionInfoFormCard', "visible", false));
@@ -111,7 +111,7 @@ export const getRevisionDetails = getCommonCard({
                   revision.refPermitNo = searchedPermitNo;
                   dispatch(prepareFinalObject("revision", revision));
                 } else {
-                  dispatch(handleField("apply", "components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg.children.cardContent.children.permitNoRecordFound.children.key.props", "labelKey", "Permit information found please check below"));
+                  dispatch(handleField("apply", "components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg.children.cardContent.children.permitNoRecordFound.children.key.props", "labelKey", "BPA_REVISION_RECORD_FOUND_HEADER"));
                   dispatch(prepareFinalObject("PermitInfo", response))
                   dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.applicantSummary', "visible", true));
                   dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.revisionDocumentUploadCard', "visible", false));
@@ -460,7 +460,49 @@ const isSystemGeneratedPermit = (value) => {
   }
 }
 
-export const revisionSummary = getCommonGrayCard({
+const gotoOldApplication = async (state, dispatch) => {
+  let RevisionInfo = get(state.screenConfiguration.preparedFinalObject, "revision");
+  let tenantId = getQueryArg(window.location.href, "tenantId")
+  const response = await getAppSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId,
+    },
+    { key: "applicationNo", value: RevisionInfo && RevisionInfo.refBpaApplicationNo },
+  ]);
+
+  if (response && response.BPA) {
+    let bService = response.BPA[0].businessService;
+    let type = '';
+    if (bService === "BPA_LOW" || bService === "BPA5") {
+      type = "LOW"
+    } else {
+      type = "HIGH"
+    }
+    let url = '';
+    if (process.env.REACT_APP_NAME === "Citizen") {
+
+      let siteInfo = getSiteInfo();
+      if (siteInfo === "citizen") {
+        window.location.href = `/citizen/egov-bpa/search-preview?applicationNumber=${RevisionInfo.refBpaApplicationNo}&tenantId=${tenantId}&type=${type}&bservice=${bService}`;
+      } else {
+        window.location.href = `/egov-bpa/search-preview?applicationNumber=${RevisionInfo.refBpaApplicationNo}&tenantId=${tenantId}&type=${type}&bservice=${bService}`;
+      }
+
+    } else {
+      
+      let siteInfo = getSiteInfo();
+      if (siteInfo === "employee") {
+        window.location.href = `/employee/egov-bpa/apply?applicationNumber=${RevisionInfo.refBpaApplicationNo}&tenantId=${tenantId}`
+      } else {
+        window.location.href = `/egov-bpa/apply?applicationNumber=${RevisionInfo.refBpaApplicationNo}&tenantId=${tenantId}`
+      }
+    }
+
+  }
+}
+
+export const notSujogPermitRevisionSummary = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",
@@ -479,40 +521,94 @@ export const revisionSummary = getCommonGrayCard({
           labelKey: "BPA_OLD_APPLICATION_TITLE_HEADER"
         })
       },
-    //   edcrHistoryButton: {
-    //     componentPath: "Button",
-    //     props: {
-    //         color: "primary",
-    //         style: {
-    //             marginTop: "-10px",
-    //             marginRight: "-18px"
-    //         }
-    //     },
-    //     gridDefination: {
-    //         xs: 6,
-    //         align: "right"
-    //     },
-    //     children: {
-    //         editIcon: {
-    //             uiFramework: "custom-atoms",
-    //             componentPath: "Icon",
-    //             props: {
-    //                 iconName: "history"
-    //             }
-    //         },
-    //         buttonLabel: getLabel({
-    //             labelName: "Edit",
-    //             labelKey: "BPA_SCRUTINY_HISTORY"
-    //         })
-    //     },
-    //     onClickDefination: {
-    //         action: "condition",
-    //         callBack: (state, dispatch) => {
-    //             //viewHistoryDialog(state, dispatch);
-    //             console.log("Nero Hello")
-    //         }
-    //     }
-    // },
+      
+      oldPermitNo: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_PERMIT_NO_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.refPermitNo",
+            callBack: checkValueForNA
+        }
+      ),
+      permitIssueDate: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_PERMIT_ISSUE_DATE_LABEL "
+        },
+        {
+          jsonPath:
+            "revision.refPermitDate",
+            callBack: value => {
+              return convertEpochToDate(value) || checkValueForNA;
+            }
+        }
+      ),
+      systemGeneratedPermit: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_SYSTEM_GENERATED_PERMIT_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.isSujogExistingApplication",
+            callBack: value => {
+              return isSystemGeneratedPermit(value) || checkValueForNA;
+            }
+        }
+      ),
+
+    }
+  }
+})
+export const revisionSummary = getCommonGrayCard({
+  header: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: { marginBottom: "10px" }
+    },
+    children: {
+      header: {
+        gridDefination: {
+          xs: 6,
+          md:6,
+          sm:12
+        },
+        ...getCommonSubHeader({
+          labelName: "Owner Information",
+          labelKey: "BPA_OLD_APPLICATION_TITLE_HEADER"
+        })
+      },
+      gotoOldApplication: {
+        componentPath: "Button",
+        props: {
+            color: "primary",
+            style: {
+                marginTop: "-10px",
+                marginRight: "-18px"
+            }
+        },
+        gridDefination: {
+            xs: 6,
+            align: "right"
+        },
+        children: {
+            
+            buttonLabel: getLabel({
+                labelName: "Edit",
+                labelKey: "BPA_GOTO_OLD_APPLICATION"
+            })
+        },
+        onClickDefination: {
+            action: "condition",
+            callBack: (state, dispatch) => {
+                gotoOldApplication(state, dispatch);
+            }
+        }
+    },
       oldAppNo: getLabelWithValue(
         {
           labelName: "Mobile No.",
@@ -527,7 +623,7 @@ export const revisionSummary = getCommonGrayCard({
       oldPermitNo: getLabelWithValue(
         {
           labelName: "Mobile No.",
-          labelKey: "BPA_OLD_PERMIT_NO_LABEL"
+          labelKey: "BPA_REVISION_PERMIT_NO_LABEL"
         },
         {
           jsonPath:
@@ -538,7 +634,7 @@ export const revisionSummary = getCommonGrayCard({
       permitIssueDate: getLabelWithValue(
         {
           labelName: "Mobile No.",
-          labelKey: "BPA_OLD_PERMIT_ISSUE_DATE_LABEL"
+          labelKey: "BPA_REVISION_PERMIT_ISSUE_DATE_LABEL "
         },
         {
           jsonPath:

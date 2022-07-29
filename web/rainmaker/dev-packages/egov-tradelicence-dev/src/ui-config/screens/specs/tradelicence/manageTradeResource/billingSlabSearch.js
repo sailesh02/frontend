@@ -285,7 +285,7 @@ export const billSlabSearchForm = getCommonCard({
           {
             key: "tradeType",
             fieldType: "autosuggest",
-            className: "applicant-details-error autocomplete-dropdown",
+            className: "applicant-details-error autocomplete-dropdown tl-bs-autocomplete-dropdown",
             callBack: tradeTypeChange,
             isRequired: false,
             requiredValue: true,
@@ -294,7 +294,7 @@ export const billSlabSearchForm = getCommonCard({
           {
             key: "tradeSubType",
             callBack: tradeSubTypeChange,
-            className: "applicant-details-error autocomplete-dropdown",
+            className: "applicant-details-error autocomplete-dropdown tl-bs-autocomplete-dropdown",
             fieldType: "autosuggest",
             isRequired: false,
             requiredValue: true,
@@ -324,7 +324,7 @@ export const billSlabSearchForm = getCommonCard({
           variant: "contained",
           style: {
             color: "white",
-            margin: "8px",
+            margin: "30px 8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
             width: "220px",
@@ -356,7 +356,7 @@ export const billSlabSearchForm = getCommonCard({
             borderColor: "#FE7A51",
             width: "220px",
             height: "48px",
-            margin: "8px",
+            margin: "30px 8px",
             // float: "right",
           },
         },

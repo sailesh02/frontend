@@ -54,12 +54,15 @@ const handleStatusUpdate = async(e,updateValue,status,drawingNo) => {
     selectedPreapprovedPlan[0].active = false
   }
   try{
+    let queryObj = {
+      "preapprovedPlan":selectedPreapprovedPlan[0]
+    }
     const response = await httpRequest(
       "post",
       "/bpa-services/v1/preapprovedplan/_update",
       "_search",
       [],
-      selectedPreapprovedPlan[0]
+      queryObj
     );
     if(response){
       console.log(".PA...",PA)

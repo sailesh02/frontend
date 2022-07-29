@@ -741,6 +741,7 @@ const setSearchResponse = async (
         true
       )
     );
+    dispatch(handleField("search-preview", "components.div.children.citizenFooter.children.viewPaymentDetail", "visible", false))
   }
 
   if (
@@ -1571,11 +1572,20 @@ const setSearchResponse = async (
           true
         )
       );
-    } else if(get(response, "BPA[0].status") == "PENDING_APPL_FEE" && ifUserRoleExists("PENDING_SANC_FEE_PAYMENT")){
+    } else if(get(response, "BPA[0].status") == "PENDING_SANC_FEE_PAYMENT" && ifUserRoleExists("BPA_ARCHITECT")){
       dispatch(
         handleField(
           "search-preview",
           "components.div.children.citizenFooter.children.viewPaymentDetail",
+          "visible",
+          true
+        )
+      );
+    } else if(get(response, "BPA[0].status") == "CITIZEN_ACTION_PENDING_AT_APPROVAL" && ifUserRoleExists("BPA_ARCHITECT")){
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.citizenFooter.children.forwardButton",
           "visible",
           true
         )

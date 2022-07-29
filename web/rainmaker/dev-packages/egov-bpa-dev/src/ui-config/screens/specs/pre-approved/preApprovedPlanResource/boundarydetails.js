@@ -98,7 +98,7 @@ export const detailsofplot = getCommonCard({
                     className : "tl-trade-type"
                   },
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "scrutinyDetails.planDetail.planInformation.plotNo",
+                jsonPath: "BPA.additionalDetails.planDetail.plot.plotNo",
                 gridDefination: {
                     xs: 12,
                     sm: 12,

@@ -1,5 +1,5 @@
 import { httpRequest } from "../../../../../ui-utils/api";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 export const getPreApproveList = async (action, state, dispatch) => {
   let queryObject = {
     preapprovedPlanSearchCriteria: {},
@@ -15,9 +15,10 @@ export const getPreApproveList = async (action, state, dispatch) => {
 
     const arr = [];
     const res = response;
+    dispatch(prepareFinalObject("PA",res))
     res.preapprovedPlan.map((item, index) => {
       const newObj = {};
-      newObj.active = item.active;
+      newObj.active = item;
       newObj.drawingNo = item.drawingNo;
       newObj.plotSize = parseInt(item.plotLength) * parseInt(item.plotWidth);
       newObj.abuttingRoad = item.roadWidth;
@@ -27,8 +28,8 @@ export const getPreApproveList = async (action, state, dispatch) => {
         PREAPPROVE_EDIT_TOOGLE_BUTTON: newObj.active,
         PREAPPROVE_BUILDING_PLAN: newObj.drawingNo,
         PREAPPROVE_PLOT_SIZE: newObj.plotSize,
-        PREAPPROVE_ABUTTING_ROAD: newObj.abuttingRoad,
-        PREAPPROVE_PLOT_AREA: newObj.plotArea,
+        PREAPPROVE_ABUTTING_ROAD_COLUMN: newObj.abuttingRoad,
+        PREAPPROVE_PLOT_AREA_COLUMN: newObj.plotArea,
         PREAPPROVE_BUILD_UP_AREA: newObj.buildUpArea,
         // PREAPPROVE_FLOORS: "",
         // PREAPPROVE_FRONT_SETBACK: "",

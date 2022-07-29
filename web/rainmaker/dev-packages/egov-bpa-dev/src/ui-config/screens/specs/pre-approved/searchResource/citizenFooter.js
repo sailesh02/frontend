@@ -487,6 +487,7 @@ export const citizenFooter = getCommonApplyFooter({
   },
   forwardButton: {
     componentPath: "Button",
+    visible: false,
     props: {
       variant: "contained",
       color: "primary",
@@ -506,10 +507,10 @@ export const citizenFooter = getCommonApplyFooter({
       action: "condition",
       callBack: updateBpaApplication
     },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      action: "FORWARD"
-    }
+    // roleDefination: {
+    //   rolePath: "user-info.roles",
+    //   action: "FORWARD"
+    // }
   },
   spclArchApproveButton: {
     componentPath: "Button",

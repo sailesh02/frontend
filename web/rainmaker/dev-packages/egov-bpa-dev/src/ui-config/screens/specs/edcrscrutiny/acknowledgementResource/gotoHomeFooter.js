@@ -218,29 +218,34 @@ export const gotoHomeFooter = getCommonApplyFooter({
     },
     visible : false
   },
-  // updateBpaAppWithNewScrutiny: {
-  //   componentPath: "Button",
-  //   props: {
-  //     variant: "contained",
-  //     color: "primary",
-  //     style: {
-  //       minWidth: "200px",
-  //       height: "48px",
-  //       marginRight: "16px"
-  //     },
-  //   },
-  //   children: {
-  //     downloadReceiptButtonLabel: getLabel({
-  //       labelName: "SUBMIT",
-  //       labelKey: "EDCR_UPDATE_BPA_WITH_NEW_SCRUNTINY_BUTTON"
-  //     })
-  //   },
+  createRevisionApp: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "16px"
+      },
+    },
+    children: {
+      downloadReceiptButtonLabel: getLabel({
+        labelName: "SUBMIT",
+        labelKey: "BPA_CREATE_REVISION_APP"
+      })
+    },
+    visible : false,
   //   onClickDefination: {
   //     action: "condition",
   //     callBack: (state, dispatch) => {
-  //       updateBpaAppWithNewScrutiny(state, dispatch);
+  //       getRedirectionBPAURL();
   //     }
   // },
-  //   visible : false
-  // }
+  onClickDefination: {
+    action: "page_change",
+     path: getRedirectionBPAURL()
+  },
+    visible : false
+  }
 });

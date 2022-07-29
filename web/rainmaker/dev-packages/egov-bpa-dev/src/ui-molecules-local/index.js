@@ -172,7 +172,14 @@ const DownloadDocuments = Loadable({
   loader: () => import("./DownloadDocuments"),
   loading: () => <Loading />
 });
-
+const RevisionDocumentList = Loadable({
+  loader: () => import("./RevisionDocumentList"),
+  loading: () => <Loading />
+});
+const RevisionMultiDocDetailCard = Loadable({
+  loader: () => import("./RevisionMultiDocDetailCard"),
+  loading: () => <Loading />
+});
 
 export {
   TestMolecules,
@@ -211,5 +218,7 @@ export {
   CloseDialog,
   InstallmentDetail,
   GenerateInstallmentsDemandDialog,
-  DownloadDocuments
+  DownloadDocuments,
+  RevisionDocumentList,
+  RevisionMultiDocDetailCard
 };

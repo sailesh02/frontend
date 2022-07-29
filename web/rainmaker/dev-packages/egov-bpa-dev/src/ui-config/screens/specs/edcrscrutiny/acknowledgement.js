@@ -233,6 +233,7 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenant = getQueryArg(window.location.href, "tenantId");
+    const isRevisionApp = getQueryArg(window.location.href, "isRevisionApp");
 
     getSearchResultsfromEDCRWithApplcationNo(applicationNumber, tenant, dispatch)
       .then(response => {
@@ -268,7 +269,7 @@ const screenConfig = {
                 false
               )
             )
-          }else if (purpose == "apply" && status == "success" && scrutinyType == "rework") {
+          }else if (purpose == "apply" && status == "success" && isRevisionApp === "YES") {
             dispatch(
               handleField(
                 "acknowledgement",
@@ -285,14 +286,14 @@ const screenConfig = {
                 false
               )
             )
-            // dispatch(
-            //   handleField(
-            //     "acknowledgement",
-            //     "components.div.children.gotoHomeFooter.children.updateBpaAppWithNewScrutiny",
-            //     "visible",
-            //     true
-            //   )
-            // )
+            dispatch(
+              handleField(
+                "acknowledgement",
+                "components.div.children.gotoHomeFooter.children.createRevisionApp",
+                "visible",
+                true
+              )
+            )
           } 
           else if (purpose == "apply" && status == "success") {
             dispatch(

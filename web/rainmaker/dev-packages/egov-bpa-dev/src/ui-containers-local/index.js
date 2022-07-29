@@ -165,6 +165,14 @@ const FullPaymentContainer =  Loadable({
   loader: () => import("./FullPaymentContainer"),
   loading: () => <Loading />
 });
+const RevisionDocumentListContainer =  Loadable({
+  loader: () => import("./RevisionDocumentListContainer"),
+  loading: () => <Loading />
+});
+const RevisionDocsPreviewContainer =  Loadable({
+  loader: () => import("./RevisionDocsPreviewContainer"),
+  loading: () => <Loading />
+});
 
 export {
   CustomTabContainer,
@@ -199,5 +207,7 @@ export {
   SignRandomPdfContainer,
   EdcrHistory,
   DynamicCheckboxes,
-  FullPaymentContainer
+  FullPaymentContainer,
+  RevisionDocumentListContainer,
+  RevisionDocsPreviewContainer
 };

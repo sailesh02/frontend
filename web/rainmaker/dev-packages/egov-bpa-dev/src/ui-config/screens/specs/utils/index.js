@@ -30,7 +30,35 @@ import { getBpaSearchResults, getAppSearchResults, prepareNOCUploadData } from "
 import "./index.css";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import store from "ui-redux/store";
+//import { setRevisionAppCard } from "../egov-bpa/apply";
 
+export const setRevisionAppCard = (scrutinyDetails, dispatch) => {
+  console.log(scrutinyDetails, "Nero edcr state")
+  const planInformation = scrutinyDetails && scrutinyDetails.planDetail && scrutinyDetails.planDetail.planInformation;
+  console.log(scrutinyDetails, planInformation, "Nero Plan Information")
+  if (planInformation && planInformation.hasOwnProperty("isRevisionApplication")) {
+    if (planInformation && !planInformation.isRevisionApplication) {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.getRevisionDetails",
+          "visible",
+          false
+        )
+      );
+    }
+  } else {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.getRevisionDetails",
+        "visible",
+        false
+      )
+    );
+  }
+
+}
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -3198,7 +3226,9 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
               []
             );
             currOwnersArr = scrutinyData[0];
+            
             dispatch(prepareFinalObject(`scrutinyDetails`, currOwnersArr));
+            await setRevisionAppCard(currOwnersArr, dispatch)
             // await riskType(state, dispatch);
             await edcrDetailsToBpaDetails(state, dispatch);
             await residentialType(state, dispatch);

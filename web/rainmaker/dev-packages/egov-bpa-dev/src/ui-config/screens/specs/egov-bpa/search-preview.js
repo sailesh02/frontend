@@ -59,6 +59,7 @@ import commonConfig from "config/common.js";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { additionalDocsInformation } from "./applyResource/documentDetails";
 import { sanctionFeeAdjustmentDetails } from "./applyResource/sanctionFeeAdjustmentDetails";
+import { revisionSummary, revisionDocsSummary } from "./applyResource/revisionDetail";
 
 const closePdfSigningPopup = (refreshType) => {
   store.dispatch(
@@ -1586,8 +1587,126 @@ const setSearchResponse = async (
     }
 
   }
+
+  if(response && response.BPA[0] && response.BPA[0].hasOwnProperty("isRevisionApplication")){
+    if(response.BPA[0].isRevisionApplication){
+      
+      prepareRevisionObject(state, dispatch, response.BPA[0]);
+      
+    }
+  }
 };
 
+const prepareRevisionObject = async(state, dispatch, bpa) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/bpa-services/v1/revision/_search",
+      "",
+      [],
+      {revisionSearchCriteria: {
+        bpaApplicationNo: bpa && bpa.applicationNo
+      }
+        
+      }
+    );
+    console.log(response, "Nero Revision")
+    if(response && response.revision && response.revision.length > 0){
+    dispatch(prepareFinalObject("revision", response.revision[0]));
+    
+    dispatch(handleField(
+      "search-preview",
+      "components.div.children.body.children.cardContent.children.revisionSummary",
+      "visible",
+      true
+    ))
+
+    if(!response.revision[0].isSujogExistingApplication){
+      prepareRevsionDocumentPreview(state, dispatch);
+      dispatch(handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.revisionDocsSummary",
+        "visible",
+        true
+      ))
+      
+    }
+    }
+    
+  } catch (error) {
+    console.log(error, "Error")
+  }
+
+
+}
+
+const prepareRevsionDocumentPreview = async(state, dispatch) => {
+  
+
+      let documentsPreview = [];
+
+      // Get all documents from response
+      let revisionObj = get(
+        state,
+        "screenConfiguration.preparedFinalObject.revision",
+        {}
+      );
+      
+      let applicantDocuments = jp.query(
+        revisionObj,
+        "$.documents.*"
+      );
+   
+      let allDocuments = [
+        ...applicantDocuments
+      ];
+    
+      allDocuments.forEach(doc => {
+    
+        documentsPreview.push({
+          title: getTransformedLocale(doc.documentType),
+          //title: doc.documentType,
+          fileStoreId: doc.fileStoreId,
+          linkText: "View"
+        });
+      });
+      let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+      let fileUrls =
+        fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+      documentsPreview = documentsPreview.map((doc, index) => {
+        doc["link"] =
+          (fileUrls &&
+            fileUrls[doc.fileStoreId] &&
+            getFileUrl(fileUrls[doc.fileStoreId])) ||
+          "";
+        doc["name"] =
+          (fileUrls[doc.fileStoreId] &&
+            decodeURIComponent(
+              getFileUrl(fileUrls[doc.fileStoreId])
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`;
+        return doc;
+    
+      });
+      let documentDetailsPreview = [], nocDocumentsPreview = [];
+      documentsPreview.forEach(doc => {
+        if (doc && doc.title) {
+          let type = doc.title.split("_")[0];
+          if (type === "NOC") {
+            nocDocumentsPreview.push(doc);
+          } else {
+            documentDetailsPreview.push(doc)
+          }
+        }
+      })
+      dispatch(prepareFinalObject("RvsndocumentDetailsPreview", documentDetailsPreview));
+     
+
+}
 export const getNocList = async (state,dispatch,filter) => {
   let mdmsBody = {
     MdmsCriteria: {
@@ -1822,6 +1941,19 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.approvalAuthority.visible",
       false
     );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.revisionSummary.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.revisionDocsSummary.visible",
+      false
+    );
+
+    
+    
     dispatch(prepareFinalObject("nocDocumentsDetailsRedux", {}));
    
     return action;
@@ -1918,6 +2050,7 @@ const screenConfig = {
         },
         body: getCommonCard({
           approvalAuthority: approvalAuthority,
+          revisionSummary: revisionSummary,
           estimateSummary: estimateSummary,
           sanctionFeeSummary: sanctionFeeSummary,
           sanctionFeeAdjustFormCard: {
@@ -1943,6 +2076,7 @@ const screenConfig = {
           institutionSummary: institutionSummary,
           additionalDocsInformation: additionalDocsInformation,
           previewSummary: previewSummary,
+          revisionDocsSummary: revisionDocsSummary,
           nocDetailsApply: nocDetailsSearchBPA,
           spclArchList: spclArchitectsPicker,
           declarationSummary: declarationSummary,

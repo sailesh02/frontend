@@ -11,7 +11,7 @@ import "../utils/index.css";
 import { CONSTANTS } from "../../../../config/common";
 
 const visibleUat = CONSTANTS.features.isPreApprovedCitizenActive;
-
+const isRevisionActive = CONSTANTS.features.isRevisionActive;
 const header = getCommonHeader(
   {
     labelName: "Building Plan Approval",
@@ -85,12 +85,31 @@ const cardItems = [
     icon: <FormIcon />,
     route: "preApprovedPlanDetails",
   },
+  {
+    label: {
+      labelKey: "BPA_REVISION_APPLICATION",
+      labelName: "Building Permit New Construction",
+    },
+    hide: hideBPACard(),
+    icon: <BPANewPermitIcon />,
+    route: {
+      screenKey: "home",
+      jsonPath: "components.cityPickerDialog",
+      value: "apply",
+    },
+  }
 ];
 
 let cardList = []
 if (!visibleUat) {
   cardList = cardItems.filter((item, index) => {
     if (item.route != "preApprovedPlanDetails") {
+      return item;
+    }
+  });
+}else if(!isRevisionActive){
+  cardList = cardItems.filter((item, index) => {
+    if (item.label.labelKey != "BPA_REVISION_APPLICATION") {
       return item;
     }
   });

@@ -165,22 +165,20 @@ const FullPaymentContainer =  Loadable({
   loader: () => import("./FullPaymentContainer"),
   loading: () => <Loading />
 });
-<<<<<<< HEAD
 const BlockContainer = Loadable({
   loader: () => import("./BlockContainer"),
   loading: () => <Loading />
 });
-
 const PreApproveDocumentListContainer = Loadable({
   loader: () => import("./PreApproveDocumentListContainer"),
-=======
+  loading: () => <Loading />
+});
 const RevisionDocumentListContainer =  Loadable({
   loader: () => import("./RevisionDocumentListContainer"),
   loading: () => <Loading />
 });
 const RevisionDocsPreviewContainer =  Loadable({
   loader: () => import("./RevisionDocsPreviewContainer"),
->>>>>>> 8f4108b4d (feat: implemented revision feature)
   loading: () => <Loading />
 });
 

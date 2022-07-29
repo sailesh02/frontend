@@ -1,7 +1,12 @@
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import { httpRequest } from "../../../../../ui-utils/api";
 import React from "react";
+import get from "lodash/get";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+import store from "ui-redux/store";
 
 // Document ddownload once you click on document link available in table row
 const onDownloadClick = async (rowData, fileStoreId) => {
@@ -34,6 +39,60 @@ const colData = (colArrayData, tableMeta) => {
   }
 };
 
+const handleStatusUpdate = async(e,updateValue,status,drawingNo) => {
+  let state = store.getState();
+  let PA = get(
+    state.screenConfiguration.preparedFinalObject,
+    "PA",
+    {}
+  );
+  let selectedPreapprovedPlan = PA.preapprovedPlan.filter(item=>item.drawingNo === drawingNo)
+  if(e.target.value === "No") {
+    selectedPreapprovedPlan[0].active = true
+
+  }else {
+    selectedPreapprovedPlan[0].active = false
+  }
+  try{
+    let queryObj = {
+      "preapprovedPlan":selectedPreapprovedPlan[0]
+    }
+    const response = await httpRequest(
+      "post",
+      "/bpa-services/v1/preapprovedplan/_update",
+      "_search",
+      [],
+      queryObj
+    );
+    if(response){
+      console.log(".PA...",PA)
+      store.dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "PA_UPDATE_SUCCESS",
+            labelKey: "Status Updated Successfully.",
+          },
+          "success"
+        )
+      );
+    }
+  }catch(err){
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "PA_UPDATE_FAIL",
+          labelKey: err,
+        },
+        "error"
+      )
+    );
+  }
+  
+  
+}
+
 // Configure pre approved plan MUI table.
 // Using Switch from material ui to show toogle button
 export const listOfPreAprrovedPlan = {
@@ -43,7 +102,7 @@ export const listOfPreAprrovedPlan = {
   props: {
     columns: [
       {
-        labelName: "Edit Toogle Button",
+        labelName: "Status",
         labelKey: "PREAPPROVE_EDIT_TOOGLE_BUTTON",
         options: {
           filter: true,
@@ -53,11 +112,12 @@ export const listOfPreAprrovedPlan = {
                 control={
                   <Switch
                     color="primary"
-                    checked={value}
-                    value={value ? "Yes" : "No"}
+                    checked={value.active}
+                    value={value.active ? "Yes" : "No"}
                   />
                 }
                 onChange={(event) => {
+                  handleStatusUpdate(event,updateValue,tableMeta.rowData[0].active,tableMeta.rowData[0].drawingNo);
                   updateValue(event.target.value === "Yes" ? false : true);
                 }}
               />
@@ -70,8 +130,8 @@ export const listOfPreAprrovedPlan = {
         labelName: "Plot size.",
         labelKey: "PREAPPROVE_PLOT_SIZE",
       },
-      { labelName: "Abutting road", labelKey: "PREAPPROVE_ABUTTING_ROAD" },
-      { labelName: "Plot area", labelKey: "PREAPPROVE_PLOT_AREA" },
+      { labelName: "Abutting road", labelKey: "PREAPPROVE_ABUTTING_ROAD_COLUMN" },
+      { labelName: "Plot area", labelKey: "PREAPPROVE_PLOT_AREA_COLUMN" },
       { labelName: "Build-up area", labelKey: "PREAPPROVE_BUILD_UP_AREA" },
       // { labelName: "No. of floors", labelKey: "PREAPPROVE_FLOORS" },
       // { labelName: "Front setback", labelKey: "PREAPPROVE_FRONT_SETBACK" },

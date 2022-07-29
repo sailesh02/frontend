@@ -234,7 +234,7 @@ export const basicSummary = getCommonGrayCard({
         labelKey: "BPA_BOUNDARY_PLOT_AREA_LABEL",
       },
       {
-        jsonPath: "scrutinyDetails.planDetail.plot.area",
+        jsonPath: "BPA.additionalDetails.planDetail.plot.area",
         callBack: checkValueForNA,
       }
     ),
@@ -244,7 +244,7 @@ export const basicSummary = getCommonGrayCard({
         labelKey: "BPA_BOUNDARY_KHATA_NO_LABEL",
       },
       {
-        jsonPath: "scrutinyDetails.planDetail.planInformation.khataNo",
+        jsonPath: "BPA.additionalDetails.planDetail.planInformation.khataNo",
         callBack: checkValueForNA,
       }
     ),
@@ -254,7 +254,7 @@ export const basicSummary = getCommonGrayCard({
         labelKey: "BPA_BOUNDARY_HOLDING_NO_LABEL",
       },
       {
-        jsonPath: "BPA.additionalDetails.holdingNo",
+        jsonPath: "BPA.additionalDetails.planDetail.planInformation.holdingNo",
         callBack: checkValueForNA,
       }
     ),
@@ -264,7 +264,7 @@ export const basicSummary = getCommonGrayCard({
         labelKey: "BPA_BOUNDARY_PLOT_NO_LABEL",
       },
       {
-        jsonPath: "scrutinyDetails.planDetail.planInformation.plotNo",
+        jsonPath: "BPA.additionalDetails.planDetail.plot.plotNo",
         callBack: checkValueForNA,
       }
     ),

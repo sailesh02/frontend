@@ -119,14 +119,14 @@ class AssessmentHistory extends Component {
 
                     {!!reassessAllowed && ((latestAssessment[0].assessmentNumber == Assessment.assessmentNumber) && Assessment.status == "ACTIVE") && (<div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div className="assess-history" style={{ float: "right" }}>
-                            <Button
+                            {/* <Button
                                 label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.REASSESS].parentButton} color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
                                     history && history.push(getPropertyLink(propertyId, Assessment.tenantId, PROPERTY_FORM_PURPOSE.ASSESS, Assessment.financialYear, Assessment.assessmentNumber)
                                             );
                                 }}
-                            ></Button>
+                            ></Button> */}
                         </div>
 
                     </div >)}

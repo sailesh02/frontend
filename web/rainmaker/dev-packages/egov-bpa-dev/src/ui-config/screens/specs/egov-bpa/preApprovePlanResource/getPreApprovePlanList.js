@@ -12,7 +12,6 @@ export const getPreApproveList = async (action, state, dispatch) => {
       [],
       queryObject
     );
-
     const arr = [];
     const res = response;
     dispatch(prepareFinalObject("PA",res))
@@ -24,13 +23,22 @@ export const getPreApproveList = async (action, state, dispatch) => {
       newObj.abuttingRoad = item.roadWidth;
       newObj.plotArea = item.drawingDetail.plotArea;
       newObj.buildUpArea = item.drawingDetail.totalBuitUpArea;
+
+      newObj.plotLength = item.plotLength;
+      newObj.plotWidth = item.plotWidth;
+      newObj.floorDescription = item.drawingDetail.floorDescription;
+      newObj.totalFar = "";//item.drawingDetail.totalFar;
       arr.push({
         PREAPPROVE_EDIT_TOOGLE_BUTTON: newObj.active,
         PREAPPROVE_BUILDING_PLAN: newObj.drawingNo,
-        PREAPPROVE_PLOT_SIZE: newObj.plotSize,
+        // PREAPPROVE_PLOT_SIZE: newObj.plotSize,
         PREAPPROVE_ABUTTING_ROAD_COLUMN: newObj.abuttingRoad,
         PREAPPROVE_PLOT_AREA_COLUMN: newObj.plotArea,
         PREAPPROVE_BUILD_UP_AREA: newObj.buildUpArea,
+        PREAPPROVE_FLOORS: newObj.floorDescription,
+        PREAPPROVE_LENGTH: newObj.plotLength,
+        PREAPPROVE_WIDTH: newObj.plotWidth,
+        PREAPPROVE_FAR: newObj.totalFar,
         // PREAPPROVE_FLOORS: "",
         // PREAPPROVE_FRONT_SETBACK: "",
         // PREAPPROVE_REAR_SETBACK: "",

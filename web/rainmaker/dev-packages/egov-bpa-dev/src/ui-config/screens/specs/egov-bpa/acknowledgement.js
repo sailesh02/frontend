@@ -357,7 +357,6 @@ const getAcknowledgementCard = (
     };
   }else if (purpose === "PRE_APPROVED" && status === "success") {
     return {
-      header:getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",

@@ -20,7 +20,7 @@ import {
 import store from "ui-redux/store";
 
 import get from "lodash/get";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getPreApproveList } from "./preApprovePlanResource/getPreApprovePlanList";
 import { getMdmsData } from "./preApprovePlanResource/getMdmsData";
 import { prepareDocumentsUploadData } from "./preApprovePlanResource/prepareDocumentUploadData";
@@ -36,6 +36,16 @@ const header = getCommonHeader({
 const getData = async (action, state, dispatch) => {
   await getMdmsData(action, state, dispatch);
 };
+const onClose = () => {
+  store.dispatch(
+    handleField(
+      "preapprovedplan",
+      "components.popupForScrutinyDetail.props",
+      "open",
+      false
+    )
+  );
+}
 const screenConfig = {
   _comment: "preapprovedplan screen configuration object",
   uiFramework: "material-ui",
@@ -100,13 +110,14 @@ const screenConfig = {
                   moduleName: "egov-bpa",
                   componentPath: "CloseDialog",
                   required: true,
+                  onClose: onClose(),
                   gridDefination: {
                     xs: 12,
                     sm: 12,
                   },
                   props: {
                     screen: "preapprovedplan",
-                    jsonpath: "components.popupForScrutinyDetail.props",
+                    jsonpath: "components.popupForScrutinyDetail",
                   },
                 },
               }),

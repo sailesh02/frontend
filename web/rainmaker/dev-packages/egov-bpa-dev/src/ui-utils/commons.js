@@ -32,6 +32,7 @@ import jp from "jsonpath";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { edcrDetailsToBpaDetails } from "../ui-config/screens/specs/utils"
 import { downloadPdf, printPdf } from "egov-ui-kit/utils/commons";
+import { CONSTANTS } from "../config/common";
 
 
 export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
@@ -702,7 +703,16 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       dispatch(prepareFinalObject("BPA", response.BPA[0]));
       setApplicationNumberBox(state, dispatch);
       await edcrDetailsToBpaDetails(state, dispatch);
-      await createUpdateRevisionInfo(state, dispatch, response.BPA[0])
+      if (CONSTANTS.features.isRevisionActive) {
+        let scrutinyDetails = get(state, "scrutinyDetails");
+        console.log(scrutinyDetails, "Nero Scrutiny Details")
+        const planInformation = scrutinyDetails && scrutinyDetails.planDetail && scrutinyDetails.planDetail.planInformation;
+        if (planInformation && planInformation.hasOwnProperty("isRevisionApplication")) {
+          if (planInformation && planInformation.isRevisionApplication) {
+            await createUpdateRevisionInfo(state, dispatch, response.BPA[0])
+          }
+        }
+      }
     } else if (method === "UPDATE") {
       response = await httpRequest(
         "post",

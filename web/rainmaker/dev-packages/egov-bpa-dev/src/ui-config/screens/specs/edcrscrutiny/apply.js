@@ -258,7 +258,7 @@ const buildingInfoCard = getCommonCard({
           labelName: "Select Service Type",
           labelKey: "BPA_IS_REVISION_APPLICATION"
         },
-        
+        visible: CONSTANTS.features.isRevisionActive ? true : false,
         props:{
           // disabled: true,
           className : "tl-trade-type"

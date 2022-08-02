@@ -185,7 +185,8 @@ const createPreApprovePlan = async (state, dispatch) => {
       floorDescription: `G+${buildingAbstract.totalFloorNo}`,
       subOccupancy: edcrDetails.blockDetail[0].suboccupancyData,
       totalBuitUpArea: parseInt(buildingAbstract.totalBuildUpArea),
-      totalCarpetArea: parseInt(buildingAbstract.totalCarpetArea)
+      totalCarpetArea: parseInt(buildingAbstract.totalCarpetArea),
+      totalFar: parseFloat(buildingAbstract.totalFar)
     };
     const blocks = [];
     edcrDetails.blockDetail.forEach((item, blockDetailsindex) => {

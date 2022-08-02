@@ -107,15 +107,19 @@ if (!visibleUat) {
       return item;
     }
   });
-}else if(!isRevisionActive){
-  cardList = cardItems.filter((item, index) => {
+}else{
+  cardList = cardItems
+}
+if(!isRevisionActive){
+  cardList = cardList.filter((item, index) => {
     if (item.label.labelKey != "BPA_REVISION_APPLICATION") {
       return item;
     }
   });
-} else {
-  cardList = cardItems
 }
+
+//cardList = cardItems
+
 
 const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",

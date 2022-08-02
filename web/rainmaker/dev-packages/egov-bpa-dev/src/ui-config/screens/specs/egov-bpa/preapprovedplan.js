@@ -18,7 +18,7 @@ import {
   addBuildingPlanDialogFooter,
 } from "./preApprovePlanResource/addPreApprovePlanBuildingDetails";
 import store from "ui-redux/store";
-
+import { CONSTANTS } from "../../../../config/common";
 import get from "lodash/get";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getPreApproveList } from "./preApprovePlanResource/getPreApprovePlanList";
@@ -46,7 +46,7 @@ const onClose = () => {
     )
   );
 }
-const screenConfig = {
+let screenConfig = {
   _comment: "preapprovedplan screen configuration object",
   uiFramework: "material-ui",
   name: "preapprovedplan",
@@ -131,4 +131,10 @@ const screenConfig = {
   },
 };
 
+
+if(!CONSTANTS.features.isPreApprovedEmployeeActive){
+  screenConfig = {}
+}
+
 export default screenConfig;
+

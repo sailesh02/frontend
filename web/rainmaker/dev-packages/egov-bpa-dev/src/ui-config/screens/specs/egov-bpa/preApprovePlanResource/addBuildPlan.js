@@ -8,6 +8,7 @@ import {
   getTextField,
   getLabelWithValue,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import React from 'react';
 import store from "ui-redux/store";
 import get from "lodash/get";
 import {
@@ -19,6 +20,7 @@ import { httpRequest } from "../../../../../ui-utils/api";
 import { getLoggedinUserRole } from "../../utils";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
+
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { feetToMeterConversion } from "./functions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -183,7 +185,8 @@ const createPreApprovePlan = async (state, dispatch) => {
       floorDescription: `G+${buildingAbstract.totalFloorNo}`,
       subOccupancy: edcrDetails.blockDetail[0].suboccupancyData,
       totalBuitUpArea: parseInt(buildingAbstract.totalBuildUpArea),
-      totalCarpetArea: parseInt(buildingAbstract.totalCarpetArea)
+      totalCarpetArea: parseInt(buildingAbstract.totalCarpetArea),
+      totalFar: parseFloat(buildingAbstract.totalFar)
     };
     const blocks = [];
     edcrDetails.blockDetail.forEach((item, blockDetailsindex) => {
@@ -298,6 +301,8 @@ const openAddBuildinfDetailsPopUp = async (state, dispatch, action) => {
   );
 };
 
+
+
 // Configuration of plot details section
 export const plotDetails = getCommonCard({
   header: getCommonTitle(
@@ -317,7 +322,7 @@ export const plotDetails = getCommonCard({
         labelName: "Width of plot(in ft.)",
         labelKey: "PREAPPROVE_PLOT_WITH_IN_FT",
       },
-      pattern: "^[0-9]*$",
+      pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
       jsonPath: "plotDetails.widthInFt",
@@ -339,7 +344,7 @@ export const plotDetails = getCommonCard({
         labelName: "Width of plot(in m.)",
         labelKey: "PREAPPROVE_PLOT_WITH_IN_METER",
       },
-      pattern: "^[0-9]*$",
+      pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
       props: {
         disabled: true,
         className: "tl-trade-type",
@@ -357,7 +362,7 @@ export const plotDetails = getCommonCard({
         labelName: "Length of plot(in ft.)",
         labelKey: "PREAPPROVE_PLOT_LENGTH_IN_FT",
       },
-      pattern: "^[0-9]*$",
+      pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
       jsonPath: "plotDetails.lengthInFt",
@@ -379,7 +384,7 @@ export const plotDetails = getCommonCard({
         labelName: "Length of plot(in m.)",
         labelKey: "PREAPPROVE_PLOT_LENGTH_IN_METER",
       },
-      pattern: "^[0-9]*$",
+      pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
       props: {
         disabled: true,
         className: "tl-trade-type",
@@ -397,7 +402,7 @@ export const plotDetails = getCommonCard({
         labelName: "Plot area(in sqmt.)",
         labelKey: "PREAPPROVE_PLOT_AREA",
       },
-      pattern: "^[0-9]*$",
+      pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "plotDetails.plotAreaInSqrMt",
       required: true,
@@ -412,7 +417,7 @@ export const plotDetails = getCommonCard({
         labelName: "Abutting road width(in m.)",
         labelKey: "PREAPPROVE_ABUTTING_ROAD",
       },
-      pattern: "^[0-9]*$",
+      pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "plotDetails.abuttingRoadWidthInMt",
       required: true,
@@ -444,7 +449,10 @@ export const buildingAbstract = getCommonCard({
         labelName: "Total build up Area(in sqmt.)",
         labelKey: "PREAPPROVE_TOTAL_BUILD_UP_AREA",
       },
-      pattern: "^[0-9]*$",
+      props: {
+        disabled:true,
+      },
+      pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "buildingAbstract.totalBuildUpArea",
       required: true,
@@ -454,15 +462,54 @@ export const buildingAbstract = getCommonCard({
         md: 6,
       },
     }),
+    totalFloorArea: getTextField({
+      label: {
+        labelName: "Total Floor Area(in sqmt.)",
+        labelKey: "PREAPPROVE_TOTAL_FLOOR_AREA",
+      },
+      props: {
+        disabled:true,
+      },
+      pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "buildingAbstract.totalFloorArea",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 6,
+        md: 6,
+      },
+    }),
+    totalFar: getTextField({
+      label: {
+        labelName: "Total FAR",
+        labelKey: "PREAPPROVE_TOTAL_FAR",
+      },
+      props: {
+        disabled:true,
+      },
+      pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "buildingAbstract.totalFar",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 6,
+        md: 6,
+      },
+    }),
     totalCarpetArea: getTextField({
       label: {
-        labelName: "Total carpet Area",
+        labelName: "Total carpet Area(in sqmt.)",
         labelKey: "PREAPPROVE_TOTAL_CARPET_AREA",
       },
-      pattern: "^[0-9]*$",
+      pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "buildingAbstract.totalCarpetArea",
       required: true,
+      props: {
+        disabled:true,
+      },
       gridDefination: {
         xs: 12,
         sm: 6,
@@ -473,6 +520,9 @@ export const buildingAbstract = getCommonCard({
       label: {
         labelName: "Total No. of Floors",
         labelKey: "PREAPPROVE_TOTAL_FLOORS",
+      },
+      props: {
+        disabled:true,
       },
       iconObj: {
         label: "G+1 ",
@@ -611,7 +661,7 @@ export const proposedBuildingDetails = getCommonCard({
                   labelName: "Building Height",
                   labelKey: "PREAPPROVE_BUILDING_HEIGHT",
                 },
-                pattern: "^[0-9]*$",
+                pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
                 errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
                 required: true,
                 jsonPath: "edcr.blockDetail[0].buildingHeight",
@@ -626,7 +676,7 @@ export const proposedBuildingDetails = getCommonCard({
                   labelName: "Actual Building Height",
                   labelKey: "PREAPPROVE_ACTUAL_BUILDING_HEIGHT",
                 },
-                pattern: "^[0-9]*$",
+                pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
                 errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
                 required: true,
                 jsonPath: "edcr.blockDetail[0].actualBuildingHeight",
@@ -641,7 +691,7 @@ export const proposedBuildingDetails = getCommonCard({
                   labelName: "Front setback",
                   labelKey: "PREAPPROVE_FRONT_SETBACK",
                 },
-                pattern: "^[0-9]*$",
+                pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
                 errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
                 required: true,
                 jsonPath: "edcr.blockDetail[0].frontSetback",
@@ -656,7 +706,7 @@ export const proposedBuildingDetails = getCommonCard({
                   labelName: "Rear setback",
                   labelKey: "PREAPPROVE_REAR_SETBACK",
                 },
-                pattern: "^[0-9]*$",
+                pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
                 errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
                 required: true,
                 jsonPath: "edcr.blockDetail[0].rearSetback",
@@ -671,7 +721,7 @@ export const proposedBuildingDetails = getCommonCard({
                   labelName: "Right setback",
                   labelKey: "PREAPPROVE_RIGHT_SETBACK",
                 },
-                pattern: "^[0-9]*$",
+                pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
                 errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
                 required: true,
                 jsonPath: "edcr.blockDetail[0].rightSetback",
@@ -686,7 +736,7 @@ export const proposedBuildingDetails = getCommonCard({
                   labelName: "Left setback",
                   labelKey: "PREAPPROVE_LEFT_SETBACK",
                 },
-                pattern: "^[0-9]*$",
+                pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
                 errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
                 required: true,
                 jsonPath: "edcr.blockDetail[0].leftSetback",
@@ -720,7 +770,7 @@ export const proposedBuildingDetails = getCommonCard({
                     "Buildup Area": {},
                     "Floor Area": {},
                     "Carpet Area": {},
-                    "Floor Height": {},
+                    "Floor Height": {},                    
                   },
                   title: "",
                   options: {
@@ -736,7 +786,7 @@ export const proposedBuildingDetails = getCommonCard({
                     print: false,
                     download: false,
                     viewColumns: false,
-                    rowHover: false,
+                    rowHover: true
                   },
                 },
               },
@@ -792,9 +842,9 @@ export const uploadDocuments = {
       labelKey: "PREAPPROVE_PLAN_UPLOAD_FILE",
     },
     inputProps: {
-      accept: "image/*, .pdf, .png, .jpeg",
+      accept: "image/*, .pdf, .png, .jpeg, .dxf",
       formatProps: {
-        accept: "image/*, .pdf, .png, .jpeg",
+        accept: "image/*, .pdf, .png, .jpeg, .dxf",
       },
       multiple: false,
       maxFileSize: 5000,
@@ -873,8 +923,8 @@ export const addPreApprovedPlanDetails = {
   },
   children: {
     plotDetails,
-    buildingAbstract,
     proposedBuildingDetails,
+    buildingAbstract,
     uploadDocuments,
     footer,
   },

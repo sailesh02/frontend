@@ -2,7 +2,7 @@
 import {
   getCommonCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { searchPropertyDetails, searchApplicationDetails, searchReassessmentDetails } from "./mutation-methods";
+import { searchPropertyDetails, searchApplicationDetails, searchReassessmentDetails, searchLegacyDetails } from "./mutation-methods";
 // import "./index.css"
 
 const propertySearchTabs = getCommonCard({
@@ -32,6 +32,10 @@ const propertySearchTabs = getCommonCard({
         {
           tabButton: {labelName: "Search Assessment", labelKey:"SEARCH_ASSESSMENT"},
           tabContent: { searchReassessmentDetails }
+        },
+        {
+          tabButton: {labelName: "Search Legacy", labelKey:"SEARCH_LEGACY"},
+          tabContent: { searchLegacyDetails }
         }
       ]
     },

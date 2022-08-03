@@ -3,7 +3,7 @@ import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } f
 import { disableField, enableField } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import React from "react";
-import { getAssessmentSearchResults, getSearchResults } from "../../../../ui-utils/commons";
+import { getAssessmentSearchResults, getLegacySearchResults, getSearchResults } from "../../../../ui-utils/commons";
 import { validateFields } from "../utils/index";
 
 export const propertySearch = async (state, dispatch) => {
@@ -16,6 +16,10 @@ export const applicationSearch = async (state, dispatch) => {
 
 export const reassessmentSearch = async (state, dispatch) => {
   searchApiCall(state, dispatch, 2)
+}
+
+export const legacySearch = async (state, dispatch) => {
+  searchApiCall(state, dispatch, 3)
 }
 
 const removeValidation = (state, dispatch, index) => {
@@ -134,6 +138,30 @@ const removeValidation = (state, dispatch, index) => {
       true
     )
   );
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[3].tabContent.searchLegacyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+      "isFieldValid",
+      true
+    )
+  )
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[3].tabContent.searchLegacyDetails.children.cardContent.children.ulbCityContainer.children.legacyId",
+      "isFieldValid",
+      true
+    )
+  )
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[3].tabContent.searchLegacyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
+      "isFieldValid",
+      true
+    )
+  )
 
 }
 
@@ -150,7 +178,7 @@ const searchApiCall = async (state, dispatch, index) => {
   showHideTable(false, dispatch, 0);
   showHideTable(false, dispatch, 1);
   showHideTable(false, dispatch, 2);
-
+  showHideTable(false, dispatch, 3)
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
     "ptSearchScreen",
@@ -186,8 +214,13 @@ const searchApiCall = async (state, dispatch, index) => {
       formValid = true;
     }
   }
-  else{
+  else if(index == 2){
     if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.acknowledgementIds != '') {
+      formValid = true;
+    }
+  }
+  else{
+    if (searchScreenObject.ids != '' || searchScreenObject.legacyPropertyId != '' || searchScreenObject.oldpropertyids != '') {
       formValid = true;
     }
   }
@@ -207,6 +240,7 @@ const searchApiCall = async (state, dispatch, index) => {
   let form1 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails", state, dispatch, "propertySearch");
   let form2 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails", state, dispatch, "propertySearch");
   let form3 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails", state, dispatch, "propertySearch");
+  let form4 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[3].tabContent.searchLegacyDetails", state, dispatch, "propertySearch");
   // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails"
   // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails"
   // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo"
@@ -289,7 +323,30 @@ const searchApiCall = async (state, dispatch, index) => {
     dispatch,
     "propertySearch"
   ) || searchScreenObject.ids == '';
-
+  const isownerCityLegacyRowValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[3].tabContent.searchLegacyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+    state,
+    dispatch,
+    "propertySearch"
+  )
+  const isPropertyRowValidinlegacy = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[3].tabContent.searchLegacyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+    state,
+    dispatch,
+    "propertySearch"
+  ) || searchScreenObject.ids == '';
+  const islegacyPropertyRowValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[3].tabContent.searchLegacyDetails.children.cardContent.children.ulbCityContainer.children.legacyId",
+    state,
+    dispatch,
+    "propertySearch"
+  ) || searchScreenObject.legacyPropertyId == '';
+  const islegacyExsistingIdValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[3].tabContent.searchLegacyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
+    state,
+    dispatch,
+    "propertySearch"
+  ) || searchScreenObject.oldpropertyids == ''
 
   if (!isSearchBoxFirstRowValid) {
     dispatch(
@@ -330,6 +387,19 @@ const searchApiCall = async (state, dispatch, index) => {
     return;
   }
   else if (index == 2 && !(isownerCityRowAssessValid && isSearchBoxFirstRowAssessValid && ispropertyTaxReassessmentidRowValid && isAssessmentPropertyRowValid) ) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill at least one field along with city",
+          labelKey: "PT_INVALID_INPUT"
+        },
+        "error"
+      )
+    );
+    return;
+  }
+  else if(index == 3 && !(isownerCityLegacyRowValid && isPropertyRowValidinlegacy && islegacyPropertyRowValid && islegacyExsistingIdValid)){
     dispatch(
       toggleSnackbar(
         true,
@@ -413,6 +483,7 @@ const searchApiCall = async (state, dispatch, index) => {
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
+      disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[3].tabContent.searchLegacyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       let response = {}
 
       if(index == 0 || index ==1){
@@ -480,9 +551,8 @@ const searchApiCall = async (state, dispatch, index) => {
           )
         );
       }
-      else{
+      else if(index == 2){
          response = await getAssessmentSearchResults(queryObject);
-         console.log("qqqqqqqqqqq", response);
          let reassessmentData = response.Assessments.map((item)=>({
 
           ["PT_ASSESSMENT_NO"]:
@@ -513,9 +583,40 @@ const searchApiCall = async (state, dispatch, index) => {
         )
       );
 }
+    else if(index == 3) {
+      response = await getLegacySearchResults(queryObject);
+      let legacyData = response.LegacyProperties.map((item)=>({
+
+        ["PT_LEGACY_NO"]:
+          item.LegacyPropertyId || "-",
+        ["PT_COMMON_TABLE_COL_PT_ID"]: item || "-",
+        ["TENANT_ID"]: item.TenantId.substring(3).charAt(0).toUpperCase() + item.TenantId.substring(3).slice(1),
+        ["PT_COMMON_COL_EXISTING_PROP_ID"]: item.OldPropertyId || "-",
+        temporary: item
+  
+}))
+
+    dispatch(
+      handleField(
+        "propertySearch",
+        "components.div.children.searchLegacyTable",
+        "props.data",
+        legacyData
+      )
+    );
+    dispatch(
+      handleField(
+        "propertySearch",
+        "components.div.children.searchLegacyTable",
+        "props.rows",
+        response.LegacyProperties.length
+      )
+    );
+    }
       enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
+      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[3].tabContent.searchLegacyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch)
    
  
       //showHideProgress(false, dispatch);
@@ -525,6 +626,7 @@ const searchApiCall = async (state, dispatch, index) => {
       enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[2].tabContent.searchReassessmentDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
+      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[3].tabContent.searchLegacyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch)
       dispatch(
         toggleSnackbar(
           true,
@@ -557,7 +659,7 @@ const showHideTable = (booleanHideOrShow, dispatch, index) => {
       )
     );
   }
-  else {
+  else if(index == 2){
     dispatch(
       handleField(
         "propertySearch",
@@ -566,6 +668,16 @@ const showHideTable = (booleanHideOrShow, dispatch, index) => {
         booleanHideOrShow
       )
     );
+  }
+  else{
+    dispatch(
+      handleField(
+        "propertySearch",
+        "components.div.children.searchLegacyTable",
+        "visible",
+        booleanHideOrShow
+      )
+    )
   }
 };
 

@@ -384,6 +384,63 @@ export const searchReassessmentTable = {
   }
 };
 
+export const searchLegacyTable = {
+  uiFramework: "custom-molecules",
+  componentPath: "Table",
+  visible: false,
+  props: {
+    className: "propertyTab",
+    columns: [
+      {
+        labelName: "Property Id",
+        labelKey: "PT_COMMON_TABLE_COL_PT_ID",
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <div>
+              <a href="javascript:void(0)" onClick={() => onPropertyIdClick(value)}>{value.PropertyId}</a>
+            </div>
+          )
+        }
+      },
+      {labelName: "Legacy Number", labelKey: "PT_LEGACY_NO"},
+      {labelName: "Existing Property Id", labelKey: "PT_COMMON_COL_EXISTING_PROP_ID"},
+      {
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
+        options: {
+          display: true
+        }
+      }
+    ],
+    title: {labelKey:"PT_HOME_PROPERTY_RESULTS_TABLE_HEADING", labelName:"Search Results for Properties"},
+    rows:"",
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      rowsPerPageOptions: [10, 15, 20]
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
+  }
+};
+
 
 
 const onPropertyTabClick = (tableMeta) => {
@@ -415,16 +472,17 @@ const applicationNumberClick = async (item) => {
 }
 
 const reassessmentNumberClick = async (item) => {
-  console.log("ITEEEM", item);
   const businessService = await getApplicationType(item && item.assessmentNumber, item.tenantId);
   if(businessService == 'ASMT'){
     navigate (`/pt-assessment/search-preview?applicationNumber=${item.assessmentNumber}&tenantId=${item.tenantId}&type=assessment`)
   }
-  console.log("BUSSSINESSSERVICE", businessService);
 }
 
 const propertyIdClick = (item) => {
   navigate(propertyInformationScreenLink(item.propertyId,item.tenantId));
+}
+const onPropertyIdClick = (item) => {
+  navigate(propertyInformationScreenLink(item.PropertyId, item.TenantId))
 }
 
 const navigate=(url)=>{

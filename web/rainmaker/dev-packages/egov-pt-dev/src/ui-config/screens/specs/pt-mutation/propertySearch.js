@@ -7,7 +7,7 @@ import "./index.css";
 import get from "lodash/get";
 import { resetFields } from "./mutation-methods";
 import propertySearchTabs from "./property-search-tabs";
-import { searchApplicationTable, searchPropertyTable, searchReassessmentTable } from "./searchResource/searchResults";
+import { searchApplicationTable, searchPropertyTable, searchReassessmentTable, searchLegacyTable } from "./searchResource/searchResults";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 let userInfo = JSON.parse(getUserInfo());
@@ -249,7 +249,8 @@ const screenConfig = {
         breakAfterSearch: getBreak(),
         searchPropertyTable,
         searchApplicationTable,
-        searchReassessmentTable
+        searchReassessmentTable,
+        searchLegacyTable
 
       }
     },

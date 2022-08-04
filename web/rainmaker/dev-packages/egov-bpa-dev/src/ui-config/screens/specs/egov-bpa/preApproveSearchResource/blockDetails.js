@@ -92,40 +92,15 @@ export const proposedBuildingDetails = getCommonCard({
         disabled: true,
       },
     },
-    subOccupancyType: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-bpa",
-      componentPath: "AutosuggestContainer",
-      props: {
-        label: {
-          labelName: "Sub Occupancy Type",
-          labelKey: "BPA_SUB_OCCUP_TYPE_LABEL",
-        },
-        placeholder: {
-          labelName: "Select Sub Occupancy Type",
-          labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER",
-        },
-        localePrefix: {
-          moduleName: "BPA",
-          masterName: "SUBOCCUPANCYTYPE",
-        },
-        required: true,
-        labelsFromLocalisation: true,
-        // isClearable: true,
-        jsonPath: "edcr.blockDetail[0].suboccupancyData",
-        sourceJsonPath: "subOccupancyPa",
-        labelsFromLocalisation: true,
-        isMulti: false,
+    subOccupancyType: getLabelWithValue(
+      {
+        labelName: "Sub Occupancy Type",
+        labelKey: "BPA_SUB_OCCUP_TYPE_LABEL",
       },
-      required: true,
-      jsonPath: "edcr.blockDetail[0].suboccupancyData",
-      isMulti: false,
-      gridDefination: {
-        xs: 12,
-        sm: 12,
-        md: 6,
-      },
-    },
+      {
+        jsonPath: "drawingDetails.drawingDetail.subOccupancy.label",
+      }
+    ),
   }),
   proposedContainer: {
     uiFramework: "custom-atoms",

@@ -18,7 +18,7 @@ import {
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import { httpRequest } from "../../../../ui-utils/api";
 import {getBpaTextToLocalMapping} from "../utils/preApprovePlan"
-
+import {gotoHomeFooter} from "./preApproveSearchResource/footer"
 import {
   addPreApprovePlan,
   addBuildingPlanDialogFooter,
@@ -53,57 +53,51 @@ const setDetails = async() => {
 
 
 const getDrawingDetails = async (action, state, dispatch) => {
-    const drawingNo=getQueryArg(window.location.href, "applicationNumber")
-    let queryObject = {
-        preapprovedPlanSearchCriteria: {
-          drawingNo: drawingNo
-        },
-      };
-      try {
-        const response = await httpRequest(
-          "post",
-          "/bpa-services/v1/preapprovedplan/_search",
-          "_search",
-          [],
-          queryObject
-        );
-        if (response && response.preapprovedPlan &&
-            response.preapprovedPlan.length > 0) {   
-            let data = response.preapprovedPlan[0].drawingDetail.blocks;
-            let tableData = [];
-            for (var j = 0; j < data.length; j++) {
-                let title = `Block ${j + 1}`;
-                let floors = data[j] && data[j].building && data[j].building.floors;
-                let setBack = data[j] && data[j].building && data[j].building.setBack;
-                let height = {
-                    actualBuildingHeight: data[j] && data[j].building && data[j].building.actualBuildingHeight,
-                    buildingHeight: data[j] && data[j].building && data[j].building.buildingHeight
-                }
-                let block = await floors.map((item, index) => (        {
-                    [getBpaTextToLocalMapping("Floor Description")]: item.floorName.toString(),//getFloorDetails((item.number).toString()) || '-',
-                    [getBpaTextToLocalMapping("Level")]: parseInt(item.floorNo),
-                    [getBpaTextToLocalMapping("Buildup Area")]: parseInt(item.builtUpArea) || "0",
-                    [getBpaTextToLocalMapping("Floor Area")]: parseInt(item.floorArea) || "0",
-                    [getBpaTextToLocalMapping("Carpet Area")]: parseInt(item.carpetArea) || "0",
-                    [getBpaTextToLocalMapping("Floor Height")]: parseInt(item.floorHeight) || "0",
-                    }));
-                let blockSetBack = {}
-                setBack.forEach((item,index)=> {
-                    blockSetBack.frontSetback=item.frontSetback,
-                    blockSetBack.rearSetback= item.rearSetback,
-                    blockSetBack.leftSetback= item.leftSetback,
-                    blockSetBack.rightSetback= item.rightSetback
-                })
-                tableData.push({ blocks: block,blockSetBack: blockSetBack, titleData: title, height:height});
-        
-            };
-            dispatch(prepareFinalObject("edcr.blockDetail", tableData));
-            return response.preapprovedPlan[0]
-        //   dispatch(prepareFinalObject("drawingDetails", response.preapprovedPlan[0]));
-        }
-      } catch (err) {
-        console.log(err);
-      }
+  const drawingNo=getQueryArg(window.location.href, "drawingNo")
+  try {
+    const response = await httpRequest(
+      "post",
+      `/bpa-services/v1/preapprovedplan/_search?drawingNo=${drawingNo}`,
+      "_search",
+      [],
+    );
+    if (response && response.preapprovedPlan &&
+        response.preapprovedPlan.length > 0) {   
+        let data = response.preapprovedPlan[0].drawingDetail.blocks;
+        let tableData = [];
+        for (var j = 0; j < data.length; j++) {
+            let title = `Block ${j + 1}`;
+            let floors = data[j] && data[j].building && data[j].building.floors;
+            let setBack = data[j] && data[j].building && data[j].building.setBack;
+            let height = {
+                actualBuildingHeight: data[j] && data[j].building && data[j].building.actualBuildingHeight,
+                buildingHeight: data[j] && data[j].building && data[j].building.buildingHeight
+            }
+            let block = await floors.map((item, index) => (        {
+                [getBpaTextToLocalMapping("Floor Description")]: item.floorName.toString(),//getFloorDetails((item.number).toString()) || '-',
+                [getBpaTextToLocalMapping("Level")]: parseInt(item.floorNo),
+                [getBpaTextToLocalMapping("Buildup Area")]: parseInt(item.builtUpArea) || "0",
+                [getBpaTextToLocalMapping("Floor Area")]: parseInt(item.floorArea) || "0",
+                [getBpaTextToLocalMapping("Carpet Area")]: parseInt(item.carpetArea) || "0",
+                [getBpaTextToLocalMapping("Floor Height")]: parseInt(item.floorHeight) || "0",
+                }));
+            let blockSetBack = {}
+            setBack.forEach((item,index)=> {
+                blockSetBack.frontSetback=item.frontSetback,
+                blockSetBack.rearSetback= item.rearSetback,
+                blockSetBack.leftSetback= item.leftSetback,
+                blockSetBack.rightSetback= item.rightSetback
+            })
+            tableData.push({ blocks: block,blockSetBack: blockSetBack, titleData: title, height:height});
+    
+        };
+        dispatch(prepareFinalObject("edcr.blockDetail", tableData));
+        return response.preapprovedPlan[0]
+    //   dispatch(prepareFinalObject("drawingDetails", response.preapprovedPlan[0]));
+    }
+  } catch (err) {
+    console.log(err);
+  }
 }
 let screenConfig = {
   _comment: "preapprovedplan-search-preview screen configuration object",
@@ -142,6 +136,7 @@ let screenConfig = {
         proposedBuildingDetails,
         buildingAbstract,
         uploadDocuments,
+        gotoHomeFooter
       },
     },
     popupForScrutinyDetail: {

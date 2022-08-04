@@ -48,7 +48,7 @@ export const buildingAbstract = getCommonCard({
         },
         pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "",//"drawingDetails.drawingDetail.totalFloorArea",
+        jsonPath: "drawingDetails.drawingDetail.totalFloorArea",
         required: true,
         gridDefination: {
           xs: 12,

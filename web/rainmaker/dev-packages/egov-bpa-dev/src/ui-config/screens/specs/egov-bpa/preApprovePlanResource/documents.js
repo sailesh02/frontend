@@ -10,9 +10,6 @@ export const uploadDocuments = {
       },
       inputProps: {
         accept: "image/*, .pdf, .png, .jpeg, .dxf",
-        formatProps: {
-          accept: "image/*, .pdf, .png, .jpeg, .dxf",
-        },
         multiple: false,
         maxFileSize: 5000,
       },

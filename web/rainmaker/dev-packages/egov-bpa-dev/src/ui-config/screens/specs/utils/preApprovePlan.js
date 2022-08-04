@@ -5410,7 +5410,7 @@ const getFloorDetails = (index) => {
 
 export const setPreApprovedProposedBuildingData = async (state, dispatch, action, value) => {
 
-  let response, occupancyType, BPA;
+  let response, occupancyType, BPA, currentIndex;
   let getLocalLabels = get(state, "app.localizationLabels");
 
   if (value == "ocApply") {
@@ -5444,6 +5444,10 @@ export const setPreApprovedProposedBuildingData = async (state, dispatch, action
       state,
       "screenConfiguration.preparedFinalObject.BPA",
       {}
+    );
+    currentIndex = get(
+      state.screenConfiguration.preparedFinalObject,
+      "edcr.currentIndex"
     );
   }
 

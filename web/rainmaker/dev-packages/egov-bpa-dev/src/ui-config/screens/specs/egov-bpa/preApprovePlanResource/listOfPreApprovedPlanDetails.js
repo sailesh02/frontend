@@ -4,6 +4,7 @@ import { httpRequest } from "../../../../../ui-utils/api";
 import React from "react";
 import get from "lodash/get";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import store from "ui-redux/store";
@@ -93,11 +94,15 @@ const handleStatusUpdate = async(e,updateValue,status,drawingNo) => {
   
 }
 
-const onApplicationRowClick = (rowData) => {
+const onApplicationRowClick = (value,tableData) => {
   const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
   const origin = process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
-
-  window.location.assign(`${origin}${environment}/egov-bpa/preapprove-search-preview?applicationNumber=${rowData[1]}&tenantId=${rowData[2]}`);
+  store.dispatch(
+    setRoute(
+      `/egov-bpa/preapprove-search-preview?drawingNo=${value}`
+    )
+  );
+  //window.location.assign(`${origin}${environment}/egov-bpa/preapprove-search-preview?drawingNo=${value}`);
 }
 
 // Configure pre approved plan MUI table.
@@ -139,7 +144,13 @@ export const listOfPreAprrovedPlan = {
       },
       {
         labelName: "Building Plan No.",
-        labelKey: "PREAPPROVE_BUILDING_PLAN"
+        labelKey: "PREAPPROVE_BUILDING_PLAN",
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta) => (
+            <a href="javascript:void(0)" onClick={() => onApplicationRowClick(tableMeta.rowData[1])}>{value}</a>
+        )
+        },
       },
       // {
       //   labelName: "Plot size.",
@@ -185,9 +196,9 @@ export const listOfPreAprrovedPlan = {
       selectableRows: false,
       hover: false,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-        onApplicationRowClick(row);
-      },
+      // onRowClick: (row, index) => {
+      //   onApplicationRowClick(row);
+      // },
     },
     customSortColumn: {},
   },

@@ -32,7 +32,129 @@ const openAddBuildinfDetailsPopUp = async (state, dispatch, action) => {
       true
     )
   );
+  store.dispatch(
+    handleField(
+      "preapprovedplan",
+      "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addBuildingPlanDialogFooter.children.EditPreApprovedPlan",
+      "visible",
+      false
+    )
+  );
+  store.dispatch(
+    handleField(
+      "preapprovedplan",
+      "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addBuildingPlanDialogFooter.children.EditPreApprovedPlan",
+      "visible",
+      false
+    )
+  );
+  store.dispatch(
+    handleField(
+      "preapprovedplan",
+      "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addBuildingPlanDialogFooter.children.deletePreApprovedPlan",
+      "visible",
+      false
+    )
+  );
+  store.dispatch(
+    handleField(
+      "preapprovedplan",
+      "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addBuildingPlanDialogFooter.children.addPreApprovedPlan",
+      "visible",
+      true
+    )
+  );
 };
+
+// Open building details pop up to add new floor information in block occupacy section
+const onRowClick = async (row,index,type=false) => {
+  
+  store.dispatch(prepareFinalObject("row", row));
+  store.dispatch(prepareFinalObject("row.index", index));
+  store.dispatch(
+    handleField(
+      "preapprovedplan",
+      "components.popupForScrutinyDetail.props",
+      "open",
+      true
+    )
+  );
+  if(type){
+    store.dispatch(
+      handleField(
+        "preapprovedplan",
+        "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addBuildingPlanDialogFooter.children.addPreApprovedPlan",
+        "visible",
+        false
+      )
+    );
+    store.dispatch(
+      handleField(
+        "preapprovedplan",
+        "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addBuildingPlanDialogFooter.children.EditPreApprovedPlan",
+        "visible",
+        true
+      )
+    );
+    store.dispatch(
+      handleField(
+        "preapprovedplan",
+        "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addBuildingPlanDialogFooter.children.deletePreApprovedPlan",
+        "visible",
+        true
+      )
+    );
+    store.dispatch(
+      handleField(
+        "preapprovedplan",
+        "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.buildUpArea",
+        "props.value",
+        row[3]
+      )
+    );
+    store.dispatch(
+      handleField(
+        "preapprovedplan",
+        "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.carpetArea",
+        "props.value",
+        row[5]
+      )
+    );
+    store.dispatch(
+      handleField(
+        "preapprovedplan",
+        "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.floorArea",
+        "props.value",
+        row[4]
+      )
+    );
+    store.dispatch(
+      handleField(
+        "preapprovedplan",
+        "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.floorDescription",
+        "props.value",
+        row[1]
+      )
+    );
+    store.dispatch(
+      handleField(
+        "preapprovedplan",
+        "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.level",
+        "props.value",
+        row[2]
+      )
+    );
+    store.dispatch(
+      handleField(
+        "preapprovedplan",
+        "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.floorHeight",
+        "props.value",
+        row[6]
+      )
+    );
+  }
+};
+
 // Configuration of block occupacy section
 export const proposedBuildingDetails = getCommonCard({
   headertitle: getCommonTitle(
@@ -258,6 +380,8 @@ export const proposedBuildingDetails = getCommonCard({
                     md: 12,
                   },
                   columns: {
+                    // -"Id": {},
+                    "Block": {},
                     "Floor Description": {},
                     Level: {},
                     "Buildup Area": {},
@@ -280,6 +404,9 @@ export const proposedBuildingDetails = getCommonCard({
                     download: false,
                     viewColumns: false,
                     rowHover: true,
+                    onRowClick: (row, index) => {
+                      onRowClick(row,index,true);
+                    }
                   },
                 },
               },

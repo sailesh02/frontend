@@ -94,7 +94,8 @@ const preparingDocumentsReview = async (state, dispatch) => {
             uploadedBy: getLoggedinUserRole(""),
             uploadedTime: new Date().getTime(),
             fileName: docDetail.fileName,
-            title: getTransformedLocale(doc.documentCode)
+            title: getTransformedLocale(doc.documentCode),
+            fileUrl:docDetail.fileUrl
           };
           documentsPreview.push(obj);
         });
@@ -179,7 +180,9 @@ const createPreApprovePlan = async (state, dispatch) => {
         subOccupancy: edcrDetails.blockDetail[0].suboccupancyData,
         totalBuitUpArea: parseInt(buildingAbstract.totalBuildUpArea),
         totalCarpetArea: parseInt(buildingAbstract.totalCarpetArea),
-        totalFar: parseFloat(buildingAbstract.totalFar)
+        totalFar: parseFloat(buildingAbstract.totalFar),
+        totalFloorArea: parseInt(buildingAbstract.totalFloorArea),
+        totalFloorNo: parseInt(buildingAbstract.totalFloorNo)
       };
       const blocks = [];
       edcrDetails.blockDetail.forEach((item, blockDetailsindex) => {

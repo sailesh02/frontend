@@ -6,6 +6,7 @@ import {
   getTextField,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import store from "ui-redux/store";
+import { v4 as uuid } from 'uuid';
 import get from "lodash/get";
 import { validateFields } from "egov-ui-framework/ui-utils/commons";
 
@@ -41,6 +42,67 @@ const floorDetails = [
   { code: "Eighth", label: "8" },
   { code: "Nineth", label: "9" },
 ]
+
+const editBuildingDetails = (state, dispatch, type) => {
+  const edcrDetails = get(
+    state.screenConfiguration.preparedFinalObject,
+    "edcr"
+  );
+  const blockDetail = get(
+    state.screenConfiguration.preparedFinalObject,
+    "blockDetail"
+  );
+  const row = get(
+    state.screenConfiguration.preparedFinalObject,
+    "row"
+  );
+  const rowIndex = get(
+    state.screenConfiguration.preparedFinalObject,
+    "row.index"
+  );
+  const newFloorDetails = {
+    "Floor Description": blockDetail.floorDescription,
+    Level: blockDetail.level,
+    "Buildup Area": blockDetail.buildUpArea,
+    "Floor Area": blockDetail.carpetArea,
+    "Carpet Area": blockDetail.floorArea,
+    "Floor Height": blockDetail.floorHeight,
+    "Block": row[0]
+    
+  };
+  if(edcrDetails && edcrDetails.blockDetail && edcrDetails.blockDetail[row[0]].blocks && edcrDetails.blockDetail[row[0]].blocks.length>0){
+    edcrDetails.blockDetail[row[0]].blocks.splice(rowIndex.rowIndex,1)
+  }
+  edcrDetails.blockDetail[row[0]].blocks.push({...newFloorDetails})
+  dispatch(prepareFinalObject("edcr", edcrDetails));
+  addBuildingAbstractValue(state, dispatch, type);
+  closeAddBuildinfDetailsPopUp();
+};
+
+const deleteBuildingDetails = (state, dispatch, type) => {
+  const edcrDetails = get(
+    state.screenConfiguration.preparedFinalObject,
+    "edcr"
+  );
+  const blockDetail = get(
+    state.screenConfiguration.preparedFinalObject,
+    "blockDetail"
+  );
+  const row = get(
+    state.screenConfiguration.preparedFinalObject,
+    "row"
+  );
+  const rowIndex = get(
+    state.screenConfiguration.preparedFinalObject,
+    "row.index"
+  );
+  if(edcrDetails && edcrDetails.blockDetail && edcrDetails.blockDetail[row[0]].blocks && edcrDetails.blockDetail[row[0]].blocks.length>0){
+    edcrDetails.blockDetail[row[0]].blocks.splice(rowIndex.rowIndex,1)
+  }
+  dispatch(prepareFinalObject("edcr", edcrDetails));
+  addBuildingAbstractValue(state, dispatch, type);
+  closeAddBuildinfDetailsPopUp();
+};
 
 const checkFloorSequence = (arr) => {
   const differenceAry = arr.slice(1).map(function (n, i) {
@@ -135,8 +197,6 @@ const addBuildingAbstractValue = () => {
     for (let edcrdtls of edcrDetails.blockDetail) {
       if(edcrdtls.blocks && edcrdtls.blocks.length> 0){
         for (let blocks of edcrdtls.blocks) {
-          console.log("blocks", blocks);
-          console.log("calculateObj", calculateObj);
           calculateObj.buildUpArea += parseInt(blocks["Buildup Area"]);
           calculateObj.carpetArea += parseInt(blocks["Carpet Area"]);
           calculateObj.floorArea += parseInt(blocks["Floor Area"]);
@@ -221,6 +281,9 @@ const addBuildingDetails = async (state, dispatch, type) => {
       "Floor Area": blockDetail.carpetArea,
       "Carpet Area": blockDetail.floorArea,
       "Floor Height": blockDetail.floorHeight,
+      // "Id": uuid(),
+      "Block": currentIndex
+      
     };
     if (edcrDetails.blockDetail.length > 0) {
       edcrDetails.blockDetail.forEach((element, index) => {
@@ -245,11 +308,6 @@ const addBuildingDetails = async (state, dispatch, type) => {
     }
     dispatch(prepareFinalObject("edcr", edcrDetails));
     addBuildingAbstractValue(state, dispatch, type);
-    // update abstractbuilding details
-    //  Total floor-area, total carper-area, total floor,total-FAR, total buildup area
-    
-    
-
     closeAddBuildinfDetailsPopUp();
   }
 };
@@ -433,6 +491,54 @@ export const addBuildingPlanDialogFooter = getCommonContainer(
         callBack: addBuildingDetails,
       },
       visible: true,
+    },
+    EditPreApprovedPlan: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+        style: {
+          minWidth: "200px",
+          height: "48px",
+          marginRight: "45px",
+          marginTop: "20px"
+        },
+      },
+      children: {
+        submitButtonLabel: getLabel({
+          labelName: "EDIT BUILDING DETAILS",
+          labelKey: "PREAPPROVE_EDIT_BUILDING_DETAILS",
+        }),
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: editBuildingDetails,
+      },
+      visible: false,
+    },
+    deletePreApprovedPlan: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+        style: {
+          minWidth: "200px",
+          height: "48px",
+          marginRight: "45px",
+          marginTop: "20px"
+        },
+      },
+      children: {
+        submitButtonLabel: getLabel({
+          labelName: "DELETE BUILDING DETAILS",
+          labelKey: "PREAPPROVE_DELETE_BUILDING_DETAILS",
+        }),
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: deleteBuildingDetails,
+      },
+      visible: false,
     },
   },
   { style: { display: "flex", justifyContent: "end" } }

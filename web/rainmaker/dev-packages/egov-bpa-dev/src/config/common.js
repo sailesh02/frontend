@@ -13,7 +13,7 @@ export const CONSTANTS = {
   features: {
     isPreApprovedCitizenActive: false,
     isRevisionActive: false,
-    isPreApprovedEmployeeActive: false
+    isPreApprovedEmployeeActive: true
   },
 };
 

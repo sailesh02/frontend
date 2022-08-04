@@ -4,6 +4,7 @@ import { httpRequest } from "../../../../../ui-utils/api";
 import React from "react";
 import get from "lodash/get";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import store from "ui-redux/store";
@@ -27,7 +28,7 @@ const colData = (colArrayData, tableMeta) => {
             onClick={() => onDownloadClick(tableMeta.rowData, fileStoreId)}
           >
             <span style={{ wordSpacing: "5px" }}>
-              {documentType[index]}
+              {item.additionalDetails.title}
               {"    "}
             </span>
           </a>
@@ -93,6 +94,17 @@ const handleStatusUpdate = async(e,updateValue,status,drawingNo) => {
   
 }
 
+const onApplicationRowClick = (value,tableData) => {
+  const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
+  const origin = process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+  store.dispatch(
+    setRoute(
+      `/egov-bpa/preapprove-search-preview?drawingNo=${value}`
+    )
+  );
+  //window.location.assign(`${origin}${environment}/egov-bpa/preapprove-search-preview?drawingNo=${value}`);
+}
+
 // Configure pre approved plan MUI table.
 // Using Switch from material ui to show toogle button
 export const listOfPreAprrovedPlan = {
@@ -117,7 +129,12 @@ export const listOfPreAprrovedPlan = {
                   />
                 }
                 onChange={(event) => {
-                  handleStatusUpdate(event,updateValue,tableMeta.rowData[0].active,tableMeta.rowData[0].drawingNo);
+                  handleStatusUpdate(
+                    event,
+                    updateValue,
+                    tableMeta.rowData[0].active,
+                    tableMeta.rowData[0].drawingNo
+                  );
                   updateValue(event.target.value === "Yes" ? false : true);
                 }}
               />
@@ -125,12 +142,31 @@ export const listOfPreAprrovedPlan = {
           },
         },
       },
-      { labelName: "Building Plan No.", labelKey: "PREAPPROVE_BUILDING_PLAN" },
+      {
+        labelName: "Building Plan No.",
+        labelKey: "PREAPPROVE_BUILDING_PLAN",
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta) => (
+            <a href="javascript:void(0)" onClick={() => onApplicationRowClick(tableMeta.rowData[1])}>{value}</a>
+        )
+        },
+      },
       // {
       //   labelName: "Plot size.",
       //   labelKey: "PREAPPROVE_PLOT_SIZE",
       // },
-      { labelName: "Abutting road", labelKey: "PREAPPROVE_ABUTTING_ROAD_COLUMN" },
+      {
+        labelName: "Tenat Id",
+        labelKey: "PREAPPROVE_TENANT_ID",
+        options: {
+          display: false
+        }
+      },
+      {
+        labelName: "Abutting road",
+        labelKey: "PREAPPROVE_ABUTTING_ROAD_COLUMN",
+      },
       { labelName: "Plot area", labelKey: "PREAPPROVE_PLOT_AREA_COLUMN" },
       { labelName: "Build-up area", labelKey: "PREAPPROVE_BUILD_UP_AREA" },
       { labelName: "No. of floors", labelKey: "PREAPPROVE_FLOORS" },
@@ -160,6 +196,9 @@ export const listOfPreAprrovedPlan = {
       selectableRows: false,
       hover: false,
       rowsPerPageOptions: [10, 15, 20],
+      // onRowClick: (row, index) => {
+      //   onApplicationRowClick(row);
+      // },
     },
     customSortColumn: {},
   },

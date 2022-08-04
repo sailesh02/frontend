@@ -747,34 +747,7 @@ const screenConfig = {
       getDrawingDetails(state, dispatch);
     }
     setPreApprovedProposedBuildingData(state, dispatch);
-    // if (applicationNumber && isEdit) {
-    //   setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
-    // } else {
-    //   let bService ="BPA1";
-    //   const drawingAppNo = getQueryArg(window.location.href, "drawingAppNo");
-    //   if (drawingAppNo) {
-    //     dispatch(prepareFinalObject("preApprovedPlan.drawingAppNo", drawingAppNo));
-    //     getDrawingDetails(state,dispatch)
-    //     getScrutinyDetails(state, dispatch);
-    //     const bServiceTemp = get(
-    //       state.screenConfiguration.preparedFinalObject,
-    //       "scrutinyDetails.planDetail.planInformation.businessService"
-    //     )
-    //     if(bServiceTemp){
-    //       bService = bServiceTemp;
-    //     }
-
-    //   }
-
-    //   setPreApprovedProposedBuildingData(state, dispatch);
-    //   getTodaysDate(action, state, dispatch);
-    //   const queryObject = [
-    //     { key: "tenantId", value: tenantId },
-    //     { key: "businessServices", value: bService }
-    //   ];
-    //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    // }
-
+    
     setMohallaIfNotSet(state, dispatch, action, appCity);
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then((response) => {

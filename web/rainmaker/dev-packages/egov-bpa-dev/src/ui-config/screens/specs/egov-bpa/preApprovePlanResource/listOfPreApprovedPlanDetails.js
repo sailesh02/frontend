@@ -152,10 +152,6 @@ export const listOfPreAprrovedPlan = {
         )
         },
       },
-      // {
-      //   labelName: "Plot size.",
-      //   labelKey: "PREAPPROVE_PLOT_SIZE",
-      // },
       {
         labelName: "Tenat Id",
         labelKey: "PREAPPROVE_TENANT_ID",
@@ -163,15 +159,15 @@ export const listOfPreAprrovedPlan = {
           display: false
         }
       },
+      { labelName: "Length", labelKey: "PREAPPROVE_LENGTH" },
+      { labelName: "Width", labelKey: "PREAPPROVE_WIDTH" },
       {
         labelName: "Abutting road",
         labelKey: "PREAPPROVE_ABUTTING_ROAD_COLUMN",
       },
       { labelName: "Plot area", labelKey: "PREAPPROVE_PLOT_AREA_COLUMN" },
       { labelName: "Build-up area", labelKey: "PREAPPROVE_BUILD_UP_AREA" },
-      { labelName: "No. of floors", labelKey: "PREAPPROVE_FLOORS" },
-      { labelName: "Length", labelKey: "PREAPPROVE_LENGTH" },
-      { labelName: "Width", labelKey: "PREAPPROVE_WIDTH" },
+      { labelName: "No. of floors", labelKey: "PREAPPROVE_FLOORS" },      
       { labelName: "Total FAR", labelKey: "PREAPPROVE_FAR" },
       {
         labelName: "BPA_COMMON_TABLE_COL_ACTION_LABEL",

@@ -9,6 +9,7 @@ import store from "ui-redux/store";
 import { v4 as uuid } from 'uuid';
 import get from "lodash/get";
 import { validateFields } from "egov-ui-framework/ui-utils/commons";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import {
   prepareFinalObject,
@@ -70,10 +71,67 @@ const editBuildingDetails = (state, dispatch, type) => {
     "Block": row[0]
     
   };
-  if(edcrDetails && edcrDetails.blockDetail && edcrDetails.blockDetail[row[0]].blocks && edcrDetails.blockDetail[row[0]].blocks.length>0){
-    edcrDetails.blockDetail[row[0]].blocks.splice(rowIndex.rowIndex,1)
+  let basementAvailable = edcrDetails.blockDetail[
+    row[0]
+  ].blocks.filter((item) => item["Floor Description"] == "Basement");
+  let isFloorDEscriptionAvailable = edcrDetails.blockDetail[
+    row[0]
+  ].blocks.find((item) => item["Level"] == newFloorDetails["Level"]);
+  // Basement floor description validation
+  if (
+    basementAvailable &&
+    basementAvailable.length > 0 &&
+    newFloorDetails["Floor Description"] == "Basement"
+  ) {
+    newFloorDetails["Level"] = -basementAvailable.length - 1;
   }
-  edcrDetails.blockDetail[row[0]].blocks.push({...newFloorDetails})
+  if (
+    isFloorDEscriptionAvailable &&
+    newFloorDetails["Floor Description"] != "Basement"
+  ) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Same Floor Description is available",
+          labelKey: "PREAPPROVE_SAME_DESCRIPTION_MESSAGE",
+        },
+        "warning"
+      )
+    );
+    closeAddBuildinfDetailsPopUp();
+    return false;
+  } else {
+    // Duplicate validation
+    let previousLevelAvlbl;
+    if (
+      newFloorDetails["Floor Description"] != "Basement" &&
+      newFloorDetails["Floor Description"] != "Ground"
+    ) {
+      previousLevelAvlbl = edcrDetails.blockDetail[row[0]].blocks.some(
+        (item) => item["Level"] == parseInt(newFloorDetails["Level"]) - 1
+      );
+      if (!previousLevelAvlbl) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName:
+                "Please select floor description in sequence e.g Ground,First,Second....",
+              labelKey: "PREAPPROVE_DESCRIPTION_SEQUENCE_MESSAGE",
+            },
+            "warning"
+          )
+        );
+        closeAddBuildinfDetailsPopUp();
+        return false;
+      }
+    }
+    if(edcrDetails && edcrDetails.blockDetail && edcrDetails.blockDetail[row[0]].blocks && edcrDetails.blockDetail[row[0]].blocks.length>0){
+      edcrDetails.blockDetail[row[0]].blocks.splice(rowIndex.rowIndex,1)
+    }
+    edcrDetails.blockDetail[row[0]].blocks.push({...newFloorDetails})
+  }  
   dispatch(prepareFinalObject("edcr", edcrDetails));
   addBuildingAbstractValue(state, dispatch, type);
   closeAddBuildinfDetailsPopUp();
@@ -96,8 +154,28 @@ const deleteBuildingDetails = (state, dispatch, type) => {
     state.screenConfiguration.preparedFinalObject,
     "row.index"
   );
+  let basementAvailable = edcrDetails.blockDetail[
+    row[0]
+  ].blocks.filter((item) => item["Floor Description"] == "Basement");
+  
+  
   if(edcrDetails && edcrDetails.blockDetail && edcrDetails.blockDetail[row[0]].blocks && edcrDetails.blockDetail[row[0]].blocks.length>0){
     edcrDetails.blockDetail[row[0]].blocks.splice(rowIndex.rowIndex,1)
+  }
+  // Basement floor description validation
+  if (
+    basementAvailable &&
+    basementAvailable.length > 0 &&
+    row[1] == "Basement"
+  ) {
+    // Todo list
+    let level = 0
+    for(let i =0;i<edcrDetails.blockDetail[row[0]].blocks.length;i++){
+      if(edcrDetails.blockDetail[row[0]].blocks[i]["Floor Description"] == "Basement"){
+        level -= 1;
+        edcrDetails.blockDetail[row[0]].blocks[i]["Level"] = level
+      }
+    }
   }
   dispatch(prepareFinalObject("edcr", edcrDetails));
   addBuildingAbstractValue(state, dispatch, type);
@@ -130,7 +208,7 @@ const closeAddBuildinfDetailsPopUp = () => {
       "preapprovedplan",
       "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.buildUpArea",
       "props.value",
-      ""
+      " "
     )
   );
   store.dispatch(
@@ -138,7 +216,7 @@ const closeAddBuildinfDetailsPopUp = () => {
       "preapprovedplan",
       "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.carpetArea",
       "props.value",
-      ""
+      " "
     )
   );
   store.dispatch(
@@ -146,7 +224,7 @@ const closeAddBuildinfDetailsPopUp = () => {
       "preapprovedplan",
       "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.floorArea",
       "props.value",
-      ""
+      " "
     )
   );
   store.dispatch(
@@ -154,7 +232,7 @@ const closeAddBuildinfDetailsPopUp = () => {
       "preapprovedplan",
       "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.floorDescription",
       "props.value",
-      ""
+      " "
     )
   );
   store.dispatch(
@@ -162,17 +240,17 @@ const closeAddBuildinfDetailsPopUp = () => {
       "preapprovedplan",
       "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.level",
       "props.value",
-      ""
+      " "
     )
   );
-  // store.dispatch(
-  //   handleField(
-  //     "preapprovedplan",
-  //     "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.subOccupancyType",
-  //     "props.value",
-  //     ""
-  //   )
-  // );
+  store.dispatch(
+    handleField(
+      "preapprovedplan",
+      "components.popupForScrutinyDetail.children.dialogContent.children.popup.children.addPreApprovePlan.children.cardContent.children.buildingAbstractContainer.children.floorHeight",
+      "props.value",
+      " "
+    )
+  );
 };
 
 // Add buidlingabstract values
@@ -197,22 +275,22 @@ const addBuildingAbstractValue = () => {
     for (let edcrdtls of edcrDetails.blockDetail) {
       if(edcrdtls.blocks && edcrdtls.blocks.length> 0){
         for (let blocks of edcrdtls.blocks) {
-          calculateObj.buildUpArea += parseInt(blocks["Buildup Area"]);
-          calculateObj.carpetArea += parseInt(blocks["Carpet Area"]);
-          calculateObj.floorArea += parseInt(blocks["Floor Area"]);
+          calculateObj.buildUpArea += parseFloat(blocks["Buildup Area"]);
+          calculateObj.carpetArea += parseFloat(blocks["Carpet Area"]);
+          calculateObj.floorArea += parseFloat(blocks["Floor Area"]);
           calculateObj.totalFloor += 1;
         }
       }
       
     }
-    calculateObj.totalFar = parseInt(calculateObj.floorArea) / parseInt(plotDetails.plotAreaInSqrMt)
+    calculateObj.totalFar = parseFloat(calculateObj.floorArea) / parseFloat(plotDetails.plotAreaInSqrMt)
     //calculateObj.totalFar = //calculateObj.floorArea / totalPlotArea;
     store.dispatch(
       handleField(
         "preapprovedplan",
         "components.div.children.showPreApprovedTab.children.showSearchScreens.props.tabs[1].tabContent.addPreApprovedPlanDetails.children.buildingAbstract.children.cardContent.children.buildingAbstractContainer.children.totalBuildUpArea",
         "props.value",
-        calculateObj.buildUpArea
+        calculateObj.buildUpArea.toFixed(2)
       )
     );
     store.dispatch(
@@ -220,7 +298,7 @@ const addBuildingAbstractValue = () => {
         "preapprovedplan",
         "components.div.children.showPreApprovedTab.children.showSearchScreens.props.tabs[1].tabContent.addPreApprovedPlanDetails.children.buildingAbstract.children.cardContent.children.buildingAbstractContainer.children.totalCarpetArea",
         "props.value",
-        calculateObj.carpetArea
+        calculateObj.carpetArea.toFixed(2)
       )
     );
     store.dispatch(
@@ -228,7 +306,7 @@ const addBuildingAbstractValue = () => {
         "preapprovedplan",
         "components.div.children.showPreApprovedTab.children.showSearchScreens.props.tabs[1].tabContent.addPreApprovedPlanDetails.children.buildingAbstract.children.cardContent.children.buildingAbstractContainer.children.totalFar",
         "props.value",
-        calculateObj.totalFar
+        calculateObj.totalFar.toFixed(2)
       )
     );
     store.dispatch(
@@ -236,7 +314,7 @@ const addBuildingAbstractValue = () => {
         "preapprovedplan",
         "components.div.children.showPreApprovedTab.children.showSearchScreens.props.tabs[1].tabContent.addPreApprovedPlanDetails.children.buildingAbstract.children.cardContent.children.buildingAbstractContainer.children.totalFloorArea",
         "props.value",
-        calculateObj.floorArea
+        calculateObj.floorArea.toFixed(2)
       )
     );
     store.dispatch(
@@ -288,21 +366,105 @@ const addBuildingDetails = async (state, dispatch, type) => {
     if (edcrDetails.blockDetail.length > 0) {
       edcrDetails.blockDetail.forEach((element, index) => {
         if (currentIndex === index.toString()) {
-            const newObj = {
-              blocks: [],
-              suboccupancyData: { label: "", value: "" },
-              titleData: "",
-              floorNo: "",
-            };
-            newObj.blocks.push(newFloorDetails);
-            newObj.titleData = `Block ${parseInt(currentIndex) + 1}`;
-            newObj.floorNo = newFloorDetails.Level;
-            if (edcrDetails.blockDetail[currentIndex].hasOwnProperty("blocks")) {
-                edcrDetails.blockDetail[currentIndex].blocks.push(newFloorDetails);
-              } else {
-              edcrDetails.blockDetail[currentIndex].blocks = newObj.blocks;
+          const newObj = {
+            blocks: [],
+            suboccupancyData: { label: "", value: "" },
+            titleData: "",
+            floorNo: "",
+          };
+          newObj.blocks.push(newFloorDetails);
+          newObj.titleData = `Block ${parseInt(currentIndex) + 1}`;
+          newObj.floorNo = newFloorDetails.Level;
+          // Duplicate validation
+          let previousLevelAvlbl;
+          if (
+            newFloorDetails["Floor Description"] != "Basement" &&
+            newFloorDetails["Floor Description"] != "Ground"
+          ) {
+            if(!edcrDetails.blockDetail[currentIndex].hasOwnProperty("blocks")){
+              if(parseInt(newFloorDetails["Level"]) - 1 >= 0){
+                dispatch(
+                  toggleSnackbar(
+                    true,
+                    {
+                      labelName:
+                        "Please select floor description in sequence e.g Ground,First,Second....",
+                      labelKey: "PREAPPROVE_DESCRIPTION_SEQUENCE_MESSAGE",
+                    },
+                    "warning"
+                  )
+                );
+                closeAddBuildinfDetailsPopUp();
+                return false;
+              }
+            } else {
+              previousLevelAvlbl = edcrDetails.blockDetail[
+                currentIndex
+              ].blocks.some(
+                (item) =>
+                  item["Level"] == parseInt(newFloorDetails["Level"]) - 1
+              );
+              if (!previousLevelAvlbl) {
+                dispatch(
+                  toggleSnackbar(
+                    true,
+                    {
+                      labelName:
+                        "Please select floor description in sequence e.g Ground,First,Second....",
+                      labelKey: "PREAPPROVE_DESCRIPTION_SEQUENCE_MESSAGE",
+                    },
+                    "warning"
+                  )
+                );
+                closeAddBuildinfDetailsPopUp();
+                return false;
+              }
             }
-            edcrDetails.blockDetail[currentIndex].titleData = newObj.titleData;
+            
+          }
+          if (edcrDetails.blockDetail[currentIndex].hasOwnProperty("blocks")) {
+            let basementAvailable = edcrDetails.blockDetail[
+              currentIndex
+            ].blocks.filter((item) => item["Floor Description"] == "Basement");
+            let isFloorDEscriptionAvailable = edcrDetails.blockDetail[
+              currentIndex
+            ].blocks.find((item) => item["Level"] == newFloorDetails["Level"]);
+            
+
+            // Basement floor description validation
+            if (
+              basementAvailable &&
+              basementAvailable.length > 0 &&
+              newFloorDetails["Floor Description"] == "Basement"
+            ) {
+              newFloorDetails["Level"] = -basementAvailable.length - 1;
+            }
+            // Floor description validation except basement
+            if (
+              isFloorDEscriptionAvailable &&
+              newFloorDetails["Floor Description"] != "Basement"
+            ) {
+              dispatch(
+                toggleSnackbar(
+                  true,
+                  {
+                    labelName: "Same Floor Description is available",
+                    labelKey: "PREAPPROVE_SAME_DESCRIPTION_MESSAGE",
+                  },
+                  "warning"
+                )
+              );
+              closeAddBuildinfDetailsPopUp();
+              return false;
+            } else {
+              edcrDetails.blockDetail[currentIndex].blocks.push(
+                newFloorDetails
+              );
+            }
+          } else {
+            edcrDetails.blockDetail[currentIndex].blocks = newObj.blocks;
+          }
+          edcrDetails.blockDetail[currentIndex].titleData = newObj.titleData;
         }
       });
     }
@@ -378,7 +540,7 @@ export const addPreApprovePlan = getCommonCard(
           labelName: "Build up Area",
           labelKey: "PREAPPROVE_BUILT_UP_AREA",
         },
-        pattern: "^[0-9]*$",
+        pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "blockDetail.buildUpArea",
         required: true,
@@ -393,7 +555,7 @@ export const addPreApprovePlan = getCommonCard(
           labelName: "Floor Area",
           labelKey: "PREAPPROVE__FLOOR_AREA",
         },
-        pattern: "^[0-9]*$",
+        pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         jsonPath: "blockDetail.floorArea",
         required: true,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
@@ -408,7 +570,7 @@ export const addPreApprovePlan = getCommonCard(
           labelName: "Carpet Area",
           labelKey: "PREAPPROVE_CARPET_AREA",
         },
-        pattern: "^[0-9]*$",
+        pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         required: true,
         jsonPath: "blockDetail.carpetArea",
@@ -423,7 +585,7 @@ export const addPreApprovePlan = getCommonCard(
           labelName: "Floor Height",
           labelKey: "PREAPPROVE_FLOOR_HEIGHT",
         },
-        pattern: "^[0-9]*$",
+        pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         required: true,
         jsonPath: "blockDetail.floorHeight",

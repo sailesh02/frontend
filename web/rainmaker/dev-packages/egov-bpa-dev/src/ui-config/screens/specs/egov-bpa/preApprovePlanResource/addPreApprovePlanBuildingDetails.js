@@ -197,15 +197,15 @@ const addBuildingAbstractValue = () => {
     for (let edcrdtls of edcrDetails.blockDetail) {
       if(edcrdtls.blocks && edcrdtls.blocks.length> 0){
         for (let blocks of edcrdtls.blocks) {
-          calculateObj.buildUpArea += parseInt(blocks["Buildup Area"]);
-          calculateObj.carpetArea += parseInt(blocks["Carpet Area"]);
-          calculateObj.floorArea += parseInt(blocks["Floor Area"]);
+          calculateObj.buildUpArea += parseFloat(blocks["Buildup Area"]).toFixed(2);
+          calculateObj.carpetArea += parseFloat(blocks["Carpet Area"]).toFixed(2);
+          calculateObj.floorArea += parseFloat(blocks["Floor Area"]).toFixed(2);
           calculateObj.totalFloor += 1;
         }
       }
       
     }
-    calculateObj.totalFar = parseInt(calculateObj.floorArea) / parseInt(plotDetails.plotAreaInSqrMt)
+    calculateObj.totalFar = parseFloat(calculateObj.floorArea).toFixed(2) / parseFloat(plotDetails.plotAreaInSqrMt).toFixed(2)
     //calculateObj.totalFar = //calculateObj.floorArea / totalPlotArea;
     store.dispatch(
       handleField(
@@ -378,7 +378,7 @@ export const addPreApprovePlan = getCommonCard(
           labelName: "Build up Area",
           labelKey: "PREAPPROVE_BUILT_UP_AREA",
         },
-        pattern: "^[0-9]*$",
+        pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "blockDetail.buildUpArea",
         required: true,
@@ -393,7 +393,7 @@ export const addPreApprovePlan = getCommonCard(
           labelName: "Floor Area",
           labelKey: "PREAPPROVE__FLOOR_AREA",
         },
-        pattern: "^[0-9]*$",
+        pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         jsonPath: "blockDetail.floorArea",
         required: true,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
@@ -408,7 +408,7 @@ export const addPreApprovePlan = getCommonCard(
           labelName: "Carpet Area",
           labelKey: "PREAPPROVE_CARPET_AREA",
         },
-        pattern: "^[0-9]*$",
+        pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         required: true,
         jsonPath: "blockDetail.carpetArea",
@@ -423,7 +423,7 @@ export const addPreApprovePlan = getCommonCard(
           labelName: "Floor Height",
           labelKey: "PREAPPROVE_FLOOR_HEIGHT",
         },
-        pattern: "^[0-9]*$",
+        pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         required: true,
         jsonPath: "blockDetail.floorHeight",

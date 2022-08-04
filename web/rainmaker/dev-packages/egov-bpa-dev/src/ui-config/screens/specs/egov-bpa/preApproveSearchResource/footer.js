@@ -21,7 +21,7 @@ const getCommonApplyFooter = (children) => {
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("CITIZEN")
     ? "/bpastakeholder-citizen/home"
-    : "/inbox";
+    : "/egov-bpa/preapprovedplan";
   return redirectionURL;
 };
 export const gotoHomeFooter = getCommonApplyFooter({
@@ -39,8 +39,8 @@ export const gotoHomeFooter = getCommonApplyFooter({
     children: {
       //downloadReceiptButtonLabel: getLabel
       goToHomeButtonLabel: getLabel({
-        labelName: "GO TO HOME",
-        labelKey: "BPA_HOME_BUTTON",
+        labelName: "Back to Pre-approved",
+        labelKey: "PREAPPROVE_BACK_TO_PREAPPROVE",
       }),
     },
     // Check this onClickDefinition later again

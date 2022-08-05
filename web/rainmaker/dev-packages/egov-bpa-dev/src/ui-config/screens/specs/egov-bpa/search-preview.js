@@ -649,6 +649,12 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
             },
             {
               name: "NocTypeMapping"
+            },
+            {
+              name: "OccupancyType"
+            },
+            {
+              name: "SubOccupancyType"
             }
           ]
         },
@@ -2093,16 +2099,16 @@ const screenConfig = {
         edcrHistory: getEdcrHistory,
           
         }),
-        triggerNocContainer :{
-          uiFramework: "custom-containers-local",
-          componentPath: "TriggerNOCContainer",
-          moduleName: "egov-bpa",
-          visible: true,
-          props: {
-            open:false,
-            nocType:''
-          }
-        },
+        // triggerNocContainer :{
+        //   uiFramework: "custom-containers-local",
+        //   componentPath: "TriggerNOCContainer",
+        //   moduleName: "egov-bpa",
+        //   visible: true,
+        //   props: {
+        //     open:false,
+        //     nocType:''
+        //   }
+        // },
         pdfSigningPopup : {
           uiFramework: 'custom-containers-local',
           componentPath: 'SignPdfContainer',

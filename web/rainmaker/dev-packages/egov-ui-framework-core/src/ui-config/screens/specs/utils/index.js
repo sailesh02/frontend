@@ -597,7 +597,9 @@ export const getPattern = type => {
     case "consumerNo":
       return /^[a-zA-Z0-9/-]*$/i;
     case "mutationCharge":
-      return /^([0-9][0-9]{0,49})(\.\d{1,2})?$/  
+      return /^([0-9][0-9]{0,49})(\.\d{1,2})?$/;
+    case "fractionalNumber":
+      return /^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$/    
   }
 };
 

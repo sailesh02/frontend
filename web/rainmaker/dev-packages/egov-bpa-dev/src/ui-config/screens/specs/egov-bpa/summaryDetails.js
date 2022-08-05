@@ -9,7 +9,7 @@ import { applicantSummary, institutionSummary } from "./summaryResource/applican
 import { applyDocSummary } from "./summaryResource/applyDocSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocDetailsApplyBPA } from "./noc";
-
+import { notSujogPermitRevisionSummary} from "../egov-bpa/applyResource/revisionDetail"
 export const bpaSummaryDetails = getCommonCard({
   header: getCommonTitle({
     labelName: "Please review your Application and Submit",
@@ -20,6 +20,7 @@ export const bpaSummaryDetails = getCommonCard({
   scrutinySummary: scrutinySummary,
   applicantSummary: applicantSummary,
   institutionSummary: institutionSummary,
+  notSujogPermitRevisionSummary: notSujogPermitRevisionSummary,
   applyDocSummary: applyDocSummary,
   nocDetailsApply: nocDetailsApplyBPA
 });

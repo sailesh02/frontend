@@ -1,6 +1,6 @@
 import axios from "axios";
 import commonConfig from "config/common.js";
-import { getCommonCaption, getCommonCard, getCommonSubHeader, getLabel, getPattern, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonCaption, getCommonCard, getCommonSubHeader, getLabel, getPattern, getTextField, dispatchMultipleFieldChangeAction } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
@@ -32,7 +32,7 @@ import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import store from "ui-redux/store";
 //import { setRevisionAppCard } from "../egov-bpa/apply";
 
-export const setRevisionAppCard = (scrutinyDetails, dispatch) => {
+export const setRevisionAppCard = async (scrutinyDetails, dispatch) => {
   console.log(scrutinyDetails, "Nero edcr state")
   const planInformation = scrutinyDetails && scrutinyDetails.planDetail && scrutinyDetails.planDetail.planInformation;
   console.log(scrutinyDetails, planInformation, "Nero Plan Information")
@@ -46,6 +46,84 @@ export const setRevisionAppCard = (scrutinyDetails, dispatch) => {
           false
         )
       );
+    }else{
+      let appNo = getQueryArg(window.location.href, "applicationNumber");
+      if (appNo) {
+
+        try {
+          const response = await httpRequest(
+            "post",
+            "/bpa-services/v1/revision/_search",
+            "",
+            [],
+            {revisionSearchCriteria: {
+              bpaApplicationNo: appNo
+            }
+              
+            }
+          );
+          console.log(response, "Nero Revision")
+          if(response && response.revision && response.revision.length > 0){
+          dispatch(prepareFinalObject("revision", response.revision[0]));
+          
+          
+      
+          if(!response.revision[0].isSujogExistingApplication){
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.getRevisionDetails",
+                "visible",
+                false
+              )
+            );
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.revisionInfoFormCard",
+                "visible",
+                true
+              )
+            );
+            dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.revisionDocumentUploadCard', "visible", true));
+            let isShelterFeeRequired = response.revision[0].SHELTER_FEE;
+            let isSecDepositRequired = response.revision[0].SECURITY_DEPOSIT;
+            let isRetenFeeRequired = response.revision[0].isRetentionFeeApplicable;    
+            const defaultValues = [
+
+              {
+                path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revisionShelterFee",
+                property: "props.value",
+                value: isShelterFeeRequired? "YES" : "NO"
+              },
+              {
+                path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revisionSecurityDeposit",
+                property: "props.value",
+                value: isSecDepositRequired? "YES": "NO"
+              },
+              {
+                path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revIsRetentionFeeApplicable",
+                property: "props.value",
+                value: isRetenFeeRequired? "YES": "NO"
+              },
+              // {
+              //   path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revPVFE",
+              //   property: "props.value",
+              //   value: "0"
+              // }
+            
+            ]
+              dispatchMultipleFieldChangeAction("apply", defaultValues, dispatch);
+
+          }
+        }
+      }catch(error){
+        console.log(error, "Error")
+      }
+
+        
+      }
+
     }
   } else {
     dispatch(

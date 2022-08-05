@@ -252,11 +252,11 @@ const buildingInfoCard = getCommonCard({
       isRevisionApplication: getSelectField({
         label: {
           labelName: "Service type",
-          labelKey: "BPA_IS_REVISION_APPLICATION"
+          labelKey: "I have building Permission with No Construction started at site and want to apply for change in permit"
         },
         placeholder: {
           labelName: "Select Service Type",
-          labelKey: "BPA_IS_REVISION_APPLICATION"
+          labelKey: "Select"
         },
         visible: CONSTANTS.features.isRevisionActive ? true : false,
         props:{
@@ -271,7 +271,7 @@ const buildingInfoCard = getCommonCard({
         //sourceJsonPath: "applyScreenMdmsData.BPA.ServiceType",
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 12
         }
       }),
       dummyDiv3: {

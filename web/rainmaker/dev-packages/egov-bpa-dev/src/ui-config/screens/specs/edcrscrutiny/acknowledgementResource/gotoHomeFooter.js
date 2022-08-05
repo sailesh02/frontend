@@ -232,7 +232,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
     children: {
       downloadReceiptButtonLabel: getLabel({
         labelName: "SUBMIT",
-        labelKey: "BPA_CREATE_REVISION_APP"
+        labelKey: "EDCR_CREATE_APP_BUTTON"
       })
     },
     visible : false,

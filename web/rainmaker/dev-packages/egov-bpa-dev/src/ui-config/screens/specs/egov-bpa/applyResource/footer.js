@@ -232,7 +232,7 @@ let bpaObj = get(
       let permitExpired = revisionInfo && revisionInfo.permitExpired;
       let isSujogExistingApplication = revisionInfo && revisionInfo.isSujogExistingApplication;
       
-      if (permitExpired != "YES" && !isSujogExistingApplication) {
+      if (revisionInfo && revisionInfo.refPermitNo && permitExpired != "YES" && !isSujogExistingApplication) {
     
         let revisionInfoCardValid = validateFields(
           "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children",
@@ -242,8 +242,8 @@ let bpaObj = get(
         if (!revisionInfoCardValid) {
           let errorMessage = {
             labelName:
-              "Please fill all mandatory fields for Basic Details, then proceed!",
-            labelKey: "Please fill all mandatory fields for Basic Details, then proceed!"
+              "Please fill all mandatory fields for Basic Details, then proceed! ",
+            labelKey: "Please fill all mandatory fields for Basic Details, then proceed! nf"
           };
           dispatch(toggleSnackbar(true, errorMessage, "warning"));
           return false;
@@ -292,7 +292,7 @@ let bpaObj = get(
           return false;
         }
       }
-      if (permitExpired === "YES") {
+      if (revisionInfo && revisionInfo.refPermitNo && permitExpired === "YES") {
         let errorMessage = {
           labelName:
             "Please fill all mandatory fields for Basic Details, then proceed!",
@@ -306,6 +306,7 @@ let bpaObj = get(
         window.location.href,
         "applicationNumber"
       );
+      if (revisionInfo && revisionInfo.refPermitNo){
       if(applicationNumber){
 
       }else{
@@ -336,6 +337,7 @@ let bpaObj = get(
         console.log(error, "Error")
       }
     }
+  }
     }
 /***********************************************************************/
     if (

@@ -31,10 +31,9 @@ export const getDrawingDetails = async (state, dispatch, fieldInfo=false) => {
     };
     const drawingDetails = await httpRequest(
       "post",
-      "/bpa-services/v1/preapprovedplan/_search",
+      `/bpa-services/v1/preapprovedplan/_search?drawingNo=${drawingAppNo}`,
       "_search",
       [],
-      queryObject
     );
     if(drawingDetails && drawingDetails.preapprovedPlan &&
       drawingDetails.preapprovedPlan.length > 0){
@@ -88,7 +87,7 @@ export const getDrawingDetails = async (state, dispatch, fieldInfo=false) => {
             data.drawingDetail.blocks
           )
         );
-
+        
         dispatch(
           prepareFinalObject(
             "scrutinyDetails.planDetail.virtualBuilding.totalBuitUpArea",

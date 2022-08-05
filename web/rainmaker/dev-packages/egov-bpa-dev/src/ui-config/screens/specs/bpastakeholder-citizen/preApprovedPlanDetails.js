@@ -72,10 +72,9 @@ const getPreApproveList = async (state, dispatch) => {
     try {
       const response = await httpRequest(
         "post",
-        "/bpa-services/v1/preapprovedplan/_search",
+        `/bpa-services/v1/preapprovedplan/_search?plotLength=${plotDetails.lengthInFt}&plotWidth=${plotDetails.widthInFt}&${plotDetails.abuttingRoadWidthInMt}`,
         "_search",
         [],
-        queryObject
       );
       const preApprovedPlanList = await response;
       if (preApprovedPlanList) {

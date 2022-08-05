@@ -75,7 +75,7 @@ class BlockContainer extends Component {
                   ></div>
                 ))}
               </div>
-            ): (
+            ) : (
               <div>
                 <h3>No Plots available with these search details</h3>
               </div>
@@ -113,7 +113,7 @@ class BlockContainer extends Component {
                   justifyContent: "flex-start",
                   gap: "5",
                   fontSize: "14px",
-                  marginBottom: "20px"
+                  marginBottom: "20px",
                 }}
               >
                 {this.state.item.documents.map((item, index) => (
@@ -127,10 +127,17 @@ class BlockContainer extends Component {
                       background: "transparent",
                       background: "lightgoldenrodyellow",
                     }}
-                    onClick={() => this.onDownloadClick(item.fileStoreId)}
-                  >{`Documet-${index + 1} : ${
-                    item.additionalDetails.title
-                  }`}</a>
+                    
+                  >
+                    {item.additionalDetails.title !=
+                      "PREAPPROVE_BUILDING_PLAN_FILE" && (
+                      <span onClick={() => this.onDownloadClick(item.fileStoreId)}>
+                        {`Documet-${index + 1} : ${
+                          item.additionalDetails.title
+                        }`}
+                      </span>
+                    )}
+                  </a>
                 ))}
               </div>
             </div>

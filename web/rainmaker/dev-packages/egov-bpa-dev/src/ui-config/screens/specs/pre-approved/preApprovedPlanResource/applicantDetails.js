@@ -48,7 +48,8 @@ const commonApplicantInformation = () => {
         },
         required: true,
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error",
+          disabled:true
         },
         title: {
           value: "Please search profile linked to the mobile no.",
@@ -58,17 +59,17 @@ const commonApplicantInformation = () => {
         pattern: getPattern("MobileNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "BPA.landInfo.owners[0].mobileNumber",
-        iconObj: {
-          iconName: "search",
-          position: "end",
-          color: "#FE7A51",
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch, fieldInfo) => {
-              getBpaDetailsForOwner(state, dispatch, fieldInfo);
-            }
-          }
-        },
+        // iconObj: {
+        //   iconName: "search",
+        //   position: "end",
+        //   color: "#FE7A51",
+        //   onClickDefination: {
+        //     action: "condition",
+        //     callBack: (state, dispatch, fieldInfo) => {
+        //       getBpaDetailsForOwner(state, dispatch, fieldInfo);
+        //     }
+        //   }
+        // },
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -101,7 +102,8 @@ const commonApplicantInformation = () => {
         errorMessage: "Invalid Name",
         jsonPath: "BPA.landInfo.owners[0].name",
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error",
+          disabled:true
         },
         gridDefination: {
           xs: 12,

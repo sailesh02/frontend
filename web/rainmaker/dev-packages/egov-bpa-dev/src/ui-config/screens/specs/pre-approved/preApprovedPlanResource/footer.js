@@ -33,7 +33,7 @@ import {
   compare,
   checkOwnerAndArchitectMobileNo,
   checkIfMobileIsRegistered,
-} from "../../utils/index";
+} from "../../utils/preApprovePlan";
 import {
   toggleSnackbar,
   prepareFinalObject,

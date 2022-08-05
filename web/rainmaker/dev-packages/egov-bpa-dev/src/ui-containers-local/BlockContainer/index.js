@@ -29,7 +29,7 @@ class BlockContainer extends Component {
   // Document ddownload once you click on document link available in table row
   onDownloadClick = async (fileStoreId) => {
     const fileUrls = await getFileUrlFromAPI(fileStoreId);
-    window.location = fileUrls[fileStoreId];
+    window.location = fileUrls[fileStoreId].split(",")[0];
   };
   setValue = (item) => {
     this.setState({ item: item, selected: true });

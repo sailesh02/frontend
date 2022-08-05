@@ -704,12 +704,12 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       setApplicationNumberBox(state, dispatch);
       await edcrDetailsToBpaDetails(state, dispatch);
       if (CONSTANTS.features.isRevisionActive) {
-        let scrutinyDetails = get(state, "scrutinyDetails");
+        let scrutinyDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails");
         console.log(scrutinyDetails, "Nero Scrutiny Details")
         const planInformation = scrutinyDetails && scrutinyDetails.planDetail && scrutinyDetails.planDetail.planInformation;
         if (planInformation && planInformation.hasOwnProperty("isRevisionApplication")) {
           if (planInformation && planInformation.isRevisionApplication) {
-            await createUpdateRevisionInfo(state, dispatch, response.BPA[0])
+            await createRevisionInfo(state, dispatch, response.BPA[0])
           }
         }
       }
@@ -723,6 +723,19 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       );
       // response = prepareOwnershipType(response);
       dispatch(prepareFinalObject("BPA", response.BPA[0]));
+      let appNo = getQueryArg(window.location.href, "applicationNumber")
+      if (payload && payload.status === "INITIATED" && appNo) {
+        if (CONSTANTS.features.isRevisionActive) {
+          let scrutinyDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails");
+          console.log(scrutinyDetails, "Nero Scrutiny Details Update")
+          const planInformation = scrutinyDetails && scrutinyDetails.planDetail && scrutinyDetails.planDetail.planInformation;
+          if (planInformation && planInformation.hasOwnProperty("isRevisionApplication")) {
+            if (planInformation && planInformation.isRevisionApplication) {
+              await updateRevisionInfo(state, dispatch, response.BPA[0])
+            }
+          }
+        }
+      }
     }
     return { status: "success", message: response };
   } catch (error) {
@@ -731,7 +744,110 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   }
 };
 
-export const createUpdateRevisionInfo = async (state, dispatch, BPA) => {
+export const updateRevisionInfo = async (state, dispatch, BPA) => {
+  let documentsUpdalod = get(
+    state,
+    "screenConfiguration.preparedFinalObject.documentsUploadReduxRvsn",
+    []
+  );
+  let payload = get(
+    state,
+    "screenConfiguration.preparedFinalObject.revision",
+    {}
+  );
+  let previousDocs = get(
+    state,
+    "screenConfiguration.preparedFinalObject.revision.documents",
+    {}
+  );
+
+
+  let documnts = [];
+  if (documentsUpdalod) {
+    Object.keys(documentsUpdalod).forEach(function (key) {
+      documnts.push(documentsUpdalod[key])
+    });
+  }
+
+  console.log(documnts, previousDocs, "Nero Docs in Update")
+
+  let requiredDocuments = [];
+  if (documnts && documnts.length > 0) {
+    documnts.forEach(documents => {
+      if (documents && documents.documents) {
+        documents.documents.forEach(docItem => {
+
+          let doc = {};
+          doc.documentType = documents.documentType;
+          doc.fileStoreId = docItem.fileStoreId;
+          doc.fileStore = docItem.fileStoreId;
+          doc.fileName = docItem.fileName;
+          doc.fileUrl = docItem.fileUrl;
+          doc.additionalDetails = {};
+          previousDocs && previousDocs.forEach(bpaDc => {
+            if (bpaDc.documentType === documents.documentType && docItem.fileStoreId) {
+              doc.id = bpaDc.id;
+            }
+          });
+          requiredDocuments.push(doc);
+
+        })
+      }
+    });
+  }
+
+  console.log(requiredDocuments, "Nero Re")
+  let documents;
+  if (requiredDocuments && requiredDocuments.length > 0) {
+    documents = requiredDocuments;
+  } else {
+    documents = null;
+  }
+  payload.documents = documents;
+  payload.bpaApplicationId = BPA && BPA.id;
+  payload.bpaApplicationNo = BPA && BPA.applicationNo;
+  
+  let permitDate = payload && payload.refPermitDate;
+  if ( typeof permitDate === "string" && permitDate.includes("-")) {
+    let permDateArray = permitDate.split("-");
+    var permitDateObject = new Date(permDateArray[0], permDateArray[1] - 1, permDateArray[2]);
+    payload.refPermitDate = permitDateObject.getTime();
+  }
+  payload.refPermitExpiryDate = parseInt(payload.refPermitExpiryDate)
+  console.log(payload, "Nero Payload rvsn update")
+  if(!payload.isSujogExistingApplication){
+    let secDepost = false;
+    let isRetentionFeeApplicable = false;
+    let shelterFee = false;
+    if(payload.refApplicationDetails.SECURITY_DEPOSIT === "YES"){
+      secDepost = true;
+    }
+    if(payload.refApplicationDetails.isRetentionFeeApplicable === "YES"){
+      isRetentionFeeApplicable = true;
+    }
+    if(payload.refApplicationDetails.SHELTER_FEE === "YES"){
+      shelterFee = true;
+    }
+
+    set(payload.refApplicationDetails, "SECURITY_DEPOSIT", secDepost);
+    set(payload.refApplicationDetails, "isRetentionFeeApplicable", isRetentionFeeApplicable);
+    set(payload.refApplicationDetails, "SHELTER_FEE", shelterFee);
+  }
+ let response = await httpRequest(
+    "post",
+    "bpa-services/v1/revision/_update",
+    "",
+    [],
+    { revision: payload }
+  );
+  if(response && response.revision){
+    return true;
+  }else{
+    return false;
+  }
+
+}
+export const createRevisionInfo = async (state, dispatch, BPA) => {
   let documentsUpdalod = get(
     state,
     "screenConfiguration.preparedFinalObject.documentsUploadReduxRvsn",
@@ -792,6 +908,24 @@ export const createUpdateRevisionInfo = async (state, dispatch, BPA) => {
   }
   payload.refPermitExpiryDate = parseInt(payload.refPermitExpiryDate)
   console.log(payload, "Nero Payload rvsn")
+  if(!payload.isSujogExistingApplication){
+    let secDepost = false;
+    let isRetentionFeeApplicable = false;
+    let shelterFee = false;
+    if(payload.refApplicationDetails.SECURITY_DEPOSIT === "YES"){
+      secDepost = true;
+    }
+    if(payload.refApplicationDetails.isRetentionFeeApplicable === "YES"){
+      isRetentionFeeApplicable = true;
+    }
+    if(payload.refApplicationDetails.SHELTER_FEE === "YES"){
+      shelterFee = true;
+    }
+
+    set(payload.refApplicationDetails, "SECURITY_DEPOSIT", secDepost);
+    set(payload.refApplicationDetails, "isRetentionFeeApplicable", isRetentionFeeApplicable);
+    set(payload.refApplicationDetails, "SHELTER_FEE", shelterFee);
+  }
  let response = await httpRequest(
     "post",
     "bpa-services/v1/revision/_create",

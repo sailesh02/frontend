@@ -12,7 +12,8 @@ import {
   getLabelWithValue,
   convertEpochToDate,
   getBreak,
-  getCommonParagraph
+  getCommonParagraph,
+  dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getTodaysDateInYMD, getPermitDetails, checkValueForNA, getSiteInfo } from "../../utils";
 import "./index.css";
@@ -24,16 +25,12 @@ import {
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {getAppSearchResults} from "../../../../../ui-utils/commons"
-
-
-
-import { changeStep } from "../applyResource/footer";
-
+import store from "ui-redux/store";
 export const getRevisionDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Basic Details",
-      labelKey: "BPA_PERMIT_DETAILS_TITLE"
+      labelKey: "BPA_REVISION_OLD_PERMIT_DETAILS_TITLE"
     },
     {
       style: {
@@ -45,11 +42,11 @@ export const getRevisionDetails = getCommonCard({
     permitNumber: getTextField({
       label: {
         labelName: "Building plan scrutiny number",
-        labelKey: "BPA_PERMIT_NO_LABEL"
+        labelKey: "BPA_REVISION_PERMIT_NO_LABEL"
       },
       placeholder: {
         labelName: "Enter Scrutiny Number",
-        labelKey: "BPA_PERMIT_NO_PLACEHOLDER"
+        labelKey: "BPA_REVISION_PERMIT_NO_PLACEHOLDER"
       },
       required: true,
       title: {
@@ -67,16 +64,13 @@ export const getRevisionDetails = getCommonCard({
         onClickDefination: {
           action: "condition",
           callBack: async (state, dispatch, fieldInfo) => {
-            console.log(state, "Nero Field Info")
+            
             let RevisionInfo = get(state.screenConfiguration.preparedFinalObject, "revision");
             let searchedPermitNo = RevisionInfo.refPermitNo;
             let tenantId = getQueryArg(window.location.href, "tenantId")
 
             let response = await getPermitDetails(searchedPermitNo, tenantId);
             if (response) {
-
-              console.log(document.body.scrollHeight, "Nero Height")
-
               if (response && response === "NOPERMIT") {
                 let revision = {}
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg', "visible", true));
@@ -87,8 +81,90 @@ export const getRevisionDetails = getCommonCard({
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.revisionInfoFormCard', "visible", true));
                 revision.isSujogExistingApplication = false;
                 revision.refPermitNo = searchedPermitNo;
-                revision.tenantId = tenantId
+                revision.tenantId = tenantId;
+
+                revision.refApplicationDetails = {
+                  PLOT_AREA: "0",
+                  BASE_FAR: "0",
+                  EWS_AREA: "0",
+                  BMV_ACRE: "0",
+                  PERMISSABLE_FAR: "0",
+                  PROJECT_VALUE_FOR_EIDP: "0",
+                  PROVIDED_FAR: "0",
+                  TDR_FAR_RELAXATION: "0",
+                  TOTAL_BUILTUP_AREA_EDCR: "0",
+                  TOTAL_FLOOR_AREA: "0",
+                  TOTAL_NO_OF_DWELLING_UNITS: "0",
+                  numberOfTemporaryStructures: "0"
+                };
                 revision.permitExpired = "NOT_IN_SUJOG"
+                const defaultValues = [
+
+                  {
+                    path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revBaseFar",
+                    property: "props.value",
+                    value: "0"
+                  },
+                  {
+                    path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revBmvAcre",
+                    property: "props.value",
+                    value: "0"
+                  },
+                  {
+                    path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revEwsArea",
+                    property: "props.value",
+                    value: "0"
+                  },
+                  {
+                    path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revPVFE",
+                    property: "props.value",
+                    value: "0"
+                  },
+                  {
+                    path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revPermFar",
+                    property: "props.value",
+                    value: "0"
+                  },
+                  {
+                    path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revPlotArea",
+                    property: "props.value",
+                    value: "0"
+                  },
+                  {
+                    path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revProvidedFar",
+                    property: "props.value",
+                    value: "0"
+                  },
+                  {
+                    path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revTdrFarRel",
+                    property: "props.value",
+                    value: "0"
+                  },
+                  {
+                    path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revTotalBuiltUpPlotArea",
+                    property: "props.value",
+                    value: "0"
+                  },
+                  {
+                    path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revTotalNoDwellingUnits",
+                    property: "props.value",
+                    value: "0"
+                  },
+                  {
+                    path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revTotalPlotArea",
+                    property: "props.value",
+                    value: "0"
+                  },
+                  {
+                    path: "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revTotalNoDwellingUnits",
+                    property: "props.value",
+                    value: "0"
+                  }
+                  
+                  
+        
+                ];
+                dispatchMultipleFieldChangeAction("apply", defaultValues, dispatch);
                 dispatch(prepareFinalObject("revision", revision));
               } else {
                 let revision = {}
@@ -97,7 +173,6 @@ export const getRevisionDetails = getCommonCard({
                 let approvalDate = new Date(expiryDateObj.getFullYear(), expiryDateObj.getMonth(), expiryDateObj.getDate())
                 let todayDateObj = new Date();
                 todayDateObj.setHours(0, 0, 0, 0);
-                console.log(approvalDate.getTime(), "Nero Approval", todayDateObj.getTime())
                 var Difference_In_Time = todayDateObj.getTime() - approvalDate.getTime();
                 var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg', "visible", true));
@@ -125,14 +200,11 @@ export const getRevisionDetails = getCommonCard({
                   revision.refPermitDate = response && response.approvalDate;
                   revision.refPermitExpiryDate = 3;
                   revision.permitExpired = "NO"
-                  console.log(revision, "Nero Revsiooo")
                   dispatch(prepareFinalObject("revision", revision));
                 }
 
               }
 
-              window.scrollTo(0, document.body.scrollHeight);
-              console.log(response, "Nero response edcc")
             }
           }
         }
@@ -323,7 +395,15 @@ export const revisionDocumentUploadCard = getCommonCard({
     type: "array"
   }
 });
+const getCurrentDate = () => {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
 
+  today = yyyy + '-' + mm + '-' + dd;
+  return today;
+}
 export const prepareRevisionDocumentsUploadData = (state, dispatch) => {
 
   // let documents = get(
@@ -392,7 +472,7 @@ export const revisionInfoFormCard = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Basic Details",
-      labelKey: "BPA_OLD_PERMIT_DETAILS_TITLE"
+      labelKey: "BPA_REVISION_OLD_PERMIT_DETAILS_TITLE"
     },
     {
       style: {
@@ -404,11 +484,11 @@ export const revisionInfoFormCard = getCommonCard({
     permitIssueDate: getDateField({
       label: {
         labelName: "Occupancy",
-        labelKey: "BPA_PERMIT_ISSUE_DATE_LABEL"
+        labelKey: "BPA_REVISION_PERMIT_ISSUE_DATE_LABEL"
       },
       placeholder: {
         labelName: "Risk Type",
-        labelKey: "BPA_PERMIT_ISSUE_DATE_PLACEHOLDER"
+        labelKey: "BPA_REVISION_PERMIT_ISSUE_DATE_LABEL"
       },
       required: true,
       jsonPath: 'revision.refPermitDate',
@@ -419,22 +499,21 @@ export const revisionInfoFormCard = getCommonCard({
       },
       props: {
         
-        className : "tl-trade-type"
+        className : "tl-trade-type",
+        inputProps: {
+      max: getCurrentDate()
+        }
       }
     }),
     
     permitExpirePeriod: getTextField({
       label: {
         labelName: "Risk Type",
-        labelKey: "BPA_PERMIT_EXPIRY_PERIOD_LABEL"
+        labelKey: "BPA_REVISION_PERMIT_EXPIRY_PERIOD_LABEL"
       },
       placeholder: {
         labelName: "Risk Type",
-        labelKey: "BPA_PERMIT_EXPIRY_PERIOD_PLACEHOLDER"
-      },
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "BPA"
+        labelKey: "BPA_REVISION_PERMIT_EXPIRY_PERIOD_LABEL"
       },
       jsonPath: "revision.refPermitExpiryDate",
       required: true,
@@ -448,6 +527,428 @@ export const revisionInfoFormCard = getCommonCard({
         className : "tl-trade-type"
       }
     }),
+    revisionOccupanceType: getSelectField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_OCCUPANCY_TYPE"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_OCCUPANCY_TYPE"
+      },
+      optionValue: "code",
+      optionLabel: "name",
+      jsonPath: "revision.refApplicationDetails.OCCUPANCY_TYPE",
+      sourceJsonPath: "applyScreenMdmsData.BPA.OccupancyType",
+     // data: [{value: true, code: "YES"}, {value: false, code: "NO"}],
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      },
+      afterFieldChange: (action, state, dispatch) => {
+        let subOccupancyType = get(
+      state,
+      `screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType`,
+      []
+  );
+  let filteredSubOcps = subOccupancyType && subOccupancyType.filter((item) => item.occupancyType===action.value)
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children.revisionSubOccupanceType.props",
+            "data",
+            filteredSubOcps
+          )
+        )
+    }
+    }),
+    revisionSubOccupanceType: getSelectField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_SUB_OCCUPANCY_TYPE"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_SUB_OCCUPANCY_TYPE"
+      },
+      optionValue: "code",
+      optionLabel: "name",
+      jsonPath: "revision.refApplicationDetails.SUB_OCCUPANCY_TYPE",
+     // data: [{}],
+      sourceJsonPath: "applyScreenMdmsData.BPA.SubOccupancyType",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    revPlotArea: getTextField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_PLOT_AREA_LABEL"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_PLOT_AREA_LABEL"
+      },
+      jsonPath: "revision.refApplicationDetails.PLOT_AREA",
+      required: true,
+      pattern: getPattern("fractionalNumber"),
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    revTotalPlotArea: getTextField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_TOTAL_FLOOR_AREA_LABEL"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_TOTAL_FLOOR_AREA_LABEL"
+      },
+      jsonPath: "revision.refApplicationDetails.TOTAL_FLOOR_AREA",
+      required: true,
+      pattern: getPattern("fractionalNumber"),
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    revTotalBuiltUpPlotArea: getTextField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_TOTAL_BUILTUP_AREA_EDCR_LABEL"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_TOTAL_BUILTUP_AREA_EDCR_LABEL"
+      },
+      pattern: getPattern("fractionalNumber"),
+      jsonPath: "revision.refApplicationDetails.TOTAL_BUILTUP_AREA_EDCR",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    revEwsArea: getTextField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_EWS_AREA_LABEL"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_EWS_AREA_LABEL"
+      },
+      jsonPath: "revision.refApplicationDetails.EWS_AREA",
+      required: true,
+      pattern: getPattern("fractionalNumber"),
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    revBmvAcre: getTextField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_BMV_ACRE_LABEL"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_BMV_ACRE_LABEL"
+      },
+      pattern: getPattern("fractionalNumber"),
+      jsonPath: "revision.refApplicationDetails.BMV_ACRE",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    revBaseFar: getTextField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_BASE_FAR_LABEL"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_BASE_FAR_LABEL"
+      },
+      pattern: getPattern("fractionalNumber"),
+      jsonPath: "revision.refApplicationDetails.BASE_FAR",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    revProvidedFar: getTextField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_PROVIDED_FAR_LABEL"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_PROVIDED_FAR_LABEL"
+      },
+      pattern: getPattern("fractionalNumber"),
+      jsonPath: "revision.refApplicationDetails.PROVIDED_FAR",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    revPermFar: getTextField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_PERMISSABLE_FAR_LABEL"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_PERMISSABLE_FAR_LABEL"
+      },
+      pattern: getPattern("fractionalNumber"),
+      jsonPath: "revision.refApplicationDetails.PERMISSABLE_FAR",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    revTdrFarRel: getTextField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_TDR_FAR_RELAXATION_LABEL"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_TDR_FAR_RELAXATION_LABEL"
+      },
+      pattern: getPattern("fractionalNumber"),
+      jsonPath: "revision.refApplicationDetails.TDR_FAR_RELAXATION",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    revTotalNoDwellingUnits: getTextField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_TOTAL_NO_OF_DWELLING_UNITS_LABEL"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_TOTAL_NO_OF_DWELLING_UNITS_LABEL"
+      },
+      pattern: getPattern("fractionalNumber"),
+      jsonPath: "revision.refApplicationDetails.TOTAL_NO_OF_DWELLING_UNITS",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    revPVFE: getTextField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_PROJECT_VALUE_FOR_EIDP_LABEL"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_PROJECT_VALUE_FOR_EIDP_LABEL"
+      },
+      pattern: getPattern("fractionalNumber"),
+      jsonPath: "revision.refApplicationDetails.PROJECT_VALUE_FOR_EIDP",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    revNumberOfTemporaryStructures: getTextField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_NO_OF_TEMP_STRUCT_LABEL"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_REVISION_NO_OF_TEMP_STRUCT_LABEL"
+      },
+      jsonPath: "revision.refApplicationDetails.numberOfTemporaryStructures",
+      required: true,
+      pattern: getPattern("fractionalNumber"),
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    revisionShelterFee: getSelectField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_SHELTER_FEE"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_SHELTER_FEE"
+      },
+      jsonPath: "revision.refApplicationDetails.SHELTER_FEE",
+      data: [{value: true, code: "YES"}, {value: false, code: "NO"}],
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+
+    revisionSecurityDeposit: getSelectField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_SECURITY_DEPOSIT"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_SECURITY_DEPOSIT"
+      },
+      jsonPath: "revision.refApplicationDetails.SECURITY_DEPOSIT",
+      data: [{value: true, code: "YES"}, {value: false, code: "NO"}],
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+
+    revIsRetentionFeeApplicable: getSelectField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_RENTAL_FEE_APPLICABLE"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_RENTAL_FEE_APPLICABLE"
+      },
+      jsonPath: "revision.refApplicationDetails.isRetentionFeeApplicable",
+      data: [{value: true, code: "YES"}, {value: false, code: "NO"}],
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+
+    revRiskType: getSelectField({
+      label: {
+        labelName: "Risk Type",
+        labelKey: "BPA_RISK_TYPE"
+      },
+      placeholder: {
+        labelName: "Risk Type",
+        labelKey: "BPA_RISK_TYPE"
+      },
+      jsonPath: "revision.refApplicationDetails.RISK_TYPE",
+      data: [{value: true, code: "LOW"}, {value: false, code: "HIGH"}],
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        
+        className : "tl-trade-type"
+      }
+    }),
+    
   })
   
 });
@@ -484,22 +985,39 @@ const gotoOldApplication = async (state, dispatch) => {
 
       let siteInfo = getSiteInfo();
       if (siteInfo === "citizen") {
-        window.location.href = `/citizen/egov-bpa/search-preview?applicationNumber=${RevisionInfo.refBpaApplicationNo}&tenantId=${tenantId}&type=${type}&bservice=${bService}`;
+        window.open(`/citizen/egov-bpa/search-preview?applicationNumber=${RevisionInfo.refBpaApplicationNo}&tenantId=${tenantId}&type=${type}&bservice=${bService}`, "_blank");
       } else {
-        window.location.href = `/egov-bpa/search-preview?applicationNumber=${RevisionInfo.refBpaApplicationNo}&tenantId=${tenantId}&type=${type}&bservice=${bService}`;
+        window.open(`/egov-bpa/search-preview?applicationNumber=${RevisionInfo.refBpaApplicationNo}&tenantId=${tenantId}&type=${type}&bservice=${bService}`, "_blank");
       }
 
     } else {
       
       let siteInfo = getSiteInfo();
       if (siteInfo === "employee") {
-        window.location.href = `/employee/egov-bpa/apply?applicationNumber=${RevisionInfo.refBpaApplicationNo}&tenantId=${tenantId}`
+        window.open(`/employee/egov-bpa/apply?applicationNumber=${RevisionInfo.refBpaApplicationNo}&tenantId=${tenantId}`, "_blank");
       } else {
-        window.location.href = `/egov-bpa/apply?applicationNumber=${RevisionInfo.refBpaApplicationNo}&tenantId=${tenantId}`
+        window.open(`/egov-bpa/apply?applicationNumber=${RevisionInfo.refBpaApplicationNo}&tenantId=${tenantId}`, "_blank")
       }
     }
 
   }
+}
+
+const getOccupancyType = (value) =>{
+  const state = store.getState();
+  console.log(value, state, "Nero State Nero")
+  let occupanyTypes = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.BPA.OccupancyType");
+  let ot = occupanyTypes && occupanyTypes.filter( item => item.code === value);
+  return ot[0].name;
+ // get(state, applyScreenMdmsData
+}
+const getSubOccupancyType = (value) =>{
+  const state = store.getState();
+  console.log(value, state, "Nero State Nero")
+  let suboccupanyTypes = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.BPA.SubOccupancyType");
+  let ot = suboccupanyTypes && suboccupanyTypes.filter( item => item.code === value);
+  return ot[0].name;
+ // get(state, applyScreenMdmsData
 }
 
 export const notSujogPermitRevisionSummary = getCommonGrayCard({
@@ -559,10 +1077,220 @@ export const notSujogPermitRevisionSummary = getCommonGrayCard({
             }
         }
       ),
+      occupancyType: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_OCCUPANCY_TYPE"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.OCCUPANCY_TYPE",
+            callBack: (value) => {
+              return getOccupancyType(value) || checkValueForNA;
+            }
+        }
+      ),
+      subOccupancyType: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_SUB_OCCUPANCY_TYPE"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.SUB_OCCUPANCY_TYPE",
+            callBack: value => {
+              return getSubOccupancyType(value) || checkValueForNA;
+            }
+        }
+      ),
+      plotArea: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_PLOT_AREA_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.PLOT_AREA",
+            callBack: checkValueForNA
+        }
+      ),
+      totalPlotArea: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_TOTAL_FLOOR_AREA_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.TOTAL_FLOOR_AREA",
+            callBack: checkValueForNA
+        }
+      ),
+      buildUpArea: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_TOTAL_BUILTUP_AREA_EDCR_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.TOTAL_BUILTUP_AREA_EDCR",
+            callBack: checkValueForNA
+        }
+      ),
+      ewsArea: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_EWS_AREA_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.EWS_AREA",
+            callBack: checkValueForNA
+        }
+      ),
+      revBmvAcre: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_BMV_ACRE_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.BMV_ACRE",
+            callBack: checkValueForNA
+        }
+      ),
+      revBaseFar: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_BASE_FAR_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.BASE_FAR",
+            callBack: checkValueForNA
+        }
+      ),
 
+      revProvidedFar: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_PROVIDED_FAR_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.PROVIDED_FAR",
+            callBack: checkValueForNA
+        }
+      ),
+      revPermFar: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_PERMISSABLE_FAR_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.PERMISSABLE_FAR",
+            callBack: checkValueForNA
+        }
+      ),
+      revTdrFarRel: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_TDR_FAR_RELAXATION_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.TDR_FAR_RELAXATION",
+            callBack: checkValueForNA
+        }
+      ),
+      revTotalNoDwellingUnits: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_TOTAL_NO_OF_DWELLING_UNITS_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.TOTAL_NO_OF_DWELLING_UNITS",
+            callBack: checkValueForNA
+        }
+      ),
+      revPVFE: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_PROJECT_VALUE_FOR_EIDP_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.PROJECT_VALUE_FOR_EIDP",
+            callBack: checkValueForNA
+        }
+      ),
+      revNumberOfTemporaryStructures: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_REVISION_NO_OF_TEMP_STRUCT_LABEL"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.numberOfTemporaryStructures",
+            callBack: checkValueForNA
+        }
+      ),
+      revisionShelterFee: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_SHELTER_FEE"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.SHELTER_FEE",
+            callBack: value => {
+              return isSystemGeneratedPermit(value) || checkValueForNA;
+            }
+        }
+      ),
+      revisionSecurityDeposit: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_SECURITY_DEPOSIT"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.SECURITY_DEPOSIT",
+            callBack: value => {
+              return isSystemGeneratedPermit(value) || checkValueForNA;
+            }
+        }
+      ),
+      revIsRetentionFeeApplicable: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_RENTAL_FEE_APPLICABLE"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.isRetentionFeeApplicable",
+            callBack: value => {
+              return isSystemGeneratedPermit(value) || checkValueForNA;
+            }
+        }
+      ),
+      revRiskType: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "BPA_RISK_TYPE"
+        },
+        {
+          jsonPath:
+            "revision.refApplicationDetails.RISK_TYPE",
+            callBack: checkValueForNA
+        }
+      ),
     }
   }
 })
+
+
 export const revisionSummary = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",

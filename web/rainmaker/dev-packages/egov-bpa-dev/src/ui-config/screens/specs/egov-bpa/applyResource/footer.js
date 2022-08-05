@@ -21,6 +21,7 @@ import { prepareNocFinalCards, compare, checkOwnerAndArchitectMobileNo, checkIfM
 import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
+import { CONSTANTS } from "../../../../../config/common";
 
 const getMdmsData = async (state, dispatch) => {
   const tenantId = get(
@@ -221,82 +222,120 @@ let bpaObj = get(
       dispatch
     );
 /*********************Revision Application Validation*******************************/
-    let revisionInfo = get(
-      state,
-      "screenConfiguration.preparedFinalObject.revision",
-      {}
-    );
-    let permitExpired = revisionInfo && revisionInfo.permitExpired;
-    let isSujogExistingApplication = revisionInfo && revisionInfo.isSujogExistingApplication;
-    console.log(isSujogExistingApplication, "Nero Sujog")
-    if(permitExpired != "YES" && isSujogExistingApplication && !isSujogExistingApplication){
-      console.log("Nero Hello")
-    let revisionInfoCardValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children",
-      state,
-      dispatch
-    )
-    if(!revisionInfoCardValid){
-     let errorMessage = {
-        labelName:
-          "Please fill all mandatory fields for Basic Details, then proceed!",
-        labelKey: "Please fill all mandatory fields for Basic Details, then proceed!"
-      };
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
-      return false;
-    }
 
-    const documentsFormat = Object.values(
-      get(state.screenConfiguration.preparedFinalObject, "documentsUploadReduxRvsn")
-    );
-
-    let requiredDocsFound = true;
-
-    if (documentsFormat && documentsFormat.length) {
-      for (let i = 0; i < documentsFormat.length; i++) {
-        let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-        let isDocumentTypeRequired = get(
-          documentsFormat[i],
-          "isDocumentTypeRequired"
-        );
-
-        let documents = get(documentsFormat[i], "documents", "DOCUMENTSNOTFOUND");
-        
-        if (isDocumentRequired) {
-          if(documents === "DOCUMENTSNOTFOUND"){
-            
-            requiredDocsFound = false;
-            break;
-          }else if(documents && documents.length < 1) {
-            
-            requiredDocsFound = false;
-            break;
-
-          }
-        } 
-      }
-      
-    }
-    if(!requiredDocsFound){
-      
-      dispatch(
-        toggleSnackbar(
-          true,
-          { labelName: "Please uplaod mandatory documents!", labelKey: "Please uplaod mandatory documents!" },
-          "warning"
-        )
+    if (CONSTANTS.features.isRevisionActive) {
+      let revisionInfo = get(
+        state,
+        "screenConfiguration.preparedFinalObject.revision",
+        {}
       );
-      return false;
+      let permitExpired = revisionInfo && revisionInfo.permitExpired;
+      let isSujogExistingApplication = revisionInfo && revisionInfo.isSujogExistingApplication;
+      
+      if (permitExpired != "YES" && !isSujogExistingApplication) {
+    
+        let revisionInfoCardValid = validateFields(
+          "components.div.children.formwizardFirstStep.children.revisionInfoFormCard.children.cardContent.children.basicDetailsContainer.children",
+          state,
+          dispatch
+        )
+        if (!revisionInfoCardValid) {
+          let errorMessage = {
+            labelName:
+              "Please fill all mandatory fields for Basic Details, then proceed!",
+            labelKey: "Please fill all mandatory fields for Basic Details, then proceed!"
+          };
+          dispatch(toggleSnackbar(true, errorMessage, "warning"));
+          return false;
+        }
+    
+        const documentsFormat = Object.values(
+          get(state.screenConfiguration.preparedFinalObject, "documentsUploadReduxRvsn")
+        );
+    
+        let requiredDocsFound = true;
+    
+        if (documentsFormat && documentsFormat.length) {
+          for (let i = 0; i < documentsFormat.length; i++) {
+            let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+            let isDocumentTypeRequired = get(
+              documentsFormat[i],
+              "isDocumentTypeRequired"
+            );
+    
+            let documents = get(documentsFormat[i], "documents", "DOCUMENTSNOTFOUND");
+    
+            if (isDocumentRequired) {
+              if (documents === "DOCUMENTSNOTFOUND") {
+    
+                requiredDocsFound = false;
+                break;
+              } else if (documents && documents.length < 1) {
+    
+                requiredDocsFound = false;
+                break;
+    
+              }
+            }
+          }
+    
+        }
+        if (!requiredDocsFound) {
+    
+          dispatch(
+            toggleSnackbar(
+              true,
+              { labelName: "Please uplaod mandatory documents!", labelKey: "Please uplaod mandatory documents!" },
+              "warning"
+            )
+          );
+          return false;
+        }
+      }
+      if (permitExpired === "YES") {
+        let errorMessage = {
+          labelName:
+            "Please fill all mandatory fields for Basic Details, then proceed!",
+          labelKey: "BPA_REVISION_PERMIT_EXPIRED_HEADER"
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "error"));
+        return false;
+      }
+    
+      const applicationNumber = getQueryArg(
+        window.location.href,
+        "applicationNumber"
+      );
+      if(applicationNumber){
+
+      }else{
+      try {
+        const response = await httpRequest(
+          "post",
+          "/bpa-services/v1/revision/_search",
+          "",
+          [],
+          {revisionSearchCriteria: {
+            refPermitNo: revisionInfo && revisionInfo.refPermitNo
+          }
+            
+          }
+        );
+        console.log(response, "Nero Revision")
+        if(response && response.revision && response.revision.length > 0){
+          let errorMessage = {
+            labelName:
+              "Please fill all mandatory fields for Basic Details, then proceed!",
+            labelKey: "BPA_REVSION_APP_ALREADY_EXISTS_FOR_PERMIT_MSG"
+          };
+          dispatch(toggleSnackbar(true, errorMessage, "error"));
+          return false;
+        }
+        
+      } catch (error) {
+        console.log(error, "Error")
+      }
     }
-    }
-    if(permitExpired === "YES"){
-     let errorMessage = {
-        labelName:
-          "Please fill all mandatory fields for Basic Details, then proceed!",
-        labelKey: "BPA_REVSION_PERMIT_EXPIRD_MSG"
-      };
-      dispatch(toggleSnackbar(true, errorMessage, "error"));
-      return false;
     }
 /***********************************************************************/
     if (
@@ -639,6 +678,28 @@ if(!isMobileExistsResponse){
       )
     );
   }
+
+    let revisionInfo = get(state.screenConfiguration.preparedFinalObject, "revision");
+    console.log(revisionInfo, "Nero revision ifno ")
+    if (revisionInfo && !revisionInfo.isSujogExistingApplication) {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.notSujogPermitRevisionSummary",
+          "visible",
+          true
+        )
+      );
+    } else {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.notSujogPermitRevisionSummary",
+          "visible",
+          false
+        )
+      );
+    }
 
   }
 

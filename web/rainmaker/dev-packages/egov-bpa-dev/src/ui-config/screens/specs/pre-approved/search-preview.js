@@ -1563,7 +1563,7 @@ const setSearchResponse = async (
 
   }
   if(get(response, "BPA[0].businessService") == "BPA6"){
-    if(get(response, "BPA[0].status") == "PENDING_APPL_FEE" && ifUserRoleExists("BPA_ARCHITECT")){
+    if(get(response, "BPA[0].status") == "PENDING_APPL_FEE" && (ifUserRoleExists("BPA_ARCHITECT") || ifUserRoleExists("CITIZEN"))){
       dispatch(
         handleField(
           "search-preview",
@@ -1572,7 +1572,7 @@ const setSearchResponse = async (
           true
         )
       );
-    } else if(get(response, "BPA[0].status") == "PENDING_SANC_FEE_PAYMENT" && ifUserRoleExists("BPA_ARCHITECT")){
+    } else if(get(response, "BPA[0].status") == "PENDING_SANC_FEE_PAYMENT" && (ifUserRoleExists("BPA_ARCHITECT") || ifUserRoleExists("CITIZEN"))){
       dispatch(
         handleField(
           "search-preview",
@@ -1581,7 +1581,7 @@ const setSearchResponse = async (
           true
         )
       );
-    } else if(get(response, "BPA[0].status") == "CITIZEN_ACTION_PENDING_AT_APPROVAL" && ifUserRoleExists("BPA_ARCHITECT")){
+    } else if(get(response, "BPA[0].status") == "CITIZEN_ACTION_PENDING_AT_APPROVAL" && (ifUserRoleExists("BPA_ARCHITECT") || ifUserRoleExists("CITIZEN"))){
       dispatch(
         handleField(
           "search-preview",

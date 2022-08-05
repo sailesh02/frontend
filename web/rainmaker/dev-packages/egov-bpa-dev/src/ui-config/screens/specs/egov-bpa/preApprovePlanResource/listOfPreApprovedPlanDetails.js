@@ -12,7 +12,7 @@ import store from "ui-redux/store";
 // Document ddownload once you click on document link available in table row
 const onDownloadClick = async (rowData, fileStoreId) => {
   const fileUrls = await getFileUrlFromAPI(fileStoreId);
-  window.location = fileUrls[fileStoreId];
+  window.location = fileUrls[fileStoreId].split(",")[0];
 };
 
 // Iterate document array and show the number of documents to download in row .

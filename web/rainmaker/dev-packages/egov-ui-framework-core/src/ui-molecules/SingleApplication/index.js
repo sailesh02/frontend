@@ -110,7 +110,10 @@ class SingleApplication extends React.Component {
           default:
             setRoute(`/oc-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}&bservice=${item.serviceType}`);
         }
-      } else {
+      } else if(item.serviceType === "BPA6") {
+        setRoute(`/pre-approved/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}`)
+      }
+      else {
         switch (item.appStatus) {
           case "INITIATED":
             if(roles && roles.length == 1 && roles[0].code == "CITIZEN") {
@@ -174,7 +177,7 @@ class SingleApplication extends React.Component {
         default:
           setRoute(`/mr/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
       }
-    }
+    } 
   };
 
   onButtonCLick = () => {

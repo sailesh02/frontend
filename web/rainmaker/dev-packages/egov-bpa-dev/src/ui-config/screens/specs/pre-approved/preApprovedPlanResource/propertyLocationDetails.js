@@ -45,7 +45,6 @@ export const bpaLocationDetails = getCommonCard(
           required: true,
           props: {
             required: true,
-            disabled: true,
             className : "tl-trade-type"
           }
         }),

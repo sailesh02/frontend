@@ -95,7 +95,7 @@ const preparingDocumentsReview = async (state, dispatch) => {
             uploadedTime: new Date().getTime(),
             fileName: docDetail.fileName,
             title: getTransformedLocale(doc.documentCode),
-            fileUrl:docDetail.fileUrl
+            fileUrl:docDetail.fileUrl && docDetail.fileUrl.split(",")[0]
           };
           documentsPreview.push(obj);
         });

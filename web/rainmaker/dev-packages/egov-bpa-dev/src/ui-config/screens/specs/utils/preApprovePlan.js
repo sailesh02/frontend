@@ -2722,24 +2722,25 @@ export const checkIfMobileIsRegistered = async (state, dispatch) => {
         userName: `${ownerNo}`
       }
     );
-    if (payload && payload.user && payload.user.hasOwnProperty("length")) {
-      if (payload.user.length === 0) {
-        console.log("nere in api")
-        // dispatch(
-        //   toggleSnackbar(
-        //     true,
-        //     {
-        //       labelName: "This mobile number is not registered!",
-        //       labelKey: "ERR_MOBILE_NUMBER_NOT_REGISTERED"
-        //     },
-        //     "info"
-        //   )
-        // );
-        return false;
-      }else{
-        return true;
-      }      
-    }
+    return true;
+    // if (payload && payload.user && payload.user.hasOwnProperty("length")) {
+    //   if (payload.user.length === 0) {
+    //     console.log("nere in api")
+    //     // dispatch(
+    //     //   toggleSnackbar(
+    //     //     true,
+    //     //     {
+    //     //       labelName: "This mobile number is not registered!",
+    //     //       labelKey: "ERR_MOBILE_NUMBER_NOT_REGISTERED"
+    //     //     },
+    //     //     "info"
+    //     //   )
+    //     // );
+    //     return false;
+    //   }else{
+    //     return true;
+    //   }      
+    // }
   }catch (error) {
     console.log(error, "Nero Error")
   }
@@ -2758,21 +2759,22 @@ export const checkOwnerAndArchitectMobileNo = (state, dispatch) => {
   );
 
   const userMobileNo = userInfo.mobileNumber;
-  if (ownerNo == userMobileNo) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Owner mobile number and Architect mobile number can not be same",
-          labelKey: "ERR_OWNER_AND_ARCHITECT_MOBILE_SAME_TOGGLE_MSG"
-        },
-        "error"
-      )
-    );
-    return false;
-  } else {
-    return true;
-  }
+  return true;
+  // if (ownerNo == userMobileNo) {
+  //   dispatch(
+  //     toggleSnackbar(
+  //       true,
+  //       {
+  //         labelName: "Owner mobile number and Architect mobile number can not be same",
+  //         labelKey: "ERR_OWNER_AND_ARCHITECT_MOBILE_SAME_TOGGLE_MSG"
+  //       },
+  //       "error"
+  //     )
+  //   );
+  //   return false;
+  // } else {
+  //   return true;
+  // }
 }
 export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
   try {

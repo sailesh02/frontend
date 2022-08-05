@@ -12,6 +12,8 @@ import {
 } from "./preApprovedPlanResource/footer";
 import { basicDetails } from "./preApprovedPlanResource/basicDetails";
 import { bpaLocationDetails } from "./preApprovedPlanResource/propertyLocationDetails";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
 import {
   buildingPlanScrutinyDetails,
   blockWiseOccupancyAndUsageDetails,
@@ -64,6 +66,11 @@ import { nocDetailsApplyBPA } from "../egov-bpa/noc";
 import { getNocList } from "./preapprove-search-preview";
 import { getDrawingDetails } from "./preApprovedPlanResource/getDrawingDetails";
 
+const setUserDetails = (action, state, dispatch) => {
+  dispatch(prepareFinalObject("BPA.landInfo.owners[0].name", JSON.parse(getUserInfo()).name));
+  dispatch(prepareFinalObject("BPA.landInfo.owners[0].mobileNumber", JSON.parse(getUserInfo()).mobileNumber));
+}
+
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "BPA_STEPPER_BASIC_DETAILS_HEADER" },
   {
@@ -78,6 +85,8 @@ export const stepsData = [
   { labelName: "Application Summary", labelKey: "BPA_STEPPER_SUMMARY_HEADER" },
 ];
 
+
+
 export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
   stepsData
@@ -85,8 +94,8 @@ export const stepper = getStepperObject(
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Apply for building permit`,
-    labelKey: "BPA_APPLY_FOR_BUILDING_PERMIT_HEADER",
+    labelName: `Drawing No`,
+    labelKey: "PREAPPROVE_DRAWING_HEADER",
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -724,7 +733,7 @@ const screenConfig = {
     dispatch(prepareFinalObject("BPA", {}));
     const applicationNumber = getQueryArg(
       window.location.href,
-      "applicationNumber"
+      "drawingAppNo"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
@@ -734,7 +743,7 @@ const screenConfig = {
     getTenantMdmsData(action, state, dispatch).then((response) => {
       dispatch(prepareFinalObject("BPA.landInfo.address.city", tenantId));
     });
-
+    setUserDetails(action, state, dispatch)
     let isEdit = true;
     if (step || step == 0) {
       isEdit = false;
@@ -745,6 +754,11 @@ const screenConfig = {
         prepareFinalObject("preApprovedPlan.drawingAppNo", drawingAppNo)
       );
       getDrawingDetails(state, dispatch);
+      set(
+        action,
+        "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumber.props.number",
+        drawingAppNo
+      );
     }
     setPreApprovedProposedBuildingData(state, dispatch);
     

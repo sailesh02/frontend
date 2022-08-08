@@ -71,8 +71,8 @@ const handleStatusUpdate = async(e,updateValue,status,drawingNo) => {
         toggleSnackbar(
           true,
           {
-            labelName: "PA_UPDATE_SUCCESS",
-            labelKey: "Status Updated Successfully.",
+            labelName: "Pre-Approved plan updated Successfully",
+            labelKey: "PREAPPROVE_UPDATE_SUCCESS",
           },
           "success"
         )

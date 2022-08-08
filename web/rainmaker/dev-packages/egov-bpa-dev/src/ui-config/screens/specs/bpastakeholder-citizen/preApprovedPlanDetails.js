@@ -291,7 +291,7 @@ const preApprovedPlanSection = getCommonContainer({
       lengthInFt: getTextField({
         label: {
           labelName: "Length of plot(in ft.)",
-          labelKey: "PREAPPROVE_PLOT_LENGTH_IN_FEET",
+          labelKey: "PREAPPROVE_PLOT_LENGTH_IN_FT",
         },
         pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         props: {
@@ -309,7 +309,7 @@ const preApprovedPlanSection = getCommonContainer({
       widthInFt: getTextField({
         label: {
           labelName: "Width of plot(in ft.)",
-          labelKey: "PREAPPROVE_PLOT_WITH_IN_FEET",
+          labelKey: "PREAPPROVE_PLOT_WITH_IN_FT",
         },
         pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         props: {

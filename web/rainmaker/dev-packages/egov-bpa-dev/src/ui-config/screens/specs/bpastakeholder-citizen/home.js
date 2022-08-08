@@ -84,20 +84,21 @@ const cardItems = [
     },
     icon: <FormIcon />,
     route: "preApprovedPlanDetails",
-  },
-  {
-    label: {
-      labelKey: "BPA_REVISION_APPLICATION",
-      labelName: "Building Permit New Construction",
-    },
-    hide: hideBPACard(),
-    icon: <BPANewPermitIcon />,
-    route: {
-      screenKey: "home",
-      jsonPath: "components.cityPickerDialog",
-      value: "apply",
-    },
   }
+  // ,
+  // {
+  //   label: {
+  //     labelKey: "BPA_REVISION_APPLICATION",
+  //     labelName: "Building Permit New Construction",
+  //   },
+  //   hide: hideBPACard(),
+  //   icon: <BPANewPermitIcon />,
+  //   route: {
+  //     screenKey: "home",
+  //     jsonPath: "components.cityPickerDialog",
+  //     value: "apply",
+  //   },
+  // }
 ];
 
 let cardList = []
@@ -107,15 +108,19 @@ if (!visibleUat) {
       return item;
     }
   });
-}else if(!isRevisionActive){
-  cardList = cardItems.filter((item, index) => {
-    if (item.label.labelKey != "BPA_REVISION_APPLICATION") {
-      return item;
-    }
-  });
-} else {
+}else{
   cardList = cardItems
 }
+// if(!isRevisionActive){
+//   cardList = cardList.filter((item, index) => {
+//     if (item.label.labelKey != "BPA_REVISION_APPLICATION") {
+//       return item;
+//     }
+//   });
+// }
+
+//cardList = cardItems
+
 
 const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",

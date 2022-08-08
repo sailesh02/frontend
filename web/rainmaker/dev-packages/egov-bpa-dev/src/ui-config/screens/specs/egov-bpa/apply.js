@@ -878,16 +878,16 @@ const screenConfig = {
         formwizardThirdStep,
         formwizardFourthStep,
         formwizardFifthStep,
-        triggerNocContainer :{
-          uiFramework: "custom-containers-local",
-          componentPath: "TriggerNOCContainer",
-          moduleName: "egov-bpa",
-          visible: true,
-          props: {
-            open:false,
-            nocType:''
-          }
-        },
+        // triggerNocContainer :{
+        //   uiFramework: "custom-containers-local",
+        //   componentPath: "TriggerNOCContainer",
+        //   moduleName: "egov-bpa",
+        //   visible: true,
+        //   props: {
+        //     open:false,
+        //     nocType:''
+        //   }
+        // },
         footer
       }
     },

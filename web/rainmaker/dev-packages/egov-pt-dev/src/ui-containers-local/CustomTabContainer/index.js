@@ -17,16 +17,25 @@ class MultiItem extends React.Component {
       dispatch(handleField("propertySearch", "components.div.children.searchPropertyTable", "visible", false));
       dispatch(handleField("propertySearch", "components.div.children.searchApplicationTable", "visible", false));
       dispatch(handleField("propertySearch", "components.div.children.searchReassessmentTable", "visible", false));
+      dispatch(handleField("propertySearch", "components.div.children.searchLegacyTable", "visible", false));
       } 
     else if(value === "PT_SEARCH_APPLICATION"){
       dispatch(handleField("propertySearch", "components.div.children.searchApplicationTable", "visible", false));
       dispatch(handleField("propertySearch", "components.div.children.searchPropertyTable", "visible", false));
       dispatch(handleField("propertySearch", "components.div.children.searchReassessmentTable", "visible", false));
+      dispatch(handleField("propertySearch", "components.div.children.searchLegacyTable", "visible", false));
+      }
+    else if(value === "SEARCH_ASSESSMENT"){
+        dispatch(handleField("propertySearch", "components.div.children.searchApplicationTable", "visible", false));
+        dispatch(handleField("propertySearch", "components.div.children.searchPropertyTable", "visible", false));
+        dispatch(handleField("propertySearch", "components.div.children.searchReassessmentTable", "visible", false));
+        dispatch(handleField("propertySearch", "components.div.children.searchLegacyTable", "visible", false));
       }
       else{
         dispatch(handleField("propertySearch", "components.div.children.searchApplicationTable", "visible", false));
         dispatch(handleField("propertySearch", "components.div.children.searchPropertyTable", "visible", false));
         dispatch(handleField("propertySearch", "components.div.children.searchReassessmentTable", "visible", false));
+        dispatch(handleField("propertySearch", "components.div.children.searchLegacyTable", "visible", false));
       }
       dispatch(prepareFinalObject("searchScreen.mobileNumber", ""));
       dispatch(prepareFinalObject("searchScreen.ids", ""));
@@ -43,6 +52,8 @@ class MultiItem extends React.Component {
         break;
       case 2:
         this.setInstrumentType("SEARCH_ASSESSMENT", dispatch)
+      case 3:
+        this.setInstrumentType("SEARCH_LEGACY", dispatch)
         break;  
       default:
         this.setInstrumentType("PT_SEARCH_PROPERTY", dispatch);
@@ -64,7 +75,6 @@ class MultiItem extends React.Component {
       screenKey,
       componentJsonpath
     } = this.props;
-
     const { onTabClick } = this;
 
     const transFormedProps = {

@@ -126,6 +126,46 @@ export const getSearchResults = async (queryObject, requestBody) => {
   }
 };
 
+export const getLegacySearchResults = async (queryObject, requestBody) => {
+  try {
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "property-services/property/_searchLegacy",
+      "",
+      queryObject,
+      requestBody
+    );
+    // response && response.Properties && response.Properties.map(property => {
+    //   if (property.status == "INWORKFLOW") {
+    //     let newOwnerList = [];
+    //     let oldOwnerList = [];
+    //     property.owners.map(owner => {
+    //       if (owner.status == 'ACTIVE') {
+    //         newOwnerList.push(owner);
+    //       } else {
+    //         oldOwnerList.push(owner);
+    //       }
+    //     })
+    //     oldOwnerList.push(...newOwnerList);
+    //     property.owners = oldOwnerList;
+    //   }
+    // })
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(toggleSpinner());
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+
 
 
 export const getDemandSearchResult = async (queryObject, dispatch) => {

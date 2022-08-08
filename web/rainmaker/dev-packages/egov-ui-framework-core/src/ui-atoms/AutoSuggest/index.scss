@@ -3,16 +3,27 @@
   max-height: "200px";
   overflow-y: "scroll";
 }
-  .autocomplete-dropdown {
-    min-width: 70%;
-    position: absolute;
-    z-index: 1900;
-    max-height: 150px;
-    max-width: 75%;
-    overflow: hidden; }
-  .autocomplete-dropdown div {
-    min-width: 70%;
-    height: auto;
-    overflow: auto;
-    max-width: 100%;
-    white-space: pre-line; }
+.autocomplete-dropdown {
+  min-width: 70%;
+  position: absolute;
+  z-index: 1900;
+  max-height: 150px;
+  max-width: 75%;
+  overflow: hidden;
+}
+.autocomplete-dropdown div {
+  min-width: 70%;
+  height: auto;
+  overflow: auto;
+  max-width: 100%;
+  white-space: pre-line;
+}
+.tl-bs-autocomplete-dropdown {
+  top: 64px !important;
+}
+.tl-bs-autocomplete-dropdown > div {
+  max-height: inherit !important;
+}
+.tl-bs-autocomplete-dropdown > div > div {
+  overflow: hidden !important;
+}

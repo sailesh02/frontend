@@ -8,7 +8,8 @@ import {
   getSelectField,
   getTextField,
   getDateField,
-  getPattern
+  getPattern,
+  getCommonParagraph
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getBpaDetailsForOwner, getTodaysDateInYMD } from "../../utils";
@@ -36,6 +37,10 @@ const commonApplicantInformation = () => {
         }
       }
     ),
+    subHeader: getCommonParagraph({
+      labelName:"Please slect logged in user as primary owner",
+      labelKey: "PREAPPROVE_OWNER_INFO_SUBTEXT"
+    }),
     applicantCard: getCommonContainer({
       mobileNumber: getTextField({
         label: {
@@ -49,13 +54,11 @@ const commonApplicantInformation = () => {
         required: true,
         props: {
           className: "applicant-details-error",
-          disabled:true
         },
         title: {
           value: "Please search profile linked to the mobile no.",
           key: "NOC_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
         },
-        infoIcon: "info_circle",
         pattern: getPattern("MobileNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "BPA.landInfo.owners[0].mobileNumber",
@@ -103,7 +106,6 @@ const commonApplicantInformation = () => {
         jsonPath: "BPA.landInfo.owners[0].name",
         props: {
           className: "applicant-details-error",
-          disabled:true
         },
         gridDefination: {
           xs: 12,

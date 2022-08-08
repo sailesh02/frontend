@@ -18,6 +18,7 @@ import {
   getFileUrlFromAPI,
   getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../../ui-utils";
 import {
   createUpdatePreApproveApplication,
@@ -582,17 +583,30 @@ const callBackForNext = async (state, dispatch) => {
           checkingOwner === "INDIVIDUAL.MULTIPLEOWNERS"
         ) {
           let count = 0,
-            ownerPrimaryArray = [];
+            ownerPrimaryArray = [],
+            isLoggedInuserPrimaryOwner = true;
           ownerDetails.forEach((owner, index) => {
             let primaryOwner = get(
               state.screenConfiguration.preparedFinalObject,
               `BPA.landInfo.owners[${index}].isPrimaryOwner`
             );
+            let mobileNumber = get(
+              state.screenConfiguration.preparedFinalObject,
+              `BPA.landInfo.owners[${index}].mobileNumber`
+            );
             if (primaryOwner && primaryOwner === true) {
-              ownerPrimaryArray.push(primaryOwner);
+              if (
+                mobileNumber &&
+                mobileNumber == JSON.parse(getUserInfo()).mobileNumber
+              ) {
+                ownerPrimaryArray.push(primaryOwner);
+              } else {
+                isLoggedInuserPrimaryOwner = false
+                
+              }
             }
           });
-          if (ownerPrimaryArray && ownerPrimaryArray.length > 0) {
+          if (ownerPrimaryArray && ownerPrimaryArray.length > 0 && isLoggedInuserPrimaryOwner) {
             if (ownerPrimaryArray.length > 1) {
               let errorMessage = {
                 labelName: "Please check only one primary owner",
@@ -613,7 +627,13 @@ const callBackForNext = async (state, dispatch) => {
               }
               prepareDocumentsUploadData(state, dispatch);
             }
-          } else {
+          } else if(!isLoggedInuserPrimaryOwner) {
+            let errorMessage = {
+              labelName: "Logged in user would be Primary owner.",
+              labelKey: "PREAPPROVE_PRIMARY_OWNER_TOAST",
+            };
+            dispatch(toggleSnackbar(true, errorMessage, "warning"));
+          }else {
             let errorMessage = {
               labelName: "Please check is primary owner",
               labelKey: "ERR_PRIMARY_OWNER_TOAST",
@@ -643,20 +663,23 @@ const callBackForNext = async (state, dispatch) => {
           state.screenConfiguration.preparedFinalObject,
           "BPA.tenantId"
         );
-        const payload = await getNocSearchResults(
-          [
-            {
-              key: "tenantId",
-              value: tenantId,
-            },
-            { key: "sourceRefId", value: applicationNumber },
-          ],
-          state
-        );
-        payload.Noc.sort(compare);
-        dispatch(prepareFinalObject("Noc", payload.Noc));
-        await prepareNOCUploadData(state, dispatch);
-        prepareNocFinalCards(state, dispatch);
+        if(applicationNumber && tenantId) {
+          const payload = await getNocSearchResults(
+            [
+              {
+                key: "tenantId",
+                value: tenantId,
+              },
+              { key: "sourceRefId", value: applicationNumber },
+            ],
+            state
+          );
+          payload.Noc.sort(compare);
+          dispatch(prepareFinalObject("Noc", payload.Noc));
+          await prepareNOCUploadData(state, dispatch);
+          prepareNocFinalCards(state, dispatch);
+        }
+        
       } else {
         if (activeStep === 0) {
           const occupancytypeValid = get(
@@ -665,7 +688,7 @@ const callBackForNext = async (state, dispatch) => {
             []
           );
           if (occupancytypeValid.length === 0) {
-            changeStep(state, dispatch)
+            changeStep(state, dispatch);
             // let errorMessage = {
             //   labelName:
             //     "Please search scrutiny details linked to the scrutiny number",

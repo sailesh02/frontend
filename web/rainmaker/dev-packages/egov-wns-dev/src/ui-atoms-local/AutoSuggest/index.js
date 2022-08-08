@@ -179,6 +179,12 @@ class IntegrationReactSelect extends React.Component {
     }
   };
 
+  componentDidUpdate(prevProps) {
+    if(prevProps.resetField !== this.props.resetField && this.props.resetField) {
+      this.setState({ single: null });
+    }
+  }
+
   handleChange = name => value => {
     this.setState({
       [name]: value
@@ -233,6 +239,7 @@ class IntegrationReactSelect extends React.Component {
           placeholder={placeholder}
           {...rest}
           onChange={this.handleChange("single")}
+          // menuIsOpen={true}
         />
       </div>
     );

@@ -16,3 +16,12 @@
     overflow: auto;
     max-width: 100%;
     white-space: pre-line; }
+.tl-bs-autocomplete-dropdown {
+  top: 64px !important;
+}
+.tl-bs-autocomplete-dropdown > div {
+  max-height: inherit !important;
+}
+.tl-bs-autocomplete-dropdown > div > div {
+  overflow: hidden !important;
+}

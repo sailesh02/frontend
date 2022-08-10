@@ -6,11 +6,15 @@ import cloneDeep from "lodash/cloneDeep";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import { LabelContainer } from "../../ui-containers-local";
 import { getLocaleLabels, isPublicSearch } from "../../ui-utils/commons";
-// import Divider from "@material-ui/core/Divider";
-// import Menu from "@material-ui/core/Menu";
-// import MenuItem from "@material-ui/core/MenuItem";
-// import Button from "@material-ui/core/Button";
+import { connect } from "react-redux";
+import Divider from "@material-ui/core/Divider";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
 // import VisibilityIcon from '@material-ui/icons/Visibility';
+// import VisibilityIcon from '@material-ui/icons/Visibility';
+import FilterListIcon from "@material-ui/icons/FilterList";
+
 import "./index.css";
 
 class WnsReportTable extends React.Component {
@@ -18,6 +22,7 @@ class WnsReportTable extends React.Component {
     data: [],
     columns: [],
     customSortOrder: "asc",
+    showMenu: false,
   };
 
   getExtraTableStyle = () => {
@@ -221,23 +226,99 @@ class WnsReportTable extends React.Component {
     return getLocaleLabels(title.labelName, title.labelKey);
   };
 
-  // downloadAsExcel = () => {
-  //   const state = store.getState();
-  //   const tableData = get(
-  //     state.screenConfiguration.preparedFinalObject,
-  //     "tableData",
-  //     []
-  //   );
-  //   // excelDownloadAction(tableData, "Sujog Jal Saathi Incentive Report")
-  // };
+  downloadAsExcel = () => {
+    const state = this.props.state;
+    const tableData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "tableData",
+      []
+    );
+    console.log("excel download");
+    // excelDownloadAction(tableData, "Sujog Jal Saathi Incentive Report")
+  };
 
-  // getCustomToolbar = () => {
-  //   return (
-  //     <React.Fragment>
-  //       <button onClick={() => this.downloadAsExcel()}>Export to Excel</button>
-  //     </React.Fragment>
-  //   );
-  // };
+  showMenuItem = () => {
+    this.setState({
+      ...this.state,
+      showMenu: true,
+    })
+  }
+
+  getColumnVisibilityMenu = () => {
+    let { columns } = this.state;
+    let fixedColumns = Array.isArray(columns) ? columns : Object.keys(columns);
+    // return (
+    //   <Menu
+    //     anchorEl={true}
+    //     id="account-menu"
+    //     // open={this.isMenuOpen}
+    //     open={true}
+    //     onClose={this.handleMenuClose}
+    //     // onClick={this.handleMenuClose}
+    //     // PaperProps={{
+    //     //   elevation: 0,
+    //     //   sx: {
+    //     //     overflow: "visible",
+    //     //     filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+    //     //     mt: 1.5,
+    //     //     "& .MuiAvatar-root": {
+    //     //       width: 32,
+    //     //       height: 32,
+    //     //       ml: -0.5,
+    //     //       mr: 1,
+    //     //     },
+    //     //     "&:before": {
+    //     //       content: '""',
+    //     //       display: "block",
+    //     //       position: "absolute",
+    //     //       top: 0,
+    //     //       right: 14,
+    //     //       width: 10,
+    //     //       height: 10,
+    //     //       bgcolor: "background.paper",
+    //     //       transform: "translateY(-50%) rotate(45deg)",
+    //     //       zIndex: 0,
+    //     //     },
+    //     //   },
+    //     // }}
+    //     transformOrigin={{ horizontal: "right", vertical: "top" }}
+    //     anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+    //   >
+    //     {fixedColumns.map((eachCol) => {
+    //       return (
+    //         <MenuItem
+    //           value={eachCol}
+    //           onClick={(e) => this.handleMenuIconClick(e)}
+    //         >
+    //           eachCol
+    //         </MenuItem>
+    //       );
+    //     })}
+    //     <MenuItem value={"item1"} onClick={(e) => this.handleMenuIconClick(e)}>
+    //       item1
+    //     </MenuItem>
+    //     <MenuItem value={"item2"} onClick={(e) => handleMenuIconClick(e)}>
+    //       item2
+    //     </MenuItem>
+    //     <Divider />
+    //     <MenuItem>
+    //       <Button>Apply</Button>
+    //       <Button onClick={this.handleMenuClose}>Close</Button>
+    //     </MenuItem>
+    //   </Menu>
+    // );
+
+    return null;
+  };
+
+  getCustomToolbar = () => {
+    return (
+      <React.Fragment>
+        <button onClick={() => this.downloadAsExcel()}>Export to Excel</button>
+        <button onClick={() => this.showMenuItem()}><FilterListIcon /></button>
+      </React.Fragment>
+    );
+  };
 
   render() {
     const { data, columns } = this.state;
@@ -268,4 +349,8 @@ WnsReportTable.propTypes = {
   options: PropTypes.object.isRequired,
 };
 
-export default WnsReportTable;
+const mapStateToProps = (state) => {
+  return { state };
+};
+
+export default connect(mapStateToProps, null)(WnsReportTable);

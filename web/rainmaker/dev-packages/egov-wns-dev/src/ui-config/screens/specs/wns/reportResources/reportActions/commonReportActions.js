@@ -1,6 +1,6 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { REPORT_DROPDOWN_OPTIONS } from "../reportConstants";
-import { billSummaryReportSearch, employeeDateWiseWSCollectionSearch } from "./reportSearchActions";
+import { employeeDateWiseWSCollectionSearch, consumerMasterReportSearch, billSummaryReportSearch } from "./reportSearchActions";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
@@ -38,7 +38,6 @@ export const setDropdownOpts = (action, state, dispatch) => {
     dispatch(
       prepareFinalObject(
         `reportDropdownOpts.${eachKey}`,
-        REPORT_DROPDOWN_OPTIONS[title]["paymentMode"],
         REPORT_DROPDOWN_OPTIONS[title][eachKey]
       )
     );
@@ -107,19 +106,25 @@ const onSuccessSearch = (tableData, dispatch) => {
 
 // Add Search Actions
 const getTableData = async (params, state, dispatch) => {
-  let tableData = [];
+  dispatch(prepareFinalObject("reportLoader", true));
+  let tableData = null;
   let title = getQueryArg(window.location.href, "title");
   switch (title) {
     case "dateWiseEmployeeCollection":
       tableData = await employeeDateWiseWSCollectionSearch(params, state, dispatch);
       break;
+
     case "billsummaryreport":
       tableData = await billSummaryReportSearch(params, state, dispatch)
+      break;
+    case "consumerMasterReport":
+      tableData = await consumerMasterReportSearch(params, state, dispatch);
       break;
     default:
       break;
   }
-  onSuccessSearch(tableData, dispatch);
+  tableData && onSuccessSearch(tableData, dispatch);
+  dispatch(prepareFinalObject("reportLoader", false));
 };
 
 export const getSearchAction = (params, state, dispatch) => {

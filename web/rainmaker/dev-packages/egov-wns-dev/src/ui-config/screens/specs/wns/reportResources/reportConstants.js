@@ -1,10 +1,12 @@
 export const REPORT_HEADER_MAPPER = {
   dateWiseEmployeeCollection: "Employee Date Wise WS Collection",
+  consumerMasterReport: "W&S Consumer Master Report",
   billsummaryreport: "W&S Bill Summary Report"
 };
 
 export const REPORT_SUB_HEADER_MAPPER = {
   dateWiseEmployeeCollection: "Modify report by date range",
+  consumerMasterReport: "Modify report by date range",
   billsummaryreport: "Modify report by date range"
 };
 
@@ -41,7 +43,25 @@ export const REPORT_DROPDOWN_OPTIONS = {
       },
     ],
   },
+  consumerMasterReport: {
+    connectionType: [
+      {
+        code: "metered",
+        name: "Metered",
+      },
+      {
+        code: "nonMetered",
+        name: "Non Metered",
+      },
+    ],
+  },
 };
+
+export const REPORT_TABLE_TITLE_MAPPER = {
+  dateWiseEmployeeCollection: "Employee Date Wise WS Collection Report",
+  consumerMasterReport: "Consumer Master Report",
+  billsummaryreport: "W&S Bill Summary Report"
+}
 
 export const REPORT_COLUMNS_MAPPER = {
   dateWiseEmployeeCollection: [
@@ -79,7 +99,7 @@ export const REPORT_COLUMNS_MAPPER = {
       labelKey: "Collected Amount",
     },
   ],
-  billsummaryreport: [
+  consumerMasterReport: [
     {
       labelKey: "Sl. No.",
     },
@@ -87,10 +107,48 @@ export const REPORT_COLUMNS_MAPPER = {
       labelKey: "ULB",
     },
     {
-      labelKey: "Date",
+      labelKey: "Ward Number",
     },
     {
-      labelKey: "Count"
+      labelKey: "Consumer Name",
+    },
+    {
+      labelKey: "Consumer Address",
+    },
+    {
+      labelKey: "Mobile Number",
+    },
+    {
+      labelKey: "Connection Number",
+    },
+    {
+      labelKey: "Old Connection Number",
+    },
+    {
+      labelKey: "Connection Type",
+    },
+    {
+      labelKey: "Connection Category",
+    },
+    {
+      labelKey: "Usage Category",
+    },
+    {
+      labelKey: "Connection Facility",
+    },
+  ],
+  billsummaryreport: [
+    {
+    labelKey: "Sl. No.",
+    },
+    {
+    labelKey: "ULB",
+    },
+    {
+    labelKey: "Date",
+    },
+    {
+    labelKey: "Count"
     }
-  ]
+    ]
 };

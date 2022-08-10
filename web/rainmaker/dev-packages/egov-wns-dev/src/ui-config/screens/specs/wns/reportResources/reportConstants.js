@@ -1,11 +1,13 @@
 export const REPORT_HEADER_MAPPER = {
   dateWiseEmployeeCollection: "Employee Date Wise WS Collection",
   consumerMasterReport: "W&S Consumer Master Report",
+  billsummaryreport: "W&S Bill Summary Report"
 };
 
 export const REPORT_SUB_HEADER_MAPPER = {
   dateWiseEmployeeCollection: "Modify report by date range",
   consumerMasterReport: "Modify report by date range",
+  billsummaryreport: "Modify report by date range"
 };
 
 export const REPORT_DROPDOWN_OPTIONS = {
@@ -57,7 +59,8 @@ export const REPORT_DROPDOWN_OPTIONS = {
 
 export const REPORT_TABLE_TITLE_MAPPER = {
   dateWiseEmployeeCollection: "Employee Date Wise WS Collection Report",
-  consumerMasterReport: "Consumer Master Report"
+  consumerMasterReport: "Consumer Master Report",
+  billsummaryreport: "W&S Bill Summary Report"
 }
 
 export const REPORT_COLUMNS_MAPPER = {
@@ -134,4 +137,18 @@ export const REPORT_COLUMNS_MAPPER = {
       labelKey: "Connection Facility",
     },
   ],
+  billsummaryreport: [
+    {
+    labelKey: "Sl. No.",
+    },
+    {
+    labelKey: "ULB",
+    },
+    {
+    labelKey: "Date",
+    },
+    {
+    labelKey: "Count"
+    }
+    ]
 };

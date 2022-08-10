@@ -10,8 +10,10 @@ import {
   REPORT_COLUMNS_MAPPER,
   REPORT_TABLE_TITLE_MAPPER,
 } from "./reportConstants";
-import { dateWiseEmployeeCollectionForm } from "./reportForms/dateWiseEmployeeCollectionForm";
+import {dateWiseEmployeeCollectionForm} from "./reportForms/dateWiseEmployeeCollectionForm";
+import { billSummaryReportForm } from "./reportForms/billSummaryreportFrom";
 import { consumerMasterReportForm } from "./reportForms/consumerMasterReportForm";
+
 
 export const getReportHeader = () => {
   let title = getQueryArg(window.location.href, "title");
@@ -62,6 +64,8 @@ export const getFormItems = () => {
     case "consumerMasterReport":
       reportForm = consumerMasterReportForm;
       break;
+    case "billsummaryreport":
+      reportForm = billSummaryReportForm;
     default:
       break;
   }

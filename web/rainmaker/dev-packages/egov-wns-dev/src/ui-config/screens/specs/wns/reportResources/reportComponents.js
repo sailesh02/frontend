@@ -12,6 +12,8 @@ import {
 } from "./reportConstants";
 import { dateWiseEmployeeCollectionForm } from "./reportForms/dateWiseEmployeeCollectionForm";
 import { consumerMasterReportForm } from "./reportForms/consumerMasterReportForm";
+import { billSummaryReportForm } from "./reportForms/billSummaryreportFrom";
+
 
 export const getReportHeader = () => {
   let title = getQueryArg(window.location.href, "title");
@@ -62,6 +64,8 @@ export const getFormItems = () => {
     case "consumerMasterReport":
       reportForm = consumerMasterReportForm;
       break;
+    case "billsummaryreport":
+      reportForm = billSummaryReportForm;
     default:
       break;
   }

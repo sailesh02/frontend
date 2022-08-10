@@ -1,9 +1,11 @@
 export const REPORT_HEADER_MAPPER = {
   dateWiseEmployeeCollection: "Employee Date Wise WS Collection",
+  billsummaryreport: "W&S Bill Summary Report"
 };
 
 export const REPORT_SUB_HEADER_MAPPER = {
   dateWiseEmployeeCollection: "Modify report by date range",
+  billsummaryreport: "Modify report by date range"
 };
 
 export const REPORT_DROPDOWN_OPTIONS = {
@@ -77,4 +79,18 @@ export const REPORT_COLUMNS_MAPPER = {
       labelKey: "Collected Amount",
     },
   ],
+  billsummaryreport: [
+    {
+      labelKey: "Sl. No.",
+    },
+    {
+      labelKey: "ULB",
+    },
+    {
+      labelKey: "Date",
+    },
+    {
+      labelKey: "Count"
+    }
+  ]
 };

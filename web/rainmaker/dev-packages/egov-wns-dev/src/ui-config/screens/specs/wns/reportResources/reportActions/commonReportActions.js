@@ -1,6 +1,6 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { REPORT_DROPDOWN_OPTIONS } from "../reportConstants";
-import { employeeDateWiseWSCollectionSearch } from "./reportSearchActions";
+import { billSummaryReportSearch, employeeDateWiseWSCollectionSearch } from "./reportSearchActions";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
@@ -112,6 +112,9 @@ const getTableData = async (params, state, dispatch) => {
   switch (title) {
     case "dateWiseEmployeeCollection":
       tableData = await employeeDateWiseWSCollectionSearch(params, state, dispatch);
+      break;
+    case "billsummaryreport":
+      tableData = await billSummaryReportSearch(params, state, dispatch)
       break;
     default:
       break;

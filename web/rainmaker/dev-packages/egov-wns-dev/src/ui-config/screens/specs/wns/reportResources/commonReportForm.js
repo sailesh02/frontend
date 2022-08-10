@@ -1,7 +1,7 @@
 import {
   getCommonCard,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getReportSubHeader, getFormItems, getTableColumns } from "./reportComponents";
+import { getReportSubHeader, getFormItems, getTableColumns, getTableTitle } from "./reportComponents";
 import { getSearchAction } from "./reportActions/commonReportActions";
 import { sortByEpoch, getEpochForDate } from "../../utils";
 
@@ -26,7 +26,7 @@ export const commonReportTable = {
   props: {
     columns: getTableColumns(),
     title: {
-      labelName: "Employee Date Wise WS Collection Report",
+      labelName: getTableTitle(),
     },
     rows: "",
     options: {

@@ -16,16 +16,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
-// const getCurrentDate = () => {
-//   var today = new Date();
-//   var dd = String(today.getDate()).padStart(2, "0");
-//   var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-//   var yyyy = today.getFullYear();
-
-//   today = yyyy + "-" + mm + "-" + dd;
-//   return today;
-// };
+import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
 
 class WnsReports extends Component {
   constructor(props) {
@@ -37,7 +28,7 @@ class WnsReports extends Component {
   }
 
   isFormValid = (reportFormObj, formItems) => {
-    const allReqFilds = formItems.filter((eachItem) => eachItem.isRequired);
+    const allReqFilds = formItems.filter((eachItem) => eachItem.required);
     let isValid = true;
     allReqFilds.forEach((eachItem) => {
       if (!reportFormObj[eachItem.key]) {
@@ -80,8 +71,8 @@ class WnsReports extends Component {
       localePrefix,
       gridSm,
       className,
-      isRequired = false,
-      isDisabled = false,
+      required = false,
+      disabled = false,
       ...rest
     } = entry;
     switch (type) {
@@ -93,7 +84,7 @@ class WnsReports extends Component {
 
           jsonPath: jsonPath,
           componentJsonpath: jsonPath,
-          helperText: isRequired ? "Required" : "",
+          helperText: required ? "Required" : "",
           gridDefination: {
             xs: 12,
             sm: gridSm ? gridSm : 4,
@@ -108,8 +99,8 @@ class WnsReports extends Component {
               labelKey: placeholderLabelKey,
             },
             localePrefix: localePrefix,
-            required: isRequired,
-            disabled: isDisabled,
+            required: required,
+            disabled: disabled,
             style: {
               width: "100%",
               cursor: "pointer",
@@ -140,8 +131,8 @@ class WnsReports extends Component {
             pattern: getPattern("Date"),
             // errorMessage,
             // requiredMessage,
-            required: isRequired,
-            disabled: isDisabled,
+            required: required,
+            disabled: disabled,
             gridDefination: {
               xs: 12,
               sm: gridSm ? gridSm : 4,
@@ -168,8 +159,8 @@ class WnsReports extends Component {
             componentJsonpath: jsonPath,
             // errorMessage,
             // requiredMessage,
-            required: isRequired,
-            disabled: isDisabled,
+            required: required,
+            disabled: disabled,
             gridDefination: {
               xs: 12,
               sm: gridSm ? gridSm : 4,
@@ -225,7 +216,7 @@ class WnsReports extends Component {
       let newItem = { ...eachItem };
       if (["text"].includes(eachItem.type)) {
         newItem["props"] = { value: "", ...newItem["props"] };
-      } 
+      }
       return newItem;
     });
     this.setState({
@@ -233,10 +224,15 @@ class WnsReports extends Component {
       resetField: true,
     });
   };
-
+  getLoader = () => {
+    let { preparedFinalObject } = this.props.state.screenConfiguration;
+    const loader = preparedFinalObject.reportLoader;
+    return loader ? <LoadingIndicator /> : null;
+  }
   render() {
     return (
       <React.Fragment>
+        {this.getLoader()}
         <Grid container spacing={2}>
           <RenderScreen
             components={this.getCardItems()}
@@ -244,18 +240,26 @@ class WnsReports extends Component {
           />
         </Grid>
         <Grid container spacing={2} className="rt-form-btn-cntr">
-          <Button variant="contained" onClick={this.handleSearch} size="large"style={{
-            color: "white",
-            backgroundColor: "#fe7a51",
-            borderRadius: "2px",
-          }}>
+          <Button
+            variant="contained"
+            onClick={this.handleSearch}
+            size="large"
+            style={{
+              color: "white",
+              backgroundColor: "#fe7a51",
+              borderRadius: "2px",
+            }}>
             Search
           </Button>
-          <Button variant="outlined" onClick={this.clearFields} size="large" style={{
-            color: "#767676",
-            backgroundColor: "#ffffff",
-            borderRadius: "2px",
-          }}
+          <Button
+            variant="outlined"
+            onClick={this.clearFields}
+            size="large"
+            style={{
+              color: "#767676",
+              backgroundColor: "#ffffff",
+              borderRadius: "2px",
+            }}
           >
             Reset
           </Button>

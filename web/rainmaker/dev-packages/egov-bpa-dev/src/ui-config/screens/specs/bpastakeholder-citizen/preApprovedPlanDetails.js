@@ -26,7 +26,6 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { validateFields } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import data from "./preApprovePlanResource/dummy.json";
 import { downloadDocuments } from "./preApprovePlanResource/document";
 import { generatePreapproveBill } from "../utils";
 

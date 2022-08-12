@@ -23,7 +23,6 @@ export const billSummaryReportForm = [
     placeholderLabelKey: "Select Month Year",
     // localePrefix,
     gridSm: 4,
-    // className,
     isRequired: true,
     // isDisabled: false,
   },

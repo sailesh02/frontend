@@ -1,6 +1,8 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
-  getCommonContainer, getCommonHeader, getCommonTitle,
+  getCommonContainer, 
+  getCommonHeader, 
+  getCommonTitle,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   REPORT_HEADER_MAPPER,

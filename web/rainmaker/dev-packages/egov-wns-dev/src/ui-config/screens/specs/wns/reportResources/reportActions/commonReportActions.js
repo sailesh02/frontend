@@ -2,8 +2,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { REPORT_DROPDOWN_OPTIONS } from "../reportConstants";
 import { billSummaryReportSearch, employeeDateWiseWSCollectionSearch, consumerMasterReportSearch, waterbillDemandReportSearch } from "./reportSearchActions";
 import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
+  handleScreenConfigurationFieldChange as handleField, prepareFinalObject,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../../../ui-utils";

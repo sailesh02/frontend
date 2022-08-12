@@ -21,7 +21,6 @@ export const waterMonthlyDemandReportForm = [
       jsonPath: "reportForm.fromDate",
       labelKey: "From Date",
       placeholderLabelKey: "Select Date",
-      // localePrefix,
       gridSm: 4,
       // className,
       required: true,

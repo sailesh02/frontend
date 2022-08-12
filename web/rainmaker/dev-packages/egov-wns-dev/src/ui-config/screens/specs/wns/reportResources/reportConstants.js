@@ -12,6 +12,7 @@ export const REPORT_SUB_HEADER_MAPPER = {
   waterMonthlyDemandReport: "Modify report by date range"
 };
 
+
 export const REPORT_DROPDOWN_OPTIONS = {
   dateWiseEmployeeCollection: {
     paymentMode: [

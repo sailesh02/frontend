@@ -20,7 +20,7 @@ export const billSummaryReportForm = [
     type: "date",
     jsonPath: "reportForm.monthYear",
     // sourceJsonPath,
-    labelKey: "Month Year",
+    labelKey: "Month/Year",
     placeholderLabelKey: "Select Month Year",
     // localePrefix,
     gridSm: 4,

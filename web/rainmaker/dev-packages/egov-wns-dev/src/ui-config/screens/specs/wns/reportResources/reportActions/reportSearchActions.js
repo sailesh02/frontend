@@ -155,3 +155,61 @@ export const billSummaryReportSearch = async (
     return null
   }
 };
+
+export const waterbillDemandReportSearch = async (params, state, dispatch) => {
+  try {
+    const formattedParams = {
+      ...params,
+      fromDate: Date.parse(params["fromDate"]),
+      toDate: Date.parse(params["toDate"]),
+      ward: params["ward"] ? params["ward"] : "NIL",
+    };
+    let queryObject = Object.keys(formattedParams).map((key) => ({
+      key: key,
+      value: formattedParams[key],
+    }));
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/report-services/reports/ws/waterMonthlyDemandReport",
+      "",
+      queryObject
+    );
+    dispatch(
+      prepareFinalObject(
+        "reportTableData",
+        payload["waterBillDemandWSReports"]
+      )
+    );
+    let tableData = payload.waterMonthlyDemandResponse.map(
+      (eachItem, index) => ({
+        "Sl. No.": index + 1,
+        ULB: eachItem["ulb"],
+        "Ward": eachItem["ward"],
+        "Connection No": eachItem["connectionNo"],
+        "Old Connection No": eachItem["oldConnectionNo"],
+        "Connection Type": eachItem["connectionType"],
+        "Connection Holder Name": eachItem["connectionHolderName"],
+        "Collection Amount": eachItem["collectionAmount"],
+        "Contact No": eachItem["contactNo"],
+        "Address": eachItem["address"],
+        "Demand Period From": eachItem["demandPeriodFrom"] ? epochToDDMMYYYYFromatter(eachItem["demandPeriodFrom"]) : "NA",
+        "Demand Period To": eachItem["demandPriodTo"] ? epochToDDMMYYYYFromatter(eachItem["demandPriodTo"]) : "NA",
+        "Current Demand": eachItem["currentDemandAmount"],
+        "Collection Amount": eachItem["collectionAmount"],
+        "Rebate Amount": eachItem["rebateAmount"],
+        "Penalty": eachItem["penaltyAmount"],
+        "Advance": eachItem["advanceAmount"],
+        "Arrear": eachItem["arrearAmt"],
+        "Total Due": eachItem["totalDueAmount"],
+        "Amount Payable after Rebate": eachItem["amountPayableAfterRebateAmount"],
+        "Amount Payable with Penalty": eachItem["amountPayableWithPenaltyAmount"]
+      })
+    );
+    return tableData;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
+    console.log(error.message);
+    return null;
+  }
+};

@@ -1,9 +1,8 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { REPORT_DROPDOWN_OPTIONS } from "../reportConstants";
-import { employeeDateWiseWSCollectionSearch, consumerMasterReportSearch, billSummaryReportSearch } from "./reportSearchActions";
+import { billSummaryReportSearch, employeeDateWiseWSCollectionSearch, consumerMasterReportSearch, waterbillDemandReportSearch } from "./reportSearchActions";
 import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
+  handleScreenConfigurationFieldChange as handleField, prepareFinalObject,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../../../ui-utils";
@@ -119,6 +118,12 @@ const getTableData = async (params, state, dispatch) => {
       break;
     case "consumerMasterReport":
       tableData = await consumerMasterReportSearch(params, state, dispatch);
+      break;
+    case "billsummaryreport":
+      tableData = await billSummaryReportSearch(params, state, dispatch)
+      break;
+    case "waterMonthlyDemandReport":
+      tableData = await waterbillDemandReportSearch(params, state, dispatch)
       break;
     default:
       break;

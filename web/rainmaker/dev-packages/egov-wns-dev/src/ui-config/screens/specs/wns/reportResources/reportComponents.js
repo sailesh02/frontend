@@ -1,7 +1,7 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
-  getCommonContainer,
-  getCommonHeader,
+  getCommonContainer, 
+  getCommonHeader, 
   getCommonTitle,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
@@ -13,6 +13,7 @@ import {
 import {dateWiseEmployeeCollectionForm} from "./reportForms/dateWiseEmployeeCollectionForm";
 import { billSummaryReportForm } from "./reportForms/billSummaryreportFrom";
 import { consumerMasterReportForm } from "./reportForms/consumerMasterReportForm";
+import {waterMonthlyDemandReportForm} from './reportForms/waterMonthlyDemandReportForm'
 
 
 export const getReportHeader = () => {
@@ -66,6 +67,9 @@ export const getFormItems = () => {
       break;
     case "billsummaryreport":
       reportForm = billSummaryReportForm;
+      break
+    case "waterMonthlyDemandReport":
+      reportForm = waterMonthlyDemandReportForm;
     default:
       break;
   }

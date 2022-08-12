@@ -1,14 +1,17 @@
 export const REPORT_HEADER_MAPPER = {
   dateWiseEmployeeCollection: "Employee Date Wise WS Collection",
   consumerMasterReport: "W&S Consumer Master Report",
-  billsummaryreport: "W&S Bill Summary Report"
+  billsummaryreport: "W&S Bill Summary Report",
+  waterMonthlyDemandReport: "Water Monthly Demands Report"
 };
 
 export const REPORT_SUB_HEADER_MAPPER = {
   dateWiseEmployeeCollection: "Modify report by date range",
   consumerMasterReport: "Modify report by date range",
-  billsummaryreport: "Modify report by date range"
+  billsummaryreport: "Modify report by date range",
+  waterMonthlyDemandReport: "Modify report by date range"
 };
+
 
 export const REPORT_DROPDOWN_OPTIONS = {
   dateWiseEmployeeCollection: {
@@ -60,8 +63,10 @@ export const REPORT_DROPDOWN_OPTIONS = {
 export const REPORT_TABLE_TITLE_MAPPER = {
   dateWiseEmployeeCollection: "Employee Date Wise WS Collection Report",
   consumerMasterReport: "Consumer Master Report",
-  billsummaryreport: "W&S Bill Summary Report"
+  billsummaryreport: "W&S Bill Summary Report",
+  waterMonthlyDemandReport: "Water Monthly Demands Report"
 }
+
 
 export const REPORT_COLUMNS_MAPPER = {
   dateWiseEmployeeCollection: [
@@ -150,5 +155,68 @@ export const REPORT_COLUMNS_MAPPER = {
     {
     labelKey: "Count"
     }
+    ],
+    waterMonthlyDemandReport: [
+      {
+        labelKey: "Sl. No.",
+      },
+      {
+        labelKey: "ULB",
+      },
+      {
+        labelKey: "Ward",
+      },
+      {
+        labelKey: "Connection No",
+      },
+      {
+        labelKey: "Old Connection No",
+      },
+      {
+        labelKey: "Connection Type",
+      },
+      {
+        labelKey: "Connection Holder Name",
+      },
+      {
+        labelKey: "Contact No",
+      },
+      {
+        labelKey: "Address",
+      },
+      {
+        labelKey: "Demand Period From",
+      },
+      {
+        labelKey: "Demand Period To",
+      },
+      {
+        labelKey: "Current Demand",
+      },
+      {
+        labelKey: "Collection Amount",
+      },
+      {
+        labelKey: "Rebate Amount",
+      },
+      {
+        labelKey: "Penalty",
+      },
+      {
+        labelKey: "Advance",
+      },
+      {
+        labelKey: "Arrear",
+      },
+      {
+        labelKey: "Total Due",
+      },
+      {
+        labelKey: "Amount Payable after Rebate",
+      },
+      {
+        labelKey: "Amount Payable with Penalty",
+      },
+      
     ]
 };

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 
 const BoxImage =(props)=>{
-  const {src,children,...rest}=props;
+  const {src,children,height,width,...rest}=props;
   return(
-    <img src={src} />
+    <img src={src} width={width} height={height}/>
   )
 }
 

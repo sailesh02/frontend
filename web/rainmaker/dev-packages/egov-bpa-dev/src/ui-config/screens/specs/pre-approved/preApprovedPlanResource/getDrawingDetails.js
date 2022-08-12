@@ -41,6 +41,29 @@ export const getDrawingDetails = async (state, dispatch, fieldInfo=false) => {
       drawingDetails.preapprovedPlan.forEach((data, index) => {
         //   Todo list
         console.log("data............", data);
+        const confirmation = [
+          { code: "YES", label: "Yes" },
+          { code: "NO", label: "No" }
+        ]
+        const landStatus = [
+          { code: "VACANT", label: "Vacant" },
+          { code: "BUILDING_CONSTRUCTED", label: "Building Constructed" },
+          { code: "UNDER_CONSTRUCTION", label: "Under Construction" }
+        ];
+        const project = [
+          { code: "RESIDENTIAL", label: "REsidential" },
+          { code: "OTHERS", label: "Others" },
+        ];
+        const governementBody = [
+          { code: "GA", label: "GA" },
+          { code: "OSHB", label: "BDA" },
+          { code: "BDA", label: "BDA" }
+        ];
+        dispatch(prepareFinalObject("PA.confirmation", confirmation));
+        dispatch(prepareFinalObject("PA.landStatus", landStatus));
+        dispatch(prepareFinalObject("PA.project", project));
+        dispatch(prepareFinalObject("PA.governementBody", governementBody));
+
         dispatch(prepareFinalObject("PA.preApprovedPlanDetails", data));
         dispatch(
           prepareFinalObject(

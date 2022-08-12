@@ -44,7 +44,7 @@ import {
   compare,
   generateBillForSanctionFee,
 } from "../utils/preApprovePlan";
-import {setInstallmentInfo} from "../utils/index"
+import {generatePreapproveBill, setInstallmentInfo} from "../utils/index"
 import { spclArchitectsPicker, approvalAuthority } from "./searchResource/spclArchitects";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import {
@@ -1153,27 +1153,13 @@ const setSearchResponse = async (
   /*********Call Sanction Fee Api and save it in State********/
   // if (
   //   appStatus &&
-  //   (appStatus == "APP_L1_VERIFICATION_INPROGRESS" ||
-  //     appStatus == "APP_L2_VERIFICATION_INPROGRESS" ||
-  //     appStatus == "APP_L3_VERIFICATION_INPROGRESS" ||
+  //   (
   //     appStatus == "APPROVAL_INPROGRESS")
   // ) {
-  //   generateBillForSanctionFee(
-  //     response,
-  //     edcrRes && edcrRes.edcrDetail[0],
-  //     dispatch,
-  //     applicationNumber,
-  //     tenantId,
-  //     "applyScreenMdmsData.sanctionFeeCardData"
+  //   const biilInfo = generatePreapproveBill(
+  //     dispatch
   //   );
-  //   generateBillForSanctionFee(
-  //     response,
-  //     edcrRes && edcrRes.edcrDetail[0],
-  //     dispatch,
-  //     applicationNumber,
-  //     tenantId,
-  //     "applyScreenMdmsData.estimateCardData"
-  //   );
+  //   console.log(biilInfo)
   // }
   // dispatch(prepareFinalObject("BPA.additionalDetails.sanctionFeeCardEnabled", false));
   /*******************/

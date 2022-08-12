@@ -5268,6 +5268,122 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
   prepareFinalCards(state, dispatch, documentsPreview, finalDocuments, isVisibleTrue);
 };
 
+export const generatePreapproveBill = async(dispatch) => {
+  const sancFee = {
+    "Calculations": [
+      {
+        "applicationNumber": null,
+        "BPA": {
+          "id": null,
+          "applicationNo": null,
+          "approvalNo": null,
+          "accountId": null,
+          "edcrNumber": "PAP-000060",
+          "riskType": "LOW",
+          "businessService": "BPA6",
+          "landId": null,
+          "tenantId": "od.cuttack",
+          "approvalDate": null,
+          "applicationDate": null,
+          "status": null,
+          "documents": null,
+          "landInfo": null,
+          "workflow": null,
+          "auditDetails": null,
+          "additionalDetails": null,
+          "reWorkHistory": null,
+          "isRevisionApplication": false
+        },
+        "tenantId": "od.cuttack",
+        "taxHeadEstimates": [
+          {
+            "taxHeadCode": "BPA_SANC_SANC_FEE",
+            "estimateAmount": 1305,
+            "category": "FEE"
+          },
+          {
+            "taxHeadCode": "BPA_SANC_WORKER_WELFARE_CESS",
+            "estimateAmount": 17054,
+            "category": "FEE"
+          },
+          {
+            "taxHeadCode": "BPA_SANC_SHELTER_FEE",
+            "estimateAmount": 0,
+            "category": "FEE"
+          },
+          {
+            "taxHeadCode": "BPA_SANC_TEMP_RETENTION_FEE",
+            "estimateAmount": 0,
+            "category": "FEE"
+          },
+          {
+            "taxHeadCode": "BPA_SANC_SECURITY_DEPOSIT",
+            "estimateAmount": 0,
+            "category": "FEE"
+          },
+          {
+            "taxHeadCode": "BPA_SANC_PUR_FAR",
+            "estimateAmount": 0,
+            "category": "FEE"
+          },
+          {
+            "taxHeadCode": "BPA_SANC_EIDP_FEE",
+            "estimateAmount": 0,
+            "category": "FEE"
+          },
+          {
+            "taxHeadCode": "BPA_SANC_ADJUSTMENT_AMOUNT",
+            "estimateAmount": 0,
+            "category": "FEE"
+          }
+        ],
+        "feeType": "SanctionFee"
+      }
+    ]
+  }
+  const appFee = {
+    "Calculations": [
+      {
+        "applicationNumber": null,
+        "BPA": {
+          "id": null,
+          "applicationNo": null,
+          "approvalNo": null,
+          "accountId": null,
+          "edcrNumber": "PAP-000060",
+          "riskType": "LOW",
+          "businessService": "BPA6",
+          "landId": null,
+          "tenantId": "od.cuttack",
+          "approvalDate": null,
+          "applicationDate": null,
+          "status": null,
+          "documents": null,
+          "landInfo": null,
+          "workflow": null,
+          "auditDetails": null,
+          "additionalDetails": null,
+          "reWorkHistory": null,
+          "isRevisionApplication": false
+        },
+        "tenantId": "od.cuttack",
+        "taxHeadEstimates": [
+          {
+            "taxHeadCode": "BPA_BLDNG_OPRN_FEE",
+            "estimateAmount": 250,
+            "category": "FEE"
+          }
+        ],
+        "feeType": "ApplicationFee"
+      }
+    ]
+  }
+  return {
+    sancFee,
+    appFee
+  }
+}
+
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
   let docs = get(state.screenConfiguration.preparedFinalObject, "documentsContract");
   let bpaDocs = [];

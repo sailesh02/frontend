@@ -19,7 +19,6 @@ export const waterMonthlyDemandReportForm = [
       key: "fromDate",
       type: "date",
       jsonPath: "reportForm.fromDate",
-      // sourceJsonPath,
       labelKey: "From Date",
       placeholderLabelKey: "Select Date",
       // localePrefix,

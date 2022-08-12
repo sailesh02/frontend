@@ -1,6 +1,5 @@
 import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
+  handleScreenConfigurationFieldChange as handleField, prepareFinalObject,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../../../ui-utils";

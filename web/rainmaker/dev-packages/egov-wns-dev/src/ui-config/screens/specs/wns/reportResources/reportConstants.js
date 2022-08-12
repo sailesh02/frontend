@@ -66,6 +66,7 @@ export const REPORT_TABLE_TITLE_MAPPER = {
   waterMonthlyDemandReport: "Water Monthly Demands Report"
 }
 
+
 export const REPORT_COLUMNS_MAPPER = {
   dateWiseEmployeeCollection: [
     {

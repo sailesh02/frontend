@@ -1,8 +1,6 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
-  getCommonContainer,
-  getCommonHeader,
-  getCommonTitle,
+  getCommonContainer, getCommonHeader, getCommonTitle,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   REPORT_HEADER_MAPPER,
@@ -10,10 +8,12 @@ import {
   REPORT_COLUMNS_MAPPER,
   REPORT_TABLE_TITLE_MAPPER,
 } from "./reportConstants";
-import { dateWiseEmployeeCollectionForm } from "./reportForms/dateWiseEmployeeCollectionForm";
+import {dateWiseEmployeeCollectionForm} from "./reportForms/dateWiseEmployeeCollectionForm";
+import { billSummaryReportForm } from "./reportForms/billSummaryreportFrom";
 import { consumerMasterReportForm } from "./reportForms/consumerMasterReportForm";
 import { billSummaryReportForm } from "./reportForms/billSummaryreportFrom";
 import {waterMonthlyDemandReportForm} from './reportForms/waterMonthlyDemandReportForm'
+
 
 export const getReportHeader = () => {
   let title = getQueryArg(window.location.href, "title");

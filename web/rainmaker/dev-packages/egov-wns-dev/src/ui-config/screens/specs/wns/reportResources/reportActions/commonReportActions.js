@@ -113,6 +113,10 @@ const getTableData = async (params, state, dispatch) => {
     case "dateWiseEmployeeCollection":
       tableData = await employeeDateWiseWSCollectionSearch(params, state, dispatch);
       break;
+
+    case "billsummaryreport":
+      tableData = await billSummaryReportSearch(params, state, dispatch)
+      break;
     case "consumerMasterReport":
       tableData = await consumerMasterReportSearch(params, state, dispatch);
       break;

@@ -5,7 +5,7 @@ export const feetToMeterConversion = (action, state, dispatch) => {
   const includeWidthInFt = splitVal.includes("widthInFt");
   const includeLengthInFt = splitVal.includes("lengthInFt");
   if (includeWidthInFt) {
-    let width = parseInt(action.value) / 3.2808
+    let width = parseFloat(action.value) / 3.2808
     width.toFixed(2)
     dispatch(
       prepareFinalObject(
@@ -15,7 +15,7 @@ export const feetToMeterConversion = (action, state, dispatch) => {
     );
   }
   if (includeLengthInFt) {
-    let length = parseInt(action.value) / 3.2808
+    let length = parseFloat(action.value) / 3.2808
     length.toFixed(2)
     dispatch(
       prepareFinalObject(

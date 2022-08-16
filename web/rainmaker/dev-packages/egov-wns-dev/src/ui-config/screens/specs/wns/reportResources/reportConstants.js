@@ -5,7 +5,8 @@ export const REPORT_HEADER_MAPPER = {
   waterMonthlyDemandReport: "Water Monthly Demands Report",
   consumerPaymentHistory: "W&S Consumer Payment History Report",
   newConsumerMonthlyReport: "W&S New Consumer Monthly Report",
-  consumerHistoryReport: "W&S Consumer History Report"
+  consumerHistoryReport: "W&S Consumer History Report",
+  consumerBillHistoryReport: "W&S Legacy Bill History Report"
 };
 
 export const REPORT_SUB_HEADER_MAPPER = {
@@ -15,7 +16,8 @@ export const REPORT_SUB_HEADER_MAPPER = {
   waterMonthlyDemandReport: "Modify report by date range",
   consumerPaymentHistory: "Modify report by date range",
   newConsumerMonthlyReport: "Modify report by date range",
-  consumerHistoryReport: "Modify report by date range"
+  consumerHistoryReport: "Modify report by date range",
+  consumerBillHistoryReport: "Modify report by date range"
 };
 
 export const REPORT_DROPDOWN_OPTIONS = {
@@ -63,6 +65,18 @@ export const REPORT_DROPDOWN_OPTIONS = {
       },
     ],
   },
+  waterMonthlyDemandReport: {
+    connectionType: [
+      {
+        code: "Metered",
+        name: "Metered",
+      },
+      {
+        code: "Non Metered",
+        name: "Non Metered",
+      },
+    ],
+  },
 };
 
 export const REPORT_TABLE_TITLE_MAPPER = {
@@ -72,7 +86,8 @@ export const REPORT_TABLE_TITLE_MAPPER = {
   waterMonthlyDemandReport: "Water Monthly Demands Report",
   consumerPaymentHistory: "Consumer Payment History Report",
   newConsumerMonthlyReport: "New Consumer Monthly Report",
-  consumerHistoryReport: "Consumer History Report"
+  consumerHistoryReport: "Consumer History Report",
+  consumerBillHistoryReport: "W&S Legacy Bill History Report"
 };
 
 export const REPORT_COLUMNS_MAPPER = {
@@ -363,4 +378,66 @@ export const REPORT_COLUMNS_MAPPER = {
       labelKey: "Receipt Number",
     },
   ],
+  consumerBillHistoryReport: [
+    {
+      labelKey: "Sl. No.",
+    },
+    {
+      labelKey: "ULB",
+    },
+    {
+      labelKey: "Old Connection No",
+    },
+    {
+      labelKey: "Month Year",
+    },
+    // {
+    //   labelKey: "Bill Date",
+    // },
+    // {
+    //   labelKey: "Rebate Date",
+    // },
+    // {
+    //   labelKey: "Current SW Demand",
+    // },
+    // {
+    //   labelKey: "Net Payment",
+    // },
+    {
+      labelKey: "Bill No",
+    },
+    {
+      labelKey: "Previous Due",
+    },
+    {
+      labelKey: "Adjusted Amount",
+    },
+    {
+      labelKey: "Previous Payment",
+    },
+    {
+      labelKey: "Rebate Available",
+    },
+    {
+      labelKey: "Fine Levied",
+    },
+    {
+      labelKey: "Current Water Demand",
+    },
+    // {
+    //   labelKey: "NPR",
+    // },
+    // {
+    //   labelKey: "NPF",
+    // },
+    // {
+    //   labelKey: "Previous Reading",
+    // },
+    // {
+    //   labelKey: "Current Reading",
+    // },
+    // {
+    //   labelKey: "Total Units Consumed",
+    // },
+  ]
 };

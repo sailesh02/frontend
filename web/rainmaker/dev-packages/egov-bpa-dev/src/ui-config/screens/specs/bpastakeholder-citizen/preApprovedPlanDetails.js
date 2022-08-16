@@ -58,16 +58,19 @@ const formValid = (state, dispatch) => {
   return isFormValid;
 };
 
-const getFileUrl = async(preApprovedPlanList) => {
+const getFileUrl = async (preApprovedPlanList) => {
   for (let item of preApprovedPlanList.preapprovedPlan) {
     for (let document of item.documents) {
-      const fileUrls = await getFileUrlFromAPI(document.fileStoreId);
-      document.fileUrl =
-      fileUrls[document.fileStoreId].split(",")[0];
+      if (
+        document.additionalDetails.title == "PREAPPROVE_BUILDING_PLAN_IMAGE"
+      ) {
+        const fileUrls = await getFileUrlFromAPI(document.fileStoreId);
+        document.fileUrl = fileUrls[document.fileStoreId].split(",")[0];
+      }
     }
   }
-  return preApprovedPlanList
-}
+  return preApprovedPlanList;
+};
 
 const setDrawingData = async (preApprovedPlanList) => {
   const preapprove = await getFileUrl(preApprovedPlanList);

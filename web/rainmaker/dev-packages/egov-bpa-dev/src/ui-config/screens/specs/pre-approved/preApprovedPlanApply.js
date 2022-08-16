@@ -95,7 +95,7 @@ export const stepper = getStepperObject(
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Drawing No`,
+    labelName: `Drawing Details`,
     labelKey: "PREAPPROVE_DRAWING_HEADER",
   }),
   applicationNumber: {

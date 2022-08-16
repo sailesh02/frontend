@@ -87,6 +87,8 @@ export const getDrawingDetails = async (state, dispatch, fieldInfo=false) => {
         dispatch(
           prepareFinalObject("BPA.serviceType", data.drawingDetail.serviceType)
         );
+        dispatch(prepareFinalObject("BPA.additionalDetails.documents", data.documents));
+
         dispatch(prepareFinalObject("BPA.businessService", "BPA6"));
         // Risk type is hardcoded
         dispatch(prepareFinalObject("BPA.riskType", "LOW"));

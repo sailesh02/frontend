@@ -59,7 +59,7 @@ export const buildingAbstract = getCommonCard({
       totalFar: getTextField({
         label: {
           labelName: "Total FAR",
-          labelKey: "PREAPPROVE_TOTAL_FAR",
+          labelKey: "PREAPPROVE_FAR",
         },
         props: {
           disabled:true,

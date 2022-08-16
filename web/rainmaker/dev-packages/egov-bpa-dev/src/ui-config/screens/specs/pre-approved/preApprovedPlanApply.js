@@ -65,6 +65,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { nocDetailsApplyBPA } from "../egov-bpa/noc";
 import { getNocList } from "./preapprove-search-preview";
 import { getDrawingDetails } from "./preApprovedPlanResource/getDrawingDetails";
+import {landDetails} from "./preApprovedPlanResource/landDetails"
 
 const setUserDetails = (action, state, dispatch) => {
   dispatch(prepareFinalObject("BPA.landInfo.owners[0].name", JSON.parse(getUserInfo()).name));
@@ -118,6 +119,7 @@ export const formwizardFirstStep = {
     basicDetails,
     bpaLocationDetails,
     detailsofplot,
+    landDetails
   },
 };
 
@@ -493,32 +495,6 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
               },
             ];
           }
-
-          // if(bpaDoc.documents ){
-          //   bpaDoc.documents.push(
-          //     {
-          //       title: getTransformedLocale(bpaDoc.dropDownValues.value),
-          //       name: name,
-          //       linkText: "View",
-          //       fileName : name,
-          //       fileStoreId : upDoc.fileStoreId,
-          //       fileUrl : url,
-          //       wfState: upDoc.wfState
-          //     }
-          //   );
-          // }else{
-          //   bpaDoc.documents = [
-          //     {
-          //       title: getTransformedLocale(bpaDoc.dropDownValues.value),
-          //       name: name,
-          //       linkText: "View",
-          //       fileName : name,
-          //       fileStoreId : upDoc.fileStoreId,
-          //       fileUrl : url,
-          //       wfState: upDoc.wfState
-          //     }
-          //   ];
-          // }
         }
       });
     });
@@ -536,15 +512,6 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
         });
       }
     });
-    // bpaDocs.forEach(doc => {
-
-    //   if (doc.documents && doc.documents.length > 0) {
-    //       doc.documents.forEach(docDetail =>{
-    //         docDetail["link"] = fileUrls[docDetail.fileStoreId];
-    //         return docDetail;
-    //       });
-    //   }
-    // });
     dispatch(prepareFinalObject("documentDetailsUploadRedux", bpaDocs));
   }
 };
@@ -729,6 +696,11 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "preApprovedPlanApply",
   beforeInitScreen: (action, state, dispatch, componentJsonpath) => {
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.landDetails.visible",
+      false
+    );
     getNocList(state, dispatch);
     dispatch(prepareFinalObject("BPA", {}));
     const applicationNumber = getQueryArg(

@@ -20,7 +20,7 @@ export const buildingPlanScrutinyDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Pre Approve plan Application Details",
-      labelKey: "BPA_APPLICATION_PREAPPROVE_DETAILS_TITLE"
+      labelKey: "PREAPPROVE_DETAILS_TITLE"
     },
     {
       style: {

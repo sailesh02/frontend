@@ -486,7 +486,7 @@ export const addPreApprovePlan = getCommonCard(
         },
         placeholder: {
           labelName: "Select Level",
-          labelKey: "PREAPPROVED_SELECT_LEVEL"
+          labelKey: "PREAPPROVE_SELECT_LEVEL"
         },
         required: true,
         visible: true,
@@ -521,7 +521,7 @@ export const addPreApprovePlan = getCommonCard(
         },
         placeholder: {
           labelName: "Select Floor Description",
-          labelKey: "PREAPPROVED_SELECT_FLOOR_DESCRIPTION"
+          labelKey: "PREAPPROVE_SELECT_FLOOR_DESCRIPTION"
         },
         props: {
           className: "preapprove-floor-details"

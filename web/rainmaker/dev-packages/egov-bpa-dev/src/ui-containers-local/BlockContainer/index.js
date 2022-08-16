@@ -1,23 +1,23 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+import MUIDataTable from "mui-datatables";
+import { generatePreapproveBill } from "../../ui-config/screens/specs/utils";
 
 const styles = {
   root: {
     color: "black",
   },
   preApprove_blockpDetails: {
-    width: "300px",
-    height: "50px",
-    backgroundColor: "#FF851B",
+    width: "150px",
+    height: "150px",
   },
   selected_preApprove_blockpDetails: {
-    width: "300px",
-    height: "50px",
-    backgroundColor: "#FF851B",
+    width: "150px",
+    height: "150px",
     border: "5px solid #AAAAAA",
   },
 };
@@ -32,7 +32,6 @@ class BlockContainer extends Component {
     window.location = fileUrls[fileStoreId].split(",")[0];
   };
   setValue = (item) => {
-    this.setState({ item: item, selected: true });
     const { data } = this.props;
     const list = data.map((listData, index) => {
       listData.selected = false;
@@ -43,8 +42,26 @@ class BlockContainer extends Component {
       }
       return listData;
     });
-    this.props.updateList("preapprovePlanList", list);
-    this.props.selectedPlot("Scrutiny[1].preApprove.selectedPlot", item);
+    generatePreapproveBill().then((res) => {
+      let totalFee =
+        parseFloat(
+          res.sancFee.Calculations[0].taxHeadEstimates.reduce(
+            (sum, current) => sum + current.estimateAmount,
+            0
+          )
+        ) +
+        parseFloat(
+          res.appFee.Calculations[0].taxHeadEstimates.reduce(
+            (sum, current) => sum + current.estimateAmount,
+            0
+          )
+        );
+      list.totalFee = totalFee;
+      item.totalFee = totalFee;
+      this.setState({ item: item, selected: true });
+      this.props.updateList("preapprovePlanList", list);
+      this.props.selectedPlot("Scrutiny[1].preApprove.selectedPlot", item);
+    });
   };
   render() {
     const { data } = this.props;
@@ -62,7 +79,8 @@ class BlockContainer extends Component {
                 }}
               >
                 {data.map((item, index) => (
-                  <div
+                  <img
+                    src={item.documents[2].fileUrl}
                     key={index}
                     className="preApprove_blockpDetails"
                     value={item}
@@ -72,7 +90,7 @@ class BlockContainer extends Component {
                         ? styles.selected_preApprove_blockpDetails
                         : styles.preApprove_blockpDetails
                     }
-                  ></div>
+                  />
                 ))}
               </div>
             ) : (
@@ -98,9 +116,25 @@ class BlockContainer extends Component {
               fontSize: "14px",
             }}
           >
-            <div>
-              <h3>Drawing Number</h3>
-              <h5>{this.state.item.drawingNo}</h5>
+            <div
+              style={{
+                display: "flex",
+                gap: "15",
+                fontSize: "14px",
+              }}
+            >
+              <div>
+                <h3>Drawing Number</h3>
+                <h5>{this.state.item.drawingNo}</h5>
+              </div>
+              <div
+                style={{
+                  marginLeft: "50px",
+                }}
+              >
+                <h3>Total Fee</h3>
+                <h5>{this.state.item.totalFee}</h5>
+              </div>
             </div>
             <div>
               <h4>
@@ -117,27 +151,30 @@ class BlockContainer extends Component {
                 }}
               >
                 {this.state.item.documents.map((item, index) => (
-                  <a
-                    key={index}
-                    style={{
-                      padding: "10px",
-                      border: "2px solid",
-                      color: "#FF851B",
-                      fontWeight: "500",
-                      background: "transparent",
-                      background: "lightgoldenrodyellow",
-                    }}
-                    
-                  >
+                  <Fragment>
                     {item.additionalDetails.title !=
                       "PREAPPROVE_BUILDING_PLAN_FILE" && (
-                      <span onClick={() => this.onDownloadClick(item.fileStoreId)}>
-                        {`Documet-${index + 1} : ${
-                          item.additionalDetails.title
-                        }`}
-                      </span>
+                      <a
+                        key={index}
+                        style={{
+                          padding: "10px",
+                          border: "2px solid",
+                          color: "#FF851B",
+                          fontWeight: "500",
+                          background: "transparent",
+                          background: "lightgoldenrodyellow",
+                        }}
+                      >
+                        <span
+                          onClick={() => this.onDownloadClick(item.fileStoreId)}
+                        >
+                          {`Documet-${index + 1} : ${
+                            item.additionalDetails.title
+                          }`}
+                        </span>
+                      </a>
                     )}
-                  </a>
+                  </Fragment>
                 ))}
               </div>
             </div>

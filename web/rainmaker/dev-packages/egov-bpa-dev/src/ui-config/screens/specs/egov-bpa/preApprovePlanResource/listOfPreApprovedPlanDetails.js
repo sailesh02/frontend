@@ -5,14 +5,19 @@ import React from "react";
 import get from "lodash/get";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { printPdf } from "egov-ui-kit/utils/commons";
 
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import store from "ui-redux/store";
 
 // Document ddownload once you click on document link available in table row
+
 const onDownloadClick = async (rowData, fileStoreId) => {
   const fileUrls = await getFileUrlFromAPI(fileStoreId);
   window.location = fileUrls[fileStoreId].split(",")[0];
+  //printPdf(fileUrls[fileStoreId].split(",")[0]);
+  
+  
 };
 
 // Iterate document array and show the number of documents to download in row .
@@ -71,8 +76,8 @@ const handleStatusUpdate = async(e,updateValue,status,drawingNo) => {
         toggleSnackbar(
           true,
           {
-            labelName: "PA_UPDATE_SUCCESS",
-            labelKey: "Status Updated Successfully.",
+            labelName: "Pre-Approved plan updated Successfully",
+            labelKey: "PREAPPROVE_UPDATE_SUCCESS",
           },
           "success"
         )

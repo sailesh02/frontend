@@ -12,6 +12,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 //import { resetFields, submitFields } from "./functions";
 import plotDetails from "egov-ui-kit/assets/images/plotDetails.jpg";
+import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField,
@@ -24,6 +26,9 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { validateFields } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { downloadDocuments } from "./preApprovePlanResource/document";
+import { generatePreapproveBill } from "../utils";
+
 
 //   Redirect to apply page
 const getRedirectionBPAURL = (state, dispatch) => {
@@ -53,6 +58,23 @@ const formValid = (state, dispatch) => {
   return isFormValid;
 };
 
+const getFileUrl = async(preApprovedPlanList) => {
+  for (let item of preApprovedPlanList.preapprovedPlan) {
+    for (let document of item.documents) {
+      const fileUrls = await getFileUrlFromAPI(document.fileStoreId);
+      document.fileUrl =
+      fileUrls[document.fileStoreId].split(",")[0];
+    }
+  }
+  return preApprovedPlanList
+}
+
+const setDrawingData = async (preApprovedPlanList) => {
+  const preapprove = await getFileUrl(preApprovedPlanList);
+  
+  return preapprove;
+};
+
 // get search preapproves list
 const getPreApproveList = async (state, dispatch) => {
   let validate = formValid(state, dispatch);
@@ -62,13 +84,6 @@ const getPreApproveList = async (state, dispatch) => {
       "screenConfiguration.preparedFinalObject.Scrutiny[1].preApprove.plotDetails",
       {}
     );
-    let queryObject = {
-      preapprovedPlanSearchCriteria: {
-        plotLength: plotDetails.lengthInFt,
-        plotWidth: plotDetails.widthInFt,
-        roadWidth: plotDetails.abuttingRoadWidthInMt,
-      },
-    };
     try {
       const response = await httpRequest(
         "post",
@@ -77,12 +92,18 @@ const getPreApproveList = async (state, dispatch) => {
         [],
       );
       const preApprovedPlanList = await response;
+      
       if (preApprovedPlanList) {
-        const list = preApprovedPlanList.preapprovedPlan.map((item, index) => {
-          item.selected = false;
-          return item;
-        });
-        dispatch(prepareFinalObject("preapprovePlanList", list));
+        setDrawingData(preApprovedPlanList).then(res=> {
+          if(res && res.preapprovedPlan && res.preapprovedPlan.length>0){
+            const list = res.preapprovedPlan.map((item, index) => {
+              item.selected = false;
+              return item;
+            });
+            dispatch(prepareFinalObject("preapprovePlanList", list));
+            
+          }
+        })
       }
     } catch (err) {
       console.log(err);
@@ -257,41 +278,10 @@ const preApprovedPlanSection = getCommonContainer({
     },
     visible: true,
     children: {
-      plotScheme: {
-        uiFramework: "custom-containers",
-        componentPath: "RadioGroupContainer",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-        },
-        jsonPath: "Scrutiny[1].preApprove.checkPlot[0].plotScheme",
-        props: {
-          label: {
-            name: "Whether Plot is part of government scheme(BDA/GA/OSHB) or private approved lay out?",
-            key: "BPA_PLOT_SCHEME",
-          },
-          buttons: [
-            {
-              labelName: "Yes",
-              labelKey: "BPA_YES_RADIOBUTTON",
-              value: "YES",
-            },
-            {
-              label: "No",
-              labelKey: "BPA_NO_RADIOBUTTON",
-              value: "NO",
-            },
-          ],
-          jsonPath: "Scrutiny[1].preApprove.checkPlot[0].plotScheme",
-          required: true,
-        },
-        required: true,
-        type: "array",
-      },
       lengthInFt: getTextField({
         label: {
           labelName: "Length of plot(in ft.)",
-          labelKey: "PREAPPROVE_PLOT_LENGTH_IN_FEET",
+          labelKey: "PREAPPROVE_PLOT_LENGTH_IN_FT",
         },
         pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         props: {
@@ -309,7 +299,7 @@ const preApprovedPlanSection = getCommonContainer({
       widthInFt: getTextField({
         label: {
           labelName: "Width of plot(in ft.)",
-          labelKey: "PREAPPROVE_PLOT_WITH_IN_FEET",
+          labelKey: "PREAPPROVE_PLOT_WITH_IN_FT",
         },
         pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         props: {
@@ -366,6 +356,8 @@ const preApprovedPlanSection = getCommonContainer({
         componentPath: "BoxImage",
         props: {
           src: plotDetails,
+          height: "300",
+          width: "300",
         },
       },
     },
@@ -380,10 +372,27 @@ const preApprovedPlanSection = getCommonContainer({
     },
     required: true,
     gridDefination: {
-      xs: 12,
-      sm: 4,
+      xs: 6,
+      sm: 6,
     },
   },
+  documents: {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 6,
+      sm: 6,
+    },
+    
+    props: {
+      style: {
+        marginBottom: "30px",
+      },
+    },
+    children: {
+      document: downloadDocuments
+    }
+  }
 });
 
 const buildingInfoCard = getCommonCard({

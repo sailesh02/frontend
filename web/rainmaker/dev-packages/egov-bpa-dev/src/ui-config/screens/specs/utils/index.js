@@ -5268,6 +5268,51 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
   prepareFinalCards(state, dispatch, documentsPreview, finalDocuments, isVisibleTrue);
 };
 
+const getFeeDetails = async(feeType) => {
+  const state = store.getState();
+  let drawing = get(
+    state,
+    "screenConfiguration.preparedFinalObject.preapprovePlanList",
+    []
+  );
+  const payload = {
+    "CalulationCriteria": [
+      {
+          "BPA": {
+              "edcrNumber": drawing[0].drawingNo,
+              "riskType": "LOW",
+              "businessService": "BPA6",
+              "applicationType": drawing[0].drawingDetail.applicationType,
+              "serviceType": drawing[0].drawingDetail.serviceType,
+              "tenantId": drawing[0].tenantId
+          },
+          "feeType": feeType,
+          "tenantId": drawing[0].tenantId,
+          "applicationType": drawing[0].drawingDetail.applicationType,
+          "serviceType": drawing[0].drawingDetail.serviceType
+      }
+    ]
+  }
+  const response = await httpRequest(
+    "post",
+    "/bpa-services/v1/bpa/_estimate",
+    "_search",
+    [],
+    payload
+  );
+  return response;
+}
+
+export const generatePreapproveBill = async() => {
+  const sancFeeDetails = await getFeeDetails("SanctionFee");
+  const appFeeDetails = await getFeeDetails("ApplicationFee")
+  
+  return {
+    sancFee: sancFeeDetails,
+    appFee: appFeeDetails
+  }
+}
+
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
   let docs = get(state.screenConfiguration.preparedFinalObject, "documentsContract");
   let bpaDocs = [];
@@ -5720,15 +5765,19 @@ export const setProposedBuildingData = async (state, dispatch, action, value) =>
     for (var j = 0; j < response.length; j++) {
       let title = `Block ${j + 1}`;
       let floors = response[j] && response[j].building && response[j].building.floors;
-      let block = await floors.map((item, index) => (
+      let block = await floors.map((item,index)=> {
+        let singleBlock = item.occupancies.map((block, index) => (
         {
           [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
           [getBpaTextToLocalMapping("Level")]: item.number,
-          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: getLocaleLabels("-", item.occupancies[0].type),//getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
-          [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
-          [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
-          [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0",
+          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: getLocaleLabels("-", block.type),//getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
+          [getBpaTextToLocalMapping("Buildup Area")]: block.builtUpArea || "0",
+          [getBpaTextToLocalMapping("Floor Area")]: block.floorArea || "0",
+          [getBpaTextToLocalMapping("Carpet Area")]: block.carpetArea || "0",
         }));
+        return singleBlock;
+      })
+      let mergedBlock = [].concat.apply([], block)
       let occupancyTypeCheck = [],
         floorNo = response[j].number
       if (BPA && BPA.landInfo && BPA.landInfo.unit && BPA.landInfo.unit[j] && BPA.landInfo.unit[j].usageCategory) {
@@ -5742,9 +5791,9 @@ export const setProposedBuildingData = async (state, dispatch, action, value) =>
       }
 
       if (occupancyTypeCheck && occupancyTypeCheck.length) {
-        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, occupancyType: occupancyTypeCheck, floorNo: floorNo });
+        tableData.push({ blocks: mergedBlock, suboccupancyData: subOccupancyType, titleData: title, occupancyType: occupancyTypeCheck, floorNo: floorNo });
       } else {
-        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, floorNo: floorNo });
+        tableData.push({ blocks: mergedBlock, suboccupancyData: subOccupancyType, titleData: title, floorNo: floorNo });
       }
 
     };

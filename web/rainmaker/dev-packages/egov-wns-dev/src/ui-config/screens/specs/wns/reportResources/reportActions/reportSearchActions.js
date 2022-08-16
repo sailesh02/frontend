@@ -1,5 +1,5 @@
 import {
-  handleScreenConfigurationFieldChange as handleField, 
+  handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -204,6 +204,151 @@ export const waterbillDemandReportSearch = async (params, state, dispatch) => {
         "Total Due": eachItem["totalDueAmount"],
         "Amount Payable after Rebate": eachItem["amountPayableAfterRebateAmount"],
         "Amount Payable with Penalty": eachItem["amountPayableWithPenaltyAmount"]
+      })
+    );
+    return tableData;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
+    console.log(error.message);
+    return null;
+  }
+};
+
+export const consumerPaymentHistorySearch = async (params, state, dispatch) => {
+  try {
+    let queryObject = Object.keys(params).map((key) => ({
+      key: key,
+      value: params[key],
+    }));
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/report-services/reports/ws/consumerPaymentHistory",
+      "",
+      queryObject
+    );
+    dispatch(
+      prepareFinalObject(
+        "reportTableData",
+        payload["consumerPaymentHistoryResponse"]
+      )
+    );
+    let tableData = payload.consumerPaymentHistoryResponse.map(
+      (eachItem, index) => ({
+        "Sl. No.": index + 1,
+        ULB: eachItem["ulb"],
+        "Employee Id": eachItem["employeeId"],
+        "Employee Name": eachItem["employeeName"],
+        "Ward Number": eachItem["wardNo"],
+        "Head": eachItem["head"],
+        "Date Of Payment": eachItem["dateOfTransaction"] ? epochToDDMMYYYYFromatter(eachItem["dateOfTransaction"]) : "NA",
+        "Transaction Id": eachItem["transactionId"],
+        "Payment Mode": eachItem["paymentMode"],
+        "Paid Amount": eachItem["paidAmount"],
+        "Month And Year": eachItem["MonthYear"],
+        "Consumer Number": eachItem["consumerNo"],
+        "Consumer Name": eachItem["consumerName"],
+        "Consumer Address": eachItem["consumerAddress"],
+      })
+    );
+    return tableData;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
+    console.log(error.message);
+    return null;
+  }
+};
+
+export const newConsumerMonthlyReportSearch = async (params, state, dispatch) => {
+  try {
+    const formattedParams = {
+      ...params,
+      monthYear: Date.parse(params["monthYear"]),
+    };
+    let queryObject = Object.keys(formattedParams).map((key) => ({
+      key: key,
+      value: formattedParams[key],
+    }));
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/report-services/reports/ws/waterNewConsumerMonthlyReport",
+      "",
+      queryObject
+    );
+    dispatch(
+      prepareFinalObject(
+        "reportTableData",
+        payload["waterNewConsumerMonthlyResponses"]
+      )
+    );
+    let tableData = payload.waterNewConsumerMonthlyResponses.map(
+      (eachItem, index) => ({
+        "Sl. No.": index + 1,
+        ULB: eachItem["ulb"],
+        "Ward Number": eachItem["ward"],
+        "Connection Number": eachItem["connectionNo"],
+        "Application Number": eachItem["applicationNo"],
+        "Execution Date": eachItem["date"] ? epochToDDMMYYYYFromatter(eachItem["date"]) : "NA",
+        "Sanction Date": eachItem["sanctionDate"] ? epochToDDMMYYYYFromatter(eachItem["sanctionDate"]) : "NA",
+        "Connection Type": eachItem["connectionType"],
+        "Connection Facility": eachItem["connectionFacility"],
+        "Connection Category": eachItem["connectionCategory"],
+        "Connection Purpose": eachItem["connectionPurpose"],
+        "Mobile Number": eachItem["mobile"],
+        "Consumer Name": eachItem["userName"],
+        "Consumer Address": eachItem["userAddress"],
+      })
+    );
+    return tableData;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
+    console.log(error.message);
+    return null;
+  }
+};
+export const consumerHistoryReportSearch = async (params, state, dispatch) => {
+  try {
+    const formattedParams = {
+      ...params,
+      fromDate: Date.parse(params["fromDate"]),
+      toDate: Date.parse(params["toDate"]),
+    };
+    let queryObject = Object.keys(formattedParams).map((key) => ({
+      key: key,
+      value: formattedParams[key],
+    }));
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/report-services/reports/ws/wsConsumerHistoryReport",
+      "",
+      queryObject
+    );
+    dispatch(
+      prepareFinalObject(
+        "reportTableData",
+        payload["wsConsumerHistoryReport"]
+      )
+    );
+    let tableData = payload.wsConsumerHistoryReport.map(
+      (eachItem, index) => ({
+        "Sl. No.": index + 1,
+        ULB: eachItem["ulb"],
+        "Ward Number": eachItem["ward"],
+        "Consumer Number": eachItem["consumerNo"],
+        "Old Connection Number": eachItem["oldConnectionNo"],
+        "Month": eachItem["month"],
+        "Connection Type": eachItem["connectionType"],
+        "Current Demand": eachItem["currentDemand"],
+        "Collection Amount": eachItem["collectionAmt"],
+        "Penalty": eachItem["penalty"],
+        "Advance": eachItem["advance"],
+        "Arrear": eachItem["arrear"],
+        "Total Due": eachItem["totalDue"],
+        "Payment Date": eachItem["paymentDate"] ? epochToDDMMYYYYFromatter(eachItem["paymentDate"]) : "NA",
+        "Payment Mode": eachItem["paymentMode"],
+        "Receipt Number": eachItem["receiptNo"],
       })
     );
     return tableData;

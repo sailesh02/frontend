@@ -7,12 +7,10 @@ import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import { LabelContainer } from "../../ui-containers-local";
 import { getLocaleLabels, isPublicSearch } from "../../ui-utils/commons";
 import { connect } from "react-redux";
-import Divider from "@material-ui/core/Divider";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "material-ui/Menu";
+import MenuItem from "material-ui/MenuItem";
 import Button from "@material-ui/core/Button";
-// import VisibilityIcon from '@material-ui/icons/Visibility';
-// import VisibilityIcon from '@material-ui/icons/Visibility';
+import Checkbox from "@material-ui/core/Checkbox";
 import FilterListIcon from "@material-ui/icons/FilterList";
 
 import "./index.css";
@@ -23,6 +21,7 @@ class WnsReportTable extends React.Component {
     columns: [],
     customSortOrder: "asc",
     showMenu: false,
+    hiddenColumns: [],
   };
 
   getExtraTableStyle = () => {
@@ -237,88 +236,80 @@ class WnsReportTable extends React.Component {
     // excelDownloadAction(tableData, "Sujog Jal Saathi Incentive Report")
   };
 
-  showMenuItem = () => {
+  showHideMenuItem = () => {
     this.setState({
       ...this.state,
-      showMenu: true,
-    })
-  }
+      showMenu: !this.state.showMenu,
+    });
+  };
+
+  handleMenuItemClick = (event) => {
+    let { hiddenColumns, columns } = this.state;
+    let isChecked = event.target.checked,
+      value = event.target.value;
+    let newColumns = [...columns];
+    let newHiddenCols = hiddenColumns.filter((eachItem) => eachItem !== value);
+    hiddenColumns.length === newHiddenCols.length && newHiddenCols.push(value);
+    columns.forEach((eachItem, index) => {
+      if (eachItem["labelKey"] === value) {
+        newColumns[index] = {
+          ...newColumns[index],
+          options: {
+            display: isChecked,
+          },
+        };
+      }
+    });
+    this.setState({
+      ...this.state,
+      columns: [...newColumns],
+      hiddenColumns: [...newHiddenCols],
+    });
+  };
 
   getColumnVisibilityMenu = () => {
-    let { columns } = this.state;
-    let fixedColumns = Array.isArray(columns) ? columns : Object.keys(columns);
-    // return (
-    //   <Menu
-    //     anchorEl={true}
-    //     id="account-menu"
-    //     // open={this.isMenuOpen}
-    //     open={true}
-    //     onClose={this.handleMenuClose}
-    //     // onClick={this.handleMenuClose}
-    //     // PaperProps={{
-    //     //   elevation: 0,
-    //     //   sx: {
-    //     //     overflow: "visible",
-    //     //     filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-    //     //     mt: 1.5,
-    //     //     "& .MuiAvatar-root": {
-    //     //       width: 32,
-    //     //       height: 32,
-    //     //       ml: -0.5,
-    //     //       mr: 1,
-    //     //     },
-    //     //     "&:before": {
-    //     //       content: '""',
-    //     //       display: "block",
-    //     //       position: "absolute",
-    //     //       top: 0,
-    //     //       right: 14,
-    //     //       width: 10,
-    //     //       height: 10,
-    //     //       bgcolor: "background.paper",
-    //     //       transform: "translateY(-50%) rotate(45deg)",
-    //     //       zIndex: 0,
-    //     //     },
-    //     //   },
-    //     // }}
-    //     transformOrigin={{ horizontal: "right", vertical: "top" }}
-    //     anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-    //   >
-    //     {fixedColumns.map((eachCol) => {
-    //       return (
-    //         <MenuItem
-    //           value={eachCol}
-    //           onClick={(e) => this.handleMenuIconClick(e)}
-    //         >
-    //           eachCol
-    //         </MenuItem>
-    //       );
-    //     })}
-    //     <MenuItem value={"item1"} onClick={(e) => this.handleMenuIconClick(e)}>
-    //       item1
-    //     </MenuItem>
-    //     <MenuItem value={"item2"} onClick={(e) => handleMenuIconClick(e)}>
-    //       item2
-    //     </MenuItem>
-    //     <Divider />
-    //     <MenuItem>
-    //       <Button>Apply</Button>
-    //       <Button onClick={this.handleMenuClose}>Close</Button>
-    //     </MenuItem>
-    //   </Menu>
-    // );
-
-    return null;
+    let { columns, hiddenColumns } = this.state;
+    return (
+      <Menu className="rt-col-menu-cntr">
+        {columns.map((eachCol) => {
+          return (
+            <MenuItem className="rt-col-menu-itms">
+              <Checkbox
+                checked={!hiddenColumns.includes(eachCol.labelKey)}
+                onChange={(e) => this.handleMenuItemClick(e)}
+                value={eachCol.labelKey}
+              />
+              {eachCol.labelKey}
+            </MenuItem>
+          );
+        })}
+      </Menu>
+    );
   };
 
   getCustomToolbar = () => {
     return (
       <React.Fragment>
-        <button onClick={() => this.downloadAsExcel()}>Export to Excel</button>
-        <button onClick={() => this.showMenuItem()}><FilterListIcon /></button>
+        <span>
+          {/* <button className="rt-tbl-btn" onClick={() => this.downloadAsExcel()}>Export to Excel</button> */}
+          <button
+            className="rt-tbl-btn rt-menu-btn"
+            onClick={() => this.showHideMenuItem()}
+          >
+            <FilterListIcon className="rt-tbl-menu-icon" />
+          </button>
+        </span>
+        {this.state.showMenu && this.getColumnVisibilityMenu()}
       </React.Fragment>
     );
   };
+  // getVisibelColumns = () => {
+  //   let { columns, hiddenColumns } = this.state;
+  //   let fixedColumns = Array.isArray(columns) ? columns : Object.keys(columns);
+  //   return fixedColumns.filter(eachCol => {
+  //     return !hiddenColumns.includes(eachCol.labelKey);
+  //   })
+  // }
 
   render() {
     const { data, columns } = this.state;
@@ -332,7 +323,7 @@ class WnsReportTable extends React.Component {
           columns={columns}
           options={{
             ...options,
-            // customToolbar: () => this.getCustomToolbar(),
+            customToolbar: () => this.getCustomToolbar(),
             onColumnSortChange: (columnName, order) =>
               this.onColumnSortChange(columnName, order),
           }}

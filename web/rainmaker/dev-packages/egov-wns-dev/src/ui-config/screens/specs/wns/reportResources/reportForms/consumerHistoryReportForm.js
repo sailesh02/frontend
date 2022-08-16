@@ -1,0 +1,43 @@
+export const consumerHistoryReportForm = [
+  {
+    key: "tenantId",
+    type: "select",
+    placeholderLabelKey: "Select ULB Name",
+    gridSm: 4,
+    jsonPath: "reportForm.tenantId",
+    sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+    required: true,
+    labelKey: "ULB Name",
+    localePrefix: {
+      moduleName: "TENANT",
+      masterName: "TENANTS",
+    },
+  },
+  {
+    key: "oldConnectionNo",
+    type: "text",
+    placeholderLabelKey: "Select Old Collection Number",
+    gridSm: 4,
+    jsonPath: "reportForm.oldConnectionNo",
+    required: true,
+    labelKey: "Old Collection Number",
+  },
+  {
+    key: "fromDate",
+    type: "date",
+    placeholderLabelKey: "Select From Date",
+    gridSm: 4,
+    jsonPath: "reportForm.fromDate",
+    required: true,
+    labelKey: "From Date",
+  },
+  {
+    key: "toDate",
+    type: "date",
+    placeholderLabelKey: "Select To Date",
+    gridSm: 4,
+    jsonPath: "reportForm.toDate",
+    required: true,
+    labelKey: "To Date",
+  },
+]

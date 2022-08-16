@@ -1,4 +1,4 @@
-export const consumerMasterReportForm = [
+export const newConsumerMonthlyReportForm = [
   {
     key: "tenantId",
     type: "select",
@@ -23,13 +23,12 @@ export const consumerMasterReportForm = [
     labelKey: "Ward (Eg NIL,01,02,..)",
   },
   {
-    key: "connectionType",
-    type: "select",
-    placeholderLabelKey: "Select Connection Type",
+    key: "monthYear",
+    type: "date",
+    placeholderLabelKey: "Select Month/Year",
     gridSm: 4,
-    jsonPath: "reportForm.connectionType",
-    sourceJsonPath: "reportDropdownOpts.connectionType",
-    required: false,
-    labelKey: "Connection Type",
+    jsonPath: "reportForm.monthYear",
+    required: true,
+    labelKey: "Month/Year",
   },
 ]

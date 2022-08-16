@@ -1,8 +1,17 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { REPORT_DROPDOWN_OPTIONS } from "../reportConstants";
-import { billSummaryReportSearch, employeeDateWiseWSCollectionSearch, consumerMasterReportSearch, waterbillDemandReportSearch } from "./reportSearchActions";
 import {
-  handleScreenConfigurationFieldChange as handleField, prepareFinalObject,
+  billSummaryReportSearch,
+  employeeDateWiseWSCollectionSearch,
+  consumerMasterReportSearch,
+  waterbillDemandReportSearch,
+  consumerPaymentHistorySearch,
+  newConsumerMonthlyReportSearch,
+  consumerHistoryReportSearch
+} from "./reportSearchActions";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../../../ui-utils";
@@ -110,21 +119,34 @@ const getTableData = async (params, state, dispatch) => {
   let title = getQueryArg(window.location.href, "title");
   switch (title) {
     case "dateWiseEmployeeCollection":
-      tableData = await employeeDateWiseWSCollectionSearch(params, state, dispatch);
+      tableData = await employeeDateWiseWSCollectionSearch(
+        params,
+        state,
+        dispatch
+      );
       break;
-
     case "billsummaryreport":
-      tableData = await billSummaryReportSearch(params, state, dispatch)
+      tableData = await billSummaryReportSearch(params, state, dispatch);
       break;
     case "consumerMasterReport":
       tableData = await consumerMasterReportSearch(params, state, dispatch);
       break;
     case "billsummaryreport":
-      tableData = await billSummaryReportSearch(params, state, dispatch)
+      tableData = await billSummaryReportSearch(params, state, dispatch);
       break;
     case "waterMonthlyDemandReport":
-      tableData = await waterbillDemandReportSearch(params, state, dispatch)
+      tableData = await waterbillDemandReportSearch(params, state, dispatch);
       break;
+    case "consumerPaymentHistory":
+      tableData = await consumerPaymentHistorySearch(params, state, dispatch);
+      break;
+    case "newConsumerMonthlyReport":
+      tableData = await newConsumerMonthlyReportSearch(params, state, dispatch);
+      break;
+    case "consumerHistoryReport":
+      tableData = await consumerHistoryReportSearch(params, state, dispatch);
+      break;
+
     default:
       break;
   }

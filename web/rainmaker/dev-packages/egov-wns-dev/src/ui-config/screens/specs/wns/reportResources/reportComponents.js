@@ -1,7 +1,7 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
-  getCommonContainer, 
-  getCommonHeader, 
+  getCommonContainer,
+  getCommonHeader,
   getCommonTitle,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
@@ -10,11 +10,13 @@ import {
   REPORT_COLUMNS_MAPPER,
   REPORT_TABLE_TITLE_MAPPER,
 } from "./reportConstants";
-import {dateWiseEmployeeCollectionForm} from "./reportForms/dateWiseEmployeeCollectionForm";
+import { dateWiseEmployeeCollectionForm } from "./reportForms/dateWiseEmployeeCollectionForm";
 import { billSummaryReportForm } from "./reportForms/billSummaryreportFrom";
 import { consumerMasterReportForm } from "./reportForms/consumerMasterReportForm";
-import {waterMonthlyDemandReportForm} from './reportForms/waterMonthlyDemandReportForm'
-
+import { waterMonthlyDemandReportForm } from "./reportForms/waterMonthlyDemandReportForm";
+import { consumerPaymentHistoryForm } from "./reportForms/consumerPaymentHistoryForm";
+import { newConsumerMonthlyReportForm } from "./reportForms/newConsumerMonthlyReportForm";
+import { consumerHistoryReportForm } from "./reportForms/consumerHistoryReportForm";
 
 export const getReportHeader = () => {
   let title = getQueryArg(window.location.href, "title");
@@ -67,9 +69,19 @@ export const getFormItems = () => {
       break;
     case "billsummaryreport":
       reportForm = billSummaryReportForm;
-      break
+      break;
     case "waterMonthlyDemandReport":
       reportForm = waterMonthlyDemandReportForm;
+      break;
+    case "consumerPaymentHistory":
+      reportForm = consumerPaymentHistoryForm;
+      break;
+    case "newConsumerMonthlyReport":
+      reportForm = newConsumerMonthlyReportForm;
+      break;
+    case "consumerHistoryReport":
+      reportForm = consumerHistoryReportForm;
+      break;
     default:
       break;
   }

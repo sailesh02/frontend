@@ -150,6 +150,8 @@ const getTableData = async (params, state, dispatch) => {
     case "consumerBillHistoryReport":
       tableData = await consumerBillHistoryReportSearch(params, state, dispatch)
       break;
+      case "consumerBillHistoryReport":
+        tableData = await consumerBillHistoryReportSearch(params, state, dispatch)  
     default:
       break;
   }

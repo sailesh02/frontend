@@ -7,7 +7,8 @@ import {
   waterbillDemandReportSearch,
   consumerPaymentHistorySearch,
   newConsumerMonthlyReportSearch,
-  consumerHistoryReportSearch
+  consumerHistoryReportSearch,
+  consumerBillHistoryReportSearch
 } from "./reportSearchActions";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -146,7 +147,9 @@ const getTableData = async (params, state, dispatch) => {
     case "consumerHistoryReport":
       tableData = await consumerHistoryReportSearch(params, state, dispatch);
       break;
-
+    case "consumerBillHistoryReport":
+      tableData = await consumerBillHistoryReportSearch(params, state, dispatch)
+      break;
     default:
       break;
   }

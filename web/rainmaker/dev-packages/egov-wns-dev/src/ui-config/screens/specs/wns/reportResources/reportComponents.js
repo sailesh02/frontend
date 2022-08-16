@@ -17,6 +17,7 @@ import { waterMonthlyDemandReportForm } from "./reportForms/waterMonthlyDemandRe
 import { consumerPaymentHistoryForm } from "./reportForms/consumerPaymentHistoryForm";
 import { newConsumerMonthlyReportForm } from "./reportForms/newConsumerMonthlyReportForm";
 import { consumerHistoryReportForm } from "./reportForms/consumerHistoryReportForm";
+import { consumerBillHistoryReportForm } from "./reportForms/consumerBillHistoryReportForm";
 
 export const getReportHeader = () => {
   let title = getQueryArg(window.location.href, "title");
@@ -81,6 +82,9 @@ export const getFormItems = () => {
       break;
     case "consumerHistoryReport":
       reportForm = consumerHistoryReportForm;
+      break;
+    case "consumerBillHistoryReport":
+      reportForm = consumerBillHistoryReportForm;
       break;
     default:
       break;

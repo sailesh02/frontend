@@ -358,3 +358,57 @@ export const consumerHistoryReportSearch = async (params, state, dispatch) => {
     return null;
   }
 };
+export const consumerBillHistoryReportSearch = async (params, state, dispatch) => {
+  try {
+    const formattedParams = {
+      ...params,
+      monthYear: Date.parse(params["monthYear"]) ? Date.parse(params["monthYear"]) : ""
+    };
+    let queryObject = Object.keys(formattedParams).map((key) => ({
+      key: key,
+      value: formattedParams[key],
+    }));
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/report-services/reports/ws/consumerBillHistoryReport",
+      "",
+      queryObject
+    );
+    dispatch(
+      prepareFinalObject(
+        "reportTableData",
+        payload["consumerBillHistoryReport"]
+      )
+    );
+    let tableData = payload.consumerBillHistoryResponse.map(
+      (eachItem, index) => ({
+        "Sl. No.": index + 1,
+        ULB: eachItem["ulb"],
+        "Old Connection No": eachItem["oldConnectionNo"],
+        "Month Year": eachItem["monthYear"] ? epochToDDMMYYYYFromatter(eachItem["monthYear"]) : "NA",
+        // "Bill Date": eachItem["billDate"] ? epochToDDMMYYYYFromatter(eachItem["billDate"]) : "NA",
+        // "Rebate Date": eachItem["rebateDate"] ? epochToDDMMYYYYFromatter(eachItem["rebateDate"]) : "NA",
+        // "Current SW Demand": eachItem["currentSWDemand"],
+        // "Net Payment": eachItem["netPayment"],
+        "Bill No": eachItem["billNo"],
+        "Previous Due": eachItem["previousDue"],
+        "Adjusted Amount": eachItem["adjustedAmt"],
+        "Previous Payment": eachItem["previousPayment"],
+        "Rebate Availed": eachItem["rebateAvailed"],
+        "Fine Levied": eachItem["fineLevied"],
+        "Current Water Demand": eachItem["currentWSDemand"],
+        // "NPR": eachItem["NPR"],
+        // "NPF": eachItem["NPF"],
+        // "Previous Reading": eachItem["previousReading"],
+        // "Current Reading": eachItem["currentReading"],
+        // "Total Units Consumed": eachItem["totalUnitsConsumed"]
+      })
+    );
+    return tableData;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
+    console.log(error.message);
+    return null;
+  }
+};

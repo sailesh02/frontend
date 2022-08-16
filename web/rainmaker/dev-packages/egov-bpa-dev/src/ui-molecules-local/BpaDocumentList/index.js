@@ -126,7 +126,8 @@ class BpaDocumentList extends Component {
     const {
       documentsList,
       documentDetailsUploadRedux = {},
-      prepareFinalObject
+      prepareFinalObject,
+      bpaDetails
     } = this.props;
     let index = 0;
     documentsList.forEach(docType => {
@@ -182,7 +183,52 @@ class BpaDocumentList extends Component {
           }
         });
     });
-    prepareFinalObject("documentDetailsUploadRedux", documentDetailsUploadRedux);
+    if (
+      bpaDetails &&
+      bpaDetails.businessService &&
+      bpaDetails.businessService == "BPA6"
+    ) {
+      let appDocumentList = {};
+      let findBpdIndex;
+      if(bpaDetails.additionalDetails && bpaDetails.additionalDetails.documents && bpaDetails.additionalDetails.documents.length > 0){
+        findBpdIndex = Object.keys(documentDetailsUploadRedux).filter((key)=> documentDetailsUploadRedux[key].documentCode == "BPD.BPL")
+        for(let document of bpaDetails.additionalDetails.documents){
+          if(document.additionalDetails && document.additionalDetails.title == "PREAPPROVE_BUILDING_PLAN_FILE") {
+            let index = findBpdIndex[0]
+            appDocumentList = {
+              ...documentDetailsUploadRedux,
+              [index]: {
+                ...documentDetailsUploadRedux[index],
+                documents: [
+                  {
+                    fileName:document.additionalDetails.fileName,
+                    fileStoreId: document.fileStoreId,
+                    fileUrl: "",
+                    isClickable: false,
+                    additionalDetails: {
+                      uploadedBy: "Employee",
+                      uploadedTime: document.additionalDetails.uploadedTime,
+                    },
+                  },
+                ],
+                dropDownValues: {
+                  value: "BPD.BPL.BPL",
+                },
+              },
+            };
+          }
+        }
+        
+        prepareFinalObject("documentDetailsUploadRedux", appDocumentList);
+      }
+      
+    } else {
+      prepareFinalObject(
+        "documentDetailsUploadRedux",
+        documentDetailsUploadRedux
+      );
+    }
+    
   };
 
   prepareDocumentsInEmployee = async (appDocumentList, bpaDetails, wfState) => {

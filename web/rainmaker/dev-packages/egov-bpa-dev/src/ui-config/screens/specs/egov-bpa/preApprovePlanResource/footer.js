@@ -62,63 +62,63 @@ const validateUploadFiles = (requiredFiles) => {
 
 // Preparing Document payload object by using json path library
 const preparingDocumentsReview = async (state, dispatch) => {
-    let documentsPreview = [];
-    let requiredFiles = {};
-    let isDocumentRequired = "";
-    let uploadRequired = [];
-    let duplicateFile = false;
-    let reduxDocuments = get(
-      state,
-      "screenConfiguration.preparedFinalObject.bparegDocumentDetailsUploadRedux",
-      {}
-    );
-    jp.query(reduxDocuments, "$.*").forEach((doc) => {
-      isDocumentRequired = doc.isDocumentRequired;
-      if (doc.documents && doc.documents.length > 0) {
-        isDocumentRequired = false;
-        doc.documents.forEach((docDetail) => {
-          let obj = {};
-          const mimeType = docDetail["fileName"].split(".")[1];
-          if (requiredFiles.hasOwnProperty(mimeType)) {
-            duplicateFile = true;
-            return false;
-          } else {
-            requiredFiles[mimeType] = 1;
-          }
-          obj.title = getTransformedLocale(doc.documentCode);
-          obj.fileName = docDetail.fileName;
-          obj.fileStoreId = docDetail.fileStoreId;
-          obj.fileStore = docDetail.fileStoreId;
-          obj.fileUrl = docDetail.fileUrl && docDetail.fileUrl.split(",")[0];
-          obj.additionalDetails = {
-            uploadedBy: getLoggedinUserRole(""),
-            uploadedTime: new Date().getTime(),
-            fileName: docDetail.fileName,
-            title: getTransformedLocale(doc.documentCode),
-            fileUrl:docDetail.fileUrl && docDetail.fileUrl.split(",")[0]
-          };
-          documentsPreview.push(obj);
-        });
-      }
-      if (isDocumentRequired) {
-        uploadRequired.push(isDocumentRequired);
-      }
-    });
-    if (uploadRequired.indexOf(true) > -1) {
-      alert("Upload all dpocumetn");
-      return false;
+  let documentsPreview = [];
+  let requiredFiles = {};
+  let isDocumentRequired = "";
+  let uploadRequired = [];
+  let duplicateFile = false;
+  let reduxDocuments = get(
+    state,
+    "screenConfiguration.preparedFinalObject.bparegDocumentDetailsUploadRedux",
+    {}
+  );
+  jp.query(reduxDocuments, "$.*").forEach((doc) => {
+    isDocumentRequired = doc.isDocumentRequired;
+    if (doc.documents && doc.documents.length > 0) {
+      isDocumentRequired = false;
+      doc.documents.forEach((docDetail) => {
+        let obj = {};
+        const mimeType = docDetail["fileName"].split(".")[1];
+        if (requiredFiles.hasOwnProperty(mimeType)) {
+          duplicateFile = true;
+          return false;
+        } else {
+          requiredFiles[mimeType] = 1;
+        }
+        obj.title = getTransformedLocale(doc.documentCode);
+        obj.fileName = docDetail.fileName;
+        obj.fileStoreId = docDetail.fileStoreId;
+        obj.fileStore = docDetail.fileStoreId;
+        obj.fileUrl = docDetail.fileUrl && docDetail.fileUrl.split(",")[0];
+        obj.additionalDetails = {
+          uploadedBy: getLoggedinUserRole(""),
+          uploadedTime: new Date().getTime(),
+          fileName: docDetail.fileName,
+          title: getTransformedLocale(doc.documentCode),
+          fileUrl: docDetail.fileUrl && docDetail.fileUrl.split(",")[0],
+        };
+        documentsPreview.push(obj);
+      });
     }
-    if (duplicateFile) {
-      alert("Do not duplicate document");
-      return false;
+    if (isDocumentRequired) {
+      uploadRequired.push(isDocumentRequired);
     }
-    const validateUpload = validateUploadFiles(requiredFiles);
-    if (!(validateUpload.indexOf(false) > -1)) {
-      return documentsPreview;
-    } else {
-      return false;
-    }
-  };
+  });
+  if (uploadRequired && uploadRequired.length>0 && uploadRequired.indexOf(true) > -1) {
+    alert("Upload all dpocumetn");
+    return false;
+  }
+  if (duplicateFile) {
+    alert("Do not duplicate document");
+    return false;
+  }
+  const validateUpload = validateUploadFiles(requiredFiles);
+  if (!(validateUpload.indexOf(false) > -1)) {
+    return documentsPreview;
+  } else {
+    return false;
+  }
+};
   
   // validate required field
   
@@ -244,7 +244,7 @@ const createPreApprovePlan = async (state, dispatch) => {
   
       preApprovePlanDetails.drawingDetail = drawingDetail;
       preApprovePlanDetails.auditDetails = auditDetails;
-      if (documents) {
+      if (documents && documents.length>0) {
         preApprovePlanDetails.documents = documents;
       } else {
         alert("Please upload all required documents");

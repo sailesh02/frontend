@@ -10,7 +10,6 @@ export const getPreApproveList = async (action, state, dispatch) => {
       "/bpa-services/v1/preapprovedplan/_search",
       "_search",
       [],
-      queryObject
     );
     const arr = [];
     const res = response;

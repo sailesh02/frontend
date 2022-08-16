@@ -168,7 +168,7 @@ class BlockContainer extends Component {
                         <span
                           onClick={() => this.onDownloadClick(item.fileStoreId)}
                         >
-                          {`Documet-${index + 1} : ${
+                          {`Documet-${index} : ${
                             item.additionalDetails.title
                           }`}
                         </span>

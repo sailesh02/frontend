@@ -268,6 +268,48 @@ export const basicSummary = getCommonGrayCard({
         callBack: checkValueForNA,
       }
     ),
+    choosePlotType: getLabelWithValue(
+      {
+        labelName:
+          "Whether Plot is part of government scheme(BDA/GA/OSHB) or private approved lay out",
+        labelKey: "PREAPPROVE_PLOT_SCHEME_HEADER",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.planDetail.plot.plotScheme",
+        callBack: checkValueForNA,
+      }
+    ),
+    chooseLayoutType: getLabelWithValue(
+      {
+        labelName:
+          "Whether the Plot is part of Approved layout/ Town Planning scheme/ Government Scheme ",
+        labelKey: "PREAPPROVE_LAYOUT_TYPE_HEADER",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.planDetail.plot.layoutType",
+        callBack: checkValueForNA,
+      }
+    ),
+    landStatus: getLabelWithValue(
+      {
+        labelName: "Land Status",
+        labelKey: "PREAPPROVE_LAND_STATUS",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.planDetail.plot.landStatus",
+        callBack: checkValueForNA,
+      }
+    ),
+    projectComponent: getLabelWithValue(
+      {
+        labelName: "Project Component",
+        labelKey: "PREAPPROVE_PROJECT_COMPONENT",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.planDetail.plot.project",
+        callBack: checkValueForNA,
+      }
+    ),
     landRegDetails: getLabelWithValue(
       {
         labelName: "Land Registration Details",
@@ -275,6 +317,144 @@ export const basicSummary = getCommonGrayCard({
       },
       {
         jsonPath: "BPA.additionalDetails.registrationDetails",
+        callBack: checkValueForNA,
+      }
+    ),
+  }),
+  DetailsOfLand: getHeader({
+    labelName: "Land Details",
+    labelKey: "PREAPPROVE_LAND_DETAILS_TITLE",
+  }),
+  break2: getBreak(),
+  detailsOfLandContainer: getCommonContainer({
+    governementBody: getLabelWithValue(
+      {
+        labelName: "Name of Lessor / Government Body",
+        labelKey: "PREAPPROVE_GOVERNMENT_BODY",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.landDetails.governementBody",
+        callBack: checkValueForNA,
+      }
+    ),
+    governmentScheme: getLabelWithValue(
+      {
+        labelName: "Name of Government Scheme",
+        labelKey: "PREAPPROVE_GOVERNMENT_SCHEME",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.landDetails.governmentScheme",
+        callBack: checkValueForNA,
+      }
+    ),
+    schemePlotNumber: getLabelWithValue(
+      {
+        labelName: "Scheme plot Number",
+        labelKey: "PREAPPROVE_SCHEME_PLOT",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.landDetails.schemePlotNumber",
+        callBack: checkValueForNA,
+      }
+    ),
+    schemePlotNumber: getLabelWithValue(
+      {
+        labelName: "Scheme plot Number",
+        labelKey: "PREAPPROVE_SCHEME_PLOT",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.landDetails.schemePlotNumber",
+        callBack: checkValueForNA,
+      }
+    ),
+    revenuePlotNumber: getLabelWithValue(
+      {
+        labelName: "Revenue plot Number",
+        labelKey: "PREAPPROVE_REVENUE_PLOT",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.landDetails.revenuePlotNumber",
+        callBack: checkValueForNA,
+      }
+    ),
+    revenueVillage: getLabelWithValue(
+      {
+        labelName: "Revenue village / Mauza",
+        labelKey: "PREAPPROVE_REVENUE_VILLAGE",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.landDetails.revenueVillage",
+        callBack: checkValueForNA,
+      }
+    ),
+    kisam: getLabelWithValue(
+      {
+        labelName: "Kisam",
+        labelKey: "PREAPPROVE_KISAM",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.landDetails.kisam",
+        callBack: checkValueForNA,
+      }
+    ),
+    widthInMt: getLabelWithValue(
+      {
+        labelName: "Width of plot(in m.)",
+        labelKey: "PREAPPROVE_PLOT_WITH_IN_METER",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.landDetails.width",
+        callBack: checkValueForNA,
+      }
+    ),
+    lengthInMt: getLabelWithValue(
+      {
+        labelName: "Length of plot(in m.)",
+        labelKey: "PREAPPROVE_PLOT_LENGTH_IN_METER",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.landDetails.length",
+        callBack: checkValueForNA,
+      }
+    ),
+    abuttingRoadWidthInMt: getLabelWithValue(
+      {
+        labelName: "Abutting road width(in m.)",
+        labelKey: "PREAPPROVE_ABUTTING_ROAD",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.landDetails.abuttingRoadWidth",
+        callBack: checkValueForNA,
+      }
+    ),
+    layoutApprovalDate: getLabelWithValue(
+      {
+        labelName: "Date of Layout Approval",
+        labelKey: "PREAPPROVE_DATE_LABEL",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.landDetails.layoutApprovalDate",
+        callBack: checkValueForNA,
+      }
+    ),
+    layoutPlotNumber: getLabelWithValue(
+      {
+        labelName: "Layout plot Number",
+        labelKey: "PREAPPROVE_LAYOUT_PLOT",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.landDetails.layoutPlotNumber",
+        callBack: checkValueForNA,
+      }
+    ),
+    roadDetails: getLabelWithValue(
+      {
+        labelName:
+          "Whether Roads/open spaces/ Drain have been gifted to ULB/Government Body",
+        labelKey: "PREAPPROVE_ROAD_DETAILS",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.landDetails.roadDetails",
         callBack: checkValueForNA,
       }
     ),

@@ -1415,56 +1415,14 @@ const setSearchResponse = async (
   }
   buttonAfterApprovedMenu(action, state, dispatch);
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-  // if (
-  //   edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments &&
-  //   edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments
-  //     .length < 1
-  // ) {
-  //   set(
-  //     action.screenConfig,
-  //     "components.div.children.body.children.cardContent.children.additionalDocsInformation.visible",
-  //     false
-  //   );
-  // }
-  // if (
-  //   edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments &&
-  //   edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments
-  //     .length > 0
-  // ) {
-  //   let scrutinyAdditionalInfo = [];
-  //   scrutinyAdditionalInfo =
-  //     edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments &&
-  //     edcrRes.edcrDetail[0].planDetail.planInformation.additionalDocuments;
-  //   let additionDocCheckboxes = get(
-  //     action.screenConfig,
-  //     "components.div.children.body.children.cardContent.children.additionalDocsInformation.children.cardContent.children.applicantCard.children",
-  //     []
-  //   );
 
-  //   let additionalCheckboxArray = Object.keys(additionDocCheckboxes);
-  //   if (additionalCheckboxArray && additionalCheckboxArray.length > 0) {
-  //     for (let i = 0; i < additionalCheckboxArray.length; i++) {
-  //       if (!scrutinyAdditionalInfo.includes(additionalCheckboxArray[i])) {
-  //         set(
-  //           action.screenConfig,
-  //           `components.div.children.body.children.cardContent.children.additionalDocsInformation.children.cardContent.children.applicantCard.children.${additionalCheckboxArray[i]}.visible`,
-  //           false
-  //         );
-  //       }
-  //     }
-  //   }
-  // }
-  //only architech can add noc
-  // if (ifUserRoleExists("BPA_ARCHITECT") && response.BPA["0"].businessService != "BPA6") {
-  //   dispatch(
-  //     handleField(
-  //       "search-preview",
-  //       "components.div.children.body.children.cardContent.children.nocDetailsApply.children.cardContent.children.headerDiv.children.header.children.addNocButton",
-  //       "visible",
-  //       true
-  //     )
-  //   );
-  // }
+
+  if(appStatus && (appStatus == "APP_L1_VERIFICATION_INPROGRESS" || appStatus == "APP_L2_VERIFICATION_INPROGRESS" || appStatus == "APP_L3_VERIFICATION_INPROGRESS" || appStatus == "APPROVAL_INPROGRESS")){
+    let searchPreview = true
+    generatePreapproveBill(searchPreview).then((res) => {
+      console.log(res)
+    });
+    }
 
   if (
     response &&

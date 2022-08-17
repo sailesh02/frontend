@@ -36,8 +36,8 @@ import {
             labelKey: "PREAPPROVE_UNDERTAKING_SHEET_FORM-VI_A",
           },
           linkDetail: {
-            labelName: "Preapprove plan Chart Sheet",
-            labelKey: "PREAPPROVE_UNDERTAKING_SHEET_FORM-VI_A_FILE",
+            labelName: "UNDERTAKING AND INTIMATION OF COMMENCEMENT FORM-VI(A)",
+            labelKey: "PREAPPROVE_UNDERTAKING_SHEET_FORM_VI_A_FILE",
           },
           jsonPath: "formViA.pdf",
         },
@@ -55,10 +55,10 @@ import {
         props: {
           label: {
             labelName: "UNDERTAKING AND INTIMATION OF COMMENCEMENT FORM-VI(B)",
-            labelKey: "PREAPPROVE_UNDERTAKING_SHEET_FORM-VI_B",
+            labelKey: "PREAPPROVE_UNDERTAKING_SHEET_FORM_VI_B",
           },
           linkDetail: {
-            labelName: "Preapprove plan Chart Sheet",
+            labelName: "UNDERTAKING AND INTIMATION OF COMMENCEMENT FORM-VI(B)",
             labelKey: "PREAPPROVE_UNDERTAKING_SHEET_FORM-VI_A_FILE",
           },
           jsonPath: "formViB.pdf",
@@ -77,10 +77,10 @@ import {
         props: {
           label: {
             labelName: "Building Standard",
-            labelKey: "PREAPPROVE_Building Standard",
+            labelKey: "PREAPPROVE_BUILDING_STANDARD",
           },
           linkDetail: {
-            labelName: "Preapprove Building Standard",
+            labelName: "Building Standard",
             labelKey: "PREAPPROVE_BUILDING_PLAN_STANDARD",
           },
           jsonPath: "standardBuilding.pdf",

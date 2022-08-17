@@ -222,6 +222,10 @@ export const landDetails = getCommonCard({
         labelName: "Select road details",
         labelKey: "PREAPPROVE_ROAD_DETAILS_PLACEHOLDER",
       },
+      localePrefix: {
+        moduleName: "PREAPPROVE",
+        masterName: "PREAPPROVE_TYPE"
+      },
       jsonPath: "BPA.additionalDetails.landDetails.roadDetails",
       sourceJsonPath: "PA.confirmation",
       required: true,

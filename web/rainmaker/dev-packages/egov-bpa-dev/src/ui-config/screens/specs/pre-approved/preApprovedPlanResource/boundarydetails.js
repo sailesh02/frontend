@@ -183,10 +183,10 @@ export const detailsofplot = getCommonCard({
           labelName: "Select Plot Scheme",
           labelKey: "PREAPPROVE_CHOOSE_PLOT_SCHEME",
         },
-        //   localePrefix: {
-        //     moduleName: "BPA",
-        //     masterName: "BPA_TYPE"
-        //   },
+        localePrefix: {
+          moduleName: "PREAPPROVE",
+          masterName: "PREAPPROVE_TYPE"
+        },
         jsonPath: "BPA.additionalDetails.planDetail.plot.plotScheme",
         sourceJsonPath: "PA.confirmation",
         required: true,
@@ -212,10 +212,10 @@ export const detailsofplot = getCommonCard({
           labelName: "Select Layout Type",
           labelKey: "PREAPPROVE_CHOOSE_LAYOUT_TYPE",
         },
-        // localePrefix: {
-        //   moduleName: "PREAPPROVE",
-        //   masterName: "PREAPPROVE_TYPE"
-        // },
+        localePrefix: {
+          moduleName: "PREAPPROVE",
+          masterName: "PREAPPROVE_TYPE"
+        },
         jsonPath: "BPA.additionalDetails.planDetail.plot.layoutType",
         sourceJsonPath: "PA.confirmation",
         required: true,
@@ -357,10 +357,10 @@ export const detailsofplot = getCommonCard({
           labelName: "Select Land Status",
           labelKey: "PREAPPROVE_CHOOSE_LAND_STATUS",
         },
-        //   localePrefix: {
-        //     moduleName: "BPA",
-        //     masterName: "BPA_TYPE"
-        //   },
+        localePrefix: {
+          moduleName: "PREAPPROVE",
+          masterName: "PREAPPROVE_TYPE"
+        },
         jsonPath: "BPA.additionalDetails.planDetail.plot.landStatus",
         sourceJsonPath: "PA.landStatus",
         required: true,
@@ -401,10 +401,10 @@ export const detailsofplot = getCommonCard({
           labelName: "Select Project",
           labelKey: "PREAPPROVE_CHOOSE_PROJECT_COMPONENT",
         },
-        //   localePrefix: {
-        //     moduleName: "BPA",
-        //     masterName: "BPA_TYPE"
-        //   },
+        localePrefix: {
+          moduleName: "PREAPPROVE",
+          masterName: "PREAPPROVE_TYPE"
+        },
         jsonPath: "BPA.additionalDetails.planDetail.plot.project",
         sourceJsonPath: "PA.project",
         required: true,

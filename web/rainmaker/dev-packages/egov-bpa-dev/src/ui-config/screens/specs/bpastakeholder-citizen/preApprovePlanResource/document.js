@@ -32,18 +32,40 @@ import {
         },
         props: {
           label: {
-            labelName: "Chart Sheet",
-            labelKey: "PREAPPROVE_CHART_SHEET",
+            labelName: "UNDERTAKING AND INTIMATION OF COMMENCEMENT FORM-VI(A)",
+            labelKey: "PREAPPROVE_UNDERTAKING_SHEET_FORM-VI_A",
           },
           linkDetail: {
             labelName: "Preapprove plan Chart Sheet",
-            labelKey: "PREAPPROVE_CHART_SHEET_FILE",
+            labelKey: "PREAPPROVE_UNDERTAKING_SHEET_FORM-VI_A_FILE",
           },
-          jsonPath: "feeChart.pdf",
+          jsonPath: "formViA.pdf",
         },
         type: "array",
       },
       pdf2: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
+        componentPath: "PdfContainer",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 12,
+        },
+        props: {
+          label: {
+            labelName: "UNDERTAKING AND INTIMATION OF COMMENCEMENT FORM-VI(B)",
+            labelKey: "PREAPPROVE_UNDERTAKING_SHEET_FORM-VI_B",
+          },
+          linkDetail: {
+            labelName: "Preapprove plan Chart Sheet",
+            labelKey: "PREAPPROVE_UNDERTAKING_SHEET_FORM-VI_A_FILE",
+          },
+          jsonPath: "formViB.pdf",
+        },
+        type: "array",
+      },
+      pdf3: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",
         componentPath: "PdfContainer",

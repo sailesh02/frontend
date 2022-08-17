@@ -7,6 +7,9 @@ import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import MUIDataTable from "mui-datatables";
 import { generatePreapproveBill } from "../../ui-config/screens/specs/utils";
 import { Dialog, DialogContent } from "@material-ui/core";
+import {
+  getLocaleLabels,
+} from "egov-ui-framework/ui-utils/commons";
 
 const styles = {
   root: {
@@ -39,7 +42,7 @@ class BlockContainer extends Component {
     window.location = fileUrls[fileStoreId].split(",")[0];
   };
   setValue = (item) => {
-    const { data } = this.props;
+    const { data,localizationLabels } = this.props;
     const list = data.map((listData, index) => {
       listData.selected = false;
       if (listData.drawingNo === item.drawingNo) {
@@ -55,9 +58,19 @@ class BlockContainer extends Component {
     generatePreapproveBill().then((res) => {
       let totalFee = [];
       res.sancFee.Calculations[0].taxHeadEstimates.forEach((item, index) => {
+        item.taxHeadCode = getLocaleLabels(
+          item.taxHeadCode,
+          item.taxHeadCode,
+          localizationLabels
+        );
         totalFee.push(item);
       });
       res.appFee.Calculations[0].taxHeadEstimates.forEach((item, index) => {
+        item.taxHeadCode = getLocaleLabels(
+          item.taxHeadCode,
+          item.taxHeadCode,
+          localizationLabels
+        );
         totalFee.push(item);
       });
       list.totalFee = totalFee;
@@ -99,7 +112,7 @@ class BlockContainer extends Component {
                 ))}
                 {this.state.isOpen && (
                   <Dialog
-                  fullScreen={false}
+                  fullScreen={true}
                   open={open}
                   onClose={this.handleShowDialog}
                   maxWidth={false}
@@ -108,7 +121,7 @@ class BlockContainer extends Component {
                     children={
                       <img
                       style={{
-                        width: "300px",
+                        width: "100%",
                       }}
                       src={this.state.image}
                       onClick={this.handleShowDialog}
@@ -161,7 +174,7 @@ class BlockContainer extends Component {
                         display: "flex",
                       }}
                     >
-                      <h5>{item.taxHeadCode} : </h5>
+                      <h5>{item.taxHeadCode}:</h5>
                       {"    "}
                       <h5>{item.estimateAmount}</h5>
                     </div>
@@ -229,6 +242,7 @@ const mapStateToProps = (state, ownprops) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+  
   return {
     selectedPlot: (jsonPath, value) =>
       dispatch(prepareFinalObject(jsonPath, value)),

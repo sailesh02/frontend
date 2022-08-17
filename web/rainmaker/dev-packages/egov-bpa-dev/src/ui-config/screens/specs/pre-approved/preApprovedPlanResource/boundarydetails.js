@@ -199,124 +199,153 @@ export const detailsofplot = getCommonCard({
           className: "tl-trade-type",
         },
       }),
-      beforeFieldChange: (action, state, dispatch) => {
-        if (action.value === "YES") {
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.visible",
-              "visible",
-              true
-            )
-          );
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.layoutApprovalDate",
-              "visible",
-              false
-            )
-          );
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.layoutPlotNumber",
-              "visible",
-              false
-            )
-          );
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.roadDetails",
-              "visible",
-              false
-            )
-          );
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.governementBody",
-              "visible",
-              true
-            )
-          );
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.governmentScheme",
-              "visible",
-              true
-            )
-          );
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.schemePlotNumber",
-              "visible",
-              true
-            )
-          );
-        } else {
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.visible",
-              "visible",
-              true
-            )
-          );
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.layoutApprovalDate",
-              "visible",
-              true
-            )
-          );
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.layoutPlotNumber",
-              "visible",
-              true
-            )
-          );
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.roadDetails",
-              "visible",
-              true
-            )
-          );
-
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.governementBody",
-              "visible",
-              false
-            )
-          );
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.governmentScheme",
-              "visible",
-              false
-            )
-          );
-          dispatch(
-            handleField(
-              "preApprovedPlanApply",
-              "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.schemePlotNumber",
-              "visible",
-              false
-            )
-          );
-        }
-      },
+      
+    },
+    chooseLayoutType: {
+      ...getSelectField({
+        label: {
+          labelName:
+            "Whether the Plot is part of Approved layout/ Town Planning scheme/ Government Scheme ",
+          labelKey: "PREAPPROVE_LAYOUT_TYPE_HEADER",
+        },
+        placeholder: {
+          labelName: "Select Layout Type",
+          labelKey: "PREAPPROVE_CHOOSE_LAYOUT_TYPE",
+        },
+        // localePrefix: {
+        //   moduleName: "PREAPPROVE",
+        //   masterName: "PREAPPROVE_TYPE"
+        // },
+        jsonPath: "BPA.additionalDetails.planDetail.plot.layoutType",
+        sourceJsonPath: "PA.confirmation",
+        required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6,
+        },
+        props: {
+          className: "tl-trade-type",
+        },
+        beforeFieldChange: (action, state, dispatch) => {
+          if (action.value === "YES") {
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.visible",
+                "visible",
+                true
+              )
+            );
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.layoutApprovalDate",
+                "visible",
+                false
+              )
+            );
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.layoutPlotNumber",
+                "visible",
+                false
+              )
+            );
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.roadDetails",
+                "visible",
+                false
+              )
+            );
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.governementBody",
+                "visible",
+                true
+              )
+            );
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.governmentScheme",
+                "visible",
+                true
+              )
+            );
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.schemePlotNumber",
+                "visible",
+                true
+              )
+            );
+          } else {
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.visible",
+                "visible",
+                true
+              )
+            );
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.layoutApprovalDate",
+                "visible",
+                true
+              )
+            );
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.layoutPlotNumber",
+                "visible",
+                true
+              )
+            );
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.roadDetails",
+                "visible",
+                true
+              )
+            );
+  
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.governementBody",
+                "visible",
+                false
+              )
+            );
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.governmentScheme",
+                "visible",
+                false
+              )
+            );
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children.schemePlotNumber",
+                "visible",
+                false
+              )
+            );
+          }
+        },
+      }),
     },
     landStatus: {
       ...getSelectField({

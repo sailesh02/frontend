@@ -157,11 +157,17 @@ const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
+    let isLandDetailsofplotCardValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.landDetails.children.cardContent.children.landDetailsContainer.children",
+      state,
+      dispatch
+    );
 
     if (
       !isBasicDetailsCardValid ||
       !isLocationDetailsCardValid ||
-      !isDetailsofplotCardValid
+      !isDetailsofplotCardValid ||
+      !isLandDetailsofplotCardValid
     ) {
       isFormValid = false;
       hasFieldToaster = true;

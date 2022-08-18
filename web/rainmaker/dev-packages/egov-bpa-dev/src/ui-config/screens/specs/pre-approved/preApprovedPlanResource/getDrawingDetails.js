@@ -51,7 +51,7 @@ export const getDrawingDetails = async (state, dispatch, fieldInfo=false) => {
           { code: "UNDER_CONSTRUCTION", label: "Under Construction" }
         ];
         const project = [
-          { code: "RESIDENTIAL", label: "REsidential" },
+          { code: "RESIDENTIAL", label: "Residential" },
           { code: "OTHERS", label: "Others" },
         ];
         const governementBody = [
@@ -59,10 +59,15 @@ export const getDrawingDetails = async (state, dispatch, fieldInfo=false) => {
           { code: "OSHB", label: "BDA" },
           { code: "BDA", label: "BDA" }
         ];
+        const layoutType = [
+          { code: "GOVERNMENT", label: "GOVERNMENT_SCHEME" },
+          { code: "PRIVATE", label: "PRIVATE_SCHEME" },
+        ]
         dispatch(prepareFinalObject("PA.confirmation", confirmation));
         dispatch(prepareFinalObject("PA.landStatus", landStatus));
         dispatch(prepareFinalObject("PA.project", project));
         dispatch(prepareFinalObject("PA.governementBody", governementBody));
+        dispatch(prepareFinalObject("PA.layoutType", layoutType));
 
         dispatch(prepareFinalObject("PA.preApprovedPlanDetails", data));
         dispatch(

@@ -56,14 +56,16 @@ class BlockContainer extends Component {
       return listData;
     });
     generatePreapproveBill().then((res) => {
-      let totalFee = [];
+      let sancfee = [];
+      let appfee = []
       res.sancFee.Calculations[0].taxHeadEstimates.forEach((item, index) => {
+        
         item.taxHeadCode = getLocaleLabels(
           item.taxHeadCode,
           item.taxHeadCode,
           localizationLabels
         );
-        totalFee.push(item);
+        sancfee.push(item);
       });
       res.appFee.Calculations[0].taxHeadEstimates.forEach((item, index) => {
         item.taxHeadCode = getLocaleLabels(
@@ -71,10 +73,12 @@ class BlockContainer extends Component {
           item.taxHeadCode,
           localizationLabels
         );
-        totalFee.push(item);
+        appfee.push(item);
       });
-      list.totalFee = totalFee;
-      item.totalFee = totalFee;
+      list.sancfee = sancfee;
+      list.appfee = appfee;
+      item.sancfee = sancfee;
+      item.appfee = appfee;
       this.setState({ item: item, selected: true });
       this.handleShowDialog();
       this.props.updateList("preapprovePlanList", list);
@@ -82,7 +86,42 @@ class BlockContainer extends Component {
     });
   };
   render() {
-    const { data } = this.props;
+    const { data,localizationLabels } = this.props;
+    const noPlotsAvailableLabel = getLocaleLabels(
+      "PREAPPROVE_NO_PLOTS",
+      "No Plots available with these search details",
+      localizationLabels
+    );
+    const noPlotsLabel = getLocaleLabels(
+      "PREAPPROVE_PLOTS_NOT_AVAILABLE",
+      "Plots not Available",
+      localizationLabels
+    );
+    const drawingNumber = getLocaleLabels(
+      "BPA_DRAWING_NO_LABEL",
+      "Drawing Number",
+      localizationLabels
+    );
+    const feeDetails = getLocaleLabels(
+      "PREAPPROVE_FEE_DETAILS",
+      "Fee Details",
+      localizationLabels
+    );
+    const documentLabel = getLocaleLabels(
+      "PREAPPROVE_DOCUMENT_LABEL",
+      "Documents(Please download the documents to preview drawing details)",
+      localizationLabels
+    );
+    const sancFee = getLocaleLabels(
+      "PREAPPROVE_SANC_FEE_LABEL",
+      "Sanction Fee Details",
+      localizationLabels
+    );
+    const appFee = getLocaleLabels(
+      "PREAPPROVE_APP_FEE_LABEL",
+      "Application Fee Details",
+      localizationLabels
+    );
     return (
       <div>
         {data ? (
@@ -112,35 +151,35 @@ class BlockContainer extends Component {
                 ))}
                 {this.state.isOpen && (
                   <Dialog
-                  fullScreen={true}
-                  open={open}
-                  onClose={this.handleShowDialog}
-                  maxWidth={false}
-                >
-                  <DialogContent
-                    children={
-                      <img
-                      style={{
-                        width: "100%",
-                      }}
-                      src={this.state.image}
-                      onClick={this.handleShowDialog}
-                      alt="no image"
+                    fullScreen={true}
+                    open={open}
+                    onClose={this.handleShowDialog}
+                    maxWidth={false}
+                  >
+                    <DialogContent
+                      children={
+                        <img
+                          style={{
+                            width: "100%",
+                          }}
+                          src={this.state.image}
+                          onClick={this.handleShowDialog}
+                          alt="no image"
+                        />
+                      }
                     />
-                    }
-                  />
-                </Dialog>
+                  </Dialog>
                 )}
               </div>
             ) : (
               <div>
-                <h3>No Plots available with these search details</h3>
+                <h3>{noPlotsAvailableLabel}</h3>
               </div>
             )}
           </div>
         ) : (
           <div>
-            <h3>Plots not Available</h3>
+            <h3>{noPlotsLabel}</h3>
           </div>
         )}
 
@@ -161,32 +200,51 @@ class BlockContainer extends Component {
               }}
             >
               <div>
-                <h3>Drawing Number</h3>
+                <h3>{drawingNumber}</h3>
                 <h5>{this.state.item.drawingNo}</h5>
               </div>
               <div>
-                <h3>Total Fee</h3>
+                <h3>{feeDetails}</h3>
                 <Fragment>
-                  {this.state.item.totalFee.map((item, index) => (
-                    <div
-                      key={index}
-                      style={{
-                        display: "flex",
-                      }}
-                    >
-                      <h5>{item.taxHeadCode}:</h5>
-                      {"    "}
-                      <h5>{item.estimateAmount}</h5>
-                    </div>
-                  ))}
+                  {this.state.item.sancfee && (
+                    <Fragment>
+                      <h4>{sancFee}</h4>
+                      {this.state.item.sancfee.map((item, index) => (
+                        <div
+                          key={index}
+                          style={{
+                            display: "flex",
+                          }}
+                        >
+                          <h5>{item.taxHeadCode}:</h5>
+                          {"    "}
+                          <h5>{item.estimateAmount}</h5>
+                        </div>
+                      ))}
+                    </Fragment>
+                  )}
+                  {this.state.item.appfee && (
+                    <Fragment>
+                      <h4>{appFee}</h4>
+                      {this.state.item.appfee.map((item, index) => (
+                        <div
+                          key={index}
+                          style={{
+                            display: "flex",
+                          }}
+                        >
+                          <h5>{item.taxHeadCode}:</h5>
+                          {"    "}
+                          <h5>{item.estimateAmount}</h5>
+                        </div>
+                      ))}
+                    </Fragment>
+                  )}
                 </Fragment>
               </div>
             </div>
             <div>
-              <h4>
-                Documents(Please download the documents to preview drawing
-                details)
-              </h4>
+              <h4>{documentLabel}</h4>
               <div
                 style={{
                   display: "flex",

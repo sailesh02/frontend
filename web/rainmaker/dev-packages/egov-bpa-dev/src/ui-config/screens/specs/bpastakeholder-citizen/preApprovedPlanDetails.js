@@ -10,8 +10,7 @@ import {
   getCommonValue,
   getCommonParagraph,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-//import { resetFields, submitFields } from "./functions";
-import plotDetails from "egov-ui-kit/assets/images/plotDetails.jpg";
+import plotDetails from "egov-ui-kit/assets/images/plotDetails.png";
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 
 import {
@@ -29,7 +28,11 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { downloadDocuments } from "./preApprovePlanResource/document";
 import { generatePreapproveBill } from "../utils";
 
-
+// Reset fields and refresh page
+const resetFields = () => {
+  location.reload();
+  return false;
+}
 //   Redirect to apply page
 const getRedirectionBPAURL = (state, dispatch) => {
   let drawingAppNo = get(
@@ -472,10 +475,10 @@ const buildingInfoCard = getCommonCard({
             labelKey: "BPA_SCRUTINY_CLEARFORM_BUTTON",
           }),
         },
-        // onClickDefination: {
-        //   action: "condition",
-        //   callBack: resetFields,
-        // },
+        onClickDefination: {
+          action: "condition",
+          callBack: resetFields,
+        },
       },
 
       searchButton: {

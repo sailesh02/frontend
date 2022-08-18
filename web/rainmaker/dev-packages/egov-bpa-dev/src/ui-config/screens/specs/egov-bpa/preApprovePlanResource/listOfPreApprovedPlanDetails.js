@@ -164,8 +164,8 @@ export const listOfPreAprrovedPlan = {
           display: false
         }
       },
-      { labelName: "Length", labelKey: "PREAPPROVE_LENGTH" },
-      { labelName: "Width", labelKey: "PREAPPROVE_WIDTH" },
+      { labelName: "Length(in ft.)", labelKey: "PREAPPROVE_LENGTH" },
+      { labelName: "Width(in ft)", labelKey: "PREAPPROVE_WIDTH" },
       {
         labelName: "Abutting road",
         labelKey: "PREAPPROVE_ABUTTING_ROAD_COLUMN",

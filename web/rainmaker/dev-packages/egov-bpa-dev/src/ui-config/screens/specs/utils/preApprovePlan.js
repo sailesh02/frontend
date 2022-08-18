@@ -3508,6 +3508,12 @@ export const getBpaTextToLocalMapping = label => {
         "BPA_COMMON_TABLE_COL_CARPET_AREA",
         localisationLabels
       );
+    case "Floor Height":
+      return getLocaleLabels(
+        "Carpet Area",
+        "PREAPPROVE_FLOOR_HEIGHT",
+        localisationLabels
+      );
     case "Application No":
       return getLocaleLabels(
         "Application No",

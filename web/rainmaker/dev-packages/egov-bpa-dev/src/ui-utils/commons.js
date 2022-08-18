@@ -979,9 +979,15 @@ export const prepareDocumentsUploadData = (state, dispatch, isOC) => {
   if(bpaDetails.businessService == "BPA6"){
     preApproveDocumentType.forEach((item,index)=> {
       // Hardcoded Risk type value >>>needs to remove later
-      item.RiskType="OTHER";
       item.docTypes.forEach((doc,index)=> {
         doc.required = false;
+        if (bpaDetails.additionalDetails.landDetails.roadDetails == "YES"){
+          if (
+            doc.code == "PAP.PREAPPROVED_GIFTDEEDDOCUMENT"
+          ) {
+            doc.required = true;
+          }
+        }
         if (bpaDetails.additionalDetails.planDetail.plot.layout == "PRIVATE") {
           if (
             doc.code == "PAP.PREAPPROVED_LAYOUTAPPROVELLETTER" ||
@@ -1986,6 +1992,11 @@ export const isFileValid = (file, acceptedFiles) => {
 };
 
 export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
+  let bpaDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    null
+  );
   if (!applicationNo) {
     applicationNo = get(
       state,
@@ -1993,11 +2004,10 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
       null
     );
   }
-
-  if (applicationNo) {
+  if(bpaDetails && bpaDetails.businessService === "BPA6" && applicationNo){
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.headerDiv.children.header.children.applicationNumber",
         "visible",
         true
@@ -2005,13 +2015,33 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
     );
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.headerDiv.children.header.children.applicationNumber",
         "props.number",
-        applicationNo
+        bpaDetails.applicationNo
       )
     );
+  } else {
+    if (applicationNo) {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.headerDiv.children.header.children.applicationNumber",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.headerDiv.children.header.children.applicationNumber",
+          "props.number",
+          applicationNo
+        )
+      );
+    }
   }
+  
 };
 
 export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {

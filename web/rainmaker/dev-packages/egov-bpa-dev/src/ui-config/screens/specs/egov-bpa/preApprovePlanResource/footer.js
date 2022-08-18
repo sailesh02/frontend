@@ -165,6 +165,8 @@ const createPreApprovePlan = async (state, dispatch) => {
         tenantId: getTenantId(),
         plotLength: plotDetails.lengthInMt,
         plotWidth: plotDetails.widthInMt,
+        plotLengthInFeet: plotDetails.lengthInFt,
+        plotWidthInFeet: plotDetails.widthInFt,
         roadWidth: plotDetails.abuttingRoadWidthInMt,
         active: false,
       };

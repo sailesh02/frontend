@@ -3094,7 +3094,11 @@ export const getRiskType = (state, dispatch, forBPA) => {
     state.screenConfiguration.preparedFinalObject,
     "applyScreenMdmsData.BPA.RiskTypeComputation"
   );
-
+  let bpaDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    null
+  );
 
   let lowRiskBuilding = get(
     state.screenConfiguration.preparedFinalObject,
@@ -3128,12 +3132,16 @@ export const getRiskType = (state, dispatch, forBPA) => {
   //   ];
   //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
   // }
-
-  if (lowRiskBuilding) {
+  if(bpaDetails && bpaDetails.businessService == "BPA6"){
     scrutinyRiskType = "LOW"
-  } else {
-    scrutinyRiskType = "OTHER"
+  }else {
+    if (lowRiskBuilding) {
+      scrutinyRiskType = "LOW"
+    } else {
+      scrutinyRiskType = "OTHER"
+    }
   }
+  
 
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
   return scrutinyRiskType;

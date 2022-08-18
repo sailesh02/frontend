@@ -981,7 +981,8 @@ export const prepareDocumentsUploadData = (state, dispatch, isOC) => {
       // Hardcoded Risk type value >>>needs to remove later
       item.RiskType="OTHER";
       item.docTypes.forEach((doc,index)=> {
-        if (bpaDetails.additionalDetails.planDetail.plot.layoutType == "NO") {
+        doc.required = false;
+        if (bpaDetails.additionalDetails.planDetail.plot.layout == "PRIVATE") {
           if (
             doc.code == "PAP.PREAPPROVED_LAYOUTAPPROVELLETTER" ||
             doc.code == "PAP.PREAPPROVED_APPROVEDLAYOUTDRAWING"

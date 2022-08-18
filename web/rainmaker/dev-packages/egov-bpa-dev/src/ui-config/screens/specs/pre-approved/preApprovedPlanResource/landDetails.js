@@ -65,7 +65,7 @@ export const landDetails = getCommonCard({
         labelName: "Scheme plot Number",
         labelKey: "PREAPPROVE_SCHEME_PLOT",
       },
-      required: false,
+      required: true,
       jsonPath: "BPA.additionalDetails.landDetails.schemePlotNumber",
       gridDefination: {
         xs: 12,
@@ -81,24 +81,8 @@ export const landDetails = getCommonCard({
         labelName: "Revenue plot Number",
         labelKey: "PREAPPROVE_REVENUE_PLOT",
       },
-      required: false,
+      required: true,
       jsonPath: "BPA.additionalDetails.landDetails.revenuePlotNumber",
-      gridDefination: {
-        xs: 12,
-        sm: 12,
-        md: 6,
-      },
-      props: {
-        className: "tl-trade-type",
-      },
-    }),
-    revenueVillage: getTextField({
-      label: {
-        labelName: "Revenue village / Mauza",
-        labelKey: "PREAPPROVE_REVENUE_VILLAGE",
-      },
-      required: false,
-      jsonPath: "BPA.additionalDetails.landDetails.revenueVillage",
       gridDefination: {
         xs: 12,
         sm: 12,
@@ -113,7 +97,7 @@ export const landDetails = getCommonCard({
         labelName: "Kisam",
         labelKey: "PREAPPROVE_KISAM",
       },
-      required: false,
+      required: true,
       jsonPath: "BPA.additionalDetails.landDetails.kisam",
       gridDefination: {
         xs: 12,
@@ -129,6 +113,7 @@ export const landDetails = getCommonCard({
         labelName: "Width of plot(in m.)",
         labelKey: "PREAPPROVE_PLOT_WITH_IN_METER",
       },
+      required: true,
       pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
       props: {
         className: "tl-trade-type",
@@ -146,6 +131,7 @@ export const landDetails = getCommonCard({
         labelName: "Length of plot(in m.)",
         labelKey: "PREAPPROVE_PLOT_LENGTH_IN_METER",
       },
+      required: true,
       pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
       props: {
         className: "tl-trade-type",
@@ -200,7 +186,7 @@ export const landDetails = getCommonCard({
         labelName: "Layout plot Number",
         labelKey: "PREAPPROVE_LAYOUT_PLOT",
       },
-      required: false,
+      required: true,
       visible: false,
       jsonPath: "BPA.additionalDetails.landDetails.layoutPlotNumber",
       gridDefination: {

@@ -23,8 +23,8 @@ export const getPreApproveList = async (action, state, dispatch) => {
       newObj.plotArea = item.drawingDetail.plotArea;
       newObj.buildUpArea = item.drawingDetail.totalBuitUpArea;
 
-      newObj.plotLength = item.plotLength;
-      newObj.plotWidth = item.plotWidth;
+      newObj.plotLength = item.plotLengthInFeet;
+      newObj.plotWidth = item.plotWidthInFeet;
       newObj.floorDescription = item.drawingDetail.floorDescription;
       newObj.totalFar = item.drawingDetail.totalFar;
       newObj.tenantId = item.tenantId;

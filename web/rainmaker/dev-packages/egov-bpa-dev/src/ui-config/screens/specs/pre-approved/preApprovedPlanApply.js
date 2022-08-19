@@ -729,11 +729,11 @@ const screenConfig = {
         prepareFinalObject("preApprovedPlan.drawingAppNo", drawingAppNo)
       );
       getDrawingDetails(state, dispatch);
-      set(
-        action,
-        "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumber.props.number",
-        drawingAppNo
-      );
+      // set(
+      //   action,
+      //   "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumber.props.number",
+      //   drawingAppNo
+      // );
     }
     setPreApprovedProposedBuildingData(state, dispatch);
     

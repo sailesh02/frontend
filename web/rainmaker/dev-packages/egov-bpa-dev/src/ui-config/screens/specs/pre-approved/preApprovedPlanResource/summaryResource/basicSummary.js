@@ -310,6 +310,16 @@ export const basicSummary = getCommonGrayCard({
         callBack: checkValueForNA,
       }
     ),
+    layoutType: getLabelWithValue(
+      {
+        labelName: "Layout Type",
+        labelKey: "PREAPPROVE_LAYOUT_TYPE",
+      },
+      {
+        jsonPath: "BPA.additionalDetails.planDetail.plot.layout",
+        callBack: checkValueForNA,
+      }
+    ),
     landRegDetails: getLabelWithValue(
       {
         labelName: "Land Registration Details",
@@ -327,7 +337,7 @@ export const basicSummary = getCommonGrayCard({
   }),
   break2: getBreak(),
   detailsOfLandContainer: getCommonContainer({
-    governementBody: getLabelWithValue(
+    layout: getLabelWithValue(
       {
         labelName: "Name of Lessor / Government Body",
         labelKey: "PREAPPROVE_GOVERNMENT_BODY",
@@ -397,23 +407,23 @@ export const basicSummary = getCommonGrayCard({
         callBack: checkValueForNA,
       }
     ),
-    widthInMt: getLabelWithValue(
+    widthInFt: getLabelWithValue(
       {
-        labelName: "Width of plot(in m.)",
-        labelKey: "PREAPPROVE_PLOT_WITH_IN_METER",
+        labelName: "Width of plot(in ft.)",
+        labelKey: "PREAPPROVE_PLOT_WITH_IN_FT",
       },
       {
-        jsonPath: "BPA.additionalDetails.landDetails.width",
+        jsonPath: "BPA.additionalDetails.landDetails.widthInFt",
         callBack: checkValueForNA,
       }
     ),
-    lengthInMt: getLabelWithValue(
+    lengthInFt: getLabelWithValue(
       {
-        labelName: "Length of plot(in m.)",
-        labelKey: "PREAPPROVE_PLOT_LENGTH_IN_METER",
+        labelName: "Length of plot(in ft.)",
+        labelKey: "PREAPPROVE_PLOT_LENGTH_IN_FT",
       },
       {
-        jsonPath: "BPA.additionalDetails.landDetails.length",
+        jsonPath: "BPA.additionalDetails.landDetails.lengthInFt",
         callBack: checkValueForNA,
       }
     ),

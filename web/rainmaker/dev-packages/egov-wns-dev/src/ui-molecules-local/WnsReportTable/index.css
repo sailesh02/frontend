@@ -55,6 +55,7 @@ table tbody tr td {
     overflow: hidden !important;
     word-break: break-all !important;
   }
+  
   table tbody tr td p {
     margin: 0px !important;
   }

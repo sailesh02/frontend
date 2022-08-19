@@ -50,9 +50,58 @@ export const taxCollectorWiseCollectionSearch = async (
         "Ammount Collected": eachItem["ammountCollected"],
         "Payment Mode": eachItem["paymentMode"],
         "Receipt Number": eachItem["receiptNumber"],
-        "Payment Date": eachItem["paymentDate"],
+        "Payment Date": eachItem["paymentDate"] ? epochToDDMMYYYYFromatter(eachItem["paymentDate"]) : "NA",
         "Property Id": eachItem["propertyId"],
         "Old Property Id": eachItem["oldPropertyId"],
+      })
+    );
+    return tableData;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
+    console.log(error.message);
+    return null;
+  }
+};
+
+export const ulbWiseTaxCollectionSearch = async (
+  params,
+  state,
+  dispatch
+) => {
+  try {
+    const formattedParams = {
+      ...params,
+      startDate: Date.parse(params["startDate"]),
+      endDate: Date.parse(params["endDate"]),
+    };
+    let queryObject = Object.keys(formattedParams).map((key) => ({
+      key: key,
+      value: formattedParams[key],
+    }));
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/report-services/reports/pt/ulbWiseTaxCollectionReport",
+      "",
+      queryObject
+    );
+    dispatch(
+      prepareFinalObject(
+        "reportTableData",
+        payload["ulbWiseTaxCollectionResponse"]
+      )
+    );
+    let tableData = payload.ulbWiseTaxCollectionResponse.map(
+      (eachItem, index) => ({
+        "Sl. No.": index + 1,
+        "ULB": eachItem["ulb"],
+        "Property Id": eachItem["propertyId"],
+        "Old Property Id": eachItem["oldPropertyId"],
+        "Ward": eachItem["ward"],
+        "Current Year Demand Amount": eachItem["currentYearDemandAmount"],
+        "Total Arrear Demand Amount": eachItem["totalArrearDemandAmount"],
+        "Total Collected Amount": eachItem["totalCollectedAmount"],
+        "Due Amount": eachItem["dueAmount"],
       })
     );
     return tableData;

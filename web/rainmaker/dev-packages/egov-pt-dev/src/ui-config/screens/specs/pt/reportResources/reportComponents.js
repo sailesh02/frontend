@@ -11,6 +11,7 @@ import {
   REPORT_TABLE_TITLE_MAPPER,
 } from "./reportConstants";
 import { taxCollectorWiseCollectionForm } from "./reportForms/taxCollectorWiseCollectionForm";
+import { ulbWiseTaxCollectionForm } from "./reportForms/ulbWiseTaxCollectionForm";
 
 export const getReportHeader = () => {
   let title = getQueryArg(window.location.href, "title");
@@ -58,6 +59,10 @@ export const getFormItems = () => {
     case "taxCollectorWiseCollection":
       reportForm = taxCollectorWiseCollectionForm;
       break;
+    case "ulbWiseTaxCollection":
+      reportForm = ulbWiseTaxCollectionForm;
+      break;
+      
     default:
       break;
   }

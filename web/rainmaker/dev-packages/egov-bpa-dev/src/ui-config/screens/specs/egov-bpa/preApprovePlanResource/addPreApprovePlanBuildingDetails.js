@@ -268,21 +268,82 @@ const addBuildingAbstractValue = () => {
     buildUpArea: 0,
     carpetArea: 0,
     floorArea: 0,
-    totalFloor: 0,
+    totalFloor: "",
     totalFar: 0
   };
+
   if(edcrDetails.blockDetail && edcrDetails.blockDetail.length> 0){
+    let floorNoDetails = [];
     for (let edcrdtls of edcrDetails.blockDetail) {
+      let levelArr = [];
+      let maxFloor;
       if(edcrdtls.blocks && edcrdtls.blocks.length> 0){
+        let B = 0, S = 0,ST = 0, G = 0;
         for (let blocks of edcrdtls.blocks) {
           calculateObj.buildUpArea += parseFloat(blocks["Buildup Area"]);
           calculateObj.carpetArea += parseFloat(blocks["Carpet Area"]);
           calculateObj.floorArea += parseFloat(blocks["Floor Area"]);
-          calculateObj.totalFloor += 1;
+          // calculateObj.totalFloor += 1;
+          let level = blocks["Level"];
+          let floorDescription = blocks["Floor Description"];
+          if(level < 0){
+            B += 1
+          }else if(level == 0){
+            G += 1;
+          }else if(level>0){
+            if(floorDescription == "Service"){
+              S += 1
+            }
+            if(floorDescription == "Stilt"){
+              ST += 1
+            }
+          }
+          levelArr.push(level)
+          maxFloor = Math.max(...levelArr)
+          
         }
+        let floorStr = "";
+        if (B > 0) {
+          if (B == 1) {
+            floorStr += `B+`;
+          } else {
+            floorStr += `${B}B+`;
+          }
+        }
+        if (G > 0) {
+          if (G == 1) {
+            floorStr += `G+`;
+          } else {
+            floorStr += `${G}G+`;
+          }
+        }
+        if (S > 0) {
+          if (S == 1) {
+            floorStr += `S+`;
+          } else {
+            floorStr += `${S}S+`;
+          }
+        }
+        if (ST > 0) {
+          if (ST == 1) {
+            floorStr += `ST+`;
+          } else {
+            floorStr += `${ST}ST+`;
+          }
+        }
+        if(maxFloor > 0){
+          floorNoDetails.push(`${floorStr} ${maxFloor}`)
+        } else {
+          floorNoDetails.push(`${floorStr}`)
+        }
+        
       }
       
     }
+    for(let floorDetails of floorNoDetails){
+      calculateObj.totalFloor += floorDetails + ",";
+    }
+    
     calculateObj.totalFar = parseFloat(calculateObj.floorArea) / parseFloat(plotDetails.plotAreaInSqrMt)
     //calculateObj.totalFar = //calculateObj.floorArea / totalPlotArea;
     store.dispatch(

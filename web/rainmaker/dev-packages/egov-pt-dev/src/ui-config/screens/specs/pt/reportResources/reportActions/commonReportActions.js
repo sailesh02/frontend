@@ -1,7 +1,8 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { REPORT_DROPDOWN_OPTIONS } from "../reportConstants";
 import {
-  taxCollectorWiseCollectionSearch
+  taxCollectorWiseCollectionSearch,
+  ulbWiseTaxCollectionSearch
 } from "./reportSearchActions";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -114,6 +115,10 @@ const getTableData = async (params, state, dispatch) => {
     case "taxCollectorWiseCollection":
       tableData = await taxCollectorWiseCollectionSearch(params, state, dispatch);
       break;
+    case "ulbWiseTaxCollection":
+      tableData = await ulbWiseTaxCollectionSearch(params, state, dispatch);
+      break;
+      
     default:
       break;
   }

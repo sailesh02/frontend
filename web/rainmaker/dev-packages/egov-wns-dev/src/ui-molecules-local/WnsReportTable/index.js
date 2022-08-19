@@ -12,6 +12,7 @@ import MenuItem from "material-ui/MenuItem";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import "./index.css";
 
@@ -292,24 +293,19 @@ class WnsReportTable extends React.Component {
       <React.Fragment>
         <span>
           {/* <button className="rt-tbl-btn" onClick={() => this.downloadAsExcel()}>Export to Excel</button> */}
-          <button
-            className="rt-tbl-btn rt-menu-btn"
-            onClick={() => this.showHideMenuItem()}
-          >
-            <FilterListIcon className="rt-tbl-menu-icon" />
-          </button>
+          <Tooltip title={"Show/Hide Columns"}>
+            <button
+              className="rt-tbl-btn rt-menu-btn"
+              onClick={() => this.showHideMenuItem()}
+            >
+              <FilterListIcon className="rt-tbl-menu-icon" />
+            </button>
+          </Tooltip>
         </span>
         {this.state.showMenu && this.getColumnVisibilityMenu()}
       </React.Fragment>
     );
   };
-  // getVisibelColumns = () => {
-  //   let { columns, hiddenColumns } = this.state;
-  //   let fixedColumns = Array.isArray(columns) ? columns : Object.keys(columns);
-  //   return fixedColumns.filter(eachCol => {
-  //     return !hiddenColumns.includes(eachCol.labelKey);
-  //   })
-  // }
 
   render() {
     const { data, columns } = this.state;

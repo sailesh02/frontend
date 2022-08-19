@@ -255,7 +255,15 @@ export const updatePFOforSearchResults = async (
 
   if (payload && payload.MarriageRegistrations) {
     dispatch(prepareFinalObject("MarriageRegistrations[0]", payload.MarriageRegistrations[0]));
-
+    const action = getQueryArg(window.location.href, "action");
+    if (action === "edit") {
+      const docsList = payload.MarriageRegistrations[0]["applicationDocuments"];
+      const docsIdMapper = {};
+      docsList.forEach(eachItem => {
+        docsIdMapper[eachItem["documentType"]] = eachItem["id"];
+      })
+      dispatch(prepareFinalObject("docsIdMapper", docsIdMapper));
+    }
   }
 
 

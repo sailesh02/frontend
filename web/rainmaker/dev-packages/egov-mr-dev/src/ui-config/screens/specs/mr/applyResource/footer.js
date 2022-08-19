@@ -452,24 +452,35 @@ let mrgDateObj = null;
         )
       );
       let docList = [...queryObject[0].applicationDocuments];
-      let revisedList = docList.filter(eachItem => eachItem && eachItem.fileName);
+      let revisedList = docList.filter(
+        eachItem => eachItem && (eachItem.fileName || eachItem.fileStoreId || eachItem.id)
+      );
       queryObject[0].applicationDocuments = revisedList;
       let updateResponse = [];
-      updateResponse = await httpRequest("post", "/mr-services/v1/_update", "", [], {
-        MarriageRegistrations: queryObject
-      });
-      let updtdDocsList = updateResponse["MarriageRegistrations"][0]["applicationDocuments"];
-      updateApplicationDocsValues(updtdDocsList, state, dispatch);
-      
-      if (getQueryArg(window.location.href, "action") === "edit") {
-        //EDIT FLOW
-        const businessId = getQueryArg(
-          window.location.href,
-          "applicationNumber"
+      if(userAction != 'edit'){
+        updateResponse = await httpRequest("post", "/mr-services/v1/_update", "", [], {
+          MarriageRegistrations: queryObject
+        });
+        let updtdDocsList = updateResponse["MarriageRegistrations"][0]["applicationDocuments"];
+        updateApplicationDocsValues(updtdDocsList, state, dispatch);
+      } else {
+        const docsList = get(
+          state.screenConfiguration.preparedFinalObject,
+          "MarriageRegistrations[0].applicationDocuments",
+          []
         );
-
-        const tenantId = getQueryArg(window.location.href, "tenantId");
-
+        const docsIdMapper = get(
+          state.screenConfiguration.preparedFinalObject,
+          "docsIdMapper",
+          {}
+        );
+        let updtdDocsList = [...docsList];
+        docsList.forEach((eachItem, index) => {
+          if(!eachItem["id"]) {
+            updtdDocsList[index]["id"] = docsIdMapper[eachItem["documentType"]]
+          }
+        })
+        updateApplicationDocsValues(updtdDocsList, state, dispatch);
       }
       uploadedDocData = uploadedDocData.filter(item => item.fileUrl && item.fileName)
       const reviewDocData =

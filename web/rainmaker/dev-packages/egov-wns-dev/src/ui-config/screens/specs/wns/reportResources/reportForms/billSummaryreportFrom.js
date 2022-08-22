@@ -7,13 +7,12 @@ export const billSummaryReportForm = [
     className: "applicant-details-error autocomplete-dropdown",
     jsonPath: "reportForm.tenantId",
     sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-    //required: true,
+    required: false,
     labelKey: "ULB Name",
     localePrefix: {
       moduleName: "TENANT",
       masterName: "TENANTS",
     },
-    // onChange: onChangeTest,
   },
   {
     key: "monthYear",
@@ -21,9 +20,7 @@ export const billSummaryReportForm = [
     jsonPath: "reportForm.monthYear",
     labelKey: "Month/Year",
     placeholderLabelKey: "Select Month Year",
-    // localePrefix,
     gridSm: 4,
-    isRequired: true,
-    // isDisabled: false,
+    required: true,
   },
 ]

@@ -83,28 +83,23 @@ export const consumerMasterReportSearch = async (params, state, dispatch) => {
       queryObject
     );
     dispatch(
-      prepareFinalObject(
-        "reportTableData",
-        payload["ComsumerMasterWSReports"]
-      )
+      prepareFinalObject("reportTableData", payload["ComsumerMasterWSReports"])
     );
-    let tableData = payload.ComsumerMasterWSReports.map(
-      (eachItem, index) => ({
-        "Sl. No.": index + 1,
-        ULB: eachItem["ulb"],
-        "Ward Number": eachItem["wardNo"],
-        "Connection Number": eachItem["connectionNo"],
-        "Old Connection Number": eachItem["oldConnectionNo"],
-        "Connection Type": eachItem["connectionType"],
-        "Connection Category": eachItem["connectionCategory"],
-        "Usage Category": eachItem["usageCategory"],
-        "Connection Facility": eachItem["connectionFacility"],
-        "User Id": eachItem["userId"],
-        "Consumer Name": eachItem["userName"],
-        "Mobile Number": eachItem["userMobile"],
-        "Consumer Address": eachItem["userAddress"],
-      })
-    );
+    let tableData = payload.ComsumerMasterWSReports.map((eachItem, index) => ({
+      "Sl. No.": index + 1,
+      ULB: eachItem["ulb"],
+      "Ward Number": eachItem["wardNo"],
+      "Connection Number": eachItem["connectionNo"],
+      "Old Connection Number": eachItem["oldConnectionNo"],
+      "Connection Type": eachItem["connectionType"],
+      "Connection Category": eachItem["connectionCategory"],
+      "Usage Category": eachItem["usageCategory"],
+      "Connection Facility": eachItem["connectionFacility"],
+      "User Id": eachItem["userId"],
+      "Consumer Name": eachItem["userName"],
+      "Mobile Number": eachItem["userMobile"],
+      "Consumer Address": eachItem["userAddress"],
+    }));
     return tableData;
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
@@ -113,11 +108,7 @@ export const consumerMasterReportSearch = async (params, state, dispatch) => {
   }
 };
 
-export const billSummaryReportSearch = async (
-  params,
-  state,
-  dispatch
-) => {
+export const billSummaryReportSearch = async (params, state, dispatch) => {
   try {
     const formattedParams = {
       ...params,
@@ -135,24 +126,19 @@ export const billSummaryReportSearch = async (
       queryObject
     );
     dispatch(
-      prepareFinalObject(
-        "reportTableData",
-        payload["billSummaryResponses"]
-      )
+      prepareFinalObject("reportTableData", payload["billSummaryResponses"])
     );
-    let tableData = payload.billSummaryResponses.map(
-      (eachItem, index) => ({
-        "Sl. No.": index + 1,
-        ULB: eachItem["ULB"],
-        "Date": eachItem["Month-Year"],
-        "Count": eachItem["Count"]
-      })
-    );
+    let tableData = payload.billSummaryResponses.map((eachItem, index) => ({
+      "Sl. No.": index + 1,
+      ULB: eachItem["ULB"],
+      Date: eachItem["Month-Year"],
+      Count: eachItem["Count"],
+    }));
     return tableData;
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
     console.log(error.message);
-    return null
+    return null;
   }
 };
 
@@ -176,34 +162,37 @@ export const waterbillDemandReportSearch = async (params, state, dispatch) => {
       queryObject
     );
     dispatch(
-      prepareFinalObject(
-        "reportTableData",
-        payload["waterBillDemandWSReports"]
-      )
+      prepareFinalObject("reportTableData", payload["waterBillDemandWSReports"])
     );
     let tableData = payload.waterMonthlyDemandResponse.map(
       (eachItem, index) => ({
         "Sl. No.": index + 1,
         ULB: eachItem["ulb"],
-        "Ward": eachItem["ward"],
+        Ward: eachItem["ward"],
         "Connection No": eachItem["connectionNo"],
         "Old Connection No": eachItem["oldConnectionNo"],
         "Connection Type": eachItem["connectionType"],
         "Connection Holder Name": eachItem["connectionHolderName"],
         "Collection Amount": eachItem["collectionAmount"],
         "Contact No": eachItem["contactNo"],
-        "Address": eachItem["address"],
-        "Demand Period From": eachItem["demandPeriodFrom"] ? epochToDDMMYYYYFromatter(eachItem["demandPeriodFrom"]) : "NA",
-        "Demand Period To": eachItem["demandPriodTo"] ? epochToDDMMYYYYFromatter(eachItem["demandPriodTo"]) : "NA",
+        Address: eachItem["address"],
+        "Demand Period From": eachItem["demandPeriodFrom"]
+          ? epochToDDMMYYYYFromatter(eachItem["demandPeriodFrom"])
+          : "NA",
+        "Demand Period To": eachItem["demandPriodTo"]
+          ? epochToDDMMYYYYFromatter(eachItem["demandPriodTo"])
+          : "NA",
         "Current Demand": eachItem["currentDemandAmount"],
         "Collection Amount": eachItem["collectionAmount"],
         "Rebate Amount": eachItem["rebateAmount"],
-        "Penalty": eachItem["penaltyAmount"],
-        "Advance": eachItem["advanceAmount"],
-        "Arrear": eachItem["arrearAmt"],
+        Penalty: eachItem["penaltyAmount"],
+        Advance: eachItem["advanceAmount"],
+        Arrear: eachItem["arrearAmt"],
         "Total Due": eachItem["totalDueAmount"],
-        "Amount Payable after Rebate": eachItem["amountPayableAfterRebateAmount"],
-        "Amount Payable with Penalty": eachItem["amountPayableWithPenaltyAmount"]
+        "Amount Payable after Rebate":
+          eachItem["amountPayableAfterRebateAmount"],
+        "Amount Payable with Penalty":
+          eachItem["amountPayableWithPenaltyAmount"],
       })
     );
     return tableData;
@@ -240,8 +229,10 @@ export const consumerPaymentHistorySearch = async (params, state, dispatch) => {
         "Employee Id": eachItem["employeeId"],
         "Employee Name": eachItem["employeeName"],
         "Ward Number": eachItem["wardNo"],
-        "Head": eachItem["head"],
-        "Date Of Payment": eachItem["dateOfTransaction"] ? epochToDDMMYYYYFromatter(eachItem["dateOfTransaction"]) : "NA",
+        Head: eachItem["head"],
+        "Date Of Payment": eachItem["dateOfTransaction"]
+          ? epochToDDMMYYYYFromatter(eachItem["dateOfTransaction"])
+          : "NA",
         "Transaction Id": eachItem["transactionId"],
         "Payment Mode": eachItem["paymentMode"],
         "Paid Amount": eachItem["paidAmount"],
@@ -259,7 +250,11 @@ export const consumerPaymentHistorySearch = async (params, state, dispatch) => {
   }
 };
 
-export const newConsumerMonthlyReportSearch = async (params, state, dispatch) => {
+export const newConsumerMonthlyReportSearch = async (
+  params,
+  state,
+  dispatch
+) => {
   try {
     const formattedParams = {
       ...params,
@@ -289,8 +284,12 @@ export const newConsumerMonthlyReportSearch = async (params, state, dispatch) =>
         "Ward Number": eachItem["ward"],
         "Connection Number": eachItem["connectionNo"],
         "Application Number": eachItem["applicationNo"],
-        "Execution Date": eachItem["date"] ? epochToDDMMYYYYFromatter(eachItem["date"]) : "NA",
-        "Sanction Date": eachItem["sanctionDate"] ? epochToDDMMYYYYFromatter(eachItem["sanctionDate"]) : "NA",
+        "Execution Date": eachItem["date"]
+          ? epochToDDMMYYYYFromatter(eachItem["date"])
+          : "NA",
+        "Sanction Date": eachItem["sanctionDate"]
+          ? epochToDDMMYYYYFromatter(eachItem["sanctionDate"])
+          : "NA",
         "Connection Type": eachItem["connectionType"],
         "Connection Facility": eachItem["connectionFacility"],
         "Connection Category": eachItem["connectionCategory"],
@@ -326,31 +325,28 @@ export const consumerHistoryReportSearch = async (params, state, dispatch) => {
       queryObject
     );
     dispatch(
-      prepareFinalObject(
-        "reportTableData",
-        payload["wsConsumerHistoryReport"]
-      )
+      prepareFinalObject("reportTableData", payload["wsConsumerHistoryReport"])
     );
-    let tableData = payload.wsConsumerHistoryReport.map(
-      (eachItem, index) => ({
-        "Sl. No.": index + 1,
-        ULB: eachItem["ulb"],
-        "Ward Number": eachItem["ward"],
-        "Consumer Number": eachItem["consumerNo"],
-        "Old Connection Number": eachItem["oldConnectionNo"],
-        "Month": eachItem["month"],
-        "Connection Type": eachItem["connectionType"],
-        "Current Demand": eachItem["currentDemand"],
-        "Collection Amount": eachItem["collectionAmt"],
-        "Penalty": eachItem["penalty"],
-        "Advance": eachItem["advance"],
-        "Arrear": eachItem["arrear"],
-        "Total Due": eachItem["totalDue"],
-        "Payment Date": eachItem["paymentDate"] ? epochToDDMMYYYYFromatter(eachItem["paymentDate"]) : "NA",
-        "Payment Mode": eachItem["paymentMode"],
-        "Receipt Number": eachItem["receiptNo"],
-      })
-    );
+    let tableData = payload.wsConsumerHistoryReport.map((eachItem, index) => ({
+      "Sl. No.": index + 1,
+      ULB: eachItem["ulb"],
+      "Ward Number": eachItem["ward"],
+      "Consumer Number": eachItem["consumerNo"],
+      "Old Connection Number": eachItem["oldConnectionNo"],
+      Month: eachItem["month"],
+      "Connection Type": eachItem["connectionType"],
+      "Current Demand": eachItem["currentDemand"],
+      "Collection Amount": eachItem["collectionAmt"],
+      Penalty: eachItem["penalty"],
+      Advance: eachItem["advance"],
+      Arrear: eachItem["arrear"],
+      "Total Due": eachItem["totalDue"],
+      "Payment Date": eachItem["paymentDate"]
+        ? epochToDDMMYYYYFromatter(eachItem["paymentDate"])
+        : "NA",
+      "Payment Mode": eachItem["paymentMode"],
+      "Receipt Number": eachItem["receiptNo"],
+    }));
     return tableData;
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
@@ -358,15 +354,15 @@ export const consumerHistoryReportSearch = async (params, state, dispatch) => {
     return null;
   }
 };
-export const consumerBillHistoryReportSearch = async (params, state, dispatch) => {
+export const consumerBillHistoryReportSearch = async (
+  params,
+  state,
+  dispatch
+) => {
   try {
-    const formattedParams = {
-      ...params,
-      monthYear: Date.parse(params["monthYear"]) ? Date.parse(params["monthYear"]) : ""
-    };
-    let queryObject = Object.keys(formattedParams).map((key) => ({
+    let queryObject = Object.keys(params).map((key) => ({
       key: key,
-      value: formattedParams[key],
+      value: params[key],
     }));
     let payload = null;
     payload = await httpRequest(
@@ -385,24 +381,13 @@ export const consumerBillHistoryReportSearch = async (params, state, dispatch) =
       (eachItem, index) => ({
         "Sl. No.": index + 1,
         ULB: eachItem["ulb"],
-        "Old Connection No": eachItem["oldConnectionNo"],
-        "Month Year": eachItem["monthYear"] ? epochToDDMMYYYYFromatter(eachItem["monthYear"]) : "NA",
-        // "Bill Date": eachItem["billDate"] ? epochToDDMMYYYYFromatter(eachItem["billDate"]) : "NA",
-        // "Rebate Date": eachItem["rebateDate"] ? epochToDDMMYYYYFromatter(eachItem["rebateDate"]) : "NA",
-        // "Current SW Demand": eachItem["currentSWDemand"],
-        // "Net Payment": eachItem["netPayment"],
-        "Bill No": eachItem["billNo"],
-        "Previous Due": eachItem["previousDue"],
-        "Adjusted Amount": eachItem["adjustedAmt"],
-        "Previous Payment": eachItem["previousPayment"],
-        "Rebate Availed": eachItem["rebateAvailed"],
-        "Fine Levied": eachItem["fineLevied"],
-        "Current Water Demand": eachItem["currentWSDemand"],
-        // "NPR": eachItem["NPR"],
-        // "NPF": eachItem["NPF"],
-        // "Previous Reading": eachItem["previousReading"],
-        // "Current Reading": eachItem["currentReading"],
-        // "Total Units Consumed": eachItem["totalUnitsConsumed"]
+        "Consumer Code": eachItem["consumerCode"],
+        "Period From": eachItem["periodFrom"],
+        "Period To": eachItem["periodTo"],
+        "Payment Completed": eachItem["paymentCompleted"],
+        "Tax Amount": eachItem["taxAmount"],
+        "Collected Amount": eachItem["collectedAmount"],
+        "Due Amount": eachItem["dueAmount"],
       })
     );
     return tableData;

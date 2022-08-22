@@ -1,11 +1,13 @@
 export const REPORT_HEADER_MAPPER = {
   taxCollectorWiseCollection: "Tax Collector Wise Collection Report",
   ulbWiseTaxCollection: "ULB Wise Tax Collection Report",
+  propertyDetails: "ULB Wise Property Details Report",
 };
 
 export const REPORT_SUB_HEADER_MAPPER = {
   taxCollectorWiseCollection: "Modify report by date range",
   ulbWiseTaxCollection: "Modify report by date range",
+  propertyDetails: "Modify report by date range",
 };
 
 export const REPORT_DROPDOWN_OPTIONS = {};
@@ -13,6 +15,7 @@ export const REPORT_DROPDOWN_OPTIONS = {};
 export const REPORT_TABLE_TITLE_MAPPER = {
   taxCollectorWiseCollection: "Tax Collector Wise Collection Report",
   ulbWiseTaxCollection: "ULB Wise Tax Collection Report",
+  propertyDetails: "Property Details Report",
 };
 
 export const REPORT_COLUMNS_MAPPER = {
@@ -75,6 +78,50 @@ export const REPORT_COLUMNS_MAPPER = {
     },
     {
       labelKey: "Due Amount",
+    },
+  ],
+  propertyDetails: [
+    {
+      labelKey: "Sl. No.",
+    },
+    {
+      labelKey: "ULB",
+    },
+    {
+      labelKey: "Ward Number",
+    },
+    {
+      labelKey: "Old Property Id",
+    },
+    {
+      labelKey: "Property Id",
+    },
+    {
+      labelKey: "User Id",
+    },
+    {
+      labelKey: "User Name",
+    },
+    {
+      labelKey: "Mobile Number",
+    },
+    {
+      labelKey: "Door Number",
+    },
+    {
+      labelKey: "Building Name",
+    },
+    {
+      labelKey: "Street",
+    },
+    {
+      labelKey: "City",
+    },
+    {
+      labelKey: "Pincode",
+    },
+    {
+      labelKey: "Address",
     },
   ],
 };

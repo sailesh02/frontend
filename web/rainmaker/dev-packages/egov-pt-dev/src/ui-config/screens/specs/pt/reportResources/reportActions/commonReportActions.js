@@ -3,7 +3,8 @@ import { REPORT_DROPDOWN_OPTIONS } from "../reportConstants";
 import {
   taxCollectorWiseCollectionSearch,
   ulbWiseTaxCollectionSearch,
-  propertyDetailsSearch
+  propertyDetailsSearch,
+  propertyCollectionSearch
 } from "./reportSearchActions";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -122,6 +123,8 @@ const getTableData = async (params, state, dispatch) => {
     case "propertyDetails":
       tableData = await propertyDetailsSearch(params, state, dispatch);
       break;
+    case "propertyWiseCollection":
+      tableData = await propertyCollectionSearch(params, state, dispatch)
     default:
       break;
   }

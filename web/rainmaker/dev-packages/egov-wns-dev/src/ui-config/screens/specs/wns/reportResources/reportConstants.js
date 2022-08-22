@@ -6,7 +6,7 @@ export const REPORT_HEADER_MAPPER = {
   consumerPaymentHistory: "W&S Consumer Payment History Report",
   newConsumerMonthlyReport: "W&S New Consumer Monthly Report",
   consumerHistoryReport: "W&S Consumer History Report",
-  consumerBillHistoryReport: "W&S Legacy Bill History Report"
+  consumerBillHistoryReport: "Consumer Wise Demand History",
 };
 
 export const REPORT_SUB_HEADER_MAPPER = {
@@ -17,7 +17,7 @@ export const REPORT_SUB_HEADER_MAPPER = {
   consumerPaymentHistory: "Modify report by date range",
   newConsumerMonthlyReport: "Modify report by date range",
   consumerHistoryReport: "Modify report by date range",
-  consumerBillHistoryReport: "Modify report by date range"
+  consumerBillHistoryReport: "Modify report by date range",
 };
 
 export const REPORT_DROPDOWN_OPTIONS = {
@@ -87,7 +87,7 @@ export const REPORT_TABLE_TITLE_MAPPER = {
   consumerPaymentHistory: "Consumer Payment History Report",
   newConsumerMonthlyReport: "New Consumer Monthly Report",
   consumerHistoryReport: "Consumer History Report",
-  consumerBillHistoryReport: "W&S Legacy Bill History Report"
+  consumerBillHistoryReport: "W&S Consumer Wise Demand History",
 };
 
 export const REPORT_COLUMNS_MAPPER = {
@@ -386,58 +386,25 @@ export const REPORT_COLUMNS_MAPPER = {
       labelKey: "ULB",
     },
     {
-      labelKey: "Old Connection No",
+      labelKey: "Consumer Code",
     },
     {
-      labelKey: "Month Year",
-    },
-    // {
-    //   labelKey: "Bill Date",
-    // },
-    // {
-    //   labelKey: "Rebate Date",
-    // },
-    // {
-    //   labelKey: "Current SW Demand",
-    // },
-    // {
-    //   labelKey: "Net Payment",
-    // },
-    {
-      labelKey: "Bill No",
+      labelKey: "Period From",
     },
     {
-      labelKey: "Previous Due",
+      labelKey: "Period To",
     },
     {
-      labelKey: "Adjusted Amount",
+      labelKey: "Payment Completed",
     },
     {
-      labelKey: "Previous Payment",
+      labelKey: "Tax Amount",
     },
     {
-      labelKey: "Rebate Available",
+      labelKey: "Collected Amount",
     },
     {
-      labelKey: "Fine Levied",
+      labelKey: "Due Amount",
     },
-    {
-      labelKey: "Current Water Demand",
-    },
-    // {
-    //   labelKey: "NPR",
-    // },
-    // {
-    //   labelKey: "NPF",
-    // },
-    // {
-    //   labelKey: "Previous Reading",
-    // },
-    // {
-    //   labelKey: "Current Reading",
-    // },
-    // {
-    //   labelKey: "Total Units Consumed",
-    // },
-  ]
+  ],
 };

@@ -12,6 +12,7 @@ import {
 } from "./reportConstants";
 import { taxCollectorWiseCollectionForm } from "./reportForms/taxCollectorWiseCollectionForm";
 import { ulbWiseTaxCollectionForm } from "./reportForms/ulbWiseTaxCollectionForm";
+import { propertyDetailsForm } from "./reportForms/propertyDetailsForm";
 
 export const getReportHeader = () => {
   let title = getQueryArg(window.location.href, "title");
@@ -62,7 +63,9 @@ export const getFormItems = () => {
     case "ulbWiseTaxCollection":
       reportForm = ulbWiseTaxCollectionForm;
       break;
-      
+    case "propertyDetails":
+      reportForm = propertyDetailsForm;
+      break;
     default:
       break;
   }

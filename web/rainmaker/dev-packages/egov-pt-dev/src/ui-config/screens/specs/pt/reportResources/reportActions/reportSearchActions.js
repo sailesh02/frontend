@@ -69,14 +69,9 @@ export const ulbWiseTaxCollectionSearch = async (
   dispatch
 ) => {
   try {
-    const formattedParams = {
-      ...params,
-      startDate: Date.parse(params["startDate"]),
-      endDate: Date.parse(params["endDate"]),
-    };
-    let queryObject = Object.keys(formattedParams).map((key) => ({
+    let queryObject = Object.keys(params).map((key) => ({
       key: key,
-      value: formattedParams[key],
+      value: params[key],
     }));
     let payload = null;
     payload = await httpRequest(
@@ -102,6 +97,55 @@ export const ulbWiseTaxCollectionSearch = async (
         "Total Arrear Demand Amount": eachItem["totalArrearDemandAmount"],
         "Total Collected Amount": eachItem["totalCollectedAmount"],
         "Due Amount": eachItem["dueAmount"],
+      })
+    );
+    return tableData;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
+    console.log(error.message);
+    return null;
+  }
+};
+
+export const propertyDetailsSearch = async (
+  params,
+  state,
+  dispatch
+) => {
+  try {
+    let queryObject = Object.keys(params).map((key) => ({
+      key: key,
+      value: params[key],
+    }));
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/report-services/reports/pt/propertyDetails",
+      "",
+      queryObject
+    );
+    dispatch(
+      prepareFinalObject(
+        "reportTableData",
+        payload["propertyDetailsInfo"]
+      )
+    );
+    let tableData = payload.propertyDetailsInfo.map(
+      (eachItem, index) => ({
+        "Sl. No.": index + 1,
+        "ULB": eachItem["ulbName"],
+        "Ward Number": eachItem["wardNumber"],
+        "Old Property Id": eachItem["oldPropertyId"],
+        "Property Id": eachItem["propertyId"],
+        "User Id": eachItem["userId"],
+        "User Name": eachItem["name"],
+        "Mobile Number": eachItem["mobileNumber"],
+        "Door Number": eachItem["doorNo"],
+        "Building Name": eachItem["buildingName"],
+        "Street": eachItem["street"],
+        "City": eachItem["city"],
+        "Pincode": eachItem["pincode"],
+        "Address": eachItem["address"],
       })
     );
     return tableData;

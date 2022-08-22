@@ -155,3 +155,50 @@ export const propertyDetailsSearch = async (
     return null;
   }
 };
+
+export const propertyCollectionSearch = async (
+  params,
+  state,
+  dispatch
+) => {
+  try {
+    let queryObject = Object.keys(params).map((key) => ({
+      key: key,
+      value: params[key],
+    }));
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/report-services/reports/pt/propertyWiseCollectionReport",
+      "",
+      queryObject
+    );
+    dispatch(
+      prepareFinalObject(
+        "reportTableData",
+        payload["propertyWiseCollectionResponse"]
+      )
+    );
+    let tableData = payload.propertyWiseCollectionResponse.map(
+      (eachItem, index) => ({
+        "Sl. No.": index + 1,
+        "Property Id": eachItem["consumerId"],
+        "Old Property Id": eachItem["oldPropertyId"],
+        "Ward": eachItem["ward"],
+        "Name": eachItem["name"],
+        "Mobile Number": eachItem["mobileNumber"],
+        "Due Before Payment": eachItem["dueBeforePayment"],
+        "Amount Paid": eachItem["amountPaid"],
+        "Current Due" : eachItem["currentDue"],
+        "Reciept Number": eachItem["receiptNumber"],
+        "Reciept Date": eachItem["receiptDate"],
+        "Payment Mode": eachItem["paymentMode"]
+      })
+    );
+    return tableData;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
+    console.log(error.message);
+    return null;
+  }
+};

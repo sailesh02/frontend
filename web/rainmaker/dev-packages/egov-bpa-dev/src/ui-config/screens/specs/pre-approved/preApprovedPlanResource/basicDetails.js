@@ -58,6 +58,23 @@ export const basicDetails = getCommonCard({
         md: 6
       }
     }),
+    preApprovedCode: getTextField({
+      label: {
+        labelName: "Preapproved Code",
+        labelKey: "PREAPPROVE_CODE"
+      },
+      required: false,
+      jsonPath: 'scrutinyDetails.preApprovedCode',
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        disabled: true,
+        className : "tl-trade-type"
+      }
+    }),
     occupancy: getTextField({
       label: {
         labelName: "Occupancy",

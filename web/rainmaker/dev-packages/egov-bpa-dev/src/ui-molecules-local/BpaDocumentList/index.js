@@ -193,7 +193,7 @@ class BpaDocumentList extends Component {
       if(bpaDetails.additionalDetails && bpaDetails.additionalDetails.documents && bpaDetails.additionalDetails.documents.length > 0){
         findBpdIndex = Object.keys(documentDetailsUploadRedux).filter((key)=> documentDetailsUploadRedux[key].documentCode == "BPD.BPL")
         for(let document of bpaDetails.additionalDetails.documents){
-          if(document.additionalDetails && document.additionalDetails.title == "PREAPPROVE_BUILDING_PLAN_FILE") {
+          if(document.additionalDetails && document.additionalDetails.title == "PREAPPROVE_BUILDING_PLAN_PDF") {
             let index = findBpdIndex[0]
             appDocumentList = {
               ...documentDetailsUploadRedux,

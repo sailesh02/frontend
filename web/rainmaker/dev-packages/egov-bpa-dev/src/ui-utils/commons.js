@@ -977,10 +977,22 @@ export const prepareDocumentsUploadData = (state, dispatch, isOC) => {
     "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.planInformation.additionalDocuments", []
   );
   if(bpaDetails.businessService == "BPA6"){
+    applicationDocuments.forEach((item,index)=> {
+      item.docTypes.forEach((doc,index)=> {
+        if (doc.code == "APPL.REVSITEPLAN") {
+          doc.required = true;
+        }
+        if (doc.code == "APPL.LANDPOSSAFFI") {
+          doc.required = true;
+        }
+      })
+    })
+
     preApproveDocumentType.forEach((item,index)=> {
-      // Hardcoded Risk type value >>>needs to remove later
+      
       item.docTypes.forEach((doc,index)=> {
         doc.required = false;
+        
         if (bpaDetails.additionalDetails.landDetails.roadDetails == "YES"){
           if (
             doc.code == "PAP.PREAPPROVED_GIFTDEEDDOCUMENT"

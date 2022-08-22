@@ -157,6 +157,7 @@ export const listOfPreAprrovedPlan = {
         )
         },
       },
+      { labelName: "Preapproved Code", labelKey: "PREAPPROVE_CODE" },
       {
         labelName: "Tenat Id",
         labelKey: "PREAPPROVE_TENANT_ID",

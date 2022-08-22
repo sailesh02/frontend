@@ -78,7 +78,8 @@ const preparingDocumentsReview = async (state, dispatch) => {
       isDocumentRequired = false;
       doc.documents.forEach((docDetail) => {
         let obj = {};
-        const mimeType = docDetail["fileName"].split(".")[1];
+        let doctype = docDetail["fileName"].split(".")
+        const mimeType = doctype[doctype.length-1];
         if (requiredFiles.hasOwnProperty(mimeType)) {
           duplicateFile = true;
           return false;
@@ -164,6 +165,7 @@ const createPreApprovePlan = async (state, dispatch) => {
       const preApprovePlanDetails = {
         tenantId: getTenantId(),
         plotLength: plotDetails.lengthInMt,
+        preApprovedCode: plotDetails.preApprovedCode,
         plotWidth: plotDetails.widthInMt,
         plotLengthInFeet: plotDetails.lengthInFt,
         plotWidthInFeet: plotDetails.widthInFt,

@@ -84,6 +84,12 @@ export const getDrawingDetails = async (state, dispatch, fieldInfo=false) => {
         );
         dispatch(
           prepareFinalObject(
+            "scrutinyDetails.preApprovedCode",
+            data.preApprovedCode
+          )
+        );
+        dispatch(
+          prepareFinalObject(
             "scrutinyDetails.planDetail.planInformation.occupancy",
             data.drawingDetail.occupancy
           )

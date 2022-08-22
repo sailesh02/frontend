@@ -16,6 +16,7 @@ import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField,
+  toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
@@ -27,6 +28,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { downloadDocuments } from "./preApprovePlanResource/document";
 import { generatePreapproveBill } from "../utils";
+import { FALSE } from "node-sass";
 
 // Reset fields and refresh page
 const resetFields = () => {
@@ -53,7 +55,7 @@ const getRedirectionBPAURL = (state, dispatch) => {
 const formValid = (state, dispatch) => {
   let isFormValid = false;
   isFormValid = validateFields(
-    "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.preApproveContent.children.plotDescription.children",
+    "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.preApproveContent.children",
     state,
     dispatch,
     "preApprovedPlanDetails"
@@ -81,6 +83,40 @@ const setDrawingData = async (preApprovedPlanList) => {
   return preapprove;
 };
 
+const handleEligibilityCheckStatus = () => {
+  let url = "/edcrscrutiny/apply"
+  store.dispatch(setRoute(url));
+};
+
+const checkEligibility = (label, value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Href",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
+    visible: false,
+    style: {
+      cursor: "pointer",
+      color: "blue"
+    },
+    props: {
+      disabled: true,
+      onClick: handleEligibilityCheckStatus,
+      style: {
+        cursor: "pointer",
+        color: "blue"
+      },
+      ...props,
+    },
+    children: {
+      label: getCommonCaption(label),
+      value: getCommonValue(value),
+    },
+  };
+};
+
 // get search preapproves list
 const getPreApproveList = async (state, dispatch) => {
   let validate = formValid(state, dispatch);
@@ -95,21 +131,20 @@ const getPreApproveList = async (state, dispatch) => {
         "post",
         `/bpa-services/v1/preapprovedplan/_search?plotLengthInFeet=${plotDetails.lengthInFt}&plotWidthInFeet=${plotDetails.widthInFt}&roadWidth=${plotDetails.abuttingRoadWidthInMt}&active=true`,
         "_search",
-        [],
+        []
       );
       const preApprovedPlanList = await response;
-      
+
       if (preApprovedPlanList) {
-        setDrawingData(preApprovedPlanList).then(res=> {
-          if(res && res.preapprovedPlan && res.preapprovedPlan.length>0){
+        setDrawingData(preApprovedPlanList).then((res) => {
+          if (res && res.preapprovedPlan && res.preapprovedPlan.length > 0) {
             const list = res.preapprovedPlan.map((item, index) => {
               item.selected = false;
               return item;
             });
             dispatch(prepareFinalObject("preapprovePlanList", list));
-            
           }
-        })
+        });
       }
     } catch (err) {
       console.log(err);
@@ -143,16 +178,7 @@ const getLabelWithValueNote = (label, value, props = {}) => {
 const onHrefClick = () => {
   window.open("https://bhubaneswarone.in/home/", "_blank");
 };
-const handleEligibilityCheckStatus = () => {
-  store.dispatch(
-    handleField(
-      "preApprovedPlanDetails",
-      "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.preApproveContent",
-      "visible",
-      true
-    )
-  );
-};
+
 const getNoteLink = (label, value, props = {}) => {
   return {
     uiFramework: "custom-atoms",
@@ -269,6 +295,79 @@ const offsetGrid = () => {
   };
 };
 
+const handleFieldAccessibility = (action,state,dispatch,disabled=false) => {
+  if(disabled){
+    dispatch(prepareFinalObject("preApprovedSearch.searchCall",false));
+    dispatch(
+      handleField(
+        "preApprovedPlanDetails",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.preApproveContent.children.abuttingRoadWidthInMt",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "preApprovedPlanDetails",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.preApproveContent.children.lngthInFt",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "preApprovedPlanDetails",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.preApproveContent.children.widthInFt",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "preApprovedPlanDetails",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.preApproveContent.children.link",
+        "visible",
+        true
+      )
+    );
+  } else {
+    dispatch(prepareFinalObject("preApprovedSearch.searchCall",true));
+    dispatch(
+      handleField(
+        "preApprovedPlanDetails",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.preApproveContent.children.abuttingRoadWidthInMt",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "preApprovedPlanDetails",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.preApproveContent.children.lngthInFt",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "preApprovedPlanDetails",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.preApproveContent.children.widthInFt",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "preApprovedPlanDetails",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.preApprovedPlanSection.children.preApproveContent.children.link",
+        "visible",
+        false
+      )
+    );
+  }
+  
+}
+
 const preApprovedPlanSection = getCommonContainer({
   preApproveContent: {
     uiFramework: "custom-atoms",
@@ -284,7 +383,146 @@ const preApprovedPlanSection = getCommonContainer({
     },
     visible: true,
     children: {
-      lengthInFt: getTextField({
+      chooseLayoutType: {
+        ...getSelectField({
+          label: {
+            labelName:
+              "Whether the Plot is part of Approved layout/ Town Planning scheme/ Government Scheme ",
+            labelKey: "PREAPPROVE_LAYOUT_TYPE_HEADER",
+          },
+          placeholder: {
+            labelName: "Select Layout Type",
+            labelKey: "PREAPPROVE_CHOOSE_LAYOUT_TYPE",
+          },
+          localePrefix: {
+            moduleName: "PREAPPROVE",
+            masterName: "PREAPPROVE_TYPE"
+          },
+          jsonPath: "Scrutiny[1].preApprove.layoutType",
+          sourceJsonPath: "preApprovedSearch.confirmation",
+          required: true,
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+          },
+          props: {
+            className: "tl-trade-type",
+          },
+          beforeFieldChange: (action, state, dispatch) => {
+            if (action.value === "NO") {
+              dispatch(
+                toggleSnackbar(
+                  true,
+                  {
+                    labelName: "Please select correct Layout to proceed",
+                    labelKey: "PREAPPROVE_CHOOSE_LAYOUT_TYPE_ERROR_MESSAGE",
+                  },
+                  "error"
+                )
+              );
+              handleFieldAccessibility(action,state,dispatch,true)
+            } else {
+              handleFieldAccessibility(action,state,dispatch,false)
+            }
+          },
+        }),
+      },
+      landStatus: {
+        ...getSelectField({
+          label: {
+            labelName: "Land Status",
+            labelKey: "PREAPPROVE_LAND_STATUS",
+          },
+          placeholder: {
+            labelName: "Select Land Status",
+            labelKey: "PREAPPROVE_CHOOSE_LAND_STATUS",
+          },
+          localePrefix: {
+            moduleName: "PREAPPROVE",
+            masterName: "PREAPPROVE_TYPE"
+          },
+          jsonPath: "Scrutiny[1].preApprove.landStatus",
+          sourceJsonPath: "preApprovedSearch.landStatus",
+          required: true,
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+          },
+          props: {
+            className: "tl-trade-type",
+          },
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          if (action.value != "VACANT") {
+            dispatch(
+              toggleSnackbar(
+                true,
+                {
+                  labelName: "Please select correct Land status to proceed",
+                  labelKey: "PREAPPROVE_LAND_STATUS_TYPE_ERROR_MESSAGE",
+                },
+                "error"
+              )
+            );
+            handleFieldAccessibility(action,state,dispatch,true)
+          } else {
+            handleFieldAccessibility(action,state,dispatch,false)
+          }
+        },
+      },
+      projectComponent: {
+        ...getSelectField({
+          label: {
+            labelName: "Project Component",
+            labelKey: "PREAPPROVE_PROJECT_COMPONENT",
+          },
+          placeholder: {
+            labelName: "Select Project",
+            labelKey: "PREAPPROVE_CHOOSE_PROJECT_COMPONENT",
+          },
+          localePrefix: {
+            moduleName: "PREAPPROVE",
+            masterName: "PREAPPROVE_TYPE"
+          },
+          jsonPath: "Scrutiny[1].preApprove.project",
+          sourceJsonPath: "preApprovedSearch.project",
+          required: true,
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+          },
+          props: {
+            className: "tl-trade-type",
+          },
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          if (action.value === "OTHERS") {
+            dispatch(
+              toggleSnackbar(
+                true,
+                {
+                  labelName: "Please select correct project component to proceed",
+                  labelKey: "PREAPPROVE_PROJECT_COMPONENT_ERROR_MESSAGE",
+                },
+                "error"
+              )
+            );
+            handleFieldAccessibility(action,state,dispatch,true)
+          } else {
+            handleFieldAccessibility(action,state,dispatch,false)
+          }
+        },
+      },
+      link: checkEligibility(
+        {
+          labelName: "",
+          labelKey: "",
+        },
+        {
+          jsonPath: "Note[0].link1",
+        }
+      ),
+      lngthInFt: getTextField({
         label: {
           labelName: "Length of plot(in ft.)",
           labelKey: "PREAPPROVE_PLOT_LENGTH_IN_FT",
@@ -344,7 +582,7 @@ const preApprovedPlanSection = getCommonContainer({
           xs: 12,
           sm: 12,
         },
-      }),
+      }),      
     },
    
   },
@@ -553,6 +791,20 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "preApprovedPlanDetails",
   beforeInitScreen: (action, state, dispatch) => {
+    const confirmation = [
+      { code: "YES", label: "Yes" },
+      { code: "NO", label: "No" }
+    ]
+    const landStatus = [
+      { code: "VACANT", label: "Vacant" },
+      { code: "BUILDING_CONSTRUCTED", label: "Building Constructed" },
+      { code: "UNDER_CONSTRUCTION", label: "Under Construction" }
+    ];
+    const project = [
+      { code: "RESIDENTIAL", label: "Residential" },
+      { code: "OTHERS", label: "Others" },
+    ];
+    dispatch(prepareFinalObject("preApprovedSearch", {}));
     dispatch(prepareFinalObject("Scrutiny[0]", {}));
     dispatch(prepareFinalObject("LicensesTemp[0]", {}));
     dispatch(
@@ -567,9 +819,12 @@ const screenConfig = {
     dispatch(
       prepareFinalObject(
         "Note[0].link1",
-        "Check your eligibility for preapproved plan"
+        "PREAPPROVE_REDIRECT_TO_SCRUTINY_PAGE"
       )
     );
+    dispatch(prepareFinalObject("preApprovedSearch.confirmation", confirmation));
+    dispatch(prepareFinalObject("preApprovedSearch.landStatus", landStatus));
+    dispatch(prepareFinalObject("preApprovedSearch.project", project));
     // fetchMDMSData(action, state, dispatch);
     // setValuesForRework(action, state, dispatch);
     return action;

@@ -1,0 +1,43 @@
+export const propertyWiseDemandsForm = [
+  {
+    key: "ulbName",
+    type: "select",
+    placeholderLabelKey: "Select ULB Name",
+    gridSm: 4,
+    jsonPath: "reportForm.ulbName",
+    sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+    required: true,
+    labelKey: "ULB Name",
+    localePrefix: {
+      moduleName: "TENANT",
+      masterName: "TENANTS",
+    },
+  },
+  {
+    key: "propertyId",
+    type: "text",
+    placeholderLabelKey: "Select Property Id",
+    gridSm: 4,
+    jsonPath: "reportForm.propertyId",
+    required: false,
+    labelKey: "Property Id",
+  },
+  {
+    key: "oldPropertyId",
+    type: "text",
+    placeholderLabelKey: "Select Old Property Id",
+    gridSm: 4,
+    jsonPath: "reportForm.oldPropertyId",
+    required: false,
+    labelKey: "Old Property Id",
+  },
+  {
+    key: "wardNo",
+    type: "text",
+    placeholderLabelKey: "Select Tax Ward",
+    gridSm: 4,
+    jsonPath: "reportForm.wardNo",
+    required: false,
+    labelKey: "Tax Ward",
+  },
+]

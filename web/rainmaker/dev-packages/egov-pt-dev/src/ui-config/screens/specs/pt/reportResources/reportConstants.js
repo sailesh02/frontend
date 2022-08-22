@@ -2,14 +2,16 @@ export const REPORT_HEADER_MAPPER = {
   taxCollectorWiseCollection: "Tax Collector Wise Collection Report",
   ulbWiseTaxCollection: "ULB Wise Tax Collection Report",
   propertyDetails: "ULB Wise Property Details Report",
-  propertyWiseCollection: "Property Wise Collection Report"
+  propertyWiseCollection: "Property Wise Collection Report",
+  propertyWiseDemands: "Property Wise Demands Report",
 };
 
 export const REPORT_SUB_HEADER_MAPPER = {
   taxCollectorWiseCollection: "Modify report by date range",
   ulbWiseTaxCollection: "Modify report by date range",
   propertyDetails: "Modify report by date range",
-  propertyWiseCollection: "Modify report by date range"
+  propertyWiseCollection: "Modify report by date range",
+  propertyWiseDemands: "Modify report by date range",
 };
 
 export const REPORT_DROPDOWN_OPTIONS = {};
@@ -18,7 +20,8 @@ export const REPORT_TABLE_TITLE_MAPPER = {
   taxCollectorWiseCollection: "Tax Collector Wise Collection Report",
   ulbWiseTaxCollection: "ULB Wise Tax Collection Report",
   propertyDetails: "Property Details Report",
-  propertyWiseCollection: "Property Wise Collection Report"
+  propertyWiseCollection: "Property Wise Collection Report",
+  propertyWiseDemands: "Property Wise Demands Report",
 };
 
 export const REPORT_COLUMNS_MAPPER = {
@@ -134,7 +137,7 @@ export const REPORT_COLUMNS_MAPPER = {
     {
       labelKey: "Property Id",
     },
-    
+
     {
       labelKey: "Old Property Id",
     },
@@ -165,5 +168,43 @@ export const REPORT_COLUMNS_MAPPER = {
     {
       labelKey: "Payment Mode",
     },
-  ]
+  ],
+  propertyWiseDemands: [
+    {
+      labelKey: "Sl. No.",
+    },
+    {
+      labelKey: "ULB",
+    },
+    {
+      labelKey: "Property Id",
+    },
+    {
+      labelKey: "Old Property Id",
+    },
+    {
+      labelKey: "Ward",
+    },
+    {
+      labelKey: "Name",
+    },
+    {
+      labelKey: "Mobile Number",
+    },
+    {
+      labelKey: "Financial Year From",
+    },
+    {
+      labelKey: "Financial Year To",
+    },
+    {
+      labelKey: "Total Demand Amount",
+    },
+    {
+      labelKey: "Paid Amount",
+    },
+    {
+      labelKey: "Due Amount",
+    },
+  ],
 };

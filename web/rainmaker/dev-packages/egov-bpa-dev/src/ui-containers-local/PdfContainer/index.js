@@ -5,8 +5,9 @@ import get from "lodash/get";
 import { withStyles } from "@material-ui/core/styles";
 import { getLocaleLabels, getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import feeChart from "egov-ui-kit/assets/files/feeChart.pdf";
 import standardBuilding from "egov-ui-kit/assets/files/standardBuilding.pdf"
+import viAIntimation from "egov-ui-kit/assets/files/FORM-VI(A) - UNDERTAKING AND INTIMATION OF COMMENCEMENT OF CONSTRUCTION.pdf"
+import viBIntimation from "egov-ui-kit/assets/files/FORM-VI(B) - INTIMATION FOR COMPLETION OF CONSTRUCTION.pdf"
 const styles = {
   root: {
     color: 'rgba(0, 0, 0, 0.54)',
@@ -80,7 +81,22 @@ class PdfContainer extends React.Component {
     }
 
     const setPdfLink = () => {
-      let pdfFile = value == "feeChart.pdf" ? feeChart : standardBuilding
+      let pdfFile;
+      // let pdfFile = value == "feeChart.pdf" ? feeChart : standardBuilding
+      switch (value) {
+        case "formViA.pdf":
+          pdfFile = viAIntimation;
+          break;
+        case "formViB.pdf":
+          pdfFile = viBIntimation;
+          break;
+        case "standardBuilding.pdf":
+          pdfFile = standardBuilding;
+          break;
+        default:
+          pdfFile = "";
+          break;
+      }
       return pdfFile
     }
     value = downloadLink ? downloadLink : value;

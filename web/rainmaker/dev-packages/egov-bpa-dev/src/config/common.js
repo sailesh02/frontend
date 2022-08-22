@@ -12,7 +12,7 @@ const commonConfig = {
 export const CONSTANTS = {
   features: {
     isPreApprovedCitizenActive: true,
-    isRevisionActive: true,
+    isRevisionActive: false,
     isPreApprovedEmployeeActive: true
   },
 };

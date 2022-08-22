@@ -92,7 +92,7 @@ const tradeUnitCard = {
               setDataInField: true,
               jsonPath: "tradeUnits[0].fromUom",
             },
-            pattern: getPattern("UOMValue"),
+            // pattern: getPattern("UOMValue"),
             jsonPath: "tradeUnits[0].fromUom",
             gridDefination: {
               xs: 12,
@@ -114,7 +114,7 @@ const tradeUnitCard = {
               setDataInField: true,
               jsonPath: "tradeUnits[0].toUom",
             },
-            pattern: getPattern("UOMValue"),
+            // pattern: getPattern("UOMValue"),
             jsonPath: "tradeUnits[0].toUom",
             gridDefination: {
               xs: 12,
@@ -136,7 +136,7 @@ const tradeUnitCard = {
               setDataInField: true,
               jsonPath: "tradeUnits[0].rate",
             },
-            pattern: getPattern("UOMValue"),
+            // pattern: getPattern("UOMValue"),
             jsonPath: "tradeUnits[0].rate",
             gridDefination: {
               xs: 12,

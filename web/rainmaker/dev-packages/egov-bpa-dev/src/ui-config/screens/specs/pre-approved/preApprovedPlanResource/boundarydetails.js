@@ -6,7 +6,7 @@ import {
   getCommonContainer,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import "./index.css";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField,toggleSnackbar,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const detailsofplot = getCommonCard({
   header: getCommonTitle(
@@ -170,25 +170,82 @@ export const detailsofplot = getCommonCard({
           md: 6,
         },
       }),
-    },
-
-    choosePlotType: {
+    },    
+    chooseLayoutType: {
       ...getSelectField({
         label: {
           labelName:
-            "Whether Plot is part of government scheme(BDA/GA/OSHB) or private approved lay out",
-          labelKey: "PREAPPROVE_PLOT_SCHEME_HEADER",
+            "Whether the Plot is part of Approved layout/ Town Planning scheme/ Government Scheme ",
+          labelKey: "PREAPPROVE_LAYOUT_TYPE_HEADER",
         },
         placeholder: {
-          labelName: "Select Plot Scheme",
-          labelKey: "PREAPPROVE_CHOOSE_PLOT_SCHEME",
+          labelName: "Select Layout Type",
+          labelKey: "PREAPPROVE_CHOOSE_LAYOUT_TYPE",
         },
-        //   localePrefix: {
-        //     moduleName: "BPA",
-        //     masterName: "BPA_TYPE"
-        //   },
-        jsonPath: "BPA.additionalDetails.planDetail.plot.plotScheme",
+        localePrefix: {
+          moduleName: "PREAPPROVE",
+          masterName: "PREAPPROVE_TYPE"
+        },
+        jsonPath: "BPA.additionalDetails.planDetail.plot.layoutType",
         sourceJsonPath: "PA.confirmation",
+        required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6,
+        },
+        props: {
+          className: "tl-trade-type",
+        },
+        beforeFieldChange: (action, state, dispatch) => {
+          if (action.value === "NO") {
+            dispatch(
+              toggleSnackbar(
+                true,
+                {
+                  labelName: "Please select correct Layout to proceed",
+                  labelKey: "PREAPPROVE_CHOOSE_LAYOUT_TYPE_ERROR_MESSAGE",
+                },
+                "error"
+              )
+            );
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.footer.children.nextButton.props",
+                "disabled",
+                true
+              )
+            );
+          } else {
+            dispatch(
+              handleField(
+                "preApprovedPlanApply",
+                "components.div.children.footer.children.nextButton.props",
+                "disabled",
+                false
+              )
+            );
+          }
+        },
+      }),
+    },
+    landStatus: {
+      ...getSelectField({
+        label: {
+          labelName: "Land Status",
+          labelKey: "PREAPPROVE_LAND_STATUS",
+        },
+        placeholder: {
+          labelName: "Select Land Status",
+          labelKey: "PREAPPROVE_CHOOSE_LAND_STATUS",
+        },
+        localePrefix: {
+          moduleName: "PREAPPROVE",
+          masterName: "PREAPPROVE_TYPE"
+        },
+        jsonPath: "BPA.additionalDetails.planDetail.plot.landStatus",
+        sourceJsonPath: "PA.landStatus",
         required: true,
         gridDefination: {
           xs: 12,
@@ -200,7 +257,123 @@ export const detailsofplot = getCommonCard({
         },
       }),
       beforeFieldChange: (action, state, dispatch) => {
-        if (action.value === "YES") {
+        if (action.value != "VACANT") {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Please select correct Land status to proceed",
+                labelKey: "PREAPPROVE_LAND_STATUS_TYPE_ERROR_MESSAGE",
+              },
+              "error"
+            )
+          );
+          dispatch(
+            handleField(
+              "preApprovedPlanApply",
+              "components.div.children.footer.children.nextButton.props",
+              "disabled",
+              true
+            )
+          );
+        } else {
+          dispatch(
+            handleField(
+              "preApprovedPlanApply",
+              "components.div.children.footer.children.nextButton.props",
+              "disabled",
+              false
+            )
+          );
+        }
+      },
+    },
+    projectComponent: {
+      ...getSelectField({
+        label: {
+          labelName: "Project Component",
+          labelKey: "PREAPPROVE_PROJECT_COMPONENT",
+        },
+        placeholder: {
+          labelName: "Select Project",
+          labelKey: "PREAPPROVE_CHOOSE_PROJECT_COMPONENT",
+        },
+        localePrefix: {
+          moduleName: "PREAPPROVE",
+          masterName: "PREAPPROVE_TYPE"
+        },
+        jsonPath: "BPA.additionalDetails.planDetail.plot.project",
+        sourceJsonPath: "PA.project",
+        required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6,
+        },
+        props: {
+          className: "tl-trade-type",
+        },
+      }),
+      beforeFieldChange: (action, state, dispatch) => {
+        if (action.value === "OTHERS") {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Please select correct project component to proceed",
+                labelKey: "PREAPPROVE_PROJECT_COMPONENT_ERROR_MESSAGE",
+              },
+              "error"
+            )
+          );
+          dispatch(
+            handleField(
+              "preApprovedPlanApply",
+              "components.div.children.footer.children.nextButton.props",
+              "disabled",
+              true
+            )
+          );
+        } else {
+          dispatch(
+            handleField(
+              "preApprovedPlanApply",
+              "components.div.children.footer.children.nextButton.props",
+              "disabled",
+              false
+            )
+          );
+        }
+      },
+    },
+    layoutType: {
+      ...getSelectField({
+        label: {
+          labelName: "Layout Type",
+          labelKey: "PREAPPROVE_LAYOUT_TYPE",
+        },
+        placeholder: {
+          labelName: "Select Layout Type",
+          labelKey: "PREAPPROVE_LAYOUT_TYPE_PLACEHOLDER",
+        },
+        localePrefix: {
+          moduleName: "PREAPPROVE",
+          masterName: "PREAPPROVE_TYPE"
+        },
+        jsonPath: "BPA.additionalDetails.planDetail.plot.layout",
+        sourceJsonPath: "PA.layoutType",
+        required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6,
+        },
+        props: {
+          className: "tl-trade-type",
+        },
+      }),
+      beforeFieldChange: (action, state, dispatch) => {
+        if (action.value === "GOVERNMENT") {
           dispatch(
             handleField(
               "preApprovedPlanApply",
@@ -316,94 +489,6 @@ export const detailsofplot = getCommonCard({
             )
           );
         }
-      },
-    },
-    landStatus: {
-      ...getSelectField({
-        label: {
-          labelName: "Land Status",
-          labelKey: "PREAPPROVE_LAND_STATUS",
-        },
-        placeholder: {
-          labelName: "Select Land Status",
-          labelKey: "PREAPPROVE_CHOOSE_LAND_STATUS",
-        },
-        //   localePrefix: {
-        //     moduleName: "BPA",
-        //     masterName: "BPA_TYPE"
-        //   },
-        jsonPath: "BPA.additionalDetails.planDetail.plot.landStatus",
-        sourceJsonPath: "PA.landStatus",
-        required: true,
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6,
-        },
-        props: {
-          className: "tl-trade-type",
-        },
-      }),
-      beforeFieldChange: (action, state, dispatch) => {
-        //   if(action.value === "BPA5"){
-        //     dispatch(
-        //       handleField("apply", "components.div.children.formwizardSecondStep.children.getLowRiskConditions", "visible", true)
-        //     );
-        //     dispatch(
-        //       handleField("apply", "components.div.children.formwizardSecondStep.children.accreditedPersonDetails", "visible", true)
-        //     );
-        //   }else{
-        //     dispatch(
-        //       handleField("apply", "components.div.children.formwizardSecondStep.children.getLowRiskConditions", "visible", false)
-        //     );
-        //     dispatch(
-        //       handleField("apply", "components.div.children.formwizardSecondStep.children.accreditedPersonDetails", "visible", false)
-        //     );
-        //   }
-      },
-    },
-    projectComponent: {
-      ...getSelectField({
-        label: {
-          labelName: "Project Component",
-          labelKey: "PREAPPROVE_PROJECT_COMPONENT",
-        },
-        placeholder: {
-          labelName: "Select Project",
-          labelKey: "PREAPPROVE_CHOOSE_PROJECT_COMPONENT",
-        },
-        //   localePrefix: {
-        //     moduleName: "BPA",
-        //     masterName: "BPA_TYPE"
-        //   },
-        jsonPath: "BPA.additionalDetails.planDetail.plot.project",
-        sourceJsonPath: "PA.project",
-        required: true,
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6,
-        },
-        props: {
-          className: "tl-trade-type",
-        },
-      }),
-      beforeFieldChange: (action, state, dispatch) => {
-        //   if(action.value === "BPA5"){
-        //     dispatch(
-        //       handleField("apply", "components.div.children.formwizardSecondStep.children.getLowRiskConditions", "visible", true)
-        //     );
-        //     dispatch(
-        //       handleField("apply", "components.div.children.formwizardSecondStep.children.accreditedPersonDetails", "visible", true)
-        //     );
-        //   }else{
-        //     dispatch(
-        //       handleField("apply", "components.div.children.formwizardSecondStep.children.getLowRiskConditions", "visible", false)
-        //     );
-        //     dispatch(
-        //       handleField("apply", "components.div.children.formwizardSecondStep.children.accreditedPersonDetails", "visible", false)
-        //     );
-        //   }
       },
     },
     landRegDetails: {

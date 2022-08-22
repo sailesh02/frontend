@@ -29,6 +29,10 @@ export const landDetails = getCommonCard({
         labelName: "Name of Lessor / Government Body",
         labelKey: "PREAPPROVE_GOVERNMENT_BODY",
       },
+      localePrefix: {
+        moduleName: "PREAPPROVE",
+        masterName: "PREAPPROVE_TYPE"
+      },
       placeholder: {
         labelName: "Select Government Body",
         labelKey: "PREAPPROVE_SELECT_GOVERNMENT_BODY",
@@ -65,7 +69,7 @@ export const landDetails = getCommonCard({
         labelName: "Scheme plot Number",
         labelKey: "PREAPPROVE_SCHEME_PLOT",
       },
-      required: false,
+      required: true,
       jsonPath: "BPA.additionalDetails.landDetails.schemePlotNumber",
       gridDefination: {
         xs: 12,
@@ -81,24 +85,8 @@ export const landDetails = getCommonCard({
         labelName: "Revenue plot Number",
         labelKey: "PREAPPROVE_REVENUE_PLOT",
       },
-      required: false,
+      required: true,
       jsonPath: "BPA.additionalDetails.landDetails.revenuePlotNumber",
-      gridDefination: {
-        xs: 12,
-        sm: 12,
-        md: 6,
-      },
-      props: {
-        className: "tl-trade-type",
-      },
-    }),
-    revenueVillage: getTextField({
-      label: {
-        labelName: "Revenue village / Mauza",
-        labelKey: "PREAPPROVE_REVENUE_VILLAGE",
-      },
-      required: false,
-      jsonPath: "BPA.additionalDetails.landDetails.revenueVillage",
       gridDefination: {
         xs: 12,
         sm: 12,
@@ -113,7 +101,7 @@ export const landDetails = getCommonCard({
         labelName: "Kisam",
         labelKey: "PREAPPROVE_KISAM",
       },
-      required: false,
+      required: true,
       jsonPath: "BPA.additionalDetails.landDetails.kisam",
       gridDefination: {
         xs: 12,
@@ -124,34 +112,36 @@ export const landDetails = getCommonCard({
         className: "tl-trade-type",
       },
     }),
-    widthInMt: getTextField({
+    widthInFt: getTextField({
       label: {
-        labelName: "Width of plot(in m.)",
-        labelKey: "PREAPPROVE_PLOT_WITH_IN_METER",
+        labelName: "Width of plot(in ft.)",
+        labelKey: "PREAPPROVE_PLOT_WITH_IN_FT",
       },
+      required: true,
       pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
       props: {
         className: "tl-trade-type",
       },
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "BPA.additionalDetails.landDetails.width",
+      jsonPath: "BPA.additionalDetails.landDetails.widthInFt",
       gridDefination: {
         xs: 12,
         sm: 6,
         md: 6,
       },
     }),
-    lengthInMt: getTextField({
+    lengthInFt: getTextField({
       label: {
-        labelName: "Length of plot(in m.)",
-        labelKey: "PREAPPROVE_PLOT_LENGTH_IN_METER",
+        labelName: "Length of plot(in ft.)",
+        labelKey: "PREAPPROVE_PLOT_LENGTH_IN_FT",
       },
+      required: true,
       pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
       props: {
         className: "tl-trade-type",
       },
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "BPA.additionalDetails.landDetails.length",
+      jsonPath: "BPA.additionalDetails.landDetails.lengthInFt",
       gridDefination: {
         xs: 12,
         sm: 6,
@@ -200,7 +190,7 @@ export const landDetails = getCommonCard({
         labelName: "Layout plot Number",
         labelKey: "PREAPPROVE_LAYOUT_PLOT",
       },
-      required: false,
+      required: true,
       visible: false,
       jsonPath: "BPA.additionalDetails.landDetails.layoutPlotNumber",
       gridDefination: {
@@ -221,6 +211,10 @@ export const landDetails = getCommonCard({
       placeholder: {
         labelName: "Select road details",
         labelKey: "PREAPPROVE_ROAD_DETAILS_PLACEHOLDER",
+      },
+      localePrefix: {
+        moduleName: "PREAPPROVE",
+        masterName: "PREAPPROVE_TYPE"
       },
       jsonPath: "BPA.additionalDetails.landDetails.roadDetails",
       sourceJsonPath: "PA.confirmation",

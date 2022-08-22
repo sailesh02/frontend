@@ -14,11 +14,11 @@ export const consumerPaymentHistoryForm = [
     },
   },
   {
-    key: "consumerNumber",
+    key: "consumerCode",
     type: "text",
     placeholderLabelKey: "Select Consumer Number",
     gridSm: 4,
-    jsonPath: "reportForm.consumerNumber",
+    jsonPath: "reportForm.consumerCode",
     required: true,
     labelKey: "Consumer Number",
   },

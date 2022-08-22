@@ -947,6 +947,12 @@ export const prepareDocumentsUploadData = (state, dispatch, isOC) => {
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping", //[0].docTypes
     []
   );
+
+  let preApproveDocumentType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.PreApprovedDocTypeMapping", //[0].docTypes
+    []
+  );
   let documentsDropDownValues = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
@@ -970,6 +976,44 @@ export const prepareDocumentsUploadData = (state, dispatch, isOC) => {
     state,
     "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.planInformation.additionalDocuments", []
   );
+  if(bpaDetails.businessService == "BPA6"){
+    preApproveDocumentType.forEach((item,index)=> {
+      // Hardcoded Risk type value >>>needs to remove later
+      item.docTypes.forEach((doc,index)=> {
+        doc.required = false;
+        if (bpaDetails.additionalDetails.landDetails.roadDetails == "YES"){
+          if (
+            doc.code == "PAP.PREAPPROVED_GIFTDEEDDOCUMENT"
+          ) {
+            doc.required = true;
+          }
+        }
+        if (bpaDetails.additionalDetails.planDetail.plot.layout == "PRIVATE") {
+          if (
+            doc.code == "PAP.PREAPPROVED_LAYOUTAPPROVELLETTER" ||
+            doc.code == "PAP.PREAPPROVED_APPROVEDLAYOUTDRAWING"
+          ) {
+            doc.required = true;
+          }
+        } else {
+          if (
+            doc.code == "PAP.PREAPPROVED_ALLOTMENTLETTER" ||
+            doc.code == "PAP.PREAPPROVED_SCHEMEDRAWING"
+          ) {
+            doc.required = true;
+          }
+        }
+      })      
+    })
+    
+    // let updatePreapprovedDocType = resetPreapproveDocType.map((item,index)=>{
+    //   item.RiskType="OTHER";
+    //   return item;
+    // });
+    applicationDocuments = applicationDocuments.concat(preApproveDocumentType)
+
+    //documentsDropDownValues = documentsDropDownValues.concat(preApproveDocumentType)
+  }
 let addtionalDocTypesCheckboxesValues = {};
   if (additionalDocTypes && additionalDocTypes.length > 0) {
     for (let i = 0; i < additionalDocTypes.length; i++) {
@@ -1064,6 +1108,65 @@ var myArray;
     });
 
     myArray = documentsContract;
+   // dispatch(prepareFinalObject("documentsContract", documentsContract));
+  }
+  if (documents[1] && documents[1].length > 0) {
+    let preApprovedArray = [];
+    let documentsList = [];
+    documents[1].forEach(doc => {
+      let code = doc.code;
+      doc.dropDownValues = [];
+      documentsDropDownValues.forEach(value => {
+        let values = value.code.slice(0, code.length);
+        if (code === values) {
+          doc.hasDropdown = true;
+          doc.dropDownValues.push(value);
+        }
+      });
+      documentsList.push(doc);
+    });
+    const bpaDocuments = documentsList;
+    let documentsContract = [];
+    let tempDoc = {};
+
+    bpaDocuments.forEach(doc => {
+      let card = {};
+      card["code"] = doc.code.split(".")[0];
+      card["title"] = doc.code.split(".")[0];
+      card["cards"] = [];
+      tempDoc[doc.code.split(".")[0]] = card;
+    });
+    bpaDocuments.forEach(doc => {
+      let card = {};
+      card["name"] = doc.code;
+      card["code"] = doc.code;
+      if (bpaDetails && bpaDetails.documents && bpaDetails.documents.length > 0) {
+        card["required"] = false;
+      }
+      else {
+        card["required"] = doc.required ? true : false;
+      };
+      if (doc.hasDropdown && doc.dropDownValues) {
+        let dropDownValues = {};
+        dropDownValues.label = "Select Documents";
+        dropDownValues.required = doc.required ? true : false;
+        dropDownValues.menu = doc.dropDownValues.filter(item => {
+          return item.active;
+        });
+        dropDownValues.menu = dropDownValues.menu.map(item => {
+          return { code: item.code, label: item.code };
+        });
+        card["dropDownValues"] = dropDownValues;
+      }
+      tempDoc[doc.code.split(".")[0]].cards.push(card);
+    });
+
+    Object.keys(tempDoc).forEach(key => {
+      documentsContract.push(tempDoc[key]);
+    });
+
+    preApprovedArray = documentsContract;
+    myArray = myArray.concat(preApprovedArray)
    // dispatch(prepareFinalObject("documentsContract", documentsContract));
   }
 let finalAdditionDocs = [];
@@ -1889,6 +1992,11 @@ export const isFileValid = (file, acceptedFiles) => {
 };
 
 export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
+  let bpaDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    null
+  );
   if (!applicationNo) {
     applicationNo = get(
       state,
@@ -1896,11 +2004,10 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
       null
     );
   }
-
-  if (applicationNo) {
+  if(bpaDetails && bpaDetails.businessService === "BPA6" && applicationNo){
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.headerDiv.children.header.children.applicationNumber",
         "visible",
         true
@@ -1908,13 +2015,33 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
     );
     dispatch(
       handleField(
-        "apply",
+        "preApprovedPlanApply",
         "components.div.children.headerDiv.children.header.children.applicationNumber",
         "props.number",
-        applicationNo
+        bpaDetails.applicationNo
       )
     );
+  } else {
+    if (applicationNo) {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.headerDiv.children.header.children.applicationNumber",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.headerDiv.children.header.children.applicationNumber",
+          "props.number",
+          applicationNo
+        )
+      );
+    }
   }
+  
 };
 
 export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {

@@ -6,6 +6,10 @@ import get from "lodash/get";
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import MUIDataTable from "mui-datatables";
 import { generatePreapproveBill } from "../../ui-config/screens/specs/utils";
+import { Dialog, DialogContent } from "@material-ui/core";
+import {
+  getLocaleLabels,
+} from "egov-ui-framework/ui-utils/commons";
 
 const styles = {
   root: {
@@ -25,6 +29,12 @@ class BlockContainer extends Component {
   state = {
     item: null,
     selected: false,
+    isOpen: false,
+    image: "",
+  };
+  handleShowDialog = () => {
+    this.setState({ isOpen: !this.state.isOpen });
+    console.log("cliked");
   };
   // Document ddownload once you click on document link available in table row
   onDownloadClick = async (fileStoreId) => {
@@ -32,39 +42,86 @@ class BlockContainer extends Component {
     window.location = fileUrls[fileStoreId].split(",")[0];
   };
   setValue = (item) => {
-    const { data } = this.props;
+    const { data,localizationLabels } = this.props;
     const list = data.map((listData, index) => {
       listData.selected = false;
       if (listData.drawingNo === item.drawingNo) {
         if (!item.selected) {
           listData.selected = true;
+          this.setState({ image: item.documents[2].fileUrl });
+          this.props.setImagePreview("imagePreview",!this.state.isOpen)
+          
         }
       }
       return listData;
     });
     generatePreapproveBill().then((res) => {
-      let totalFee =
-        parseFloat(
-          res.sancFee.Calculations[0].taxHeadEstimates.reduce(
-            (sum, current) => sum + current.estimateAmount,
-            0
-          )
-        ) +
-        parseFloat(
-          res.appFee.Calculations[0].taxHeadEstimates.reduce(
-            (sum, current) => sum + current.estimateAmount,
-            0
-          )
+      let sancfee = [];
+      let appfee = []
+      res.sancFee.Calculations[0].taxHeadEstimates.forEach((item, index) => {
+        
+        item.taxHeadCode = getLocaleLabels(
+          item.taxHeadCode,
+          item.taxHeadCode,
+          localizationLabels
         );
-      list.totalFee = totalFee;
-      item.totalFee = totalFee;
+        sancfee.push(item);
+      });
+      res.appFee.Calculations[0].taxHeadEstimates.forEach((item, index) => {
+        item.taxHeadCode = getLocaleLabels(
+          item.taxHeadCode,
+          item.taxHeadCode,
+          localizationLabels
+        );
+        appfee.push(item);
+      });
+      list.sancfee = sancfee;
+      list.appfee = appfee;
+      item.sancfee = sancfee;
+      item.appfee = appfee;
       this.setState({ item: item, selected: true });
+      this.handleShowDialog();
       this.props.updateList("preapprovePlanList", list);
       this.props.selectedPlot("Scrutiny[1].preApprove.selectedPlot", item);
     });
   };
   render() {
-    const { data } = this.props;
+    const { data,localizationLabels } = this.props;
+    const noPlotsAvailableLabel = getLocaleLabels(
+      "PREAPPROVE_NO_PLOTS",
+      "No Plots available with these search details",
+      localizationLabels
+    );
+    const noPlotsLabel = getLocaleLabels(
+      "PREAPPROVE_PLOTS_NOT_AVAILABLE",
+      "Plots not Available",
+      localizationLabels
+    );
+    const drawingNumber = getLocaleLabels(
+      "BPA_DRAWING_NO_LABEL",
+      "Drawing Number",
+      localizationLabels
+    );
+    const feeDetails = getLocaleLabels(
+      "PREAPPROVE_FEE_DETAILS",
+      "Fee Details",
+      localizationLabels
+    );
+    const documentLabel = getLocaleLabels(
+      "PREAPPROVE_DOCUMENT_LABEL",
+      "Documents(Please download the documents to preview drawing details)",
+      localizationLabels
+    );
+    const sancFee = getLocaleLabels(
+      "PREAPPROVE_SANC_FEE_LABEL",
+      "Sanction Fee Details",
+      localizationLabels
+    );
+    const appFee = getLocaleLabels(
+      "PREAPPROVE_APP_FEE_LABEL",
+      "Application Fee Details",
+      localizationLabels
+    );
     return (
       <div>
         {data ? (
@@ -72,8 +129,8 @@ class BlockContainer extends Component {
             {data.length > 0 ? (
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr 1fr",
                   gap: "10px",
                   marginBottom: "20px",
                 }}
@@ -92,16 +149,37 @@ class BlockContainer extends Component {
                     }
                   />
                 ))}
+                {this.state.isOpen && (
+                  <Dialog
+                    fullScreen={true}
+                    open={open}
+                    onClose={this.handleShowDialog}
+                    maxWidth={false}
+                  >
+                    <DialogContent
+                      children={
+                        <img
+                          style={{
+                            width: "100%",
+                          }}
+                          src={this.state.image}
+                          onClick={this.handleShowDialog}
+                          alt="no image"
+                        />
+                      }
+                    />
+                  </Dialog>
+                )}
               </div>
             ) : (
               <div>
-                <h3>No Plots available with these search details</h3>
+                <h3>{noPlotsAvailableLabel}</h3>
               </div>
             )}
           </div>
         ) : (
           <div>
-            <h3>Plots not Available</h3>
+            <h3>{noPlotsLabel}</h3>
           </div>
         )}
 
@@ -118,29 +196,55 @@ class BlockContainer extends Component {
           >
             <div
               style={{
-                display: "flex",
-                gap: "15",
                 fontSize: "14px",
               }}
             >
               <div>
-                <h3>Drawing Number</h3>
+                <h3>{drawingNumber}</h3>
                 <h5>{this.state.item.drawingNo}</h5>
               </div>
-              <div
-                style={{
-                  marginLeft: "50px",
-                }}
-              >
-                <h3>Total Fee</h3>
-                <h5>{this.state.item.totalFee}</h5>
+              <div>
+                <h3>{feeDetails}</h3>
+                <Fragment>
+                  {this.state.item.sancfee && (
+                    <Fragment>
+                      <h4>{sancFee}</h4>
+                      {this.state.item.sancfee.map((item, index) => (
+                        <div
+                          key={index}
+                          style={{
+                            display: "flex",
+                          }}
+                        >
+                          <h5>{item.taxHeadCode}:</h5>
+                          {"    "}
+                          <h5>{item.estimateAmount}</h5>
+                        </div>
+                      ))}
+                    </Fragment>
+                  )}
+                  {this.state.item.appfee && (
+                    <Fragment>
+                      <h4>{appFee}</h4>
+                      {this.state.item.appfee.map((item, index) => (
+                        <div
+                          key={index}
+                          style={{
+                            display: "flex",
+                          }}
+                        >
+                          <h5>{item.taxHeadCode}:</h5>
+                          {"    "}
+                          <h5>{item.estimateAmount}</h5>
+                        </div>
+                      ))}
+                    </Fragment>
+                  )}
+                </Fragment>
               </div>
             </div>
             <div>
-              <h4>
-                Documents(Please download the documents to preview drawing
-                details)
-              </h4>
+              <h4>{documentLabel}</h4>
               <div
                 style={{
                   display: "flex",
@@ -168,9 +272,7 @@ class BlockContainer extends Component {
                         <span
                           onClick={() => this.onDownloadClick(item.fileStoreId)}
                         >
-                          {`Documet-${index} : ${
-                            item.additionalDetails.title
-                          }`}
+                          {`Documet-${index} : ${item.additionalDetails.title}`}
                         </span>
                       </a>
                     )}
@@ -198,10 +300,13 @@ const mapStateToProps = (state, ownprops) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+  
   return {
     selectedPlot: (jsonPath, value) =>
       dispatch(prepareFinalObject(jsonPath, value)),
     updateList: (jsonPath, value) =>
+      dispatch(prepareFinalObject(jsonPath, value)),
+    setImagePreview: (jsonPath, value) =>
       dispatch(prepareFinalObject(jsonPath, value)),
   };
 };

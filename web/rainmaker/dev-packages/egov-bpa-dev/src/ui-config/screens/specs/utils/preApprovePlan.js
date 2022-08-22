@@ -3508,6 +3508,12 @@ export const getBpaTextToLocalMapping = label => {
         "BPA_COMMON_TABLE_COL_CARPET_AREA",
         localisationLabels
       );
+    case "Floor Height":
+      return getLocaleLabels(
+        "Carpet Area",
+        "PREAPPROVE_FLOOR_HEIGHT",
+        localisationLabels
+      );
     case "Application No":
       return getLocaleLabels(
         "Application No",
@@ -6164,84 +6170,7 @@ export const generateBillForSanctionFee = async (bpaObject, edcrObject, dispatch
 };
 
 export const createSanctionFeeData = (billDetails, feetype) => {
-    //let billDetails;
-    // if(feetype === "sancfee"){
-    //  billDetails =  [
-    //       {
-    //           "applicationNumber": null,
-    //           "BPA": {},
-    //           "tenantId": "od.cuttack",
-    //           "taxHeadEstimates": [
-    //               {
-    //                   "taxHeadCode": "BPA_SANC_SANC_FEE",
-    //                   "estimateAmount": 4773,
-    //                   "category": "FEE"
-    //               },
-    //               {
-    //                   "taxHeadCode": "BPA_SANC_WORKER_WELFARE_CESS",
-    //                   "estimateAmount": 61137,
-    //                   "category": "FEE"
-    //               },
-    //               {
-    //                   "taxHeadCode": "BPA_SANC_SHELTER_FEE",
-    //                   "estimateAmount": 0,
-    //                   "category": "FEE"
-    //               },
-    //               {
-    //                   "taxHeadCode": "BPA_SANC_TEMP_RETENTION_FEE",
-    //                   "estimateAmount": 2000,
-    //                   "category": "FEE"
-    //               },
-    //               {
-    //                   "taxHeadCode": "BPA_SANC_SECURITY_DEPOSIT",
-    //                   "estimateAmount": 0,
-    //                   "category": "FEE"
-    //               },
-    //               {
-    //                   "taxHeadCode": "BPA_SANC_PUR_FAR",
-    //                   "estimateAmount": 4950,
-    //                   "category": "FEE"
-    //               },
-    //               {
-    //                   "taxHeadCode": "BPA_SANC_EIDP_FEE",
-    //                   "estimateAmount": 0,
-    //                   "category": "FEE"
-    //               }
-    //           ],
-    //           "feeType": "SanctionFee"
-    //       }
-    //   ];
-    //   }else{
-    //     billDetails =  [
-    //       {
-    //           "applicationNumber": null,
-    //           "BPA": {},
-    //           "tenantId": "od.cuttack",
-    //           "taxHeadEstimates": [
-    //               {
-    //                   "taxHeadCode": "BPA_BLDNG_OPRN_FEE",
-    //                   "estimateAmount": 1225,
-    //                   "category": "FEE"
-    //               }
-                  
-    //           ],
-    //           "feeType": "ApplicationFee"
-    //       }
-    //   ];
-    // }
     
-
-  //const billDetails
-  // let fees =
-  //   billDetails &&
-  //   billDetails[0].taxHeadEstimates &&
-  //   billDetails[0].taxHeadEstimates.map(item => {
-  //     return {
-  //       name: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode },
-  //       value: item.estimateAmount,
-  //       info: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode }
-  //     };
-  //   });
   
   let fees =
     billDetails &&

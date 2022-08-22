@@ -3094,7 +3094,11 @@ export const getRiskType = (state, dispatch, forBPA) => {
     state.screenConfiguration.preparedFinalObject,
     "applyScreenMdmsData.BPA.RiskTypeComputation"
   );
-
+  let bpaDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    null
+  );
 
   let lowRiskBuilding = get(
     state.screenConfiguration.preparedFinalObject,
@@ -3128,12 +3132,16 @@ export const getRiskType = (state, dispatch, forBPA) => {
   //   ];
   //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
   // }
-
-  if (lowRiskBuilding) {
+  if(bpaDetails && bpaDetails.businessService == "BPA6"){
     scrutinyRiskType = "LOW"
-  } else {
-    scrutinyRiskType = "OTHER"
+  }else {
+    if (lowRiskBuilding) {
+      scrutinyRiskType = "LOW"
+    } else {
+      scrutinyRiskType = "OTHER"
+    }
   }
+  
 
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
   return scrutinyRiskType;
@@ -5268,31 +5276,61 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
   prepareFinalCards(state, dispatch, documentsPreview, finalDocuments, isVisibleTrue);
 };
 
-const getFeeDetails = async(feeType) => {
+const getFeeDetails = async(feeType,searchPreview=false) => {
   const state = store.getState();
-  let drawing = get(
-    state,
-    "screenConfiguration.preparedFinalObject.preapprovePlanList",
-    []
-  );
-  const payload = {
-    "CalulationCriteria": [
-      {
-          "BPA": {
-              "edcrNumber": drawing[0].drawingNo,
-              "riskType": "LOW",
-              "businessService": "BPA6",
-              "applicationType": drawing[0].drawingDetail.applicationType,
-              "serviceType": drawing[0].drawingDetail.serviceType,
-              "tenantId": drawing[0].tenantId
-          },
-          "feeType": feeType,
-          "tenantId": drawing[0].tenantId,
-          "applicationType": drawing[0].drawingDetail.applicationType,
-          "serviceType": drawing[0].drawingDetail.serviceType
-      }
-    ]
+  let drawing;
+  let payload;
+  if(searchPreview){
+    drawing = get(
+      state,
+      "screenConfiguration.preparedFinalObject.PA.preApprovedPlanDetails",
+      []
+    );
+    payload = {
+      "CalulationCriteria": [
+        {
+            "BPA": {
+                "edcrNumber": drawing.drawingNo,
+                "riskType": "LOW",
+                "businessService": "BPA6",
+                "applicationType": drawing.drawingDetail.applicationType,
+                "serviceType": drawing.drawingDetail.serviceType,
+                "tenantId": drawing.tenantId
+            },
+            "feeType": feeType,
+            "tenantId": drawing.tenantId,
+            "applicationType": drawing.drawingDetail.applicationType,
+            "serviceType": drawing.drawingDetail.serviceType
+        }
+      ]
+    }
+  } else {
+    drawing = get(
+      state,
+      "screenConfiguration.preparedFinalObject.preapprovePlanList",
+      []
+    );
+    payload = {
+      "CalulationCriteria": [
+        {
+            "BPA": {
+                "edcrNumber": drawing[0].drawingNo,
+                "riskType": "LOW",
+                "businessService": "BPA6",
+                "applicationType": drawing[0].drawingDetail.applicationType,
+                "serviceType": drawing[0].drawingDetail.serviceType,
+                "tenantId": drawing[0].tenantId
+            },
+            "feeType": feeType,
+            "tenantId": drawing[0].tenantId,
+            "applicationType": drawing[0].drawingDetail.applicationType,
+            "serviceType": drawing[0].drawingDetail.serviceType
+        }
+      ]
+    }
   }
+  
+  
   const response = await httpRequest(
     "post",
     "/bpa-services/v1/bpa/_estimate",
@@ -5303,10 +5341,35 @@ const getFeeDetails = async(feeType) => {
   return response;
 }
 
-export const generatePreapproveBill = async() => {
-  const sancFeeDetails = await getFeeDetails("SanctionFee");
-  const appFeeDetails = await getFeeDetails("ApplicationFee")
+export const generatePreapproveBill = async(searchPreview=false) => {
+  const sancFeeDetails = await getFeeDetails("SanctionFee",searchPreview);
+  const appFeeDetails = await getFeeDetails("ApplicationFee",searchPreview);
+
+  if(appFeeDetails && appFeeDetails.Calculations.length>0){
+    const estimateData = createSanctionFeeData(appFeeDetails.Calculations, "appfee");
+    estimateData &&
+      estimateData.length &&
+      store.dispatch(
+        prepareFinalObject(
+          "applyScreenMdmsData.estimateCardData",
+          estimateData
+        )
+      );
+  }
+  if(sancFeeDetails && sancFeeDetails.Calculations.length>0){
+    const estimateData = createSanctionFeeData(sancFeeDetails.Calculations, "sancfee");
+    estimateData &&
+      estimateData.length &&
+      store.dispatch(
+        prepareFinalObject(
+          "applyScreenMdmsData.sanctionFeeCardData",
+          estimateData
+        )
+      );
+  }
   
+  
+
   return {
     sancFee: sancFeeDetails,
     appFee: appFeeDetails

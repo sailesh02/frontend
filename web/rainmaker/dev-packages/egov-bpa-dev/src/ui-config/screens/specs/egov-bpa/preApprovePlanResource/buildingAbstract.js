@@ -100,10 +100,7 @@ export const buildingAbstract = getCommonCard({
         props: {
           disabled:true,
         },
-        iconObj: {
-          label: "G+1 ",
-          position: "start",
-        },
+        
         jsonPath: "buildingAbstract.totalFloorNo",
         required: true,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",

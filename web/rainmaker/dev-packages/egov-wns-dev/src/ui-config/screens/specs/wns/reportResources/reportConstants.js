@@ -77,18 +77,6 @@ export const REPORT_DROPDOWN_OPTIONS = {
       },
     ],
   },
-  waterMonthlyDemandReport: {
-    connectionType: [
-      {
-        code: "metered",
-        name: "Metered",
-      },
-      {
-        code: "nonMetered",
-        name: "Non Metered",
-      },
-    ],
-  },
 };
 
 export const REPORT_TABLE_TITLE_MAPPER = {

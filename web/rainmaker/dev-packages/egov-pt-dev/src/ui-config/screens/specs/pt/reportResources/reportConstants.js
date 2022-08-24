@@ -137,7 +137,6 @@ export const REPORT_COLUMNS_MAPPER = {
     {
       labelKey: "Property Id",
     },
-
     {
       labelKey: "Old Property Id",
     },

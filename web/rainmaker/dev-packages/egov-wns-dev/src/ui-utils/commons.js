@@ -3020,6 +3020,11 @@ export const isModifyMode = () => {
     return (isMode && isMode.toUpperCase() === 'MODIFY');
 }
 
+export const applicableApplicationType = () => {
+    let isApplication = getQueryArg(window.location.href, "applicationType")
+    return (isApplication && isApplication.toUpperCase() === "CLOSE_CONNECTION") || (isApplication && isApplication.toUpperCase() === "DISCONNECT_CONNECTION")
+}
+
 export const isDisconnectOrClose = () => {
     let disconnectOrClose = getQueryArg(window.location.href, "disconnectOrClose");
     return (disconnectOrClose && disconnectOrClose == 'true');

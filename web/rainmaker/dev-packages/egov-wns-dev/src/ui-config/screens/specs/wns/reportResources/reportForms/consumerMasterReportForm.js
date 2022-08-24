@@ -20,7 +20,7 @@ export const consumerMasterReportForm = [
     gridSm: 4,
     jsonPath: "reportForm.ward",
     required: false,
-    labelKey: "Ward (Eg NIL,01,02,..)",
+    labelKey: "Ward (Ex: 01, 02, 03...)",
   },
   {
     key: "connectionType",

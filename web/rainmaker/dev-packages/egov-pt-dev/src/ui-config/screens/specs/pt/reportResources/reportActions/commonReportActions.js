@@ -4,12 +4,8 @@ import {
   taxCollectorWiseCollectionSearch,
   ulbWiseTaxCollectionSearch,
   propertyDetailsSearch,
-<<<<<<< HEAD
-  propertyCollectionSearch
-=======
   propertyCollectionSearch,
   propertyWiseDemandsSearch
->>>>>>> 8ced2eec56b2266f0b72ac18702ffb13bb3f5ab6
 } from "./reportSearchActions";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -129,16 +125,12 @@ const getTableData = async (params, state, dispatch) => {
       tableData = await propertyDetailsSearch(params, state, dispatch);
       break;
     case "propertyWiseCollection":
-<<<<<<< HEAD
-      tableData = await propertyCollectionSearch(params, state, dispatch)
-=======
       tableData = await propertyCollectionSearch(params, state, dispatch);
       break;
     case "propertyWiseDemands":
       tableData = await propertyWiseDemandsSearch(params, state, dispatch);
       break;
 
->>>>>>> 8ced2eec56b2266f0b72ac18702ffb13bb3f5ab6
     default:
       break;
   }

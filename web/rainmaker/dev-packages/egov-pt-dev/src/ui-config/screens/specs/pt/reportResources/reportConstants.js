@@ -2,24 +2,16 @@ export const REPORT_HEADER_MAPPER = {
   taxCollectorWiseCollection: "Tax Collector Wise Collection Report",
   ulbWiseTaxCollection: "ULB Wise Tax Collection Report",
   propertyDetails: "ULB Wise Property Details Report",
-<<<<<<< HEAD
-  propertyWiseCollection: "Property Wise Collection Report"
-=======
   propertyWiseCollection: "Property Wise Collection Report",
   propertyWiseDemands: "Property Wise Demands Report",
->>>>>>> 8ced2eec56b2266f0b72ac18702ffb13bb3f5ab6
 };
 
 export const REPORT_SUB_HEADER_MAPPER = {
   taxCollectorWiseCollection: "Modify report by date range",
   ulbWiseTaxCollection: "Modify report by date range",
   propertyDetails: "Modify report by date range",
-<<<<<<< HEAD
-  propertyWiseCollection: "Modify report by date range"
-=======
   propertyWiseCollection: "Modify report by date range",
   propertyWiseDemands: "Modify report by date range",
->>>>>>> 8ced2eec56b2266f0b72ac18702ffb13bb3f5ab6
 };
 
 export const REPORT_DROPDOWN_OPTIONS = {};
@@ -28,12 +20,8 @@ export const REPORT_TABLE_TITLE_MAPPER = {
   taxCollectorWiseCollection: "Tax Collector Wise Collection Report",
   ulbWiseTaxCollection: "ULB Wise Tax Collection Report",
   propertyDetails: "Property Details Report",
-<<<<<<< HEAD
-  propertyWiseCollection: "Property Wise Collection Report"
-=======
   propertyWiseCollection: "Property Wise Collection Report",
   propertyWiseDemands: "Property Wise Demands Report",
->>>>>>> 8ced2eec56b2266f0b72ac18702ffb13bb3f5ab6
 };
 
 export const REPORT_COLUMNS_MAPPER = {
@@ -149,11 +137,6 @@ export const REPORT_COLUMNS_MAPPER = {
     {
       labelKey: "Property Id",
     },
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 8ced2eec56b2266f0b72ac18702ffb13bb3f5ab6
     {
       labelKey: "Old Property Id",
     },
@@ -184,9 +167,6 @@ export const REPORT_COLUMNS_MAPPER = {
     {
       labelKey: "Payment Mode",
     },
-<<<<<<< HEAD
-  ]
-=======
   ],
   propertyWiseDemands: [
     {
@@ -226,5 +206,4 @@ export const REPORT_COLUMNS_MAPPER = {
       labelKey: "Due Amount",
     },
   ],
->>>>>>> 8ced2eec56b2266f0b72ac18702ffb13bb3f5ab6
 };

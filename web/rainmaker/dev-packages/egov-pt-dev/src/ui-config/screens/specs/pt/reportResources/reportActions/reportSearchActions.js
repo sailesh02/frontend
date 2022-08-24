@@ -189,11 +189,7 @@ export const propertyCollectionSearch = async (
         "Mobile Number": eachItem["mobileNumber"],
         "Due Before Payment": eachItem["dueBeforePayment"],
         "Amount Paid": eachItem["amountPaid"],
-<<<<<<< HEAD
-        "Current Due" : eachItem["currentDue"],
-=======
         "Current Due": eachItem["currentDue"],
->>>>>>> 8ced2eec56b2266f0b72ac18702ffb13bb3f5ab6
         "Reciept Number": eachItem["receiptNumber"],
         "Reciept Date": eachItem["receiptDate"],
         "Payment Mode": eachItem["paymentMode"]
@@ -205,8 +201,6 @@ export const propertyCollectionSearch = async (
     console.log(error.message);
     return null;
   }
-<<<<<<< HEAD
-=======
 };
 
 export const propertyWiseDemandsSearch = async (
@@ -254,5 +248,4 @@ export const propertyWiseDemandsSearch = async (
     console.log(error.message);
     return null;
   }
->>>>>>> 8ced2eec56b2266f0b72ac18702ffb13bb3f5ab6
 };

@@ -13,6 +13,30 @@ const epochToDDMMYYYYFromatter = (epochDate) => {
   return formatDate;
 };
 
+const removeEmptyParams = (paramsObj) => {
+  let paramsList = [];
+  Object.keys(paramsObj).forEach((key) => {
+    if (paramsObj[key]) {
+      paramsList.push({
+        key: key,
+        value: paramsObj[key],
+      });
+    }
+  });
+  return paramsList;
+};
+
+const getDayDifference = (toDate, fromDate) => {
+  const startDate = new Date(toDate);
+  const endDate = new Date(fromDate);
+  const monthDiff =
+    endDate.getMonth() -
+    startDate.getMonth() +
+    12 * (endDate.getFullYear() - startDate.getFullYear());
+  const dayDiff = monthDiff * 30 + endDate.getDate() - startDate.getDate();
+  console.log(dayDiff);
+  return dayDiff;
+};
 export const employeeDateWiseWSCollectionSearch = async (
   params,
   state,
@@ -23,10 +47,7 @@ export const employeeDateWiseWSCollectionSearch = async (
       ...params,
       collectionDate: Date.parse(params["collectionDate"]),
     };
-    let queryObject = Object.keys(formattedParams).map((key) => ({
-      key: key,
-      value: formattedParams[key],
-    }));
+    let queryObject = removeEmptyParams(formattedParams);
     let payload = null;
     payload = await httpRequest(
       "post",
@@ -67,14 +88,7 @@ export const employeeDateWiseWSCollectionSearch = async (
 
 export const consumerMasterReportSearch = async (params, state, dispatch) => {
   try {
-    const formattedParams = {
-      ...params,
-      ward: params["ward"] ? params["ward"] : "NIL",
-    };
-    let queryObject = Object.keys(formattedParams).map((key) => ({
-      key: key,
-      value: formattedParams[key],
-    }));
+    let queryObject = removeEmptyParams(params);
     let payload = null;
     payload = await httpRequest(
       "post",
@@ -110,14 +124,11 @@ export const consumerMasterReportSearch = async (params, state, dispatch) => {
 
 export const billSummaryReportSearch = async (params, state, dispatch) => {
   try {
-    const formattedParams = {
+    let formattedParams = {
       ...params,
       monthYear: Date.parse(params["monthYear"]),
     };
-    let queryObject = Object.keys(formattedParams).map((key) => ({
-      key: key,
-      value: formattedParams[key],
-    }));
+    let queryObject = removeEmptyParams(formattedParams);
     let payload = null;
     payload = await httpRequest(
       "post",
@@ -144,58 +155,75 @@ export const billSummaryReportSearch = async (params, state, dispatch) => {
 
 export const waterbillDemandReportSearch = async (params, state, dispatch) => {
   try {
-    const formattedParams = {
-      ...params,
-      fromDate: Date.parse(params["fromDate"]),
-      toDate: Date.parse(params["toDate"]),
-      ward: params["ward"] ? params["ward"] : "NIL",
-    };
-    let queryObject = Object.keys(formattedParams).map((key) => ({
-      key: key,
-      value: formattedParams[key],
-    }));
-    let payload = null;
-    payload = await httpRequest(
-      "post",
-      "/report-services/reports/ws/waterMonthlyDemandReport",
-      "",
-      queryObject
-    );
-    dispatch(
-      prepareFinalObject("reportTableData", payload["waterBillDemandWSReports"])
-    );
-    let tableData = payload.waterMonthlyDemandResponse.map(
-      (eachItem, index) => ({
-        "Sl. No.": index + 1,
-        ULB: eachItem["ulb"],
-        Ward: eachItem["ward"],
-        "Connection No": eachItem["connectionNo"],
-        "Old Connection No": eachItem["oldConnectionNo"],
-        "Connection Type": eachItem["connectionType"],
-        "Connection Holder Name": eachItem["connectionHolderName"],
-        "Collection Amount": eachItem["collectionAmount"],
-        "Contact No": eachItem["contactNo"],
-        Address: eachItem["address"],
-        "Demand Period From": eachItem["demandPeriodFrom"]
-          ? epochToDDMMYYYYFromatter(eachItem["demandPeriodFrom"])
-          : "NA",
-        "Demand Period To": eachItem["demandPriodTo"]
-          ? epochToDDMMYYYYFromatter(eachItem["demandPriodTo"])
-          : "NA",
-        "Current Demand": eachItem["currentDemandAmount"],
-        "Collection Amount": eachItem["collectionAmount"],
-        "Rebate Amount": eachItem["rebateAmount"],
-        Penalty: eachItem["penaltyAmount"],
-        Advance: eachItem["advanceAmount"],
-        Arrear: eachItem["arrearAmt"],
-        "Total Due": eachItem["totalDueAmount"],
-        "Amount Payable after Rebate":
-          eachItem["amountPayableAfterRebateAmount"],
-        "Amount Payable with Penalty":
-          eachItem["amountPayableWithPenaltyAmount"],
-      })
-    );
-    return tableData;
+    const dayDiff = getDayDifference(params["fromDate"], params["toDate"]);
+    console.log(dayDiff);
+    if (dayDiff < 0) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelKey: "From Date should be less than To Date." },
+          "warning"
+        )
+      );
+      return null;
+    } else if (dayDiff > 31) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelKey: "Date difference should be less than a month." },
+          "warning"
+        )
+      );
+      return null;
+    } else {
+      const formattedParams = {
+        ...params,
+        fromDate: Date.parse(params["fromDate"]),
+        toDate: Date.parse(params["toDate"]),
+      };
+      let queryObject = removeEmptyParams(formattedParams);
+      let payload = null;
+      payload = await httpRequest(
+        "post",
+        "/report-services/reports/ws/waterMonthlyDemandReport",
+        "",
+        queryObject
+      );
+      dispatch(
+        prepareFinalObject(
+          "reportTableData",
+          payload["waterBillDemandWSReports"]
+        )
+      );
+      let tableData = payload.waterMonthlyDemandResponse.map(
+        (eachItem, index) => ({
+          "Sl. No.": index + 1,
+          ULB: eachItem["ulb"],
+          Ward: eachItem["ward"],
+          "Connection No": eachItem["connectionNo"],
+          "Old Connection No": eachItem["oldConnectionNo"],
+          "Connection Type": eachItem["connectionType"],
+          "Connection Holder Name": eachItem["connectionHolderName"],
+          "Collection Amount": eachItem["collectionAmount"],
+          "Contact No": eachItem["contactNo"],
+          Address: eachItem["address"],
+          "Demand Period From": eachItem["demandPeriodFrom"],
+          "Demand Period To": eachItem["demandPriodTo"],
+          "Current Demand": eachItem["currentDemandAmount"],
+          "Collection Amount": eachItem["collectionAmount"],
+          "Rebate Amount": eachItem["rebateAmount"],
+          Penalty: eachItem["penaltyAmount"],
+          Advance: eachItem["advanceAmount"],
+          Arrear: eachItem["arrearAmt"],
+          "Total Due": eachItem["totalDueAmount"],
+          "Amount Payable after Rebate":
+            eachItem["amountPayableAfterRebateAmount"],
+          "Amount Payable with Penalty":
+            eachItem["amountPayableWithPenaltyAmount"],
+        })
+      );
+      return tableData;
+    }
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
     console.log(error.message);
@@ -205,10 +233,7 @@ export const waterbillDemandReportSearch = async (params, state, dispatch) => {
 
 export const consumerPaymentHistorySearch = async (params, state, dispatch) => {
   try {
-    let queryObject = Object.keys(params).map((key) => ({
-      key: key,
-      value: params[key],
-    }));
+    let queryObject = removeEmptyParams(params);
     let payload = null;
     payload = await httpRequest(
       "post",
@@ -260,10 +285,7 @@ export const newConsumerMonthlyReportSearch = async (
       ...params,
       monthYear: Date.parse(params["monthYear"]),
     };
-    let queryObject = Object.keys(formattedParams).map((key) => ({
-      key: key,
-      value: formattedParams[key],
-    }));
+    let queryObject = removeEmptyParams(formattedParams);
     let payload = null;
     payload = await httpRequest(
       "post",
@@ -284,12 +306,8 @@ export const newConsumerMonthlyReportSearch = async (
         "Ward Number": eachItem["ward"],
         "Connection Number": eachItem["connectionNo"],
         "Application Number": eachItem["applicationNo"],
-        "Execution Date": eachItem["date"]
-          ? epochToDDMMYYYYFromatter(eachItem["date"])
-          : "NA",
-        "Sanction Date": eachItem["sanctionDate"]
-          ? epochToDDMMYYYYFromatter(eachItem["sanctionDate"])
-          : "NA",
+        "Execution Date": eachItem["date"],
+        "Sanction Date": eachItem["sanctionDate"],
         "Connection Type": eachItem["connectionType"],
         "Connection Facility": eachItem["connectionFacility"],
         "Connection Category": eachItem["connectionCategory"],
@@ -313,10 +331,7 @@ export const consumerHistoryReportSearch = async (params, state, dispatch) => {
       fromDate: Date.parse(params["fromDate"]),
       toDate: Date.parse(params["toDate"]),
     };
-    let queryObject = Object.keys(formattedParams).map((key) => ({
-      key: key,
-      value: formattedParams[key],
-    }));
+    let queryObject = removeEmptyParams(formattedParams);
     let payload = null;
     payload = await httpRequest(
       "post",
@@ -360,10 +375,7 @@ export const consumerBillHistoryReportSearch = async (
   dispatch
 ) => {
   try {
-    let queryObject = Object.keys(params).map((key) => ({
-      key: key,
-      value: params[key],
-    }));
+    let queryObject = removeEmptyParams(params);
     let payload = null;
     payload = await httpRequest(
       "post",

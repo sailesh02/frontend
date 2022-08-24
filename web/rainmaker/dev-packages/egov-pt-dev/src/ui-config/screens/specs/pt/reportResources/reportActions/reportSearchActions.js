@@ -189,7 +189,11 @@ export const propertyCollectionSearch = async (
         "Mobile Number": eachItem["mobileNumber"],
         "Due Before Payment": eachItem["dueBeforePayment"],
         "Amount Paid": eachItem["amountPaid"],
+<<<<<<< HEAD
         "Current Due" : eachItem["currentDue"],
+=======
+        "Current Due": eachItem["currentDue"],
+>>>>>>> 8ced2eec56b2266f0b72ac18702ffb13bb3f5ab6
         "Reciept Number": eachItem["receiptNumber"],
         "Reciept Date": eachItem["receiptDate"],
         "Payment Mode": eachItem["paymentMode"]
@@ -201,4 +205,54 @@ export const propertyCollectionSearch = async (
     console.log(error.message);
     return null;
   }
+<<<<<<< HEAD
+=======
+};
+
+export const propertyWiseDemandsSearch = async (
+  params,
+  state,
+  dispatch
+) => {
+  try {
+    let queryObject = Object.keys(params).map((key) => ({
+      key: key,
+      value: params[key],
+    }));
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/report-services/reports/pt/propertyWiseDemandReport",
+      "",
+      queryObject
+    );
+    dispatch(
+      prepareFinalObject(
+        "reportTableData",
+        payload["propertyWiseDemandResponse"]
+      )
+    );
+    let tableData = payload.propertyWiseDemandResponse.map(
+      (eachItem, index) => ({
+        "Sl. No.": index + 1,
+        "ULB": eachItem["ulb"],
+        "Property Id": eachItem["propertyId"],
+        "Old Property Id": eachItem["oldPropertyId"],
+        "Ward": eachItem["ward"],
+        "Name": eachItem["name"],
+        "Mobile Number": eachItem["mobileNumber"],
+        "Financial Year From": eachItem["taxPeriodFrom"],
+        "Financial Year To": eachItem["taxPeriodTo"],
+        "Total Demand Amount": eachItem["taxDemandAmount"],
+        "Paid Amount": eachItem["paidAmount"],
+        "Due Amount": eachItem["dueAmount"],
+      })
+    );
+    return tableData;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
+    console.log(error.message);
+    return null;
+  }
+>>>>>>> 8ced2eec56b2266f0b72ac18702ffb13bb3f5ab6
 };

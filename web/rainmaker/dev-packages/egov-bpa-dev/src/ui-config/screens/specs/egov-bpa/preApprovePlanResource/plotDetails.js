@@ -131,5 +131,20 @@ export const plotDetails = getCommonCard({
           md: 6,
         },
       }),
+      preApprovedCode: getTextField({
+        label: {
+          labelName: "Preapproved Code",
+          labelKey: "PREAPPROVE_CODE",
+        },
+        pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "plotDetails.preApprovedCode",
+        required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 6,
+          md: 6,
+        },
+      }),
     }),
   });

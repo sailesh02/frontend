@@ -25,12 +25,14 @@ export const getPreApproveList = async (action, state, dispatch) => {
 
       newObj.plotLength = item.plotLengthInFeet;
       newObj.plotWidth = item.plotWidthInFeet;
+      newObj.preApprovedCode = item.preApprovedCode;
       newObj.floorDescription = item.drawingDetail.floorDescription;
       newObj.totalFar = item.drawingDetail.totalFar;
       newObj.tenantId = item.tenantId;
       arr.push({
         PREAPPROVE_EDIT_TOOGLE_BUTTON: newObj.active,
         PREAPPROVE_BUILDING_PLAN: newObj.drawingNo,
+        PREAPPROVE_CODE: newObj.preApprovedCode,
         // PREAPPROVE_PLOT_SIZE: newObj.plotSize,
         PREAPPROVE_ABUTTING_ROAD_COLUMN: newObj.abuttingRoad,
         PREAPPROVE_TENANT_ID: newObj.tenantId,

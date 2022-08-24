@@ -417,8 +417,8 @@ const addBuildingDetails = async (state, dispatch, type) => {
       Level: blockDetail.level,
       //"Occupancy/Sub Occupancy": "",
       "Buildup Area": blockDetail.buildUpArea,
-      "Floor Area": blockDetail.carpetArea,
-      "Carpet Area": blockDetail.floorArea,
+      "Floor Area": blockDetail.floorArea,
+      "Carpet Area": blockDetail.carpetArea,
       "Floor Height": blockDetail.floorHeight,
       // "Id": uuid(),
       "Block": currentIndex
@@ -633,7 +633,7 @@ export const addPreApprovePlan = getCommonCard(
         },
         pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        required: true,
+        required: false,
         jsonPath: "blockDetail.carpetArea",
         gridDefination: {
           xs: 12,
@@ -648,7 +648,7 @@ export const addPreApprovePlan = getCommonCard(
         },
         pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        required: true,
+        required: false,
         jsonPath: "blockDetail.floorHeight",
         gridDefination: {
           xs: 12,

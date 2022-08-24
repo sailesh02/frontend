@@ -15,6 +15,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import Tooltip from "@material-ui/core/Tooltip";
 
 import "./index.css";
+import { excelDownloadAction } from "./excelDownloadAction";
 
 class WnsReportTable extends React.Component {
   state = {
@@ -234,7 +235,7 @@ class WnsReportTable extends React.Component {
       []
     );
     console.log("excel download");
-    // excelDownloadAction(tableData, "Sujog Jal Saathi Incentive Report")
+    excelDownloadAction(tableData, "Report")
   };
 
   showHideMenuItem = () => {
@@ -292,7 +293,7 @@ class WnsReportTable extends React.Component {
     return (
       <React.Fragment>
         <span>
-          {/* <button className="rt-tbl-btn" onClick={() => this.downloadAsExcel()}>Export to Excel</button> */}
+          <button className="rt-tbl-btn" onClick={() => this.downloadAsExcel()}>Export to Excel</button>
           <Tooltip title={"Show/Hide Columns"}>
             <button
               className="rt-tbl-btn rt-menu-btn"

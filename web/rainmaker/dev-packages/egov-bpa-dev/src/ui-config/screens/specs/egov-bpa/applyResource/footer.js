@@ -204,6 +204,7 @@ let bpaObj = get(
   let isFormValid = true;
   let hasFieldToaster = false;
   let isMobileExists = true;
+  let hasNoc = false;
 
   if (activeStep === 0) {
     let isBasicDetailsCardValid = validateFields(
@@ -503,7 +504,7 @@ if(!isMobileExistsResponse){
     let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
     let bpaApp = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
     let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
-    
+        
     let nocTypesFromMDMS = get(
       state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA,
       "NocTypeMapping",
@@ -596,7 +597,8 @@ if(!isMobileExistsResponse){
       );
   
       let validateDocumentField = false;
-  
+      let thirdPartyDataExists = false;
+      
       if (documentsFormat && documentsFormat.length) {
         for (let i = 0; i < documentsFormat.length; i++) {
           let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
@@ -644,10 +646,74 @@ if(!isMobileExistsResponse){
         isFormValid = false;
         hasFieldToaster = true;
         } else {
-          getSummaryRequiredDetails(state, dispatch);
+          if (process.env.REACT_APP_NAME === "Citizen") {
+        
+            if (noc && noc.length > 0) {
+              noc &&
+                noc.forEach((item) => {
+                  if (!("thirdPartyNOC" in item.additionalDetails)) {
+                    thirdPartyDataExists = true;
+                    isFormValid = false;
+                    hasNoc = true;
+                    return;
+                  }
+                });
+            }
+        
+            if (thirdPartyDataExists) {
+              dispatch(
+                toggleSnackbar(
+                  true,
+                  {
+                    labelName: "Please upload required data for NOCs",
+                    labelKey: "Please upload required data for NOCs",
+                  },
+                  "warning"
+                )
+              );
+            }
+          }
+          if (!thirdPartyDataExists){
+            getSummaryRequiredDetails(state, dispatch);
+          }else {
+            isFormValid = false;
+            hasNoc = true;
+          }
         }
       } else {
-        getSummaryRequiredDetails(state, dispatch);
+        if (process.env.REACT_APP_NAME === "Citizen") {
+        
+          if (noc && noc.length > 0) {
+            noc &&
+              noc.forEach((item) => {
+                if (!("thirdPartyNOC" in item.additionalDetails)) {
+                  thirdPartyDataExists = true;
+                  isFormValid = false;
+                  hasNoc = true;
+                  return;
+                }
+              });
+          }
+      
+          if (thirdPartyDataExists) {
+            dispatch(
+              toggleSnackbar(
+                true,
+                {
+                  labelName: "Please upload required data for NOCs",
+                  labelKey: "Please upload required data for NOCs",
+                },
+                "warning"
+              )
+            );
+          }
+        }
+        if (!thirdPartyDataExists){
+          getSummaryRequiredDetails(state, dispatch);
+        }else {
+          isFormValid = false;
+          hasNoc = true;
+        }        
       }
     // }else{
     //   
@@ -903,6 +969,25 @@ if(!isMobileExistsResponse){
           break;
       }
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    } else if (hasNoc){
+      let errorMessage = {
+        labelName: "Please fill all NOC details",
+        labelKey: "ERR_UPLOAD_MANDATORY_NOC_DOCUMENTS"
+      };
+      switch (activeStep) {
+        case 0:
+          errorMessage = {
+            labelName: "Please fill all NOC details",
+            labelKey: "ERR_UPLOAD_MANDATORY_NOC_DOCUMENTS"
+          };
+          break;
+        case 1:
+          errorMessage = {
+            labelName: "Please fill all NOC details",
+            labelKey: "ERR_UPLOAD_MANDATORY_NOC_DOCUMENTS"
+          };
+          break;
+      }
     }
   }
 };

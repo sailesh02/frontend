@@ -127,6 +127,8 @@ class TriggerNOCContainer extends Component {
     numberErrMsg:'Please Enter Valid Number upto two Decimal Points',
     stringErrMsg:'Please Enter Valid String'
   }
+  nocTypeParams = getQueryArg(window.location.href, "nocType");
+
   
   prepareDocumentsForPayload = async (wfState) => {
     const {preparedFinalObject} = this.props
@@ -166,6 +168,80 @@ class TriggerNOCContainer extends Component {
             uploadingDocuments.push(doc);
           })
         }
+      });
+      store.dispatch(prepareFinalObject("payloadDocumentFormat",uploadingDocuments));
+    }
+  }
+
+  prepareUpdateDocumentsForPayload = async (wfState) => {
+    const {preparedFinalObject} = this.props
+    const {nocDocumentsDetailsRedux,Noc} = preparedFinalObject
+    let appDocumentList = nocDocumentsDetailsRedux
+    let documnts = [];
+    if (appDocumentList) {
+      Object.keys(appDocumentList).forEach(function (key) {
+        if (appDocumentList && appDocumentList[key]) {
+          documnts.push(appDocumentList[key]);
+        }
+      });
+    }
+
+    // prepareFinalObject("nocDocumentsDetailsRedux", {});
+    let requiredDocuments = [], uploadingDocuments = [];
+    if (documnts && documnts.length > 0) {
+      documnts.forEach(documents => {
+        if (documents && documents.documents) {
+          documents.documents.map(docs => {
+            let doc = {};
+            doc.documentType = documents.documentCode;
+            doc.title = documents.documentCode;
+            doc.fileStoreId = docs.fileStoreId;
+            doc.fileName = docs.fileName;
+            doc.fileUrl = docs.fileUrl;
+            doc.link = docs.fileUrl;
+            doc.name = docs.fileName;
+            doc.isClickable = true;
+            doc.additionalDetails = {
+              uploadedBy: getLoggedinUserRole(wfState),
+              uploadedTime: new Date().getTime()
+            }
+            if (doc.id) {
+              doc.id = docs.id;
+            }
+            uploadingDocuments.push(doc);
+          })
+        }
+      });
+
+      // create update payload
+      uploadingDocuments = uploadingDocuments.map((item) => {
+        let payload;
+        const doc =
+          Noc &&
+          Noc.documents.find(
+            (document) => document.documentType === item.documentType
+          );
+        if (doc) {
+          payload = {
+            id: doc.id,
+            documentType: doc.documentType,
+            fileStoreId: item.fileStoreId,
+            fileName: item.fileName,
+            fileUrl: item.fileUrl,
+            link: item.link,
+            name: item.name,
+            isClickable: item.isClickable,
+            title: item.title,
+            additionalDetails: {
+              uploadedBy: item.additionalDetails.uploadedBy,
+              uploadedTime: item.additionalDetails.uploadedTime,
+            },
+          };
+          return payload;
+        } else {
+          return item;
+        }
+        
       });
       store.dispatch(prepareFinalObject("payloadDocumentFormat",uploadingDocuments));
     }
@@ -989,8 +1065,7 @@ FireStationsDropDown = async()=>{
   }
 
   getDocumentsFromMDMS = async (nocType) => {
-    let {BPA} = this.props.preparedFinalObject
-    let {applicationType} = BPA
+    
     let mdmsBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -1016,15 +1091,27 @@ FireStationsDropDown = async()=>{
     );
 
     let documents = payload && payload.MdmsRes && payload.MdmsRes.NOC && payload.MdmsRes.NOC.DocumentTypeMapping || []
-
     let documentList = documents && documents.length > 0 && documents[0].docTypes.map( doc => {
+      let docTypeArray = doc.documentType && doc.documentType.split('.')
+      let length = docTypeArray.length
+      let docType = length == 2  ? `${doc.documentType}.CERTIFICATE` : doc.documentType
+      let required = length == 2 ? false : true
       return {
-        code : doc.documentType,
-        documentType : doc.documentType,
-        required : doc.required,
+        code : docType,
+        documentType : docType,
+        required : required,
         active : doc.active || true
       }
     })
+
+    // let documentList = documents && documents.length > 0 && documents[0].docTypes.map( doc => {
+    //   return {
+    //     code : doc.documentType,
+    //     documentType : doc.documentType,
+    //     required : doc.required,
+    //     active : doc.active || true
+    //   }
+    // })
 
     store.dispatch(prepareFinalObject("SelectedNocDocument",documentList))
     this.prepareDocumentsUploadData(documentList)
@@ -1136,6 +1223,7 @@ FireStationsDropDown = async()=>{
               return noc
             }
           })
+          updateNocPayload[0].workflow = this.setNocWorkflowState(updateNocPayload[0])
           updateNocPayload[0].documents = payloadDocumentFormat,
           updateNocPayload[0].additionalDetails.SubmittedOn = submittedOn
           if(nocType == 'NMA_NOC'|| nocType == "FIRE_NOC"){
@@ -1241,6 +1329,36 @@ FireStationsDropDown = async()=>{
   
   };
 
+  setNocWorkflowState = (noc) => {
+    let currentState = store.getState();
+    let bpaStatus
+    let {BPA} = currentState.screenConfiguration.preparedFinalObject
+    
+    if(getQueryArg(window.location.href, "bpaStatus")) {
+      bpaStatus = getQueryArg(window.location.href, "bpaStatus");      
+    }else {
+      bpaStatus = BPA.status
+    }
+    let bpaStatusArray = [
+      "INITIATED",
+      "CITIZEN_APPROVAL_INPROCESS",
+      "PENDING_APPL_FEE",
+      "INPROGRESS",
+    ];
+  
+    if (
+      noc.applicationStatus == "CREATED" &&
+      !bpaStatusArray.includes(bpaStatus)
+    ) {
+      let action = {
+        action: "INITIATE",
+      };
+      return action;
+    } else {
+      return null;
+    }
+  };
+
   saveDetails = async (nocType) => {
     const isFromBPA = getQueryArg(window.location.href, "isFromBPA");
     if(isFromBPA){
@@ -1277,7 +1395,9 @@ FireStationsDropDown = async()=>{
       }else{
         Noc.additionalDetails.thirdPartyNOC = NewNocAdditionalDetails.thirdPartyNOC;
       }
-     
+      this.prepareUpdateDocumentsForPayload("")
+      let {payloadDocumentFormat} = currentState.screenConfiguration.preparedFinalObject
+      Noc.documents = payloadDocumentFormat
      if(ChangedNocAction){
       Noc.workflow = {action: "INITIATE"};
      }
@@ -1319,9 +1439,13 @@ FireStationsDropDown = async()=>{
   componentDidMount = () => {
     store.dispatch(prepareFinalObject("nocDocumentsDetailsRedux", {}));
     store.dispatch(prepareFinalObject("documentsContractNOC", []));
-    this.fireBuildingDropDOwn()
-    this.FiredistrictsDropDown()
-    this.FireStationsDropDown()
+    this.getDocumentsFromMDMS(this.nocTypeParams)
+    if(this.nocTypeParams && this.nocTypeParams === "FIRE_NOC" || this.state.nocType == "FIRE_NOC"){
+      this.fireBuildingDropDOwn()
+      this.FiredistrictsDropDown()
+      this.FireStationsDropDown()
+    }
+    
   };
 
   closeDialog = () => {
@@ -1455,7 +1579,7 @@ FireStationsDropDown = async()=>{
                     labelKey="BPA_DOCUMENT_DETAILS_HEADER" />
                   </Typography>
                   </Grid>
-                  {((this.state.nocType == "NMA_NOC"  || this.props.nocType == 'NMA_NOC')) &&
+                  {((this.state.nocType == "NMA_NOC"  || this.props.nocType == 'NMA_NOC' || this.nocTypeParams == 'NMA_NOC')) &&
                   <Grid item sm={12}>
                       <DocumentListContainerNOC
                         buttonLabel = {{
@@ -1474,7 +1598,7 @@ FireStationsDropDown = async()=>{
                       </DocumentListContainerNOC>
                   </Grid>
             }
-             {((this.state.nocType == "FIRE_NOC"  || this.props.nocType == "FIRE_NOC")) &&
+             {((this.state.nocType == "FIRE_NOC"  || this.props.nocType == "FIRE_NOC" || this.nocTypeParams == "FIRE_NOC")) &&
             <Grid item sm={12}>
             <DocumentListContainerNOC
               buttonLabel = {{

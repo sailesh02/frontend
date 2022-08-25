@@ -28,8 +28,7 @@ import { httpRequest } from "../../ui-utils/api";
 import { LinkAtom } from "../../ui-atoms-local"
 import store from "ui-redux/store";
 import { CheckboxContainer } from "../../ui-containers-local";
-import { createNoc } from "../../ui-utils/commons";
-
+import { createNoc, fireBuildingTypeDropDownApi, getFiredistrictsDropDownApi, getFireStationsDropDownApi } from "../../ui-utils/commons";
 const styles = {
   documentTitle: {
     color: "rgba(0, 0, 0, 0.87)",
@@ -414,7 +413,7 @@ class NocDetailCardBPA extends Component {
       uploadedDocIndex: 0,
       editableDocuments: null,
       nocType : '',
-      isUpdate:false
+      isUpdate:false,
     };
   }
   componentDidMount = () => {
@@ -1110,54 +1109,100 @@ class NocDetailCardBPA extends Component {
   };
 
   initiateNoc = async(nocType,isUpdate) => {
-    let bPaappNo = getQueryArg(
-      window.location.href,
-      "applicationNumber", ""
-    );
-    let tenantId = getQueryArg(
-      window.location.href,
-      "tenantId", ""
-    );
-    let payload = {
-      "id": null,
-      "tenantId": tenantId,
-      "applicationNo": null,
-      "nocNo": null,
-      "applicationType": "NEW",
-      "nocType": nocType,
-      "accountId": null,
-      "source": "BPA",
-      "sourceRefId": bPaappNo,
-      "landId": null,
-      "status": null,
-      "applicationStatus": null,
-      "documents": null,
-      "workflow": null,
-      "auditDetails": null,
-      "additionalDetails": null
-  }
-   let response = await createNoc(payload);
- 
-   if(response){
-    let nocSplits = nocType.split("_");
-    store.dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName:  `${nocSplits[0]} ${nocSplits[1]} activated successfully. Please wait, while fetching updated data`,
-          labelKey:  `${nocSplits[0]} ${nocSplits[1]} activated successfully. Please wait, while fetching updated data`
-        },
-        "success"
+    if(process.env.REACT_APP_NAME === "Employee") {
+      store.dispatch(handleField(
+        "apply",
+        "components.div.children.showNotification.props",
+        "open",
+        true
+      ))
+      store.dispatch(handleField(
+        "search-preview",
+        "components.div.children.showNotification.props",
+        "open",
+        true
+      ))
+    }  
+
+    setTimeout(async()=>{
+      store.dispatch(handleField(
+        "apply",
+        "components.div.children.showNotification.props",
+        "open",
+        false
+      ))
+      store.dispatch(handleField(
+        "search-preview",
+        "components.div.children.showNotification.props",
+        "open",
+        false
+      ))
+      let bPaappNo = getQueryArg(
+        window.location.href,
+        "applicationNumber", ""
+      );
+      let tenantId = getQueryArg(
+        window.location.href,
+        "tenantId", ""
+      );
+      let payload = {
+        "id": null,
+        "tenantId": tenantId,
+        "applicationNo": null,
+        "nocNo": null,
+        "applicationType": "NEW",
+        "nocType": nocType,
+        "accountId": null,
+        "source": "BPA",
+        "sourceRefId": bPaappNo,
+        "landId": null,
+        "status": null,
+        "applicationStatus": null,
+        "documents": null,
+        "workflow": null,
+        "auditDetails": null,
+        "additionalDetails": null
+    }
+     let response = await createNoc(payload);
+   
+     if(response){
+      let nocSplits = nocType.split("_");
+      store.dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName:  `${nocSplits[0]} ${nocSplits[1]} activated successfully. Please wait, while fetching updated data`,
+            labelKey:  `${nocSplits[0]} ${nocSplits[1]} activated successfully. Please wait, while fetching updated data`
+          },
+          "success"
+        )
       )
-    )
-   // setTimeout(location.reload(), 5000);
-    setTimeout(function(){
-      window.location.reload(1);
-   }, 4000);
+     // setTimeout(location.reload(), 5000);
+      setTimeout(function(){
+        window.location.reload(1);
+     }, 4000);
+    }
+    },2000)
+    
   }
+  fireBuildingDropDOwn = async()=>{
+    await fireBuildingTypeDropDownApi()
+  }
+  FiredistrictsDropDown = async()=>{
+    await getFiredistrictsDropDownApi()
+  }
+  
+  FireStationsDropDown = async()=>{
+    await getFireStationsDropDownApi()
   }
 
+
   triggerNoc = (nocType,isUpdate) => {
+    if(nocType == "FIRE_NOC"){
+      this.fireBuildingDropDOwn()
+      this.FiredistrictsDropDown()
+      this.FireStationsDropDown()
+    }
     this.setState({
       nocType : nocType
     })
@@ -1172,7 +1217,7 @@ class NocDetailCardBPA extends Component {
         "apply",
         "components.div.children.triggerNocContainer.props",
         "isUpdate",
-         false
+        false
       ))
     }
     store.dispatch(prepareFinalObject("documentsContractNOC", []));
@@ -1222,73 +1267,118 @@ class NocDetailCardBPA extends Component {
         {requiredNocToTrigger &&
           requiredNocToTrigger.length > 0 &&
           requiredNocToTrigger.map((card, index) => {
-            return (
-              card.name ? (<div style={styles.documentTitle}>
+            return card.name ? (
+              <div style={styles.documentTitle}>
                 <div>
                   <Grid container>
                     <Grid item xs={3}>
                       <LabelContainer
-                      labelKey={getTransformedLocale(card.nocType)}
-                      style={styles.nocTitle}
+                        labelKey={getTransformedLocale(card.nocType)}
+                        style={styles.nocTitle}
                       />
-                      {card.required && process.env.REACT_APP_NAME !== "Citizen" ? <span style = {styles.spanStyle}>*</span> : ""}
+                      {card.required &&
+                      process.env.REACT_APP_NAME !== "Citizen" ? (
+                        <span style={styles.spanStyle}>*</span>
+                      ) : (
+                        ""
+                      )}
                     </Grid>
                     <Grid item xs={3}>
-                      <LinkAtom 
-                      linkDetail = {card.additionalDetails.linkDetails} 
+                      <LinkAtom
+                        linkDetail={card.additionalDetails.linkDetails}
                       />
                     </Grid>
                     {card.additionalDetails.nocNo ? (
-                    <Grid item xs={3}>
-                      <Typography
-                      variant="subtitle1"
-                      style={{ fontWeight: "bold", fontSize: "12px" }}
-                      >
-                      Approval Number
-                      </Typography>
-                    {card.additionalDetails.nocNo ?
-                  <div style={styles.fontStyle}>
-                    {card.additionalDetails.nocNo}
-                  </div>: "NA" }
-                  </Grid> ) : ( "" )}
-                </Grid>
-                <NocData
-                  docItem={card}
-                  docIndex={index}
-                  key={index.toString()}
-                  {...rest}
-                />
+                      <Grid item xs={3}>
+                        <Typography
+                          variant="subtitle1"
+                          style={{ fontWeight: "bold", fontSize: "12px" }}
+                        >
+                          Approval Number
+                        </Typography>
+                        {card.additionalDetails.nocNo ? (
+                          <div style={styles.fontStyle}>
+                            {card.additionalDetails.nocNo}
+                          </div>
+                        ) : (
+                          "NA"
+                        )}
+                      </Grid>
+                    ) : (
+                      ""
+                    )}
+                  </Grid>
+                  <NocData
+                    docItem={card}
+                    docIndex={index}
+                    key={index.toString()}
+                    {...rest}
+                  />
                 </div>
-            <div>{this.getCard(card, index)}</div>  
-            <div>{card.nocType == 'FIRE_NOC' && card && card.additionalDetails && card.additionalDetails.submissionDetails.thirdPartyNOC&&
-            this.getFIREOCForm(index,disabled,card.additionalDetails.submissionDetails)}</div>
-            <div>{card.nocType == 'NMA_NOC' && card.nmaDetails && card.nmaDetails.thirdPartyNOC && 
-            this.getNMANOCForm(index,disabled,card.nmaDetails.thirdPartyNOC)}</div>
-          </div>) : (
-             <Grid style={{paddingTop:'18px',paddingRight:'22px',paddingBottom:'18px',paddingLeft:'10px',marginBottom:'10px',width:'100%',backgroundColor: "#FFFFFF"}} container>
-                <Grid style={{align:'center'}} item xs={11}>
-                  <LabelContainer style={{fontWeight:'bold',fontSize:'12px'}}
-                    labelKey={getTransformedLocale(card.nocType)}/>
+                <div>{this.getCard(card, index)}</div>
+                <div>
+                  {card.nocType == "FIRE_NOC" &&
+                    card &&
+                    card.additionalDetails &&
+                    card.additionalDetails.submissionDetails.thirdPartyNOC &&
+                    this.getFIREOCForm(
+                      index,
+                      disabled,
+                      card.additionalDetails.submissionDetails
+                    )}
+                </div>
+                <div>
+                  {card.nocType == "NMA_NOC" &&
+                    card.nmaDetails &&
+                    card.nmaDetails.thirdPartyNOC &&
+                    this.getNMANOCForm(
+                      index,
+                      disabled,
+                      card.nmaDetails.thirdPartyNOC
+                    )}
+                </div>
+              </div>
+            ) : (
+              <Grid
+                style={{
+                  paddingTop: "18px",
+                  paddingRight: "22px",
+                  paddingBottom: "18px",
+                  paddingLeft: "10px",
+                  marginBottom: "10px",
+                  width: "100%",
+                  backgroundColor: "#FFFFFF",
+                }}
+                container
+              >
+                <Grid style={{ align: "center" }} item xs={11}>
+                  <LabelContainer
+                    style={{ fontWeight: "bold", fontSize: "12px" }}
+                    labelKey={getTransformedLocale(card.nocType)}
+                  />
                 </Grid>
-             <Grid style={{align: "right"}} item xs={1}>
-               <Button 
-                // onClick = {() => this.triggerNoc(card.nocType,false)}
-                onClick = {() => this.initiateNoc(card.nocType,false)}
-                 style = {{
-                 color: "white",
-                 backgroundColor: "rgb(254, 122, 81)",
-                 borderRadius: "2px"}}>
-                 {`APPLY ${card.nocType.split("_")[0]} ${card.nocType.split("_")[1]}`}
-               </Button>
-             </Grid>
-           </Grid>
-          )
-              
-            )
-          })
-        }
+                <Grid style={{ align: "right" }} item xs={1}>
+                  <Button
+                    // onClick = {() => this.triggerNoc(card.nocType,false)}
+                    onClick={() => this.initiateNoc(card.nocType, false)}
+                    style={{
+                      color: "white",
+                      backgroundColor: "rgb(254, 122, 81)",
+                      borderRadius: "2px",
+                    }}
+                  >
+                    {`APPLY ${card.nocType.split("_")[0]} ${
+                      card.nocType.split("_")[1]
+                    }`}
+                  </Button>
+                </Grid>
+              </Grid>
+            );
+          })}
+          
+        
       </div>
-    )
+    );
   }
 
   onUploadClick = (uploadedDocIndex) => {

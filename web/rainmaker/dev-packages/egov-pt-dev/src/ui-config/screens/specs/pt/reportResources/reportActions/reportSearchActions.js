@@ -33,7 +33,6 @@ const getDayDifference = (toDate, fromDate) => {
     startDate.getMonth() +
     12 * (endDate.getFullYear() - startDate.getFullYear());
   const dayDiff = monthDiff * 30 + endDate.getDate() - startDate.getDate();
-  console.log(dayDiff);
   return dayDiff;
 };
 
@@ -44,7 +43,6 @@ export const taxCollectorWiseCollectionSearch = async (
 ) => {
   try {
     const dayDiff = getDayDifference(params["startDate"], params["endDate"]);
-    console.log(dayDiff);
     if (dayDiff < 0) {
       dispatch(
         toggleSnackbar(

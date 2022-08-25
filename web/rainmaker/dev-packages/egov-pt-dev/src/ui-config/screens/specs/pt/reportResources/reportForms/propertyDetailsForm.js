@@ -6,7 +6,7 @@ export const propertyDetailsForm = [
     gridSm: 4,
     jsonPath: "reportForm.ulbName",
     sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-    required: false,
+    required: true,
     labelKey: "ULB Name",
     localePrefix: {
       moduleName: "TENANT",

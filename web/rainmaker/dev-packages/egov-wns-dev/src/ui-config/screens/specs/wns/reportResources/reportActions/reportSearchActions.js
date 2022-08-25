@@ -34,7 +34,6 @@ const getDayDifference = (toDate, fromDate) => {
     startDate.getMonth() +
     12 * (endDate.getFullYear() - startDate.getFullYear());
   const dayDiff = monthDiff * 30 + endDate.getDate() - startDate.getDate();
-  console.log(dayDiff);
   return dayDiff;
 };
 export const employeeDateWiseWSCollectionSearch = async (
@@ -88,7 +87,11 @@ export const employeeDateWiseWSCollectionSearch = async (
 
 export const consumerMasterReportSearch = async (params, state, dispatch) => {
   try {
-    let queryObject = removeEmptyParams(params);
+    const formattedParams = {
+      ...params,
+      ward: params["ward"] ? params["ward"] : "NIL",
+    };
+    let queryObject = removeEmptyParams(formattedParams);
     let payload = null;
     payload = await httpRequest(
       "post",
@@ -156,7 +159,6 @@ export const billSummaryReportSearch = async (params, state, dispatch) => {
 export const waterbillDemandReportSearch = async (params, state, dispatch) => {
   try {
     const dayDiff = getDayDifference(params["fromDate"], params["toDate"]);
-    console.log(dayDiff);
     if (dayDiff < 0) {
       dispatch(
         toggleSnackbar(
@@ -306,7 +308,7 @@ export const newConsumerMonthlyReportSearch = async (
         "Ward Number": eachItem["ward"],
         "Connection Number": eachItem["connectionNo"],
         "Application Number": eachItem["applicationNo"],
-        "Execution Date": eachItem["date"],
+        "Execution Date": eachItem["executionDate"],
         "Sanction Date": eachItem["sanctionDate"],
         "Connection Type": eachItem["connectionType"],
         "Connection Facility": eachItem["connectionFacility"],
@@ -326,43 +328,53 @@ export const newConsumerMonthlyReportSearch = async (
 };
 export const consumerHistoryReportSearch = async (params, state, dispatch) => {
   try {
-    const formattedParams = {
-      ...params,
-      fromDate: Date.parse(params["fromDate"]),
-      toDate: Date.parse(params["toDate"]),
-    };
-    let queryObject = removeEmptyParams(formattedParams);
-    let payload = null;
-    payload = await httpRequest(
-      "post",
-      "/report-services/reports/ws/wsConsumerHistoryReport",
-      "",
-      queryObject
-    );
-    dispatch(
-      prepareFinalObject("reportTableData", payload["wsConsumerHistoryReport"])
-    );
-    let tableData = payload.wsConsumerHistoryReport.map((eachItem, index) => ({
-      "Sl. No.": index + 1,
-      ULB: eachItem["ulb"],
-      "Ward Number": eachItem["ward"],
-      "Consumer Number": eachItem["consumerNo"],
-      "Old Connection Number": eachItem["oldConnectionNo"],
-      Month: eachItem["month"],
-      "Connection Type": eachItem["connectionType"],
-      "Current Demand": eachItem["currentDemand"],
-      "Collection Amount": eachItem["collectionAmt"],
-      Penalty: eachItem["penalty"],
-      Advance: eachItem["advance"],
-      Arrear: eachItem["arrear"],
-      "Total Due": eachItem["totalDue"],
-      "Payment Date": eachItem["paymentDate"]
-        ? epochToDDMMYYYYFromatter(eachItem["paymentDate"])
-        : "NA",
-      "Payment Mode": eachItem["paymentMode"],
-      "Receipt Number": eachItem["receiptNo"],
-    }));
-    return tableData;
+    const dayDiff = getDayDifference(params["fromDate"], params["toDate"]);
+    if (dayDiff < 0) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelKey: "From Date should be less than To Date." },
+          "warning"
+        )
+      );
+      return null;
+    } else {
+      const formattedParams = {
+        ...params,
+        fromDate: Date.parse(params["fromDate"]),
+        toDate: Date.parse(params["toDate"]),
+      };
+      let queryObject = removeEmptyParams(formattedParams);
+      let payload = null;
+      payload = await httpRequest(
+        "post",
+        "/report-services/reports/ws/wsConsumerHistoryReport",
+        "",
+        queryObject
+      );
+      dispatch(
+        prepareFinalObject("reportTableData", payload["wsConsumerHistoryReport"])
+      );
+      let tableData = payload.wsConsumerHistoryReport.map((eachItem, index) => ({
+        "Sl. No.": index + 1,
+        ULB: eachItem["ulb"],
+        "Ward Number": eachItem["ward"],
+        "Consumer Number": eachItem["consumerNo"],
+        "Old Connection Number": eachItem["oldConnectionNo"],
+        Month: eachItem["month"],
+        "Connection Type": eachItem["connectionType"],
+        "Current Demand": eachItem["currentDemand"],
+        "Collection Amount": eachItem["collectionAmt"],
+        Penalty: eachItem["penalty"],
+        Advance: eachItem["advance"],
+        Arrear: eachItem["arrear"],
+        "Total Due": eachItem["totalDue"],
+        "Payment Date": eachItem["paymentDate"],
+        "Payment Mode": eachItem["paymentMode"],
+        "Receipt Number": eachItem["receiptNo"],
+      }));
+      return tableData;
+    }
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
     console.log(error.message);

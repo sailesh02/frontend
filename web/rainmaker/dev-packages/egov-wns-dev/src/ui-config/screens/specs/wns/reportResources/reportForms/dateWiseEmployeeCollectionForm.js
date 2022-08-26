@@ -1,0 +1,35 @@
+export const dateWiseEmployeeCollectionForm = [
+  {
+    key: "tenantId",
+    type: "select",
+    placeholderLabelKey: "Select ULB Name",
+    gridSm: 4,
+    jsonPath: "reportForm.tenantId",
+    sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+    required: true,
+    labelKey: "ULB Name",
+    localePrefix: {
+      moduleName: "TENANT",
+      masterName: "TENANTS",
+    },
+  },
+  {
+    key: "collectionDate",
+    type: "date",
+    jsonPath: "reportForm.collectionDate",
+    labelKey: "Collection Date",
+    placeholderLabelKey: "Select Collection Date",
+    gridSm: 4,
+    required: true,
+  },
+  {
+    key: "paymentMode",
+    type: "select",
+    placeholderLabelKey: "Select Payment Mode",
+    gridSm: 4,
+    jsonPath: "reportForm.paymentMode",
+    sourceJsonPath: "reportDropdownOpts.paymentMode",
+    required: false,
+    labelKey: "Payment Mode",
+  },
+]

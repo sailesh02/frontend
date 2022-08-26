@@ -1,0 +1,19 @@
+.rt-form-btn-cntr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  padding: 30px 10px 20px 10px; }
+
+.rt-wns-auto-dd {
+  min-width: 70%;
+  position: absolute;
+  z-index: 1900;
+  max-height: 127px;
+  max-width: 80%;
+  overflow: auto;
+  top: 60px !important; }
+
+.rt-wns-auto-dd > div > div {
+  max-height: 127px; }

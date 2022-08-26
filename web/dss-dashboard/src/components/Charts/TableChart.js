@@ -468,8 +468,13 @@ class TableChart extends Component {
         this.state.lastYeardata = null;
       }
       this.state.prevDrillCode = drillCode;
-
-
+      // Below code is for remove testing and Odisha from city
+      if(newData && newData.length>0) {
+      
+        let arrr = newData.filter(item => (item && item.DDRs && item.DDRs.length>0) ? (item.DDRs[0] !== "testing" && item.DDRs[0] !== "Odisha") : item);
+        newData = arrr
+        
+      }
       return (
         <div className={classes.tableChart} style={{ display: 'flex', flexDirection: 'column', marginTop: "10px" }}>
           <div className="tableHeading">

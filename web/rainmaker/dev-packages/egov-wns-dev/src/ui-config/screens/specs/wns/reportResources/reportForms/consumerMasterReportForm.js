@@ -1,0 +1,35 @@
+export const consumerMasterReportForm = [
+  {
+    key: "tenantId",
+    type: "select",
+    placeholderLabelKey: "Select ULB Name",
+    gridSm: 4,
+    jsonPath: "reportForm.tenantId",
+    sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+    required: true,
+    labelKey: "ULB Name",
+    localePrefix: {
+      moduleName: "TENANT",
+      masterName: "TENANTS",
+    },
+  },
+  {
+    key: "ward",
+    type: "text",
+    placeholderLabelKey: "Select Ward",
+    gridSm: 4,
+    jsonPath: "reportForm.ward",
+    required: false,
+    labelKey: "Ward (Ex: 01, 02, 03...)",
+  },
+  {
+    key: "connectionType",
+    type: "select",
+    placeholderLabelKey: "Select Connection Type",
+    gridSm: 4,
+    jsonPath: "reportForm.connectionType",
+    sourceJsonPath: "reportDropdownOpts.connectionType",
+    required: false,
+    labelKey: "Connection Type",
+  },
+]

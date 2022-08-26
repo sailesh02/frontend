@@ -178,6 +178,11 @@ class IntegrationReactSelect extends React.Component {
       this.setState({ single: fieldValue });
     }
   };
+  componentDidUpdate(prevProps) {
+    if(prevProps.resetField !== this.props.resetField && this.props.resetField) {
+      this.setState({ single: null });
+    }
+  }
 
   handleChange = name => value => {
     this.setState({

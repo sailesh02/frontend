@@ -103,9 +103,6 @@ export const REPORT_COLUMNS_MAPPER = {
       labelKey: "Property Id",
     },
     {
-      labelKey: "User Id",
-    },
-    {
       labelKey: "User Name",
     },
     {

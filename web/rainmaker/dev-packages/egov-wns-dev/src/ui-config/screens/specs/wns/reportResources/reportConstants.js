@@ -366,7 +366,7 @@ export const REPORT_COLUMNS_MAPPER = {
       labelKey: "Arrear",
     },
     {
-      labelKey: "ULTotal DueB",
+      labelKey: "Total Due",
     },
     {
       labelKey: "Payment Date",

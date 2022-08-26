@@ -1008,7 +1008,10 @@ const getOccupancyType = (value) =>{
   console.log(value, state, "Nero State Nero")
   let occupanyTypes = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.BPA.OccupancyType");
   let ot = occupanyTypes && occupanyTypes.filter( item => item.code === value);
-  return ot[0].name;
+  if(ot && ot.length) {
+    return ot[0].name;
+  }
+  
  // get(state, applyScreenMdmsData
 }
 const getSubOccupancyType = (value) =>{
@@ -1016,7 +1019,9 @@ const getSubOccupancyType = (value) =>{
   console.log(value, state, "Nero State Nero")
   let suboccupanyTypes = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.BPA.SubOccupancyType");
   let ot = suboccupanyTypes && suboccupanyTypes.filter( item => item.code === value);
-  return ot[0].name;
+  if(ot && ot.length) {
+    return ot[0].name;
+  }
  // get(state, applyScreenMdmsData
 }
 

@@ -61,10 +61,10 @@ export const basicDetails = getCommonCard({
     preApprovedCode: getTextField({
       label: {
         labelName: "Preapproved Code",
-        labelKey: "PREAPPROVE_CODE"
+        labelKey: "PREAPPROVE_IDENTIFY_CODE"
       },
-      required: false,
-      jsonPath: 'scrutinyDetails.preApprovedCode',
+      required: true,
+      jsonPath: 'BPA.additionalDetails.preApprovedCode',
       gridDefination: {
         xs: 12,
         sm: 12,

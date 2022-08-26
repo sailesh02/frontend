@@ -9,16 +9,26 @@ import {
   getLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  prepareFinalObject,
+  handleScreenConfigurationFieldChange as handleField,
+  toggleSnackbar,
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import set from "lodash/set";
+import commonConfig from "config/common.js";
+import store from "ui-redux/store";
 import {
   getQueryArg,
-  setBusinessServiceDataToLocalStorage
+  setBusinessServiceDataToLocalStorage,
+  getTransformedLocale,
+  getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils/api";
 import { requiredDocumentsData, checkValueForNA, getNocSearchResults } from "../utils";
+import { ifUserRoleExists } from "egov-ui-framework/ui-utils/commons";
 
+var myArr;
 const titlebar = {
   uiFramework: "custom-atoms",
   componentPath: "Div",
@@ -133,11 +143,310 @@ const applicationOverview = getCommonContainer({
             window.open(bpaAppurl, '_blank');
           }
         }
-      }
+     }
 
     },
   }),
 });
+const checkAllRequiredDocumentsUploaded = (nocType,requiredDocuments) => {
+  let allDocumentsUploaded = false
+  //get codes of requiredDocuments
+  let docFromMDMS = requiredDocuments && requiredDocuments.length > 0 && requiredDocuments.map ( doc => {
+    return doc.code
+  })
+  //get all noc's
+  //let {Noc} = this.props.preparedFinalObject
+  let state = store.getState();
+  let Noc = get(state.screenConfiguration.preparedFinalObject, "Noc", "");
+  let requiredNoc = [];
+  requiredNoc.push(Noc)
+  
+  let documents = []
+  // to get uploaded documents
+  requiredNoc && requiredNoc.length > 0 && requiredNoc[0].documents && 
+  requiredNoc[0].documents.length > 0 && requiredNoc[0].documents.map( doc => {
+    if(!documents.includes(doc.documentType)){
+      documents.push(doc.documentType)
+    }
+  })
+  if(requiredNoc && requiredNoc.length > 0 && requiredNoc[0].nocType == 'FIRE_NOC'){
+    if(requiredNoc[0].additionalDetails && requiredNoc[0].additionalDetails.thirdPartyNOC){
+      allDocumentsUploaded = true
+    }
+  }
+  
+  if(requiredNoc && requiredNoc.length > 0 && requiredNoc[0].nocType == 'NMA_NOC'){
+    if(requiredNoc[0].additionalDetails && requiredNoc[0].additionalDetails.thirdPartyNOC){
+      allDocumentsUploaded = true
+    }
+  }  
+  else{
+    let isUploadedDoc = docFromMDMS && docFromMDMS.length > 0 && docFromMDMS.map ( doc => {
+      if(documents.includes(doc)){
+        return true
+      }else{
+        return false
+      }
+    })
+    if(isUploadedDoc &&isUploadedDoc.includes(false) &&requiredNoc && requiredNoc.length > 0 && requiredNoc[0].nocType == 'FIRE_NOC' ){
+      allDocumentsUploaded = true
+    }
+    if(isUploadedDoc && isUploadedDoc.includes(false) &&requiredNoc && requiredNoc.length > 0 && requiredNoc[0].nocType == 'NMA_NOC' ){
+      allDocumentsUploaded = false
+    }
+    else if(documents && documents.length > 0 && docFromMDMS && docFromMDMS.length > 0){
+        if(documents.length == 1 && docFromMDMS.length == 1){
+          if(docFromMDMS[0].endsWith('CERTIFICATE') && documents[0].endsWith('CERTIFICATE')){
+            allDocumentsUploaded = true
+          }
+      }
+    }
+    else{
+      allDocumentsUploaded = false
+    }
+  }
+  return allDocumentsUploaded
+}
+const prepareDocumentForRedux = async (documentsList) => {
+  let state = store.getState();
+  const nocDocumentsDetailsRedux = get(state.screenConfiguration.preparedFinalObject, "nocDocumentsDetailsRedux", "");;
+  let index = 0;
+  documentsList.forEach((docType) => {
+    docType.cards &&
+      docType.cards.forEach((card) => {
+        if (card.subCards) {
+          card.subCards.forEach((subCard) => {
+            let oldDocType = get(
+              nocDocumentsDetailsRedux,
+              `[${index}].documentType`
+            );
+            let oldDocCode = get(
+              nocDocumentsDetailsRedux,
+              `[${index}].documentCode`
+            );
+            let oldDocSubCode = get(
+              nocDocumentsDetailsRedux,
+              `[${index}].documentSubCode`
+            );
+            if (
+              oldDocType != docType.code ||
+              oldDocCode != card.name ||
+              oldDocSubCode != subCard.name
+            ) {
+              nocDocumentsDetailsRedux[index] = {
+                documentType: docType.code,
+                documentCode: card.name,
+                documentSubCode: subCard.name,
+              };
+            }
+            index++;
+          });
+        } else {
+          let oldDocType = get(
+            nocDocumentsDetailsRedux,
+            `[${index}].documentType`
+          );
+          let oldDocCode = get(
+            nocDocumentsDetailsRedux,
+            `[${index}].documentCode`
+          );
+
+          if (oldDocType != docType.code || oldDocCode != card.name) {
+            nocDocumentsDetailsRedux[index] = {
+              documentType: docType.code,
+              documentCode: card.name,
+              isDocumentRequired: card.required,
+              isDocumentTypeRequired: card.dropDownValues
+                ? card.dropDownValues.required
+                : false,
+            };
+          }
+          index++;
+        }
+      });
+  });
+  store.dispatch(
+    prepareFinalObject("nocDocumentsDetailsRedux", nocDocumentsDetailsRedux)
+  );
+};
+const prepareDocumentsUploadData = (documents) => {
+  let documentsContract = [];
+  let tempDoc = {};
+  documents && documents.length > 0 && documents.forEach(doc => {
+      let card = {};
+      card["code"] = doc.documentType;
+      card["title"] = doc.documentType;
+      card["documentType"] = doc.documentType
+      card["cards"] = [];
+      tempDoc[doc.documentType] = card;
+  });
+
+  documents && documents.length > 0 && documents.forEach(doc => {
+      // Handle the case for multiple muildings
+      let card = {};
+      card["name"] = doc.code;
+      card["code"] = doc.code;
+      card["required"] = doc.required ? true : false;
+      card["documents"] = [1,2,3];
+      card["rob"] = [3,4,3]
+      if (doc.hasDropdown && doc.dropdownData) {
+          let dropdown = {};
+          dropdown.label = "WS_SELECT_DOC_DD_LABEL";
+          dropdown.required = true;
+          dropdown.menu = doc.dropdownData.filter(item => {
+              return item.active;
+          });
+          dropdown.menu = dropdown.menu.map(item => {
+              return { code: item.code, label: getTransformedLocale(item.code) };
+          });
+          card["dropdown"] = dropdown;
+      }
+      tempDoc[doc.documentType].cards.push(card);
+  });
+
+  Object.keys(tempDoc).forEach(key => {
+      documentsContract.push(tempDoc[key]);
+  });
+  
+  store.dispatch(prepareFinalObject("documentsContractNOC", documentsContract));
+
+  prepareDocumentForRedux(documentsContract)
+
+};
+
+const getDocumentsFromMDMS = async (nocType, isUpdate) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [
+        {
+          moduleName: "NOC",
+          masterDetails: [
+            {
+              name: "DocumentTypeMapping",
+              filter: `$.[?(@.nocType=='${nocType}')]`,
+            },
+          ],
+        },
+      ],
+    },
+  };
+  let payload = await httpRequest(
+    "post",
+    "/egov-mdms-service/v1/_search",
+    "_search",
+    [],
+    mdmsBody
+  );
+
+  let documents =
+    (payload &&
+      payload.MdmsRes &&
+      payload.MdmsRes.NOC &&
+      payload.MdmsRes.NOC.DocumentTypeMapping) ||
+    [];
+  let requiredDocumentsFormat =
+    documents &&
+    documents.length > 0 &&
+    documents[0].docTypes.map((doc) => {
+      let docTypeArray = doc.documentType && doc.documentType.split(".");
+      let length = docTypeArray.length;
+      let docType =
+        length == 2 ? `${doc.documentType}.CERTIFICATE` : doc.documentType;
+      let required = length == 2 ? false : true;
+      return {
+        code: docType,
+        documentType: docType,
+        required: required,
+        active: doc.active || true,
+      };
+    });
+
+  store.dispatch(
+    prepareFinalObject("SelectedNocDocument", requiredDocumentsFormat)
+  );
+
+
+  let state = store.getState();
+  let Noc = get(state.screenConfiguration.preparedFinalObject, "Noc", "");
+  let requiredNoc = [];
+  requiredNoc.push(Noc);
+  if (
+    requiredNoc &&
+    requiredNoc.length > 0 &&
+    requiredNoc[0].documents &&
+    requiredNoc[0].documents.length > 0
+  ) {
+    if (nocType == "NMA_NOC") {
+      store.dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.triggerNocContainer.props",
+          "height",
+          "400px"
+        )
+      );
+      store.dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.triggerNocContainer.props",
+          "open",
+          true
+        )
+      );
+      let documentDetailsPreview = get(state.screenConfiguration.preparedFinalObject, "documentDetailsPreview", "");
+      prepareDocumentsUploadData(requiredDocumentsFormat,documentDetailsPreview);
+    }
+      
+  } else {
+    if (checkAllRequiredDocumentsUploaded(nocType, requiredDocumentsFormat)) {
+      store.dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "BPA_NOC_UP_TO_DATE_MSG",
+            labelKey: "BPA_NOC_UP_TO_DATE_MSG",
+          },
+          "success"
+        )
+      );
+    } else {
+      if (nocType == "NMA_NOC") {
+        store.dispatch(
+          handleField(
+            "search-preview",
+            "components.div.children.triggerNocContainer.props",
+            "height",
+            "400px"
+          )
+        );
+      } else {
+        store.dispatch(
+          handleField(
+            "search-preview",
+            "components.div.children.triggerNocContainer.props",
+            "height",
+            "270px"
+          )
+        );
+      }
+      store.dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.triggerNocContainer.props",
+          "open",
+          true
+        )
+      );
+      prepareDocumentsUploadData(requiredDocumentsFormat);
+    }
+  }
+  
+
+
+
+  
+};
 
 const nocInfo = getCommonContainer({
   header: getCommonTitle(
@@ -149,8 +458,7 @@ const nocInfo = getCommonContainer({
       style: {
         marginBottom: 18
       }
-    }
-  ),
+    }  ),
   appOverViewDetailsContainer: getCommonContainer({
     applicationNo: getLabelWithValue(
       {
@@ -207,6 +515,7 @@ const nocInfo = getCommonContainer({
         action: "condition",
         callBack: (state, dispatch) => {
           let nocData = get(state.screenConfiguration.preparedFinalObject, "Noc", "");
+          // getDocumentsFromMDMS(nocData.nocType)
           dispatch(handleField(
             "search-preview",
             "components.div.children.triggerNocContainer.props",
@@ -296,7 +605,27 @@ const setSearchResponse = async (
   let nocNewObject = {};
   let thirdPartyData = get(response, "Noc[0].additionalDetails.thirdPartyNOC");
   let NocApp = get(response, "Noc[0]", {});
-
+  if(NocApp.applicationStatus != "CREATED" || NocApp.applicationStatus != "INPROGRESS" ){
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.nocUpdateContainer.children.cardContent.children.nocOverview.children.appOverViewDetailsContainer.children.viewApplication",
+        "visible",
+        false
+      )
+    );
+    
+  }
+  if(!ifUserRoleExists("BPA_ARCHITECT")){
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.nocUpdateContainer.children.cardContent.children.nocOverview.children.appOverViewDetailsContainer.children.viewApplication",
+        "visible",
+        false
+      )
+    );
+  }
 if(NocApp.nocType === "FIRE_NOC"){
   for (var key in thirdPartyData) {
     

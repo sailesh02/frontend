@@ -140,6 +140,12 @@ const TriggerNOCContainer =  Loadable({
   loader: () => import("./TriggerNOCContainer"),
   loading: () => <Loading />
 });
+
+const ShowNotification =  Loadable({
+  loader: () => import("./ShowNotification"),
+  loading: () => <Loading />
+});
+
 const BpaSanctionFeeCardContainer =  Loadable({
   loader: () => import("./BpaSanctionFeeCardContainer"),
   loading: () => <Loading />
@@ -213,6 +219,7 @@ export {
   PreviewContainer,
   TextAreaContainer,
   TriggerNOCContainer,
+  ShowNotification,
   BpaSanctionFeeCardContainer,
   TextAreaContainerForBpa,
   ScnHistory,

@@ -134,7 +134,7 @@ export const plotDetails = getCommonCard({
       preApprovedCode: getTextField({
         label: {
           labelName: "Preapproved Code",
-          labelKey: "PREAPPROVE_CODE",
+          labelKey: "PREAPPROVE_IDENTIFY_CODE",
         },
         pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",

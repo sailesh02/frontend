@@ -1118,7 +1118,28 @@ var myArray;
     Object.keys(tempDoc).forEach(key => {
       documentsContract.push(tempDoc[key]);
     });
-
+    if(bpaDetails.businessService == "BPA6"){
+      documentsContract = documentsContract.filter((item)=>{
+        if(item.code === "APPL" || item.code ==="BPD") {
+          return item;
+        }
+      })
+      let removedDocument = ["APPL.OTHERDOCUMENT","APPL.TEMPSTRUCTUREPHOTO","APPL.ROADWIDENINGCERTIFICATE"]
+  
+      documentsContract = documentsContract.filter((val) => {
+        let menu = val.cards.filter((card) => !removedDocument.includes(card.code));
+        val.cards = menu;
+        return val;
+      });
+      documentsContract = documentsContract.filter((val) => {
+        let menu = val.title === "BPD" && val.cards.filter((card) => card.code === "BPD.BPL");
+        if (menu){
+          val.cards = menu;
+        }      
+        return val;
+      });
+    }
+    
     myArray = documentsContract;
    // dispatch(prepareFinalObject("documentsContract", documentsContract));
   }
@@ -1464,10 +1485,10 @@ const getNocDocuments = (state) => {
         if (doc.applicationType === nocDoc.applicationType && doc.nocType === nocDoc.nocType) {
           let linkDetails = {};
           let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
-          let url = `${window.location.origin}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true&bpaStatus=${bpaStatus}`;
+          let url = `${window.location.origin}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true&bpaStatus=${bpaStatus}&nocType=${nocDoc.nocType}`;
           if (process.env.NODE_ENV === "production") {
             if (checkingApp) {
-              url = `${window.location.origin}/${checkingApp}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true&bpaStatus=${bpaStatus}`;
+              url = `${window.location.origin}/${checkingApp}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true&bpaStatus=${bpaStatus}&nocType=${nocDoc.nocType}`;
             }
           }
           // if (nocDoc.applicationStatus === "CREATED" || nocDoc.applicationStatus === null) {

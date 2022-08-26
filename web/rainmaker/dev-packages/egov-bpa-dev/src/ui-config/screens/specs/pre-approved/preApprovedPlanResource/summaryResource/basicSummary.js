@@ -137,6 +137,16 @@ export const basicSummary = getCommonGrayCard({
         callBack: checkValueForNA,
       }
     ),
+    preApprovedCode: getLabelWithValue(
+      {
+        labelName: "Preapproved Code",
+        labelKey: "PREAPPROVE_IDENTIFY_CODE"
+      },
+      {
+        jsonPath: "BPA.additionalDetails.preApprovedCode",
+        callBack: checkValueForNA,
+      }
+    ),
     applicationdate: getLabelWithValue(
       {
         labelName: "Application Date",

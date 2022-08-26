@@ -28,7 +28,6 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { downloadDocuments } from "./preApprovePlanResource/document";
 import { generatePreapproveBill } from "../utils";
-import { FALSE } from "node-sass";
 
 // Reset fields and refresh page
 const resetFields = () => {

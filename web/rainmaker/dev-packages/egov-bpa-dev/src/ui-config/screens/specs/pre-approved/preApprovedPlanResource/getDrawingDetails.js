@@ -82,12 +82,7 @@ export const getDrawingDetails = async (state, dispatch, fieldInfo=false) => {
             data.drawingDetail.applicationType
           )
         );
-        dispatch(
-          prepareFinalObject(
-            "scrutinyDetails.preApprovedCode",
-            data.preApprovedCode
-          )
-        );
+        
         dispatch(
           prepareFinalObject(
             "scrutinyDetails.planDetail.planInformation.occupancy",
@@ -99,6 +94,7 @@ export const getDrawingDetails = async (state, dispatch, fieldInfo=false) => {
           prepareFinalObject("BPA.serviceType", data.drawingDetail.serviceType)
         );
         dispatch(prepareFinalObject("BPA.additionalDetails.documents", data.documents));
+        dispatch(prepareFinalObject("BPA.additionalDetails.preApprovedCode", data.preApprovedCode));
 
         dispatch(prepareFinalObject("BPA.businessService", "BPA6"));
         // Risk type is hardcoded

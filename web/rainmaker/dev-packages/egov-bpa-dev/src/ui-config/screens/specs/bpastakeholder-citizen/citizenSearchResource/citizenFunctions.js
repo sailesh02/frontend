@@ -470,18 +470,24 @@ export const getPdfBody = async (applicationNo, tenantId) => {
 
 export const onDownloadClick = async (tData) => {
   let data = await getPdfBody(tData.dscDetails.applicationNo,tData.dscDetails.tenantId)
-  let response = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=buildingpermit&tenantId=${tData.dscDetails.tenantId}`, data, {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  })
-  if (
-    response &&
-    response.data.filestoreIds &&
-    response.data.filestoreIds.length > 0
-  ) {
-    const fileUrls = await getFileUrlFromAPI(response.data.filestoreIds[0],tData.dscDetails.tenantId);
-    window.location = fileUrls[response.data.filestoreIds[0]];  
+  if(tData.dscDetails && tData.dscDetails.documentId){
+    const downloadUrl = await getFileUrlFromAPI(tData.dscDetails.documentId,"od");
+    window.location = downloadUrl[tData.dscDetails.documentId];  
+  }else {
+    let response = await axios.post(`/edcr/rest/dcr/generatePermitOrder?key=buildingpermit&tenantId=${tData.dscDetails.tenantId}`, data, {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    })
+    if (
+      response &&
+      response.data.filestoreIds &&
+      response.data.filestoreIds.length > 0
+    ) {
+      const fileUrls = await getFileUrlFromAPI(response.data.filestoreIds[0],tData.dscDetails.tenantId);
+      window.location = fileUrls[response.data.filestoreIds[0]];  
+    }
   }
+  
 }
 
 const onUploadClick = (tData) => {
@@ -579,7 +585,14 @@ const onDownloadClickBuildingLayout = async (tData) => {
 
 const setUploadBuildingLayout = (tData) => {
   let filteredDoc = tData && tData.documents.filter( item => item.documentType === "BPD.BPL.BPL") 
-  if (filteredDoc && filteredDoc.length > 0) {
+  if (
+    filteredDoc &&
+    filteredDoc.length > 0 &&
+    tData.buildingAdditionalDetails &&
+    !tData.buildingAdditionalDetails.hasOwnProperty(
+      "buildingPlanLayoutIsSigned"
+    )
+  ) {
     return (
       <a
         href="javascript:void(0)"
@@ -596,13 +609,9 @@ const setUploadBuildingLayout = (tData) => {
     tData.buildingAdditionalDetails &&
     tData.buildingAdditionalDetails.hasOwnProperty("buildingPlanLayoutIsSigned")
   ) {
-    return (
-      ""
-    );
+    return "";
   } else {
-    return (
-      ""
-    )
+    return "";
   }
 }
 const setDownloadBuildingLayout = (tData) => {

@@ -123,6 +123,16 @@ const netAdvAnnualPaymentEstimateCard = Loadable({
   loading: () => <Loading />
 })
 
+const WnsReports = Loadable({
+  loader: () => import("./WnsReports"),
+  loading: () => <Loading />
+});
+
+const WnsReportTable = Loadable({
+  loader: () => import("./WnsReportTable"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   Tooltip,
@@ -148,5 +158,7 @@ export {
   ChipsInput,
   DemandAdjustMent,
   AdvAnnualPaymentEstimateCard,
-  netAdvAnnualPaymentEstimateCard
+  netAdvAnnualPaymentEstimateCard,
+  WnsReports,
+  WnsReportTable
 };

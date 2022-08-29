@@ -4,6 +4,9 @@
   "license": "egov",
   "description": "",
   "main": "index.js",
+  "dependencies": {
+    "xlsx": "^0.15.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }

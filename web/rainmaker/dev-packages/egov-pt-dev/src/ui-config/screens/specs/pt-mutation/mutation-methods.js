@@ -782,7 +782,7 @@ export const searchLegacyDetails = getCommonCard({
         sm: 4,
       },
       required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
+      pattern: /^[a-zA-Z0-9-/-]*$/i,
       jsonPath: "ptSearchScreen.legacyPropertyId",
       errorMessage: "ERR_INVALID_PROPERTY_ID"
     }),

@@ -3,7 +3,7 @@ import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner, hideSpinner, showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { disableField, enableField, getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
-import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantIdCommon, getUserInfo, getLocale, getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
@@ -3020,6 +3020,11 @@ export const isModifyMode = () => {
     return (isMode && isMode.toUpperCase() === 'MODIFY');
 }
 
+export const applicableApplicationType = () => {
+    let isApplication = getQueryArg(window.location.href, "applicationType")
+    return (isApplication && isApplication.toUpperCase() === "CLOSE_CONNECTION") || (isApplication && isApplication.toUpperCase() === "DISCONNECT_CONNECTION")
+}
+
 export const isDisconnectOrClose = () => {
     let disconnectOrClose = getQueryArg(window.location.href, "disconnectOrClose");
     return (disconnectOrClose && disconnectOrClose == 'true');
@@ -3510,4 +3515,39 @@ export const getAdvAnnualPaymentEstimate = async(state, dispatch,tenantId, consu
     
 
     
+  }
+
+  export const transformById = (payload, id) => {
+    return (
+      payload &&
+      payload.reduce((result, item) => {
+        result[item[id]] = {
+          ...item
+        };
+
+        return result;
+      }, {})
+    );
+  };
+
+  export const isPublicSearch = () => {
+    return location && location.pathname && location.pathname.includes("/withoutAuth");
+  }
+
+  export const getLocaleLabels = (label, labelKey, localizationLabels) => {
+    if (!localizationLabels)
+      localizationLabels = transformById(
+        JSON.parse(getLocalization(`localization_${getLocale()}`)),
+        "code"
+      );
+    if (labelKey) {
+      let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
+      if (!translatedLabel || labelKey === translatedLabel) {
+        return translatedLabel;
+      } else {
+        return translatedLabel;
+      }
+    } else {
+      return label;
+    }
   }

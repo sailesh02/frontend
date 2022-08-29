@@ -56,6 +56,9 @@ const resetData = () => {
       headerLabel = "SW_MODIFY_TASK_DETAILS"
     }
   }
+  if(isDisconnectOrClose()){
+    editredirect += '&mode=ownershipTransfer&modeaction=edit'
+  }
 
 }
 

@@ -728,12 +728,25 @@ export const getData = async (action, state, dispatch) => {
         delete combinedArray[0].id; combinedArray[0].documents = [];
       }
 
-      if(isOwnerShipTransfer()){
+      if(isOwnerShipTransfer() && !isModifyModeAction()){
+        // this delete for initiate ownership transfer
         delete combinedArray[0].id; combinedArray[0].documents = [];
       }
       if (isModifyMode() && isModifyModeAction()) {
         // ModifyEdit should not call create.
         dispatch(prepareFinalObject("modifyAppCreated", true));
+      }
+      if (isModifyMode() && !isModifyModeAction()) {
+        // ModifyConn should call create.
+        dispatch(prepareFinalObject("modifyAppCreated", false));
+      }
+      if (isOwnerShipTransfer() && isModifyModeAction()) {
+        // OwnershipEdit should not call create.
+        dispatch(prepareFinalObject("ownershipTransferCreated", true));
+      }
+      if (isOwnerShipTransfer() && !isModifyModeAction()) {
+        // OwnershipTransfer should call create.
+        dispatch(prepareFinalObject("ownershipTransferCreated", false));
       }
 
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));

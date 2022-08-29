@@ -323,7 +323,8 @@ const callBackForNext = async (state, dispatch) => {
                       "Water And Sewerage"
                     )
                   );
-                  if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
+                  if (sewerData && sewerData.length > 0 && waterData.length === 0) { 
+                    await applyForWater(state, dispatch); }
                   else if (waterData && waterData.length > 0 && sewerData.length === 0) { 
                     await applyForSewerage(state, dispatch); }
                 } else if ((sewerChecked && sewerData.length === 0) || (isModifyMode() && sewerData.length === 1 && !modifyAppCreated) || (sewerData && sewerData.length === 1 && isOwnerShipTransfer() && !ownershipTransferCreated)) {
@@ -350,7 +351,8 @@ const callBackForNext = async (state, dispatch) => {
                     "Water And Sewerage"
                   )
                 );
-                if (waterData.length === 0 && sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+                if (waterData.length === 0 && sewerData.length === 0) {
+                  isFormValid = await applyForWaterOrSewerage(state, dispatch); }
               } else if (waterChecked) {
                 dispatch(
                   prepareFinalObject(
@@ -358,10 +360,12 @@ const callBackForNext = async (state, dispatch) => {
                     _.capitalize(serviceConst.WATER)
                   )
                 );
-                if (waterData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+                if (waterData.length === 0) {
+                   isFormValid = await applyForWaterOrSewerage(state, dispatch); }
               } else if (sewerChecked) {
                 dispatch(prepareFinalObject("applyScreen.service", _.capitalize(serviceConst.SEWERAGE)))
-                if (sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+                if (sewerData.length === 0) {
+                  isFormValid = await applyForWaterOrSewerage(state, dispatch); }
               }
             }
           } else {

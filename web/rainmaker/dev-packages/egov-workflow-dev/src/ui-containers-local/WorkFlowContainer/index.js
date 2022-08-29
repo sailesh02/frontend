@@ -883,8 +883,8 @@ else{
       state.isStateUpdatable = false;
     }
 
-    if (moduleName === "ModifySWConnection" || moduleName === "ModifyWSConnection"){
-      if(applicationState != "PENDING_FOR_APPROVAL")
+    if (moduleName === "ModifySWConnection" || moduleName === "ModifyWSConnection" || moduleName === "WSOwnershipChange"){
+      if(applicationState === "INITIATED")
       state.isStateUpdatable = true
     }
     if (moduleName === "WSReplaceMeter"){

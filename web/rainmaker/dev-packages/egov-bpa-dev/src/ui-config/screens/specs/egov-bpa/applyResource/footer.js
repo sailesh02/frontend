@@ -22,6 +22,7 @@ import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChang
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import { CONSTANTS } from "../../../../../config/common";
+import set from "lodash/set";
 
 const getMdmsData = async (state, dispatch) => {
   const tenantId = get(
@@ -419,6 +420,7 @@ let bpaObj = get(
   }
 
   if (activeStep === 2) {
+    let bpaApp = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
     let isApplicantTypeCardValid = validateFields(
       "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
       state,
@@ -434,7 +436,7 @@ let bpaObj = get(
       state,
       dispatch
     );
-
+    
     // Multiple applicants cards validations
     let multipleApplicantCardPath =
       "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items";
@@ -504,7 +506,8 @@ if(!isMobileExistsResponse){
     let edCrDetails = get(state.screenConfiguration.preparedFinalObject, "scrutinyDetails", []);
     let bpaApp = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
     let requiredNocs = edCrDetails.planDetail.planInformation.requiredNOCs || [];
-        
+    
+    
     let nocTypesFromMDMS = get(
       state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA,
       "NocTypeMapping",
@@ -816,6 +819,16 @@ if(!isMobileExistsResponse){
                 "INITIATE"
               );
               responseStatus = get(response, "status", "");
+              if (response.message.BPA[0].businessService == "BPA5") {
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.nocDetailsApply.props.style",
+                    "display",
+                    "none"
+                  )
+                );
+              }
               responseStatus === "success" && changeStep(state, dispatch);
             }
             prepareDocumentsUploadData(state, dispatch);

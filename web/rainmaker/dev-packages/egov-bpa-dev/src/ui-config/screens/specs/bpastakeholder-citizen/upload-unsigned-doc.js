@@ -184,18 +184,31 @@ export const footer = getCommonApplyFooter({
     },
   },
 });
+export const pageHeaderSetUp = () => {
+  const type = getQueryArg(window.location.href, "type");
+  let header;
+  if(type == "dscUpdate"){
+    header = getCommonHeader({
+      labelName: `Apply for building permit`,
+      labelKey: "BPA_UPLOAD_PERMIT_DOCUMENT_HEADER",
+    })
+  }else {
+    header = getCommonHeader({
+      labelName: `Apply for building permit`,
+      labelKey: "BPA_UPLOAD_BPL_DOCUMENT_HEADER",
+    })
+  }
+  return header
+}
 export const header = getCommonContainer({
-  header: getCommonHeader({
-    labelName: `Apply for building permit`,
-    labelKey: "BPA_UPLOAD_BPL_DOCUMENT_HEADER",
-  }),
+  header: pageHeaderSetUp(),
 });
 
 export const documentDetails = getCommonCard({
   header: getCommonTitle(
     {
-      labelName: "Required Documents",
-      labelKey: "BPA_BPL_DOCUMENT_DETAILS_HEADER",
+      labelName: "Upload Document",
+      labelKey: "BPA_DOCUMENT_DETAILS_HEADER",
     },
     { style: { marginBottom: 18 } }
   ),

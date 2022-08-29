@@ -61,7 +61,7 @@ export const basicDetails = getCommonCard({
     preApprovedCode: getTextField({
       label: {
         labelName: "Preapproved Code",
-        labelKey: "PREAPPROVE_IDENTIFY_CODE"
+        labelKey: "PREAPPROVE_NOTIFY_CODE"
       },
       required: true,
       jsonPath: 'BPA.additionalDetails.preApprovedCode',

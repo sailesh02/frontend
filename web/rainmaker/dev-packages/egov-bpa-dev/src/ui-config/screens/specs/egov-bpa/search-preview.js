@@ -1593,6 +1593,26 @@ const setSearchResponse = async (
       
     }
   }
+  if(response.BPA["0"].businessService === "BPA5"){
+    
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.nocSummary",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.nocDetailsApply",
+        "visible",
+        false
+      )
+    );
+  }
+  
 };
 
 const prepareRevisionObject = async(state, dispatch, bpa) => {

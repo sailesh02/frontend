@@ -6545,7 +6545,7 @@ export const setBPATypeData = async (state, dispatch, action, value) => {
     "screenConfiguration.preparedFinalObject.scrutinyDetails.tenantId",
     []
   );
-   if(bServices && bServices.includes("|") && tenantId != "od.bhubaneswar" && tenantId != "od.bhubaneswardevelopmentauthority"){
+   if(bServices && bServices.includes("|") && (tenantId == "od.bhubaneswar" || tenantId == "od.bhubaneswardevelopmentauthority")){
      let bServicesObj = [];
      let bServicesArray = bServices && bServices.split("|").forEach(item => bServicesObj.push({code: item}));
      dispatch(prepareFinalObject("edcr.BPAType", bServicesObj));

@@ -140,7 +140,7 @@ export const basicSummary = getCommonGrayCard({
     preApprovedCode: getLabelWithValue(
       {
         labelName: "Preapproved Code",
-        labelKey: "PREAPPROVE_IDENTIFY_CODE"
+        labelKey: "PREAPPROVE_NOTIFY_CODE"
       },
       {
         jsonPath: "BPA.additionalDetails.preApprovedCode",

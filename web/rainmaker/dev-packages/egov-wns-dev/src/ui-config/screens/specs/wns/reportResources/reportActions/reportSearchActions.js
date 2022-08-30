@@ -353,26 +353,31 @@ export const consumerHistoryReportSearch = async (params, state, dispatch) => {
         queryObject
       );
       dispatch(
-        prepareFinalObject("reportTableData", payload["wsConsumerHistoryReport"])
+        prepareFinalObject(
+          "reportTableData",
+          payload["wsConsumerHistoryReport"]
+        )
       );
-      let tableData = payload.wsConsumerHistoryReport.map((eachItem, index) => ({
-        "Sl. No.": index + 1,
-        ULB: eachItem["ulb"],
-        "Ward Number": eachItem["ward"],
-        "Consumer Number": eachItem["consumerNo"],
-        "Old Connection Number": eachItem["oldConnectionNo"],
-        Month: eachItem["month"],
-        "Connection Type": eachItem["connectionType"],
-        "Current Demand": eachItem["currentDemand"],
-        "Collection Amount": eachItem["collectionAmt"],
-        Penalty: eachItem["penalty"],
-        Advance: eachItem["advance"],
-        Arrear: eachItem["arrear"],
-        "Total Due": eachItem["totalDue"],
-        "Payment Date": eachItem["paymentDate"],
-        "Payment Mode": eachItem["paymentMode"],
-        "Receipt Number": eachItem["receiptNo"],
-      }));
+      let tableData = payload.wsConsumerHistoryReport.map(
+        (eachItem, index) => ({
+          "Sl. No.": index + 1,
+          ULB: eachItem["ulb"],
+          "Ward Number": eachItem["ward"],
+          "Consumer Number": eachItem["consumerNo"],
+          "Old Connection Number": eachItem["oldConnectionNo"],
+          Month: eachItem["month"],
+          "Connection Type": eachItem["connectionType"],
+          "Current Demand": eachItem["currentDemand"],
+          "Collection Amount": eachItem["collectionAmt"],
+          Penalty: eachItem["penalty"],
+          Advance: eachItem["advance"],
+          Arrear: eachItem["arrear"],
+          "Total Due": eachItem["totalDue"],
+          "Payment Date": eachItem["paymentDate"],
+          "Payment Mode": eachItem["paymentMode"],
+          "Receipt Number": eachItem["receiptNo"],
+        })
+      );
       return tableData;
     }
   } catch (error) {
@@ -446,11 +451,82 @@ export const connectionsEligibleForDemandGenerationSearch = async (
       (eachItem, index) => ({
         "Sl. No.": index + 1,
         ULB: eachItem["tenantid"],
-        "Ward": eachItem["ward"],
-        "No of Connections": eachItem['numberofconnections']
+        Ward: eachItem["ward"],
+        "No of Connections": eachItem["numberofconnections"],
       })
     );
     return tableData;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
+    console.log(error.message);
+    return null;
+  }
+};
+export const employeeWiseWSCollectionSearch = async (
+  params,
+  state,
+  dispatch
+) => {
+  try {
+    const dayDiff = getDayDifference(params["fromDate"], params["toDate"]);
+    if (dayDiff < 0) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelKey: "From Date should be less than To Date." },
+          "warning"
+        )
+      );
+      return null;
+    } else if (dayDiff > 31) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelKey: "Date difference should be less than a month." },
+          "warning"
+        )
+      );
+      return null;
+    } else {
+      const formattedParams = {
+        ...params,
+        fromDate: Date.parse(params["fromDate"]),
+        toDate: Date.parse(params["toDate"]),
+      };
+      let queryObject = removeEmptyParams(formattedParams);
+      let payload = null;
+      payload = await httpRequest(
+        "post",
+        "/report-services/reports/ws/employeeWiseWSCollection",
+        "",
+        queryObject
+      );
+      dispatch(
+        prepareFinalObject(
+          "reportTableData",
+          payload["employeeWiseWSCollectionResponse"]
+        )
+      );
+      let tableData = payload.employeeWiseWSCollectionResponse.map(
+        (eachItem, index) => ({
+          "Sl. No.": index + 1,
+          ULB: eachItem["ulb"],
+          "Ward Number": eachItem["ward"],
+          "Employee User Id": eachItem["employeeId"],
+          "Employee User Name": eachItem["employeeName"],
+          Head: eachItem["head"],
+          "Payment Date": eachItem["paymentDate"]
+            ? epochToDDMMYYYYFromatter(eachItem["paymentDate"])
+            : "NA",
+          "Payment Mode": eachItem["paymentMode"],
+          "Receipt No": eachItem["receiptNo"],
+          Amount: eachItem["amount"],
+          "Consumer Number": eachItem["consumerCode"],
+          "Old Consumer Number": eachItem["oldConsumerNo"],
+        })
+      );
+      return tableData;
+    }
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
     console.log(error.message);

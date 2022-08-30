@@ -7,7 +7,8 @@ export const REPORT_HEADER_MAPPER = {
   newConsumerMonthlyReport: "W&S New Consumer Monthly Report",
   consumerHistoryReport: "W&S Consumer History Report",
   consumerBillHistoryReport: "Consumer Wise Demand History",
-  connectionsEligibleForDemandGenerationReport: "WS Connections Eligible For Demand Generation"
+  connectionsEligibleForDemandGenerationReport: "WS Connections Eligible For Demand Generation",
+  employeeWiseWSCollection: "Employee Wise WS Collection Report",
 };
 
 export const REPORT_SUB_HEADER_MAPPER = {
@@ -19,7 +20,8 @@ export const REPORT_SUB_HEADER_MAPPER = {
   newConsumerMonthlyReport: "Modify report by date range",
   consumerHistoryReport: "Modify report by date range",
   consumerBillHistoryReport: "Modify report by date range",
-  connectionsEligibleForDemandGenerationReport: "Modify report by date range"
+  connectionsEligibleForDemandGenerationReport: "Modify report by date range",
+  employeeWiseWSCollection: "Modify report by date range",
 };
 
 export const REPORT_DROPDOWN_OPTIONS = {
@@ -90,7 +92,8 @@ export const REPORT_TABLE_TITLE_MAPPER = {
   newConsumerMonthlyReport: "New Consumer Monthly Report",
   consumerHistoryReport: "Consumer History Report",
   consumerBillHistoryReport: "W&S Consumer Wise Demand History",
-  connectionsEligibleForDemandGenerationReport: "WS Connections Eligible For Demand Generation"
+  connectionsEligibleForDemandGenerationReport: "WS Connections Eligible For Demand Generation",
+  employeeWiseWSCollection: "Employee Wise WS Collection",
 };
 
 export const REPORT_COLUMNS_MAPPER = {
@@ -423,5 +426,43 @@ export const REPORT_COLUMNS_MAPPER = {
     {
       labelKey: "No of Connections",
     },
-  ]
+  ],
+  employeeWiseWSCollection: [
+    {
+      labelKey: "Sl. No.",
+    },
+    {
+      labelKey: "ULB",
+    },
+    {
+      labelKey: "Ward Number",
+    },
+    {
+      labelKey: "Employee User Id",
+    },
+    {
+      labelKey: "Employee User Name",
+    },
+    {
+      labelKey: "Head",
+    },
+    {
+      labelKey: "Payment Date",
+    },
+    {
+      labelKey: "Payment Mode",
+    },
+    {
+      labelKey: "Receipt No",
+    },
+    {
+      labelKey: "Amount",
+    },
+    {
+      labelKey: "Consumer Number",
+    },
+    {
+      labelKey: "Old Consumer Number",
+    },
+  ],
 };

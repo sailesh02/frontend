@@ -1,0 +1,43 @@
+export const employeeWiseWSCollectionFrom = [
+  {
+    key: "tenantId",
+    type: "select",
+    placeholderLabelKey: "Select ULB Name",
+    gridSm: 4,
+    jsonPath: "reportForm.tenantId",
+    sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+    required: true,
+    labelKey: "ULB Name",
+    localePrefix: {
+      moduleName: "TENANT",
+      masterName: "TENANTS",
+    },
+  },
+  {
+    key: "ward",
+    type: "text",
+    placeholderLabelKey: "Select Ward",
+    gridSm: 4,
+    jsonPath: "reportForm.ward",
+    required: false,
+    labelKey: "Ward (Ex: 01, 02, 03...)",
+  },
+  {
+    key: "fromDate",
+    type: "date",
+    jsonPath: "reportForm.fromDate",
+    labelKey: "From Date",
+    placeholderLabelKey: "Select Date",
+    gridSm: 4,
+    required: true,
+  },
+  {
+    key: "toDate",
+    type: "date",
+    jsonPath: "reportForm.toDate",
+    labelKey: "To Date",
+    placeholderLabelKey: "Select Date",
+    gridSm: 4,
+    required: true,
+  },
+];

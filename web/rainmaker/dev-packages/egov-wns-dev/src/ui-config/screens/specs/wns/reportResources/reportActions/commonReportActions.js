@@ -8,7 +8,8 @@ import {
   consumerPaymentHistorySearch,
   newConsumerMonthlyReportSearch,
   consumerHistoryReportSearch,
-  consumerBillHistoryReportSearch
+  consumerBillHistoryReportSearch,
+  connectionsEligibleForDemandGenerationSearch
 } from "./reportSearchActions";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -150,6 +151,9 @@ const getTableData = async (params, state, dispatch) => {
     case "consumerBillHistoryReport":
       tableData = await consumerBillHistoryReportSearch(params, state, dispatch)
       break; 
+    case "connectionsEligibleForDemandGenerationReport":
+      tableData = await connectionsEligibleForDemandGenerationSearch(params, state, dispatch)
+      break;
     default:
       break;
   }

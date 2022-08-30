@@ -421,3 +421,39 @@ export const consumerBillHistoryReportSearch = async (
     return null;
   }
 };
+
+export const connectionsEligibleForDemandGenerationSearch = async (
+  params,
+  state,
+  dispatch
+) => {
+  try {
+    let queryObject = removeEmptyParams(params);
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/report-services/reports/ws/wsConnectionsEligibleForDemandGeneration",
+      "",
+      queryObject
+    );
+    dispatch(
+      prepareFinalObject(
+        "reportTableData",
+        payload["wsConnectionsEligibleForDemandGeneration"]
+      )
+    );
+    let tableData = payload.wsConnectionsEligibleForDemandGeneration.map(
+      (eachItem, index) => ({
+        "Sl. No.": index + 1,
+        ULB: eachItem["tenantid"],
+        "Ward": eachItem["ward"],
+        "No of Connections": eachItem['numberofconnections']
+      })
+    );
+    return tableData;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
+    console.log(error.message);
+    return null;
+  }
+};

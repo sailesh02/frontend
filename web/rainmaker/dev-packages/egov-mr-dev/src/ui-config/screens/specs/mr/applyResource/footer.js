@@ -452,9 +452,7 @@ let mrgDateObj = null;
         )
       );
       let docList = [...queryObject[0].applicationDocuments];
-      let revisedList = docList.filter(
-        eachItem => eachItem && (eachItem.fileName || eachItem.fileStoreId || eachItem.id)
-      );
+      let revisedList = docList.filter(eachItem => eachItem && eachItem.fileName);
       queryObject[0].applicationDocuments = revisedList;
       let updateResponse = [];
       if(userAction != 'edit'){

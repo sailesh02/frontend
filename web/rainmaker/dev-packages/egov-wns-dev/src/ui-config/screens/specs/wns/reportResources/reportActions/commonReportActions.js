@@ -9,7 +9,8 @@ import {
   newConsumerMonthlyReportSearch,
   consumerHistoryReportSearch,
   consumerBillHistoryReportSearch,
-  connectionsEligibleForDemandGenerationSearch
+  connectionsEligibleForDemandGenerationSearch,
+  employeeWiseWSCollectionSearch
 } from "./reportSearchActions";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -153,6 +154,9 @@ const getTableData = async (params, state, dispatch) => {
       break; 
     case "connectionsEligibleForDemandGenerationReport":
       tableData = await connectionsEligibleForDemandGenerationSearch(params, state, dispatch)
+      break;
+    case "employeeWiseWSCollection":
+      tableData = await employeeWiseWSCollectionSearch(params, state, dispatch)
       break;
     default:
       break;

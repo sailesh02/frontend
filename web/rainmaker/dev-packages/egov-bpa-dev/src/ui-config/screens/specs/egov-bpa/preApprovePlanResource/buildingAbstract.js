@@ -26,7 +26,7 @@ export const buildingAbstract = getCommonCard({
           labelKey: "PREAPPROVE_TOTAL_BUILD_UP_AREA",
         },
         props: {
-          disabled:true,
+          disabled:false,
         },
         pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
@@ -44,7 +44,7 @@ export const buildingAbstract = getCommonCard({
           labelKey: "PREAPPROVE_TOTAL_FLOOR_AREA",
         },
         props: {
-          disabled:true,
+          disabled:false,
         },
         pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
@@ -62,7 +62,7 @@ export const buildingAbstract = getCommonCard({
           labelKey: "PREAPPROVE_FAR",
         },
         props: {
-          disabled:true,
+          disabled:false,
         },
         pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
@@ -82,9 +82,9 @@ export const buildingAbstract = getCommonCard({
         pattern: "^(?=.)([+-]?([0-9]*)(.([0-9]+))?)$",
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "buildingAbstract.totalCarpetArea",
-        required: true,
+        required: false,
         props: {
-          disabled:true,
+          disabled:false,
         },
         gridDefination: {
           xs: 12,
@@ -98,11 +98,11 @@ export const buildingAbstract = getCommonCard({
           labelKey: "PREAPPROVE_TOTAL_FLOORS",
         },
         props: {
-          disabled:true,
+          disabled:false,
         },
         
         jsonPath: "buildingAbstract.totalFloorNo",
-        required: true,
+        required: false,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         gridDefination: {
           xs: 12,

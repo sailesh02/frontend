@@ -65,75 +65,86 @@ const editBuildingDetails = (state, dispatch, type) => {
     "Floor Description": blockDetail.floorDescription,
     Level: blockDetail.level,
     "Buildup Area": blockDetail.buildUpArea,
-    "Floor Area": blockDetail.carpetArea,
-    "Carpet Area": blockDetail.floorArea,
+    "Floor Area": blockDetail.floorArea,
+    "Carpet Area": blockDetail.carpetArea,
     "Floor Height": blockDetail.floorHeight,
     "Block": row[0]
     
   };
   let basementAvailable = edcrDetails.blockDetail[
-    row[0]
+    row[0]-1
   ].blocks.filter((item) => item["Floor Description"] == "Basement");
   let isFloorDEscriptionAvailable = edcrDetails.blockDetail[
-    row[0]
+    row[0]-1
   ].blocks.find((item) => item["Level"] == newFloorDetails["Level"]);
-  // Basement floor description validation
-  if (
-    basementAvailable &&
-    basementAvailable.length > 0 &&
-    newFloorDetails["Floor Description"] == "Basement"
-  ) {
-    newFloorDetails["Level"] = -basementAvailable.length - 1;
-  }
-  if (
-    isFloorDEscriptionAvailable &&
-    newFloorDetails["Floor Description"] != "Basement"
-  ) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Same Floor Description is available",
-          labelKey: "PREAPPROVE_SAME_DESCRIPTION_MESSAGE",
-        },
-        "warning"
-      )
-    );
-    closeAddBuildinfDetailsPopUp();
-    return false;
+  
+  // Edit existing data starts
+  if(newFloorDetails["Level"] ==isFloorDEscriptionAvailable["Level"]) {
+    if(edcrDetails && edcrDetails.blockDetail && edcrDetails.blockDetail[row[0]-1].blocks && edcrDetails.blockDetail[row[0]-1].blocks.length>0){
+      edcrDetails.blockDetail[row[0]-1].blocks.splice(rowIndex.rowIndex,1)
+    }
+    edcrDetails.blockDetail[row[0]-1].blocks.push({...newFloorDetails})
   } else {
-    // Duplicate validation
-    let previousLevelAvlbl;
+    // Basement floor description validation
     if (
-      newFloorDetails["Floor Description"] != "Basement" &&
-      newFloorDetails["Floor Description"] != "Ground"
+      basementAvailable &&
+      basementAvailable.length > 0 &&
+      newFloorDetails["Floor Description"] == "Basement"
     ) {
-      previousLevelAvlbl = edcrDetails.blockDetail[row[0]].blocks.some(
-        (item) => item["Level"] == parseInt(newFloorDetails["Level"]) - 1
+      newFloorDetails["Level"] = -basementAvailable.length - 1;
+    }
+    if (
+      isFloorDEscriptionAvailable &&
+      newFloorDetails["Floor Description"] != "Basement"
+    ) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Same Floor Description is available",
+            labelKey: "PREAPPROVE_SAME_DESCRIPTION_MESSAGE",
+          },
+          "warning"
+        )
       );
-      if (!previousLevelAvlbl) {
-        dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName:
-                "Please select floor description in sequence e.g Ground,First,Second....",
-              labelKey: "PREAPPROVE_DESCRIPTION_SEQUENCE_MESSAGE",
-            },
-            "warning"
-          )
+      closeAddBuildinfDetailsPopUp();
+      return false;
+    } else {
+      // Duplicate validation
+      let previousLevelAvlbl;
+      if (
+        newFloorDetails["Floor Description"] != "Basement" &&
+        newFloorDetails["Floor Description"] != "Ground"
+      ) {
+        previousLevelAvlbl = edcrDetails.blockDetail[row[0]-1].blocks.some(
+          (item) => item["Level"] == parseInt(newFloorDetails["Level"]) - 1
         );
-        closeAddBuildinfDetailsPopUp();
-        return false;
+        if (!previousLevelAvlbl) {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName:
+                  "Please select floor description in sequence e.g Ground,First,Second....",
+                labelKey: "PREAPPROVE_DESCRIPTION_SEQUENCE_MESSAGE",
+              },
+              "warning"
+            )
+          );
+          closeAddBuildinfDetailsPopUp();
+          return false;
+        }
       }
-    }
-    if(edcrDetails && edcrDetails.blockDetail && edcrDetails.blockDetail[row[0]].blocks && edcrDetails.blockDetail[row[0]].blocks.length>0){
-      edcrDetails.blockDetail[row[0]].blocks.splice(rowIndex.rowIndex,1)
-    }
-    edcrDetails.blockDetail[row[0]].blocks.push({...newFloorDetails})
-  }  
+      if(edcrDetails && edcrDetails.blockDetail && edcrDetails.blockDetail[row[0]-1].blocks && edcrDetails.blockDetail[row[0]-1].blocks.length>0){
+        edcrDetails.blockDetail[row[0]-1].blocks.splice(rowIndex.rowIndex,1)
+      }
+      edcrDetails.blockDetail[row[0]-1].blocks.push({...newFloorDetails})
+    } 
+  }
+  // Edit existing data ends
+   
   dispatch(prepareFinalObject("edcr", edcrDetails));
-  addBuildingAbstractValue(state, dispatch, type);
+  addBuildingAbstractValue();
   closeAddBuildinfDetailsPopUp();
 };
 
@@ -155,12 +166,12 @@ const deleteBuildingDetails = (state, dispatch, type) => {
     "row.index"
   );
   let basementAvailable = edcrDetails.blockDetail[
-    row[0]
+    row[0]-1
   ].blocks.filter((item) => item["Floor Description"] == "Basement");
   
   
-  if(edcrDetails && edcrDetails.blockDetail && edcrDetails.blockDetail[row[0]].blocks && edcrDetails.blockDetail[row[0]].blocks.length>0){
-    edcrDetails.blockDetail[row[0]].blocks.splice(rowIndex.rowIndex,1)
+  if(edcrDetails && edcrDetails.blockDetail && edcrDetails.blockDetail[row[0]-1].blocks && edcrDetails.blockDetail[row[0]-1].blocks.length>0){
+    edcrDetails.blockDetail[row[0]-1].blocks.splice(rowIndex.rowIndex,1)
   }
   // Basement floor description validation
   if (
@@ -170,15 +181,15 @@ const deleteBuildingDetails = (state, dispatch, type) => {
   ) {
     // Todo list
     let level = 0
-    for(let i =0;i<edcrDetails.blockDetail[row[0]].blocks.length;i++){
-      if(edcrDetails.blockDetail[row[0]].blocks[i]["Floor Description"] == "Basement"){
+    for(let i =0;i<edcrDetails.blockDetail[row[0]-1].blocks.length;i++){
+      if(edcrDetails.blockDetail[row[0]-1].blocks[i]["Floor Description"] == "Basement"){
         level -= 1;
-        edcrDetails.blockDetail[row[0]].blocks[i]["Level"] = level
+        edcrDetails.blockDetail[row[0]-1].blocks[i]["Level"] = level
       }
     }
   }
   dispatch(prepareFinalObject("edcr", edcrDetails));
-  addBuildingAbstractValue(state, dispatch, type);
+  addBuildingAbstractValue();
   closeAddBuildinfDetailsPopUp();
 };
 
@@ -421,7 +432,7 @@ const addBuildingDetails = async (state, dispatch, type) => {
       "Carpet Area": blockDetail.carpetArea,
       "Floor Height": blockDetail.floorHeight,
       // "Id": uuid(),
-      "Block": currentIndex
+      "Block": parseInt(currentIndex) + 1
       
     };
     if (edcrDetails.blockDetail.length > 0) {
@@ -530,7 +541,7 @@ const addBuildingDetails = async (state, dispatch, type) => {
       });
     }
     dispatch(prepareFinalObject("edcr", edcrDetails));
-    addBuildingAbstractValue(state, dispatch, type);
+    addBuildingAbstractValue();
     closeAddBuildinfDetailsPopUp();
   }
 };

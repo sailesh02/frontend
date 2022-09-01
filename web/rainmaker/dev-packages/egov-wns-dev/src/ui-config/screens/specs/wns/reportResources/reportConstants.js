@@ -7,8 +7,9 @@ export const REPORT_HEADER_MAPPER = {
   newConsumerMonthlyReport: "W&S New Consumer Monthly Report",
   consumerHistoryReport: "W&S Consumer History Report",
   consumerBillHistoryReport: "Consumer Wise Demand History",
-  connectionsEligibleForDemandGenerationReport: "WS Connections Eligible For Demand Generation",
+  connectionsEligibleForDemandGeneration: "WS Connections Eligible For Demand Generation",
   employeeWiseWSCollection: "Employee Wise WS Collection Report",
+  schedulerBasedDemandsGeneration: "WS Scheduler Based Demands Generation Report"
 };
 
 export const REPORT_SUB_HEADER_MAPPER = {
@@ -20,8 +21,9 @@ export const REPORT_SUB_HEADER_MAPPER = {
   newConsumerMonthlyReport: "Modify report by date range",
   consumerHistoryReport: "Modify report by date range",
   consumerBillHistoryReport: "Modify report by date range",
-  connectionsEligibleForDemandGenerationReport: "Modify report by date range",
+  connectionsEligibleForDemandGeneration: "Modify report by date range",
   employeeWiseWSCollection: "Modify report by date range",
+  schedulerBasedDemandsGeneration: "Modify report by date range"
 };
 
 export const REPORT_DROPDOWN_OPTIONS = {
@@ -92,8 +94,9 @@ export const REPORT_TABLE_TITLE_MAPPER = {
   newConsumerMonthlyReport: "New Consumer Monthly Report",
   consumerHistoryReport: "Consumer History Report",
   consumerBillHistoryReport: "W&S Consumer Wise Demand History",
-  connectionsEligibleForDemandGenerationReport: "WS Connections Eligible For Demand Generation",
+  connectionsEligibleForDemandGeneration: "WS Connections Eligible For Demand Generation",
   employeeWiseWSCollection: "Employee Wise WS Collection",
+  schedulerBasedDemandsGeneration: "WS Scheduler Based Demands Generation"
 };
 
 export const REPORT_COLUMNS_MAPPER = {
@@ -413,7 +416,7 @@ export const REPORT_COLUMNS_MAPPER = {
       labelKey: "Due Amount",
     },
   ],
-  connectionsEligibleForDemandGenerationReport: [
+  connectionsEligibleForDemandGeneration: [
     {
       labelKey: "Sl. No.",
     },
@@ -465,4 +468,33 @@ export const REPORT_COLUMNS_MAPPER = {
       labelKey: "Old Consumer Number",
     },
   ],
+  schedulerBasedDemandsGeneration: [
+    {
+      labelKey: "Sl. No.",
+    },
+    {
+      labelKey: "ULB",
+    },
+    {
+      labelKey: "Ward Number",
+    },
+    {
+      labelKey: "Connection Number",
+    },
+    {
+      labelKey: "Old Connection Number",
+    },
+    {
+      labelKey: "Connection Type",
+    },
+    {
+      labelKey: "Demand Generation Date",
+    },
+    {
+      labelKey: "Tax Period From",
+    },
+    {
+      labelKey: "Tax Period To",
+    },
+  ]
 };

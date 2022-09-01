@@ -533,3 +533,54 @@ export const employeeWiseWSCollectionSearch = async (
     return null;
   }
 };
+
+export const schedulerBasedDemandsGenerationSearch = async (
+  params,
+  state,
+  dispatch
+) => {
+  try {
+    const formattedParams = {
+      ...params,
+      monthYear: Date.parse(params["monthYear"]),
+    };
+    let queryObject = removeEmptyParams(formattedParams);
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/report-services/reports/ws/wsSchedulerBasedDemandsGeneration",
+      "",
+      queryObject
+    );
+    dispatch(
+      prepareFinalObject(
+        "reportTableData",
+        payload["wsSchedulerBasedDemandsGenerationReponse"]
+      )
+    );
+    let tableData = payload.wsSchedulerBasedDemandsGenerationReponse.map(
+      (eachItem, index) => ({
+        "Sl. No.": index + 1,
+        ULB: eachItem["ulb"],
+        "Ward Number": eachItem["ward"],
+        "Connection Number": eachItem["consumerCode"],
+        "Old Connection Number": eachItem["oldConnectionNo"],
+        "Connection Type": eachItem["connectionType"],
+        "Demand Generation Date":  eachItem["demandGenerationDate"]
+        ? epochToDDMMYYYYFromatter(eachItem["demandGenerationDate"])
+        : "NA",
+        "Tax Period From": eachItem["taxPeriodFrom"]
+        ? epochToDDMMYYYYFromatter(eachItem["taxPeriodFrom"])
+        : "NA",
+        "Tax Period To": eachItem["taxPeriodto"] 
+        ? epochToDDMMYYYYFromatter(eachItem["taxPeriodto"])
+        : "NA"
+      })
+    );
+    return tableData;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
+    console.log(error.message);
+    return null;
+  }
+};

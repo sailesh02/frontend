@@ -20,6 +20,7 @@ import { consumerHistoryReportForm } from "./reportForms/consumerHistoryReportFo
 import { consumerBillHistoryReportForm } from "./reportForms/consumerBillHistoryReportForm";
 import { connectionsEligibleForDemandGenerationForm } from "./reportForms/connectionsEligibleForDemandGeneration";
 import { employeeWiseWSCollectionFrom } from "./reportForms/employeeWiseWSCollectionFrom";
+import { schedulerBasedDemandsGenerationForm } from './reportForms/schedulerBasedDemandsGenerationForm'
 
 export const getReportHeader = () => {
   let title = getQueryArg(window.location.href, "title");
@@ -88,11 +89,14 @@ export const getFormItems = () => {
     case "consumerBillHistoryReport":
       reportForm = consumerBillHistoryReportForm;
       break;
-    case "connectionsEligibleForDemandGenerationReport":
+    case "connectionsEligibleForDemandGeneration":
       reportForm = connectionsEligibleForDemandGenerationForm
     break;
     case "employeeWiseWSCollection":
       reportForm = employeeWiseWSCollectionFrom;
+      break;
+    case "schedulerBasedDemandsGeneration":
+      reportForm = schedulerBasedDemandsGenerationForm;
       break;
     default:
       break;

@@ -291,9 +291,15 @@ const addBuildingAbstractValue = () => {
       if(edcrdtls.blocks && edcrdtls.blocks.length> 0){
         let B = 0, S = 0,ST = 0, G = 0;
         for (let blocks of edcrdtls.blocks) {
-          calculateObj.buildUpArea += parseFloat(blocks["Buildup Area"]);
-          calculateObj.carpetArea += parseFloat(blocks["Carpet Area"]);
-          calculateObj.floorArea += parseFloat(blocks["Floor Area"]);
+          if(blocks["Carpet Area"]){
+            calculateObj.carpetArea += parseFloat(blocks["Carpet Area"]);
+          }
+          if(blocks["Buildup Area"]) {
+            calculateObj.buildUpArea += parseFloat(blocks["Buildup Area"]);
+          }
+          if(blocks["Floor Area"]){
+            calculateObj.floorArea += parseFloat(blocks["Floor Area"]);
+          }
           // calculateObj.totalFloor += 1;
           let level = blocks["Level"];
           let floorDescription = blocks["Floor Description"];
@@ -351,11 +357,15 @@ const addBuildingAbstractValue = () => {
       }
       
     }
-    for(let floorDetails of floorNoDetails){
-      calculateObj.totalFloor += floorDetails + ",";
+    if (floorNoDetails && floorNoDetails.length>0){
+      for(let floorDetails of floorNoDetails){
+        calculateObj.totalFloor += floorDetails + ",";
+      }
     }
     
-    calculateObj.totalFar = parseFloat(calculateObj.floorArea) / parseFloat(plotDetails.plotAreaInSqrMt)
+    if(calculateObj.floorArea && plotDetails.plotAreaInSqrMt) {
+      calculateObj.totalFar = parseFloat(calculateObj.floorArea) / parseFloat(plotDetails.plotAreaInSqrMt)
+    }
     //calculateObj.totalFar = //calculateObj.floorArea / totalPlotArea;
     store.dispatch(
       handleField(

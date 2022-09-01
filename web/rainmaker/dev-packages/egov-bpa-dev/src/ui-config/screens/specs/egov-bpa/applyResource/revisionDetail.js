@@ -29,8 +29,8 @@ import store from "ui-redux/store";
 export const getRevisionDetails = getCommonCard({
   header: getCommonTitle(
     {
-      labelName: "Basic Details",
-      labelKey: "BPA_REVISION_OLD_PERMIT_DETAILS_TITLE"
+      labelName: "Old Permit Letter Number",
+      labelKey: "BPA_REVISION_OLD_PERMIT_LETTER_NO"
     },
     {
       style: {
@@ -76,7 +76,7 @@ export const getRevisionDetails = getCommonCard({
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg', "visible", true));
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.applicantSummary', "visible", false));
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.revisionDocumentUploadCard', "visible", false));
-                dispatch(handleField("apply", "components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg.children.cardContent.children.permitNoRecordFound.children.key.props", "labelKey", "BPA_REVISION_NO_RECORD_FOUND_HEADER"));
+                dispatch(handleField("apply", "components.div.children.formwizardFirstStep.children.searchPermitInfoFoundMsg.children.cardContent.children.permitNoRecordFound.children.key.props", "labelKey", "BPA_REVISION_NO_RECORD_FOUND_DB_HEADER"));
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.revisionDocumentUploadCard', "visible", true));
                 dispatch(handleField("apply", 'components.div.children.formwizardFirstStep.children.revisionInfoFormCard', "visible", true));
                 revision.isSujogExistingApplication = false;
@@ -472,7 +472,7 @@ export const revisionInfoFormCard = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Basic Details",
-      labelKey: "BPA_REVISION_OLD_PERMIT_DETAILS_TITLE"
+      labelKey: "BPA_REVISION_PERMIT_DETAILS_TITLE"
     },
     {
       style: {

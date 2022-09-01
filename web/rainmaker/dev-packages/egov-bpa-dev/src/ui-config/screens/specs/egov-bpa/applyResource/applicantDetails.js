@@ -118,7 +118,7 @@ const commonApplicantInformation = () => {
           labelName: "Select Gender",
           labelKey: "BPA_APPLICANT_GENDER_PLACEHOLDER"
         },
-        required: true,
+        required: false,
         optionValue: "code",
         optionLabel: "label",
         jsonPath: "BPA.landInfo.owners[0].gender",
@@ -152,7 +152,7 @@ const commonApplicantInformation = () => {
             labelName: "DD/MM/YYYY",
             labelKey: "BPA_ENTER_APPLICANT_DOB_PLACEHOLDER"
           },
-          required: true,
+          required: false,
           pattern: getPattern("Date"),
           isDOB: true,
           errorMessage: "BPA_DOB_ERROR_MESSAGE",
@@ -179,6 +179,7 @@ const commonApplicantInformation = () => {
           labelName: "Enter Email",
           labelKey: "BPA_ENTER_APPLICANT_EMAIL_PLACEHOLDER"
         },
+        required: true,
         pattern: getPattern("Email"),
         errorMessage: "BPA_INVALID_EMIAL",
         jsonPath: "BPA.landInfo.owners[0].emailId",
@@ -200,7 +201,7 @@ const commonApplicantInformation = () => {
           labelName: "Enter Guardian Name",
           labelKey: "BPA_APPLICANT_GUARDIAN_NAME_PLACEHOLDER"
         },
-        required: true,
+        required: false,
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
         jsonPath:

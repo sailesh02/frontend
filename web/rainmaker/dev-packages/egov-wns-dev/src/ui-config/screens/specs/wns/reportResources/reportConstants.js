@@ -7,9 +7,12 @@ export const REPORT_HEADER_MAPPER = {
   newConsumerMonthlyReport: "W&S New Consumer Monthly Report",
   consumerHistoryReport: "W&S Consumer History Report",
   consumerBillHistoryReport: "Consumer Wise Demand History",
-  connectionsEligibleForDemandGeneration: "WS Connections Eligible For Demand Generation",
+  connectionsEligibleForDemandGeneration:
+    "WS Connections Eligible For Demand Generation",
   employeeWiseWSCollection: "Employee Wise WS Collection Report",
-  schedulerBasedDemandsGeneration: "WS Scheduler Based Demands Generation Report"
+  schedulerBasedDemandsGeneration:
+    "WS Scheduler Based Demands Generation Report",
+  monthWisePendingBillGeneration: "Month Wise Pending Bill Generation",
 };
 
 export const REPORT_SUB_HEADER_MAPPER = {
@@ -23,7 +26,8 @@ export const REPORT_SUB_HEADER_MAPPER = {
   consumerBillHistoryReport: "Modify report by date range",
   connectionsEligibleForDemandGeneration: "Modify report by date range",
   employeeWiseWSCollection: "Modify report by date range",
-  schedulerBasedDemandsGeneration: "Modify report by date range"
+  schedulerBasedDemandsGeneration: "Modify report by date range",
+  monthWisePendingBillGeneration: "Modify report by date range",
 };
 
 export const REPORT_DROPDOWN_OPTIONS = {
@@ -94,9 +98,11 @@ export const REPORT_TABLE_TITLE_MAPPER = {
   newConsumerMonthlyReport: "New Consumer Monthly Report",
   consumerHistoryReport: "Consumer History Report",
   consumerBillHistoryReport: "W&S Consumer Wise Demand History",
-  connectionsEligibleForDemandGeneration: "WS Connections Eligible For Demand Generation",
+  connectionsEligibleForDemandGeneration:
+    "WS Connections Eligible For Demand Generation",
   employeeWiseWSCollection: "Employee Wise WS Collection",
-  schedulerBasedDemandsGeneration: "WS Scheduler Based Demands Generation"
+  schedulerBasedDemandsGeneration: "WS Scheduler Based Demands Generation",
+  monthWisePendingBillGeneration: "Month Wise Pending Bill Generation",
 };
 
 export const REPORT_COLUMNS_MAPPER = {
@@ -496,5 +502,16 @@ export const REPORT_COLUMNS_MAPPER = {
     {
       labelKey: "Tax Period To",
     },
-  ]
+  ],
+  monthWisePendingBillGeneration: [
+    {
+      labelKey: "Sl. No.",
+    },
+    {
+      labelKey: "ULB",
+    },
+    {
+      labelKey: "Consumer Code",
+    },
+  ],
 };

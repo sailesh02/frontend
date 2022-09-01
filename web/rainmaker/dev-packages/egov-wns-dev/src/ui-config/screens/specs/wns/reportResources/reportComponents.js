@@ -21,6 +21,7 @@ import { consumerBillHistoryReportForm } from "./reportForms/consumerBillHistory
 import { connectionsEligibleForDemandGenerationForm } from "./reportForms/connectionsEligibleForDemandGeneration";
 import { employeeWiseWSCollectionFrom } from "./reportForms/employeeWiseWSCollectionFrom";
 import { schedulerBasedDemandsGenerationForm } from './reportForms/schedulerBasedDemandsGenerationForm'
+import { monthWisePendingBillGenerationForm } from "./reportForms/monthWisePendingBillGenerationForm";
 
 export const getReportHeader = () => {
   let title = getQueryArg(window.location.href, "title");
@@ -97,6 +98,9 @@ export const getFormItems = () => {
       break;
     case "schedulerBasedDemandsGeneration":
       reportForm = schedulerBasedDemandsGenerationForm;
+      break;
+    case "monthWisePendingBillGeneration":
+      reportForm = monthWisePendingBillGenerationForm;
       break;
     default:
       break;

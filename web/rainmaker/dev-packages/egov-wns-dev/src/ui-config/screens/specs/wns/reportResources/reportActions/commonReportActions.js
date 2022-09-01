@@ -10,7 +10,8 @@ import {
   consumerHistoryReportSearch,
   consumerBillHistoryReportSearch,
   connectionsEligibleForDemandGenerationSearch,
-  employeeWiseWSCollectionSearch
+  employeeWiseWSCollectionSearch,
+  schedulerBasedDemandsGenerationSearch
 } from "./reportSearchActions";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -19,6 +20,7 @@ import {
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../../../ui-utils";
 import commonConfig from "config/common.js";
+import { schedulerBasedDemandsGenerationForm } from "../reportForms/schedulerBasedDemandsGenerationForm";
 
 export const getCurrentDate = () => {
   var today = new Date();
@@ -152,12 +154,14 @@ const getTableData = async (params, state, dispatch) => {
     case "consumerBillHistoryReport":
       tableData = await consumerBillHistoryReportSearch(params, state, dispatch)
       break; 
-    case "connectionsEligibleForDemandGenerationReport":
+    case "connectionsEligibleForDemandGeneration":
       tableData = await connectionsEligibleForDemandGenerationSearch(params, state, dispatch)
       break;
     case "employeeWiseWSCollection":
       tableData = await employeeWiseWSCollectionSearch(params, state, dispatch)
       break;
+    case "schedulerBasedDemandsGeneration":
+      tableData = await schedulerBasedDemandsGenerationSearch(params, state, dispatch)  
     default:
       break;
   }

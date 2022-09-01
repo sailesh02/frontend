@@ -13,6 +13,12 @@ const epochToDDMMYYYYFromatter = (epochDate) => {
   return formatDate;
 };
 
+const dateToEpochStartDay = (date) => {
+  let start = new Date(date);
+  start.setUTCHours(0, 0, 0, 0);
+  return Date.parse(start);
+};
+
 const removeEmptyParams = (paramsObj) => {
   let paramsList = [];
   Object.keys(paramsObj).forEach((key) => {
@@ -566,15 +572,53 @@ export const schedulerBasedDemandsGenerationSearch = async (
         "Connection Number": eachItem["consumerCode"],
         "Old Connection Number": eachItem["oldConnectionNo"],
         "Connection Type": eachItem["connectionType"],
-        "Demand Generation Date":  eachItem["demandGenerationDate"]
-        ? epochToDDMMYYYYFromatter(eachItem["demandGenerationDate"])
-        : "NA",
+        "Demand Generation Date": eachItem["demandGenerationDate"]
+          ? epochToDDMMYYYYFromatter(eachItem["demandGenerationDate"])
+          : "NA",
         "Tax Period From": eachItem["taxPeriodFrom"]
-        ? epochToDDMMYYYYFromatter(eachItem["taxPeriodFrom"])
-        : "NA",
-        "Tax Period To": eachItem["taxPeriodto"] 
-        ? epochToDDMMYYYYFromatter(eachItem["taxPeriodto"])
-        : "NA"
+          ? epochToDDMMYYYYFromatter(eachItem["taxPeriodFrom"])
+          : "NA",
+        "Tax Period To": eachItem["taxPeriodto"]
+          ? epochToDDMMYYYYFromatter(eachItem["taxPeriodto"])
+          : "NA",
+      })
+    );
+    return tableData;
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelKey: error.message }, "error"));
+    console.log(error.message);
+    return null;
+  }
+};
+export const monthWisePendingBillGenerationSearch = async (
+  params,
+  state,
+  dispatch
+) => {
+  try {
+    const formattedParams = {
+      ...params,
+      fromDate: dateToEpochStartDay(params["fromDate"]),
+    };
+    let queryObject = removeEmptyParams(formattedParams);
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/report-services/reports/ws/monthWisePendingBillGeneration",
+      "",
+      queryObject
+    );
+    dispatch(
+      prepareFinalObject(
+        "reportTableData",
+        payload["monthWisePendingBillGenerationResponse"]
+      )
+    );
+    let tableData = payload.monthWisePendingBillGenerationResponse.map(
+      (eachItem, index) => ({
+        "Sl. No.": index + 1,
+        ULB: eachItem["ulb"],
+        "Consumer Code": eachItem["consumerCode"],
       })
     );
     return tableData;

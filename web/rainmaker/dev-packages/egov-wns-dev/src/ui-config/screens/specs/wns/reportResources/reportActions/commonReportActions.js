@@ -11,7 +11,8 @@ import {
   consumerBillHistoryReportSearch,
   connectionsEligibleForDemandGenerationSearch,
   employeeWiseWSCollectionSearch,
-  schedulerBasedDemandsGenerationSearch
+  schedulerBasedDemandsGenerationSearch,
+  monthWisePendingBillGenerationSearch,
 } from "./reportSearchActions";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -152,16 +153,36 @@ const getTableData = async (params, state, dispatch) => {
       tableData = await consumerHistoryReportSearch(params, state, dispatch);
       break;
     case "consumerBillHistoryReport":
-      tableData = await consumerBillHistoryReportSearch(params, state, dispatch)
-      break; 
+      tableData = await consumerBillHistoryReportSearch(
+        params,
+        state,
+        dispatch
+      );
+      break;
     case "connectionsEligibleForDemandGeneration":
-      tableData = await connectionsEligibleForDemandGenerationSearch(params, state, dispatch)
+      tableData = await connectionsEligibleForDemandGenerationSearch(
+        params,
+        state,
+        dispatch
+      );
       break;
     case "employeeWiseWSCollection":
-      tableData = await employeeWiseWSCollectionSearch(params, state, dispatch)
+      tableData = await employeeWiseWSCollectionSearch(params, state, dispatch);
       break;
     case "schedulerBasedDemandsGeneration":
-      tableData = await schedulerBasedDemandsGenerationSearch(params, state, dispatch)  
+      tableData = await schedulerBasedDemandsGenerationSearch(
+        params,
+        state,
+        dispatch
+      );
+      break;
+    case "monthWisePendingBillGeneration":
+      tableData = await monthWisePendingBillGenerationSearch(
+        params,
+        state,
+        dispatch
+      );
+      break;
     default:
       break;
   }

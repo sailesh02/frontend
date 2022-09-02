@@ -7,6 +7,7 @@ import {
   getTextField,
   getPattern,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -24,7 +25,15 @@ class WnsReports extends Component {
     this.state = {
       active: props.active,
       formItems: props.formItems,
+      title: getQueryArg(window.location.href, "title")
     };
+  }
+
+  componentDidUpdate() {
+    const currTitle = getQueryArg(window.location.href, "title");
+    if(currTitle !== this.state.title) {
+      window.location.reload();
+    }
   }
 
   isFormValid = (reportFormObj, formItems) => {

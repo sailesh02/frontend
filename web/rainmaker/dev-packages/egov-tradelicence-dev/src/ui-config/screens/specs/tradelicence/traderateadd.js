@@ -324,14 +324,14 @@ export const tradeDetails = getCommonCard({
     tradeRateType: {
       ...getSelectField({
         label: {
-          labelName: "Trade Type",
-          labelKey: "TL_RATE_TYPE_LABEL",
+          labelName: "Type",
+          labelKey: "Type",
         },
 
         optionLabel: "name",
         placeholder: {
-          labelName: "Select Trade Type",
-          labelKey: "TL_RATE_TYPE_PH",
+          labelName: "Type",
+          labelKey: "Select Type",
         },
         data: [{ code: "FLAT" }, { code: "RATE" }],
         jsonPath: "billingSlab[0].type",

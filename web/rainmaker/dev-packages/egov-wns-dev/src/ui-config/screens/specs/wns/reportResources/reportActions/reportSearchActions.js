@@ -458,7 +458,7 @@ export const connectionsEligibleForDemandGenerationSearch = async (
         "Sl. No.": index + 1,
         ULB: eachItem["tenantid"],
         Ward: eachItem["ward"],
-        "No of Connections": eachItem["numberofconnections"],
+        "No of Connections": eachItem["numberOfConnections"],
       })
     );
     return tableData;

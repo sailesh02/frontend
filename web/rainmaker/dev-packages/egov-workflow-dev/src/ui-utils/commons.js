@@ -1,10 +1,10 @@
 
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo,getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSnackbar,hideSpinner, showSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get"
 import store from "redux/store";
-
+import axios from 'axios';
 import { getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { downloadPdf, openPdf, printPdf } from "egov-ui-kit/utils/commons";
 
@@ -145,9 +145,56 @@ const getFileStore = (fileKey, documents) => {
   fileStoreId = requiredDocument && requiredDocument.length > 0 && requiredDocument[0].documentId || null
   return fileStoreId
 }
+// get PDF body
+export const getPdfBody = async (applicationNo, tenantId) => {
+  const userInfo = JSON.parse(getUserInfo());
+  const authToken = getAccessToken();
+  let RequestInfo = {
+    "apiId": "Rainmaker",
+    "ver": ".01",
+    "action": "_search",
+    "did": "1",
+    "key": "",
+    "msgId": "20170310130900|en_IN",
+    "requesterId": "",
+    authToken,
+    "userInfo": userInfo
+  };
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "applicationNo", value: applicationNo },
+  ];
+  try {
+    let bpaResult = await httpRequest(
+      "post",
+      "/bpa-services/v1/bpa/_search",
+      "",
+      queryObject
+    );
+    let edcrNumber =
+      (bpaResult &&
+        bpaResult.BPA &&
+        bpaResult.BPA.length > 0 &&
+        bpaResult.BPA[0].edcrNumber) ||
+      "";
+
+    try {
+      let BPA = bpaResult.BPA[0];
+      //BPA.businessService = "BPA1" //Need to remove this line once BPA5 is added from Backend side.
+      return {
+        RequestInfo: RequestInfo,
+        Bpa: [BPA],
+      };
+    } catch (err) {
+      return;
+    }
+  } catch (err) {
+    return;
+  }
+};
 export const showPDFPreview = async (pdfPreviewData, pdfKey, modulePdfIdentifier, mode = 'download') => {
   let tenantId = get(pdfPreviewData[0], "tenantId") || get(pdfPreviewData, "tenantId");
-  let applicationNumber = get(pdfPreviewData[0], "applicationNumber")
+  let applicationNumber = get(pdfPreviewData[0], "applicationNumber") || get(pdfPreviewData, "applicationNo");
   // const applicationType = pdfPreviewData && pdfPreviewData.length > 0 ? get(pdfPreviewData[0], "applicationType") : "NEW";
   const queryStr = [
     { key: "key", value: pdfKey },
@@ -166,7 +213,7 @@ export const showPDFPreview = async (pdfPreviewData, pdfKey, modulePdfIdentifier
       value: applicationNumber
     }
   ];
-
+  let data = await getPdfBody(applicationNumber,tenantId)
   let oldFileStoreId = null;
   if(modulePdfIdentifier === "MarriageRegistrations" || modulePdfIdentifier === "Licenses"){
     const LicensesPayload = await getSearchResultsForPdf(queryObject, modulePdfIdentifier);
@@ -197,22 +244,29 @@ export const showPDFPreview = async (pdfPreviewData, pdfKey, modulePdfIdentifier
         });
 
       }else if(modulePdfIdentifier === "BPA") {
-        store.dispatch(showSpinner())
-        let Bpa = '';
+        store.dispatch(showSpinner());
+        let Bpa = "";
         Bpa = [pdfPreviewData];
-        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bpa }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-        .then(res => {
-          store.dispatch(hideSpinner())
-          res.filestoreIds[0]
-          if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-            res.filestoreIds.map(fileStoreId => {
-              downloadReceiptFromFilestoreID(fileStoreId, "open")
-            })
+        let res = await axios.post(
+          `/edcr/rest/dcr/generatePermitOrder?key=buildingpermit&tenantId=${tenantId}`,
+          data,
+          {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          }
+        );
+        if (res.data) {
+          store.dispatch(hideSpinner());
+          res.data.filestoreIds[0]
+          if (res.data.filestoreIds && res.data.filestoreIds.length > 0) {
+            res.data.filestoreIds.map((fileStoreId) => {
+              downloadReceiptFromFilestoreID(fileStoreId, "open",tenantId);
+            });
           } else {
-            store.dispatch(hideSpinner())
+            store.dispatch(hideSpinner());
             console.log("Error In Acknowledgement form Download");
           }
-        });
+        }
       }
       else {
         let Licenses = '';

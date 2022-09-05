@@ -271,13 +271,8 @@ export const showPDFPreview = async (pdfPreviewData, pdfKey, modulePdfIdentifier
       else {
         let Licenses = '';
         Licenses = pdfPreviewData;
-        
-        httpRequest(
-          "post",
-          `/edcr/rest/dcr/generatePermitOrder?key=buildingpermit&tenantId=${tenantId}`,
-          data,
-          { Accept: "application/json", responseType: "arraybuffer" }
-        ).then(res => {
+        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+          .then(res => {
             res.filestoreIds[0]
             if (res && res.filestoreIds && res.filestoreIds.length > 0) {
               res.filestoreIds.map(fileStoreId => {

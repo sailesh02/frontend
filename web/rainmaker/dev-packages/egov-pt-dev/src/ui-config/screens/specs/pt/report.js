@@ -1,24 +1,43 @@
+import { getBreak } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
-  getBreak,
+  commonReportForm,
+  commonReportTable,
+} from "./reportResources/commonReportForm";
+import { getMdmsData } from "./reportResources/reportActions/commonReportActions";
+import {
+  getCommonContainer,
+  getCommonHeader,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  prepareFinalObject,
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { commonReportForm, commonReportTable } from "./reportResources/commonReportForm";
-import { getReportHeader } from "./reportResources/reportComponents";
-import { setDropdownOpts, getMdmsData } from "./reportResources/reportActions/commonReportActions";
 
 export const getScreenData = async (action, state, dispatch) => {
   await getMdmsData(action, state, dispatch);
-  setDropdownOpts(action, state, dispatch);
+};
+
+const getReportHeader = () => {
+  const header = getCommonContainer({
+    header: getCommonHeader({
+      labelKey: "",
+    }),
+  });
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    children: {
+      header: {
+        gridDefination: {
+          xs: 12,
+          sm: 10,
+        },
+        ...header,
+      },
+    },
+  };
 };
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "report",
   beforeInitScreen: (action, state, dispatch) => {
-    dispatch(prepareFinalObject(`reportForm`, {}));
-    dispatch(prepareFinalObject("reportTableData", []));
     getScreenData(action, state, dispatch);
     return action;
   },

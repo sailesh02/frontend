@@ -9,10 +9,11 @@ import { getLocaleLabels, isPublicSearch } from "../../ui-utils/commons";
 import { connect } from "react-redux";
 import Menu from "material-ui/Menu";
 import MenuItem from "material-ui/MenuItem";
-import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Tooltip from "@material-ui/core/Tooltip";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import "./index.css";
 import { excelDownloadAction } from "./excelDownloadAction";
@@ -24,6 +25,38 @@ class WnsReportTable extends React.Component {
     customSortOrder: "asc",
     showMenu: false,
     hiddenColumns: [],
+    title: getQueryArg(window.location.href, "title"),
+  };
+
+  componentDidMount() {
+    const title = getQueryArg(window.location.href, "title");
+    this.refreshTableStructure(title);
+  }
+  componentDidUpdate() {
+    const currTitle = getQueryArg(window.location.href, "title");
+    if (currTitle !== this.state.title) {
+      this.refreshTableStructure(currTitle);
+    }
+  }
+
+  refreshTableStructure = (currTitle) => {
+    const { tableColumnList, dispatch } = this.props;
+    dispatch(
+      handleField(
+        "report",
+        "components.div.children.commonReportTable",
+        "visible",
+        false
+      )
+    );
+    this.setState({
+      data: [],
+      columns: tableColumnList[currTitle],
+      customSortOrder: "asc",
+      showMenu: false,
+      hiddenColumns: [],
+      title: currTitle,
+    });
   };
 
   getExtraTableStyle = () => {
@@ -48,15 +81,6 @@ class WnsReportTable extends React.Component {
   getMuiTheme = () =>
     createMuiTheme({
       overrides: {
-        MUIDataTableBodyCell: {
-          root: {
-            // "&:nth-child(2)": {
-            //   color: isPublicSearch() ? "rgba(0, 0, 0, 0.87)" : "#2196F3",
-            //   cursor: isPublicSearch() ? "auto" : "pointer",
-            //   border: "2px solid red"
-            // },
-          },
-        },
         MuiTableRow: {
           root: {
             "&:nth-child(odd)": {
@@ -98,9 +122,7 @@ class WnsReportTable extends React.Component {
       data &&
       [...data].reduce((acc, curr) => {
         let dataRow = [];
-        // Object.keys(columns).forEach(column => {
         columns.forEach((column) => {
-          // Handling the case where column name is an object with options
           column =
             typeof column === "object" ? get(column, "labelKey") : column;
           let columnValue = get(curr, `${column}`, "");
@@ -138,14 +160,10 @@ class WnsReportTable extends React.Component {
   };
 
   updateTable = (data, columns) => {
-    // const updatedData = this.formatData(data, columns);
-    // Column names should be array not keys of an object!
-    // This is a quick fix, but correct this in other modules also!
     let fixedColumns = Array.isArray(columns) ? columns : Object.keys(columns);
     const updatedData = this.formatData(data, fixedColumns);
     this.setState({
       data: updatedData,
-      // columns: Object.keys(columns)
       columns: this.getTranslatedHeader(fixedColumns),
     });
   };
@@ -186,7 +204,6 @@ class WnsReportTable extends React.Component {
           "COMMON_TABLE_ROWS_PER_PAGE",
           "Rows per page:"
         ),
-        // displayRows: this.getLabelContainer("COMMON_TABLE_OF", "of")
       },
       toolbar: {
         search: this.getLabelContainer("COMMON_TABLE_SEARCH", "Search"),
@@ -235,7 +252,7 @@ class WnsReportTable extends React.Component {
       []
     );
     console.log("excel download");
-    excelDownloadAction(tableData, "Report")
+    excelDownloadAction(tableData, "Report");
   };
 
   showHideMenuItem = () => {
@@ -293,7 +310,9 @@ class WnsReportTable extends React.Component {
     return (
       <React.Fragment>
         <span>
-          <button className="rt-tbl-btn" onClick={() => this.downloadAsExcel()}>Export to Excel</button>
+          <button className="rt-tbl-btn" onClick={() => this.downloadAsExcel()}>
+            Export to Excel
+          </button>
           <Tooltip title={"Show/Hide Columns"}>
             <button
               className="rt-tbl-btn rt-menu-btn"
@@ -341,4 +360,8 @@ const mapStateToProps = (state) => {
   return { state };
 };
 
-export default connect(mapStateToProps, null)(WnsReportTable);
+const mapDispatchToProps = (dispatch) => {
+  return { dispatch };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(WnsReportTable);

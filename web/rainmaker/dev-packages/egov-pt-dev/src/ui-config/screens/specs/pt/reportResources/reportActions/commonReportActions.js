@@ -1,18 +1,14 @@
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { REPORT_DROPDOWN_OPTIONS } from "../reportConstants";
-import {
-  taxCollectorWiseCollectionSearch,
-  ulbWiseTaxCollectionSearch,
-  propertyDetailsSearch,
-  propertyCollectionSearch,
-  propertyWiseDemandsSearch
-} from "./reportSearchActions";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../../../ui-utils";
+import { sortByEpoch, getEpochForDate } from "../../../utils";
 import commonConfig from "config/common.js";
+import { getTableData } from "../reportMappers/reportSearchActionMapper";
+import { REPORT_COLUMNS_MAPPER } from "../reportMappers/reportColumnMapper";
+import { REPORT_TABLE_TITLE_MAPPER } from "../reportMappers/reportLabelMapper";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 export const getCurrentDate = () => {
   var today = new Date();
@@ -34,19 +30,17 @@ export const dateToEpochEndDay = (date) => {
   return Date.parse(end);
 };
 
-export const setDropdownOpts = (action, state, dispatch) => {
-  let title = getQueryArg(window.location.href, "title");
-  const keys = REPORT_DROPDOWN_OPTIONS[title]
-    ? Object.keys(REPORT_DROPDOWN_OPTIONS[title])
-    : [];
-  keys.forEach((eachKey) => {
-    dispatch(
-      prepareFinalObject(
-        `reportDropdownOpts.${eachKey}`,
-        REPORT_DROPDOWN_OPTIONS[title][eachKey]
-      )
-    );
+export const customSortFunction = (data, i, sortDateOrder) => {
+  const epochDates = data.reduce((acc, curr) => {
+    acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+    return acc;
+  }, []);
+  const order = sortDateOrder === "asc" ? true : false;
+  const finalData = sortByEpoch(epochDates, !order).map((item) => {
+    item.pop();
+    return item;
   });
+  return { data: finalData, currentOrder: !order ? "asc" : "desc" };
 };
 
 // Add MDMS Data
@@ -81,75 +75,44 @@ export const getMdmsData = async (action, state, dispatch) => {
   }
 };
 
+const setCommonReportTable = (key, value, dispatch) => {
+  dispatch(
+    handleField(
+      "report",
+      "components.div.children.commonReportTable",
+      key,
+      value
+    )
+  );
+};
+
 const onSuccessSearch = (tableData, dispatch) => {
-  dispatch(
-    handleField(
-      "report",
-      "components.div.children.commonReportTable",
-      "props.data",
-      tableData
-    )
+  const currTitle = getQueryArg(window.location.href, "title");
+  setCommonReportTable(
+    "props.title",
+    { labelName: REPORT_TABLE_TITLE_MAPPER[currTitle] },
+    dispatch
   );
-  dispatch(
-    handleField(
-      "report",
-      "components.div.children.commonReportTable",
-      "props.rows",
-      tableData.length
-    )
+  setCommonReportTable(
+    "props.columns",
+    REPORT_COLUMNS_MAPPER[currTitle],
+    dispatch
   );
-  dispatch(
-    handleField(
-      "report",
-      "components.div.children.commonReportTable",
-      "visible",
-      true
-    )
-  );
+  setCommonReportTable("props.data", tableData, dispatch);
+  setCommonReportTable("props.rows", tableData.length, dispatch);
+  setCommonReportTable("visible", true, dispatch);
   dispatch(prepareFinalObject("tableData", tableData));
 };
 
-// Add Search Actions
-const getTableData = async (params, state, dispatch) => {
+export const getSearchAction = async (params, state, dispatch) => {
+  setCommonReportTable("visible", false, dispatch);
   dispatch(prepareFinalObject("reportLoader", true));
-  let tableData = null;
-  let title = getQueryArg(window.location.href, "title");
-  switch (title) {
-    case "taxCollectorWiseCollection":
-      tableData = await taxCollectorWiseCollectionSearch(params, state, dispatch);
-      break;
-    case "ulbWiseTaxCollection":
-      tableData = await ulbWiseTaxCollectionSearch(params, state, dispatch);
-      break;
-    case "propertyDetails":
-      tableData = await propertyDetailsSearch(params, state, dispatch);
-      break;
-    case "propertyWiseCollection":
-      tableData = await propertyCollectionSearch(params, state, dispatch);
-      break;
-    case "propertyWiseDemands":
-      tableData = await propertyWiseDemandsSearch(params, state, dispatch);
-      break;
-
-    default:
-      break;
-  }
-  tableData && onSuccessSearch(tableData, dispatch);
-  dispatch(prepareFinalObject("reportLoader", false));
-};
-
-export const getSearchAction = (params, state, dispatch) => {
-  dispatch(
-    handleField(
-      "report",
-      "components.div.children.commonReportTable",
-      "visible",
-      false
-    )
-  );
   try {
-    getTableData(params, state, dispatch);
+    const tableData = await getTableData(params, state, dispatch);
+    tableData && onSuccessSearch(tableData, dispatch);
+    dispatch(prepareFinalObject("reportLoader", false));
   } catch (error) {
     console.log(error);
+    dispatch(prepareFinalObject("reportLoader", false));
   }
 };

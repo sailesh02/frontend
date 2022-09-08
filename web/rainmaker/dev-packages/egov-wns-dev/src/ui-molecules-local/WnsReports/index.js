@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import { Card, Button } from "components";
 import RenderScreen from "egov-ui-framework/ui-molecules/RenderScreen";
 import { connect } from "react-redux";
 import {
@@ -24,17 +23,67 @@ class WnsReports extends Component {
     super(props);
     this.state = {
       active: props.active,
-      formItems: props.formItems,
-      title: getQueryArg(window.location.href, "title")
+      formItems: [],
+      title: "",
     };
+  }
+
+  componentDidMount() {
+    const title = getQueryArg(window.location.href, "title");
+    this.setReportScreen(title);
   }
 
   componentDidUpdate() {
     const currTitle = getQueryArg(window.location.href, "title");
-    if(currTitle !== this.state.title) {
-      window.location.reload();
+    if (currTitle !== this.state.title) {
+      this.setReportScreen(currTitle);
     }
   }
+
+  setDropdownOpts = (currTitle) => {
+    const { dropdownOptions, dispatch } = this.props;
+    const slctDropdownOpts = dropdownOptions[currTitle];
+    const keys = slctDropdownOpts ? Object.keys(slctDropdownOpts) : [];
+    keys.forEach((eachKey) => {
+      dispatch(
+        prepareFinalObject(
+          `reportDropdownOpts.${eachKey}`,
+          slctDropdownOpts[eachKey]
+        )
+      );
+    });
+  };
+
+  setReportScreen = (currTitle) => {
+    const { formItems, reportHeaders, reportSubHeaders, dispatch } = this.props;
+    this.setState({
+      ...this.state,
+      title: currTitle,
+      formItems: formItems[currTitle] ? formItems[currTitle] : [],
+      resetField: true,
+    });
+    const headerText = reportHeaders[currTitle];
+    const subHeaderText = reportSubHeaders[currTitle] ? reportSubHeaders[currTitle] : "Invalid Report URL";
+    dispatch(prepareFinalObject("reportForm", {}));
+    dispatch(prepareFinalObject("reportTableData", []));
+    dispatch(
+      handleField(
+        "report",
+        "components.div.children.header.children.header.children.header.children.key",
+        "props.labelKey",
+        headerText
+      )
+    );
+    dispatch(
+      handleField(
+        "report",
+        "components.div.children.commonReportForm.children.cardContent.children.subHeader.children.key",
+        "props.labelKey",
+        subHeaderText
+      )
+    );
+    this.setDropdownOpts(currTitle);
+  };
 
   isFormValid = (reportFormObj, formItems) => {
     const allReqFilds = formItems.filter((eachItem) => eachItem.required);
@@ -138,19 +187,12 @@ class WnsReports extends Component {
             jsonPath: jsonPath,
             componentJsonpath: jsonPath,
             pattern: getPattern("Date"),
-            // errorMessage,
-            // requiredMessage,
             required: required,
             disabled: disabled,
             gridDefination: {
               xs: 12,
               sm: gridSm ? gridSm : 4,
             },
-            // props: {
-            //   inputProps: {
-            //     max: getCurrentDate(),
-            //   },
-            // },
             ...rest,
           }),
         };
@@ -166,8 +208,6 @@ class WnsReports extends Component {
             localePrefix: localePrefix,
             jsonPath: jsonPath,
             componentJsonpath: jsonPath,
-            // errorMessage,
-            // requiredMessage,
             required: required,
             disabled: disabled,
             gridDefination: {
@@ -205,7 +245,7 @@ class WnsReports extends Component {
       }
       if (resetField) {
         let newItem = { ...eachItem };
-        if (["text"].includes(eachItem.type)) {
+        if (["text"].includes(eachItem.type) && newItem["props"]) {
           delete newItem["props"]["value"];
         }
         newFormItems.splice(index, 1, newItem);
@@ -237,8 +277,9 @@ class WnsReports extends Component {
     let { preparedFinalObject } = this.props.state.screenConfiguration;
     const loader = preparedFinalObject.reportLoader;
     return loader ? <LoadingIndicator /> : null;
-  }
+  };
   render() {
+    let { formItems } = this.state;
     return (
       <React.Fragment>
         {this.getLoader()}
@@ -248,31 +289,34 @@ class WnsReports extends Component {
             onFieldChange={this.onFieldChange}
           />
         </Grid>
-        <Grid container spacing={2} className="rt-form-btn-cntr">
-          <Button
-            variant="contained"
-            onClick={this.handleSearch}
-            size="large"
-            style={{
-              color: "white",
-              backgroundColor: "#fe7a51",
-              borderRadius: "2px",
-            }}>
-            Search
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={this.clearFields}
-            size="large"
-            style={{
-              color: "#767676",
-              backgroundColor: "#ffffff",
-              borderRadius: "2px",
-            }}
-          >
-            Reset
-          </Button>
-        </Grid>
+        {formItems && formItems.length !== 0 && (
+          <Grid container spacing={2} className="rt-form-btn-cntr">
+            <Button
+              variant="contained"
+              onClick={this.handleSearch}
+              size="large"
+              style={{
+                color: "white",
+                backgroundColor: "#fe7a51",
+                borderRadius: "2px",
+              }}
+            >
+              Search
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={this.clearFields}
+              size="large"
+              style={{
+                color: "#767676",
+                backgroundColor: "#ffffff",
+                borderRadius: "2px",
+              }}
+            >
+              Reset
+            </Button>
+          </Grid>
+        )}
       </React.Fragment>
     );
   }
@@ -281,9 +325,5 @@ class WnsReports extends Component {
 const mapStateToProps = (state) => {
   return { state };
 };
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {};
-// };
 
 export default connect(mapStateToProps, null)(WnsReports);
